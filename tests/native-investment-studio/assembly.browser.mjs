@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
+import { participantMovement } from './participant-movement.browser-helper.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { before, after, test } from 'node:test';
@@ -300,13 +301,19 @@ for (const engine of names) {
       await page.keyboard.press('Space'); assert.deepEqual(await geometry(), before);
       assert.equal(await bytes(page), accepted);
     }
+    await participantMovement(page, list);
+    assert.equal(await bytes(page), accepted, 'team ordering stays in the existing membership draft');
   });
   test(`${engine}: people and teams publish exact funded amounts, keep membership order and resolve removal dependencies`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const original = await bytes(page);
     await ada(page);
     const rate = people(page).locator('[data-assembly-person-fields] [data-rate-step="10"]');
-    await field(page, 'ratePerHour').fill(''); await expect(rate).toBeDisabled();
+    await field(page, 'ratePerHour').fill(''); await expect(rate).toBeEnabled();
+    await expect(field(page, 'ratePerHour')).toHaveValue('');
+    await rate.press('ArrowRight');
+    await expect(field(page, 'ratePerHour')).toHaveValue('10.00');
+    assert.equal(await bytes(page), original, 'a deliberate dial adjustment establishes a draft rate');
     await field(page, 'ratePerHour').fill('120.25'); await rate.focus(); await page.keyboard.press('ArrowRight');
     await expect(field(page, 'ratePerHour')).toHaveValue('130.25');
     await expect(people(page).locator('[data-assembly-total]')).toHaveText('$1,460.50');

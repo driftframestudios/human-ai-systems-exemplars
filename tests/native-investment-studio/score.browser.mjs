@@ -277,23 +277,26 @@ for (const engine of names) {
     assert.deepEqual(removed.scoreSettings.dependencies, []);
     assert.equal(await page.evaluate(() => window.scoreFixture.studio.previewCommand({ type: 'work.remove', workId: 'followup' }, window.scoreFixture.studio.read()).ok), true);
     await undo(page); assert.equal(await bytes(page), accepted);
-    await page.evaluate(() => {
-      const { studio, controller } = window.scoreFixture, candidate = structuredClone(studio.read().state);
-      candidate.scoreSettings.cadence.handoffs = [];
-      const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
-    });
-    const retained = await bytes(page);
-    await root(page).locator('[data-native-workspace="session"] > summary').click();
-    await root(page).locator('[data-native-session-select]').selectOption('followup');
-    await root(page).locator('[data-session-action="remove"]').click();
-    await root(page).locator('[data-native-session-dependencies] [data-native-open-score="dependency"]').click();
-    await expect(inspector(page).getByRole('heading', { name: 'Inspect retained handoff' })).toBeVisible();
-    await expect(inspector(page)).toContainText('Receive the review');
-    assert.equal(await bytes(page), retained, 'inspection preserves the retained relationship');
-    await inspector(page).getByRole('button', { name: 'Remove this retained handoff', exact: true }).click();
-    await score(page).locator('.native-score__pending').getByRole('button', { name: 'Apply horizon', exact: true }).click();
-    assert.equal(await page.evaluate(() => window.scoreFixture.studio.previewCommand({ type: 'work.remove', workId: 'followup' }, window.scoreFixture.studio.read()).ok), true);
-    await undo(page); assert.equal(await bytes(page), retained);
+    for (const hasCadence of [true, false]) {
+      await page.evaluate(withCadence => {
+        const { studio, controller } = window.scoreFixture, candidate = structuredClone(studio.read().state);
+        if (withCadence) candidate.scoreSettings.cadence.handoffs = [];
+        else candidate.scoreSettings.cadence = null;
+        const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
+      }, hasCadence);
+      const retained = await bytes(page), workspace = root(page).locator('[data-native-workspace="session"]');
+      if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
+      await root(page).locator('[data-native-session-select]').selectOption('followup');
+      await root(page).locator('[data-session-action="remove"]').click();
+      await root(page).locator('[data-native-session-dependencies] [data-native-open-score="dependency"]').click();
+      await expect(inspector(page).getByRole('heading', { name: 'Inspect retained handoff' })).toBeVisible();
+      await expect(inspector(page)).toContainText('Receive the review');
+      assert.equal(await bytes(page), retained, 'inspection preserves the retained relationship with or without a cadence');
+      await inspector(page).getByRole('button', { name: 'Remove this retained handoff', exact: true }).click();
+      await score(page).locator('.native-score__pending').getByRole('button', { name: 'Apply horizon', exact: true }).click();
+      assert.equal(await page.evaluate(() => window.scoreFixture.studio.previewCommand({ type: 'work.remove', workId: 'followup' }, window.scoreFixture.studio.read()).ok), true);
+      await undo(page); assert.equal(await bytes(page), retained);
+    }
   });
 
   test(`${engine}: a newer Purpose editor retains its lease and focus through score callbacks`, async t => {

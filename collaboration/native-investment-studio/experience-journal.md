@@ -50,9 +50,9 @@ delivery-phase lanes, with a local phase view and Delivery overview return.
 PR #783 delivered #766: deliberate arrangement choices update one accepted
 instance directly, with local Undo and a linked-work amount. PR #769 and
 PR #774 recorded the earlier route and related design decisions. Direct
-creation (#770) receives that shared entry language. Participant controls (#771),
-attached editorial companions (#772) and scoped removal/shared Undo (#773)
-remain prospective focused issues.
+creation (#770) receives that shared entry language. Participant movement (#771)
+and attached editorial companions (#772) consolidate the next receiving controls;
+scoped removal/shared Undo (#773) retains its future acceptance boundary.
 PR #785 delivered the enclosed duration and rate modules (#767). PR #786 delivered
 #757: canonical person/team editors open below Team planning's selected rack,
 preserving those modules and the People chapter. PR #787 delivered #768, extending
@@ -66,10 +66,13 @@ coarse/fine dial geometry. PR #793 repaired the current-entry browser routes
 keeps its adjacent receiver. One canonical form and session owner serve both.
 PR #794 delivered that focused deck increment after independent review. PR #795
 delivered #758's immediate session creation after independent review and passing
-hosted checks; it also corrected the source-test routing registration (#796). #770 completes the sequence with native New session rows
-inside both Coordination sequencers. Creation Undo remains distinct from
-cancelling later edits to the added session. The follow-on participant, companion
-and removal patterns retain their prospective issues.
+hosted checks; it also corrected the source-test routing registration (#796).
+PR #797 delivered #770's native New session rows inside both Coordination
+sequencers. Creation Undo remains distinct from cancelling later edits to the
+added session. The current #771/#772 increment shares participant movement across
+session and team editors and attaches compact editorial drawers beneath the
+horizon. Its receiving PR owns delivery and exercised behavior. The future
+percentage model is split into #798; broader removal remains with #773.
 
 ### State, people and evidence
 
@@ -152,10 +155,13 @@ evidence and reviewer. Delays name affected work and can propose a later period.
 Availability opens beside a person and period; funded time retains its economic
 meaning. Broad period membership establishes sequence, not exact collisions.
 
-The default view keeps the overview and MIDI tracks together. Stages & handoffs
-reveals related work and its contextual settings. People and available time use
-progressive disclosure. Detailed chronological readings stay in downloadable
-reports. The earlier eight-category elapsed-time inspector is retired.
+The default view keeps the overview and MIDI tracks together. Compact People
+and Stages keys inside the screen reach their existing inspectors. People and
+available time and Stages & handoffs are pale drawers attached to the screen's
+lower edge, closed initially and labeled with the current plan or period.
+Handoff, decision and delay pads keep their contextual routes; To place retains
+access to relationships awaiting placement. Detailed chronological readings stay
+in downloadable reports. The earlier eight-category inspector is retired.
 
 ### A coherent visual instrument
 
@@ -313,6 +319,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. Team planning retains the adjacent placement. The exact initiating control toggles the deck, while another occurrence selects its placement; one owner preserves the shared draft and session properties. |
 | Every Coordination rack Add session requiring preparation and final confirmation | #758 accepts a useful session immediately and opens its canonical editor. Cancel reverts subsequent edits; creation Undo removes the added record while its accepted change remains latest. Plans needing a team or person retain guided creation. |
 | Empty-space creation awaiting an entry, or treating an existing blank cell as new work | #770 adds a named New session row to both Coordination sequencers. Its native buttons create from period/subdivision or accepted-person context. Existing occurrence gaps and participation dots preserve their descriptive meaning; the read-only People table stays unchanged. |
+| Participant movement applied only in the Session detail deck | #771 shares the keyed Move up/down pattern across session receivers, guided session creation and team membership. Inclusion retains positions; explicit ordering retains person identity and useful focus. Percentage-based effort has a separate future contract in #798. |
+| Detached people and relationship disclosures with uneven in-rack access | #772 attaches the existing pale drawers beneath the horizon, preserving spring reveal and draft owners. Compact People/Stages keys and existing relationship pads open the same inspectors; To place keeps unplaced relationships reachable. |
 
 ## Coordination consolidation
 
@@ -502,18 +510,34 @@ participation dots remain descriptive. The read-only People table receives no
 creation row. Current contextual editing and exact-creation Undo receive each
 new record; the composition adds an entry rather than another acceptance route.
 
-#771 reuses keyed pad movement for explicit participant reordering; inclusion
-keeps card positions stable. Its future percentage proposal names Time in this
-session, with a visible duration denominator. The current model gives each
-participant the full session duration; share-based effort therefore needs a
-separate stored/projection contract. Availability and funded time remain
-distinct. This exploration can run alongside the composition work.
+#771 shares participant movement across the canonical session editor, its rack
+and guided receivers, and team membership. A helper in `rack-controls.mjs`
+synchronizes Move up/down labels and edge states. Each controller calls
+`animateRackChange` and restores focus to the moved person's inclusion switch.
+The existing motion preference decides whether keyed cards move or settle
+immediately. Inclusion keeps the available cards mounted in their positions.
+The session and team controllers retain their distinct draft and acceptance owners.
 
-#772 attaches People and available time and Stages & handoffs directly below the
-rack as editorial sub-racks. Their useful controls, collapsed initial state,
-spring reveal and onward People routes remain. Equivalent in-rack entries
-address the same records and editors. Keep the existing native disclosure,
-flowRoot and motion owners as their enclosure changes.
+The future Time in this session fader is now scoped in
+[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
+It would describe one person's share of one occurrence, defaulting to 100% and
+showing the corresponding duration. Each person's share would be independent;
+0% would retain selected identity with an explicit zero-time reading. Current
+membership still gives every participant the full duration. A stored/projection
+contract must precede effort, cost or funded-time changes. Period availability
+and funded time retain their separate meanings.
+
+#772 uses `studio-rack-companions` to attach People and available time and Stages
+& handoffs below the horizon. Pale native disclosures keep their spring reveal,
+closed initial state and concise plan/period caption. Dark `studio-rack-records`
+rails supply People and Stages entries inside the screen. Existing handoff,
+decision and delay pads retain their routes; Handoffs or To place keys retain
+outgoing and unplaced relations. The drawer and rack paths address the same
+selected record and inspector. Expanded state follows the actual inspector and
+flow disclosure; Apply/Cancel restores the originating cadence key when present.
+Person settings keeps its explicit onward route to People. The existing
+`flowRoot`, draft and `mountStudioMotion` owners remain authoritative; collapsing
+the editorial reading preserves its unfinished edit.
 
 #773 receives the [removal/recovery research](removal-recovery-research.md): quiet
 rose removal with explicit scope, a concise local result and exact-removal Undo
@@ -702,10 +726,15 @@ PR #790 owns #788's duration skin and pointer observation. #789's receiving PR
 records the stable in-rack Session detail deck, existing-session draft/return
 behavior and occurrence/participant controls. This journal records the design
 and ownership; PR #794 records its completed review and delivery. PR #795 owns
-#758's immediate-add, later-edit and exact-creation Undo observations. #770's
-receiving PR owns the contextual period/person entry, ordinary phone/laptop
-geometry and return observations. This finishes the current sequence from
-inspecting a session to creating one. #771, #772 and #773 remain prospective.
+#758's immediate-add, later-edit and exact-creation Undo observations. PR #797
+owns #770's contextual period/person entry, ordinary phone/laptop geometry and
+return observations. The #771/#772 receiving PR records participant order/focus
+and motion, attached drawer containment and same-record operation routes. Review
+also preserved relationship recovery before a cadence exists (#801). The same
+pass restores the existing stage-choice layout (#799) and aligns the assembly
+rate check with deliberate adjustment from an unknown rate (#800).
+This journal records design and ownership rather than an unrun check result.
+Future percentage semantics remain with #798 and broader removal with #773.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

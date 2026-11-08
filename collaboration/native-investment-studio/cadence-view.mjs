@@ -9,7 +9,7 @@ const noop = () => {};
 // plan; session duration and investment retain their existing model owners.
 export function createCadenceView(root, {
   onSelect = noop, onNavigate = noop, onPeriod = noop, onAddSession = noop,
-  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onTryReview = noop, flowRoot = null,
+  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onTryReview = noop, flowRoot = null, flowPanel = null,
 } = {}) {
   const document = root.ownerDocument;
   let disposed = false, previousPeriodId, overviewReturn, periodOriginKey;
@@ -36,10 +36,17 @@ export function createCadenceView(root, {
   function create(label, action, target, key) {
     return button(label, action, target, key, `native-control--create native-cadence__create${action === 'add-session' ? ' studio-rack-add' : ''}`);
   }
-  function disclosure(label, key, expanded) {
-    const details = node('details', undefined, 'native-cadence__details');
-    details.dataset.cadenceDisclosure = key; details.open = expanded.has(key);
-    details.append(node('summary', label)); return details;
+  function disclosure(label, key) {
+    const details = node('details', undefined, 'native-cadence__details studio-rack-companion');
+    details.dataset.cadenceDisclosure = key;
+    const summary = node('summary'); summary.append(node('span', label));
+    details.append(summary); return details;
+  }
+  function scopeCaption(details, label) {
+    const summary = details.querySelector(':scope > summary');
+    let caption = summary.querySelector('.studio-rack-companion__scope');
+    if (!caption) { caption = node('span', undefined, 'studio-rack-companion__scope'); summary.append(caption); }
+    caption.textContent = label;
   }
   // The session owner lends its live controls to this slot. Refresh only the
   // surrounding projections so a dial turn or text edit keeps its DOM owner.
@@ -51,13 +58,17 @@ export function createCadenceView(root, {
   const tracks = node('div', undefined, 'native-cadence__tracks'); tracks.tabIndex = 0;
   tracks.setAttribute('role', 'region'); tracks.setAttribute('aria-label', 'Session tracks; scroll across the planning periods');
   const previewReading = node('p', undefined, 'native-cadence__preview'); previewReading.dataset.cadencePreviewReading = '';
-  screen.append(reading, board, delayRail, sessionSlot, tracks, previewReading); screen.hidden = true;
-  root.replaceChildren(screen);
-  let companions = [];
-  function replaceCompanions(fragment) {
-    companions.forEach(element => element.remove());
-    companions = [...fragment.childNodes]; root.append(fragment);
-  }
+  const recordRail = node('nav', undefined, 'studio-rack-records'); recordRail.setAttribute('aria-label', 'People and relationships');
+  screen.append(reading, board, delayRail, sessionSlot, tracks, previewReading, recordRail); screen.hidden = true;
+  const attachments = node('div', undefined, 'studio-rack-companions');
+  const availability = disclosure('People and available time', 'people');
+  const personRows = node('div', undefined, 'native-cadence__people'); availability.append(personRows);
+  const relationshipPanel = flowPanel ?? disclosure('Stages & handoffs', 'flow');
+  relationshipPanel.classList.add('studio-rack-companion');
+  attachments.append(availability, relationshipPanel);
+  const extras = node('div', undefined, 'native-cadence__extras');
+  root.classList.add('studio-rack-composition'); root.replaceChildren(screen, attachments, extras);
+  const externalFlowEvents = flowRoot && !root.contains(flowRoot) ? flowRoot : null;
   function click(event) {
     const control = event.target.closest('[data-cadence-action]');
     if (disposed || !control || !(root.contains(control) || flowRoot?.contains(control))) return;
@@ -75,13 +86,14 @@ export function createCadenceView(root, {
   root.addEventListener('click', click);
   root.addEventListener('pointerover', showPreview);
   root.addEventListener('focusin', showPreview);
-  flowRoot?.addEventListener('click', click);
+  externalFlowEvents?.addEventListener('click', click);
 
   function refresh(projection, { periodId = null, selected = null, preview = false } = {}) {
     if (disposed) return;
-    const expanded = new Set([...root.querySelectorAll('[data-cadence-disclosure][open]')].map(element => element.dataset.cadenceDisclosure));
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
     const scrollPosition = { board: board.scrollLeft, tracks: tracks.scrollLeft };
+    const recordScroll = new Map([...recordRail.querySelectorAll('[data-record-rail]')]
+      .map(element => [element.dataset.recordRail, element.scrollLeft]));
     actions.clear();
     const { state, result } = projection, cadence = state.scoreSettings.cadence;
     const fragment = document.createDocumentFragment();
@@ -95,7 +107,11 @@ export function createCadenceView(root, {
         create('Arrange this plan in sprints', 'create-horizon', null, 'create-horizon'));
       screen.hidden = true;
       reading.replaceChildren(); board.replaceChildren(); delayRail.replaceChildren(); tracks.replaceChildren();
-      fragment.append(invitation); replaceCompanions(fragment); return;
+      // Retained relationship recovery remains usable before a plan gains
+      // sprint/quarter placement. Only the period reading needs a cadence.
+      availability.hidden = true; attachments.hidden = !flowPanel;
+      scopeCaption(relationshipPanel, 'Saved arrangement');
+      fragment.append(invitation); extras.replaceChildren(fragment); return;
     }
     const model = projectCadence(state);
     const people = new Map(state.people.map(row => [row.id, row]));
@@ -131,8 +147,10 @@ export function createCadenceView(root, {
       + (incoming.get(row.workId)?.length ? ` Needs ${incoming.get(row.workId).map(id => work.get(id)?.label).filter(Boolean).join(', ')}.` : ' Opens this part of the work.');
     const endpointName = endpoint => endpoint.kind === 'stage' ? stages.find(row => row.id === endpoint.id)?.label ?? 'Stage'
       : work.get(endpoint.id)?.label ?? 'Session';
-    const inPeriod = row => !activePeriod || row.periodIds?.includes(activePeriod.id)
+    const inPeriod = row => !activePeriod || row.periodId === activePeriod.id || row.periodIds?.includes(activePeriod.id)
       || row.fromPeriodId === activePeriod.id || row.toPeriodId === activePeriod.id;
+    attachments.hidden = false; availability.hidden = false;
+    for (const details of [availability, relationshipPanel]) scopeCaption(details, activePeriod?.label ?? 'Plan overview');
 
     screen.hidden = false; screen.setAttribute('aria-label', activePeriod ? `${activePeriod.label} sessions and decisions` : 'Sprint and quarter plan overview');
     const context = node('div');
@@ -172,8 +190,8 @@ export function createCadenceView(root, {
       control.dataset.cadencePreview = decision.question || `Review ${decision.label.toLowerCase()} with the responsible people.`;
       return control;
     }
-    function delayMarker(delay) {
-      const control = selection(delay.label, 'delay', delay.id, `delay:${delay.id}`, selected, {}, 'native-cadence__delay native-control--navigate');
+    function delayMarker(delay, suffix = '') {
+      const control = selection(delay.label, 'delay', delay.id, `delay:${delay.id}${suffix ? ':' + suffix : ''}`, selected, {}, 'native-cadence__delay native-control--navigate');
       control.append(node('small', `${periodLabel(delay.fromPeriodId)} → ${periodLabel(delay.toPeriodId)}`));
       control.dataset.cadencePreview = delay.reason || 'Inspect the work affected by this delay.';
       return control;
@@ -317,7 +335,7 @@ export function createCadenceView(root, {
       fragment.append(demonstration);
     }
 
-    const flow = flowRoot ? node('div') : disclosure('Stages & handoffs', 'flow', expanded);
+    const flow = node('div');
     flow.classList.add('native-cadence__flow');
     const flowHeading = node('header', undefined, 'native-cadence__section-heading');
     flowHeading.append(create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'add-stage'),
@@ -358,9 +376,10 @@ export function createCadenceView(root, {
       controls.append(addDecision, addDelay); card.append(open, controls); handoffRows.append(card);
     }
     if (handoffRows.childElementCount) flow.append(handoffRows);
-    for (const decision of decisions.filter(row => row.periodId === null)) flow.append(decisionMarker(decision, 'unplaced'));
-    for (const delay of model.delays.filter(row => row.toPeriodId === null)) flow.append(delayMarker(delay));
-    if (flowRoot) flowRoot.replaceChildren(flow); else fragment.append(flow);
+    for (const decision of decisions.filter(inPeriod)) flow.append(decisionMarker(decision, 'editorial'));
+    for (const delay of model.delays.filter(inPeriod)) flow.append(delayMarker(delay, 'editorial'));
+    if (flowRoot) flowRoot.replaceChildren(flow);
+    else { relationshipPanel.querySelector(':scope > .native-cadence__flow')?.remove(); relationshipPanel.append(flow); }
 
     const unplaced = occurrences.filter(row => row.periodId === null || !periodById.has(row.periodId));
     if (unplaced.length) {
@@ -371,8 +390,16 @@ export function createCadenceView(root, {
       tray.append(clips); fragment.append(tray);
     }
 
-    const availability = disclosure(activePeriod ? `People in ${activePeriod.label}` : 'People and available time', 'people', expanded);
-    const personRows = node('div', undefined, 'native-cadence__people');
+    personRows.replaceChildren(); recordRail.replaceChildren();
+    function recordRow(label) {
+      const row = node('div', undefined, 'studio-rack-records__row');
+      row.append(node('span', label, 'studio-rack-records__label'));
+      const controls = node('div', undefined, 'studio-rack-records__keys');
+      controls.dataset.recordRail = label;
+      controls.tabIndex = 0; controls.setAttribute('role', 'region'); controls.setAttribute('aria-label', label + '; scroll to inspect');
+      row.append(controls); recordRail.append(row); return controls;
+    }
+    const peopleKeys = recordRow('People');
     const participants = activePeriod ? new Set(visible.flatMap(row => row.work.personIds)) : new Set(state.people.map(row => row.id));
     for (const id of participants) {
       const person = people.get(id); if (!person) continue;
@@ -387,12 +414,34 @@ export function createCadenceView(root, {
       const action = selection('Review availability', 'person', id, `availability:${id}`, selected,
         { periodId: activePeriod?.id ?? null }, 'native-cadence__quiet native-control--navigate');
       action.setAttribute('aria-label', `Review availability for ${person.label}`);
+      const rackEntry = selection(person.label, 'person', id, `rack-person:${id}`, selected,
+        { periodId: activePeriod?.id ?? null }, 'studio-rack-record-key native-control--navigate');
+      rackEntry.setAttribute('aria-label', `Review availability for ${person.label}`);
+      rackEntry.dataset.cadencePreview = `${person.label} · ${duration(effort)} of planned participation.`;
+      peopleKeys.append(rackEntry);
       const settings = button('Person settings', 'navigate', { kind: 'person', id }, `person-settings:${id}`, 'native-cadence__quiet native-control--navigate');
       const controls = node('div', undefined, 'native-cadence__local-actions'); controls.append(action, settings); card.append(controls); personRows.append(card);
     }
-    availability.append(personRows); fragment.append(availability);
-    replaceCompanions(fragment);
+    if (!participants.size) peopleKeys.append(node('span', 'Add people to a session to plan their time.'));
+    const stageKeys = recordRow('Stages');
+    for (const stage of stages.filter(inPeriod)) stageKeys.append(selection(stage.label, 'stage', stage.id, `rack-stage:${stage.id}`, selected,
+      {}, 'studio-rack-record-key native-control--navigate'));
+    stageKeys.append(create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'rack-add-stage'),
+      create('Connect work', 'add-handoff', null, 'rack-add-handoff'));
+    const railHandoffs = handoffs.filter(row => activePeriod ? inPeriod(row) && row.toPeriodId !== activePeriod.id : row.toPeriodId === null);
+    const railDecisions = activePeriod ? [] : decisions.filter(row => row.periodId === null);
+    const railDelays = activePeriod ? [] : model.delays.filter(row => row.toPeriodId === null);
+    if (railHandoffs.length || railDecisions.length || railDelays.length) {
+      const unplacedKeys = recordRow(activePeriod ? 'Handoffs' : 'To place');
+      for (const handoff of railHandoffs) unplacedKeys.append(selection(`${endpointName(handoff.from)} → ${endpointName(handoff.to)}`,
+        'handoff', handoff.id, `rack-handoff:${handoff.id}`, selected, {}, 'studio-rack-record-key native-control--navigate'));
+      for (const decision of railDecisions) unplacedKeys.append(decisionMarker(decision, 'rack-unplaced'));
+      for (const delay of railDelays) unplacedKeys.append(delayMarker(delay, 'rack-unplaced'));
+    }
+    extras.replaceChildren(fragment);
     if (restoredScroll) { board.scrollLeft = restoredScroll.board; tracks.scrollLeft = restoredScroll.tracks; }
+    if (!periodChanged) for (const element of recordRail.querySelectorAll('[data-record-rail]'))
+      element.scrollLeft = recordScroll.get(element.dataset.recordRail) ?? 0;
     if (arrivalFocus) {
       const arrival = [...root.querySelectorAll('[data-cadence-key]')].find(element => element.dataset.cadenceKey === arrivalFocus);
       arrival?.focus({ preventScroll: !periodChanged });
@@ -402,7 +451,7 @@ export function createCadenceView(root, {
   return Object.freeze({ refresh, getSessionSlot: () => disposed ? null : sessionSlot, dispose() {
     if (disposed) return; disposed = true; actions.clear();
     root.removeEventListener('click', click); root.removeEventListener('pointerover', showPreview); root.removeEventListener('focusin', showPreview);
-    flowRoot?.removeEventListener('click', click);
-    root.classList.remove('native-cadence'); delete root.dataset.cadenceReading;
+    externalFlowEvents?.removeEventListener('click', click);
+    root.classList.remove('native-cadence', 'studio-rack-composition'); delete root.dataset.cadenceReading;
   } });
 }

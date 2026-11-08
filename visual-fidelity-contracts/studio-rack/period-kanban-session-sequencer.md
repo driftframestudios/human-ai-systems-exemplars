@@ -168,12 +168,20 @@ table keeps its current scope. Both creation routes reuse the owner in
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 and the [contextual return contract](contextual-inspection-recovery.md).
 
-People and available time and Stages & handoffs remain useful
-[editorial companions](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772).
-Their planned attachment to the rack's lower edge preserves compact
-disclosure, spring movement and contextual scope. The corresponding people and
-relationship pads offer the same operations inside the instrument; both paths
-continue to address the same records and editors.
+People and available time and Stages & handoffs are attached
+[editorial companions](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
+at the horizon's lower edge. Their shared `studio-rack-companions` housing carries
+pale native disclosures, initially closed, with a Plan overview or selected-period
+caption. Opening keeps normal page flow and the existing spring movement.
+
+Compact People and Stages key rails inside the screen address the same inspectors
+as the drawers. Existing relation pads reach handoffs, decisions and delays;
+Handoffs/To place keys retain outgoing or unplaced relationships. Stage and handoff
+inspection keep their Add decision and Add delay operations. Add stage and
+Connect work also appear in the compact rail. Person settings remains a marked
+onward route to People beside local availability. Expanded state follows the
+actual inspector; Apply/Cancel returns to the originating key when present.
+Scope, drafts and acceptance keep their current owners across both readings.
 
 The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 supplies both readings with one existing session owner. The
@@ -185,7 +193,8 @@ from another occurrence's selection, and draft placement from accepted work.
 The receiving PR also records cross-rack retention, Apply/Cancel, return focus
 and period/phase context. The duration module and exact repetition input remain
 available. #758 adds direct accepted creation and its exact-creation Undo;
-#770 completes this sequence with contextual creation rows. Its receiving PR
-records the exercised context, return and ordinary phone/laptop geometry. The
-participant, attached-companion and broader removal patterns remain prospective.
+PR #797 delivered #770's contextual creation rows with their exercised context,
+return and ordinary phone/laptop geometry. The #771/#772 receiving PR owns the
+shared movement and attached-companion observations. Future percentage-based
+participation (#798) and broader removal (#773) retain separate contracts.
 Exact calendar or performance expansion needs its own consequential question.

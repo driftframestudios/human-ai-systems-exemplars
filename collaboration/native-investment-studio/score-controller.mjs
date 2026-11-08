@@ -23,6 +23,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
   let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
   let selected = { kind: 'horizon', id: '' }, fieldSignature = '', lastProjection = null;
+  let inspectionEntryKey = null;
   let arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
   const created = new Map();
   const node = (tag, text, className) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; };
@@ -65,6 +66,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   flowPanel.dataset.cadenceDisclosure = 'flow';
   const flowSummary = node('summary', 'Stages & handoffs'), flowRoot = node('div');
   const inspector = node('details', undefined, 'native-score__inspector'), summary = node('summary', 'Relationship settings');
+  inspector.id = instance + '-inspector';
   const form = node('form'); form.noValidate = true; form.dataset.scoreForm = '';
   const title = node('h4', 'Inspect the arrangement'), detail = node('p', '', 'native-score__record-note');
   title.tabIndex = -1;
@@ -80,14 +82,23 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   form.append(title, detail, recovery, fields, contextActions, preview, error, actions);
   inspector.append(summary, form); flowPanel.append(flowSummary, flowRoot, inspector);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
-  root.append(toolbar, pending, projectionRoot, flowPanel, status);
+  root.append(toolbar, pending, projectionRoot, status);
   const view = createCadenceView(projectionRoot, {
     onSelect: (target, source) => select(target, true, source), onNavigate: (target, source) => navigate(target, source),
     onPeriod: id => { periodId = id; render(); }, onAddSession: createSession,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
-    onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot,
+    onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot, flowPanel,
     onTryReview: () => tryLaterReview(),
   });
+  function syncInspectorControls() {
+    for (const control of projectionRoot.querySelectorAll('[data-cadence-action="select"]:not([data-studio-session-id])')) {
+      control.setAttribute('aria-controls', inspector.id);
+      control.setAttribute('aria-expanded', String(control.getAttribute('aria-pressed') === 'true'
+        && flowPanel.open && inspector.open && !inspector.hidden));
+    }
+  }
+  listen(flowPanel, 'toggle', syncInspectorControls);
+  listen(inspector, 'toggle', syncInspectorControls);
 
   function ensure() {
     if (disposed || !canOpen()) return null;
@@ -140,6 +151,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (match) target = { kind: 'handoff', id: match.id };
     }
     if (!['stage', 'handoff', 'gate', 'delay', 'person', 'horizon', 'legacy-availability', ...Object.keys(RETAINED_LISTS)].includes(target.kind)) return;
+    inspectionEntryKey = source?.dataset.cadenceKey ?? null;
     selected = target; fieldSignature = ''; const result = ensure(); render();
     if (!result || disposed) return;
     inspector.open = true; flowPanel.open = true; const epoch = generation, mark = boundary(); onEditing();
@@ -173,6 +185,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const group = node(multiple ? 'fieldset' : 'div', undefined, 'native-score__field' + (prose ? ' native-score__field--prose' : ''));
     const caption = node(multiple ? 'legend' : 'label', label);
     const input = node(multiple ? 'div' : choices ? 'select' : prose ? 'textarea' : 'input');
+    if (multiple) input.className = 'native-score__choices';
     input.id = instance + '-field-' + controls.size; input.dataset.cadenceField = key;
     if (!multiple) caption.htmlFor = input.id;
     if (choices) for (const [id, text] of choices) {
@@ -319,6 +332,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     for (const el of pendingActions.children) el.disabled = !editable || composing;
     error.textContent = current.error?.message ?? (proposed && !proposed.ok ? proposed.error.message : '');
     root.dataset.scoreState = current.status;
+    syncInspectorControls();
     return current;
   }
   function addStage() {
@@ -426,7 +440,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     announce(method === 'apply' ? 'Arrangement applied. Undo restores the previous plan.' : 'Changes cancelled.');
     if (!owns(epoch) || editing.read().active) return;
     const prefix = (origin.kind === 'gate' ? 'decision' : origin.kind) + ':' + origin.id;
-    const marker = [...projectionRoot.querySelectorAll('[data-cadence-key]'), ...flowRoot.querySelectorAll('[data-cadence-key]')].find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
+    const entries = [...projectionRoot.querySelectorAll('[data-cadence-key]')];
+    const marker = entries.find(el => el.dataset.cadenceKey === inspectionEntryKey)
+      ?? entries.find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
+    inspectionEntryKey = null;
     if (marker) { const disclosure = marker.closest('details'); if (disclosure) disclosure.open = true; }
     const destination = marker ?? flowSummary; destination.focus({ preventScroll: true }); revealStudioDestination(destination);
   }

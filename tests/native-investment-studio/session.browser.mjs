@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
+import { participantMovement } from './participant-movement.browser-helper.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { before, after, test } from 'node:test';
@@ -434,6 +435,7 @@ for (const engine of names) {
     }
     await sessions(page).locator('[data-session-action="person-up"][data-person-id="product-one"]').click();
     assert.notDeepEqual((await geometry()).map(row => row.id), ['product-one', 'product-two', 'engineering-one', 'engineering-two']);
+    await participantMovement(page, list);
     await legacy(page, 'cancel').click();
     assert.equal(await bytes(page), accepted);
   });

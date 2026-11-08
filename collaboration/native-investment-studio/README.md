@@ -78,22 +78,30 @@ in PR #793. Its responsive journey also protects the shared duration readout at
 enlarged text (#791); returning an editor to its home preserves focus (#792).
 PR #790 delivered the duration skin and shared dial artwork (#788).
 PR #794 delivered the deck after independent review. PR #795 delivered immediate
-session creation (#758) after independent review and passing hosted checks. #770 completes this sequence with a **New session** row inside both
-Coordination sequencers, reusing that accepted-creation and Undo owner.
+session creation (#758) after independent review and passing hosted checks.
+PR #797 delivered #770's **New session** rows inside both Coordination sequencers,
+reusing that accepted-creation and Undo owner.
 
-The continued planning route covers participant movement and future time-share
-controls
-([#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)),
-and attached editorial companions
+The current consolidation combines shared participant movement
+([#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771))
+with attached editorial companions
 ([#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)).
+Session and team membership editors share explicit Move up/down behavior; inclusion
+keeps cards in place. Compact People and Stages controls inside the horizon open
+the same records as the pale drawers attached below it. Their receiving PR owns
+the focused review and browser observations.
+
+The future **Time in this session** percentage model has its own contract in
+[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
+Current participation still gives each selected person the full session duration.
 The [removal/recovery recommendation](removal-recovery-research.md) in
 [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773)
 adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
 recovery. The existing Remove skin now lives with the shared instrument styles;
 its behavior stays with the current owners. Coordination supplies the reviewed
 recovery example before the new removal pattern spreads to other chapters.
-These are prospective increments. The arrangement reel already uses its direct
-acceptance and local Undo route.
+The refined removal pattern remains prospective. The arrangement reel already
+uses its direct acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 gives Coordination rack Add session actions a useful accepted starting record,
 then opens its existing editor. **Undo session addition** reverses that creation
@@ -102,7 +110,7 @@ and preserves the added session. The guided creation route remains available
 when a team or person must first be supplied. The
 [contextual creation rows](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 pass the chosen period/subdivision or accepted person into this same owner.
-Their receiving PR records the focused entry and recovery observations.
+PR #797 records the focused entry and recovery observations.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -189,11 +197,20 @@ column in Shared sessions. Outlined buttons retain their plus and Add session
 labels; pointer hover adds emphasis, and keyboard/touch entries stay visible.
 Existing occurrence gaps and participation dots keep their reading meaning.
 
-**Stages & handoffs** reveals the work's relationships and their editors.
-Decisions attach to a stage or handoff. Delays name affected work and can propose
-its later placement. Availability opens beside the person and period it concerns;
-funded time keeps its separate accounting meaning. Older saved plans retain
-their recorded timing and offer an explicit sprint-arrangement proposal.
+**People and available time** and **Stages & handoffs** form compact pale drawers
+attached below the horizon. They start closed and name the current plan or period.
+People and Stages keys inside the dark rack open the same inspectors; handoff,
+decision and delay pads keep their existing routes. Compact **Handoffs** or
+**To place** keys retain outgoing and unplaced relationships. Closing a drawer
+preserves unfinished work through the existing draft owner. Key carets follow
+the inspector's actual open state; Apply/Cancel returns to the initiating key.
+
+Availability opens for the selected person and period; **Person settings** is the
+marked onward route to People. Decisions attach to a stage or handoff. Delays
+name affected work and can propose its later placement. Funded time keeps its
+separate accounting meaning. Older saved plans retain their recorded timing and
+offer an explicit sprint-arrangement proposal. Their retained relationship editor
+stays reachable before they acquire a sprint or quarter horizon.
 
 Team planning follows the horizon as a permanent section. Its arrangement reel
 and editorial topology lead into a short hint, then a darker secondary rack.
@@ -243,9 +260,8 @@ with the visible session-settings receiver. The **New session** row creates work
 from a period/subdivision or accepted-person column. Shared sessions uses current
 people identities and leaves proposed team structures with their arrangement
 owner. The People chapter's read-only session table keeps its existing scope.
-The prospective attached companions in #772 retain People and available time
-and Stages & handoffs as compact readings below the rack, with equivalent in-rack
-entries and clear onward routes to People.
+The attached horizon drawers provide an editorial reading of those relationships;
+their in-rack entries and onward People routes address the same records.
 
 ### Inspect support and keep the result
 
@@ -301,6 +317,11 @@ displayed draft adjustment when focus or pointer capture ends. Escape or pointer
 cancellation restores the start of the active turn; Apply still accepts the
 editor's proposal. Native controls keep keyboard operation and exact values
 available.
+
+Participant and team-member **Move up/down** controls share labels, edge states
+and keyed movement. Focus returns to the moved person's inclusion switch.
+Inclusion preserves card positions; explicit reordering changes the stored order.
+Session participation continues to apply to every occurrence.
 
 The amp offers **Off**, **Half-speed** and **Full-speed** animation. Full-speed is
 the default; system reduced-motion preferences suppress animation. Chapter
@@ -358,6 +379,7 @@ checked source and remaining review boundary.
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
 | In-rack session deck and adjacent record editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon slot or Team planning's adjacent host. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
+| Participant order and attached editorial drawers | [`rack-controls.mjs`](rack-controls.mjs) shares reorder labels and edge states; [`work-controller.mjs`](work-controller.mjs) and [`assembly-controller.mjs`](assembly-controller.mjs) retain draft and focus ownership while calling [`reel-control.mjs`](reel-control.mjs)'s keyed movement. [`cadence-view.mjs`](cadence-view.mjs) and [`score-controller.mjs`](score-controller.mjs) connect the record rails and attached disclosures to the same inspector. |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,

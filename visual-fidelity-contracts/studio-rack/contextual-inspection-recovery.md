@@ -180,9 +180,11 @@ walkthrough determines how clearly the tape/deck metaphor reads.
 #758 accepts a useful session directly from Coordination rack Add controls and
 opens this same canonical editor. The new record survives cancellation of later
 draft edits; the local creation Undo has its own accepted-state boundary.
-#770 composes that owner into contextual New session rows. The repaired #777 browser routes supply
-current cross-chapter entry points. #771 retains broader participant movement
-and percentage semantics; the deck uses the existing inclusion and order owner.
+#770 composes that owner into contextual New session rows. The repaired #777
+browser routes supply current cross-chapter entry points. #771 shares explicit
+participant movement across the deck, other session receivers and team membership;
+existing inclusion and order owners keep their draft boundaries. The future
+percentage contract is separately scoped in #798.
 Phone reflow retains the title, exact fields, independent inclusion and visible
 Close. The receiving PR records the actual retention, placement, return and
 geometry observations; the contract describes their intended meaning.
@@ -194,15 +196,27 @@ Use Quality's selection matrix when people or support relationships benefit from
 comparable rows and pads; use a simpler pad group for a short independent choice
 set. Keep the selected object's name and Close/Return above its local controls.
 
-The planned [editorial sub-racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
-are another permitted receiver. People and available time
-and Stages & handoffs are to attach visually beneath the main instrument while
-keeping their readable card skin and existing spring disclosure. Their actions
-also have meaningful in-rack entries: a person, session or relationship remains
-the identifiable object before its editor opens. Review availability stays a
-local inspection; Person settings keeps its explicit destination when it opens
-the People chapter. Both paths use the existing owners and preserve return
-context, instead of maintaining separate copies of a form.
+The [attached editorial sub-racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
+keep People and available time and Stages & handoffs directly below the horizon
+in `studio-rack-companions`. Both native disclosures start closed, name the
+current plan or period and keep their readable card skin and spring reveal.
+Closing the disclosure preserves its unfinished draft. These receivers stay in
+normal flow and reuse the existing disclosure-motion owner.
+
+Compact People and Stages keys in `studio-rack-records` select the same person or
+stage as the drawer. Handoff, decision and delay pads retain their record routes;
+Handoffs/To place keys retain outgoing or unplaced relationships. Stage and handoff
+inspectors supply their existing Add decision and Add delay operations; Add stage
+and Connect work remain available in the compact rail. Person settings identifies
+its onward destination in People beside local availability.
+
+`score-controller.mjs` synchronizes the record keys' expanded state with the
+actual inspector and flow disclosure visibility. Apply/Cancel returns to the
+initiating cadence key when it remains available. The existing `flowRoot`,
+inspectors and draft owners serve both paths, preserving scope and proposal
+state rather than copying forms or acceptance logic. A saved plan without a cadence
+keeps its relationship inspector under **Saved arrangement**; period-specific
+readings appear when the visitor supplies a horizon.
 
 The [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
 has its own immediate acceptance and local Undo boundary. Its stable arrangement

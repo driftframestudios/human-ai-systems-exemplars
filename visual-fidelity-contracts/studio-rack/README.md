@@ -112,12 +112,13 @@ for a real shared receiving use.
 
 | Owner | Responsibility |
 | --- | --- |
-| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared track/Add/record keys, contextual creation zones, quantity modules, adjacent editor skin and the existing Remove skin |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared track/Add/record keys, contextual creation zones, attached editorial drawers, compact record rails, quantity modules, adjacent editor skin and the existing Remove skin |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, editorial delivery-phase cards, session tracks and the darker secondary Team planning enclosure |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | One canonical session form occupies Plan overview's stable detail-deck slot or Team planning's adjacent receiver; keys and pads mirror its identity, visibility and controlled element |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Adjacent person/team placement borrows canonical controls; current owners retain drafts, validation and acceptance |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Adjacent person/team placement borrows canonical controls; shared Move up/down mechanics retain the receiving controller's ordered IDs, drafts and acceptance |
+| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs) and [motion](../../collaboration/native-investment-studio/motion.mjs) | Attached people/relationship drawers and in-rack record entries share the existing selection, inspector, flowRoot and disclosure-motion owners |
 | [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning’s direct arrangement transaction, editorial topology, phase projection and scope, included-work reading, and participation table with a fixed header/local scroller |
 
 Ordinary phone and laptop widths are the receiving range for this showcase.
@@ -168,14 +169,26 @@ pads and tactile depth connect this secondary enclosure to the primary horizon
 while preserving their distinct readings.
 
 The [editorial-companion increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
-treats Editorial Rack as an attached sub-rack skin.
-People and available time and Stages & handoffs retain their concise headings,
-reading character and expandable spring movement, visually joined to the bottom
-of the instrument they explain. Their existing operations remain available from
-meaningful people, session and relationship controls inside that rack. The
-editorial receiver supplies a readable alternative and onward chapter routes;
-shared controller ownership keeps both paths aligned. The initial composition
-stays compact until the visitor opens these details.
+uses `studio-rack-companions` for the pale housing attached to the horizon's
+lower edge. Native **People and available time** and **Stages & handoffs**
+disclosures retain concise headings, a current-scope caption and spring reveal.
+They start closed and open in normal page flow. `studio-rack-records` supplies
+compact People and Stages key rails inside the dark screen; relation pads and
+Handoffs/To place keys keep outgoing or unplaced relationships reachable.
+
+The drawer and rack paths use the same selected record and inspector. Local
+availability retains the explicit Person settings route to People. Collapsing
+a drawer keeps unfinished edits with the existing owner. The retained `flowRoot`
+and `mountStudioMotion` continue to own relationship inspection and reveal.
+The generic classes describe housing; cadence attributes retain local state.
+
+Participant and team-member reordering share Move up/down labels and edge states
+through `rack-controls.mjs`. Each controller calls the existing `animateRackChange`
+helper and restores focus to the moved person's inclusion switch.
+Inclusion keeps cards in place. Full/Half-speed/Off and system reduction govern
+the presentation; the existing controller owns the ordered IDs and draft.
+The [future percentage contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
+remains separate from this movement and enclosure work.
 
 Coordination's `studio-rack-editor` has two placements. The Session detail deck
 in [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
@@ -229,6 +242,6 @@ The shared outlined `studio-rack-create-zone` keeps its plus and label visible,
 with extra emphasis on fine-pointer hover and a clear keyboard/touch entry.
 Existing gaps and participation dots retain their meaning; the People chapter's
 read-only table retains its scope.
-Attached editorial
-companions and refined removal remain prospective; their focused issues retain
-acceptance and delivery ownership.
+Attached editorial companions now share the horizon's housing and existing
+operation owners. Their receiving PR records focused verification and delivery.
+Refined removal and percentage-based participation retain their future issues.

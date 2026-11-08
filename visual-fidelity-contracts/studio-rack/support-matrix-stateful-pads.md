@@ -68,7 +68,7 @@ refer to them. Apply, Cancel and Undo keep their existing acceptance boundaries.
 | [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs) and [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Table meaning, selected card and adjacent retained editor |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Component support, quality inclusion and their existing draft owners |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) and [connection view](../../collaboration/native-investment-studio/connection-view.mjs) | Native people/session relationship table, fixed heading/Add control, local participant scroller and shared team/member-lane rendering |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Shared session keys and participation pads reflect the selected session and its actual receiver visibility |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Shared keys and pads reflect receiver state; participant/team-member Move up/down controls share keyed movement and focus while each controller owns its draft |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Person/team record keys open one adjacent canonical editor; inclusion remains with its existing draft owner |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Scoped table, rail, pad and adjacent-rack variants |
 | [Capability browser checks](../../tests/native-investment-studio/capability.browser.mjs) | Support states, retained selected drafts, shared work and readable table controls |
@@ -160,17 +160,30 @@ occurrence gaps keep their descriptive meaning. The People chapter's read-only
 table receives no creation row. A future participation action in an existing
 cell must name that person/session relationship explicitly.
 
-The [participant-control increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
-is to reuse the keyed movement of Change's component
-keys through `animateRackChange` in
-[`reel-control.mjs`](../../collaboration/native-investment-studio/reel-control.mjs).
-Consistent Move earlier/later or up/down controls describe the rendered order;
-the receiving layout chooses the directional words that match its geometry.
-Stable person identity, retained focus and the motion preference govern the
-movement. Membership toggles keep the available cards mounted; an explicit
-reorder changes their order. Its later **Time in this session** fader receives
-the quantity decision in [Precision Dials & Faders](precision-dials-faders.md)
-before a pad starts implying a person's share of session time.
+The [participant movement increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
+shares the keyed movement of Change's component keys through `animateRackChange`
+in [`reel-control.mjs`](../../collaboration/native-investment-studio/reel-control.mjs).
+`syncReorderButtons` in `rack-controls.mjs` synchronizes **Move up/down** labels
+and disabled edge states across the canonical session editor, its rack and
+guided receivers, and team membership. Each receiving controller retains its
+ordered IDs, draft, acceptance operation and focus on the moved person's
+inclusion switch.
+
+Movement follows stable person identity and the existing motion preference.
+Off or system reduction settles the same order immediately. Focus stays with
+the same person even when their Move button reaches a disabled edge.
+Membership toggles keep available cards mounted in their positions; explicit
+reordering changes order. The future **Time in this session** fader is now
+scoped in [#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
+and [Precision Dials & Faders](precision-dials-faders.md). Current membership
+continues to give every selected person the full session duration.
+
+The horizon's attached People and available time and Stages & handoffs drawers
+supply a readable alternative to compact in-rack People/Stages key rails and
+relationship pads. Both entries choose the same record and inspector. The shared
+`studio-rack-companions` enclosure preserves native disclosure and draft ownership;
+`studio-rack-records` names the compact in-screen rail. These are presentation
+roles, while the receiver keeps its person, relation and availability meanings.
 
 The future [removal pattern](../../collaboration/native-investment-studio/removal-recovery-research.md)
 keeps the affected relationship explicit: removing a person from a session,

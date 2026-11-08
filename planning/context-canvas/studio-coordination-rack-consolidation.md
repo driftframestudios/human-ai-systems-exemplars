@@ -23,9 +23,11 @@ browser routes (#777), enlarged-text readout (#791) and editor restoration (#792
 #789 places the canonical Session detail deck inside Plan overview; Team planning
 retains the adjacent receiver. PR #794 delivered that increment after independent
 review. PR #795 delivered immediate creation (#758) after independent review
-and passing hosted checks. Contextual creation rows (#770) complete
-this sequence through that same acceptance owner. Participant refinements,
-attached companions and broader removal/recovery retain their prospective issues.
+and passing hosted checks. PR #797 delivered contextual creation rows (#770)
+through that same acceptance owner. The current #771/#772 increment consolidates
+participant movement and attaches the editorial companions. Its receiving PR
+owns focused review and verification. Percentage-based participation (#798) and
+broader removal/recovery (#773) remain future work.
 The current aesthetic, compact landing and existing operations remain the reference.
 
 ## Same work, distinct readings
@@ -148,17 +150,23 @@ state. #770 reuses this owner and preserves existing cell meanings.
 
 [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
 reuses `animateRackChange` for explicit participant reordering, keyed by person
-identity. Move controls share their labels, spacing and edge states. Inclusion
-toggles keep the cards in place. Motion preferences retain their current owner.
+identity, across the session deck, adjacent/guided session receivers and team
+membership. `syncReorderButtons` in `rack-controls.mjs` synchronizes Move up/down
+labels and edge states. Each controller keeps its ordered IDs and draft, calls
+`animateRackChange` and restores focus to the moved person's inclusion switch.
+Inclusion keeps cards in place. Full/Half-speed/Off and system reduction retain
+their existing motion owner.
 
-A future **Time in this session** fader is the recommended first percentage
-interpretation: a person's share of one occurrence, with percentage and duration
-shown together. Current membership gives each participant the full duration;
-availability and funded time have separate owners. The new share therefore
-needs an explicit stored/projection contract before an operative control is
-added. #771 records that focused decision and a separate project/period
-availability option. This model exploration can run alongside the composition
-work and does not block editor placement.
+The future **Time in this session** fader is separately scoped in
+[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798):
+a person's share of one occurrence, with percentage and corresponding duration
+shown together. Default 100% preserves current examples. Shares are independent;
+0% retains selected identity and a zero-time reading. Current membership still
+gives every participant the full duration. An explicit stored/projection contract
+must precede changes to that person's effort, cost or funded-time consumption.
+Session length, repetitions, placement and other people's shares remain distinct.
+A project/period availability fader needs its own named period and available-time
+denominator. This model work has its own acceptance and proportionate evidence.
 
 ## Team planning flow
 
@@ -242,9 +250,9 @@ that #789 now uses inside Plan overview.
 Cross-entry moves the same session receiver and retains its current proposal.
 Close restores the initiating control with its local context; Cancel discards
 the proposal, and Apply accepts through the session owner. The duration enclosure
-and exact Working sessions input remain intact. #758/#770, #771, #772 and #773
-keep creation, participant changes, attached companions and removal/recovery as
-separate increments.
+and exact Working sessions input remain intact. Creation (#758/#770), participant
+movement (#771), attached companions (#772), future percentages (#798) and
+removal/recovery (#773) retain their distinct acceptance boundaries.
 
 ### Session detail deck inside Plan overview
 
@@ -279,8 +287,9 @@ occurrences. People controls therefore describe participation in the session;
 per-occurrence placement pads describe where each repetition happens. Native
 checkboxes own independent inclusion; native radios own exclusive period and
 subdivision choices. A people-by-occurrence matrix would require a separate
-membership model. #771 retains its broader movement and percentage work; the
-deck uses the current ordered participant collection and reorder operations.
+membership model. #771 shares the current movement and reorder controls across
+receivers; #798 separately owns a future percentage model. The deck continues to
+use one ordered participant collection for all occurrences.
 
 `cadence-view.mjs` preserves a stable deck slot while refreshing the board and
 tracks around it. `mountRackEditor` in `rack-controls.mjs` lends canonical nodes
@@ -380,17 +389,31 @@ focused layout and value agreement evidence.
 ## Attached editorial companions
 
 [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
-preserves **People and available time** and **Stages & handoffs** as compact
-editorial sub-racks attached to the instrument's lower edge. Their pale skin,
-short summaries and existing spring reveal provide a useful visual counterpoint.
-The initial view stays collapsed; an open companion can host its own rack.
+attaches **People and available time** and **Stages & handoffs** to the horizon's
+lower edge in a shared `studio-rack-companions` enclosure. Pale native disclosures
+retain concise summaries, the current Plan overview or selected-period caption,
+and the existing spring reveal. They start closed and open in normal page flow.
+Their headings and pale reading skin counterpoint the dark screen.
 
-Map each useful operation to both an in-rack entry and the existing editorial
-route: people/availability, stages, handoffs, decisions and delays. Both entries
-select the same record and editor. Keep clear onward routes to People alongside
-local operations, with the current destination cue and recoverable return.
-Preserve `cadence-view.mjs` content, `score-controller.mjs`'s retained flow
-disclosure/inspector and `motion.mjs`'s disclosure owner during composition.
+| Editorial operation | Equivalent in-rack entry | Retained owner |
+| --- | --- | --- |
+| Inspect a person's availability | People key in the compact `studio-rack-records` rail | Selected-person availability inspector in `score-controller.mjs` |
+| Open Person settings in People | Person settings in that same availability inspector | Existing cross-chapter route and person editor |
+| Inspect a stage; add its decision or delay | Stage key in the compact rail | Existing stage inspector and draft |
+| Inspect a handoff; add its decision or delay | Relation pad or compact Handoffs/To place key | Existing handoff inspector and draft |
+| Inspect a decision or delay | Relation pad or To place key when awaiting placement | Existing relation selection and inspector |
+| Add a stage or connect work | Add stage and Connect work in the compact Stages rail | Existing creation/draft owner |
+
+The drawer and screen entries select the same record. Their expanded state tracks
+the actual flow disclosure and inspector. Closing a native disclosure keeps its
+unfinished draft; Apply/Cancel returns to the initiating cadence key when present.
+Acceptance and removal retain their current owners.
+The current-period drawer includes decisions and delays alongside stages and
+handoffs. `cadence-view.mjs` renders the people reading and compact entry rails;
+`score-controller.mjs` retains `flowRoot`, relationship content and the inspector.
+`motion.mjs#mountStudioMotion` remains the spring-disclosure owner. Shared
+instrument CSS owns the generic enclosure and rail roles; cadence data attributes
+continue to identify local state.
 
 ## Scoped removal with nearby recovery
 
@@ -432,19 +455,20 @@ expanding the first style PR into a deletion-model rewrite.
 | [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777) | Current-entry observations for two legacy browser journeys | Delivered in #793 with readout (#791) and editor-restoration (#792) repairs |
 | [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789) | Session detail deck inside Plan overview | PR #794 delivered the stable slot, canonical editor and occurrence/participant controls after independent review |
 | [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) | Immediate session addition and exact-creation Undo | PR #795 delivered useful accepted defaults, canonical editing and scoped creation Undo after independent review and passing checks |
-| [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Contextual New session rows | Final increment in this sequence: period/subdivision and accepted-person entries reuse #758's owner; its receiving PR owns focused verification and delivery |
-| [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant movement; separately, scoped percentage semantics | Movement can accompany shared controls; the percentage model remains independent future work |
-| [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Receives the shared shell; prepares contextual editors without changing their draft ownership |
+| [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Contextual New session rows | Delivered in PR #797; period/subdivision and accepted-person entries reuse #758's owner |
+| [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant and team-member movement | Current focused increment; one helper shares labels/edge states, and controllers reuse keyed movement with focus on the moved person's switch |
+| [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Current focused increment; compact native drawers and record rails retain existing draft, inspector and motion owners |
+| [#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798) | Time in this session percentage contract | Future model and control; current participants retain the full session duration |
 | [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773) | Scoped removal, amp Undo, then a Coordination local-recovery example | Receives shared controls/history; human review releases cross-chapter removal adoption |
 
 The reviewed #757/#768 implementations supply shared panel placement and session
 editing ownership. #789 composes that owner inside Plan overview.
 #758 supplies the acceptance/Undo owner and #770 supplies contextual new-record
-entries. This completes the current sequence from inspecting a session to
-creating one. #771's movement and percentage work, #772's companion shell and
-#773's broader removal/recovery remain prospective. Existing-session editing
-keeps its draft boundaries. Publication, sticky amp work and general performance
-retain their own routes.
+entries. The #771/#772 increment consolidates movement and attached readings
+around those established operations. Its receiving PR records review and delivery.
+Future percentage work (#798) and broader removal/recovery (#773) retain separate
+issues. Existing-session editing keeps its draft boundaries. Publication, sticky
+amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
 as accepted foundations. #765’s reviewed composition, #779’s delivery board and
@@ -494,8 +518,14 @@ adjacent entry remains part of the cross-rack draft and return observation.
 PR #795 records #758's useful accepted session, its contextual receiver, Cancel
 preserving that record, local Undo reversing only the latest creation, and the
 guided fallback when people or teams need to be supplied. A later accepted edit
-retires the local creation shortcut while preserving global history. #770's
-receiving PR observes period/subdivision and accepted-person entry, canonical
-editing and Undo, ordinary phone/laptop containment and keyboard/touch access.
-Existing gap/dot readings and the People chapter's read-only table remain part
-of its scope boundary. The receipt records actual checked behavior.
+retires the local creation shortcut while preserving global history. PR #797
+records #770's period/subdivision and accepted-person entry, canonical editing
+and Undo, ordinary phone/laptop containment and keyboard/touch access. Existing
+gap/dot readings and the People chapter's read-only table retain their scope.
+
+The #771/#772 receipt should observe one reorder retaining identity, draft and
+useful focus; inclusion preserving position; and Off/system-reduced motion
+settling the same order. A populated companion journey should address the same
+person or relation from the drawer and rack, preserve scope/drafts, and show the
+closed initial enclosure at phone/laptop widths. These are fitting observations;
+the receiving PR records which behavior was actually checked.
