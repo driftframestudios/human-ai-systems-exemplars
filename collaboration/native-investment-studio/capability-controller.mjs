@@ -3,6 +3,7 @@ import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from '
 import { money } from './display.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { revealStudioDestination } from './motion.mjs';
+import { mountSubmitMirror, focusSubmitControl } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const COLLECTION = Object.freeze({ ability: 'abilities', practice: 'practices' });
@@ -31,6 +32,8 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   elements.selected.before(rack); rack.append(elements.selected, elements.configure);
   const closeControl = button('Close', 'close'); closeControl.classList.add('native-control--cancel');
   elements.selected.querySelector('.native-capability-card__actions').append(closeControl);
+  const topApply = mountSubmitMirror(closeControl.parentElement, { before: closeControl });
+  topApply.setSource(actions.get('apply'));
   const editor = editing.capability;
   let disposed = false, generation = 0, composing = false, acknowledged = false, projection = null;
   let selection = null, target = null, builtTarget = null, builtProjection = null;
@@ -296,6 +299,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     actions.get('fresh-id').hidden = !view.creationConflict;
     for (const action of ['review', 'current', 'discard', 'fresh-id']) actions.get(action).disabled = !draft;
     actions.get('apply').disabled = !draft || view.status !== 'editing'; actions.get('cancel').disabled = !draft;
+    topApply.setSource(draft ? actions.get('apply') : null);
     if (draft) {
       elements.summary.textContent = `${descriptor.mode === 'remove' ? 'Remove' : 'Settings'} · ${descriptor.definition.action}`;
       for (const [key, control] of controls) {
@@ -399,7 +403,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     }
     const next = editor.begin(makeCapabilityTarget(capabilityForm(descriptor.kind, 'update', descriptor.definition.id, descriptor.definition.version), descriptor.id), accepted);
     opened(next, epoch, false); if (!owns(epoch)) return;
-    announce(`Proposal applied. ${investmentAmount('Accepted investment', accepted.result)}${accepted.result.plannedCommitmentCents === null ? ' Add missing hourly rates in People to complete the amount.' : ''}`); actions.get('apply').focus();
+    announce(`Proposal applied. ${investmentAmount('Accepted investment', accepted.result)}${accepted.result.plannedCommitmentCents === null ? ' Add missing hourly rates in People to complete the amount.' : ''}`); focusSubmitControl(actions.get('apply'));
   }
   function addRecord(control) {
     const view = editor.read(), key = control.dataset.capabilityReceiverField;
@@ -513,7 +517,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (disposed) return;
     close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const control of actions.values()) control.disabled = true;
-    closeControl.remove(); root.append(elements.selected, elements.configure); rack.remove();
+    topApply.dispose(); closeControl.remove(); root.append(elements.selected, elements.configure); rack.remove();
     INSTANCES.delete(root); projection = null; controls.clear(); workGroups.clear();
   }
   render();

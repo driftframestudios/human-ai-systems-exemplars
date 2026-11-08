@@ -74,7 +74,7 @@
 .studio-occurrences__title { display: grid; gap: .2rem; }
 .native-coordination .studio-occurrences__title h4 { margin: 0; color: var(--native-paper); font: 700 .8rem/1.4 ui-monospace, monospace; }
 .studio-occurrences__header > button { justify-self: end; }
-.studio-occurrences__footer { margin-block-start: auto; padding-block-start: .6rem; }
+.studio-occurrences__footer { display: flex; justify-content: flex-end; margin-block-start: auto; padding-block-start: .6rem; }
 .studio-occurrences__count { font: 700 .9rem/1.4 ui-monospace, monospace; color: var(--native-signal); }
 .studio-occurrences__pads { display: flex; flex-wrap: wrap; gap: .4rem; }
 .native-coordination .studio-occurrences__pad {
@@ -118,8 +118,13 @@
 .studio-session-state .native-session__exclusive { display: grid; flex: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
 .studio-session-state .native-session__exclusive > li { margin: 0; }
 .studio-session-state .native-session__exclusive label {
+ display: grid; grid-template-columns: auto minmax(0, 1fr); align-content: start; align-items: start; gap: .45rem;
  min-block-size: 4.5rem; padding: .65rem; border: 1px solid #668b73; border-block-end-width: .2rem; border-radius: .15rem;
 }
+.studio-session-state .native-session__exclusive label > input { margin-block-start: .15rem; }
+.studio-session-state .native-session__exclusive label > span { display: grid; gap: .35rem; }
+.studio-session-state .native-session__exclusive strong { font: inherit; font-weight: 650; }
+.studio-session-state .native-session__exclusive small { color: inherit; font-size: .72rem; line-height: 1.4; }
 .studio-session-state .native-session__exclusive label:has(:checked) { border-block-start-width: 1px; border-color: #275b4b; }
 .studio-session-state .native-session__exclusive label:has(:focus-visible) { outline: .15rem solid var(--native-signal); outline-offset: .15rem; }
 @container (min-width: 44rem) {

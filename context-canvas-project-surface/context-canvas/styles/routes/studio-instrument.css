@@ -49,7 +49,7 @@
 .native-coordination [data-native-chapter-panel] { font-size:.9rem; }
 .native-coordination :where([data-native-chapter-panel]) button { border-width:1px; box-shadow:none; padding:.45rem .7rem; min-block-size:2.5rem; }
 .native-coordination :where([data-native-chapter-panel]) button:active:not(:disabled,[aria-disabled='true']) { box-shadow:inset 0 2px 3px #173c3133; transform:none; }
-.native-coordination :where([data-native-chapter-panel]) button[type='submit'] { box-shadow:.2rem .2rem 0 var(--native-key-shadow); border-width:2px; }
+.native-coordination :where([data-native-chapter-panel]) :is(button[type='submit'], .studio-apply-control) { box-shadow:.2rem .2rem 0 var(--native-key-shadow); border-width:2px; }
 .native-coordination :where([data-native-chapter-panel]) :is(input:not([type='checkbox'],[type='radio'],[type='range']),select,textarea) { border:1px solid #668b73; }
 .native-coordination .native-control--remove { border:1px solid #965368; background:#ecd3dc; color:#71394d; box-shadow:none; }
 .native-coordination .native-control--remove:active:not(:disabled) { box-shadow:none; transform:none; }
@@ -80,7 +80,7 @@
 .native-coordination :is(.studio-team-lane, .native-cadence__period, .native-cadence__stage, .native-score__stage, .native-arrangement__lane) .native-control--create { box-shadow: none; border: 1px dashed var(--native-rule); background: color-mix(in srgb, var(--native-signal) 18%, var(--native-paper)); }
 .native-coordination :is(button,a).native-control--navigate:not([data-studio-session-id])[data-native-destination-active='true']::after,
 .native-coordination :is(button,a).native-control--navigate[aria-expanded='true']::after { transform: translateY(-50%) rotate(135deg); }
-.native-coordination button[type='submit'] { background: var(--native-signal); }
+.native-coordination :is(button[type='submit'], .studio-apply-control) { background: var(--native-signal); color: var(--native-text); }
 .native-coordination input[type='text']:not([inputmode]):not(:disabled), .native-coordination textarea:not(:disabled) { background: var(--native-zine-field); color: var(--native-text); border-color: var(--native-rule); }
 .native-coordination :is(.native-score__steps,.native-coordination__stepper) { column-gap: .35rem; justify-content: center; }
 @media (min-width: 64rem) {
@@ -148,8 +148,8 @@
  background: color-mix(in srgb, var(--native-signal) 18%, var(--native-paper));
  color: var(--native-text); box-shadow: none; font-size: .75rem;
 }
-/* Empty creation space has its own row; existing session cells keep their
-   occurrence or participation meaning. Both rack readings share this skin. */
+/* Existing plan cells append a working session; a separate New plan row creates
+   a cassette. Both rack readings share this creation skin. */
 .native-coordination button.native-control--create.studio-rack-create-zone {
  display: flex; align-items: center; justify-content: center; gap: .4rem;
  inline-size: 100%; min-block-size: 2.75rem; padding: .4rem;
@@ -306,6 +306,7 @@
 .studio-rack-records { display: grid; gap: .4rem; min-inline-size: 0; margin-block-start: .7rem; padding-block-start: .6rem; border-block-start: 1px solid #668b73; }
 .studio-rack-records__row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); align-items: center; gap: .45rem; min-inline-size: 0; }
 .studio-rack-records__label { color: #d1dfcd; font: 650 .68rem/1.4 ui-monospace, monospace; }
+.native-cadence__unplaced .studio-rack-records__label { color: var(--native-text); }
 .studio-rack-records__keys { display: flex; gap: .4rem; min-inline-size: 0; padding: .2rem; overflow-x: auto; scrollbar-color: #739e85 #10261e; }
 .studio-rack-records__keys:focus-visible { outline: .15rem solid #fff4d4; outline-offset: .05rem; }
 .native-coordination .studio-rack-records__keys > button { flex: 0 0 auto; max-inline-size: 19rem; inline-size: auto; }
@@ -320,7 +321,7 @@
 }
 @media (forced-colors: active) {
   .studio-rack-companions, .native-coordination .studio-rack-companion, .native-coordination .studio-rack-companion > summary { border-color: CanvasText; background: Canvas; color: CanvasText; }
-  .studio-rack-records__label { color: CanvasText; }
+  .studio-rack-records__label, .native-cadence__unplaced .studio-rack-records__label { color: CanvasText; }
   .native-coordination .studio-rack-record-key { background: ButtonFace; color: ButtonText; border-color: ButtonText; box-shadow: none; }
   .native-coordination .studio-rack-record-key[aria-pressed='true'] { background: ButtonFace; color: ButtonText; border-color: Highlight; outline: 1px solid Highlight; }
 }

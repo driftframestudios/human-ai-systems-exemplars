@@ -4,6 +4,7 @@ import { createShowcaseCadence } from './showcase-scenarios.mjs';
 import { scoreField, startingScoreRaw } from './score-draft.mjs';
 import { money } from './display.mjs';
 import { resolveScoreDestination } from './navigation-policy.mjs';
+import { mountSubmitMirror } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const LABELS = Object.freeze({ stage: 'stage', handoff: 'handoff', gate: 'decision', delay: 'delay', person: 'person',
@@ -79,13 +80,16 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const status = node('p', '', 'native-coordination__status'); status.setAttribute('role', 'status'); status.dataset.scoreStatus = '';
   form.append(detail, recovery, fields, contextActions, preview, error, actions);
   form.className = 'studio-rack-editor__body';
-  inspectorHeading.append(title, button('Close', 'close', 'native-control--cancel'));
+  const inspectorTools = node('div', undefined, 'studio-rack-editor__tools');
+  const topApply = mountSubmitMirror(inspectorTools); topApply.setSource(apply);
+  inspectorTools.append(button('Close', 'close', 'native-control--cancel'));
+  inspectorHeading.append(title, inspectorTools);
   inspector.append(inspectorHeading, form); flowPanel.append(flowSummary, flowRoot);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   root.append(toolbar, pending, projectionRoot, status);
   const view = createCadenceView(projectionRoot, {
     onSelect: (target, source) => select(target, true, source), onLoadPlan: loadPlan, onAddPeriod: addPeriod, onNavigate: (target, source) => navigate(target, source),
-    onPeriod: id => { periodId = id; render(); }, onAddSession: createSession,
+    onPeriod: id => { periodId = id; render(); }, onAddSession: createSession, onAddOccurrence: addOccurrence,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot, flowPanel,
   });
@@ -193,6 +197,23 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
     onCreateSession(context, source);
   }
+  function addOccurrence({ workId, periodId: destination, subdivision }) {
+    if (disposed || !isActive()) return;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    if (onLoadPlan(loadedPlanId) === false || disposed || !isActive()) return;
+    const base = studio.read(), cadence = base.state.scoreSettings.cadence;
+    const work = base.state.work.find(row => row.id === workId);
+    if (!work || !cadence?.periods.some(period => period.id === destination)) return;
+    const placements = cadence.placements.filter(row => row.workId === workId)
+      .map(({ occurrenceIndex, periodId, subdivision }) => ({ occurrenceIndex, periodId, subdivision }));
+    placements.push({ occurrenceIndex: work.occurrences, periodId: destination, subdivision });
+    const result = studio.applyCommand({ type: 'work.update', work: { ...work, occurrences: work.occurrences + 1 }, placements }, base);
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    onAccepted(result.projection);
+    if (!disposed) { render(); onEditing(); announce(`Session added to ${work.label}. Undo restores the previous sessions.`); }
+  }
   function writeRaw(key, value) {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
     const result = operate(Array.isArray(value) ? 'setIds' : 'setText', current.draft.token, key, value);
@@ -241,6 +262,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const signature = JSON.stringify([selected, periodId, raw.stageIds, raw.gateIds, cadence?.periods, cadence?.handoffs.map(row => row.id), cadence?.delays.map(row => row.id)]);
     if (signature === fieldSignature && lastProjection === state) return;
     fieldSignature = signature; lastProjection = state; controls.clear(); fields.replaceChildren(); contextActions.replaceChildren();
+    actions.querySelector('[data-score-action="remove"]')?.remove();
+    inspector.dataset.recordKind = selected.kind;
     const people = [['', 'Choose when known'], ...state.people.map(row => [row.id, row.label])];
     const periods = [['', 'Choose a period'], ...(cadence?.periods ?? []).map(row => [row.id, row.label])];
     const endpoints = [...state.work.map(row => ['work:' + row.id, row.label]), ...raw.stageIds.map(id => ['stage:' + id, raw['stage.' + id + '.label'] || 'New stage'])];
@@ -270,9 +293,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       rawField('gate.' + selected.id + '.reviewerPersonId', raw, people);
       rawField('gate.' + selected.id + '.modeledDecision', raw, Object.entries(CHOICES));
     } else if (selected.kind === 'handoff') {
-      ownedField('handoffs', 'from', 'Work preparing the handoff', { choices: endpoints, endpoint: true });
-      ownedField('handoffs', 'to', 'Work receiving the handoff', { choices: endpoints, endpoint: true });
-      ownedField('handoffs', 'connectionId', 'Team connection', { choices: [['', 'Choose when useful'], ...state.connections.map(row => [row.id, row.sharedObject])], nullable: true });
+      ownedField('handoffs', 'from', 'From work', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'to', 'To work', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'connectionId', 'Team connection (optional)', { choices: [['', 'Choose when useful'], ...state.connections.map(row => [row.id, row.sharedObject])], nullable: true });
+      fields.lastElementChild?.classList.add('native-score__field--connection');
     } else if (selected.kind === 'delay') {
       ownedField('delays', 'label', 'Delay name');
       ownedField('delays', 'anchor', 'Affected work or handoff', { choices: [...endpoints, ...(cadence?.handoffs ?? []).map(row => ['handoff:' + row.id, 'Handoff · ' + row.id])], endpoint: true });
@@ -292,10 +316,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
         }, { numeric: true, placeholder: 'Unknown' });
       const personLink = button('Open person settings', 'person-settings', 'native-control--navigate'); contextActions.append(personLink);
     }
-    if (['stage', 'handoff'].includes(selected.kind) && selected.id) {
+    if (['stage', 'handoff'].includes(selected.kind) && selected.id && !created.has(selected.kind + ':' + selected.id)) {
       contextActions.append(button('Add decision here', 'add-decision', 'native-control--create'), button('Add delay here', 'add-delay', 'native-control--create'));
     }
-    if (['stage', 'handoff', 'gate', 'delay'].includes(selected.kind) && selected.id) contextActions.append(button('Remove this ' + LABELS[selected.kind], 'remove', 'native-control--remove'));
+    if (['stage', 'handoff', 'gate', 'delay'].includes(selected.kind) && selected.id && !created.has(selected.kind + ':' + selected.id)) actions.append(button('Remove this ' + LABELS[selected.kind], 'remove', 'native-control--remove'));
   }
   function render() {
     const current = editor.read(); if (disposed) return current;
@@ -323,7 +347,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     detail.textContent = Object.hasOwn(RETAINED_LISTS, selected.kind) || selected.kind === 'legacy-availability'
       ? 'This reference was saved in an earlier arrangement. Inspect it here, then remove it if it no longer belongs in this plan. Apply keeps the removal; Cancel restores it.'
       : selected.kind === 'stage' ? 'Group the sessions that support this stage. Their people and duration stay with each session.'
-      : selected.kind === 'handoff' ? 'Connect the work preparing a result to the work that receives it.'
+      : selected.kind === 'handoff' ? 'Choose the work that passes a result, then the work that receives it.'
         : selected.kind === 'gate' ? 'Name the question and the person who will review the evidence.'
           : selected.kind === 'delay' ? 'Describe what needs more time. Move the affected sessions when you are ready to revise their placement.'
             : selected.kind === 'person' ? 'Available time describes this period. Leave it blank when unknown; funded time has its own meaning.'
@@ -333,7 +357,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       const next = value(); if (multiple) for (const check of input.querySelectorAll('input')) check.checked = (next ?? []).includes(check.value);
       else if (input.value !== String(next ?? '')) input.value = next ?? '';
     }
-    fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft;
+    fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft || !contextActions.children.length;
     const inspectorHome = displayedCadence ? view.getSessionSlot() : flowPanel;
     if (inspector.parentElement !== inspectorHome) inspectorHome.append(inspector);
     if (!displayedCadence && inspectorOpen) flowPanel.open = true;
@@ -345,7 +369,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       : current.draft ? 'Review the entries before applying this arrangement.' : '';
     pendingText.textContent = arrangementNote + ' ' + preview.textContent;
     pending.hidden = selected.kind !== 'horizon' || !changed;
-    actions.hidden = !current.draft || selected.kind === 'horizon'; preview.hidden = selected.kind === 'horizon';
+    actions.hidden = !current.draft || selected.kind === 'horizon'; preview.hidden = ['horizon', 'handoff'].includes(selected.kind);
     apply.textContent = isNew ? 'Add ' + LABELS[selected.kind] + ' to plan' : 'Apply changes'; apply.disabled = !editable || composing || !changed;
     cancel.disabled = !current.draft;
     for (const el of pendingActions.children) el.disabled = !editable || composing;
@@ -512,7 +536,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; inspectorOpen = false; inspector.hidden = true; if (park && editing.read().active?.kind === 'score') editing.park(); }
   function dispose() {
     if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
-    close(); disposed = true; operate('read'); view.dispose(); cleanup.splice(0).forEach(release => release());
+    close(); disposed = true; operate('read'); view.dispose(); topApply.dispose(); cleanup.splice(0).forEach(release => release());
     for (const el of [toolbar, pending, projectionRoot, flowPanel, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
   }
   render();

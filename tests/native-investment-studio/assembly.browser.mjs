@@ -105,9 +105,13 @@ for (const engine of names) {
     const personEditor = people(page).locator('[data-person-configure]');
     await expect(people(page).locator('.studio-people-rates [data-person-configure]')).toBeVisible();
     await expect(personEditor.locator('[name="label"]')).toHaveValue('Person 5');
+    const personApply = personEditor.locator('[data-editor-apply]');
+    await expect(personApply).toHaveCount(1); await expect(personApply).toBeDisabled();
     const addedId = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.at(-1).id);
     await personEditor.locator('[name="label"]').fill('Service designer');
-    await personEditor.locator('[data-person-action="apply"]').click();
+    await expect(personApply).toBeEnabled(); await personApply.click();
+    await expect(personApply).toBeFocused(); await expect(personApply).toBeDisabled();
+    await expect(personEditor.locator('[data-person-action="apply"]')).toHaveAttribute('aria-disabled', 'true');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
       await personEditor.scrollIntoViewIfNeeded(); await frames(page);
@@ -119,12 +123,18 @@ for (const engine of names) {
     }
     await personEditor.locator('[data-person-action="close"]').click();
     await expect(people(page).locator(`[data-person-id="${addedId}"]`)).toBeFocused();
+    await people(page).locator(`[data-person-id="${addedId}"]`).click();
+    await expect(personApply).toHaveCount(1); await expect(personApply).toBeDisabled();
+    await personEditor.locator('[data-person-action="close"]').click();
     await action(page, 'team-create').click();
     await expect(people(page).locator('.native-assembly__teams [data-assembly-configure]')).toBeVisible();
     await expect(field(page, 'label')).toHaveValue('New team');
     await field(page, 'label').fill('Service team');
     await people(page).locator(`[data-assembly-member="${addedId}"]`).check();
-    await apply(page).click();
+    const teamApply = people(page).locator('[data-assembly-configure] [data-editor-apply]');
+    await expect(teamApply).toHaveCount(1); await expect(teamApply).toBeEnabled(); await teamApply.click();
+    await expect(teamApply).toBeFocused(); await expect(teamApply).toBeDisabled();
+    await expect(apply(page)).toHaveAttribute('aria-disabled', 'true');
     const addedTeam = await page.evaluate(() => window.assemblyFixture.studio.read().state.teams.at(-1));
     assert.equal(addedTeam.label, 'Service team'); assert.deepEqual(addedTeam.personIds, [addedId]);
     await action(page, 'close').click();

@@ -106,6 +106,60 @@ for (const engine of names) {
     await expect(deck).toBeHidden();
   });
 
+  for (const basis of ['sprint', 'quarter']) test(`${engine}: session tracks append sessions across ${basis}s and Undo preserves earlier placements`, async t => {
+    const page = await open(t, engine, { viewport: { width: 390, height: 1000 } });
+    if (basis === 'quarter') await score(page).locator('[data-cadence-basis][value="quarter"]').check();
+    const original = await bytes(page), before = JSON.parse(original);
+    const work = before.work.find(row => row.label === 'Research synthesis');
+    await cadence(page).locator(`[data-studio-plan-id="${work.id}"]`).click();
+    const originalPlacements = before.scoreSettings.cadence.placements.filter(row => row.workId === work.id);
+    await cadence(page).locator(`[data-cadence-key="add-occurrence:${work.id}:period-2:overview"]`).click();
+    const first = await bytes(page), firstState = JSON.parse(first);
+    assert.equal(firstState.work.length, before.work.length, 'adding a session retains the cassette identities');
+    assert.equal(firstState.work.find(row => row.id === work.id).occurrences, work.occurrences + 1);
+    assert.deepEqual(firstState.scoreSettings.cadence.placements.filter(row => row.workId === work.id), [
+      ...originalPlacements, { workId: work.id, occurrenceIndex: work.occurrences, periodId: 'period-2', subdivision: 1 },
+    ]);
+    await cadence(page).locator('[data-cadence-key="track-period:period-3"]').click();
+    const add = cadence(page).locator(`[data-cadence-key="add-occurrence:${work.id}:period-3:2"]`);
+    await expect(add).toBeVisible();
+    await add.click();
+    const second = JSON.parse(await bytes(page));
+    assert.equal(second.work.find(row => row.id === work.id).occurrences, work.occurrences + 2);
+    assert.deepEqual(second.scoreSettings.cadence.placements.filter(row => row.workId === work.id), [
+      ...originalPlacements,
+      { workId: work.id, occurrenceIndex: work.occurrences, periodId: 'period-2', subdivision: 1 },
+      { workId: work.id, occurrenceIndex: work.occurrences + 1, periodId: 'period-3', subdivision: 2 },
+    ]);
+    assert.deepEqual(second.work.filter(row => row.id !== work.id), before.work.filter(row => row.id !== work.id));
+    await expect(cadence(page).locator(`[data-cadence-key="pad:${work.id}:${work.occurrences + 1}"]`)).toBeVisible();
+    await undo(page); assert.equal(await bytes(page), first);
+    await undo(page); assert.equal(await bytes(page), original);
+  });
+
+  test(`${engine}: repeated period additions keep every new plan in its original sprint and in view`, async t => {
+    const page = await open(t, engine), original = JSON.parse(await bytes(page));
+    const added = [];
+    for (const periodId of ['period-4', 'period-4', 'period-2']) {
+      await period(page, periodId).getByRole('button', { name: /^Add a session in /u }).click();
+      const state = JSON.parse(await bytes(page));
+      const created = state.work.filter(row => !original.work.some(previous => previous.id === row.id));
+      assert.equal(created.length, added.length + 1, 'each creation adds a distinct record');
+      const newest = created.find(row => !added.some(previous => previous.id === row.id));
+      added.push({ id: newest.id, periodId });
+      for (const item of added) assert.deepEqual(state.scoreSettings.cadence.placements.filter(row => row.workId === item.id), [
+        { workId: item.id, occurrenceIndex: 0, periodId: item.periodId, subdivision: 1 },
+      ], 'later creation retains the earlier placement');
+    }
+    for (const { id, periodId } of added)
+      await expect(period(page, periodId).locator(`[data-studio-session-id="${id}"]`)).toBeVisible();
+    await undo(page);
+    const restored = JSON.parse(await bytes(page));
+    assert.equal(restored.work.length, original.work.length + 2);
+    for (const { id } of added.slice(0, 2))
+      await expect(period(page, 'period-4').locator(`[data-studio-session-id="${id}"]`)).toBeVisible();
+  });
+
   for (const { width, basis, origin } of [
     { width: 1273, basis: 'sprint', origin: 'period' },
     { width: 390, basis: 'sprint', origin: 'track-period' },
@@ -177,12 +231,16 @@ for (const engine of names) {
     const stage = flow(page).locator('[data-cadence-key="stage:understand"]');
     await stage.click();
     await expect(cadence(page).locator('[data-studio-session-slot] > .native-score__inspector')).toBeVisible();
+    const topApply = inspector(page).locator('[data-editor-apply]');
+    await expect(topApply).toHaveCount(1); await expect(topApply).toBeDisabled();
     await input(page, 'stage.understand.label').fill('Understand the service request');
+    await expect(topApply).toBeEnabled();
     await inspector(page).getByRole('button', { name: 'Close', exact: true }).click();
     await expect(inspector(page)).toBeHidden();
     await expect(stage).toBeFocused();
     await stage.click();
     await expect(input(page, 'stage.understand.label')).toHaveValue('Understand the service request');
+    await expect(topApply).toHaveCount(1);
     await inspector(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
     await expect(stage).toBeFocused();
     await flow(page).getByRole('button', { name: 'Add a decision for Understand the request', exact: true }).click();
@@ -190,8 +248,14 @@ for (const engine of names) {
     await expect(input(page, 'gate.gate-1.label')).toBeFocused();
     await input(page, 'gate.gate-1.label').fill('Agree the request');
     await input(page, 'gate.gate-1.reviewerPersonId').selectOption('maya');
-    const confirm = inspector(page).getByRole('button', { name: 'Add decision to plan', exact: true });
+    const confirm = topApply;
+    await expect(confirm).toHaveText('Add decision to plan');
     await expect(confirm).not.toHaveClass(/native-control--create/u);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await inspector(page).screenshot({ path: resolve(captures, `${engine}-top-apply-decision-${width}.png`) });
+      assert.ok(await inspector(page).evaluate(element => element.getBoundingClientRect().right <= document.documentElement.clientWidth + 1));
+    }
     assert.equal(await bytes(page), accepted);
     await confirm.click();
     const state = JSON.parse(await bytes(page));
@@ -241,9 +305,10 @@ for (const engine of names) {
     });
     await expect(score(page)).toHaveAttribute('data-score-state', 'stale');
     await expect(input(page, 'stage.understand.label')).toBeDisabled();
+    const topApply = inspector(page).locator('[data-editor-apply]'); await expect(topApply).toBeDisabled();
     await inspector(page).getByRole('button', { name: 'Review saved edits', exact: true }).click();
     await expect(input(page, 'stage.understand.label')).toHaveValue('Understand the receiving team’s request');
-    await inspector(page).getByRole('button', { name: 'Apply changes', exact: true }).click();
+    await expect(topApply).toBeEnabled(); await topApply.click();
     const state = JSON.parse(await bytes(page));
     assert.equal(state.work.find(row => row.id === 'review').minutesPerOccurrence, 45);
     assert.equal(state.scoreSettings.stages.find(row => row.id === 'understand').label, 'Understand the receiving team’s request');

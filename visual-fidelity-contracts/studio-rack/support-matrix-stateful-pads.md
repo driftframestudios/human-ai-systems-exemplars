@@ -6,7 +6,7 @@ keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
 dev receiving contract revised 8 November 2026 for
-[#825](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/825).
+[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
 `main` remains the approved reference until a human cues dev promotion.
 
@@ -19,6 +19,7 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 | Team planning | Delivery overview groups people, work and handoffs by phase. Shared sessions separately shows each person's participation in each session and remains visible while the Delivery working area edits a person, team or handoff. |
 | Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
 | Working sessions | Numbered pads select an occurrence. Period and subdivision choices place it; participant switches and explicit order controls apply to the session as a whole. |
+| Funding and Status | Named large radio pads place the selection control at the top left, beside a short label and hint. Persistent pressed state carries the choice. |
 
 Use a matrix when named row/column relationships help a visitor compare. A short
 pad rail fits a small choice set. A phase or period lane groups work by that
@@ -45,17 +46,21 @@ keep their intentionally different fader treatments.
 
 ## Creation, assignment and recovery
 
-Named creation regions state the object and scope they add. Horizon period lanes
-and the Shared sessions New session row create through the existing session
-owner, using the selected period or person context. Existing participation cells
-continue to represent participation. Empty occurrence gaps retain timing meaning.
+Named creation regions state the object and scope they add. A plus inside an
+existing plan's temporal track appends a working session to that plan and retains
+its earlier placements. The horizon's period lanes and New plan row create
+distinct records and retain the All plans view. Shelf New plan deliberately loads
+its new cassette. Shared sessions creation uses accepted-person context; its
+existing person/session cells continue to represent participation.
 
 People's Add person and Add team accept useful records and open their local
 editors. Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
 Apply accepts its support assignment. Cancel restores the prior assignment while
 the newly created record remains available. The stable amp Undo uses that same
-history, independently of cassette selection.
+history, independently of cassette selection. Top Apply beside Close delegates
+to the same canonical bottom action, with matching label, disabled state,
+validation and return focus. The existing bottom row remains available.
 
 Membership toggles keep available cards mounted in place. Move up/down changes
 ordered IDs explicitly, with the shared keyed transition and focus on the moved
@@ -70,7 +75,8 @@ Cancel, saved drafts and return behavior.
 Native tables retain captions and scoped row/column headers. A meaningful cell
 remains readable with its row and column. Ordinary phone widths use a named local
 scroll region; the heading and creation controls stay available outside it.
-Long labels wrap and headers contrast against their actual background. Shape,
+Long labels wrap and headers contrast against their actual background. The pale
+Sessions to place tray uses dark text; dark rack captions retain light text. Shape,
 text and focus styling preserve state in forced colors.
 
 Reels and faders may rearrange keyed pads into an authored configuration. Stable
@@ -91,7 +97,8 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs), [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Support-table meaning, one selected module and retained support proposal |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing and accepted record creation |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion and return identity |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion, Apply delegation and return identity |
+| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Temporal append targets, distinct plan creation, retained placements and Undo |
 | [Abilities/People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Tables, local racks, membership pads and shared control treatment |
 | [Abilities](../../tests/native-investment-studio/capability.browser.mjs), [People](../../tests/native-investment-studio/assembly.browser.mjs), [rack](../../tests/native-investment-studio/rack-controls.browser.mjs) browser checks | Exercised support meaning, direct creation, assignment boundaries, ordering, retained work and local geometry |
 
@@ -103,8 +110,11 @@ supply the composition and interpretation observations.
 
 This dev contract supersedes Abilities reverse/beside inspection modes, detached
 People editing as the primary route, and hiding Shared sessions during a Delivery
-record edit. The two Abilities tables, existing meaning of stored contributions,
-and independent participation matrix remain current. `main` retains its approved
+record edit. #828 additionally supersedes descriptive-only blank temporal cells
+with explicit append targets and bottom-only Apply access with a shared top
+entry. Working sessions Remove moves from #825's bottom-left to bottom-right;
+Add remains top-right. The two Abilities tables, existing meaning of stored
+contributions, and independent participation matrix remain current. `main` retains its approved
 runtime; Git history preserves earlier composition decisions.
 
 Independent response routing, per-person allocation and further removal behavior

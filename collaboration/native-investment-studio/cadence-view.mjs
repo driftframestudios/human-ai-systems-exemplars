@@ -1,5 +1,6 @@
 import { duration, money } from './display.mjs';
 import { CADENCE_PERIOD_LIMIT, CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
+import { LIMITS } from './config.mjs';
 import { createTapePicker } from './tape-picker.mjs';
 import { revealStudioDestination } from './motion.mjs';
 
@@ -9,7 +10,7 @@ const noop = () => {};
 // This view groups admitted occurrences. Clip width expresses a place in the
 // plan; session duration and investment retain their existing model owners.
 export function createCadenceView(root, {
-  onSelect = noop, onLoadPlan = noop, onNavigate = noop, onPeriod = noop, onAddPeriod = noop, onAddSession = noop,
+  onSelect = noop, onLoadPlan = noop, onNavigate = noop, onPeriod = noop, onAddPeriod = noop, onAddSession = noop, onAddOccurrence = noop,
   onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, flowRoot = null, flowPanel = null,
 } = {}) {
   const document = root.ownerDocument;
@@ -79,7 +80,7 @@ export function createCadenceView(root, {
     const item = actions.get(control.dataset.cadenceKey); if (!item) return;
     if (item.action === 'period' && item.target !== null) periodOriginKey = control.dataset.cadenceKey;
     const receivers = { select: onSelect, 'load-plan': onLoadPlan, navigate: onNavigate, period: onPeriod, 'add-period': onAddPeriod,
-      'add-session': onAddSession, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
+      'add-session': onAddSession, 'add-occurrence': onAddOccurrence, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
       'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon };
     receivers[item.action]?.(item.target, control);
   }
@@ -310,8 +311,7 @@ export function createCadenceView(root, {
       headings.append(th);
     }
     trackHead.append(headings); const trackBody = node('tbody');
-    for (const item of state.work.filter(item => (!loadedPlan || item.id === loadedPlan.id)
-      && (!activePeriod || visible.some(row => row.workId === item.id)))) {
+    for (const item of state.work.filter(item => !loadedPlan || item.id === loadedPlan.id)) {
       const tr = node('tr'), label = node('th'); label.scope = 'row';
       const name = selection(item.label, 'work', item.id, `track-work:${item.id}`, selected, {}, 'studio-track-key native-cadence__track-name native-control--navigate');
       name.setAttribute('aria-label', `${item.label}, ${duration(item.minutesPerOccurrence)} per person. Open session settings.`); label.append(name); tr.append(label);
@@ -333,23 +333,32 @@ export function createCadenceView(root, {
           pad.setAttribute('aria-label', `${item.label}, session ${row.occurrenceIndex + 1}, ${column.period.label}, ${subdivisionLabel(row.subdivision)}. ${duration(item.minutesPerOccurrence)} per person. Open session settings.`);
           pads.append(pad);
         }
-        if (!members.length) { const empty = node('span', '—', 'native-cadence__rest'); empty.setAttribute('aria-label', 'No sessions in this period'); pads.append(empty); }
+        const destination = `${column.period.label}${column.subdivision === null ? '' : `, ${subdivisionLabel(column.subdivision)}`}`;
+        const add = create(members.length ? '' : 'Session', 'add-occurrence',
+          { workId: item.id, periodId: column.period.id, subdivision: column.subdivision ?? 1 },
+          `add-occurrence:${item.id}:${column.period.id}:${column.subdivision ?? 'overview'}`);
+        add.classList.add('studio-rack-create-zone');
+        add.disabled = item.occurrences >= LIMITS.occurrences;
+        add.setAttribute('aria-label', `Add ${item.label} session in ${destination}`);
+        add.dataset.cadencePreview = `Add another ${item.label} session in ${destination}. ${duration(item.minutesPerOccurrence)} per person.`;
+        if (!members.length) add.style.gridColumn = '1 / -1';
+        pads.append(add);
         cell.append(pads); tr.append(cell);
       }
       trackBody.append(tr);
     }
     const newSession = node('tr', undefined, 'studio-rack-create-row');
-    const newSessionHeading = node('th', 'New session'); newSessionHeading.scope = 'row'; newSession.append(newSessionHeading);
+    const newSessionHeading = node('th', 'New plan'); newSessionHeading.scope = 'row'; newSession.append(newSessionHeading);
     for (const column of trackColumns) {
       const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');
       pads.style.setProperty('--cadence-pad-columns', '1');
-      const add = create('Add session', 'add-session',
+      const add = create('New plan', 'add-session',
         { periodId: column.period.id, subdivision: column.subdivision ?? 1 },
         `new-session:${column.period.id}:${column.subdivision ?? 'overview'}`);
       add.classList.add('studio-rack-create-zone');
       const destination = `${column.period.label}${column.subdivision === null ? '' : `, ${subdivisionLabel(column.subdivision)}`}`;
-      add.setAttribute('aria-label', `Add a session in ${destination}`);
-      add.dataset.cadencePreview = `Add a session in ${destination}, then adjust its people and duration.`;
+      add.setAttribute('aria-label', `Add a new plan in ${destination}`);
+      add.dataset.cadencePreview = `Add a new plan in ${destination}, then adjust its people and duration.`;
       pads.append(add); cell.append(pads); newSession.append(cell);
     }
     trackBody.append(newSession);

@@ -1,5 +1,55 @@
 import { revealStudioDestination } from './motion.mjs';
 
+const submitOrigins = new WeakMap();
+export function focusSubmitControl(source) {
+  const origin = submitOrigins.get(source);
+  (origin?.isConnected ? origin : source).focus({ preventScroll: Boolean(origin) });
+}
+
+// A nearby Apply control delegates to the canonical submitter. The form keeps
+// validation, draft ownership, acceptance and the bottom action in one place.
+export function mountSubmitMirror(container, { before = null, attribute = 'data-editor-apply' } = {}) {
+  const document = container.ownerDocument, button = document.createElement('button');
+  button.type = 'button'; button.className = 'studio-apply-control'; button.setAttribute(attribute, '');
+  container.insertBefore(button, before);
+  let source = null, disposed = false;
+  function refresh() {
+    if (disposed) return;
+    button.hidden = !source || source.hidden || source.classList.contains('native-control--remove');
+    button.textContent = source?.textContent ?? 'Apply changes';
+    button.disabled = !source || source.matches(':disabled');
+    button.setAttribute('aria-disabled', String(button.disabled || source.getAttribute('aria-disabled') === 'true'));
+    const label = source?.getAttribute('aria-label');
+    if (label) button.setAttribute('aria-label', label); else button.removeAttribute('aria-label');
+  }
+  const observer = new document.defaultView.MutationObserver(refresh);
+  function setSource(next) {
+    if (disposed) return;
+    if (source !== next) {
+      observer.disconnect(); source = next;
+      if (source) {
+        observer.observe(source, { attributes: true, childList: true, subtree: true });
+        for (let ancestor = source.parentElement; ancestor; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === 'FIELDSET') observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+          if (ancestor.tagName === 'FORM') break;
+        }
+      }
+    }
+    refresh();
+  }
+  const apply = () => {
+    refresh();
+    if (button.disabled || button.hidden || button.getAttribute('aria-disabled') === 'true') return;
+    const submitter = source; submitOrigins.set(submitter, button);
+    try { submitter.click(); } finally { submitOrigins.delete(submitter); refresh(); }
+  };
+  button.addEventListener('click', apply); refresh();
+  return Object.freeze({ element: button, setSource, refresh, dispose() {
+    if (disposed) return;
+    disposed = true; observer.disconnect(); button.removeEventListener('click', apply); button.remove(); source = null;
+  } });
+}
+
 // Session and team membership share ordering semantics while retaining their
 // own draft actions and receiving skins.
 export function syncReorderButtons(up, down, { label, index, count }) {
@@ -54,7 +104,9 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   close.textContent = 'Close'; close.dataset.rackEditorClose = '';
   const body = document.createElement('div'); body.className = 'studio-rack-editor__body';
   const identity = document.createElement('div'); identity.append(title, context);
-  heading.append(identity, close); host.append(heading, body); root.append(host);
+  const tools = document.createElement('div'); tools.className = 'studio-rack-editor__tools'; tools.append(close);
+  const apply = mountSubmitMirror(tools, { before: close, attribute: 'data-rack-editor-apply' });
+  heading.append(identity, tools); host.append(heading, body); root.append(host);
   const homes = new Map(Object.entries(editors).map(([kind, nodes]) => [kind, nodes.map(node => {
     const marker = document.createComment(`home: ${kind} editor`); node.before(marker);
     return { node, marker };
@@ -66,6 +118,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   const keyOf = entryKey;
   const controls = () => [...root.querySelectorAll('[data-studio-record-kind]')];
   function sync() {
+    apply.setSource(body.querySelector('button[type="submit"]'));
     if (selected) {
       const label = readLabel(selected) ?? selected.label;
       title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`;
@@ -134,7 +187,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     },
     sync,
     dispose() {
-      restore(); close.removeEventListener('click', requestClose); host.remove();
+      apply.dispose(); restore(); close.removeEventListener('click', requestClose); host.remove();
       for (const records of homes.values()) for (const { marker } of records) marker.remove();
     },
   });

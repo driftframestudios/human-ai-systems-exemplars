@@ -15,7 +15,7 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`, currently
-receiving #825 after the #820/#821 simplification. Promotion to main and a tagged public release each await
+receiving #828 after the #825 direct-editor integration. Promotion to main and a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
 
@@ -26,7 +26,7 @@ Its blocky angled artwork and size stay intact while the surrounding controls ar
 more compact. At phone width the shelf becomes a horizontal strip. A cassette
 selects its plan and filters the board/tracks; it closes the detail receiver.
 All plans returns from this filter. Period selection remains independent, with a
-visible selected sprint/quarter and Whole plan return inside the rack.
+visible selected sprint/quarter and Plan overview return inside the rack.
 
 The composition reads in this order: period board, optional compact working area,
 session tracks, then small People and Stages routes. An existing clip opens the
@@ -35,22 +35,35 @@ scope. A first opening uses the downward reveal; changing the selected record
 keeps the same receiver and its position. The detail border stays flush with its
 rack. Duration and Working sessions fill neighboring slots on a wide rack.
 Working sessions uses the regular dark module housing, with its heading/count
-and Add in the top row and Remove at the bottom left. Funding and Status have a
-named module with large stateful pads beside Participants. Phone layouts stack
+and Add in the top row and Remove at the bottom right. Funding and Status have a
+named module with large stateful pads beside Participants. Each radio sits at
+the top left of its pad, beside the label and a short explanation. Phone layouts stack
 these modules while preserving the Hours/Minutes pair.
 
-Empty period-lane space and the sequencer's new-session row provide named native
-creation targets. Fine-pointer hover and keyboard focus expose the plus and short
-label; touch keeps them visible. A click creates one accepted session in that
-period, then opens editing. Existing session/participant cells retain their own
-inspection or membership meaning. New plan and Add sprint/quarter remain explicit
-because they create different objects. Period additions accept immediately.
+Existing-plan track cells expose a plus that appends an accepted working session
+in the chosen period or subdivision. Count and complete placements enter one
+canonical command, so earlier sessions keep their identity and location. Empty
+periods remain available even when a cassette is loaded. A compact plus fits
+populated cells; an accessible name and hover/focus preview identify the plan
+and destination.
+
+Empty period-lane space and the sequencer's New plan row create distinct work
+records, then open their canonical editor. Fine-pointer hover and keyboard focus
+expose the lane's plus and short label; touch keeps them visible. Those additions
+retain All plans so every earlier clip stays visible. Shelf New plan deliberately
+loads the newly created cassette. This resolves the reported apparent replacement
+on repeated additions: accepted identities and placements were retained, while
+automatic cassette filtering hid previous clips. Add sprint/quarter retains its
+separate accepted horizon operation.
 
 Session pads own repetition in the rack, with Add session and selected-session
 removal; the synchronized numeric field remains an implementation detail. The
 selected pad retains its subtle movement. A stage or handoff opens its existing
-relationship owner in the rack. These operations preserve the accepted model,
-reference checks, proposals and shared history.
+relationship owner in the rack. New handoff shows From work, To work and optional
+Team connection; creation, Cancel and Close lead. After acceptance, decisions,
+delays and bottom-right removal become available. Its relationship fields carry
+the useful context; a repeated cost preview is hidden. These operations preserve
+the accepted model, reference checks, proposals and shared history.
 
 Team planning follows the horizon with its arrangement reel and concise preview,
 then the delivery-phase board and shared-session matrix. A selected team replaces
@@ -110,7 +123,7 @@ remain preserved references.
 | --- | --- |
 | Accepted plan | One immutable projection supplies accepted amounts, relationships, comparisons and downloads. |
 | Ordinary editor proposal | Raw values and selections remain in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
-| Direct rack operation | Arrangement selection, Coordination team membership/name/order, period creation and record additions use canonical accepted commands. People team edits retain their existing Apply boundary. |
+| Direct rack operation | Arrangement selection, Coordination team membership/name/order, period creation, existing-plan occurrence append and record additions use canonical accepted commands. People team edits retain their existing Apply boundary. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
 | Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
 | Baseline | An independent comparison and restore point, separate from Undo and unfinished edits. |
@@ -132,8 +145,9 @@ Creating a prerequisite returns to the same visible session receiver and focuses
 its review or requested field. Empty-plan creation uses that receiver directly;
 completion clears the finished detour. Team name changes keep a stable Team
 settings heading so accepting text preserves the next membership click's position.
-The earlier focused recovery repairs are recorded in #822 and #823. #825 adds
-the local handoff/team return and independent delivery/sequencer visibility.
+The earlier focused recovery repairs are recorded in #822 and #823. #825 supplied
+the local handoff/team return and independent delivery/sequencer visibility;
+#828 preserves those routes while clarifying addition and acceptance.
 
 ### Visual and interaction contract
 
@@ -145,7 +159,10 @@ its approved size. Local tables scroll within their rack at phone widths.
 
 Ordinary local controls have light borders and restrained depth. A selected pad
 has a clear pressed state; a disclosure caret reflects the receiver's actual
-visibility. Apply retains a raised primary treatment. Cancel is ghost. Reversible
+visibility. Apply retains a raised primary treatment beside Close and at the
+bottom of the form. The top control delegates to the canonical submitter and
+mirrors its label, disabled/validation state and return focus. Removal confirmation
+keeps its own bottom action. Cancel is ghost. Reversible
 Remove is muted rose with a named object. A plus means starting creation, never
 confirming an already-created proposal. Empty creation slots progressively replace
 standalone Add buttons when their object and scope are unambiguous. The
@@ -159,7 +176,8 @@ wrap internally at phone widths. These smaller controls remain native and named.
 Money dials retain their separate coarse/fine quantity contract.
 Module stretching changes the outer slot geometry while preserving that dial
 specimen. Funding and Status use readable native radio pads with a persistent
-pressed state and separate group labels.
+pressed state, separate group labels and short explanatory hints. The pale
+Sessions to place tray uses dark text; dark instrument captions keep light text.
 
 Full Studio motion is the authored preference; visitors may lower it and system
 reduced-motion is honored. Selected occurrence pads keep their small bounce.
@@ -192,7 +210,12 @@ participant time shares remain with #798; production Reset remains with #808.
 | Team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
 | Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
 | People creation starts a detached form; Abilities creation changes chapter | Useful accepted defaults and local editors retain the current rack and support selection. |
-| Working-session Add and Remove share a crowded heading; Funding has small ungrouped choices | Add top-right, Remove bottom-left, full-height duration and a named Funding and Status pad module. |
+| #825 Working-session Remove sits bottom-left | #828 moves it to the bottom right; Add remains top-right and duration retains its full-height slot. |
+| Blank existing-plan track cells only describe empty time | A plus appends a working session to that plan and preserves every earlier placement. |
+| Every period addition loads the newest cassette | Lane/track New plan additions keep All plans visible; shelf New plan deliberately loads the new cassette. |
+| Apply appears only below the form | Shared top Apply beside Close delegates to the canonical bottom action, including validation and focus. |
+| New handoff exposes decisions, delays, removal and a repeated amount immediately | From work, To work and optional Team connection lead; follow-on operations become available after acceptance. |
+| Funding has small ungrouped choices | Named large radio pads provide top-left selection controls, short hints and clear pressed state. |
 | All custom teams fall into Planning | Existing stage relationships or distributed phase placement keep the delivery board balanced. |
 | Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
 | Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
@@ -216,5 +239,5 @@ routing, ordinary mobile containment and readable focus. Arithmetic inventories
 and repeated all-page screenshots are unnecessary for these changes.
 
 Use the README to run the current proof, the Visual Fidelity Contracts for
-composition, and #825 for the present delivery. Broader financial models,
+composition, and #828 for the present delivery. Broader financial models,
 response records, performance and public release retain their separate issues.

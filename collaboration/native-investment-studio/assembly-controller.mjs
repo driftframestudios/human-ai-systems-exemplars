@@ -10,7 +10,7 @@ import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
-import { syncReorderButtons } from './rack-controls.mjs';
+import { syncReorderButtons, mountSubmitMirror, focusSubmitControl } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
@@ -41,7 +41,9 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   const localTitle = document.createElement('h4'); localTitle.textContent = 'Team settings';
   const localClose = document.createElement('button'); localClose.type = 'button'; localClose.textContent = 'Close';
   localClose.dataset.assemblyAction = 'close'; localClose.className = 'native-control--cancel';
-  localHeading.append(localTitle, localClose); elements.summary.after(localHeading);
+  const localTools = document.createElement('div'); localTools.className = 'studio-rack-editor__tools'; localTools.append(localClose);
+  localHeading.append(localTitle, localTools); elements.summary.after(localHeading);
+  const topApply = mountSubmitMirror(localTools, { before: localClose }); topApply.setSource(elements.apply);
   const editor = editing.assembly;
   const cleanup = [];
   let projection = null, people = new Map(), personPositions = new Map(), teams = new Map(), references = new Map();
@@ -366,7 +368,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       render(); acknowledgedOpen = true; elements.configure.open = true;
       announce(descriptor.mode === 'create' ? 'Team added.' : 'Team updated.');
       onEditing();
-      if (currentOperation(epoch)) elements.apply.focus();
+      if (currentOperation(epoch)) focusSubmitControl(elements.apply);
     } else {
       close({ park: false }); render(); announce(descriptor.collection === 'people' ? 'Person removed.' : 'Team removed.');
       const closedAt = generation;
@@ -453,7 +455,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function dispose() {
     if (disposed) return;
-    rateControls.dispose(); localHeading.remove();
+    rateControls.dispose(); topApply.dispose(); localHeading.remove();
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;

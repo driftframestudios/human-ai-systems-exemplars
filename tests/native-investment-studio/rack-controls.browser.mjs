@@ -90,6 +90,47 @@ async function contained(page, width) {
 }
 
 for (const engine of names) for (const width of [390, 1440]) {
+  test(`${engine}: top Apply shares canonical validation, acceptance and focus at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width);
+    await track(page, 'review').click();
+    const topApply = adjacent(page).locator('[data-rack-editor-apply]');
+    const bottomApply = configure(page).locator('[data-action="apply"]');
+    const label = configure(page).locator('[name="label"]');
+    await expect(topApply).toHaveCount(1); await expect(topApply).toBeDisabled();
+    await label.fill(''); await expect(topApply).toBeEnabled(); await topApply.click();
+    await expect(label).toBeFocused();
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'review').label), 'Pilot decision review');
+    await label.fill('Review the pilot together'); await topApply.click();
+    await expect(topApply).toBeFocused(); await expect(topApply).toBeDisabled();
+    await expect(bottomApply).toHaveAttribute('aria-disabled', 'true');
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'review').label), 'Review the pilot together');
+    await adjacent(page).locator('[data-rack-editor-close]').click(); await track(page, 'review').click();
+    await expect(topApply).toHaveCount(1); await expect(topApply).toBeDisabled();
+    await label.fill('Retained review title');
+    await page.evaluate(() => {
+      const { studio, controller } = window.rackFixture, base = studio.read(), person = base.state.people[0];
+      const result = studio.updatePerson(person.id, { ...person, label: 'Pilot product lead' }, base);
+      if (!result.ok) throw Error(result.error.code);
+      controller.refresh();
+    });
+    await expect(bottomApply).toBeDisabled(); await expect(topApply).toBeDisabled();
+    await configure(page).locator('[data-action="review"]').click();
+    await expect(topApply).toBeEnabled(); await topApply.click();
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'review').label), 'Retained review title');
+    await adjacent(page).locator('.studio-rack-editor__heading').screenshot({ path: resolve(captures, `${engine}-top-apply-${width}.png`) });
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+
+    const handoff = root(page).locator('[data-connection-templates] [data-delivery-connection]').first();
+    await handoff.click();
+    await expect(adjacent(page)).toHaveAttribute('data-rack-editor-kind', 'connection');
+    await expect(topApply).toBeDisabled();
+    await adjacent(page).locator('[name="sharedObject"]').fill('Agreed next step'); await topApply.click();
+    await expect(topApply).toBeFocused(); await expect(topApply).toBeDisabled();
+    await expect(adjacent(page).locator('[data-connection-apply]')).toHaveAttribute('aria-disabled', 'true');
+    assert.ok(await page.evaluate(() => window.rackFixture.studio.read().state.connections.some(row => row.sharedObject === 'Agreed next step')));
+    await contained(page, width);
+  });
+
   test(`${engine}: cassettes load a quiet scope and keep in-rack edits recoverable at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), original = await bytes(page);
     const library = horizon(page).locator('.studio-plan-library');
@@ -307,9 +348,9 @@ for (const engine of names) for (const width of [390, 1440]) {
     await rack.screenshot({ path: resolve(captures, `${engine}-team-rack-accepted-${width}.png`) });
     assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1);
     await expect(templates.locator('[data-template-action="apply"]')).toBeHidden();
-    const recoveryId = await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.label === 'Diagnose and agree a response').id);
+    const recoveryId = await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.label === 'Diagnose and agree on a response').id);
     await delivery.locator(`[data-delivery-session="${recoveryId}"]`).click();
-    await expect(configure(page).locator('[name="label"]')).toHaveValue('Diagnose and agree a response');
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Diagnose and agree on a response');
     await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(planning).toBeVisible();
     await expect(delivery.locator(`[data-delivery-session="${recoveryId}"]`)).toBeFocused();
@@ -424,8 +465,8 @@ for (const engine of names) for (const width of [390, 1440]) {
     });
     assert.ok(modules.add.right > modules.sessions.right - 24 && modules.add.bottom <= modules.pads.top,
       'Add is at the working-session module top right');
-    assert.ok(modules.remove.left < modules.sessions.left + 24 && modules.remove.top > modules.pads.bottom,
-      'Remove follows the session controls at the bottom left');
+    assert.ok(modules.remove.right > modules.sessions.right - 24 && modules.remove.top > modules.pads.bottom,
+      'Remove follows the session controls at the bottom right');
     if (width === 1440) assert.ok(Math.abs(modules.duration.height - modules.sessions.height) < 2,
       'duration fills the height of its neighboring rack module');
     assert.ok(modules.funding.height >= 64, 'Funding choices use touchable pads');
@@ -710,7 +751,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
     const quarter = horizon(page).getByRole('heading', { name:'Quarter 2', exact:true });
     const newMonth = horizon(page).locator('[data-cadence-key="new-session:period-2:3"]');
-    await expect(newMonth).toHaveAccessibleName('Add a session in Quarter 2, Month 3');
+    await expect(newMonth).toHaveAccessibleName('Add a new plan in Quarter 2, Month 3');
     if (width === 1440) {
       await newMonth.hover();
       assert.equal(await bytes(page), quarterBytes, 'revealing a ghost creation pad leaves accepted work unchanged');

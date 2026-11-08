@@ -64,9 +64,9 @@
 .native-coordination :is(.studio-people-rates,.native-assembly__teams) :is(.native-team__roster > li,.native-assembly__team-list > li) { color:var(--native-text); }
 .native-coordination :is(.studio-people-rates,.native-assembly__teams) > .native-coordination__configuration { margin:0; border:1px solid #668b73; box-shadow:none; color:var(--native-text); background:var(--studio-peach); }
 :is(.studio-people-rates,.native-assembly__teams) > .native-coordination__configuration[open] > summary { display:none; }
-.studio-people-editor__heading { display:flex; align-items:center; justify-content:space-between; gap:.7rem; padding:.6rem .8rem; background:#29483a; color:#f7f0d6; }
-.native-coordination .studio-people-editor__heading h4 { margin:0; color:inherit; }
-.native-coordination .studio-people-editor__heading button { color:inherit; background:transparent; border-color:#668b73; box-shadow:none; }
+.studio-people-editor__heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.7rem; padding:.6rem .8rem; background:#29483a; color:#f7f0d6; }
+.native-coordination .studio-people-editor__heading h4 { min-inline-size:0; margin:0; color:inherit; }
+.native-coordination .studio-people-editor__heading button:not(.studio-apply-control) { color:inherit; background:transparent; border-color:#668b73; box-shadow:none; }
 .studio-rack-editor .studio-people-editor__heading { display:none; }
 .studio-person-name textarea { inline-size:100%; min-inline-size:0; min-block-size:2.5rem; padding:.5rem; border:1px solid var(--native-rule); border-radius:3px; color:var(--native-text); background:var(--native-paper); font:inherit; resize:vertical; }
 .studio-person-name { display:grid; gap:.3rem; margin-block-end:.65rem; max-inline-size:28rem; }

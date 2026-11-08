@@ -167,6 +167,13 @@
 .native-coordination .native-cadence__handoff-key { border: 1px solid var(--native-rule); }
 .native-coordination .native-cadence__flow .native-control--create { box-shadow: none; background: transparent; border: 1px dashed var(--native-rule); }
 .native-coordination .native-score__inspector [data-score-action='apply'] { background: var(--native-signal); }
+.native-score__inspector > .studio-rack-editor__body { padding: .8rem; }
+.native-score__inspector [data-score-action='remove'] { margin-inline-start: auto; }
+.native-score__inspector[data-record-kind='handoff'] .native-score__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); border: 0; padding: 0; }
+.native-score__field--connection { grid-column: 1 / -1; }
+@container native-coordination-chapter (max-width: 38rem) {
+  .native-score__inspector[data-record-kind='handoff'] .native-score__fields { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 65rem) {
   .studio-arrangement-deck { grid-template-columns: minmax(0, 1fr); }
   .studio-arrangement-deck > .native-reel { max-inline-size: 25rem; justify-self: center; inline-size: 100%; }
