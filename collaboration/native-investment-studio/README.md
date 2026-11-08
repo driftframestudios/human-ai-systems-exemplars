@@ -61,15 +61,16 @@ adjacent inspector, Change/Quality pad movement and the editorial disclosures.
 Shared components gain role-based names as they are extracted; intentional
 chapter differences, including the two fader styles, remain useful.
 
-The next proposed composition is a
+The approved next composition is a
 [Session detail deck](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
 inside Plan overview ([#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)).
-It would open between the period board and Session tracks, retaining the current
-session owner, duration module and Close/Apply/Cancel behavior. Existing-session
-editing can move there independently of immediate creation. Repair
-[#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)'s
-stale People/Investment browser entries first to give that change a useful
-cross-chapter baseline.
+It will open between the period board and Session tracks, retaining the current
+session owner, duration module and Close/Apply/Cancel behavior. The browser-route
+repair in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)
+uses the current People, arrangement and populated-showcase entries. Its responsive
+journey also protects the shared duration readout at enlarged text (#791).
+Existing-session editing precedes immediate creation (#758), then empty-space
+entry (#770).
 
 The continued planning route adds empty-space session creation
 ([#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)),

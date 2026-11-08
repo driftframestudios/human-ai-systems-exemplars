@@ -57,7 +57,8 @@ export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = re
     }
   }
   function restore() {
-    for (const records of homes.values()) for (const { node, marker } of records) marker.after(node);
+    for (const records of homes.values()) for (const { node, marker } of records)
+      if (marker.nextSibling !== node) marker.after(node);
   }
   function returnFocus(preferred) {
     const candidates = [...controls(), ...root.querySelectorAll('[data-studio-session-id]')].filter(control => {

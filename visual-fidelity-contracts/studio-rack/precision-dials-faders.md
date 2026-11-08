@@ -107,7 +107,9 @@ existing treatment.
 
 Hours and Minutes share a row when the receiving space permits it and reflow
 inside the enclosure at ordinary phone widths. The output remains above the
-controls. **Working sessions** stays nearby as a separate repetition control:
+controls. At enlarged text, its quantity columns reflow while each numeric
+reading stays on one line; valid, blank and corrected values preserve the
+control positions below it. **Working sessions** stays nearby as a separate repetition control:
 duration changes the length of each occurrence, while the count determines how
 many occur. The static About session markup and dynamic `createTimeControls`
 factory use the same composition and retain their output/input associations.

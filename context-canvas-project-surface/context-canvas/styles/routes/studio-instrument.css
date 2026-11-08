@@ -174,14 +174,14 @@
     box-shadow: .2rem .2rem 0 var(--native-key-shadow);
     color: var(--native-signal);
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 5rem), 1fr));
     gap: .75rem;
     inline-size: min(100%, 20rem);
     padding: .75rem;
     text-align: center;
 }
 .native-coordination__duration-display > span { display: grid; gap: .2rem; min-inline-size: 0; }
-.native-coordination__duration-display strong { font: 500 clamp(2rem, 4vw, 2.5rem)/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.native-coordination__duration-display strong { font: 500 clamp(2rem, 4vw, 2.5rem)/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .native-coordination__duration-display > span > span { font-size: .75rem; }
 .native-rate-controls { display: grid; gap: .45rem; min-inline-size: 0; margin-block: .5rem; }
 .native-rate__dials { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
