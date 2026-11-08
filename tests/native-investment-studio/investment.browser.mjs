@@ -939,3 +939,54 @@ for (const engine of names) test(`${engine}: investment receivers retire cleanly
   assert.match(observed.session, /Known \$/); assert.equal(observed.retiredUnchanged, true);
   assert.match(observed.refreshed, /Pilot upfront investment/); assert.doesNotMatch(observed.refreshed, /Reserve set aside/);
 });
+
+for (const engine of names) test(`${engine}: Investment uses the shared Showcase reel family with reachable choices and silent refresh`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page), approach = view.locator('.native-reel').filter({ has: page.locator('legend', { hasText: 'Investment approach' }) });
+  const lens = view.locator('.native-reel').filter({ has: page.locator('legend', { hasText: 'Investment lens' }) });
+  await expect(approach).toHaveAttribute('data-reel-variant', 'teal');
+  await expect(lens).toHaveAttribute('data-reel-variant', 'cobalt');
+  await expect(lens).toHaveAttribute('data-reel-secondary', 'true');
+  const before = await bytes(page);
+  await page.evaluate(() => window.investmentFixture.controller.refresh());
+  assert.equal(await bytes(page), before, 'rendering the accepted reel state does not publish an edit');
+  const protect = approach.getByRole('button', { name: 'Investment approach: Protect delivery', exact: true });
+  await protect.click();
+  await expect(approach.locator('.native-reel__reading')).toHaveText('Protect delivery');
+  await expect(view.locator('[data-allocation="reserve"]')).toContainText('$3,000');
+  await root(page).locator('[data-studio-undo]').click();
+  await expect(approach.locator('.native-reel__reading')).toHaveText('Deliver now');
+  await approach.getByRole('button', { name: 'Next investment approach', exact: true }).click();
+  await expect(protect).toHaveAttribute('aria-pressed', 'true');
+  await protect.focus(); await page.keyboard.press('ArrowRight');
+  await expect(approach.getByRole('button', { name: 'Investment approach: Explore options', exact: true })).toBeFocused();
+  await expect(view.locator('[data-allocation="opportunity"]')).toContainText('$3,000');
+  for (const width of [1440, 650, 651, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const reel of [view.locator('.investment-study__domain'), approach, lens]) {
+      await reel.scrollIntoViewIfNeeded();
+      const misses = await reel.locator('.native-reel__choice,.native-reel__hub').evaluateAll(controls => controls.filter(control => {
+        const box = control.getBoundingClientRect(), x = box.x + box.width / 2, y = box.y + box.height / 2;
+        return box.width < 24 || box.height < 24 || !control.contains(document.elementFromPoint(x, y));
+      }).map(control => control.getAttribute('aria-label')));
+      assert.deepEqual(misses, [], `${width}px shared reel choice centers remain reachable`);
+    }
+    await approach.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(captures, `${engine}-${width}-shared-investment-reels.png`) });
+  }
+  const parity = await page.evaluate(() => {
+    const financial = document.querySelector('#native-studio-investment .native-reel[data-reel-variant="cobalt"]');
+    const quality = document.querySelector('#native-studio-assurance .native-reel[data-reel-variant="cobalt"]');
+    return ['backgroundColor', 'color'].map(property => [getComputedStyle(financial)[property], getComputedStyle(quality)[property]]);
+  });
+  for (const [financial, quality] of parity) assert.equal(financial, quality, 'shared housing colors retain their owner');
+  const rotor = approach.locator('.native-reel__rotor'), motion = mode => root(page).locator(`[data-native-motion-choice="${mode}"]`);
+  await expect(rotor).toHaveCSS('transition-duration', '0s');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await motion('full').check(); await expect(rotor).toHaveCSS('transition-duration', '0.48s');
+  await motion('lower').check(); await expect(rotor).toHaveCSS('transition-duration', '0.96s');
+  await motion('off').check(); await expect(rotor).toHaveCSS('transition-duration', '0s');
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(approach.locator('[aria-pressed="true"]')).toHaveCSS('outline-style', 'solid');
+});

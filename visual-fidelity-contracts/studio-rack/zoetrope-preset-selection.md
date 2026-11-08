@@ -3,10 +3,11 @@
 Let visitors explore authored configurations by choosing a visible reel position
 and seeing the resulting work immediately. The fixed housing, rotating center
 and pressed choice make the setting easy to locate. Team arrangements, Change
-viewpoints/frameworks and Quality preparation/recovery are current receivers.
+viewpoints/frameworks, Quality preparation/recovery and Investment comparisons
+are current receivers.
 
-**Standing:** review candidate `0.1.0`; ID `vfc:zoetrope-preset-selection`;
-reviewed 7 November 2026. This pattern inherits
+**Standing:** review candidate `0.2.0`; ID `vfc:zoetrope-preset-selection`;
+reviewed 8 November 2026. This pattern inherits
 [Studio Rack Composition](README.md) and uses its Instrument Rack treatment.
 
 ## Fit and smallest useful dose
@@ -40,6 +41,20 @@ may vary. The choice labels remain stationary while the center rotates. Selected
 buttons keep their target geometry when pressed. A compact output repeats the
 selected meaning; it does not add a competing instruction panel.
 
+Investment adopts this shared Showcase presentation. Its planning workbench's
+illustrative reel remains preserved as a reference, while the live chapter uses
+the same housing, stationary perimeter options and rotor as other chapters.
+Chocolate financial modules remain the surrounding composition. Teal primary
+and cobalt secondary variants distinguish paired dimensions; labels and actual
+available width determine when a group stacks.
+
+Investment's Domain reel chooses a deck type to inspect and retains local view
+state. Reels inside a loaded deck change its named comparison settings or apply
+connected presets through the canonical owner. A metric can select the related
+control group; a preset can update several assumptions together. The visible
+choice, selected output and result remain synchronized. Silent synchronization
+after Undo or import changes presentation without creating another edit.
+
 ## Keyboard, motion and alternate presentation
 
 Position buttons remain ordinary buttons. Arrow-key stepping follows the shared
@@ -67,8 +82,10 @@ to fit an arbitrary circle.
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Housing, rotor, pressed treatment, motion and forced-color variant |
 | [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) and [template transactions](../../collaboration/native-investment-studio/connection-templates.mjs) | Direct arrangement replacement, field settlement, included-work reading and local Undo |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Viewpoint/framework and preparation/recovery consequences |
+| [Investment control adapter](../../collaboration/native-investment-studio/investment-controls.mjs) and [workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Shared reel presentation, independent financial choices and connected comparison consequences |
 | [Shell browser checks](../../tests/native-investment-studio/shell.browser.mjs) | Shared reel semantics and motion preferences |
 | [Connection template](../../tests/native-investment-studio/connection-template.browser.mjs), [Change](../../tests/native-investment-studio/change.browser.mjs), [Assurance](../../tests/native-investment-studio/assurance.browser.mjs) | Populated choice results, preserved draft ownership and chapter-specific recovery |
+| [Investment browser journey](../../tests/native-investment-studio/investment.browser.mjs) | Connected financial choices, shared stepping, retained focus, history recovery and ordinary mobile composition |
 
 The [instrument research](../../collaboration/native-investment-studio/usability-research.md#digital-instrument-composition--5-november-2026)
 uses physical-controller selection and parameter displays as inspiration. The
@@ -101,4 +118,4 @@ correctable, and the shared editing coordinator preserves other unfinished work.
 A shared-record conflict offers a compact choice to preserve that record and use
 separate replacement records. Local Undo targets the arrangement’s latest accepted
 change; later accepted edits retire that shortcut while history remains available
-in Investment. Future global amp recovery stays with #773.
+through the stable amp Undo and Investment recovery utilities.

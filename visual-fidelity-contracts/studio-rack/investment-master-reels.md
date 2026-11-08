@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.2.0`, ID
+**Standing:** approved reference and receiving composition, version `0.3.0`, ID
 `vfc:investment-master-reels`; 8 November 2026, receiving
 [#809](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809).
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
@@ -64,7 +64,8 @@ change views; the financial cassette shelf owns comparison identities.
 | [Saved deck contract](../../collaboration/native-investment-studio/investment-state.mjs) | Stable identity, bounded assumptions and integer-hundredth serialization |
 | [Accepted-plan projection](../../collaboration/native-investment-studio/investment-projection.mjs) | Canonical people, ledger prices and authored periods |
 | [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Shelf, independent editors, connected reels, allocation pads and cash-flow tracks |
-| [Controls](../../collaboration/native-investment-studio/investment-controls.mjs) | Stable monetary dials, exact fields, circular steppers and reel controls |
+| [Financial controls](../../collaboration/native-investment-studio/investment-controls.mjs) | Stable monetary dials, exact fields, circular steppers and a thin shared-reel adapter |
+| [Shared Showcase reel](../../collaboration/native-investment-studio/reel-control.mjs) and [instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Stationary perimeter choices, fixed housing, rotating center, stepping, selected reading, motion and disposal |
 | [Receiving stylesheet](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Scoped specimen geometry and integration with the About rack |
 
 The plan deck reads accepted staffing and extra work from the canonical ledger.
@@ -210,20 +211,34 @@ gesture's starting value. Native range fallback remains usable in forced colors.
 
 ## Reels make changes visible
 
-A reel consists of a stable label, rotating decorative wheel, current choice,
-Previous/Next controls and openly available choice pads. The rotor turns while
-the controls and text stay readable. Selection is also expressed with
-`aria-pressed`; reduced motion presents the same choice immediately.
+The Showcase uses the existing [Zoetrope Preset Selection](zoetrope-preset-selection.md)
+family for its final reel art. Issue
+[#854](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/854)
+supersedes adoption of the planning specimen's separate wheel-and-pad renderer.
+The specimen remains a reference for financial relationships, cassette artwork,
+monetary modules and composition.
 
-The reference wheel is `136px` with a `2px #668b73` edge, pale `#bacbb5` body,
-dark inset ring and lower-right shadow. Its rotor sits `10px` inside with a
-`5px #142f25` edge; alternating `#2b5240` and `#f7f0d6` sectors turn through
-`420ms cubic-bezier(.2,.8,.25,1)`. The label button remains centered at
-`32px 19px` insets. Previous/Next buttons remain circular at `32px` wide with
-a `30px` minimum height. At `650px` and below, Investment uses `96px` wheels,
-`7px` rotor insets, `3px` rotor edges and `24px 12px` center insets; the pad
-column has a `150px` flex basis. The wheel and openly visible choice pads
-stay beside one another where the available width permits.
+The shared reel owns a labeled fieldset, fixed housing, stationary perimeter
+choice buttons, rotating decorative center, central Next button and selected
+output. Investment's thin adapter supplies financial read/write callbacks and
+stable focus keys. Accepted refresh and Undo select silently; only visitor
+operations dispatch a financial change. Arrow keys step through the same visible
+choices. Teal introduces a dimension; a companion uses cobalt with the secondary
+settling rhythm. Shared Full-speed, Half-speed, Off, system reduction and forced
+colors apply to these reels exactly as they do in other chapters.
+
+The global Domain reel has a centered `25rem` maximum enclosure. The loaded
+comparison retains the receiving grid's `310px` preferred minimum and `24rem`
+shared wheel maximum. Pairs share a row when room permits and stack at phone
+widths. Investment owns the grid and short financial context below each reel;
+the shared component owns the housing, pad geometry, rotor and selected colors.
+Broad Investment button and fieldset rules leave these shared roles intact.
+
+For exact reconstruction of the preserved planning specimen only: its wheel is
+`136px`, with a `2px #668b73` edge, `#bacbb5` body, `10px` rotor inset and
+`420ms cubic-bezier(.2,.8,.25,1)` rotation. Its separate Previous/Next buttons
+are `32px` wide and its phone wheel is `96px`. These measurements remain with
+the frozen specimen and do not govern the receiving Showcase reel family.
 
 Lifecycle presets change a bounded group of assumptions together. Alternative
 and metric reels select the corresponding cash-flow or headline reading. The
@@ -268,7 +283,7 @@ the allocation reading; the earlier duplicate bar block is superseded.
 The lens selects Whole plan, Funded time or Extra investment. It filters the
 actual work pads and sprint amounts together, while the allocation still accounts
 for the whole plan. Context under each reel ties its selection to the other
-reading. Adjusting budget, reserve, options or deck funding marks the approach
+reading. Adjusting budget, reserve or options marks the approach
 Custom; a named approach restores its two allocations together. The reserve
 expresses money set aside, with any effect on delivery risk left unspecified.
 

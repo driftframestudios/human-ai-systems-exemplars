@@ -1,4 +1,5 @@
 // Financial rack controls: the receiving chapter owns amounts, choices and Undo.
+import { createReel } from './reel-control.mjs';
 const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(value);
 const TURN_STEP = 30;
 let sequence = 0;
@@ -142,37 +143,16 @@ export function createMoneyControl({ id, label, read, write, min = 0, max = 1000
   return { element, update, release: releaseAll, dispose() { releaseAll(); disposed = true; lifetime.abort(); element.remove(); } };
 }
 
-export function createChoiceReel({ id, label, options, read, write }) {
-  const instance = `${id}-${++sequence}`, element = node('fieldset', undefined, 'study-choice-reel');
-  element.append(node('legend', label));
-  const body = node('div', undefined, 'study-choice-reel__body'), wheel = node('div', undefined, 'study-choice-reel__wheel');
-  const rotor = node('span', undefined, 'study-choice-reel__rotor'); rotor.setAttribute('aria-hidden', 'true');
-  let selected = null, angle = 0;
-  const index = () => Math.max(0, options.findIndex(option => option.id === read()));
-  function choose(value) { if (value !== read()) write(value); update(); }
-  function move(direction) { if (options.length) choose(options[(index() + direction + options.length) % options.length].id); }
-  const center = button('', `${label}: next choice`, () => move(1), `${id}-reel`, 'study-choice-reel__center');
-  center.setAttribute('aria-controls', `${instance}-pads`); wheel.append(rotor, center);
-  const controls = node('div', undefined, 'study-choice-reel__controls'), navigation = node('div', undefined, 'study-choice-reel__navigation');
-  navigation.append(button('‹', `${label}: previous choice`, () => move(-1), `${id}-previous`), button('›', `${label}: next choice`, () => move(1), `${id}-next`));
-  const pads = node('div', undefined, 'study-choice-reel__pads'); pads.id = `${instance}-pads`;
-  const choices = options.map(option => {
-    const pad = button(option.label, `${label}: ${option.label}`, () => choose(option.id), `${id}-${option.id}`);
-    pads.append(pad); return { option, pad };
-  });
-  controls.append(navigation, pads); body.append(wheel, controls); element.append(body);
-  function update(value = read()) {
-    const nextIndex = Math.max(0, options.findIndex(option => option.id === value)), next = options[nextIndex];
-    if (next && next.id !== selected) {
-      const previousIndex = options.findIndex(option => option.id === selected);
-      const distance = previousIndex < 0 ? nextIndex : ((nextIndex - previousIndex + options.length * 1.5) % options.length) - options.length / 2;
-      angle += distance * 360 / options.length; selected = next.id; rotor.style.transform = `rotate(${angle}deg)`;
-    }
-    center.textContent = next?.label ?? 'Choose a view';
-    center.setAttribute('aria-label', `${label}: next choice. Current ${next?.label ?? 'none'}`);
-    center.disabled = options.length < 2;
-    for (const { option, pad } of choices) pad.setAttribute('aria-pressed', String(option.id === value));
-    for (const control of navigation.children) control.disabled = options.length < 2;
+// The shared Showcase reel owns artwork, stepping, motion and disposal. This
+// receiver preserves the financial controller's read/write and focus vocabulary.
+export function createChoiceReel({ id, label, options, read, write, secondary = false }) {
+  const reel = createReel(document, { label, choices: options, value: read(),
+    variant: secondary ? 'cobalt' : 'teal', secondary,
+    onSelect(value) { if (value !== read()) write(value); reel.select(read()); } });
+  for (const control of reel.element.querySelectorAll('[data-reel-choice]')) {
+    control.dataset.focusKey = `${id}-${control.dataset.reelChoice}`;
+    control.setAttribute('aria-label', `${label}: ${control.textContent}`);
   }
-  update(); return { element, update };
+  reel.element.querySelector('.native-reel__hub').dataset.focusKey = `${id}-reel`;
+  return { element: reel.element, update(value = read()) { reel.select(value); }, dispose: reel.dispose };
 }

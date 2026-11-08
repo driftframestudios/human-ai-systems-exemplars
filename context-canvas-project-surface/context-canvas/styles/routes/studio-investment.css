@@ -1,14 +1,15 @@
-/* Investment deck adoption. Specimen geometry lives with its runtime owner here. */
+/* Investment deck adoption. Cassette and money geometry belong here; shared
+   native-reel artwork comes from the earlier studio-instrument.css owner. */
 #native-studio-investment .studio-investment-workspace { display:block; }
 #native-studio-investment .investment-utility-rail { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem; }
 #native-studio-investment .investment-utility-rail button[aria-pressed=true] { background:var(--native-mint,#56d8c9); color:#102e25; box-shadow:inset 0 2px 4px #173c3155; }
 #native-studio-investment .investment-study { color:#f8f1d9; font-family:var(--font-sans,system-ui,sans-serif); }
-#native-studio-investment .investment-study :is(h2,h3,h4,p,fieldset,output) { color:inherit; margin-block-start:0; }
+#native-studio-investment .investment-study :is(h2,h3,h4,p,fieldset:not(.native-reel),output:not(.native-reel__reading)) { color:inherit; margin-block-start:0; }
 #native-studio-investment .investment-study :is(h2,h3,h4) { font-family:inherit; line-height:1.3; border:0; }
 #native-studio-investment .investment-study h3 { font-size:1rem; margin-block-end:.5rem; }
 #native-studio-investment .investment-study h4 { font-size:.9rem; margin-block-end:.5rem; }
-#native-studio-investment .investment-study button { min-width:0; min-height:2.5rem; font-family:inherit; font-size:.82rem; font-weight:600; line-height:1.3; padding:.5rem .65rem; }
-#native-studio-investment .investment-study button:focus-visible { outline:3px solid #f8f1d9; outline-offset:3px; }
+#native-studio-investment .investment-study button:not(.native-reel__choice,.native-reel__hub) { min-width:0; min-height:2.5rem; font-family:inherit; font-size:.82rem; font-weight:600; line-height:1.3; padding:.5rem .65rem; }
+#native-studio-investment .investment-study button:not(.native-reel__choice,.native-reel__hub):focus-visible { outline:3px solid #f8f1d9; outline-offset:3px; }
 #native-studio-investment .investment-study .bar { display:flex; gap:.5rem; justify-content:space-between; align-items:center; flex-wrap:wrap; }
 #native-studio-investment .investment-study .hint { font-size:.75rem; line-height:1.4; }
 #native-studio-investment .investment-study .ghost { background:transparent; color:#f8f1d9; border:1px solid #96b39e; box-shadow:none; }
@@ -18,7 +19,7 @@
 
 #native-studio-investment .investment-study { display:grid; gap:.8rem; min-width:0; }
 #native-studio-investment .investment-study--masters { grid-template-columns:290px minmax(0,1fr); align-items:start; }
-#native-studio-investment .investment-study__domain { grid-column:1/-1; }
+#native-studio-investment .investment-study__domain { grid-column:1/-1; inline-size:min(100%,25rem); justify-self:center; }
 #native-studio-investment .investment-study__channel { min-width:0; padding:.7rem; background:linear-gradient(90deg,#34443a 0 3px,transparent 3px calc(100% - 3px),#0d1a14 calc(100% - 3px)),#12231f; border:1px solid #668b73; border-radius:6px; box-shadow:inset 0 0 12px #071c1580; }
 #native-studio-investment .investment-study__channel>h2 { margin-bottom:.65rem; font-size:1rem; }
 #native-studio-investment .investment-study__masters { display:grid; gap:.9rem; padding:.25rem .1rem .9rem; }
@@ -51,7 +52,7 @@
 #native-studio-investment .investment-comparison__head .remove { font-size:.75rem; }
 #native-studio-investment .investment-comparison__reels { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr)); gap:.65rem; margin:.7rem; }
 #native-studio-investment .investment-comparison__reels--connected { padding:.5rem; border:1px solid #92735f; background:#403d32; border-radius:4px; }
-#native-studio-investment .investment-comparison__reel-context { display:block; margin-top:.6rem; padding-top:.5rem; border-top:1px solid #92735f; color:#c2decc; font:.75rem/1.5 ui-monospace,monospace; }
+#native-studio-investment .investment-comparison__reel-context { display:block; margin-top:.6rem; padding-top:.5rem; border-top:1px solid #92735f; color:inherit; font:.75rem/1.5 ui-monospace,monospace; }
 #native-studio-investment .investment-comparison__allocation { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.5rem; }
 #native-studio-investment .investment-comparison__allocation-pad { --allocation-ink:#56d8c9; display:grid; align-content:start; gap:.6rem; min-width:0; padding:.7rem .6rem .5rem; background:#23382e; border:1px solid #668b73; border-top:3px solid var(--allocation-ink); }
 #native-studio-investment .investment-comparison__allocation-pad>span { font-size:.75rem; }
@@ -141,13 +142,6 @@
 #native-studio-investment .investment-comparison__head { flex-wrap:wrap; } }
 @media(max-width:650px) {
 #native-studio-investment .investment-comparison__allocation { grid-template-columns:repeat(2,minmax(0,1fr)); }
-#native-studio-investment .investment-study .study-choice-reel__body { gap:.6rem; align-items:center; }
-#native-studio-investment .investment-study .study-choice-reel__wheel { width:96px; height:96px; flex-basis:96px; }
-#native-studio-investment .investment-study .study-choice-reel__rotor { inset:7px; border-width:3px; }
-#native-studio-investment .investment-study .study-choice-reel__rotor::after { width:10px; height:10px; left:calc(50% - 5px); }
-#native-studio-investment .investment-study .study-choice-reel__center { inset:24px 12px; padding:.2rem; font-size:.62rem; }
-#native-studio-investment .investment-study .study-choice-reel__controls { flex:1 1 150px; }
-#native-studio-investment .investment-study .study-choice-reel__pads>button { flex-basis:4rem; }
 }
 @media(prefers-reduced-motion:reduce) {
 #native-studio-investment .investment-master__face, #native-studio-investment .investment-master:hover .investment-master__face { transform:none; transition:none; } }
@@ -181,29 +175,10 @@
 #native-studio-investment .study-money__steps { display:flex; justify-content:space-between; gap:.5rem; }
 #native-studio-investment .study-money__steps>button { width:30px; height:30px; min-height:30px; flex:0 0 30px; padding:0; text-align:center; border:1px solid var(--money-ink); border-radius:50%; color:var(--money-ink); background:var(--money-paper); }
 #native-studio-investment .study-money__steps>button:hover { color:var(--money-ink); background:var(--money-peach); }
-#native-studio-investment .study-choice-reel { min-width:0; margin:0; padding:.7rem; border:1px solid #92735f; border-radius:4px; background:#3b2b25; color:#f8f1d9; }
-#native-studio-investment .study-choice-reel>legend { padding:0 .3rem; font-size:.82rem; font-weight:650; }
-#native-studio-investment .study-choice-reel__body { display:flex; align-items:center; flex-wrap:wrap; gap:.8rem; }
-#native-studio-investment .study-choice-reel__wheel { position:relative; flex:0 0 136px; width:136px; height:136px; border:2px solid #668b73; border-radius:50%; box-shadow:inset 0 0 0 4px #10261e,3px 3px 0 #07170f; background:#bacbb5; overflow:hidden; }
-#native-studio-investment .study-choice-reel__rotor { position:absolute; inset:10px; border:5px solid #142f25; border-radius:50%; background:repeating-conic-gradient(#2b5240 0deg 23deg,#f7f0d6 23deg 45deg); box-shadow:inset 0 0 0 5px #9db8a0; transition:transform 420ms cubic-bezier(.2,.8,.25,1); pointer-events:none; }
-#native-studio-investment .study-choice-reel__rotor::after { content:''; position:absolute; width:14px; height:14px; left:calc(50% - 7px); top:1px; border:2px solid #172724; border-radius:50%; background:#66dcc2; }
-#native-studio-investment .study-choice-reel__center { position:absolute; inset:32px 19px; min-height:0; padding:.3rem; border:2px solid #668b73; border-radius:50%; box-shadow:2px 3px 2px #10261e; background:#172724; color:#f7f0d6; font-size:.72rem; line-height:1.2; text-align:center; overflow-wrap:anywhere; }
-#native-studio-investment .study-choice-reel__center:hover { background:#294d3e; color:#f7f0d6; }
-#native-studio-investment .study-choice-reel__controls { flex:1 1 180px; min-width:0; display:grid; gap:.5rem; }
-#native-studio-investment .study-choice-reel__navigation { display:flex; gap:.5rem; }
-#native-studio-investment .study-choice-reel__navigation>button { width:32px; min-height:30px; padding:0; text-align:center; border-radius:50%; font-size:1.2rem; background:#f7f0d6; color:#172724; }
-#native-studio-investment .study-choice-reel__navigation>button:hover { background:#f2d0b6; color:#172724; }
-#native-studio-investment .study-choice-reel__pads { display:flex; flex-wrap:wrap; gap:.4rem; }
-#native-studio-investment .study-choice-reel__pads>button { flex:1 1 5.5rem; padding:.4rem .5rem; text-align:center; font-size:.78rem; color:#213252; background:#f7f0d6; }
-#native-studio-investment .study-choice-reel__pads>button:hover { color:#213252; background:#f2d0b6; }
-#native-studio-investment .study-choice-reel__pads>button[aria-pressed=true] { background:#66dcc2; color:#172724; box-shadow:inset 0 3px 4px #173c3155; }
-@media(prefers-reduced-motion:reduce) {
-#native-studio-investment .study-choice-reel__rotor { transition:none; } }
 @media(forced-colors:active) {
-#native-studio-investment .study-money__face, #native-studio-investment .study-choice-reel__rotor { display:none; }
+#native-studio-investment .study-money__face { display:none; }
 #native-studio-investment .study-money__dial { width:100%; border:0; border-radius:0; background:none; }
 #native-studio-investment .study-money__dial>input { opacity:1; }
-#native-studio-investment .study-choice-reel__pads>button[aria-pressed=true] { outline:2px solid Highlight; }
 }
 
 #native-studio-investment .study-money__steps>button { min-width:30px; min-height:30px; padding:0; }
@@ -211,4 +186,3 @@
 #native-studio-investment .investment-study__periods { display:flex; overflow-x:auto; }
 #native-studio-investment .investment-study__periods>div { flex:1 0 8rem; }
 #native-studio-investment .investment-study [hidden] { display:none; }
-[data-native-motion=lower] #native-studio-investment .study-choice-reel__rotor { transition:none; }
