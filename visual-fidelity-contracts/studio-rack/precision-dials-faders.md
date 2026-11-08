@@ -134,13 +134,21 @@ occurrence pads select placement; the nearby exact count and circular steps
 retain repetition meaning. One duration and participant set apply to every
 occurrence.
 
-The future [participant fader](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
-starts with **Time in this session**, meaning each person's share of one session
-occurrence. Its proportion and unit stay visible beside the control. The Issue
-owns the proposed defaults, zero-time behavior and effort/price contract before
-implementation. Membership, funded time and period availability retain their
-different meanings; existing whole-session participation remains authoritative
-until that model change lands.
+The future [participant fader contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
+is separate from #771's shared movement controls. **Time in this session** would
+mean one person's share of one occurrence, with percentage and corresponding
+duration visible together. Default 100% preserves existing examples. Shares are
+independent, so several people may each use 100%. A 0% share would retain selected
+identity with a zero-time reading; inclusion remains its own operation.
+
+This is future model work. The stored contract and projection must establish how
+a share changes that person's effort, cost and funded-time consumption before an
+operative fader appears. Session duration, repetitions, placement and other
+people retain their separate values. Exact input, Apply/Cancel, Undo and portable
+reports must describe the same share; legacy plans retain 100% semantics. A
+project/period availability fader needs its own named period and available-time
+denominator. Current participants receive the full session duration, and the
+enclosed Hours/Minutes controls retain their existing quantity and art direction.
 
 Use real pointer gestures when investigating an engine-specific reset: brief
 inside/outside movements, release, focus transfer and deliberate cancellation

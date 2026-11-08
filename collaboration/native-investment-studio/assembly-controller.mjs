@@ -8,6 +8,8 @@ import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
+import { animateRackChange } from './reel-control.mjs';
+import { syncReorderButtons } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
@@ -144,10 +146,10 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       }
       const name = people.get(id)?.label ?? `${id} (removed)`, index = positions.get(id);
       item.dataset.selected = String(selected.has(id)); controls.checkbox.checked = selected.has(id);
+      item.dataset.assemblyMemberRow = id;
       item.querySelector('[data-member-name]').textContent = name;
       item.querySelector('.native-coordination__member-status').textContent = selected.has(id) ? `Included · ${index + 1}` : 'Available';
-      controls.up.disabled = index === undefined || index === 0; controls.down.disabled = index === undefined || index === ids.length - 1;
-      controls.up.setAttribute('aria-label', `Move up: ${name} in the team`); controls.down.setAttribute('aria-label', `Move down: ${name} in the team`);
+      syncReorderButtons(controls.up, controls.down, { label: `${name} in the team`, index, count: ids.length });
       memberControls.set(id, controls); rows.push(item);
     }
     if (rows.length !== elements.members.children.length || rows.some((row, index) => row !== elements.members.children[index]))
@@ -386,8 +388,11 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    const result = editor.setIds(view.draft.token, 'personIds', ids);
-    changed(result, epoch, () => memberControls.get(id)?.checkbox.focus());
+    const update = () => changed(editor.setIds(view.draft.token, 'personIds', ids), epoch,
+      () => memberControls.get(id)?.checkbox.focus());
+    if (direction !== null) animateRackChange(elements.members, update,
+      { selector: '[data-assembly-member-row]', key: 'assemblyMemberRow' });
+    else update();
   }
   function recover(action) {
     const view = editor.read();

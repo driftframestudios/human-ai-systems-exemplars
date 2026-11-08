@@ -3059,7 +3059,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-score__field > .native-score__choices, .native-score__interval { grid-column: 1 / -1; }
 .native-score__field:has(.native-score__choices), .native-score__fund { grid-column: 1 / -1; }
 .native-score__choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: .4rem; }
-.native-score__choices label, .native-score__fund { display: flex; align-items: start; gap: .5rem; padding: .5rem; border: 1px solid var(--native-rule); background: var(--native-paper); font-size: .85rem; }
+.native-score__choices label, .native-score__fund { display: flex; align-items: start; gap: .5rem; min-block-size: 2.75rem; padding: .5rem; border: 1px solid var(--native-rule); background: var(--native-paper); font-size: .85rem; }
 .native-score select, .native-score input[type='text'] { max-inline-size: 100%; min-inline-size: 0; padding: .55rem; min-block-size: 2.75rem; font: inherit; color: var(--native-text); background-color: #fffdf4; border: .125rem solid var(--native-rule); border-radius: .15rem; }
 .native-score input[type='text']:not(.native-score__number) { text-align: start; }
 .native-score .native-score__number { inline-size: 100%; font-family: ui-monospace, monospace; font-weight: 700; text-align: center; }

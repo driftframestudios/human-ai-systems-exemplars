@@ -11,6 +11,7 @@ import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
+import { syncReorderButtons } from './rack-controls.mjs';
 import { prepareSessionCreation } from './session-creation.mjs';
 
 const INSTANCES = new WeakMap();
@@ -337,8 +338,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       role.hidden = !rackMode || !role.textContent;
       item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button'), index = positions.get(id);
-      up.disabled = index === undefined || index === 0; down.disabled = index === undefined || index === ids.length - 1;
-      up.setAttribute('aria-label', `Move up: ${person?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${person?.label ?? id}`);
+      syncReorderButtons(up, down, { label: person?.label ?? id, index, count: ids.length });
       rows.push(item); memberControls.set(id, checkbox);
     }
     // Membership changes keep mounted controls. Explicit order changes and
@@ -659,7 +659,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
     const update = () => changed(operate('setIds', view.draft.token, 'personIds', ids), epoch, () => memberControls.get(id)?.focus());
-    if (rackMode && delta !== null) animateRackChange(elements.members, update,
+    if (delta !== null) animateRackChange(elements.members, update,
       { selector: '[data-session-member]', key: 'sessionMember' });
     else update();
   }

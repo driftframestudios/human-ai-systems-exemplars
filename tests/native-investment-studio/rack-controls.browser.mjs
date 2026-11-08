@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { before, after, test } from 'node:test';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
+import { participantMovement } from './participant-movement.browser-helper.mjs';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
 const engines = { chromium, firefox, webkit };
@@ -231,6 +232,87 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(await bytes(page), customized, 'Undo restores the preceding arrangement and its work together');
   });
 
+  test(`${engine}: attached companions share rack records, retain proposals and return to the selected sprint at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width), accepted = await bytes(page);
+    const score = root(page).locator('[data-native-score]'), screen = horizon(page).locator('.native-cadence__screen');
+    const companions = horizon(page).locator('.studio-rack-companions');
+    const people = companions.locator('[data-cadence-disclosure="people"]');
+    const flow = companions.locator('[data-cadence-disclosure="flow"]');
+    const inspector = score.locator('.native-score__inspector');
+    const field = name => inspector.locator(`[data-cadence-field="${name}"]`);
+    for (const drawer of [people, flow]) assert.equal(await drawer.evaluate(node => node.open), false);
+    assert.equal(await companions.evaluate(node => node.previousElementSibling.matches('.native-cadence__screen')), true);
+    const attached = await companions.boundingBox(), face = await screen.boundingBox();
+    assert.ok(Math.abs(attached.x - face.x) < 1 && Math.abs(attached.width - face.width) < 1
+      && Math.abs(attached.y - (face.y + face.height)) <= 1, 'the editorial disclosures share the rack edge');
+
+    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
+    const sprint = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
+    await expect(companions.locator('.studio-rack-companion__scope')).toHaveText(['Sprint 2', 'Sprint 2']);
+    if (engine === 'chromium') await companions.screenshot({ path:resolve(captures, `attached-companions-${width}.png`) });
+    const personKey = screen.locator('[data-cadence-key^="rack-person:"]').first();
+    const personId = (await personKey.getAttribute('data-cadence-key')).slice('rack-person:'.length);
+    const person = JSON.parse(accepted).people.find(row => row.id === personId);
+    await personKey.click();
+    await expect(personKey).toHaveAttribute('aria-expanded', 'true');
+    await expect(field('availability-period')).toHaveValue('period-2');
+    await field('availability-minutes').fill('240');
+    await flow.locator(':scope > summary').click();
+    await expect(personKey).toHaveAttribute('aria-expanded', 'false');
+    await personKey.click();
+    await expect(field('availability-minutes')).toHaveValue('240');
+    await people.locator(':scope > summary').click();
+    const availability = people.locator(`[data-cadence-key="availability:${personId}"]`);
+    await availability.click();
+    await expect(field('availability-minutes')).toHaveValue('240');
+    await expect(field('availability-period')).toHaveValue('period-2');
+    await inspector.getByRole('button', { name:'Open person settings', exact:true }).click();
+    await expect(root(page).locator('[data-native-chapter="people"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(root(page).locator(`[data-team-roster] [data-person-id="${personId}"]`)).toHaveAttribute('aria-pressed', 'true');
+    await expect(root(page).locator('[data-person-configure] [name="ratePerHour"]')).toHaveValue((person.rateCentsPerHour / 100).toFixed(2));
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(field('availability-minutes')).toHaveValue('240');
+    await expect(field('availability-period')).toHaveValue('period-2');
+    await expect(sprint).toHaveAttribute('aria-current', 'page');
+    await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
+    await expect(availability).toBeFocused();
+    assert.equal(await bytes(page), accepted, 'drawer navigation and the People round trip retain the accepted plan');
+
+    const stageKey = screen.locator('[data-cadence-key^="rack-stage:"]').first();
+    const stageId = (await stageKey.getAttribute('data-cadence-key')).slice('rack-stage:'.length);
+    await stageKey.click();
+    await field(`stage.${stageId}.label`).fill('Build and rehearse with operators');
+    await flow.locator(':scope > summary').click();
+    await expect(stageKey).toHaveAttribute('aria-expanded', 'false');
+    await stageKey.click();
+    await expect(field(`stage.${stageId}.label`)).toHaveValue('Build and rehearse with operators');
+    const stage = flow.locator(`[data-cadence-key="stage:${stageId}"]`);
+    await stage.click();
+    await expect(field(`stage.${stageId}.label`)).toHaveValue('Build and rehearse with operators');
+    await expect(inspector.getByRole('button', { name:'Add decision here', exact:true })).toBeVisible();
+    await expect(inspector.getByRole('button', { name:'Add delay here', exact:true })).toBeVisible();
+    if (engine === 'chromium') await companions.screenshot({ path:resolve(captures, `attached-companions-open-${width}.png`) });
+    await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
+    await expect(stage).toBeFocused(); await expect(sprint).toHaveAttribute('aria-current', 'page');
+
+    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
+    await horizon(page).getByRole('button', { name:'Try a later review', exact:true }).click();
+    const sameRecord = async (rackKey, drawerKey, title) => {
+      await screen.locator(rackKey).first().click();
+      await expect(inspector.getByRole('heading', { name:title, exact:true })).toBeVisible();
+      const readFields = () => inspector.locator('[data-cadence-field]').evaluateAll(nodes => nodes.map(node => [node.dataset.cadenceField, node.value]));
+      const values = await readFields();
+      await flow.locator(drawerKey).first().click();
+      assert.deepEqual(await readFields(), values, 'rack and editorial entries inspect the same record');
+    };
+    await sameRecord('[data-cadence-key^="track-handoff:"]', '[data-cadence-key^="handoff:"]', 'Inspect handoff');
+    await sameRecord('[data-cadence-key^="decision:"]', '[data-cadence-key^="decision:"]', 'Inspect decision');
+    await sameRecord('[data-cadence-key^="delay:"]', '[data-cadence-key^="delay:"]', 'Inspect delay');
+    await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
+    assert.equal(await bytes(page), accepted, 'relationship inspection preserves the accepted plan');
+    await contained(page, width);
+  });
+
   test(`${engine}: in-rack session editing retains draft, scope and return across both racks at ${width}px`, { timeout: 90000 }, async t => {
     const page = await open(t, engine, width, true), accepted = await bytes(page);
     await page.evaluate(() => { window.rackFixture.sessionNode = document.querySelector('[data-native-configure]'); });
@@ -282,6 +364,8 @@ for (const engine of names) for (const width of [390, 1440]) {
     await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' }));
     await page.screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}-viewport.png`) });
     await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}.png`) });
+    await participantMovement(page, configure(page).locator('[data-native-session-members]'));
+    assert.equal(await bytes(page), accepted, 'participant movement leaves accepted work intact');
     const minutes = configure(page).locator('[name="minutesPerSession"]');
     await configure(page).locator('[data-native-minutes-knob]').press('ArrowUp');
     await expect(minutes).toHaveValue('1');
@@ -340,6 +424,7 @@ for (const engine of names) for (const width of [390, 1440]) {
       'participation inspection uses the Team planning receiver');
     await receiverReading(page, 'pairing', true);
     await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-shared-session-${width}.png`) });
+    await participantMovement(page, configure(page).locator('[data-native-session-members]'));
     await sharedTrack(page, 'research').click();
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Research synthesis');
     await receiverReading(page, 'research', true);

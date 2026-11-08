@@ -1,5 +1,15 @@
 import { revealStudioDestination } from './motion.mjs';
 
+// Session and team membership share ordering semantics while retaining their
+// own draft actions and receiving skins.
+export function syncReorderButtons(up, down, { label, index, count }) {
+  for (const [control, direction, boundary] of [[up, 'up', 0], [down, 'down', count - 1]]) {
+    control.textContent = `Move ${direction}`;
+    control.setAttribute('aria-label', `Move ${direction}: ${label}`);
+    control.disabled = index === undefined || index < 0 || index === boundary;
+  }
+}
+
 // Rack readings borrow the session editor's identity and visibility. Updating
 // attributes in place preserves each reading's focus and horizontal position.
 export function syncSessionControls(root, { selectedId, expanded, controlsId }) {

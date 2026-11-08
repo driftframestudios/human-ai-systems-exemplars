@@ -40,7 +40,7 @@
 .studio-session-deck .native-session__members strong { flex: 1 1 11rem; color: inherit; font-size: .85rem; }
 .studio-session-deck .native-session__members label small { font-size: .7rem; color: #c2decc; }
 .studio-session-deck .native-session__members .native-coordination__member-status { color: var(--studio-screen-text); }
-.native-coordination .studio-session-deck .native-coordination__manipulation { gap: .3rem; margin: 0; }
+.native-coordination .studio-session-deck .native-coordination__manipulation { gap: .5rem; margin: 0; }
 .native-coordination .studio-session-deck .native-coordination__manipulation > button {
  min-block-size: 2.75rem; padding: .35rem .5rem; font-size: .7rem;
  background: var(--native-paper); color: var(--native-text); box-shadow: none; border: 1px solid #668b73;
@@ -95,7 +95,7 @@
  .studio-session-deck .native-session__members label > span { display: grid; gap: .1rem; }
  .studio-session-deck .native-session__members strong { font-size: .75rem; }
  .studio-session-deck .native-session__members label small { font-size: .65rem; }
- .native-coordination .studio-session-deck .native-coordination__manipulation { display: grid; grid-template-columns: minmax(0, 1fr); gap: .25rem; margin: 0; }
+ .native-coordination .studio-session-deck .native-coordination__manipulation { display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; margin: 0; }
  .native-coordination .studio-session-deck .native-coordination__manipulation > button { font-size: .65rem; padding-inline: .35rem; }
  .studio-occurrences__pad small { overflow-wrap: anywhere; }
 }
