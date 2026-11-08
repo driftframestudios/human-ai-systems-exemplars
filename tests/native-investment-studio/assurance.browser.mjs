@@ -122,6 +122,8 @@ for (const engine of names) {
     await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'assurance').click();
     await panel(page).getByRole('button', { name: 'Recovery events and learning work', exact: true }).click(); await action(page, 'add-event').click();
     const event = panel(page).locator('[data-assurance-event="event-1"]');
+    await expect(event).not.toHaveAttribute('open', '');
+    await event.locator('summary').first().click();
     await field(page, 'event.event-1.label').fill('Recover the interrupted request');
     await field(page, 'event.event-1.receiverPersonId').selectOption('sam');
     await field(page, 'event.event-1.reviewBoundary').fill('Quality checks that the saved request can resume.');

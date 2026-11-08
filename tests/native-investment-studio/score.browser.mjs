@@ -88,18 +88,20 @@ for (const engine of names) {
     assert.equal(await bytes(page), accepted);
   });
 
-  test(`${engine}: a quarter adds an accepted session and opens its in-rack settings`, async t => {
+  test(`${engine}: a quarter adds an accepted session whose settings open on selection`, async t => {
     const page = await open(t, engine);
     await score(page).locator('[data-cadence-basis][value="quarter"]').check();
     const accepted = await bytes(page), before = JSON.parse(accepted);
     await period(page, 'period-2').getByRole('button', { name: /^Add a session in /u }).click();
     const deck = root(page).locator('[data-rack-editor-kind]');
-    await expect(deck).toHaveAttribute('data-rack-placement', 'inset');
+    await expect(deck).toBeHidden();
     const state = JSON.parse(await bytes(page));
     const work = state.work.find(row => !before.work.some(previous => previous.id === row.id));
     assert.ok(work); assert.equal(work.minutesPerOccurrence, 30);
     assert.deepEqual(state.scoreSettings.cadence.placements.find(row => row.workId === work.id),
       { workId: work.id, occurrenceIndex: 0, periodId: 'period-2', subdivision: 1 });
+    assert.equal(work.label, 'New session 1');
+    await period(page, 'period-2').locator(`[data-studio-session-id="${work.id}"]`).click();
     await expect(deck.locator('[name="label"]')).toHaveValue(work.label);
     await root(page).locator('[data-rack-creation-undo]').click();
     assert.equal(await bytes(page), accepted);
@@ -113,7 +115,7 @@ for (const engine of names) {
     const work = before.work.find(row => row.label === 'Research synthesis');
     await cadence(page).locator(`[data-studio-plan-id="${work.id}"]`).click();
     const originalPlacements = before.scoreSettings.cadence.placements.filter(row => row.workId === work.id);
-    await cadence(page).locator(`[data-cadence-key="add-occurrence:${work.id}:period-2:overview"]`).click();
+    await cadence(page).locator(`[data-cadence-key="add-occurrence:${work.id}:period-2:1"]`).click();
     const first = await bytes(page), firstState = JSON.parse(first);
     assert.equal(firstState.work.length, before.work.length, 'adding a session retains the cassette identities');
     assert.equal(firstState.work.find(row => row.id === work.id).occurrences, work.occurrences + 1);
@@ -197,6 +199,23 @@ for (const engine of names) {
     assert.equal(await bytes(page), accepted, 'scope changes retain the accepted horizon');
   });
 
+  test(`${engine}: period captions retain period identity, work and Undo`, async t => {
+    const page = await open(t, engine), original = JSON.parse(await bytes(page));
+    const lane = period(page, 'period-4'), editor = lane.locator('.native-cadence__period-label');
+    await editor.locator('summary').click();
+    await editor.getByRole('textbox', { name:'Period caption' }).fill('Prepare the receiving teams');
+    await editor.getByRole('button', { name:'Save label' }).click();
+    const changed = JSON.parse(await bytes(page));
+    assert.deepEqual(changed.scoreSettings.cadence.periods.at(-1),
+      { id:'period-4', label:'Sprint 4', caption:'Prepare the receiving teams' });
+    assert.deepEqual(changed.work, original.work);
+    assert.deepEqual(changed.scoreSettings.cadence.placements, original.scoreSettings.cadence.placements);
+    await expect(lane.locator('.native-cadence__stage-labels')).toHaveText('Prepare the receiving teams');
+    await expect(lane.getByRole('button', { name:'Sprint 4 Open sprint detail', exact:true })).toBeVisible();
+    await undo(page);
+    await expect(lane.locator('.native-cadence__stage-labels')).toHaveText('Build and rehearse · Review the evidence');
+  });
+
   test(`${engine}: an in-board period addition is accepted immediately and Undo restores it`, async t => {
     const page = await open(t, engine), accepted = await bytes(page), original = JSON.parse(accepted);
     const board = cadence(page).locator('.native-cadence__board');
@@ -244,33 +263,45 @@ for (const engine of names) {
     await inspector(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
     await expect(stage).toBeFocused();
     await flow(page).getByRole('button', { name: 'Add a decision for Understand the request', exact: true }).click();
-    await expect(inspector(page).getByRole('heading', { name: 'New decision for Understand the request', exact: true })).toBeVisible();
-    await expect(input(page, 'gate.gate-1.label')).toBeFocused();
+    await expect(inspector(page)).toBeHidden();
+    const decisionState = JSON.parse(await bytes(page));
+    assert.equal(decisionState.scoreSettings.gates.find(row => row.id === 'gate-1').label, 'New decision 1');
+    assert.deepEqual(decisionState.scoreSettings.cadence.decisionAnchors.find(row => row.gateId === 'gate-1'),
+      { gateId:'gate-1', kind:'stage', id:'understand' });
+    await cadence(page).locator('[data-cadence-key^="decision:gate-1:"]').first().click();
+    await expect(input(page, 'gate.gate-1.label')).toHaveValue('New decision 1');
     await input(page, 'gate.gate-1.label').fill('Agree the request');
     await input(page, 'gate.gate-1.reviewerPersonId').selectOption('maya');
-    const confirm = topApply;
-    await expect(confirm).toHaveText('Add decision to plan');
-    await expect(confirm).not.toHaveClass(/native-control--create/u);
-    for (const width of [1440, 390]) {
-      await page.setViewportSize({ width, height: 1000 });
-      await inspector(page).screenshot({ path: resolve(captures, `${engine}-top-apply-decision-${width}.png`) });
-      assert.ok(await inspector(page).evaluate(element => element.getBoundingClientRect().right <= document.documentElement.clientWidth + 1));
-    }
-    assert.equal(await bytes(page), accepted);
-    await confirm.click();
+    await topApply.click();
     const state = JSON.parse(await bytes(page));
     assert.equal(state.scoreSettings.gates.find(row => row.id === 'gate-1').label, 'Agree the request');
-    assert.deepEqual(state.scoreSettings.cadence.decisionAnchors.find(row => row.gateId === 'gate-1'),
-      { gateId: 'gate-1', kind: 'stage', id: 'understand' });
     const afterDecision = await bytes(page);
     await showFlow(page);
-    await flow(page).getByRole('button', { name: 'Add a delay to the handoff from Research synthesis to Prototype pairing', exact: true }).click();
-    await expect(inspector(page).getByRole('heading', { name: 'New delay', exact: true })).toBeVisible();
+    await flow(page).getByRole('button', { name: 'Add a delay to the handoff from Research synthesis to Prototype pairing', exact:true }).click();
+    await expect(inspector(page)).toBeHidden();
+    const delayState = JSON.parse(await bytes(page));
+    assert.equal(delayState.scoreSettings.cadence.delays.at(-1).label, 'New delay 1');
+    await cadence(page).locator('[data-cadence-key="delay:delay-1"]').click();
     await expect(input(page, 'delays.delay-1.anchor')).toHaveValue('handoff:research-before-pairing');
     await input(page, 'delays.delay-1.reason').fill('The receiving team needs time to review the research.');
-    assert.equal(await bytes(page), afterDecision);
-    await inspector(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
-    assert.equal(await bytes(page), afterDecision);
+    await inspector(page).getByRole('button', { name:'Cancel changes', exact:true }).click();
+    assert.deepEqual(JSON.parse(await bytes(page)), delayState, 'Cancel retains the accepted addition');
+    await undo(page); assert.equal(await bytes(page), afterDecision);
+    await period(page, 'period-1').getByRole('button', { name:'Sprint 1 Open sprint detail', exact:true }).click();
+    await showFlow(page);
+    await flow(page).getByRole('button', { name:'Add stage', exact:true }).click();
+    await expect(inspector(page)).toBeHidden();
+    const addedStage = JSON.parse(await bytes(page)).scoreSettings.stages.at(-1);
+    assert.equal(addedStage.label, 'New stage 1');
+    await showFlow(page);
+    await flow(page).locator(`[data-cadence-key="stage:${addedStage.id}"]`).click();
+    await expect(input(page, `stage.${addedStage.id}.label`)).toHaveValue('New stage 1');
+    await inspector(page).getByRole('button', { name:'Close', exact:true }).click();
+    await flow(page).getByRole('button', { name:'Connect work', exact:true }).click();
+    await expect(inspector(page)).toBeHidden();
+    const addedHandoff = JSON.parse(await bytes(page)).scoreSettings.cadence.handoffs.at(-1);
+    await flow(page).locator(`[data-cadence-key="handoff:${addedHandoff.id}"]`).click();
+    await expect(inspector(page)).toBeVisible();
   });
 
   test(`${engine}: a quarter example replaces the view in place and Undo restores the pilot`, async t => {
@@ -390,6 +421,38 @@ for (const engine of names) {
     });
     const expected = { active: 'purpose', sameLease: true, raw: 'The receiving team can recover an interrupted request.', focus: 'newer-purpose-focus', acceptedUnchanged: true };
     assert.deepEqual(observed, ['onBegin', 'onEditing'].map(callback => ({ callback, beforeDisposal: expected, afterDisposal: expected })));
+  });
+
+  test(`${engine}: direct score creation preserves a successor editor's focus`, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountScorePanel } = await import('/collaboration/native-investment-studio/score-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.scoreFixture.controller.dispose();
+      const element = document.querySelector('[data-native-score]'), results = [];
+      const external = document.createElement('input'); document.body.append(external);
+      for (const callback of ['onAccepted', 'onEditing']) {
+        const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
+        const initialCount = studio.read().state.scoreSettings.stages.length;
+        let successor;
+        const receiver = mountScorePanel(element, { studio, editing, [callback]() {
+          if (successor) return;
+          editing.purpose.begin('purpose', studio.read());
+          successor = editing.read().active.token; external.focus();
+        } });
+        const add = element.querySelector('[data-cadence-key="rack-add-stage"]');
+        add.focus(); add.click();
+        results.push({ callback, added: studio.read().state.scoreSettings.stages.length - initialCount,
+          active: editing.read().active.kind, retained: editing.read().active.token === successor,
+          focusRetained: document.activeElement === external });
+        receiver.dispose(); editing.dispose();
+      }
+      external.remove(); return results;
+    });
+    assert.deepEqual(observed, ['onAccepted', 'onEditing'].map(callback =>
+      ({ callback, added: 1, active: 'purpose', retained: true, focusRetained: true })));
   });
 
   test(`${engine}: disposal during preview releases the score lease and owned controls`, async t => {

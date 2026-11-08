@@ -91,7 +91,7 @@ const ARRANGEMENT_JSON_BYTES = JSON.stringify({ arrangements: [] }).length - 1
     + 3 * (JSON.stringify({ slotId: '', connectionId: '' }).length + 2 * VALUE_LIMITS.identifier + 1));
 export const CADENCE_PLACEMENT_BYTES = COLLECTION_LIMITS.scoreOccurrences * (128 + 2 * VALUE_LIMITS.identifier);
 export const CADENCE_JSON_BYTES = 1024 + CADENCE_PLACEMENT_BYTES
-  + COLLECTION_LIMITS.cadencePeriods * (128 + VALUE_LIMITS.identifier + LABEL_JSON_BYTES)
+  + COLLECTION_LIMITS.cadencePeriods * (128 + VALUE_LIMITS.identifier + 2 * LABEL_JSON_BYTES)
   + COLLECTION_LIMITS.cadenceAvailability * (128 + 2 * VALUE_LIMITS.identifier)
   + COLLECTION_LIMITS.scoreDependencies * (256 + 3 * VALUE_LIMITS.identifier)
   + COLLECTION_LIMITS.scoreGates * (128 + 2 * VALUE_LIMITS.identifier)

@@ -101,3 +101,13 @@ test('preset admission requires a listed identity and explicit version', () => {
     assert.throws(() => preparePreset('shared-working-sessions', version), error => error.code === 'preset-version');
   }
 });
+
+
+test('the live showcase can include a paused follow-up without changing the primary workflow or amount', () => {
+  const base = preparePlan(createShowcasePlan()), example = preparePlan(createShowcasePlan({ pausedExample:true }));
+  const paused = example.state.work.filter(row => row.status === 'paused');
+  assert.equal(paused.length, 1); assert.equal(paused[0].label, 'Explore a second service route');
+  assert.deepEqual(example.state.work.filter(row => row.id !== paused[0].id), base.state.work);
+  assert.ok(example.state.scoreSettings.cadence.placements.some(row => row.workId === paused[0].id));
+  assert.equal(example.result.knownCommitmentCents, base.result.knownCommitmentCents);
+});

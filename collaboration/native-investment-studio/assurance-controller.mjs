@@ -2,6 +2,7 @@ import { createTimeControls, mountDurationDials, renderTimeReadout } from './tim
 import { ASSURANCE_FIELDS, assuranceField, assuranceSettingsFromRaw, startingAssuranceRaw } from './assurance-draft.mjs';
 import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalDefinitions, getLearningPromptDefinition, projectAssurance, sourcePresetEstimate } from './assurance-models.mjs';
 import { money } from './display.mjs';
+import { nextCreatedLabel } from './creation-label.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences, summarizeAssuranceWork } from './assurance-consequences.mjs';
 import { createReel, revealReelResult, animateRackChange } from './reel-control.mjs';
@@ -589,7 +590,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     showPane(kind === 'rehearsal' ? 'rehearsal' : 'recovery');
     const raw = editor.read().draft.raw, list = collectionKeys[kind]; let sequence = 1; while (raw[list].includes(`${kind}-${sequence}`)) sequence += 1; const id = `${kind}-${sequence}`;
     edit([[list, [...raw[list], id]], ...Object.entries(values).map(([key, value]) => [`${kind}.${id}.${key}`, value])]);
-    const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = true; card.summary.focus(); return id;
+    const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = kind !== 'event'; card.summary.focus(); return id;
   }
   function settle(method) {
     rateControls.release();
@@ -624,7 +625,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     if (action === 'proposal-settings') { controls.get('proposal.label').input.focus(); return; }
     if (action === 'step') { const epoch = ++generation; changed(editor.step(view.draft.token, control.dataset.assuranceField, Number(control.dataset.assuranceStep)), epoch); return; }
     if (action === 'work') { onSourceWork(control.dataset.assuranceWork, { targetId: 'assurance' }); return; }
-    if (action === 'add-event') { addRecord('event', { label: 'Recovery after an interrupted task', included: 'yes', lifecycle: 'active', eventCount: '1', aggregateMinutesPerEvent: '60', receiverPersonId: view.projection.state.people.find(row => /operations/i.test(row.label))?.id ?? '', reviewBoundary: 'Resume the saved request and confirm the next handoff.', workIds: [] }); return; }
+    if (action === 'add-event') { addRecord('event', { label: nextCreatedLabel(view.draft.raw.eventIds.map(id => ({ label: view.draft.raw[`event.${id}.label`] })), 'recovery event'), included: 'yes', lifecycle: 'active', eventCount: '1', aggregateMinutesPerEvent: '60', receiverPersonId: view.projection.state.people.find(row => /operations/i.test(row.label))?.id ?? '', reviewBoundary: 'Resume the saved request and confirm the next handoff.', workIds: [] }); return; }
     if (action === 'learning') { addRecord('learning', { promptId: control.dataset.assurancePrompt, context: 'Use the pilot walkthrough to find the next improvement.', decisionOwnerPersonId: view.projection.state.people[0]?.id ?? '', reviewBoundary: 'Review the finding before the next working session.', workIds: [] }); return; }
     if (action === 'rehearse') {
       const definition = listRehearsalDefinitions().find(row => row.id === control.dataset.assuranceDefinition);

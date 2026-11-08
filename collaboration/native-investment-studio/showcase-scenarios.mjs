@@ -26,6 +26,9 @@ export function createShowcaseCadence(plan, periodCount, basis = 'sprint') {
       cadence.placements.push({ workId, occurrenceIndex, periodId: cadence.periods[periodIndex].id, subdivision });
     }
   }
+  const pausedExample = plan.work.find(work => work.id === 'optional-followup');
+  if (pausedExample) cadence.placements.push({ workId: pausedExample.id, occurrenceIndex: 0,
+    periodId: cadence.periods.at(-1).id, subdivision: basis === 'quarter' ? 3 : 2 });
   cadence.handoffs = plan.scoreSettings.dependencies.map(edge => ({ id: edge.id,
     from: { kind: 'work', id: edge.fromWorkId }, to: { kind: 'work', id: edge.toWorkId }, connectionId: edge.connectionId }));
   cadence.decisionAnchors = plan.scoreSettings.gates.map(gate => ({ gateId: gate.id, kind: 'stage', id: gate.afterStageId }));

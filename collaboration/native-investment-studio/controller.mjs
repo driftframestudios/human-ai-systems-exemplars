@@ -531,11 +531,10 @@ export function mountCoordinationPanel(root, options = {}) {
     // visible. The cassette shelf alone loads the newly created plan as a filter.
     if (anchor.matches('[data-score-projection]'))
       scorePanel?.showPlan(source?.dataset.cadenceKey === 'cassette-add' ? result.id : null);
-    if (result.opened && !disposed && studio.read() === result.projection) {
-      openRackEditor({ kind: 'session', id: result.id, periodId: context?.periodId }, entry());
-    }
+    rackEditor?.hide({ home: true });
     syncSessionReceiver();
-    announce('Session added. Adjust its settings or undo the addition.');
+    entry()?.focus({ preventScroll: true });
+    announce('Session added. Select it to adjust its settings.');
   }
   function createRecordInRack(kind, context, source) {
     const anchor = requireElement('[data-connection-templates]');
@@ -543,9 +542,10 @@ export function mountCoordinationPanel(root, options = {}) {
     const result = createRackRecord(studio, editing, kind, context);
     if (!result.ok) { announce(result.error.message); return; }
     rackCreation = { kind, id: result.id, projection: result.projection, entry };
+    templatePanel?.recordCreated?.(kind, result.id, context);
     render();
-    if (!disposed && studio.read() === result.projection) openRackEditor({ kind, id: result.id }, entry());
     syncSessionReceiver();
+    entry()?.focus({ preventScroll: true });
     announce(`${kind === 'team' ? 'Team' : 'Handoff'} added. Adjust its settings or undo the addition.`);
   }
   function undoRackCreation() {
@@ -561,7 +561,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function useHorizonExample(id) {
     const create = { 'service-request-pilot': createShowcasePlan, 'service-request-rollout': createQuarterShowcasePlan }[id];
     if (!create || disposed) return;
-    const result = studio.replace(create(), studio.read());
+    const result = studio.replace(create({ pausedExample: true }), studio.read());
     render();
     announce(result.ok ? 'Example updated. Undo restores your previous plan.' : result.error.message);
   }
@@ -1019,7 +1019,6 @@ export function mountCoordinationPanel(root, options = {}) {
       onClose: closeRackEditor,
       onAccepted: () => render(), onEditing: () => render(),
       onRecordCreated: prerequisiteCreated,
-      onPersonCreated: id => teamPanel?.select(id),
     });
     if (teamPanel && assemblyPanel) rackEditor = mountRackEditor(root, {
       editors: {
@@ -1135,7 +1134,7 @@ export function mountCoordinationPanel(root, options = {}) {
 
 if (typeof document !== 'undefined') {
   for (const root of document.querySelectorAll('[data-native-coordination]')) {
-    try { mountCoordinationPanel(root, { studio: createStudio(createShowcasePlan()) }); }
+    try { mountCoordinationPanel(root, { studio: createStudio(createShowcasePlan({ pausedExample: true })) }); }
     catch {
       const fallback = root.querySelector('[data-native-fallback]');
       if (fallback) { fallback.hidden = false; fallback.textContent = 'Editing is unavailable.'; }

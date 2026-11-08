@@ -44,7 +44,7 @@ const FIELDS = Object.freeze({
   scoreSettings: ['version', 'window', 'dependencies', 'stages', 'waits', 'gates', 'proposals'],
   cadenceScoreSettings: ['version', 'window', 'dependencies', 'stages', 'waits', 'gates', 'proposals', 'cadence'],
   cadence: ['version', 'basis', 'periods', 'placements', 'availability', 'handoffs', 'decisionAnchors', 'delays'],
-  cadencePeriod: ['id', 'label'], cadencePlacement: ['workId', 'occurrenceIndex', 'periodId', 'subdivision'],
+  cadencePeriod: ['id', 'label'], cadencePeriodCaption: ['id', 'label', 'caption'], cadencePlacement: ['workId', 'occurrenceIndex', 'periodId', 'subdivision'],
   workPlacement: ['occurrenceIndex', 'periodId', 'subdivision'],
   cadenceAvailability: ['personId', 'periodId', 'availableMinutes'],
   cadenceEndpoint: ['kind', 'id'], cadenceHandoff: ['id', 'from', 'to', 'connectionId'],
@@ -549,7 +549,13 @@ export function prepareCadence(candidate, path = 'plan.scoreSettings.cadence') {
   const rows = (field, kind, limit, prepare) => list(raw[field], limit, `${path}.${field}`).map((value, index) => {
     const rowPath = `${path}.${field}[${index}]`; return prepare(record(value, kind, rowPath), rowPath);
   });
-  const periods = rows('periods', 'cadencePeriod', LIMITS.cadencePeriods, (row, p) => ({ id: text(row.id, `${p}.id`, true), label: text(row.label, `${p}.label`) }));
+  const periods = list(raw.periods, LIMITS.cadencePeriods, `${path}.periods`).map((value, index) => {
+    const p = `${path}.periods[${index}]`;
+    const hasCaption = value !== null && typeof value === 'object' && Object.hasOwn(value, 'caption');
+    const row = record(value, hasCaption ? 'cadencePeriodCaption' : 'cadencePeriod', p);
+    return { id: text(row.id, `${p}.id`, true), label: text(row.label, `${p}.label`),
+      ...(hasCaption ? { caption: text(row.caption, `${p}.caption`) } : {}) };
+  });
   if (!periods.length) reject('reference-count', `${path}.periods`, 'Retain at least one planning period.');
   indexRecords(periods, `${path}.periods`);
   const keys = new Set();

@@ -9,8 +9,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration,
-with the current sequencer and editor refinement in
-[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
+with the compact creation refinement in
+[#831](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/831).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -20,7 +20,9 @@ Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 A cassette loads a plan with detail closed. Existing clips open local editing;
 a plus in that plan's track adds another session while retaining earlier placements.
 Period-lane creation and the New plan row create separate records and keep All
-plans visible. The selected period and Plan overview return remain visible.
+plans visible. New records use unique names such as **New session 1** and stay
+closed until selected. Week/month creation areas fill each track cell; pointer
+hover and keyboard focus reveal the plus, while touch keeps it visible. The selected period and Plan overview return remain visible.
 Team planning follows with its arrangement reel, delivery
 board and shared-session matrix. Team name, membership and order update directly
 inside the board. Person and handoff controls use that same local working area;
@@ -53,7 +55,9 @@ saved-plan owners. Deeper independently editable financial decks remain with
    the proposal; Cancel restores accepted values. Close retains unfinished work.
 3. Use a track's plus to add a session to that plan. A period-lane creation target
    or the New plan row adds separate work; shelf New plan also loads that cassette.
-   These additions accept directly; the stable amp **Undo** recovers them.
+   These additions accept directly with editing closed; the stable amp **Undo**
+   recovers them. Select a period to edit its short caption while keeping the
+   Sprint/Quarter heading. The live example includes a paused follow-up.
 4. Turn the Team arrangement reel, then choose a team. Change membership through
    its pads and return through **Delivery overview**. Inspect a person while
    keeping Shared sessions in view.
@@ -64,7 +68,8 @@ saved-plan owners. Deeper independently editable financial decks remain with
    reading uses the same accepted people and work.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
-Known people may participate across teams. Their rates and example arrangements
+Known people may participate across teams. Removing a session clears its supporting
+links and dependent timing relationships; amp Undo restores the whole change. Their rates and example arrangements
 help a visitor explore relationships; people doing real work retain authority over
 commitments and findings.
 
@@ -77,11 +82,11 @@ commitments and findings.
 | Add another session to a plan | Plus target in its track cell; keeps earlier placements and the current scope |
 | Create separate work in a period | Lane creation or New plan row; the board keeps all records visible |
 | Add a different scope | Explicit New plan or Add sprint/quarter |
-| Add a person, team or supporting session | Useful accepted default in the current rack; later field/link changes use their existing Apply boundary |
+| Add a person, team or supporting session | Unique named record in the current rack, closed until selected; later field/link changes use their existing Apply boundary |
 | Change membership or order | Checkbox pads and compact movement controls |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
-| Remove a named object | Muted rose control using existing reference-aware recovery |
+| Remove a named object | Muted rose control; session removal clears its links in one recoverable edit |
 | Undo accepted changes | Stable native amp control; cassette shelves retain their selection role |
 
 The [control research](rack-control-research.md) explains this hierarchy and its
@@ -151,7 +156,7 @@ actual checks and their scope. Performance refinement stays with
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Cassette and Investment deck presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
 | People, contributions and abilities | [team-controller.mjs](team-controller.mjs), [responsibility-controller.mjs](responsibility-controller.mjs), [capability-controller.mjs](capability-controller.mjs) |
-| Shared direct record creation | [rack-record-creation.mjs](rack-record-creation.mjs), [assembly-controller.mjs](assembly-controller.mjs) |
+| Shared direct record creation and names | [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs), [assembly-controller.mjs](assembly-controller.mjs) |
 | Current rationale and supersessions | [experience journal](experience-journal.md) |
 
 The visual contracts map further chapter-specific source and CSS owners. Follow

@@ -37,8 +37,8 @@ test('session forms have closed target and field metadata, separate from assembl
 test('session creation starts incomplete, previews $1250 and accepts one additional $50 session', () => {
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   const token = open(editor, studio, 'work.create', 'extra');
-  assert.deepEqual(editor.read().draft.raw, { label: '', teamId: '', cadencePlacements: '[]', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
-  rejected(editor.preview(token), 'label');
+  assert.deepEqual(editor.read().draft.raw, { label: 'New session 1', teamId: '', cadencePlacements: '[]', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
+  rejected(editor.preview(token), 'reference');
   fill(editor, token, { label: '  One session  ' });
   const preview = editor.preview(token); assert.equal(preview.ok, true);
   assert.equal(preview.projection.result.knownCommitmentCents, 125000);

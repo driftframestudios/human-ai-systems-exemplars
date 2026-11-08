@@ -12,6 +12,7 @@ import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { syncReorderButtons, focusSubmitControl } from './rack-controls.mjs';
+import { nextCreatedLabel } from './creation-label.mjs';
 import { prepareSessionCreation } from './session-creation.mjs';
 
 const INSTANCES = new WeakMap();
@@ -533,7 +534,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!cadence?.periods.some(period => period.id === periodId)) return opened(result, epoch, true);
     const token = result.view.draft.token;
     const team = projection.state.teams.find(row => row.personIds.some(id => people.has(id)));
-    const values = [['label', 'Review the next step']];
+    const values = [['label', nextCreatedLabel(projection.state.work, 'session')]];
     if (team) values.push(['teamId', team.id]);
     values.push(['cadencePlacements', JSON.stringify([
       { occurrenceIndex: 0, periodId, subdivision },
@@ -580,11 +581,10 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     onRecordCreated(descriptor);
     if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return receipt(false);
     selectedId = descriptor.id; lastAcceptedId = descriptor.id;
-    const next = operate('begin', makeSessionTarget('work.update', descriptor.id), accepted);
-    if (!owns(epoch)) return receipt(false);
-    if (!next.ok) { announce(next.error.message); return receipt(false); }
-    opened(next, epoch, false);
-    return receipt(owns(epoch) && editor.read().draft?.token === next.view.draft.token);
+    selectedTarget = null;
+    acknowledgedOpen = false; elements.configure.open = false;
+    render();
+    return receipt(false);
   }
   function close({ park = true } = {}) {
     if (disposed) return;

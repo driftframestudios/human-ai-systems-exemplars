@@ -64,7 +64,7 @@ function fundedSessions() {
 
 // The showcase uses ordinary plan records. Editors, pricing and exchange share
 // the same owners as visitor-created plans; each entrance receives a fresh plan.
-export function createShowcasePlan() {
+export function createShowcasePlan({ pausedExample = false } = {}) {
   const plan = createExamplePlan();
   plan.planId = 'service-request-pilot';
   plan.horizonWeeks = 8;
@@ -152,6 +152,9 @@ export function createShowcasePlan() {
         teamId: 'product', personIds: ['maya', 'leo'], minutesPerOccurrence: 30, occurrences: 1, funding: 'additional', status: 'planned', lifecycle: 'active', timing: null } },
     ],
   };
+  if (pausedExample) plan.work.push({ id: 'optional-followup', label: 'Explore a second service route',
+    teamId: 'product', personIds: ['maya', 'leo'], minutesPerOccurrence: 30, occurrences: 1,
+    funding: 'allocated', status: 'paused', timing: null, lifecycle: 'active' });
   plan.scoreSettings.cadence = createShowcaseCadence(plan, 4);
   plan.assuranceSettings.quality.sigmaHalfSteps = 8;
   return seedShowcaseChangeSupport(plan);
@@ -159,8 +162,8 @@ export function createShowcasePlan() {
 
 // This is a separately authored rollout example. Choosing it previews a plan
 // replacement; regrouping an existing plan keeps its own work and investment.
-export function createQuarterShowcasePlan() {
-  const plan = createShowcasePlan();
+export function createQuarterShowcasePlan(options = {}) {
+  const plan = createShowcasePlan(options);
   plan.planId = 'service-request-rollout';
   plan.horizonWeeks = 26;
   plan.purpose = {
