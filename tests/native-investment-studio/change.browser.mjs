@@ -155,7 +155,7 @@ for (const engine of names) {
     const accepted = JSON.parse(await bytes(page));
     assert.equal(accepted.changeSettings.attention.channels[0].parts, 24);
     assert.deepEqual(accepted.changeSettings.frameworkMaps[0].components[0].workIds, ['review']);
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await bytes(page), initial);
     await page.evaluate(async () => {
       const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
@@ -210,7 +210,7 @@ for (const engine of names) {
     await urgency.locator('[data-change-action="work"][data-change-work="change-work-1"]').click();
     await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
     await root(page).locator('[data-native-return-action]').click(); await expect(panel(page)).toBeVisible();
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await bytes(page), beforeProposal); await tab(page, 'change').click();
     if (await action(page, 'current').isVisible()) await action(page, 'current').click();
     await field(page, 'attention.urgency').fill(' later '); await tab(page, 'people').click();
@@ -301,7 +301,7 @@ for (const engine of names) {
     assert.ok(narrow.every(box => box.x >= -.5 && box.right <= 390.5 && box.width > 0), JSON.stringify(narrow));
     await method('poda').screenshot({ path: resolve(captures, `${engine}-method-narrow.png`) });
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00');
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await bytes(page), initial, 'one Undo restores the exact preceding accepted plan');
   });
 

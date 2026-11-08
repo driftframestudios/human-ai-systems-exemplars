@@ -18,6 +18,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/tape-picker.mjs",
+      "projected_path": "collaboration/native-investment-studio/tape-picker.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-session.css",
       "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-session.css",
       "media_type": "text/css"

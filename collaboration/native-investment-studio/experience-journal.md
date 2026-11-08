@@ -230,8 +230,29 @@ accepted addition; cancelling later edits preserves that new record. The compact
 rack supersedes the detached Customize teams and handoffs form. Independent
 response objects and routing remain a separate #816 model decision.
 
-#813 owns cassette/deck projection. Future dev Showcase promotions require the
-human cue. The preserved planning reference remains available for comparison;
+#813 receives the preserved cassette and VHS-C artwork in the actual dev
+Showcase. The Plans shelf reads canonical work identities and keeps the chosen
+sprint/quarter in view; selection loads the corresponding occurrence in the same
+session editor. New plan accepts the existing defaults. Remove plan opens that
+owner's confirmation and dependency review. Undo edit beside the shelf restores
+the latest accepted change through shared history. Later field changes still
+use Apply/Cancel. This supersedes treating cassette selection as a workbench-only
+operation.
+
+Investment's first three decks organize accepted plan costs, baseline comparison,
+and saved-plan/report operations. Choosing a deck changes the visible panel;
+pending previews, canonical costs and history stay with their existing owners.
+The planning specimen's independently editable financial comparisons require a
+production record owner and are routed to #818. Its deeper reels and monetary
+modules remain preserved reference material. The shared tape-picker owns semantic
+buttons and decorative faces; consumers own identity, scope and operations.
+
+Both shelves preserve static hit targets, moving inner artwork and distinct
+selection/focus. At ordinary phone widths the shelf becomes a local horizontal
+strip. Desktop plan shelves have a local height limit so additional plans keep
+the About page compact. Relative shelf dimensions retain the approved 16px
+geometry while following enlarged text. Future dev Showcase promotions require
+the human cue. The preserved planning reference remains available for comparison;
 main retains the accepted Showcase anchor throughout this dev integration.
 
 ### State, people and evidence
@@ -475,6 +496,7 @@ entry, screenshot or technical description presents the earlier behavior.
 | Dark treatment across every work region | Pale Editorial Rack for reading and work; dark Instrument Rack for controls and visual response. |
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
+| Cassette/deck artwork confined to the planning workbench | #813 projects those preserved faces into the dev Showcase. Canonical sessions and existing cost/baseline/exchange owners supply behavior; independent financial comparison records continue in #818. |
 | Earlier main-first implementation following each approved increment | #810–#813 preserve main as the Showcase reference while integration continues through focused dev PRs. A later human cue selects runtime promotion; performance and publication retain their separate holds. |
 | Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route supplies shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent person/team (#757) and session (#768) receivers. |
 | Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; #766 supplies direct arrangement acceptance. |
@@ -920,14 +942,19 @@ rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
 #810 receives the planning-reference promotion and confirms that main's Showcase
 runtime remains unchanged. #811 established the compact dev Showcase skin.
-The current #812 receiver opens the outer layout and brings canonical team and
+PR #817 delivered #812, opening the outer layout and bringing canonical team and
 handoff editing into the delivery rack. Its receiving PR owns the focused
 state, recovery, browser and review observations. The CSS comparison covered
 390px and 1440px layouts in Chromium and WebKit; a focused borrowed-form probe
 covered one-time click delivery, text/membership edits, stale review, Cancel and
 completed removal in both engines. These observations establish those receiver
-behaviors; the integrated PR supplies the end-to-end acceptance. Cassette/deck
-integration continues in #813; independent response routing remains in #816.
+behaviors; the integrated PR supplies the end-to-end acceptance. #813 receives
+cassette selection, canonical session removal and local Undo, plus three
+Investment deck views. Its focused browser routes exercise period retention,
+matching occurrence selection, unchanged pricing, pending-preview retention and
+phone shelf containment. The receiving PR owns the final checked source and
+independent review. Broader financial comparison ownership remains in #818;
+independent response routing remains in #816.
 The approved study remains available for comparison.
 The duration panel retains its geometry and fixed-lighting reference; production
 controllers retain their editing and recovery meanings. Future percentage

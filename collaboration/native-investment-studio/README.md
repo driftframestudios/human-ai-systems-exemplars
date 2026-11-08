@@ -16,13 +16,22 @@ recoverable.
 ## Current state
 
 The accepted showcase is on `main`; the receiving integration is on `dev` under
-[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812).
+[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
 Coordination uses the available canvas directly: its section headings surround
 the dark period/session and team/shared-work racks. Compact session controls,
 chocolate Working sessions panels and Showcase dial artwork retain their owners.
 A human cue selects promotion to main.
 
-The horizon combines a sprint/quarter board and session sequencer. Team planning
+The horizon combines a sprint/quarter board and session sequencer with a **Plans**
+cassette shelf. A cassette loads the canonical session controls and retains the
+selected period; **New plan**, **Remove plan** and local **Undo edit** use the
+accepted plan and shared history. The phone shelf scrolls horizontally.
+Investment has three VHS-C navigation decks: **Plan investment**, **Compare a
+change** and **Keep a plan**. They reveal existing pricing, baseline and exchange
+owners while keeping unfinished previews available. The shared presentation
+helper is `tape-picker.mjs`; `styles/routes/studio-tapes.css` owns its two skins.
+
+Team planning
 combines a delivery board and shared-session participation reading. Their detail
 slots sit between board and tracks. Team planning's cards open the canonical
 person, team, session or handoff controls in that same rack. Add team and Add
@@ -121,8 +130,11 @@ established the compact session modules and downward arrangement reveal.
 opens the outer Coordination layout and brings team/handoff editing into the
 same board-and-tracks composition. Showcase dials, zoetropes, output styling and
 canonical behavior retain their owners. The Showcase on `main` remains the
-reference anchor; a human cue selects each promotion. Cassette/deck projection
-continues in [#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
+reference anchor; a human cue selects each promotion.
+[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813)
+receives the cassette/deck artwork and existing Showcase operations. The
+workbench's independently editable financial comparisons have a separate model
+route in [#818](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818).
 Independent response cards and routing have their own model decision in
 [#816](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/816).
 

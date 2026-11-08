@@ -130,7 +130,7 @@ for (const engine of names) {
     await action(page, 'apply').click(); await expect(accepted(page)).toHaveText('$1,248.75');
     assert.equal(await page.evaluate(() => window.teamFixture.studio.read().state.people[0].rateCentsPerHour), 11625);
     await panel(page).locator('[data-native-chapter="investment"]').click();
-    await panel(page).locator('[data-investment-action="undo"]').click();
+    await panel(page).locator('[data-investment-deck="compare"]').click(); await panel(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), initial);
     await choose(page);
     for (const raw of ['1.']) { await input(page, 'ratePerHour').fill(raw); await expect(coarse).toBeDisabled(); await expect(fine).toBeDisabled(); await expect(input(page, 'ratePerHour')).toHaveValue(raw); }

@@ -1,6 +1,7 @@
 import { duration, money } from './display.mjs';
 import { CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
 import { revealStudioDestination } from './motion.mjs';
+import { createTapePicker } from './tape-picker.mjs';
 
 const DECISIONS = Object.freeze({ open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 const noop = () => {};
@@ -51,6 +52,8 @@ export function createCadenceView(root, {
   // The session owner lends its live controls to this slot. Refresh only the
   // surrounding projections so a dial turn or text edit keeps its DOM owner.
   const screen = node('section', undefined, 'native-cadence__screen');
+  const workspace = node('div', undefined, 'studio-plan-workspace');
+  const library = node('div', undefined, 'studio-plan-library');
   const reading = node('header', undefined, 'native-cadence__reading');
   const board = node('div', undefined, 'native-cadence__board'); board.tabIndex = 0; board.setAttribute('role', 'region');
   const delayRail = node('section', undefined, 'native-cadence__period-delays'); delayRail.hidden = true;
@@ -60,6 +63,7 @@ export function createCadenceView(root, {
   const previewReading = node('p', undefined, 'native-cadence__preview'); previewReading.dataset.cadencePreviewReading = '';
   const recordRail = node('nav', undefined, 'studio-rack-records'); recordRail.setAttribute('aria-label', 'People and relationships');
   screen.append(reading, board, delayRail, sessionSlot, tracks, previewReading, recordRail); screen.hidden = true;
+  workspace.append(library, screen);
   const attachments = node('div', undefined, 'studio-rack-companions');
   const availability = disclosure('People and available time', 'people');
   const personRows = node('div', undefined, 'native-cadence__people'); availability.append(personRows);
@@ -67,7 +71,7 @@ export function createCadenceView(root, {
   relationshipPanel.classList.add('studio-rack-companion');
   attachments.append(availability, relationshipPanel);
   const extras = node('div', undefined, 'native-cadence__extras');
-  root.classList.add('studio-rack-composition'); root.replaceChildren(screen, attachments, extras);
+  root.classList.add('studio-rack-composition'); root.replaceChildren(workspace, attachments, extras);
   const externalFlowEvents = flowRoot && !root.contains(flowRoot) ? flowRoot : null;
   function click(event) {
     const control = event.target.closest('[data-cadence-action]');
@@ -92,6 +96,8 @@ export function createCadenceView(root, {
     if (disposed) return;
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
     const scrollPosition = { board: board.scrollLeft, tracks: tracks.scrollLeft };
+    const oldShelf = library.querySelector('.studio-tape-shelf');
+    const shelfScroll = { left: oldShelf?.scrollLeft ?? 0, top: oldShelf?.scrollTop ?? 0 };
     const recordScroll = new Map([...recordRail.querySelectorAll('[data-record-rail]')]
       .map(element => [element.dataset.recordRail, element.scrollLeft]));
     actions.clear();
@@ -99,6 +105,7 @@ export function createCadenceView(root, {
     const fragment = document.createDocumentFragment();
     root.classList.add('native-cadence'); root.dataset.cadenceReading = preview ? 'proposed' : 'accepted';
     if (!cadence) {
+      workspace.hidden = true;
       previousPeriodId = undefined; overviewReturn = undefined;
       flowRoot?.replaceChildren();
       const invitation = node('div', undefined, 'native-cadence__invitation');
@@ -135,6 +142,26 @@ export function createCadenceView(root, {
     const periodLabel = id => periodById.get(id)?.label ?? 'Choose a period';
     const occurrences = model.occurrences.map(row => ({ ...row, work: work.get(row.workId) })).filter(row => row.work);
     const visible = activePeriod ? occurrences.filter(row => row.periodId === activePeriod.id) : occurrences;
+    const visibleIds = new Set(visible.map(row => row.workId));
+    const shelf = createTapePicker(document, {
+      variant: 'plan', label: 'Plans', selectedId: selected?.kind === 'work' ? selected.id : null,
+      entries: state.work.filter(item => !activePeriod || visibleIds.has(item.id)).map(item => ({
+        id: item.id, title: item.label, eyebrow: teams.get(item.teamId)?.label ?? 'Choose a team',
+        detail: `${duration(item.minutesPerOccurrence)} · ${item.occurrences} ${item.occurrences === 1 ? 'session' : 'sessions'}`,
+        attributes: { 'data-cadence-key': `cassette:${item.id}`, 'data-studio-session-id': item.id },
+      })),
+      onSelect: (id, source) => {
+        if (disposed) return;
+        const occurrence = activePeriod ? visible.find(row => row.workId === id) : null;
+        onSelect({ kind: 'work', id, periodId: activePeriod?.id ?? null,
+          ...(occurrence ? { occurrenceIndex: occurrence.occurrenceIndex } : {}) }, source);
+      },
+    });
+    shelf.append(create('New plan', 'add-session', { periodId: activePeriod?.id ?? periods[0]?.id, subdivision: 1 }, 'cassette-add'));
+    library.replaceChildren(shelf);
+    const nextShelf = library.querySelector('.studio-tape-shelf');
+    nextShelf.scrollLeft = shelfScroll.left; nextShelf.scrollTop = shelfScroll.top;
+    workspace.hidden = false;
     const stages = model.stages;
     const handoffs = model.handoffs;
     const decisions = model.decisions;

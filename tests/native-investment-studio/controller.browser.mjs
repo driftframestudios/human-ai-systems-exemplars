@@ -306,6 +306,7 @@ for (const engine of names) {
     const invest = name => investment.locator(`[data-investment-action="${name}"]`);
     const exported = async () => {
       const pending = page.waitForEvent('download');
+      await investment.locator('[data-investment-deck="exchange"]').click();
       await invest('download').click();
       const download = await pending, stream = await download.createReadStream(), chunks = [];
       assert.equal(download.suggestedFilename(), 'investment-plan.json'); assert.ok(stream);
@@ -355,11 +356,11 @@ for (const engine of names) {
     assert.equal(accepted.work[0].minutesPerOccurrence, 45); assert.equal(accepted.work[0].occurrences, 6);
     assert.equal(accepted.connections.length, 2);
     assert.equal(accepted.connections.find(row => row.id === selectedId).status, 'paused');
-    await invest('undo').click();
+    await investment.locator('[data-investment-deck="compare"]').click(); await invest('undo').click();
     const restored = await exported();
     assert.deepEqual(restored.connections, accepted.connections.map(row => row.id === selectedId ? { ...row, status: 'active' } : row));
     assert.deepEqual(restored.people, accepted.people); assert.deepEqual(restored.work, accepted.work);
-    await invest('redo').click();
+    await investment.locator('[data-investment-deck="compare"]').click(); await invest('redo').click();
     assert.deepEqual((await exported()).connections, accepted.connections);
     await expect(total(page)).toHaveText('$1,822.50');
   });

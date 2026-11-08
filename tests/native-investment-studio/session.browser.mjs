@@ -314,7 +314,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,800.00');
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work[0].minutesPerOccurrence), 45);
     await tab(page, 'investment').click();
-    await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'coordination').click();
     await select(page).selectOption('review');
