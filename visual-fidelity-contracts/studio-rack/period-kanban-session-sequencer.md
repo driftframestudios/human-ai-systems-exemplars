@@ -150,21 +150,21 @@ ordinary session editors retain their existing proposal/Apply boundary. Other at
 summaries preserve the existing spring reveal.
 
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
-makes unused rack space actionable. A dedicated
-new-session row places `native-cadence__pads` creation zones under each visible
-period or subdivision. At laptop and wide widths, each zone reveals an outlined
-ghost pad with a plus on hover; keyboard focus reveals the same cue, and touch
-has a visible Add entry. The control owns a real hit target and activation, so
-moving across or scrolling through blank space simply previews the affordance.
-Creation retains the chosen sprint/quarter and any explicit subdivision.
+makes creation available inside each sequencer through a named **New session**
+row. In the horizon, native buttons sit under every visible period/subdivision
+and identify that destination. Shared sessions places them under accepted-person
+columns, using that person as context while the creation owner resolves a team
+from the accepted plan. Proposed team identities stay with the arrangement owner.
 
-Current session-row cells sit at an existing session/period intersection. An
-entry within that row names an additional occurrence of the existing work; the
-new-session row names a new record. Shared sessions has a different empty-cell
-meaning: the named person is outside that session. Its dedicated new-session
-row/gutter carries a written Add session label, while a future action at a
-person/session intersection names participation or editing. Both new-record
-routes will reuse the immediate-creation owner in
+Both readings share `studio-rack-create-zone`: an outlined button with a visible
+plus and Add session label. Fine-pointer hover adds ghost-pad emphasis; keyboard
+focus and touch keep a visible direct entry. The button owns activation, so
+moving across or scrolling through unused space leaves the plan intact.
+
+Current session-row cells retain their existing session/period or person/session
+meaning. Temporal gaps and participation dots stay descriptive; the separate
+New session row creates a new record. The People chapter's read-only session
+table keeps its current scope. Both creation routes reuse the owner in
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 and the [contextual return contract](contextual-inspection-recovery.md).
 
@@ -185,5 +185,7 @@ from another occurrence's selection, and draft placement from accepted work.
 The receiving PR also records cross-rack retention, Apply/Cancel, return focus
 and period/phase context. The duration module and exact repetition input remain
 available. #758 adds direct accepted creation and its exact-creation Undo;
-#770's empty-space entry follows as a separate authorized increment. Exact
-calendar or performance expansion needs its own consequential question.
+#770 completes this sequence with contextual creation rows. Its receiving PR
+records the exercised context, return and ordinary phone/laptop geometry. The
+participant, attached-companion and broader removal patterns remain prospective.
+Exact calendar or performance expansion needs its own consequential question.

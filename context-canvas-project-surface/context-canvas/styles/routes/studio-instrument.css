@@ -124,6 +124,29 @@
  background: color-mix(in srgb, var(--native-signal) 18%, var(--native-paper));
  color: var(--native-text); box-shadow: none; font-size: .75rem;
 }
+/* Empty creation space has its own row; existing session cells keep their
+   occurrence or participation meaning. Both rack readings share this skin. */
+.native-coordination button.native-control--create.studio-rack-create-zone {
+ display: flex; align-items: center; justify-content: center; gap: .4rem;
+ inline-size: 100%; min-block-size: 2.75rem; padding: .4rem;
+ color: var(--native-paper); background: transparent; border: 1px dashed var(--native-rule);
+ box-shadow: none; white-space: normal; line-height: 1.3;
+}
+.native-coordination button.studio-rack-create-zone:focus-visible {
+ outline: 2px solid var(--native-signal); outline-offset: 2px;
+ background: color-mix(in srgb, var(--native-signal) 18%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+ .native-coordination button.studio-rack-create-zone:hover {
+  background: color-mix(in srgb, var(--native-signal) 18%, transparent);
+  border-color: var(--native-signal); color: var(--native-signal);
+ }
+}
+@media (hover: none), (pointer: coarse) {
+ .native-coordination button.native-control--create.studio-rack-create-zone {
+  background: color-mix(in srgb, var(--native-signal) 12%, transparent); border-color: var(--native-paper);
+ }
+}
 .native-coordination button.native-control--remove,
 .native-coordination button[data-removal='true'] {
     background: var(--native-zine-rose);
@@ -136,6 +159,10 @@
  .studio-track-key small { color: inherit; }
  .native-coordination .studio-track-key[aria-pressed='true'] { outline: .15rem solid Highlight; outline-offset: -.2rem; }
  .native-coordination button.native-control--remove { border-style: double; }
+ .native-coordination button.native-control--create.studio-rack-create-zone {
+  background: ButtonFace; color: ButtonText; border-color: ButtonText;
+ }
+ .native-coordination button.studio-rack-create-zone:focus-visible { outline-color: Highlight; }
 }
 
 /* Shared quantity housings: static session, supporting-session proposals and

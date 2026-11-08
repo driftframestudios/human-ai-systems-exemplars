@@ -180,7 +180,7 @@ walkthrough determines how clearly the tape/deck metaphor reads.
 #758 accepts a useful session directly from Coordination rack Add controls and
 opens this same canonical editor. The new record survives cancellation of later
 draft edits; the local creation Undo has its own accepted-state boundary.
-#770 will compose that owner into empty-space entry. The repaired #777 browser routes supply
+#770 composes that owner into contextual New session rows. The repaired #777 browser routes supply
 current cross-chapter entry points. #771 retains broader participant movement
 and percentage semantics; the deck uses the existing inclusion and order owner.
 Phone reflow retains the title, exact fields, independent inclusion and visible
@@ -226,10 +226,16 @@ history and closing the removed record's editor. A later accepted change retires
 that local shortcut. Investment retains complete Undo history. This preserves
 the distinction between recovering creation and discarding an editing proposal.
 
-The future [blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
-will reuse that owner with a named Add control on hover or keyboard focus and a
-visible touch route. Each receiving PR owns the scoped focus, retention and
-recovery observations for its actual controls.
+The [contextual creation rows](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
+reuse that owner with a native New session row in both Coordination sequencers.
+Horizon buttons retain their named period/subdivision; Shared sessions buttons
+retain an accepted person's identity. Proposed team structures remain with the
+arrangement owner. The outlined button, plus and Add session label are visible
+before interaction; fine-pointer hover adds ghost-pad emphasis, and keyboard
+focus/touch retain a direct entry. Existing occurrence gaps, participation dots
+and the People chapter's read-only table keep their current behavior. Each
+receiving PR owns the scoped focus, retention and recovery observations for its
+actual controls.
 Revisit this contract when a control changes operation, its receiver moves or
 recovery changes.
 

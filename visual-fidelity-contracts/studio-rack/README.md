@@ -112,7 +112,7 @@ for a real shared receiving use.
 
 | Owner | Responsibility |
 | --- | --- |
-| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared track/Add/record keys, quantity modules, adjacent editor skin and the existing Remove skin |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared track/Add/record keys, contextual creation zones, quantity modules, adjacent editor skin and the existing Remove skin |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, editorial delivery-phase cards, session tracks and the darker secondary Team planning enclosure |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
@@ -222,8 +222,13 @@ accepts a useful session from Coordination rack Add controls, then opens that
 canonical editor. Cancel reverts later edits while preserving the new record.
 Local **Undo session addition** reverses creation while it remains the latest
 accepted change; Investment retains complete history. Plans needing a team or
-person use guided creation. Empty-space entry (#770) is the next authorized
-increment and will reuse this owner.
+person use guided creation. Contextual New session rows (#770) reuse this owner
+inside both Coordination sequencers. The horizon's native buttons carry period
+or week/month context; Shared sessions buttons carry accepted-person context.
+The shared outlined `studio-rack-create-zone` keeps its plus and label visible,
+with extra emphasis on fine-pointer hover and a clear keyboard/touch entry.
+Existing gaps and participation dots retain their meaning; the People chapter's
+read-only table retains its scope.
 Attached editorial
 companions and refined removal remain prospective; their focused issues retain
 acceptance and delivery ownership.

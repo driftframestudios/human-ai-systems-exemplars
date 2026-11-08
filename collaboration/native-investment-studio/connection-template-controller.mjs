@@ -293,7 +293,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       acceptedTeamIds: new Set(projection.state.teams.map(team => team.id)),
       onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
-        sessionIds: acceptedSessionIds,
+        sessionIds: acceptedSessionIds, acceptedPersonIds: new Set(projection.state.people.map(person => person.id)),
         onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' }));
     const board = rackBody.querySelector('.studio-delivery__board');
     if (deliveryView.phaseId === null) board.scrollLeft = deliveryView.overviewScroll;
