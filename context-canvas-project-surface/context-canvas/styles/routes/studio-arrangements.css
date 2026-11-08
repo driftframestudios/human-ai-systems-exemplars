@@ -75,7 +75,7 @@
 .native-coordination .native-assembly__team-list details > summary { background: transparent; font-weight: 650; }
 .native-coordination .native-assembly__team-list details .native-coordination__actions { gap: .35rem; margin: .4rem 0 0; }
 .native-coordination .native-assembly__team-list details button { box-shadow: none; }
-.native-coordination .studio-team-planning { padding: clamp(.5rem, 1vw, .75rem); background: var(--studio-editorial-surface); }
+.native-coordination .studio-team-planning { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .native-coordination [data-template-exposed] { border: 0; background: transparent; box-shadow: none; margin: 0; }
 .native-coordination [data-template-exposed] > summary { display: none; }
 .native-coordination [data-template-exposed] > [data-connection-template-body] { padding: 0; }
@@ -100,6 +100,17 @@
 .studio-rack-amount dt { color: var(--native-paper); font: 500 .7rem/1.4 ui-monospace, monospace; }
 .studio-rack-amount dd { margin: 0; color: var(--native-signal); font: 600 clamp(1.2rem, 2.3vw, 1.65rem)/1.4 ui-monospace, monospace; letter-spacing: -.025em; white-space: nowrap; }
 .studio-team-rack__body { min-inline-size: 0; }
+/* Borrowed record editors keep their canonical forms inside one stable rack slot. */
+[data-team-rack-editor] { min-inline-size: 0; }
+[data-team-rack-editor] .studio-rack-editor { margin-block: .75rem; border-color: #668b73; }
+[data-team-rack-editor] .studio-rack-editor__heading { border-block-end: .15rem solid var(--native-signal); }
+[data-team-rack-editor] .native-connection__field { grid-template-rows: auto; gap: .35rem; }
+[data-team-rack-editor] .native-connection__field .native-coordination__error:empty { display: none; }
+[data-team-rack-editor] .native-connection__field :is(label, button) { font-size: .8rem; }
+[data-team-rack-editor] .native-connection__work { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .5rem; }
+[data-team-rack-editor] .native-connection__work > li { align-content: start; }
+[data-team-rack-editor] .native-connection__work label { flex-basis: 100%; }
+[data-team-rack-editor] .native-connection__work .native-coordination__actions { gap: .4rem; }
 .native-coordination .studio-team-rack .studio-session-tracks { border: 0; border-block-start: 1px solid var(--about-sea-glass); border-radius: 0; background: transparent; padding: .4rem 0 0; margin-block: .8rem .4rem; }
 /* A delivery phase groups illustrative roles, handoffs and existing sessions.
    The cadence owner retains temporal placement; this board owns local scope. */

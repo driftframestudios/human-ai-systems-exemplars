@@ -15,16 +15,19 @@ recoverable.
 
 ## Current state
 
-The accepted showcase is on `main`; the next integration is on `dev` under
-[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811).
-The dev version uses more of the available canvas, compact dark session controls
-and a chocolate Working sessions panel. It retains Showcase dial artwork and
-canonical editing behavior. A human cue selects promotion to main.
-Coordination combines a sprint/quarter board,
-session sequencer, shared-session participation reading and a delivery board.
-One canonical session editor occupies the detail deck between the period board
-and tracks, or the adjacent Team planning receiver. Duration, participation and
-placement retain their existing draft, Apply, Cancel and recovery owners.
+The accepted showcase is on `main`; the receiving integration is on `dev` under
+[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812).
+Coordination uses the available canvas directly: its section headings surround
+the dark period/session and team/shared-work racks. Compact session controls,
+chocolate Working sessions panels and Showcase dial artwork retain their owners.
+A human cue selects promotion to main.
+
+The horizon combines a sprint/quarter board and session sequencer. Team planning
+combines a delivery board and shared-session participation reading. Their detail
+slots sit between board and tracks. Team planning's cards open the canonical
+person, team, session or handoff controls in that same rack. Add team and Add
+handoff accept a useful starting record, then open it with Undo available.
+Later edits retain their draft, Apply, Cancel and recovery owners.
 People and Stages controls open the same records as the compact editorial drawers
 attached beneath the horizon. PR #802 delivered their consolidation and shared
 participant movement after independent review.
@@ -112,16 +115,16 @@ The working showcase on `main` keeps its accepted plan, canonical editors and
 recovery behavior. The study's unassigned plans, response cards and financial
 comparisons are illustrative contracts to review before production adoption.
 The workbench remains in `planning/` as a reference. The actual About Showcase
-now iterates on `dev`: [#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
-receives the wider rack composition and compact session modules. Shared sessions
-pads fill their track cells; a Team arrangement choice loads its rack with the
-study's short downward easing. Showcase dials, zoetropes, output styling and
-canonical behavior retain their owners. The Showcase
-on `main` remains the reference anchor. A human cue selects each later promotion.
-Direct team/handoff integration follows in
-[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812),
-and cassette/deck projection in
-[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
+now iterates on `dev`. [#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
+established the compact session modules and downward arrangement reveal.
+[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812)
+opens the outer Coordination layout and brings team/handoff editing into the
+same board-and-tracks composition. Showcase dials, zoetropes, output styling and
+canonical behavior retain their owners. The Showcase on `main` remains the
+reference anchor; a human cue selects each promotion. Cassette/deck projection
+continues in [#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
+Independent response cards and routing have their own model decision in
+[#816](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/816).
 
 ### Continuing routes
 
@@ -245,31 +248,35 @@ setting keeps history intact. **Undo arrangement** restores the preceding plan.
 Shared and unrelated records keep their identities. When a shared record needs
 a separate replacement, a compact local choice preserves the existing record.
 
-People and accepted-team cards open a named editor directly below the rack.
-The selected card stays pressed; its caret points down while the editor is open.
-Press that card again or choose **Close** to hide the editor and retain its draft.
-**Cancel changes** discards the proposal and returns focus to the originating
-card; **Apply** accepts it and keeps the editor open. Switching records
-keeps unfinished work recoverable. Returning to People restores the same controls
-to that chapter.
+On `dev`, person, team, session and handoff cards open one named detail panel
+between the delivery board and Shared sessions. The selected card stays pressed;
+its caret follows the open panel. **Close** retains the draft and returns focus.
+**Cancel changes** reverts the proposal; **Apply** accepts it and keeps the editor
+open. Switching records preserves unfinished work. People and session controls
+are the same canonical elements used by their other entry points.
 
-Team planning's session cards, row keys and participation pads open the same
-canonical session form below their originating rack. Its heading names the
-session and source. Switching between this adjacent receiver and Plan overview's
-in-rack deck retains the proposal, selected period and delivery phase. Shared-session
-row keys toggle this adjacent receiver; delivery cards and participation pads
-inspect their session. Horizon entries toggle the deck when repeated. Close, Cancel and Apply keep the same meanings in both locations.
+The starter arrangement remains an example until a visitor selects its reel or
+opens a proposed team, handoff or session card. That deliberate action accepts
+the preset and opens the corresponding accepted record. **Undo arrangement**
+returns to the preceding plan. The board supplies the editing entry directly;
+the former Customize teams and handoffs section has been superseded on `dev`.
 
-Illustrative teams awaiting acceptance keep their template-customization route;
-handoffs open connection settings.
-Template text customization settles on leaving the field or pressing Enter;
-bounded choices settle immediately.
-Invalid entries stay available for correction, and other unfinished editors stay
-recoverable through Saved edits. Shared sessions follows the board with people
+**Add team** creates a named team ready for members. **Add handoff** creates a
+connection between current teams with a concise shared-work default. Each opens
+its canonical detail panel and offers Undo for that accepted addition. Cancel
+then reverts only later field edits. A handoff's expected response remains an
+optional connection field; independent response cards are scoped in #816.
+
+Session row keys toggle the detail panel; delivery cards and participation pads
+inspect their context. Moving between Team planning and Plan overview lends the
+same session form to the receiving slot while retaining its proposal, selected
+period and delivery phase. Main retains the earlier adjacent Team planning
+placement as the comparison anchor. Invalid entries stay available for correction,
+and other unfinished editors stay recoverable through Saved edits. Shared sessions follows the board with people
 as its columns. Rack headings, the readout and Add session stay outside local
 horizontal scrolling. **Included work** prices the arrangement’s distinct linked
-sessions once; the amp keeps the whole-plan amount. Before the first selection,
-the starter illustration remains available without changing the accepted plan.
+sessions once; the amp keeps the whole-plan amount. Before deliberate arrangement or starter-card selection,
+the starter illustration leaves the accepted plan intact.
 
 Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
@@ -396,11 +403,12 @@ checked source and remaining review boundary.
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs); [`session-occurrence-controls.mjs`](session-occurrence-controls.mjs) presents one occurrence's placement through the session owner's setters |
+| Immediate team/handoff addition | [`rack-record-creation.mjs`](rack-record-creation.mjs) prepares useful values through the existing assembly/connection draft owners; [`controller.mjs`](controller.mjs) opens the accepted record and binds local Undo to that accepted addition. |
 | Immediate Coordination session addition and its local Undo | [`session-creation.mjs`](session-creation.mjs) prepares useful values from known context; [`work-controller.mjs`](work-controller.mjs) uses the existing creation/acceptance owner; [`controller.mjs`](controller.mjs) opens the canonical receiver and binds local Undo to the creation's accepted state |
 | Contextual New session rows | [`cadence-view.mjs`](cadence-view.mjs) supplies period/subdivision context; [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs) supplies accepted-person context received from [`connection-template-controller.mjs`](connection-template-controller.mjs). Shared `studio-rack-create-zone` styling lives in the instrument CSS. |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
-| In-rack session deck and adjacent record editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon slot or Team planning's adjacent host. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
+| In-rack detail slots and canonical record editing | [`rack-controls.mjs`](rack-controls.mjs) places existing configure/status controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon or Team planning slot. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs), [`connection-controller.mjs`](connection-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft, event and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
 | Participant order and attached editorial drawers | [`rack-controls.mjs`](rack-controls.mjs) shares reorder labels and edge states; [`work-controller.mjs`](work-controller.mjs) and [`assembly-controller.mjs`](assembly-controller.mjs) retain draft and focus ownership while calling [`reel-control.mjs`](reel-control.mjs)'s keyed movement. [`cadence-view.mjs`](cadence-view.mjs) and [`score-controller.mjs`](score-controller.mjs) connect the record rails and attached disclosures to the same inspector. |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 

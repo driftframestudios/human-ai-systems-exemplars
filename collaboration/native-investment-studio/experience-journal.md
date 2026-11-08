@@ -63,8 +63,9 @@ existing owner. Team arrangement keeps its direct acceptance boundary. PR #790
 delivered #788's borderless peach Hours and paper Minutes with the monetary
 coarse/fine dial geometry. PR #793 repaired the current-entry browser routes
 (#777), enlarged-text readout (#791) and idempotent editor restoration (#792).
-#789 now places the Session detail deck inside Plan overview while Team planning
-keeps its adjacent receiver. One canonical form and session owner serve both.
+#789 placed the Session detail deck inside Plan overview while Team planning
+retained its adjacent receiver; #812 on dev now receives that same placement
+inside the Team planning rack. One canonical form and session owner serve both.
 PR #794 delivered that focused deck increment after independent review. PR #795
 delivered #758's immediate session creation after independent review and passing
 hosted checks; it also corrected the source-test routing registration (#796).
@@ -180,10 +181,12 @@ planned in [#808](https://github.com/driftframestudios/human-ai-systems-exemplar
 Plan overview still means the complete arrangement. Production retains its
 accepted session/count contract until a focused consolidation receives review.
 
-The proposal still maps Coordination's outside controls, including Customize
-teams and handoffs, to one useful home and its existing owner. Events remains an
-optional bounded reading. Unassigned tapes and independent response cards need
-explicit production model decisions; participant percentages stay with #798.
+The receiving #812 design places Coordination's team and handoff operations
+inside the delivery/shared-session rack. The former Customize teams and handoffs
+section is superseded by canonical record editors in its stable detail slot.
+Events remains an optional bounded reading. Unassigned tapes need a production
+model decision; independent response cards are scoped in #816 and participant
+percentages remain with #798.
 The working showcase retains its accepted plan, draft, Apply, Cancel and recovery
 contracts while the study uses immediate illustrative edits. The human now
 approved the planning workbench's promotion to main and dev in #810; PR #814
@@ -213,10 +216,23 @@ contained controls; the new arrangement reveal also honored reduced motion.
 These observations cover this receiving layout and existing operations. The
 following issues retain the larger interaction and model work.
 
-#812 owns direct team/handoff rack integration, and #813 owns cassette/deck
-projection. Future dev Showcase promotions require the human cue. The preserved
-planning reference continues to provide a comparison while canonical model,
-proposal and recovery behavior guide the actual Showcase implementation.
+The receiving #812 increment gives the Coordination sections open outer
+boundaries. Dark Plan overview and Teams and shared work racks carry the visible
+enclosures; editorial companions retain their separate reading skin. A stable
+detail slot between the delivery board and Shared sessions lends the canonical
+person, team, session or handoff form to the selected object. The same nodes and
+controllers retain draft, focus, acceptance and recovery behavior during refresh.
+
+Starter-card selection deliberately accepts its preset before opening the real
+record. Add team and Add handoff accept useful defaults through their existing
+draft owners, then open the same detail slot. Their local Undo belongs to the
+accepted addition; cancelling later edits preserves that new record. The compact
+rack supersedes the detached Customize teams and handoffs form. Independent
+response objects and routing remain a separate #816 model decision.
+
+#813 owns cassette/deck projection. Future dev Showcase promotions require the
+human cue. The preserved planning reference remains available for comparison;
+main retains the accepted Showcase anchor throughout this dev integration.
 
 ### State, people and evidence
 
@@ -224,7 +240,7 @@ proposal and recovery behavior guide the actual Showcase implementation.
 | --- | --- |
 | Accepted plan | One immutable projection supplies the accepted amount, work relationships, comparisons and downloads. |
 | Editor proposal | Ordinary editors retain raw text and selections until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
-| Team arrangement | A deliberate reel choice revises one accepted arrangement. Bounded customization choices settle immediately; text settles on field exit or Enter. Local Undo restores the preceding plan. |
+| Team arrangement | A deliberate reel choice revises one accepted arrangement with local Undo. On dev, a starter-card selection accepts its preset and opens the real record; subsequent canonical field edits use Apply/Cancel. |
 | Session addition from a Coordination rack | Add session accepts useful defaults and opens the canonical editor. Cancel reverts later draft edits while retaining that record. Local Undo reverses creation only while it remains the latest accepted change. |
 | Saved edit | The shared coordinator retains target-bound unfinished work. A changed accepted identity can require explicit review even when values happen to match. |
 | History and baseline | Undo/Redo traverse accepted changes. A baseline is an independent comparison and restore point. Saved drafts retain their separate recovery route. |
@@ -459,7 +475,7 @@ entry, screenshot or technical description presents the earlier behavior.
 | Dark treatment across every work region | Pale Editorial Rack for reading and work; dark Instrument Rack for controls and visual response. |
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
-| Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
+| Earlier main-first implementation following each approved increment | #810–#813 preserve main as the Showcase reference while integration continues through focused dev PRs. A later human cue selects runtime promotion; performance and publication retain their separate holds. |
 | Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route supplies shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent person/team (#757) and session (#768) receivers. |
 | Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; #766 supplies direct arrangement acceptance. |
 | Separate proposed-team strip, connection-button strip and Delivery lifecycle disclosure inside Team planning | #779 supersedes these parallel readings with one editorial delivery board. Six phase lanes combine team/member, session and handoff cards; the reel changes the selected structure immediately. Shared sessions retains the people-by-session matrix below. Remaining attached disclosures preserve their spring reveal. |
@@ -469,9 +485,10 @@ entry, screenshot or technical description presents the earlier behavior.
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
 | PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
 | Bordered Hours/Minutes inner groups, peach Minutes and smaller duration-only dial artwork | #788 gives borderless peach Hours and paper Minutes. Duration reuses monetary coarse/fine sizes and the same face/pointer treatment; the outward pointer remains legible at each endpoint. The outer enclosure, readout and gesture owners remain. |
-| Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
+| Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 established canonical person/team editors near the initiating rack. #812 on dev places those controls inside its stable detail slot; deliberate starter-card activation accepts the preset before opening the real record. The same controls return to People on a chapter change. |
 | Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 introduced canonical session editing below the originating horizon or Team planning rack, preserving session identity, draft and return focus. #789 refines the horizon placement in the next row. |
-| #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. Team planning retains the adjacent placement. The exact initiating control toggles the deck, while another occurrence selects its placement; one owner preserves the shared draft and session properties. |
+| #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. #812 on dev uses the corresponding slot between Team planning's delivery board and Shared sessions. One owner preserves the shared draft and session properties across both readings. |
+| Pale bordered outer wrappers enclosing each Coordination section, plus a detached Customize teams and handoffs form | #812 on dev gives the dark racks the available canvas and places canonical team, person, session and handoff controls between board and tracks. Actual rack surfaces and editorial companions retain their aesthetic; direct additions have scoped Undo. |
 | Every Coordination rack Add session requiring preparation and final confirmation | #758 accepts a useful session immediately and opens its canonical editor. Cancel reverts subsequent edits; creation Undo removes the added record while its accepted change remains latest. Plans needing a team or person retain guided creation. |
 | Empty-space creation awaiting an entry, or treating an existing blank cell as new work | #770 adds a named New session row to both Coordination sequencers. Its native buttons create from period/subdivision or accepted-person context. Existing occurrence gaps and participation dots preserve their descriptive meaning; the read-only People table stays unchanged. |
 | Participant movement applied only in the Session detail deck | #771 shares the keyed Move up/down pattern across session receivers, guided session creation and team membership. Inclusion retains positions; explicit ordering retains person identity and useful focus. Percentage-based effort has a separate future contract in #798. |
@@ -487,8 +504,9 @@ meanings. The first #765 increment gives them shared session keys and Add
 controls. `work-controller.mjs` supplies its receiver through `readReceiver()`;
 `rack-controls.mjs` mirrors the selected ID, visible open state and controlled
 element ID into mounted controls. In-place synchronization preserves focus and
-horizontal position. The initial arrangement illustration keeps its starter
-route; after selection, the board and tracks address accepted session IDs. The
+horizontal position. The initial arrangement illustration keeps its starter reading. On dev,
+deliberate activation of a proposed team, handoff or session card accepts that
+preset and opens its accepted identity. The board and tracks then share those IDs. The
 last-click motion cue remains presentation feedback.
 
 Team planning is a permanent sibling section: heading, zoetrope with editorial
@@ -502,11 +520,10 @@ continues to answer who participates in each session below the board.
 The board is an authored delivery projection. Explicit template/slot mappings
 place the selected roles and handoffs; plan-owned stage relationships remain readable
 with their sessions. A phase selection and Delivery overview return change only
-the presentation. The horizon continues to own sprint/quarter placement. People
-and accepted-team cards open their adjacent editor; illustrative teams awaiting
-acceptance retain template customization. Handoffs open connection customization,
-and accepted sessions open their canonical receiver directly below the rack. Repeated
-references retain one work identity and cost account.
+the presentation. The horizon continues to own sprint/quarter placement. People, team, handoff and session cards open their canonical editor inside
+the dev rack's stable slot between delivery board and Shared sessions. Repeated
+references retain one work identity and cost account. Main keeps its prior
+adjacent placement for comparison.
 
 Independent review found a phone return-focus gap in #780: editing a team
 rebuilt the focused phase and lost its overview scroll position. The receiver
@@ -518,8 +535,8 @@ The rack heading, investment readout and Add session stay outside local scroll
 regions. Included work prices the arrangement’s distinct linked sessions once;
 missing rates keep a known-amount label. The amp continues to show the whole plan.
 
-`connection-template-controller.mjs` owns this composition, its field settlement
-and scoped Undo. `connection-templates.mjs` prepares the replacement transaction
+`connection-template-controller.mjs` owns this composition, deliberate preset
+acceptance, stable editor slot and arrangement Undo. `connection-templates.mjs` prepares the replacement transaction
 against the accepted plan; the existing Studio history owns acceptance and
 recovery. `delivery-board.mjs` owns the phase projection and local scope;
 `connection-view.mjs` retains the editorial topology and accepted-arrangement
@@ -529,13 +546,23 @@ owns the darker housing and editorial board cards. Remaining attached disclosure
 continue through the existing spring/reveal owner. The controller keeps legacy
 disclosure receivers usable while About uses an ordinary exposed container.
 
-The #757 receiver uses `mountRackEditor` in `rack-controls.mjs` to move
-the canonical person or team controls and status into one `studio-rack-editor`.
-It sits after the stable template or accepted-connections root, outside the
-template form and rebuilt board. The parent rack retains its cards and geometry;
-the adjacent reveal occupies normal page flow. A dark title enclosure and peach
-editorial body identify the selected object, with Close above the controls.
-`studio-instrument.css` owns this shared skin and its phone reflow.
+The #757 receiver established `mountRackEditor` in `rack-controls.mjs` to lend
+canonical controls and status to one `studio-rack-editor`. #812 on dev gives
+Team planning a stable slot between its delivery board and Shared sessions,
+covering person, team, session and handoff records. The slot survives board
+refreshes and keeps the live controls, selection and edit lease. A named heading
+and Close identify the receiver; the existing quantity modules and editorial
+card colors remain recognizable within its dark rack context.
+`studio-instrument.css` owns the shared editor skin; arrangement CSS owns the
+nested Team planning placement and ordinary phone reflow.
+
+`rack-record-creation.mjs` prepares team/handoff defaults through the existing
+assembly and connection draft owners. `controller.mjs` accepts the result,
+opens its canonical receiver and binds Undo to the accepted addition. Later
+field edits retain Apply/Cancel. `connection-controller.mjs` binds clicks to the
+borrowed configure node and excludes those events at its original root, keeping
+one delivery for reorder, recovery and removal actions. Its close callback
+returns Cancel and completed removal to the rack's focus owner.
 
 `studio-record-key` distinguishes the selected object (`aria-pressed`) from its
 visible receiver (`aria-expanded`). Repeating the selected trigger closes it.
@@ -549,16 +576,16 @@ membership, removal and creation semantics.
 
 #768 extended the receiver to canonical session controls. #789 now gives that
 owner two placements: a stable Session detail deck between the horizon board
-and tracks, or the adjacent Team planning panel. Horizon keys and occurrence
-pads, delivery cards and participation pads carry their actual origin into the
+and tracks, or the corresponding Team planning slot introduced on dev in #812.
+Horizon keys and occurrence pads, delivery cards and participation pads carry their actual origin into the
 route. The selected row stays pressed; its caret follows visible disclosure.
 Repeating the initiating horizon control toggles the deck. Shared-session row
-keys toggle the adjacent receiver; delivery cards and participation pads inspect
+keys toggle that receiver; delivery cards and participation pads inspect
 their session. Choosing another occurrence changes the inspected repetition
 while keeping the form open.
 
 `cadence-view.mjs` preserves the deck slot while it refreshes the board and tracks.
-`mountRackEditor` lends the canonical form to that slot or the adjacent host;
+`mountRackEditor` lends the canonical form to the appropriate rack slot;
 `work-controller.mjs` retains raw entries, the edit lease and acceptance.
 `session-occurrence-controls.mjs` presents numbered repetitions and native radio
 choices for their period and week/month. Add occurrence delegates the count
@@ -593,20 +620,22 @@ The #766 replacement transaction updates one arrangement instance. Repeating
 its unchanged configuration leaves history intact; switching configurations
 keeps unrelated and shared records by identity. A shared record that needs a
 separate replacement receives a compact local choice. The initial illustration
-changes no accepted state until the visitor selects an arrangement.
+keeps accepted state intact until deliberate reel selection or, on dev, a
+starter-card activation that accepts the preset before opening its real record.
 
-Bounded customization selections settle immediately. Text fields settle on blur
-or Enter so a field edit creates one history entry. Invalid text remains
-correctable locally; other unfinished editors remain with the shared coordinator.
-Local Undo targets the arrangement change that created it and retires after a
-later accepted edit. Investment retains the full Undo/Redo history. This
-supersedes the earlier regular preview/Apply flow while retaining the editorial
-card treatment and the explicit confirmation for removing template grouping.
-A completed text edit lets its pointer destination finish before the board
-refreshes, preserving phase focus and local scroll. Review of
-[#782](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/782)
-also established that authored timing and retired session state survive an
-unrelated customization or later arrangement choice.
+Main retains #766's bounded customization settlement: choices accept immediately
+and text settles on blur or Enter. The #812 dev integration supersedes that
+separate form with canonical team/handoff editors in the rack. Subsequent field
+changes use Apply/Cancel; invalid entries stay available for correction, and
+other unfinished work stays with the shared coordinator. Arrangement Undo targets
+the replacement that created it and retires after a later accepted edit.
+Investment retains complete Undo/Redo history. Editorial cards and the explicit
+confirmation for removing template grouping retain their scope.
+
+The earlier #782 review established pointer destination, phase focus and local
+scroll retention during template text settlement. Its preservation of authored
+timing and retired session state across a later arrangement choice remains a
+useful boundary for the canonical-record route.
 
 The #767 duration module encloses Hours, Minutes and their combined output.
 Its larger readout sits above both dials. #788 refines the inner groups to
@@ -641,8 +670,8 @@ retains the same session owner. The
 records why a stable, nonmodal receiving slot fits this showcase: the selected
 work and period remain available while the form retains live input. Numbered
 occurrences and participant tracks provide direct operations through existing
-setters. The supersession above changes the horizon placement; Team planning's
-adjacent receiver remains useful for its participation reading.
+setters. The supersession above changes the horizon placement; #812 on dev puts Team
+planning's participation receiver between its board and tracks.
 
 #758's `session-creation.mjs` prepares one planned 30-minute session with extra
 investment from the initiating period, team or person context. The existing
@@ -890,9 +919,16 @@ pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
 #810 receives the planning-reference promotion and confirms that main's Showcase
-runtime remains unchanged. The next visual receiver is the #811 compact dev
-Showcase pass, followed by direct handoff routing (#812) and cassette/deck
-integration (#813). The approved study remains available for comparison.
+runtime remains unchanged. #811 established the compact dev Showcase skin.
+The current #812 receiver opens the outer layout and brings canonical team and
+handoff editing into the delivery rack. Its receiving PR owns the focused
+state, recovery, browser and review observations. The CSS comparison covered
+390px and 1440px layouts in Chromium and WebKit; a focused borrowed-form probe
+covered one-time click delivery, text/membership edits, stale review, Cancel and
+completed removal in both engines. These observations establish those receiver
+behaviors; the integrated PR supplies the end-to-end acceptance. Cassette/deck
+integration continues in #813; independent response routing remains in #816.
+The approved study remains available for comparison.
 The duration panel retains its geometry and fixed-lighting reference; production
 controllers retain their editing and recovery meanings. Future percentage
 semantics remain with #798 and broader removal with #773.

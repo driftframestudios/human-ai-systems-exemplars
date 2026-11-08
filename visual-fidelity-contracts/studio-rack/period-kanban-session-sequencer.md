@@ -9,7 +9,7 @@ an editorial delivery-phase board; its lanes describe work and responsibility,
 while the horizon's lanes retain period placement.
 
 **Standing:** review candidate `0.1.0`; ID
-`vfc:period-kanban-session-sequencer`; reviewed 7 November 2026. This operation
+`vfc:period-kanban-session-sequencer`; dev integration revised 8 November 2026. This operation
 inherits the palette, control families and motion modes of
 [Studio Rack Composition](README.md).
 
@@ -40,6 +40,13 @@ Undo behavior. The view keeps that distinction visible. Period counts, stage
 labels and authored presets may vary; their order and labels remain source-owned.
 Overview clips can summarize occurrences while a period view exposes each one.
 
+The dev Coordination composition uses open section boundaries: the horizon and
+Team planning wrappers group headings and related work while the dark racks carry
+their own enclosure. Their inherited inner surfaces, inset borders and editorial
+companions remain visible. This gives the board, tracks and detail slots the
+available width on ordinary phones and laptops. Main retains the earlier outer
+wrappers as the comparison anchor until a human-cued promotion.
+
 The default reading stays compact. Stages, handoffs and availability open when
 useful. Complete chronological details belong to portable reports. A concise
 hover or focus preview helps a visitor decide which clip to inspect; activation
@@ -66,8 +73,10 @@ tracks. A stable receiving slot preserves its canonical form during surrounding
 refreshes. The selected sprint/quarter and Plan overview return remain visible.
 The exact initiating control toggles the deck; another occurrence selects its
 placement. Close returns focus to the origin and retains the proposal. Team
-planning opens that same form in its adjacent receiver, preserving both the
-draft and its distinct phase/participation reading.
+planning on dev opens that same form in the stable slot between its delivery
+board and Shared sessions, preserving both the draft and its distinct
+phase/participation reading. Person, team and handoff cards share that slot with
+their own canonical controls.
 
 Numbered occurrence pads select a repetition. Native radio pads choose its
 sprint/quarter and week/month; Add occurrence changes this work's count through
@@ -88,7 +97,8 @@ stacking may change geometry while preserving reading order and record identity.
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Period board, breadcrumb, tracks, stable session-deck slot, focus return, details and actions |
 | [Delivery board](../../collaboration/native-investment-studio/delivery-board.mjs) | Authored phase projection, distinct editorial cards, local phase scope and overview return |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs) and [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Authored periods and the accepted/proposed arrangement boundary |
-| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | The selected session's draft and receiver state; synchronized selected/open cues across both Coordination readings |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical controls lent to stable detail slots; synchronized selected/open cues across both Coordination readings |
+| [Rack record creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [connection controller](../../collaboration/native-investment-studio/connection-controller.mjs) and [Studio controller](../../collaboration/native-investment-studio/controller.mjs) | Direct team/handoff defaults through existing acceptance owners; canonical handoff edits, scoped addition Undo and return focus |
 | [Occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs) | Local repetition selection and native period/subdivision choices presented through the session owner's setters |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) and cadence rules in [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css) | Receiving lane and track geometry; shared rack tokens stay inherited |
 | [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, in-rack scope cues, return focus and local scroll, retained plan/draft state, placement, horizon recovery and in-place example replacement |
@@ -124,9 +134,10 @@ pressed while its closed receiver restores the right-facing caret. A shared
 `studio-rack-add` treatment carries the useful local context into the current
 creation flow. Chapter styles continue to own column geometry.
 
-Team planning is permanent, with subtly darker secondary housing that follows
-the horizon's enclosure and header alignment. The reel and editorial topology
-remain above it. The [delivery board](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
+Team planning is permanent. Its subtly darker secondary rack follows the
+horizon's header alignment, while its section wrapper leaves that enclosure
+visible directly on the Studio field. The reel and editorial topology remain
+above it. The [delivery board](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
 combines team/member, session and handoff cards under Planning, Design,
 Implementation, Testing, Deployment and Maintenance. A phase key opens that
 phase locally, with a visible Delivery overview return restoring its originating
@@ -136,9 +147,14 @@ Explicit template/slot mappings give reel selections a visible change in roles
 and handoffs. Stage labels remain source-owned session context; custom-stage
 and supporting work retain routes. These lanes express an illustrative delivery
 pattern. Dates, period placement, completion and readiness retain their separate
-owners. People and accepted-team cards open their adjacent editors; illustrative
-teams retain customization. Handoff cards open connection customization;
-accepted sessions reach their adjacent canonical editor through stable IDs.
+owners. On dev, people, teams, handoffs and sessions open their canonical controls in
+the stable slot between delivery board and participation tracks. Deliberate
+selection of a starter team, handoff or session first accepts that preset and
+then opens its real record. The preset's Undo remains available. Add team and
+Add handoff create useful accepted defaults and open the same slot, with local
+Undo tied to that addition. Later field changes use their existing Apply/Cancel
+owners. The detached Customize teams and handoffs form is superseded by these
+record entries; independent response cards remain scoped in #816.
 
 The board supersedes the proposed-team strip, duplicated connection-button strip
 and Delivery lifecycle disclosure in this receiver. Shared sessions follows with
@@ -195,8 +211,9 @@ Scope, drafts and acceptance keep their current owners across both readings.
 The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 supplies both readings with one existing session owner. The
 [detail-deck increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
-places that form between Plan overview's board and tracks while preserving Team
-planning's adjacent route. Its focused phone/laptop observation must distinguish
+places that form between Plan overview's board and tracks. #812 on dev places
+Team planning's canonical detail slot between its delivery board and Shared
+sessions. Its focused phone/laptop observation must distinguish
 the same retained form from a replacement during refresh, exact-trigger closure
 from another occurrence's selection, and draft placement from accepted work.
 The receiving PR also records cross-rack retention, Apply/Cancel, return focus
