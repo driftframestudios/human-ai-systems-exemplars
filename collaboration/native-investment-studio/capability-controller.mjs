@@ -1,6 +1,7 @@
 import { listCapabilities, getCapabilityDefinition } from './capabilities.mjs';
 import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from './capability-draft.mjs';
 import { money } from './display.mjs';
+import { createRackRecord } from './rack-record-creation.mjs';
 import { revealStudioDestination } from './motion.mjs';
 
 const INSTANCES = new WeakMap();
@@ -28,6 +29,8 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   const catalogues = new Map(['ability', 'practice'].map(kind => [kind, root.querySelector(`[data-capability-catalogue="${kind}"]`)]));
   const rack = document.createElement('section'); rack.className = 'native-capability-rack'; rack.id = `${instance}-rack`; rack.setAttribute('aria-label', 'Selected ability or practice');
   elements.selected.before(rack); rack.append(elements.selected, elements.configure);
+  const closeControl = button('Close', 'close'); closeControl.classList.add('native-control--cancel');
+  elements.selected.querySelector('.native-capability-card__actions').append(closeControl);
   const editor = editing.capability;
   let disposed = false, generation = 0, composing = false, acknowledged = false, projection = null;
   let selection = null, target = null, builtTarget = null, builtProjection = null;
@@ -205,7 +208,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (['people', 'teams', 'work'].includes(metadata.source)) {
       const type = { people: 'person', teams: 'team', work: 'session' }[metadata.source];
       const create = node('button', `Add ${type === 'person' ? 'a person' : type === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
-      create.type = 'button'; create.classList.add('native-control--navigate'); create.dataset.nativeCreate = type; create.dataset.nativeReturn = 'capability'; create.dataset.nativeReturnField = key; group.append(create);
+      create.type = 'button'; create.dataset.capabilityAction = 'add-record'; create.dataset.capabilityRecordKind = type; create.dataset.capabilityReceiverField = key; group.append(create);
     }
     group.append(error); parent.append(group); controls.set(key, { input, error, metadata, checkboxes, radios });
   }
@@ -285,6 +288,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       builtTarget = draft?.capabilityId ?? null; builtProjection = projection; buildFields(descriptor, draft?.raw);
     }
     root.dataset.capabilityState = draft ? view.status : 'idle';
+    closeControl.hidden = !draft;
     elements.configure.hidden = !draft; actions.get('configure').hidden = Boolean(draft && elements.configure.open); elements.fields.disabled = !draft || view.status !== 'editing';
     elements.recovery.hidden = !draft || !['stale', 'parked'].includes(view.status);
     elements.current.textContent = view.creationConflict ? 'This identifier is already in the plan. Keep your entries and choose a new identifier.'
@@ -397,6 +401,27 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     opened(next, epoch, false); if (!owns(epoch)) return;
     announce(`Proposal applied. ${investmentAmount('Accepted investment', accepted.result)}${accepted.result.plannedCommitmentCents === null ? ' Add missing hourly rates in People to complete the amount.' : ''}`); actions.get('apply').focus();
   }
+  function addRecord(control) {
+    const view = editor.read(), key = control.dataset.capabilityReceiverField;
+    if (!view.draft || view.status !== 'editing' || !controls.has(key)) return;
+    const beforeTarget = target, section = selectedSection, epoch = ++generation;
+    const result = createRackRecord(studio, editing, control.dataset.capabilityRecordKind);
+    if (!owns(epoch)) return;
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    const held = editor.read();
+    if (held.draft?.capabilityId !== beforeTarget) return;
+    const resumed = editor.review(held.draft.token, result.projection);
+    if (!resumed.ok) { render(); announce(resumed.error.message); onAccepted(result.projection); return; }
+    const token = resumed.view.draft.token, metadata = describeCapabilityTarget(beforeTarget).fields[key];
+    const changed = metadata.kind === 'ids'
+      ? editor.setIds(token, key, [...resumed.view.draft.raw[key], result.id])
+      : editor.setText(token, key, result.id);
+    onAccepted(result.projection); if (!owns(epoch)) return;
+    opened(changed, epoch, false); showSection(section);
+    const added = controls.get(key)?.input;
+    (added?.querySelector(`input[value="${result.id}"]`) ?? added)?.focus({ preventScroll: true });
+    announce(`${control.dataset.capabilityRecordKind === 'person' ? 'Person' : control.dataset.capabilityRecordKind === 'team' ? 'Team' : 'Session'} added. Apply to keep this support selection.`);
+  }
   function showSupport(kind, id) {
     const row = studio.read().state[COLLECTION[kind]]?.find(row => row.id === id); if (!row) return;
     const result = open(makeCapabilityTarget(capabilityForm(kind, 'update', row.definitionId, row.definitionVersion), id), false);
@@ -429,6 +454,13 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const control = event.target.closest('[data-capability-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.capabilityAction;
     if (action === 'apply') return;
+    if (action === 'add-record') { addRecord(control); return; }
+    if (action === 'close') {
+      close(); const epoch = generation; render(); onEditing();
+      if (!owns(epoch) || !selection) return;
+      catalogues.get(selection.kind).querySelector(`[data-capability-action="select"][data-capability-definition="${selection.definitionId}"]`)?.focus({ preventScroll: true });
+      return;
+    }
     if (action === 'select') { selectedSection = 'context'; selectCard(control); showSection('context'); elements.title.tabIndex = -1; elements.title.focus({ preventScroll: true }); revealStudioDestination(rack); return; }
     if (action === 'inspect-section') { showSection(control.dataset.capabilitySectionKey); return; }
     if (action === 'example') { showExample(control.dataset.capabilityExample); return; }
@@ -481,7 +513,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (disposed) return;
     close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const control of actions.values()) control.disabled = true;
-    root.append(elements.selected, elements.configure); rack.remove();
+    closeControl.remove(); root.append(elements.selected, elements.configure); rack.remove();
     INSTANCES.delete(root); projection = null; controls.clear(); workGroups.clear();
   }
   render();

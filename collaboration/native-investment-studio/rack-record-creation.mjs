@@ -1,12 +1,21 @@
-import { describeAssemblyTarget, describeConnectionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, describeConnectionTarget, describeSessionTarget } from './command-draft.mjs';
+
+import { prepareSessionCreation } from './session-creation.mjs';
 
 const OWNERS = Object.freeze({
+  session: Object.freeze({ kind: 'session', form: 'work.create', target: 'sessionId', describe: describeSessionTarget }),
+  person: Object.freeze({ kind: 'assembly', form: 'person.create', target: 'assemblyId', describe: describeAssemblyTarget }),
   team: Object.freeze({ kind: 'assembly', form: 'team.create', target: 'assemblyId', describe: describeAssemblyTarget }),
   connection: Object.freeze({ kind: 'connection', form: 'connection.create', target: 'connectionId', describe: describeConnectionTarget }),
 });
 const failure = (code, message) => ({ ok: false, accepted: false, error: { code, path: 'rack', message } });
 
 function startingValues(state, kind, context) {
+  if (kind === 'session') {
+    const prepared = prepareSessionCreation(state, context);
+    return prepared.ok ? prepared : failure('reference', 'Add a person and team to start this session.');
+  }
+  if (kind === 'person') return { ok: true, raw: { label: `Person ${state.people.length + 1}`, ratePerHour: '100', fundedHours: '4', fundedMinutes: '0' } };
   if (kind === 'team') return { ok: true, raw: { label: 'New team', personIds: [] } };
   const teams = state.teams.filter(team => team.lifecycle !== 'retired');
   const byId = new Map(teams.map(team => [team.id, team]));
@@ -26,7 +35,7 @@ function startingValues(state, kind, context) {
 // Direct rack additions use the same ID allocation, saved edits and acceptance
 // history as the full forms. Callers open the accepted record after this receipt.
 export function createRackRecord(studio, editing, kind, context = {}) {
-  if (!Object.hasOwn(OWNERS, kind)) return failure('target', 'Choose a team or handoff to add.');
+  if (!Object.hasOwn(OWNERS, kind)) return failure('target', 'Choose a person, team, session or handoff to add.');
   const owner = OWNERS[kind];
   const base = studio.read(), prepared = startingValues(base.state, kind, context);
   if (!prepared.ok) return prepared;

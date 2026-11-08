@@ -9,6 +9,7 @@ import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { animateRackChange } from './reel-control.mjs';
+import { createRackRecord } from './rack-record-creation.mjs';
 import { syncReorderButtons } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
@@ -34,6 +35,13 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     'recovery', 'current', 'fresh-id', 'status'].map(name => [name, find(name)]));
   const inputs = Object.fromEntries(TEXT_FIELDS.map(field => [field, elements.form.elements.namedItem(field)]));
   const errors = Object.fromEntries([...TEXT_FIELDS, 'personIds'].map(field => [field, find(`error="${field}"`)]));
+  const teamRack = elements.teams.closest('.native-assembly__teams');
+  if (teamRack) teamRack.append(elements.configure, elements.status);
+  const localHeading = document.createElement('div'); localHeading.className = 'studio-people-editor__heading';
+  const localTitle = document.createElement('h4'); localTitle.textContent = 'Team settings';
+  const localClose = document.createElement('button'); localClose.type = 'button'; localClose.textContent = 'Close';
+  localClose.dataset.assemblyAction = 'close'; localClose.className = 'native-control--cancel';
+  localHeading.append(localTitle, localClose); elements.summary.after(localHeading);
   const editor = editing.assembly;
   const cleanup = [];
   let projection = null, people = new Map(), personPositions = new Map(), teams = new Map(), references = new Map();
@@ -203,6 +211,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.summary.textContent = !descriptor ? 'Settings' : descriptor.mode === 'create'
       ? descriptor.collection === 'people' ? 'Add a person' : 'Add a team'
       : `${removing ? 'Remove' : 'Settings'} · ${target?.label ?? descriptor.id}`;
+    localTitle.textContent = elements.summary.textContent;
     elements['name-group'].hidden = !descriptor || removing;
     elements['name-label'].textContent = personForm ? 'Name' : 'Team name';
     elements['person-fields'].hidden = !personForm;
@@ -286,6 +295,17 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     onBegin();
     if (!currentOperation(epoch)) return;
     return opened(editor.create(form, projection), epoch, true);
+  }
+  function addRecord(kind) {
+    if (disposed || !canOpen()) return;
+    rateControls.release(); const epoch = ++generation;
+    onBegin(); if (!currentOperation(epoch)) return;
+    const result = createRackRecord(studio, editing, kind);
+    if (!currentOperation(epoch)) return;
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    onAccepted(result.projection); if (!currentOperation(epoch)) return;
+    if (kind === 'person') { selectedPerson = result.id; close({ park: false }); render(); onPersonCreated(result.id); }
+    else open(makeAssemblyTarget('team.update', result.id));
   }
   function close({ park = true } = {}) {
     if (disposed) return;
@@ -405,7 +425,12 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const control = event.target.closest('button[data-assembly-action]');
     if (!control || (!root.contains(control) && !elements.configure.contains(control)) || control.disabled || disposed) return;
     const action = control.dataset.assemblyAction, id = control.dataset.assemblyId;
-    if (action === 'person-create' || action === 'team-create') { create(action === 'person-create' ? 'person.create' : 'team.create'); return; }
+    if (action === 'close') {
+      close(); const epoch = generation; onEditing();
+      if (currentOperation(epoch) && onClose() !== true && currentOperation(epoch)) teamControls.get(describeAssemblyTarget(selectedTarget)?.id)?.focus();
+      return;
+    }
+    if (action === 'person-create' || action === 'team-create') { addRecord(action === 'person-create' ? 'person' : 'team'); return; }
     if (action === 'team-open') { open(makeAssemblyTarget('team.update', id)); return; }
     if (action === 'team-remove' || action === 'person-remove') { open(makeAssemblyTarget(action === 'team-remove' ? 'team.remove' : 'person.remove', action === 'team-remove' ? id : selectedPerson)); return; }
     if (action === 'person-up' || action === 'person-down') { move('people', selectedPerson, action === 'person-up' ? -1 : 1); return; }
@@ -428,7 +453,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function dispose() {
     if (disposed) return;
-    rateControls.dispose();
+    rateControls.dispose(); localHeading.remove();
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;

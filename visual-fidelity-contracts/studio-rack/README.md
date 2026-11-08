@@ -47,7 +47,7 @@ receives the cassette and Investment deck pickers through a shared semantic
 button/face component and the current session, pricing, baseline and exchange
 owners. Broader financial deck state continues in #818, with main retaining its reference runtime until the human cues promotion.
 
-## Current dev simplification
+## Current dev rack integration
 
 #820 makes the board and tracks the primary interaction surface. Cassette selection
 loads scope with detail closed; the shelf joins the rack at its existing scale.
@@ -55,6 +55,20 @@ Team names/membership/order accept directly within the delivery board. Abilities
 retains its two support tables and uses one compact selected module. The duration
 receiver now adopts the preserved workbench's exact 64px dial/readout/step geometry.
 Main retains its reference behavior until a human cues promotion.
+
+#825 keeps Delivery overview and Shared sessions as independent modules. A
+person or team opens local controls in the delivery working area; Shared sessions
+stays visible. Handoff creation returns locally through the new team's controls.
+People keeps its canonical person/team editors in their roster racks. Abilities
+retains its comparable tables and creates supporting records in the selected
+module. Useful defaults accept immediately; field and relationship proposals
+retain their named Apply/Cancel boundary and amp Undo recovers accepted additions.
+
+Duration and Working sessions fill neighboring rack slots. Working sessions
+adopts the regular dark module face, Add top-right and Remove bottom-left.
+Funding and Status use large native choice pads within a named module. This
+supersedes the chocolate repetition housing and undersized standalone choices;
+the preserved duration dial artwork and standalone workbench remain intact.
 
 Local controls use lighter borders and restrained depth, while Apply keeps its
 raised emphasis. Cancel is ghost; Remove is muted rose with a named object. Undo

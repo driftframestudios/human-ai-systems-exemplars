@@ -13,10 +13,13 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
     if (text) element.textContent = text;
     return element;
   };
-  const root = node('fieldset', 'studio-occurrences');
+  const root = node('section', 'studio-occurrences');
   root.dataset.sessionOccurrences = '';
-  const legend = node('legend', '', 'Working sessions');
+  const heading = node('h4', '', 'Working sessions');
+  heading.id = `session-occurrence-${instance}-heading`;
+  root.setAttribute('aria-labelledby', heading.id);
   const header = node('div', 'studio-occurrences__header');
+  const title = node('div', 'studio-occurrences__title');
   const count = node('output', 'studio-occurrences__count');
   const add = node('button', 'native-control--create studio-rack-add', 'Add session');
   add.type = 'button'; add.dataset.sessionOccurrenceAdd = '';
@@ -39,7 +42,9 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
   placement.append(periodField, subdivisionField);
   const error = node('p', 'native-coordination__error');
   const meaning = node('p', 'studio-occurrences__meaning', 'Duration and people apply to every session.');
-  header.append(count, add, remove); root.append(legend, header, pads, pager, placement, meaning, error);
+  const footer = node('div', 'studio-occurrences__footer');
+  title.append(heading, count); header.append(title, add); footer.append(remove);
+  root.append(header, pads, pager, placement, meaning, error, footer);
   let selected = 0, current = null, signature = null, padSignature = null, identity = null, disposed = false;
   let periodControls = new Map(), subdivisionControls = new Map(), padControls = new Map();
   const cleanup = [];

@@ -235,7 +235,8 @@ export function mountCoordinationPanel(root, options = {}) {
     const container = target.kind === 'session' && horizonSource ? scorePanel.getSessionSlot()
       : anchor.matches('[data-connection-templates]') ? anchor.querySelector('[data-team-rack-editor]') : null;
     workPanel?.setRackMode?.(target.kind === 'session' && Boolean(container));
-    rackEditor.show({ ...target, label: record.label ?? record.sharedObject, originLabel }, source, anchor,
+    rackEditor.show({ ...target, label: record.label ?? record.sharedObject, originLabel,
+      returnLabel: target.kind === 'person' && container ? 'Back to Delivery overview' : null }, source, anchor,
       { container, arrival: current?.open ? 'change' : 'open', originRoot: horizonSource ?? anchor });
     render();
     const panel = rackEditor.element.querySelector('details');
@@ -295,7 +296,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (pendingReturnFocus && !hasReturnDraft(pendingReturnFocus, drafts)) pendingReturnFocus = null;
     if (!returnRegion || !returnNote || !returnButton) return;
     const route = returnRoutes.at(-1);
-    returnRegion.hidden = !route;
+    returnRegion.hidden = !route || Boolean(route.rackSource && templatePanel?.isTeamOpen());
     if (returnTeamButton) returnTeamButton.hidden = true;
     if (!route) return;
     const collection = { person: 'people', team: 'teams', session: 'work' }[route.createdKind];
@@ -336,6 +337,20 @@ export function mountCoordinationPanel(root, options = {}) {
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     const held = editing.read().parked.some(record => record.kind === kind && record.targetId === target);
+    if (activeChapter === 'coordination' && kind === 'connection' && creating === 'team') {
+      const source = captureRackEntry(button, root);
+      const result = createRackRecord(studio, editing, 'team');
+      if (!result.ok) { announce(result.error.message); render(); return; }
+      pendingReturnFocus = null;
+      retainReturnAncestors(kind, target);
+      returnRoutes.push({ kind, target, creating, held, createdId: result.id, createdKind: 'team',
+        field: button.dataset.nativeReturnField, rackSource: source });
+      rackEditor?.hide({ home: true });
+      templatePanel?.openTeam(result.id, source(), { onReturn: returnToDraft, returnLabel: '← Handoff settings' });
+      render(); syncSessionReceiver();
+      announce('Team added. Edit it here, then return to the handoff. Undo is available.');
+      return;
+    }
     chapterShell?.select(creating === 'session' ? 'coordination' : 'people');
     const result = creating === 'session' ? workPanel?.create() : assemblyPanel?.create(`${creating}.create`);
     if (!result?.ok) { announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
@@ -386,6 +401,10 @@ export function mountCoordinationPanel(root, options = {}) {
     const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel, score: scorePanel }[route.kind];
     const result = panel.open(route.target);
     if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
+    if (route.rackSource && route.kind === 'connection') {
+      const descriptor = describeConnectionTarget(route.target);
+      if (descriptor?.id) openRackEditor({ kind: 'connection', id: descriptor.id }, route.rackSource());
+    }
     pendingReturnFocus = route.field ? { kind: route.kind, target: route.target, field: route.field } : null;
     returnRoutes.pop(); render(); renderReturnRoute();
     focusReturnedField();

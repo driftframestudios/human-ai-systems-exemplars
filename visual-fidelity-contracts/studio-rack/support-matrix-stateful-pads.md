@@ -1,207 +1,115 @@
 # Support Matrix & Stateful Pads
 
-Make the work behind a plan visible through comparable rows, useful empty cells
-and pads that open the corresponding detail. A visitor can distinguish assigned
-people, linked sessions, planned support and recorded observations before deciding
-what to inspect. The Abilities tables and Quality session tracks are current
-examples within the [Studio](../../context-canvas-project-surface/context-canvas/index.html#native-studio-work).
+Compare the work behind a plan through named rows, meaningful columns and pads
+that open the corresponding detail. People, sessions, support and observations
+keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
-reviewed 7 November 2026. Palette and shared controls inherit
-[Studio Rack Composition](README.md).
+dev receiving contract revised 8 November 2026 for
+[#825](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/825).
+Palette and shared controls inherit [Studio Rack Composition](README.md).
+`main` remains the approved reference until a human cues dev promotion.
 
-## Fit and smallest useful dose
+## Current compositions
 
-Use a matrix when the same questions apply to several abilities, practices or
-sessions. Use a pad rail when the main task is selecting one record or toggling
-independent options. One named row, meaningful column headings and one adjacent
-inspector form a useful starting point. A kanban lane groups work by a named
-period, team, phase or attention area; its position retains that meaning when
-pads move.
-
-## Distinguish the states
-
-| Meaning | Control and visual reading |
+| Surface | Comparison and interaction |
 | --- | --- |
-| Selected for inspection | Pressed choice or expanded receiver, with a visible selected target |
-| Included in a proposal | Native checkbox or toggle button with `aria-pressed`, accompanied by written or accessible inclusion state |
-| Included in the accepted plan | Accepted projection supplied by the plan owner |
-| Supporting work linked | Named session or meaningful pad whose accessible name identifies it |
-| Person participating in a session | Participation pad at the named person/session intersection |
-| Support still to choose | Useful empty-state wording and an actionable route |
-| Requirement outside a card's definition | Explicit Not specified reading rather than an invented gap |
-| Recorded observation | Its reviewer, context and revision, distinct from an authored example |
+| Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one selected support module at the relevant section. |
+| People | The roster and team racks contain local editors. The contribution/session matrix and role-facet rail retain their own readings and existing stored responsibility values. |
+| Team planning | Delivery overview groups people, work and handoffs by phase. Shared sessions separately shows each person's participation in each session and remains visible while the Delivery working area edits a person, team or handoff. |
+| Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
+| Working sessions | Numbered pads select an occurrence. Period and subdivision choices place it; participant switches and explicit order controls apply to the session as a whole. |
 
-The pad's operation determines its semantics. Selection and inclusion may each
-use a toggle button with `aria-pressed`; the label and surrounding context
-identify which operation it performs. Existing independent-membership controls
-also use native checkboxes. A disclosure uses `aria-expanded`, and a pad that
-navigates carries a destination cue. Color and depth support the state already
-expressed by the semantic control and its written state. Decorative meter
-segments never create an additional readiness claim.
+Use a matrix when named row/column relationships help a visitor compare. A short
+pad rail fits a small choice set. A phase or period lane groups work by that
+named scope; moving a pad preserves its identity and relationship meaning.
 
-The current Abilities chapter retains both full support tables. Their
-responsibility, preparation, review and observation columns support comparison;
-one editing rack follows the selected table. Change and Quality can use denser
-track pads because their neighboring work lanes supply the selected component's
-context. These are permitted variants of the same operation, not interchangeable
-labels for different evidence states.
+## State and operation
 
-## Compact dev receivers
-
-The two Abilities tables remain comparable, with one selected support module below.
-People uses a contribution-by-session matrix and a role-facet rail. Removing visible
-free-text contribution fields preserves existing stored responsibility values.
-Team membership pads stay in place while inclusion changes; reorder controls use
-stable person identities and the existing movement effect. Direct team changes
-accept through shared history, while contribution/support forms retain Apply.
-
-Creation regions in #821 have their own named object and scope. An empty person/
-session intersection continues to describe participation. It never creates a new
-person or session merely because it is empty.
-
-## Reading, motion and recovery
-
-Native tables retain captions and scoped row/column headers. Every meaningful
-cell remains readable with its row and column. Two-dimensional inspection uses
-a named local scroll region at phone widths. Long labels wrap; headers retain
-contrast against their actual background. Ordinary text, border and shape keep
-selected and available states legible in alternate color presentations.
-
-Reels and faders may rearrange keyed pads to illustrate an authored configuration.
-The movement follows stable identity and honors the shared motion preference.
-The written result appears independently of the effect. Inspection retains the
-owning draft, and shared sessions retain one cost account even when several pads
-refer to them. Apply, Cancel and Undo keep their existing acceptance boundaries.
-
-## Source and evidence
-
-| Owner or observation | Responsibility |
+| Meaning | Visible and semantic reading |
 | --- | --- |
-| [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs) and [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Table meaning, selected card and adjacent retained editor |
-| [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Component support, quality inclusion and their existing draft owners |
-| [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) and [connection view](../../collaboration/native-investment-studio/connection-view.mjs) | Native people/session relationship table, fixed heading/Add control, local participant scroller and shared team/member-lane rendering |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Shared keys and pads reflect receiver state; participant/team-member Move up/down controls share keyed movement and focus while each controller owns its draft |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Person/team record keys open one adjacent canonical editor; inclusion remains with its existing draft owner |
-| [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Scoped table, rail, pad and adjacent-rack variants |
-| [Capability browser checks](../../tests/native-investment-studio/capability.browser.mjs) | Support states, retained selected drafts, shared work and readable table controls |
-| [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Component selection, linked work, pressure-driven pad movement and recovery |
+| Selected for inspection | Pressed choice identifies the record; expanded state reports its visible receiver. |
+| Included in a proposal | Native checkbox or named toggle expresses inclusion. The proposal's Apply boundary remains clear. |
+| Included in accepted work | The accepted projection supplies the state. Team planning membership changes update it directly. |
+| Person participating | The named person/session intersection expresses participation. Selecting its pad inspects that session. |
+| Linked support | A named session or accessible pad identifies the supporting work. |
+| Support to choose | Concise empty-state wording opens the corresponding local controls. |
+| Outside a card's definition | Not specified preserves the authored definition's scope. |
+| Recorded observation | Reviewer, context and revision distinguish the observation from an authored example. |
+
+Color, border and depth reinforce the control's semantic and written state.
+Selected Team planning membership uses the current sequencer face: dark green,
+signal border and a signal inset; available pads use the resting face and dashed
+border. A native checkbox retains the membership operation. Change and Quality
+keep their intentionally different fader treatments.
+
+## Creation, assignment and recovery
+
+Named creation regions state the object and scope they add. Horizon period lanes
+and the Shared sessions New session row create through the existing session
+owner, using the selected period or person context. Existing participation cells
+continue to represent participation. Empty occurrence gaps retain timing meaning.
+
+People's Add person and Add team accept useful records and open their local
+editors. Abilities can add a person, team or supporting session from the selected
+module, then select it in the current proposal. Creation enters accepted history;
+Apply accepts its support assignment. Cancel restores the prior assignment while
+the newly created record remains available. The stable amp Undo uses that same
+history, independently of cassette selection.
+
+Membership toggles keep available cards mounted in place. Move up/down changes
+ordered IDs explicitly, with the shared keyed transition and focus on the moved
+person. The selected people currently receive the full session duration for
+every occurrence. A percentage fader remains scoped in
+[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
+The [inspection contract](contextual-inspection-recovery.md) owns local Close,
+Cancel, saved drafts and return behavior.
+
+## Reading and motion
+
+Native tables retain captions and scoped row/column headers. A meaningful cell
+remains readable with its row and column. Ordinary phone widths use a named local
+scroll region; the heading and creation controls stay available outside it.
+Long labels wrap and headers contrast against their actual background. Shape,
+text and focus styling preserve state in forced colors.
+
+Reels and faders may rearrange keyed pads into an authored configuration. Stable
+identity carries the movement, and the shared motion preference governs it.
+The resulting state is readable independently of animation. Several support pads
+can refer to one session; the shared session keeps one cost account.
 
 The [recorded instrument research](../../collaboration/native-investment-studio/usability-research.md#digital-instrument-composition--5-november-2026)
-adapts the pad/device distinction in the [Push manual](https://www.ableton.com/en/push/manual/).
-That precedent supports separating selection from parameter editing. Native
-table meaning and the Studio's source model establish the actual relationships.
-Focused browser observations establish the exercised controls; the visitor's
-interpretation remains a human walkthrough question.
+uses the [Push manual](https://www.ableton.com/en/push/manual/) as a precedent for
+separating selection from parameter editing. Native table semantics and the
+Studio model establish these actual relationships. The precedent supplies an
+interaction analogy; human walkthrough evaluates whether it helps this visitor.
 
-## Re-entry and future scope
+## Ownership and evidence
 
-Revisit when a cell changes meaning, a pad changes operation, a source record
-gains a new state, or an inspector moves. The
-[Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
-uses Shared sessions as a participation reading: each column names a person and
-each row names shared work. A populated pad means that person participates;
-selection identifies the session being inspected. Accepted-session keys and
-participation pads now mirror the same selected record and visible receiver.
-Participation remains the pad's relationship meaning; selected/open cues describe
-inspection. The initial arrangement illustration precedes acceptance; after a
-choice, its session keys use accepted IDs and the shared receiver state. Team planning's permanent
-secondary rack groups an editorial delivery board and Shared sessions. The
-board's phase lanes combine team/member, session and handoff cards; a team can
-appear in several phases as an illustrative role while keeping one identity.
-The editorial topology above retains its relationship routes. Shared sessions
-keeps its separate participation meaning, and its heading and Add control stay
-visible while participant columns scroll locally.
+| Route | Responsibility or observation |
+| --- | --- |
+| [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs), [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Support-table meaning, one selected module and retained support proposal |
+| [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
+| [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing and accepted record creation |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion and return identity |
+| [Abilities/People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Tables, local racks, membership pads and shared control treatment |
+| [Abilities](../../tests/native-investment-studio/capability.browser.mjs), [People](../../tests/native-investment-studio/assembly.browser.mjs), [rack](../../tests/native-investment-studio/rack-controls.browser.mjs) browser checks | Exercised support meaning, direct creation, assignment boundaries, ordering, retained work and local geometry |
 
-The [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs)
-uses explicit template/slot mappings to vary the selected picture with the reel.
-Every session and handoff retains its own card and receiver; source stage labels
-remain session context. This replaces the separate team strip and lifecycle
-disclosure in Team planning. The [Period Kanban variant](period-kanban-session-sequencer.md)
-owns phase scope and return. Team arrangement selection updates one accepted
-instance with local Undo; ordinary session editors retain their Apply boundary.
-Remaining attached disclosures keep their spring reveal.
+The receiving PR names the checks actually run and their scope. A passing
+operation check establishes that journey; visual inspection and human review
+supply the composition and interpretation observations.
 
-The existing `native-quality-tracks` is the preferred aesthetic precedent for
-future in-rack selection matrices: compact named rows, dark table housing,
-clearly available pads, and solid pressed inclusion states. Its Quality support
-and inclusion meanings remain specific to that receiver. A Coordination panel
-names whether its pads choose people, select a session or reveal settings. A
-short option set can use a pad rail; a matrix earns its space when named row and
-column relationships help the visitor compare.
+## Supersession and next boundary
 
-The [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-opens the canonical editor directly below Team planning's initiating rack.
-People and accepted-team keys select an object; membership controls continue to
-edit its proposal. `studio-record-key` reports selected and expanded states
-separately, and closing retains the draft while restoring the originating key's
-focus. The existing control groups remain useful; a larger matrix is a
-composition option when the relationships benefit from comparison. The
-[session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-uses the same contextual opening and return grammar while retaining its own
-participation and duration owners. A participation pad opens that session's
-canonical editor below its originating Team planning rack; it keeps its meaning
-as a person/session intersection. Horizon entries and shared-session row keys toggle their
-receiver; another entry supplies its own inspection context. Close preserves the
-draft and returns to that control. Moving to the same work in the temporal rack
-places the canonical form in #789's stable Session detail deck between the
-period board and tracks, retaining the proposal and existing scope owners.
+This dev contract supersedes Abilities reverse/beside inspection modes, detached
+People editing as the primary route, and hiding Shared sessions during a Delivery
+record edit. The two Abilities tables, existing meaning of stored contributions,
+and independent participation matrix remain current. `main` retains its approved
+runtime; Git history preserves earlier composition decisions.
 
-The deck uses named participant tracks with native inclusion switches and the
-existing explicit reorder controls. One ordered participant collection applies
-to every occurrence of that session, as does its duration. Numbered occurrence
-pads select the repetition whose placement is being edited; native radio pads
-choose its sprint/quarter and week/month. Add occurrence delegates a count change
-to the current session draft. These controls use Quality's compact track skin
-while preserving their distinct inclusion, ordering and placement meanings.
-The exact repetition field stays available. Apply accepts these changes together;
-Cancel reverts them, and Close retains their unfinished draft.
-
-An unused participation cell keeps its person/session meaning. #758's Coordination
-rack Add session accepts useful defaults, then opens the canonical editor with
-its known team/person context. Cancel reverts later edits and preserves the new
-session; local Undo reverses its creation while that change remains latest.
-Plans needing a team or person retain guided creation. The
-[empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
-uses a named **New session** row with native Add buttons under accepted-person
-columns in Shared sessions. It passes the selected person to the existing
-creation owner; proposed team structures keep their separate acceptance path.
-The same outlined `studio-rack-create-zone` serves horizon period/subdivision
-columns. A plus and written Add session label remain visible, with fine-pointer
-hover emphasis and a visible keyboard/touch route. Participation dots and
-occurrence gaps keep their descriptive meaning. The People chapter's read-only
-table receives no creation row. A future participation action in an existing
-cell must name that person/session relationship explicitly.
-
-The [participant movement increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
-shares the keyed movement of Change's component keys through `animateRackChange`
-in [`reel-control.mjs`](../../collaboration/native-investment-studio/reel-control.mjs).
-`syncReorderButtons` in `rack-controls.mjs` synchronizes **Move up/down** labels
-and disabled edge states across the canonical session editor, its rack and
-guided receivers, and team membership. Each receiving controller retains its
-ordered IDs, draft, acceptance operation and focus on the moved person's
-inclusion switch.
-
-Movement follows stable person identity and the existing motion preference.
-Off or system reduction settles the same order immediately. Focus stays with
-the same person even when their Move button reaches a disabled edge.
-Membership toggles keep available cards mounted in their positions; explicit
-reordering changes order. The future **Time in this session** fader is now
-scoped in [#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
-and [Precision Dials & Faders](precision-dials-faders.md). Current membership
-continues to give every selected person the full session duration.
-
-The horizon's attached People and available time and Stages & handoffs drawers
-supply a readable alternative to compact in-rack People/Stages key rails and
-relationship pads. Both entries choose the same record and inspector. The shared
-`studio-rack-companions` enclosure preserves native disclosure and draft ownership;
-`studio-rack-records` names the compact in-screen rail. These are presentation
-roles, while the receiver keeps its person, relation and availability meanings.
-
-The future [removal pattern](../../collaboration/native-investment-studio/removal-recovery-research.md)
-keeps the affected relationship explicit: removing a person from a session,
-removing one occurrence and removing the shared session have distinct scopes.
-Routine removal from accepted work offers named Undo through the existing
-history owner. Draft participation remains an inclusion choice with its existing
-Apply/Cancel boundary. A pad's selection or empty state never silently enlarges
-the operation to related records.
+Independent response routing, per-person allocation and further removal behavior
+retain their own model and recovery decisions. The
+[Period Kanban contract](period-kanban-session-sequencer.md) owns period/phase
+scope; [Precision Dials & Faders](precision-dials-faders.md) owns quantity controls.
+Revisit this contract when a cell's meaning, its operation or its acceptance
+boundary changes.

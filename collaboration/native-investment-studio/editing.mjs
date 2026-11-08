@@ -20,7 +20,7 @@ const TYPES = Object.freeze({
     fields: Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']),
     create: studio => createWorkDraftAdapter(studio, null, { durationFormat: 'hours-minutes' }) }),
   person: Object.freeze({ id: 'personId', index: state => indexRows(state.people), step: true,
-    fields: Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']),
+    fields: Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']),
     create: createPersonDraftAdapter }),
   purpose: Object.freeze({ id: 'purposeId', index: state => new Map([['purpose', state.purpose]]),
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),

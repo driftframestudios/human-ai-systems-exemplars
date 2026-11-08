@@ -85,14 +85,54 @@ async function open(t, engine, full = false) {
   return page;
 }
 
+async function prepareCreation(page, kind) {
+  await page.evaluate(async kind => {
+    const { mountAssemblyPanel } = await import('/collaboration/native-investment-studio/assembly-controller.mjs');
+    mountAssemblyPanel(document.querySelector('[data-native-assembly]'), {}).create(`${kind}.create`);
+  }, kind);
+}
 async function ada(page) {
-  await action(page, 'person-create').click();
+  await prepareCreation(page, 'person');
   await field(page, 'label').fill('Ada');
   await field(page, 'ratePerHour').fill('120');
   await field(page, 'fundedHours').fill('2');
 }
 
 for (const engine of names) {
+  test(`${engine}: People adds usable people and teams directly inside their racks with amp Undo`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    await action(page, 'person-create').click();
+    const personEditor = people(page).locator('[data-person-configure]');
+    await expect(people(page).locator('.studio-people-rates [data-person-configure]')).toBeVisible();
+    await expect(personEditor.locator('[name="label"]')).toHaveValue('Person 5');
+    const addedId = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.at(-1).id);
+    await personEditor.locator('[name="label"]').fill('Service designer');
+    await personEditor.locator('[data-person-action="apply"]').click();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await personEditor.scrollIntoViewIfNeeded(); await frames(page);
+      assert.equal(await personEditor.evaluate(element => {
+        const box = element.getBoundingClientRect();
+        return box.left >= 0 && box.right <= document.documentElement.clientWidth + 1;
+      }), true, 'the canonical editor stays in its People rack at phone and desktop widths');
+      await page.screenshot({ path: resolve(captures, `${engine}-direct-person-${width}.png`) });
+    }
+    await personEditor.locator('[data-person-action="close"]').click();
+    await expect(people(page).locator(`[data-person-id="${addedId}"]`)).toBeFocused();
+    await action(page, 'team-create').click();
+    await expect(people(page).locator('.native-assembly__teams [data-assembly-configure]')).toBeVisible();
+    await expect(field(page, 'label')).toHaveValue('New team');
+    await field(page, 'label').fill('Service team');
+    await people(page).locator(`[data-assembly-member="${addedId}"]`).check();
+    await apply(page).click();
+    const addedTeam = await page.evaluate(() => window.assemblyFixture.studio.read().state.teams.at(-1));
+    assert.equal(addedTeam.label, 'Service team'); assert.deepEqual(addedTeam.personIds, [addedId]);
+    await action(page, 'close').click();
+    await expect(people(page).locator('[data-assembly-configure]')).not.toHaveAttribute('open', '');
+    await expect(people(page).locator(`[data-assembly-team="${addedTeam.id}"]`)).toBeFocused();
+    for (let count = 0; count < 4; count += 1) await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), initial);
+  });
   test(`${engine}: People session tracks return to people and team lanes open the matching membership editor`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const accepted = await bytes(page);
@@ -123,7 +163,7 @@ for (const engine of names) {
     const rate = editor.locator('[name="ratePerHour"]');
     await first.click();
     await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
-    await expect(adjacent(page)).toBeVisible(); await expect(rate).toBeFocused();
+    await expect(adjacent(page)).toBeVisible(); await expect(editor.locator('[name="label"]')).toBeFocused();
     assert.equal(await adjacent(page).evaluate(node => Boolean(node.closest('[data-team-rack-editor]'))), true, 'the person receiver occupies the Team planning rack');
     await expect(editor).toHaveCount(1); await expect(adjacent(page).locator('[data-person-configure]')).toHaveCount(1);
     await expect(first).toHaveAttribute('aria-expanded', 'true');
@@ -317,7 +357,7 @@ for (const engine of names) {
     await expect(people(page).locator('[data-person-configure]')).toHaveAttribute('open', '');
     const adaId = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.find(row => row.label === 'Ada').id);
     assert.equal(await page.evaluate(id => window.assemblyFixture.studio.read().state.people.find(row => row.id === id).rateCentsPerHour, adaId), 12525);
-    await action(page, 'team-create').click();
+    await prepareCreation(page, 'team');
     await expect(rate).toBeDisabled(); await expect(rate).toBeHidden();
     await field(page, 'label').fill('Design');
     await people(page).locator(`[data-assembly-member="${adaId}"]`).check();
@@ -357,7 +397,7 @@ for (const engine of names) {
 
   test(`${engine}: saved assembly selections retain their target through chapter changes, purpose disclosure and creation collisions`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
-    await action(page, 'team-create').click();
+    await prepareCreation(page, 'team');
     await field(page, 'label').fill('Operations');
     await people(page).locator('[data-assembly-member="engineering-one"]').check();
     await people(page).locator('[data-person-id="product-one"]').click();
@@ -386,7 +426,7 @@ for (const engine of names) {
     await apply(page).click();
     // Four people × $100/hour × six sessions × (2 hours + 30 minutes).
     await expect(total(page)).toHaveText('$6,000.00');
-    await action(page, 'person-create').click();
+    await prepareCreation(page, 'person');
     await field(page, 'label').fill('Saved person');
     await field(page, 'ratePerHour').fill('95');
     const originalTarget = await page.evaluate(() => window.assemblyFixture.editing.assembly.read().draft.assemblyId);
@@ -521,7 +561,7 @@ for (const engine of names) {
           onAccepted() { fixture.lifecycle.acceptedNotifications += 1; },
         });
       });
-      await action(page, 'team-create').click();
+      await prepareCreation(page, 'team');
       await field(page, 'label').fill('Accepted team');
       await apply(page).click();
       await expect(action(page, 'team-create')).toBeDisabled();

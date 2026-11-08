@@ -15,7 +15,7 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`, currently
-receiving #820 and #821. Promotion to main and a tagged public release each await
+receiving #825 after the #820/#821 simplification. Promotion to main and a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
 
@@ -33,8 +33,11 @@ session tracks, then small People and Stages routes. An existing clip opens the
 canonical session controls between board and tracks. Close restores the originating
 scope. A first opening uses the downward reveal; changing the selected record
 keeps the same receiver and its position. The detail border stays flush with its
-rack. Duration and Working sessions sit beside one another on a wide rack;
-participants and funding use neighboring space.
+rack. Duration and Working sessions fill neighboring slots on a wide rack.
+Working sessions uses the regular dark module housing, with its heading/count
+and Add in the top row and Remove at the bottom left. Funding and Status have a
+named module with large stateful pads beside Participants. Phone layouts stack
+these modules while preserving the Hours/Minutes pair.
 
 Empty period-lane space and the sequencer's new-session row provide named native
 creation targets. Fine-pointer hover and keyboard focus expose the plus and short
@@ -58,13 +61,22 @@ available, otherwise spread across phases; their handoffs follow the receiving
 team. Template-authored placements retain their meaning.
 
 Session, person and handoff forms remain canonical and can be borrowed into the
-Team planning receiver. The separate connection diagram and detached Working
+Team planning receiver. Delivery overview and Shared sessions are independent
+working modules: inspecting a person replaces the delivery area while the
+sequencer stays visible. The local return restores Delivery overview. Handoff
+Create team accepts a new team, opens direct team controls, then returns to the
+retained handoff so the visitor can review it and choose the new team in the
+requested field. The separate connection diagram and detached Working
 sessions panel are retired from the visible composition. Their retained source
 owners continue to supply shared state and forms where needed.
 
 ### People, Abilities and the other chapters
 
-People presents its existing roster and rate/time controls directly. Roles use
+People keeps its person and team editors inside their own roster racks. Add
+accepts useful defaults immediately; amp Undo recovers that creation. The person
+draft now owns Name or role alongside rate and funded time, so a new person can
+be refined locally. Apply accepts field edits, while Close retains the draft and
+returns focus to its record. Roles use
 one compact facet rail instead of showing every dimension at once. Contributions
 appear as rows against supporting sessions; accepted links light their cells.
 Receiver choice and linked work remain meaningful. Removed free-text review and
@@ -73,7 +85,10 @@ decision-boundary editors leave previously stored values intact.
 Abilities retains both native support tables: What people can do and How the
 team works, with responsibility, preparation, review and observation columns.
 One selected compact module follows the tables. People, Prepare, Review and
-Example pads select the relevant controls. The reverse-card and side-by-side
+Example pads select the relevant controls. Supporting person/team/session creation
+stays in the selected module, retaining its entries and preselecting the new
+record. Creation accepts immediately; Apply accepts the support relationship.
+Close retains the draft. The reverse-card and side-by-side
 modes are retired. Existing proposals, shared work identity and pricing remain.
 
 Change keeps its framework/viewpoint reels, piano-like keys and distinct faders.
@@ -95,7 +110,7 @@ remain preserved references.
 | --- | --- |
 | Accepted plan | One immutable projection supplies accepted amounts, relationships, comparisons and downloads. |
 | Ordinary editor proposal | Raw values and selections remain in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
-| Direct rack operation | Arrangement selection, team membership/name/order, period creation and new-session creation use canonical accepted commands. |
+| Direct rack operation | Arrangement selection, Coordination team membership/name/order, period creation and record additions use canonical accepted commands. People team edits retain their existing Apply boundary. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
 | Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
 | Baseline | An independent comparison and restore point, separate from Undo and unfinished edits. |
@@ -117,7 +132,8 @@ Creating a prerequisite returns to the same visible session receiver and focuses
 its review or requested field. Empty-plan creation uses that receiver directly;
 completion clears the finished detour. Team name changes keep a stable Team
 settings heading so accepting text preserves the next membership click's position.
-The focused repairs are tracked by #822 and #823.
+The earlier focused recovery repairs are recorded in #822 and #823. #825 adds
+the local handoff/team return and independent delivery/sequencer visibility.
 
 ### Visual and interaction contract
 
@@ -141,6 +157,9 @@ Hours and paper Minutes. The shared dark readout sits above them. Exact fields
 and 30px circular steps sit below/right with the preserved gap; the two columns
 wrap internally at phone widths. These smaller controls remain native and named.
 Money dials retain their separate coarse/fine quantity contract.
+Module stretching changes the outer slot geometry while preserving that dial
+specimen. Funding and Status use readable native radio pads with a persistent
+pressed state and separate group labels.
 
 Full Studio motion is the authored preference; visitors may lower it and system
 reduced-motion is honored. Selected occurrence pads keep their small bounce.
@@ -171,6 +190,9 @@ participant time shares remain with #798; production Reset remains with #808.
 | --- | --- |
 | #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
 | Team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
+| Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
+| People creation starts a detached form; Abilities creation changes chapter | Useful accepted defaults and local editors retain the current rack and support selection. |
+| Working-session Add and Remove share a crowded heading; Funding has small ungrouped choices | Add top-right, Remove bottom-left, full-height duration and a named Funding and Status pad module. |
 | All custom teams fall into Planning | Existing stage relationships or distributed phase placement keep the delivery board balanced. |
 | Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
 | Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
@@ -194,5 +216,5 @@ routing, ordinary mobile containment and readable focus. Arithmetic inventories
 and repeated all-page screenshots are unnecessary for these changes.
 
 Use the README to run the current proof, the Visual Fidelity Contracts for
-composition, and #820/#821 for the present delivery. Broader financial models,
+composition, and #825 for the present delivery. Broader financial models,
 response records, performance and public release retain their separate issues.

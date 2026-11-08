@@ -78,3 +78,20 @@ test('a successor edit interrupts creation before publication and keeps its owne
   assert.equal(editing.read().active.token, successor.view.draft.token);
   assert.equal(editing.read().parked.find(row => row.kind === 'assembly').raw.label, 'New team');
 });
+
+
+test('direct person and session additions are usable records with separate Undo steps', () => {
+  const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
+  const before = studio.read(), person = createRackRecord(studio, editing, 'person');
+  assert.equal(person.ok, true, person.error?.message);
+  const row = studio.read().state.people.find(row => row.id === person.id);
+  assert.equal(row.label, 'Person 7');
+  assert.equal(row.rateCentsPerHour, 10000);
+  const session = createRackRecord(studio, editing, 'session', { personId: person.id });
+  assert.equal(session.ok, true, session.error?.message);
+  assert.deepEqual(studio.read().state.work.find(row => row.id === session.id).personIds, [person.id]);
+  assert.equal(studio.undo(studio.read()).ok, true);
+  assert.deepEqual(studio.read().state, person.projection.state);
+  assert.equal(studio.undo(studio.read()).ok, true);
+  assert.deepEqual(studio.read().state, before.state);
+});

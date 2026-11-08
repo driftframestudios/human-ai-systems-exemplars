@@ -8,9 +8,9 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 
 ## Current state
 
-`main` retains the approved showcase. `dev` receives the compact rack integration
-under [#820](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/820)
-and [#821](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/821).
+`main` retains the approved showcase. `dev` receives the compact rack integration,
+with the current direct-editing increment in
+[#825](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/825).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -21,13 +21,20 @@ A cassette loads a plan with detail closed. Existing clips open local editing;
 empty creation slots add useful work directly. The selected period and Whole plan
 return remain visible. Team planning follows with its arrangement reel, delivery
 board and shared-session matrix. Team name, membership and order update directly
-inside the board.
+inside the board. Person and handoff controls use that same local working area;
+Shared sessions remains available as its own module. Create a team from a handoff,
+then return to that handoff with its entries intact.
 
-People combines its roster, role facets and contribution/session matrix. Abilities
-retains both support tables and opens one compact selected module. The preserved
+People combines its roster, local person/team editors, role facets and
+contribution/session matrix. Add creates a useful record immediately; its name,
+rate and funded time can be edited in place. Abilities retains both support tables
+and opens one compact selected module. Add people, teams or sessions directly to
+that module's support selection, then Apply to accept the relationship. The preserved
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,
 peach Hours, paper Minutes, a shared readout and circular steps. Session pads own
-repetition inside the rack.
+repetition inside a neighboring dark module, with Add at the top right and Remove
+at the bottom left. Duration fills its slot; Funding and Status use a named pad
+module beside Participants at wider widths.
 
 Investment has three VHS-C navigation decks: **Plan investment**, **Compare a
 change** and **Keep a plan**. They reveal the existing pricing, baseline and
@@ -43,9 +50,13 @@ saved-plan owners. Deeper independently editable financial decks remain with
 3. Add a session in a period's empty area, or add another sprint/quarter. These
    additions accept directly; the stable **Undo** control in the amp recovers them.
 4. Turn the Team arrangement reel, then choose a team. Change membership through
-   its pads and return through **Delivery overview**.
-5. Select an Abilities support cell, turn a Change or Quality reel, or compare a
-   baseline in Investment. Each reading uses the same accepted people and work.
+   its pads and return through **Delivery overview**. Inspect a person while
+   keeping Shared sessions in view.
+5. Add or select a person/team in People, or choose an Abilities support cell.
+   Local controls retain your place. Close keeps unfinished entries; amp Undo
+   recovers an accepted addition.
+6. Turn a Change or Quality reel, or compare a baseline in Investment. Each
+   reading uses the same accepted people and work.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
 Known people may participate across teams. Their rates and example arrangements
@@ -60,6 +71,7 @@ commitments and findings.
 | Inspect existing work | Named pad or track key; selected/open state follows the live receiver |
 | Add within a period | Empty lane/track target with a plus on hover/focus, visible on touch |
 | Add a different scope | Explicit New plan or Add sprint/quarter |
+| Add a person, team or supporting session | Useful accepted default in the current rack; later field/link changes use their existing Apply boundary |
 | Change membership or order | Checkbox pads and compact movement controls |
 | Accept a proposal | Raised Apply action |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
@@ -124,6 +136,7 @@ actual checks and their scope. Performance refinement stays with
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Cassette and Investment deck presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
 | People, contributions and abilities | [team-controller.mjs](team-controller.mjs), [responsibility-controller.mjs](responsibility-controller.mjs), [capability-controller.mjs](capability-controller.mjs) |
+| Shared direct record creation | [rack-record-creation.mjs](rack-record-creation.mjs), [assembly-controller.mjs](assembly-controller.mjs) |
 | Current rationale and supersessions | [experience journal](experience-journal.md) |
 
 The visual contracts map further chapter-specific source and CSS owners. Follow

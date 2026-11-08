@@ -1,3 +1,4 @@
+import { LIMITS } from './config.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { createDraftCoordinator } from './editing.mjs';
 import { money, duration } from './display.mjs';
@@ -7,8 +8,8 @@ import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
 
-const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
-const LABELS = Object.freeze({ ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
+const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
+const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
 const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
@@ -36,6 +37,12 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   participation.setAttribute('aria-label', 'People and shared sessions');
   const ratesRack = elements.roster.closest('.studio-people-rates');
   if (ratesRack) ratesRack.before(participation); else elements.roster.after(participation);
+  if (ratesRack) ratesRack.append(elements.configure, elements.status);
+  const localHeading = document.createElement('div'); localHeading.className = 'studio-people-editor__heading';
+  const localTitle = document.createElement('h4'); localTitle.textContent = 'Person settings';
+  const localClose = document.createElement('button'); localClose.type = 'button'; localClose.textContent = 'Close';
+  localClose.dataset.personAction = 'close'; localClose.className = 'native-control--cancel';
+  localHeading.append(localTitle, localClose); elements.summary.after(localHeading);
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
@@ -143,6 +150,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const marker of elements.roster.querySelectorAll('[data-person-saved]')) marker.hidden = !parked.has(marker.dataset.personSaved);
     elements.configure.hidden = selectedId === null;
     elements.name.textContent = people.get(selectedId)?.label ?? 'Person unavailable';
+    localTitle.textContent = people.get(selectedId)?.label ?? 'Person settings';
     elements.fieldset.disabled = view.status !== 'editing';
     elements.recovery.hidden = view.status !== 'stale';
     const currentPerson = people.get(selectedId);
@@ -256,6 +264,13 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const personId = button.dataset.personId ?? button.dataset.teamPersonId;
     if (personId) { select(personId); return; }
     const action = button.dataset.personAction;
+    if (action === 'close') {
+      rateControls.release(); const epoch = ++generation; composing = false;
+      if (editing.read().active?.kind === 'person') editing.park();
+      elements.configure.open = false; onEditing();
+      if (owns(epoch) && onClose() !== true && owns(epoch)) elements.roster.querySelector(`[data-person-id="${selectedId}"]`)?.focus();
+      return;
+    }
     if (action === 'review' || action === 'use-current' || action === 'discard') {
       const view = editor.read();
       if (!view.draft) return;
@@ -289,7 +304,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
     rateControls.dispose();
-    summaryPreview.remove();
+    summaryPreview.remove(); localHeading.remove();
     participation.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -304,7 +319,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     close: () => { if (!disposed) { rateControls.release(); generation += 1; composing = false; elements.configure.open = false; } },
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
-    for (const input of Object.values(inputs)) input.maxLength = 32;
+    for (const [field, input] of Object.entries(inputs)) input.maxLength = field === 'label' ? LIMITS.label : 32;
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
     listen(elements.form, 'input', edit);
