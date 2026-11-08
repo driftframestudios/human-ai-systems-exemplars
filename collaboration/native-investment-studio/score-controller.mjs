@@ -115,23 +115,26 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     render();
   }
   function acceptCadence(update, message) {
-    if (disposed || !isActive()) return;
+    const unavailable = () => ({ ok: false, error: { message: 'Return to this plan and try the change again.' } });
+    if (disposed || !isActive()) return unavailable();
     const parked = editing.park();
-    if (!parked.ok) { render(); announce(parked.error.message); return; }
-    if (onLoadPlan(loadedPlanId) === false || disposed || !isActive()) return;
+    if (!parked.ok) { render(); announce(parked.error.message); return parked; }
+    if (onLoadPlan(loadedPlanId) === false || disposed || !isActive()) return unavailable();
     const base = studio.read(), current = base.state.scoreSettings.cadence;
     const next = update(current, base.state);
-    if (!next || next === current) return;
+    if (!next) return unavailable();
+    if (next === current) return { ok: true };
     const result = studio.replace({ ...base.state, revision: base.state.revision + 1,
       scoreSettings: { ...base.state.scoreSettings, cadence: next } }, base);
-    if (!result.ok) { render(); announce(result.error.message); return; }
+    if (!result.ok) { render(); announce(result.error.message); return result; }
     selected = { kind: 'horizon', id: '' }; fieldSignature = '';
     inspectorOpen = false; flowPanel.open = false;
     onAccepted(result.projection);
     if (!disposed) { render(); onEditing(); announce(message); }
+    return result;
   }
   function renamePeriod({ id, label }) {
-    acceptCadence(current => {
+    return acceptCadence(current => {
       const period = current?.periods.find(row => row.id === id);
       if (!period || (period.caption ?? '') === label) return current;
       const { caption: _previousCaption, ...identity } = period;

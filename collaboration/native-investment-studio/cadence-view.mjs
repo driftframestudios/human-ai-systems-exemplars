@@ -7,6 +7,7 @@ import { revealStudioDestination } from './motion.mjs';
 
 const DECISIONS = Object.freeze({ open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 const noop = () => {};
+let viewSequence = 0;
 
 // This view groups admitted occurrences. Clip width expresses a place in the
 // plan; session duration and investment retain their existing model owners.
@@ -15,7 +16,8 @@ export function createCadenceView(root, {
   onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, flowRoot = null, flowPanel = null,
 } = {}) {
   const document = root.ownerDocument;
-  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey;
+  const captionPrefix = `cadence-caption-${++viewSequence}`;
+  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey, captionEdit = null, lastReading;
   const actions = new Map();
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -100,6 +102,7 @@ export function createCadenceView(root, {
 
   function refresh(projection, { periodId = null, loadedPlanId = null, selected = null, preview = false } = {}) {
     if (disposed) return;
+    lastReading = { projection, options: { periodId, loadedPlanId, selected, preview } };
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
     const scrollPosition = { board: board.scrollLeft, tracks: tracks.scrollLeft };
     const oldShelf = library.querySelector('.studio-tape-shelf');
@@ -111,6 +114,7 @@ export function createCadenceView(root, {
     const fragment = document.createDocumentFragment();
     root.classList.add('native-cadence'); root.dataset.cadenceReading = preview ? 'proposed' : 'accepted';
     if (!cadence) {
+      captionEdit = null;
       workspace.hidden = true;
       previousPeriodId = undefined; overviewReturn = undefined;
       flowRoot?.replaceChildren();
@@ -131,6 +135,7 @@ export function createCadenceView(root, {
     const work = new Map(state.work.map(row => [row.id, row]));
     const teams = new Map(state.teams.map(row => [row.id, row]));
     const periods = cadence.periods, periodById = new Map(periods.map(row => [row.id, row]));
+    if (captionEdit && (captionEdit.basis !== cadence.basis || !periodById.has(captionEdit.id))) captionEdit = null;
     const activePeriod = periodById.get(periodId) ?? null;
     const loadedPlan = work.get(loadedPlanId) ?? null;
     screen.dataset.loadedPlan = loadedPlan?.id ?? '';
@@ -246,23 +251,54 @@ export function createCadenceView(root, {
       } else heading.textContent = `${subdivisionName} ${subdivision}`;
       column.append(heading);
       const matchingStages = stages.filter(stage => stage.periodIds.includes(period.id));
-      if ((period.caption || matchingStages.length) && subdivision === null) {
-        const labels = node('p', period.caption ?? matchingStages.map(stage => stage.label).join(' · '), 'native-cadence__stage-labels'); column.append(labels);
-      }
       if (subdivision === null) {
-        const rename = node('details', undefined, 'native-cadence__period-label');
-        const summary = node('summary', 'Edit label'); summary.dataset.periodRename = period.id;
-        summary.setAttribute('aria-label', `Edit ${period.label} label`);
+        const rename = node('div', undefined, 'native-cadence__period-label');
+        const caption = period.caption ?? matchingStages.map(stage => stage.label).join(' · ');
+        const reading = node('div', undefined, 'native-cadence__caption');
+        const text = node('p', caption, 'native-cadence__stage-labels'); text.hidden = !caption;
+        const trigger = node('button', 'Edit', 'native-cadence__caption-edit'); trigger.type = 'button';
+        trigger.dataset.periodRename = period.id; trigger.dataset.cadenceKey = `caption-edit:${period.id}`;
+        trigger.setAttribute('aria-label', `Edit ${period.label} caption`);
+        trigger.setAttribute('aria-expanded', String(captionEdit?.id === period.id));
+        reading.append(text, trigger);
         const form = node('form'), label = node('label', 'Period caption'), input = node('input');
-        input.type = 'text'; input.value = period.caption ?? ''; input.placeholder = matchingStages.map(stage => stage.label).join(' · '); input.maxLength = LIMITS.label;
+        form.id = `${captionPrefix}-${period.id}`; trigger.setAttribute('aria-controls', form.id);
+        form.hidden = captionEdit?.id !== period.id;
+        input.type = 'text'; input.value = captionEdit?.id === period.id ? captionEdit.value : caption;
+        input.maxLength = LIMITS.label; input.dataset.cadenceKey = `caption-input:${period.id}`;
         label.append(input);
-        const save = node('button', 'Save label'); save.type = 'submit'; form.append(label, save);
+        const tools = node('div', undefined, 'native-cadence__caption-tools');
+        const save = node('button', 'Save label'); save.type = 'submit';
+        const cancel = node('button', 'Cancel', 'native-control--cancel'); cancel.type = 'button'; tools.append(save, cancel);
+        const error = node('p', captionEdit?.id === period.id ? captionEdit.error : '', 'native-cadence__caption-error'); error.setAttribute('role', 'alert');
+        const redraw = key => {
+          refresh(lastReading.projection, lastReading.options);
+          [...board.querySelectorAll('[data-cadence-key]')].find(item => item.dataset.cadenceKey === key)?.focus({ preventScroll: true });
+        };
+        trigger.addEventListener('click', () => {
+          if (captionEdit?.id === period.id) { captionEdit = null; redraw(trigger.dataset.cadenceKey); }
+          else { captionEdit = { id: period.id, basis: cadence.basis, value: caption, error: '' }; redraw(input.dataset.cadenceKey); }
+        });
+        cancel.addEventListener('click', () => { captionEdit = null; redraw(trigger.dataset.cadenceKey); });
+        input.addEventListener('input', () => {
+          if (captionEdit?.id === period.id) { captionEdit.value = input.value; captionEdit.error = ''; error.textContent = ''; }
+        });
+        form.append(label, tools, error);
         form.addEventListener('submit', event => {
           event.preventDefault();
-          onRenamePeriod({ id: period.id, label: input.value.trim() });
-          [...board.querySelectorAll('[data-period-rename]')].find(item => item.dataset.periodRename === period.id)?.focus({ preventScroll: true });
+          if (captionEdit?.id !== period.id) return;
+          const submitted = captionEdit;
+          const value = input.value.trim();
+          // Saving the unchanged stage summary keeps it derived from stages.
+          const result = onRenamePeriod({ id: period.id, label: period.caption === undefined && value === caption ? '' : value });
+          if (disposed || captionEdit !== submitted) return;
+          if (result?.ok) { captionEdit = null; redraw(trigger.dataset.cadenceKey); }
+          else {
+            captionEdit.error = result?.error?.message ?? 'Your caption is kept here. Try saving again.';
+            redraw(input.dataset.cadenceKey);
+          }
         });
-        rename.append(summary, form); column.append(rename);
+        rename.append(reading, form); column.append(rename);
       }
       const clips = node('div', undefined, 'native-cadence__clips');
       const rows = occurrences.filter(row => row.periodId === period.id && (subdivision === null || row.subdivision === subdivision))
@@ -518,7 +554,7 @@ export function createCadenceView(root, {
     }
   }
   return Object.freeze({ refresh, getSessionSlot: () => disposed ? null : sessionSlot, dispose() {
-    if (disposed) return; disposed = true; actions.clear();
+    if (disposed) return; disposed = true; captionEdit = null; lastReading = null; actions.clear();
     root.removeEventListener('click', click); root.removeEventListener('pointerover', showPreview); root.removeEventListener('focusin', showPreview);
     externalFlowEvents?.removeEventListener('click', click);
     root.classList.remove('native-cadence', 'studio-rack-composition'); delete root.dataset.cadenceReading;
