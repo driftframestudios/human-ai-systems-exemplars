@@ -1,4 +1,5 @@
 import { duration } from './display.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
 
 const PHASES = Object.freeze([
   ['planning', 'Planning', 'Agree the work and who needs it.'],
@@ -200,9 +201,9 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     if (onAdd) {
       const actions = node('div', undefined, 'studio-delivery__add');
       for (const [kind, label] of [['team', 'Add team'], ['connection', 'Add handoff']]) {
-        const add = button(label, 'native-control--create studio-rack-add', event => onAdd(kind, phase.id, event.currentTarget));
-        add.dataset.studioEntryKey = `delivery-add:${phase.id}:${kind}`;
-        add.setAttribute('aria-label', `${label} in ${phase.label}`); actions.append(add);
+        const add = createRackAddControl(document, { label: `${label} in ${phase.label}`, text: label,
+          className: 'studio-rack-create-zone--persistent', dataset: { studioEntryKey: `delivery-add:${phase.id}:${kind}` } });
+        add.addEventListener('click', event => onAdd(kind, phase.id, event.currentTarget)); actions.append(add);
       }
       lane.append(content, actions);
     } else lane.append(content);

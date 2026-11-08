@@ -22,7 +22,9 @@ Issue #813 adopts this artwork on `dev` through
 [`tape-picker.mjs`](../../collaboration/native-investment-studio/tape-picker.mjs)
 and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css).
 Issue #820 refines its receiving interaction: the unchanged-size shelf attaches
-directly to the full height of the period rack. A cassette loads its canonical
+directly to the full height of the period rack. #837 expands the desktop shelf
+scroll area from 40rem to 80rem while keeping cassette dimensions intact. At
+650px and below it remains a horizontal strip with no vertical height cap. A cassette loads its canonical
 work identity and filters the board/tracks while closing detail. The selected
 sprint/quarter remains visible; All plans removes the plan filter and Whole plan
 removes the period filter. Existing board/track clips open editing locally.

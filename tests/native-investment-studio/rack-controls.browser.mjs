@@ -189,6 +189,12 @@ for (const engine of names) for (const width of [390, 1440]) {
     await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
     await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(4);
     await contained(page, width);
+    for (let index = 0; index < 4; index++) await create.click();
+    const shelfShape = await shelf.evaluate(node => ({ height:node.clientHeight, horizontal:node.scrollWidth > node.clientWidth,
+      count:node.querySelectorAll('.studio-tape-key').length }));
+    assert.equal(shelfShape.count, 8);
+    if (width === 1440) assert.ok(shelfShape.height > 640, 'the full-height shelf shows more than the former four-cassette area');
+    else assert.ok(shelfShape.horizontal && shelfShape.height < 300, 'mobile keeps a compact horizontal shelf');
     if (engine === 'chromium') {
       await horizon(page).locator('.studio-plan-workspace').screenshot({ path:resolve(captures, `plan-cassettes-${width}.png`) });
       await page.emulateMedia({ forcedColors:'active', reducedMotion:'reduce' });
@@ -631,6 +637,19 @@ for (const engine of names) for (const width of [390, 1440]) {
     const close = adjacent(page).locator('[data-rack-editor-close]');
     const undo = root(page).locator('[data-studio-undo]');
 
+    await addTeam.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    const controls = await addTeam.locator('xpath=..').evaluate(group => [...group.children].map(button => {
+      const rect = button.getBoundingClientRect(), box = group.getBoundingClientRect(), style = getComputedStyle(button);
+      return { width:rect.width, groupWidth:box.width, height:rect.height, color:style.color, shadow:style.boxShadow,
+        plus:button.querySelector('[aria-hidden="true"]')?.textContent, name:button.getAttribute('aria-label') };
+    }));
+    assert.equal(controls.length, 2);
+    for (const control of controls) {
+      assert.ok(Math.abs(control.width-control.groupWidth) < 2 && control.height >= 44, 'each lane action spans the lane with a reachable target');
+      assert.notEqual(control.color, 'rgba(0, 0, 0, 0)', 'both different creation jobs stay visible');
+      assert.equal(control.shadow, 'none'); assert.equal(control.plus, '+'); assert.ok(control.name);
+    }
     await addTeam.click();
     const teamCreation = await read(), originalTeamIds = new Set(before.state.teams.map(row => row.id));
     const teams = teamCreation.state.teams.filter(row => !originalTeamIds.has(row.id));

@@ -63,6 +63,13 @@ edits retain their Apply/Cancel boundary.
 An empty lane is a named native button: fine-pointer hover and keyboard focus
 reveal its ghosted plus; touch keeps the invitation visible. Each week/month
 provides its own target across the track cell, including space to its right.
+The shared [rack creation control](../../collaboration/native-investment-studio/rack-creation-controls.mjs)
+owns the native target and decorative plus. Its controller retains the operation
+and canonical history. Delivery lanes use its persistent labeled variant: full-width
+Add team and Add handoff ghost actions stack at the bottom. Both stay visible
+across pointer, keyboard and touch; empty session slots retain hover/focus reveal.
+This supersedes the small side-by-side delivery additions.
+
 The accessible name identifies the plan and exact destination. Newly created
 records use the first available **New {item} N** name. Creation keeps editing
 closed; the named representation opens its receiver when selected. Existing pads keep their

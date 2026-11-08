@@ -166,7 +166,7 @@
 .native-coordination button.native-control--create.studio-rack-create-area { flex:1 1 3rem; align-self:stretch; min-block-size:3rem; margin:0; }
 .native-cadence__period:has(> .studio-rack-create-area) > .native-cadence__clips { flex:0 0 auto; }
 @media (hover:hover) and (pointer:fine) {
- .native-coordination button.studio-rack-create-zone:not(:hover,:focus-visible) { color:transparent; border-color:transparent; background:transparent; }
+ .native-coordination button.studio-rack-create-zone:not(.studio-rack-create-zone--persistent,:hover,:focus-visible) { color:transparent; border-color:transparent; background:transparent; }
 }
 @media (hover: hover) and (pointer: fine) {
  .native-coordination button.studio-rack-create-zone:hover {
