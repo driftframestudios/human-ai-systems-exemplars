@@ -2606,6 +2606,41 @@
       "source_path": "collaboration/native-investment-studio/score-time.mjs",
       "projected_path": "collaboration/native-investment-studio/score-time.mjs",
       "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-catalog.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-catalog.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-financials.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-financials.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-state.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-state.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-projection.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-projection.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-workbench.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-workbench.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css",
+      "media_type": "text/css"
     }
   ]
 }

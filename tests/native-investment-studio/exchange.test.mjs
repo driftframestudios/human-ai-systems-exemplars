@@ -163,7 +163,7 @@ test('legacy preview carries truthful source version while accepted export remai
   const legacy = createExamplePlan();
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
-  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings; delete legacy.scoreSettings; delete legacy.arrangements; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
+  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings; delete legacy.scoreSettings; delete legacy.arrangements; delete legacy.investmentSettings; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId, teamId: row.teamId, workIds: row.supportBindings[0].workIds }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
@@ -171,9 +171,9 @@ test('legacy preview carries truthful source version while accepted export remai
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.9.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.10.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.9.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.10.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

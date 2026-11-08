@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference specimen, version `0.1.3`, ID
+**Standing:** approved reference and receiving composition, version `0.2.0`, ID
 `vfc:investment-master-reels`; 8 November 2026, receiving
 [#809](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809).
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
@@ -46,28 +46,48 @@ beside those changes rather than silently following a redesigned runtime.
 
 ## Showcase receiving composition
 
-Issue #813 adopts the VHS-C face and shelf on `dev`, with the shared
-[`tape-picker.mjs`](../../collaboration/native-investment-studio/tape-picker.mjs)
-and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css)
-owners. Its first three decks are fixed navigation groups: Plan investment
-reads accepted costs, Compare a change retains baseline/history, and Keep a plan
-retains replacement previews, files and reports. Their panels stay mounted while
-deck selection changes visibility. A selection leaves accepted pricing and pending
-previews with their existing owners.
+Issue [#818](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818)
+adopts the complete financial workbench on `dev`. This supersedes the #813
+three-cassette navigation adaptation and the earlier hold on model adoption.
+The exact planning specimen remains available for comparison; promotion of the
+Showcase to `main` continues to await the human cue.
 
-The four cost readings use a dark loaded rack and chocolate Extra work companion.
-Existing detailed forms and reports keep their light reading surfaces and dark
-text. Shelf titles and direct loaded-rack headings remain light. The body retains
-its internal grip, large left reel and deep extrusion. Stable outer keys keep
-focus while the faces move. Rem-based shelf widths preserve the normal 16px
-reference geometry and accommodate enlarged text; phone shelves scroll locally.
+Five populated decks provide Plan investment, Customer rollout, Commercial
+cohort, Service operations and Capital choices. A compact rail keeps the existing
+baseline comparison, saved-plan exchange and reports available. Its controls
+change views; the financial cassette shelf owns comparison identities.
 
-The independent financial deck types, add/remove-copy behavior and connected
-assumption reels below describe the preserved planning specimen. Their Showcase
-model adoption is a separate receiving task in
-[#818](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818).
-This distinguishes an adopted visual picker from an independently owned financial
-comparison. A future receiving increment updates that boundary deliberately.
+| Runtime owner | Receiving responsibility |
+| --- | --- |
+| [Deck catalogue](../../collaboration/native-investment-studio/investment-catalog.mjs) | Closed deck vocabulary, linked presets and fresh defaults |
+| [Financial calculation adapter](../../collaboration/native-investment-studio/investment-financials.mjs) | Projection through the existing financial formula owner |
+| [Saved deck contract](../../collaboration/native-investment-studio/investment-state.mjs) | Stable identity, bounded assumptions and integer-hundredth serialization |
+| [Accepted-plan projection](../../collaboration/native-investment-studio/investment-projection.mjs) | Canonical people, ledger prices and authored periods |
+| [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Shelf, independent editors, connected reels, allocation pads and cash-flow tracks |
+| [Controls](../../collaboration/native-investment-studio/investment-controls.mjs) | Stable monetary dials, exact fields, circular steppers and reel controls |
+| [Receiving stylesheet](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Scoped specimen geometry and integration with the About rack |
+
+The plan deck reads accepted staffing and extra work from the canonical ledger.
+Its funding pads explicitly update the selected session through the existing
+work command. Financial comparison controls own separate assumptions and retain
+the accepted cost. Unknown rates remain named as unknown, with known-price
+readings where necessary. Authored sprint or quarter labels determine the work
+sequence; the projection follows the plan's actual periods.
+
+Plan format `0.10.0` carries independent deck records. Earlier supported files
+migrate to five fresh defaults while retaining their prior work and prices.
+Every accepted comparison edit joins the same amp-head Undo history as work
+edits. A dial's consecutive samples share one owned gesture token, yielding one
+recovery step; the next gesture, another accepted command, baseline capture or
+history traversal establishes a new boundary. Copy removal releases its control
+listeners, and Undo reconstructs its original identity and assumptions.
+
+Reels select explicit named values through native buttons. Presets update their
+related assumptions together; manual amount or fader edits move the preset
+reading to Custom. Commercial GRR/NRR and CAC/payback selections expose their
+respective controls. Plan approach and lens retain distinct jobs: approach
+changes reserves and options, while lens filters the visible funding group.
+Reserve/option allocations and shortfall pads visibly respond to those choices.
 
 ## Load a comparison from the shelf
 
