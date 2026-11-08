@@ -37,7 +37,7 @@ const CATALOGUE = new Map([
   catalogue('tiger-team', 'Tiger Team', 'Assemble a temporary response team, resolve a focused problem and hand ownership back.',
     [['response', 'Focused response team'], ['specialists', 'Specialist support'], ['owner', 'Receiving owner']],
     [['diagnose', 'Bring the evidence', 'specialists', 'response'], ['resolve', 'Test the response', 'response', 'specialists'], ['return', 'Return ownership', 'response', 'owner']],
-    { diagnose: { sharedObject: 'Evidence of the problem and affected work', responseExpectation: 'Agree a focused response and a stopping condition.', sessionLabel: 'Diagnose and agree a response' },
+    { diagnose: { sharedObject: 'Evidence of the problem and affected work', responseExpectation: 'Agree a focused response and a stopping condition.', sessionLabel: 'Diagnose and agree on a response' },
       resolve: { sharedObject: 'A tested response and remaining limitations', responseExpectation: 'Check the response with the relevant specialists.' },
       return: { sharedObject: 'Recovery instructions and an accountable owner', responseExpectation: 'The receiving owner accepts ongoing responsibility.' } }),
 ].map(row => [row.id, row]));

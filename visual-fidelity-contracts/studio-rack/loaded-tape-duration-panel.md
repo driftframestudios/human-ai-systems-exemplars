@@ -5,7 +5,7 @@ one compact panel. Hours and Minutes share a readout, neighboring dial groups
 and exact fields, while the adjacent Working sessions panel owns repetitions
 and their placement.
 
-**Standing:** human-approved visual reference, version `0.1.3`, ID
+**Standing:** human-approved visual reference, version `0.1.4`, ID
 `vfc:loaded-tape-duration-panel`; updated 8 November 2026. The panel preserves
 its approved scale, geometry and palette with one deliberate lighting correction:
 the dial face stays still while its pointer turns. The original recall baseline is
@@ -114,17 +114,19 @@ a `.5rem` gap and `.65rem 0` margin. Hosted by and Remove session retain the
 following compact action row in the preserved workbench. The dev Showcase's
 current receiving arrangement is specified below.
 
-For #825, the Showcase places **Add session** at the top right beside the
-Working sessions heading/count, and **Remove session** at the bottom left after
+For #828, the Showcase places **Add session** at the top right beside the
+Working sessions heading/count, and **Remove session** at the bottom right after
 the placement pads. It uses the regular `#1c302d` dark rack face, `1px #668b73`
 edge, `.7rem` padding and `4px` corners. The duration module stretches to the
 height of that neighboring slot; its internal dial, readout and step geometry
 remain the specimen above. An empty feedback region contributes no grid track
 or gap. Named **Funding and status** groups use native radio pads in two columns,
-with a minimum `4.5rem` height and clear pressed selection. That module fills the
-space beside Participants on a wide rack and follows Participants on phones.
-These receiving rules supersede the earlier chocolate repetition enclosure and
-the shared Add/Remove heading row; the standalone workbench remains unchanged.
+with a minimum `4.5rem` height and clear pressed selection. Each radio sits at
+the top left beside its label and concise hint. That module fills the space
+beside Participants on a wide rack and follows Participants on phones.
+These receiving rules supersede #825's bottom-left Remove position, the earlier
+chocolate repetition enclosure and the shared Add/Remove heading row. The
+standalone workbench and exact duration artwork remain unchanged.
 
 The layout reference is exact and intentionally local:
 
@@ -160,6 +162,10 @@ background remains `#35483d` behind the duration panel's rounded corners, and
 `#duration` retains its own palette. The compact dark heading provides the
 loaded session name and Close. The duration panel's height follows its contents
 and the shared row; a fixed-height replacement requires a new visual comparison.
+The Showcase's loaded editor also provides Apply beside Close, delegated to its
+canonical bottom action. This shared acceptance entry leaves duration controls,
+validation, draft ownership and the preserved panel geometry with their existing
+owners.
 
 ## Behavior, recall and revision
 

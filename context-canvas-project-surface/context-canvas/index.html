@@ -420,12 +420,12 @@
                 <div class="native-session__settings-grid studio-session-state" role="group" aria-labelledby="native-session-state-heading">
                   <h4 id="native-session-state-heading">Funding and status</h4>
                   <fieldset id="native-session-funding"><legend>Funding</legend><ul class="native-session__exclusive">
-                    <li><label><input type="radio" name="funding" value="additional" aria-describedby="native-session-funding-error" checked><span>Extra investment</span></label></li>
-                    <li><label><input type="radio" name="funding" value="allocated" aria-describedby="native-session-funding-error"><span>Included in funded time</span></label></li>
+                    <li><label><input type="radio" name="funding" value="additional" aria-labelledby="native-session-additional-label" aria-describedby="native-session-funding-error native-session-additional-hint" checked><span><strong id="native-session-additional-label">Extra investment</strong><small id="native-session-additional-hint">Adds effort beyond funded time.</small></span></label></li>
+                    <li><label><input type="radio" name="funding" value="allocated" aria-labelledby="native-session-allocated-label" aria-describedby="native-session-funding-error native-session-allocated-hint"><span><strong id="native-session-allocated-label">Included in funded time</strong><small id="native-session-allocated-hint">Uses the time already funded.</small></span></label></li>
                   </ul></fieldset>
                   <fieldset id="native-session-status"><legend>Status</legend><ul class="native-session__exclusive">
-                    <li><label><input type="radio" name="status" value="planned" aria-describedby="native-session-status-error native-session-pause-note" checked><span>Planned</span></label></li>
-                    <li><label><input type="radio" name="status" value="paused" aria-describedby="native-session-status-error native-session-pause-note"><span>Paused</span></label></li>
+                    <li><label><input type="radio" name="status" value="planned" aria-labelledby="native-session-planned-label" aria-describedby="native-session-status-error native-session-pause-note native-session-planned-hint" checked><span><strong id="native-session-planned-label">Planned</strong><small id="native-session-planned-hint">Part of the active plan.</small></span></label></li>
+                    <li><label><input type="radio" name="status" value="paused" aria-labelledby="native-session-paused-label" aria-describedby="native-session-status-error native-session-pause-note native-session-paused-hint"><span><strong id="native-session-paused-label">Paused</strong><small id="native-session-paused-hint">Keeps planned time and cost.</small></span></label></li>
                   </ul></fieldset>
                 </div>
                 <p class="native-coordination__hint" id="native-session-pause-note" data-native-session-pause-note hidden>Paused sessions keep their planned time and cost.</p>

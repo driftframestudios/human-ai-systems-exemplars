@@ -3,6 +3,7 @@ import { describeArrangementReference } from './coordination-arrangements.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
+import { focusSubmitControl } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const FIELDS = Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'status']);
@@ -285,7 +286,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     render(); if (!owns(epoch)) return;
     announce(next.ok ? 'Connection updated.' : next.error.message);
     const ready = boundary(); onEditing();
-    if (retains(epoch, ready)) elements.apply.focus();
+    if (retains(epoch, ready)) focusSubmitControl(elements.apply);
   }
   function membership(id, delta = null, checked = false) {
     const view = editor.read();

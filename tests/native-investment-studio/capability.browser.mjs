@@ -231,7 +231,9 @@ for (const engine of names) {
     await ids(page, 'new.review.personIds').locator('input[value="product-one"]').check(); await field(page, 'new.review.hoursPerSession').fill('1');
     await field(page, 'new.review.minutesPerSession').fill('30'); await field(page, 'new.review.funding').selectOption('additional');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('$16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
-    await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00'); await expect(action(page, 'apply')).toBeFocused();
+    const topApply = panel(page).locator('[data-editor-apply]');
+    await expect(topApply).toHaveCount(1); await expect(topApply).toBeEnabled();
+    await topApply.click(); await expect(total(page)).toHaveText('$16,150.00'); await expect(topApply).toBeFocused();
     await expect(field(page, 'context')).toHaveValue('Recover an accepted change in the pilot');
     await reviewGroup.locator('[data-capability-work="review"]').click();
     await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();

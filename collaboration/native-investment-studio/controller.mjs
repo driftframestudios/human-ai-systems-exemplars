@@ -527,7 +527,10 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     if (!result?.accepted) { announce(result?.error?.message ?? 'Open the session editor to continue.'); return; }
     rackCreation = { kind: 'session', id: result.id, projection: result.projection, entry };
-    if (anchor.matches('[data-score-projection]')) scorePanel?.showPlan(result.id);
+    // Period and track additions stay in the arrangement so earlier clips stay
+    // visible. The cassette shelf alone loads the newly created plan as a filter.
+    if (anchor.matches('[data-score-projection]'))
+      scorePanel?.showPlan(source?.dataset.cadenceKey === 'cassette-add' ? result.id : null);
     if (result.opened && !disposed && studio.read() === result.projection) {
       openRackEditor({ kind: 'session', id: result.id, periodId: context?.periodId }, entry());
     }
@@ -1035,7 +1038,7 @@ export function mountCoordinationPanel(root, options = {}) {
       creationUndo.textContent = 'Undo session addition'; creationUndo.dataset.rackCreationUndo = '';
       creationUndo.hidden = true;
       const heading = rackEditor.element.querySelector('.studio-rack-editor__heading');
-      const actions = document.createElement('div'); actions.className = 'studio-rack-editor__tools';
+      const actions = heading.querySelector('.studio-rack-editor__tools');
       removePlan = document.createElement('button'); removePlan.type = 'button';
       removePlan.textContent = 'Remove plan'; removePlan.dataset.rackRemovePlan = '';
       removePlan.className = 'native-control--remove'; removePlan.hidden = true;

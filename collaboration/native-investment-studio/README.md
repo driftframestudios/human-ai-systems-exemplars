@@ -9,8 +9,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration,
-with the current direct-editing increment in
-[#825](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/825).
+with the current sequencer and editor refinement in
+[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -18,8 +18,10 @@ illustrative state is separate from the Showcase's canonical plan.
 
 Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 A cassette loads a plan with detail closed. Existing clips open local editing;
-empty creation slots add useful work directly. The selected period and Whole plan
-return remain visible. Team planning follows with its arrangement reel, delivery
+a plus in that plan's track adds another session while retaining earlier placements.
+Period-lane creation and the New plan row create separate records and keep All
+plans visible. The selected period and Plan overview return remain visible.
+Team planning follows with its arrangement reel, delivery
 board and shared-session matrix. Team name, membership and order update directly
 inside the board. Person and handoff controls use that same local working area;
 Shared sessions remains available as its own module. Create a team from a handoff,
@@ -33,8 +35,10 @@ that module's support selection, then Apply to accept the relationship. The pres
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,
 peach Hours, paper Minutes, a shared readout and circular steps. Session pads own
 repetition inside a neighboring dark module, with Add at the top right and Remove
-at the bottom left. Duration fills its slot; Funding and Status use a named pad
-module beside Participants at wider widths.
+at the bottom right. Duration fills its slot; Funding and Status use named,
+large radio pads with short hints beside Participants at wider widths.
+Editors offer Apply beside Close and retain their bottom action row; both Apply
+entries use the same validation and accepted-state owner.
 
 Investment has three VHS-C navigation decks: **Plan investment**, **Compare a
 change** and **Keep a plan**. They reveal the existing pricing, baseline and
@@ -44,11 +48,12 @@ saved-plan owners. Deeper independently editable financial decks remain with
 ## Try the experience
 
 1. Load a cassette, then open a sprint or quarter. **All plans** removes the plan
-   filter; **Whole plan** returns from the selected period.
+   filter; **Plan overview** returns from the selected period.
 2. Select a session clip to adjust its duration, people or placement. Apply accepts
    the proposal; Cancel restores accepted values. Close retains unfinished work.
-3. Add a session in a period's empty area, or add another sprint/quarter. These
-   additions accept directly; the stable **Undo** control in the amp recovers them.
+3. Use a track's plus to add a session to that plan. A period-lane creation target
+   or the New plan row adds separate work; shelf New plan also loads that cassette.
+   These additions accept directly; the stable amp **Undo** recovers them.
 4. Turn the Team arrangement reel, then choose a team. Change membership through
    its pads and return through **Delivery overview**. Inspect a person while
    keeping Shared sessions in view.
@@ -69,11 +74,12 @@ commitments and findings.
 | --- | --- |
 | Load a plan or investment grouping | Preserved cassette/deck face with a selected outline |
 | Inspect existing work | Named pad or track key; selected/open state follows the live receiver |
-| Add within a period | Empty lane/track target with a plus on hover/focus, visible on touch |
+| Add another session to a plan | Plus target in its track cell; keeps earlier placements and the current scope |
+| Create separate work in a period | Lane creation or New plan row; the board keeps all records visible |
 | Add a different scope | Explicit New plan or Add sprint/quarter |
 | Add a person, team or supporting session | Useful accepted default in the current rack; later field/link changes use their existing Apply boundary |
 | Change membership or order | Checkbox pads and compact movement controls |
-| Accept a proposal | Raised Apply action |
+| Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
 | Remove a named object | Muted rose control using existing reference-aware recovery |
 | Undo accepted changes | Stable native amp control; cassette shelves retain their selection role |
@@ -83,6 +89,10 @@ transfer limits. The [Studio Rack contracts](../../visual-fidelity-contracts/stu
 preserve the artwork and interaction grammar. Ordinary mobile layouts use local
 scrolling for two-dimensional tables and shelves. System reduced-motion and the
 visitor's motion choice retain operability without the animated treatment.
+
+The horizon's new handoff asks for From work, To work and an optional team
+connection. Apply accepts it; decisions and delays become available afterward.
+Existing handoffs keep their bottom-right Remove action.
 
 ## Run a local preview
 

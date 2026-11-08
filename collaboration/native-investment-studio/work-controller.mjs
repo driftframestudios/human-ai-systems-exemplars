@@ -11,7 +11,7 @@ import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
-import { syncReorderButtons } from './rack-controls.mjs';
+import { syncReorderButtons, focusSubmitControl } from './rack-controls.mjs';
 import { prepareSessionCreation } from './session-creation.mjs';
 
 const INSTANCES = new WeakMap();
@@ -654,7 +654,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     acknowledgedOpen = true; elements.configure.open = true;
     announce(next.ok ? `Total updated to ${money(studio.read().result.knownCommitmentCents)}.` : next.error.message);
     onEditing();
-    if (owns(epoch) && editor.read().draft?.token === reopenedToken) elements.apply.focus();
+    if (owns(epoch) && editor.read().draft?.token === reopenedToken) focusSubmitControl(elements.apply);
   }
   function membership(id, delta = null, checked = false) {
     const view = editor.read();

@@ -139,7 +139,7 @@ for (const engine of names) {
     const tiger = await bytes(page);
     assert.equal((await arrangement(page)).id, first.id);
     assert.equal((await arrangement(page)).templateId, 'tiger-team');
-    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Diagnose and agree a response');
+    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Diagnose and agree on a response');
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 1);
     const acceptedIds = await page.evaluate(() => window.templateFixture.studio.read().state.work.map(row => row.id));
     const rackIds = await panel(page).locator('[data-studio-session-id]').evaluateAll(keys => keys.map(key => key.dataset.studioSessionId));

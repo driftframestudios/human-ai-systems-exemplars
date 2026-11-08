@@ -7,6 +7,7 @@ import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
+import { mountSubmitMirror, focusSubmitControl } from './rack-controls.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -42,7 +43,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const localTitle = document.createElement('h4'); localTitle.textContent = 'Person settings';
   const localClose = document.createElement('button'); localClose.type = 'button'; localClose.textContent = 'Close';
   localClose.dataset.personAction = 'close'; localClose.className = 'native-control--cancel';
-  localHeading.append(localTitle, localClose); elements.summary.after(localHeading);
+  const localTools = document.createElement('div'); localTools.className = 'studio-rack-editor__tools'; localTools.append(localClose);
+  localHeading.append(localTitle, localTools); elements.summary.after(localHeading);
+  const topApply = mountSubmitMirror(localTools, { before: localClose }); topApply.setSource(elements.apply);
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
@@ -234,7 +237,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       if (!retains(epoch, mark)) return;
       elements.configure.open = true;
       announce(`Total updated to ${money(mark.projection.result.knownCommitmentCents)}.`);
-      elements.apply.focus();
+      focusSubmitControl(elements.apply);
     } else {
       render();
       if (!owns(epoch)) return;
@@ -304,7 +307,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
     rateControls.dispose();
-    summaryPreview.remove(); localHeading.remove();
+    topApply.dispose(); summaryPreview.remove(); localHeading.remove();
     participation.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
