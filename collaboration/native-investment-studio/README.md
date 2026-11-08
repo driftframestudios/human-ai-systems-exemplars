@@ -33,8 +33,11 @@ can add a team or handoff in place through two full-width ghost actions at its
 bottom. Both labels remain visible for pointer, keyboard and touch visitors. Team name, membership and order update directly
 with a Saved indicator. Shared sessions has its own **People / Handoffs** switch:
 checkbox pads assign participants or link work, and a row key opens compact host
-and ordering controls. Handoff editing stays inside the selected working area.
-Creating its missing team retains the handoff entries and selects the new team.
+and ordering controls. Handoff editing stays inside the selected working area: a
+short name and routing choices sit beside supporting-session pads. Add handoff
+creates a visible Delivery card and Shared sessions column with a useful default
+response. Creating its missing team retains the handoff entries and selects the
+new team. Existing response text remains in the model and exports.
 
 People combines its roster, local person/team editors, role facets and
 contribution/session matrix. Add creates a useful record immediately; its name,

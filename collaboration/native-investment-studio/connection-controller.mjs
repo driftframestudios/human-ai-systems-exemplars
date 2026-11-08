@@ -9,7 +9,7 @@ import { animateRackChange } from './reel-control.mjs';
 const INSTANCES = new WeakMap();
 const FIELDS = Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'status']);
 export const CONNECTION_LABELS = Object.freeze({ senderTeamId: 'Sending team', receiverTeamId: 'Receiving team',
-  receiverPersonId: 'Receiving person', sharedObject: 'Shared object or decision', responseExpectation: 'Expected response',
+  receiverPersonId: 'Receiving person', sharedObject: 'Handoff name', responseExpectation: 'Expected response',
   workIds: 'Supporting sessions', status: 'Status' });
 const named = row => row ? `${row.label}${row.lifecycle === 'retired' ? ' · retired' : ''}` : 'Unassigned';
 
@@ -348,7 +348,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     resume() { if (!disposed) { composing = false; if (elements.configure.open && target) open(target, false); else render(); } }, dispose });
   try {
     inputs.status.replaceChildren(option('active', 'Active'), option('paused', 'Paused'));
-    for (const field of FIELDS) if (inputs[field].tagName === 'TEXTAREA') inputs[field].maxLength = CONNECTION_FORMS['connection.create'].fields[field].maxLength;
+    for (const field of ['sharedObject', 'responseExpectation']) inputs[field].maxLength = CONNECTION_FORMS['connection.create'].fields[field].maxLength;
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
     listen(elements.form, 'input', edit);

@@ -98,10 +98,16 @@ Team planning receiver. Delivery overview and Shared sessions are independent
 working modules: inspecting a person replaces the delivery area while the
 sequencer stays visible. The local return restores Delivery overview. Handoff
 Create team accepts a uniquely named team while retaining the handoff and its
-requested field. The visitor can select that team to refine its direct controls. The separate
-connection diagram and detached Working
-sessions panel are retired from the visible composition. Their retained source
-owners continue to supply shared state and forms where needed.
+requested field. The visitor can select that team to refine its direct controls.
+The compact handoff receiver places a short name and routing choices in one
+half-rack and supporting-session pads in the other. Mobile stacks the halves.
+This supersedes the Shared object or decision and Expected response textareas
+and repeated cost preview. New handoffs use a concise response default; imported
+response text remains intact through edits and export. A creation is immediately
+visible as a Delivery card and a Shared sessions column.
+The separate connection diagram and detached Working sessions panel are retired
+from the visible composition. Their retained source owners continue to supply
+shared state and forms where needed.
 
 Shared sessions keeps two small related views. People pads change participation;
 Handoffs pads change supporting-work links. Both accept directly and use amp Undo.

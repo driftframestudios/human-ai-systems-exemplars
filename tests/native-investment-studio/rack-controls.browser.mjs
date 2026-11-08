@@ -316,7 +316,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.ok(Math.abs(returnGeometry.scroll - pagePosition) < 2, 'phase return preserves the visitor page position');
     const handoff = delivery.locator('[data-delivery-connection]:not([data-delivery-connection^="custom-connection:"])').first();
     await handoff.click();
-    await expect(templates.locator('[data-team-rack-editor] [data-connection-configure] [name="senderTeamId"]')).toBeFocused();
+    await expect(templates.locator('[data-team-rack-editor] [data-connection-configure] [name="sharedObject"]')).toBeFocused();
     const handoffId = await handoff.getAttribute('data-studio-record-id');
     await adjacent(page).locator('[data-connection-configure] [name="sharedObject"]').fill('Reviewed work and receiving instructions');
     await adjacent(page).locator('[data-connection-apply]').click();
@@ -750,6 +750,68 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(adjacent(page)).toBeHidden();
     assert.equal((await read()).state.connections.some(row => row.id === next.id), false, 'confirmed in-rack removal removes the chosen handoff');
 
+  });
+
+  test(`${engine}: compact handoffs stay visible, retain imported responses and recover with Undo at ${width}px`, { timeout:60000 }, async t => {
+    const page = await open(t, engine, width);
+    const retained = await page.evaluate(() => {
+      const { studio, controller } = window.rackFixture, plan = structuredClone(studio.read().state);
+      const connection = plan.connections.find(row => row.id === 'scope');
+      connection.responseExpectation = 'Confirm receipt.\nReturn remaining review questions.';
+      studio.replace(plan, studio.read()); controller.refresh(); return connection;
+    });
+    const original = await bytes(page), templates = root(page).locator('[data-connection-templates]');
+    const delivery = templates.locator('[data-template-rack]'), rack = shared(page);
+    const undo = root(page).locator('[data-studio-undo]');
+    await delivery.locator('[data-studio-entry-key="delivery-add:maintenance:connection"]').click();
+    const added = await page.evaluate(() => window.rackFixture.studio.read().state.connections.at(-1));
+    assert.equal(added.sharedObject, 'New handoff 1');
+    assert.equal(added.responseExpectation, 'Confirm what is ready and name the next step.');
+    const card = delivery.locator(`.studio-delivery__handoff[data-studio-record-id="${added.id}"]`);
+    await expect(card).toBeVisible(); await expect(card).toContainText('New handoff 1');
+    await expect(adjacent(page)).toBeHidden();
+    await rack.getByRole('tab', {name:'Handoffs', exact:true}).click();
+    const heading = rack.locator(`.studio-shared__handoff[data-studio-record-id="${added.id}"]`);
+    await expect(heading).toBeVisible(); await expect(heading).toContainText('New handoff 1');
+    await heading.click();
+    const receiver = rack.locator('[data-shared-rack-editor]');
+    const name = receiver.getByRole('textbox', {name:'Handoff name', exact:true});
+    await expect(name).toHaveValue('New handoff 1'); await expect(name).toHaveAttribute('type', 'text');
+    await expect(receiver.locator('textarea:visible')).toHaveCount(0);
+    await expect(receiver.locator('[name="responseExpectation"]')).toBeHidden();
+    const routing = await receiver.locator('.native-handoff__routing').boundingBox();
+    const work = await receiver.locator('.native-connection__sessions').boundingBox();
+    if (width === 1440) assert.ok(work.x >= routing.x + routing.width && Math.abs(work.y - routing.y) < 2,
+      'route controls and supporting-work pads share one horizontal rack');
+    else assert.ok(work.y >= routing.y + routing.height, 'the two modules stack at mobile width');
+    await contained(page, width);
+    if (engine === 'chromium') await adjacent(page).screenshot({path:resolve(captures, `compact-handoff-${width}.png`)});
+    await name.fill('Ready for review');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await heading.click(); await expect(name).toHaveValue('Ready for review');
+    await receiver.locator('[name="receiverTeamId"]').selectOption('operations');
+    await receiver.locator('[name="receiverPersonId"]').selectOption('noor');
+    await receiver.locator('[data-connection-work="research"]').check();
+    await receiver.locator('[data-rack-editor-apply]').click();
+    const accepted = await page.evaluate(id => window.rackFixture.studio.read().state.connections.find(row => row.id === id), added.id);
+    assert.equal(accepted.receiverTeamId, 'operations'); assert.equal(accepted.receiverPersonId, 'noor');
+    assert.deepEqual(accepted.workIds, ['research']); assert.equal(accepted.responseExpectation, added.responseExpectation);
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(card).toContainText('Ready for review'); await expect(card).toContainText('Quality and Operations');
+    await expect(heading).toContainText('Ready for review');
+    await expect(rack.locator(`[data-shared-handoff="${added.id}"][data-shared-work="research"]`)).toBeChecked();
+    await undo.click(); await expect(heading).toContainText('New handoff 1');
+    await undo.click(); assert.equal(await bytes(page), original);
+    await expect(card).toHaveCount(0); await expect(heading).toHaveCount(0);
+
+    // Ordinary routing edits retain the imported response even though the
+    // compact interface no longer asks a visitor to write one.
+    await rack.locator('.studio-shared__handoff[data-studio-record-id="scope"]').click();
+    await receiver.locator('[name="status"]').selectOption('paused');
+    await receiver.locator('[data-rack-editor-apply]').click();
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.connections.find(row => row.id === 'scope').responseExpectation), retained.responseExpectation);
+    assert.ok((await bytes(page)).includes(JSON.stringify(retained.responseExpectation)), 'export retains the imported response');
+    await undo.click(); assert.equal(await bytes(page), original);
   });
 
   test(`${engine}: rack additions remain closed, fill their selected slot and retain Undo at ${width}px`, { timeout:60000 }, async t => {

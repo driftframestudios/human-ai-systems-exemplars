@@ -258,41 +258,40 @@
                 </div>
                 <form novalidate>
                   <fieldset disabled aria-label="Connection settings">
-                    <div data-connection-fields>
-                      <div class="native-connection__grid">
-                        <div class="native-connection__field">
-                          <label for="connection-senderTeamId">Sending team</label>
-                          <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
-                          <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-receiverTeamId">Receiving team</label>
-                          <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
-                          <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-receiverPersonId">Receiving person</label>
-                          <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
-                          <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-status">Status</label>
-                          <select id="connection-status" name="status" aria-describedby="connection-status-error"></select>
-                          <p class="native-coordination__error" id="connection-status-error" data-connection-error="status"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-sharedObject">Shared object or decision</label>
-                          <textarea id="connection-sharedObject" name="sharedObject" rows="3" aria-describedby="connection-sharedObject-error"></textarea>
+                    <div class="native-handoff" data-connection-fields>
+                      <div class="native-handoff__routing">
+                        <div class="native-connection__field native-handoff__name">
+                          <label for="connection-sharedObject">Handoff name</label>
+                          <input id="connection-sharedObject" name="sharedObject" type="text" aria-describedby="connection-sharedObject-error">
                           <p class="native-coordination__error" id="connection-sharedObject-error" data-connection-error="sharedObject"></p>
                         </div>
-                        <div class="native-connection__field">
-                          <label for="connection-responseExpectation">Expected response</label>
-                          <textarea id="connection-responseExpectation" name="responseExpectation" rows="3" aria-describedby="connection-responseExpectation-error"></textarea>
-                          <p class="native-coordination__error" id="connection-responseExpectation-error" data-connection-error="responseExpectation"></p>
+                        <div class="native-connection__grid">
+                          <div class="native-connection__field">
+                            <label for="connection-senderTeamId">Sending team</label>
+                            <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
+                            <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
+                            <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-receiverTeamId">Receiving team</label>
+                            <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
+                            <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
+                            <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-receiverPersonId">Receiving person</label>
+                            <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
+                            <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
+                            <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-status">Status</label>
+                            <select id="connection-status" name="status" aria-describedby="connection-status-error"></select>
+                            <p class="native-coordination__error" id="connection-status-error" data-connection-error="status"></p>
+                          </div>
                         </div>
+                        <input id="connection-responseExpectation" name="responseExpectation" type="hidden">
+                        <p id="connection-responseExpectation-error" data-connection-error="responseExpectation" hidden></p>
                       </div>
                       <div class="native-connection__sessions" role="group" aria-labelledby="connection-work-label">
                         <p class="native-coordination__control-title" id="connection-work-label">Supporting sessions</p>
@@ -300,7 +299,7 @@
                         <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="connection">Add a session</button>
                         <p class="native-coordination__error" id="connection-workIds-error" data-connection-error="workIds"></p>
                       </div>
-                      <p class="native-coordination__hint" data-connection-cost></p>
+                      <p class="native-coordination__hint" data-connection-cost hidden></p>
                       <button type="button" class="native-control--remove" data-connection-action="remove" disabled hidden>Remove this connection</button>
                     </div>
                     <p class="native-connection__confirm" data-connection-confirm hidden></p>
