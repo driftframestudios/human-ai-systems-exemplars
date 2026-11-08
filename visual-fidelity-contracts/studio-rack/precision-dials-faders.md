@@ -8,6 +8,10 @@ Change/Quality fader banks are current receivers.
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
 reviewed 7 November 2026. It inherits the shared control and motion treatment in
 [Studio Rack Composition](README.md).
+The separately approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
+preserves an exact `dev` study reference. Its smaller equal-sized dials and
+neighboring occurrence panel have their own scope; the current production
+receivers below retain their established geometry and acceptance owners.
 
 ## Fit and smallest useful dose
 
@@ -109,7 +113,8 @@ Hours and Minutes share a row when the receiving space permits it and reflow
 inside the enclosure at ordinary phone widths. The output remains above the
 controls. At enlarged text, its quantity columns reflow while each numeric
 reading stays on one line; valid, blank and corrected values preserve the
-control positions below it. **Working sessions** stays nearby as a separate repetition control:
+control positions below it. In the current production composition,
+**Working sessions** stays nearby as a separate repetition control:
 duration changes the length of each occurrence, while the count determines how
 many occur. The static About session markup and dynamic `createTimeControls`
 factory use the same composition and retain their output/input associations.
@@ -133,6 +138,26 @@ steps preserve their layout. Close retains incomplete exact entry. Numbered
 occurrence pads select placement; the nearby exact count and circular steps
 retain repetition meaning. One duration and participant set apply to every
 occurrence.
+
+### Approved development composition
+
+The [tape workbench study](../../planning/context-canvas/studio-rack-tape-study.html)
+has a human-approved duration and Working sessions layout, preserved exactly in
+its own [Loaded Tape Duration Panel contract](loaded-tape-duration-panel.md) at
+revision `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`. The complete panel retains its
+compact title/readout row, peach Hours and paper Minutes, equal `64px` dials,
+exact fields and circular steppers. These are study-specific dimensions, distinct
+from the production coarse/fine sizes above.
+
+The two neighboring modules use `minmax(230px,1fr) minmax(240px,1fr)` columns,
+with `.7rem` gap and padding, above `1000px`. They stack at `1000px` and below.
+Occurrence pads and Add/Remove occurrence supply the visible repetition controls;
+the duplicate numeric Working sessions editor is hidden in this illustration.
+This approved development reference replaces open sizing exploration for those
+panels. Its standalone contract records the full cascade, source owner and recall
+route while cassette artwork continues to evolve. Production adoption remains a
+separate reviewed change on dev; Showcase promotion to main remains human-cued.
+The planning specimen itself is authorized for main/dev preservation in #810.
 
 The future [participant fader contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
 is separate from #771's shared movement controls. **Time in this session** would

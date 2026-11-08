@@ -8,8 +8,9 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 7 November 2026 reconciliation preserves the current contract, the focused
-Coordination consolidation route and material history. The visual grammar is owned by the
+The 8 November 2026 reconciliation preserves the accepted main contract and
+separates the all-chapter dev workbench from production decisions. The visual
+grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
@@ -69,10 +70,139 @@ delivered #758's immediate session creation after independent review and passing
 hosted checks; it also corrected the source-test routing registration (#796).
 PR #797 delivered #770's native New session rows inside both Coordination
 sequencers. Creation Undo remains distinct from cancelling later edits to the
-added session. The current #771/#772 increment shares participant movement across
-session and team editors and attaches compact editorial drawers beneath the
-horizon. Its receiving PR owns delivery and exercised behavior. The future
-percentage model is split into #798; broader removal remains with #773.
+added session. PR #802 delivered #771/#772: shared participant movement across
+session and team editors and compact editorial drawers attached beneath the
+horizon. Its review and observations own that delivery. The future percentage
+model remains in #798; broader removal remains with #773.
+
+### Preserved workbench and current Showcase integration
+
+The human requested ideation on `dev`, refreshed from `main`, before deciding
+how to incorporate more operations directly into the rack. The
+[#804 study](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804)
+established the loaded tape, people-by-session matrix, scoped period navigation
+and response routing. The approved
+[#805 direction](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
+extended that compact composition to all chapters. It supersedes treating the
+illustration as Coordination-only.
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves the cassette treatment, visible naming and fixed duration lighting.
+The [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+added preloaded independent financial comparisons and recoverable plan removal.
+The approved [#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+strengthens the VHS-C bodies, connects Plan investment's allocation reels and
+matches monetary steps to each comparison's scale. The
+[proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
+[Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
+now describe the connected experience and its receiving owners.
+
+The same illustrative session and person identities connect the chapters.
+People uses team lanes and a participation matrix; Abilities retains both support
+tables and a loaded-record editor. Change uses framework/viewpoint reels,
+emphasis faders and linked work. Quality & recovery combines before/after-release
+choices, a CRT-style attention reading and check pads. Investment initially loads
+Plan investment, preserving the shared-session funding lanes and simple saved
+comparison. Additional VHS-C-style decks offer customer rollout, commercial
+cohort, service operations and capital-choice illustrations. Marked session
+routes return to the same Coordination module and provide a route back.
+
+The shell owns page-local edits and Undo; chapter adapters read and change that
+model. A rate, duration or participation edit therefore has a visible consequence
+in the investment reading. Linking existing work from another chapter refers to
+the same session, rather than pricing another copy. The study's funding lanes
+group session amounts; production's allocation rules and full baseline/report
+semantics retain their existing owners. The added comparison decks use the
+shared Undo owner while keeping their assumptions and outputs separate from
+the shared-session amount. One of every financial deck type is preloaded; New investment deck
+creates another independent instance. Domain navigation selects a
+deck type. Lifecycle presets, alternatives and metric choices change a compact
+loaded reading with visible consequences. Customer rollout carries price and
+contribution; Commercial cohort separates opening-cohort retention from new
+revenue and acquisition; Service operations keeps time, budget and capacity
+units visible; Capital choices carries quarterly flows, NPV, IRR and payback.
+The canonical core supplies financial formulas through a small study adapter.
+
+The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+records the wider VHS-C art, stronger depth and vertical channel with a
+horizontal phone presentation. The stippled grip now sits inside the moving
+cassette face. This supersedes texture attached to its stationary outer button.
+Chocolate companions offset the dark rack around money controls and comparisons,
+extending the preserved Extra investment treatment. Funding identity owns that
+lane's color, including when it appears alone through the lens.
+
+Plan investment now pairs Investment approach with Investment lens. Deliver now,
+Protect delivery and Explore options vary explicit reserve/opportunity budget
+allocations. Four pads make the work, set-asides and remaining amount or shortfall
+visible. The funding lens filters session pads and sprint amounts; the allocation
+still accounts for the whole plan. Manual budget, allocation or funding changes
+show Custom, and a named approach restores its pair through one Undo edit.
+The approach describes spending allocation; actual shared work keeps its price,
+and a claim about improved delivery would require separate evidence.
+
+Aggregate budgets, revenue and capital use $1,000/$100 relative dials. Unit prices
+and costs retain $100/$5, with exact entry and circular $1 steps throughout.
+Readout layout is fixed by the field: expected thousands sit below the heading;
+small unit costs may sit top-right. Crossing a numeric threshold keeps that
+placement. Face lighting remains fixed and reusable controls retain stable nodes
+through the existing history owner. This supersedes the earlier all-$100/$5
+scale while preserving the approved duration controls.
+
+Quality starts at 4σ with balanced attention. Its response to urgency remains
+an authored illustration, separate from observed process capability or a forecast.
+
+The human approved the compact **Time per person** and **Working sessions**
+layout before this chapter expansion. The
+[duration-panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+preserves the complete panel at `be8ec7f`: palette, readout, dial faces, circular
+steppers and responsive geometry. The human's subsequent lighting correction
+revises that contract to `0.1.1`: the face gradient, rim and shadow remain fixed;
+the pointer carrier turns. The previous rotation of the entire face is
+superseded, with geometry, palette and gesture ownership preserved.
+The human also asked to preserve the complete cassette artwork and animation.
+The new [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
+pins that treatment at `cedafc3`: angled blocky faces, exact depth and palette,
+the `160ms ease-out` hover and the horizontal shelf at `650px` and below.
+The loaded detail panel retains its `.2s ease-out` downward unfurl from opacity
+`.3` and `translateY(-6px)`. Investment's Extra investment lane keeps its
+chocolate `#403d32` field. These preserved references distinguish settled art
+from the surrounding development experiments.
+
+The shelf now reads **Plans**. **New plan** creates the named item; **+ Session**
+adds another session to that item. Cassette faces say **sessions** instead of
+**occurrences**. The source still stores the same `tapes` and `occurrences` IDs
+and arrays; this iteration changes the visitor vocabulary and keeps duration
+and participant ownership intact. Numbered pads remain the repetition control.
+Remove plan clears explicit support/funding references and leaves independent
+response cards with visible unassigned endpoints. People and teams remain. The
+last plan can be removed and recreated; Undo restores its full snapshot, while
+Reset restores the original example. The production amp Reset is separately
+planned in [#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
+Plan overview still means the complete arrangement. Production retains its
+accepted session/count contract until a focused consolidation receives review.
+
+The proposal still maps Coordination's outside controls, including Customize
+teams and handoffs, to one useful home and its existing owner. Events remains an
+optional bounded reading. Unassigned tapes and independent response cards need
+explicit production model decisions; participant percentages stay with #798.
+The working showcase retains its accepted plan, draft, Apply, Cancel and recovery
+contracts while the study uses immediate illustrative edits. The human now
+approved the planning workbench's promotion to main and dev in #810. This
+supersedes the blanket hold on merging the study. Its Investment art and controls
+are pinned at `93bc69a`; the main Showcase runtime remains anchored at `9338acc`.
+
+The active dev Showcase integration is #811. Study scale and form factor guide
+compact module placement; the Showcase remains the art-direction authority for
+dials, zoetropes, output depth, Kanban/sequence surfaces and participation legend.
+The initial bridge broadens the Studio's usable field and compacts the existing
+session deck. Chocolate repetition housing complements the dark instrument
+surfaces; editorial secondary panels retain their useful contrast. Existing
+contextual creation and Undo owners remain. The numeric count stays available
+until occurrence pads gain a decrement route.
+
+#812 owns direct team/handoff rack integration, and #813 owns cassette/deck
+projection. Future dev Showcase promotions require the human cue. The preserved
+planning reference continues to provide a comparison while canonical model,
+proposal and recovery behavior guide the actual Showcase implementation.
 
 ### State, people and evidence
 
@@ -293,6 +423,17 @@ entry, screenshot or technical description presents the earlier behavior.
 
 | Earlier direction | Current replacement and reason |
 | --- | --- |
+| Coordination-only loaded-tape illustration in #804 | #805 extends the compact workbench across People, Abilities, Change, Quality & recovery and Investment. Shared illustrative identities and Undo make the chapter relationships reviewable; production integration remains a later decision. |
+| Blanket merge hold for the illustrative workbench | #810 authorizes preserving the planning specimen on main and dev. The actual Showcase now integrates on dev through #811–#813; its promotion to main remains human-cued. |
+| The complete dev illustration treated as tentative layout | The duration panel and neighboring Working sessions geometry have their own exact reference. #806 also preserves the cassette artwork, hover and narrow shelf in a separate contract, plus the loaded-panel unfurl and chocolate Extra investment lane. The planning reference is now authorized for main/dev preservation in #810; Showcase adoption continues on dev with human-cued promotion. |
+| Rotating the duration dial's entire face, including its gradient and shadow | The approved #806 lighting correction keeps the face and simulated light fixed. A full-face transparent carrier rotates only the existing pointer mark. Duration geometry, palette and value/gesture owners remain preserved; the duration contract is now version 0.1.1. |
+| Session tapes, New session and Occurrence as the study's shelf vocabulary | #806 uses Plans, New plan and + Session; faces show their session count. The same source identities and duration owner remain. This visible naming change leaves production's session model intact. |
+| Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
+| Investment limited to one shared-session cost reading in the dev study | Plan investment retains that reading. #807 preloads financial comparison tapes with connected reels and money dials, preserving separate units and shared Undo. |
+| #806's optional comparison decks, limited to one of each type | #807 preloads all five types and gives every added copy its own identity, settings and comparison state. Domain navigation changes the loaded view; financial edits stay in their tape. |
+| Investment texture on the outer cassette button and a universal $100/$5 money pair | #809 puts the grip inside the face, widens and deepens the VHS-C body, and uses $1,000/$100 for aggregate amounts. Unit costs retain $100/$5; readout placement is fixed per field. |
+| Plan investment driven only by a funding lens | #809 pairs the lens with explicit reserve/opportunity approaches and visible allocation/shortfall. Direct changes show Custom; shared work retains its original pricing owner. |
+| Coordination plans available only for creation and editing in the study | #807 adds direct Remove plan, explicit reference cleanup, an empty-shelf New plan route and snapshot Undo. Production Reset stays separately scoped in #808. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
 | Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
@@ -728,13 +869,19 @@ behavior and occurrence/participant controls. This journal records the design
 and ownership; PR #794 records its completed review and delivery. PR #795 owns
 #758's immediate-add, later-edit and exact-creation Undo observations. PR #797
 owns #770's contextual period/person entry, ordinary phone/laptop geometry and
-return observations. The #771/#772 receiving PR records participant order/focus
+return observations. PR #802 records #771/#772 participant order/focus
 and motion, attached drawer containment and same-record operation routes. Review
 also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-Future percentage semantics remain with #798 and broader removal with #773.
+#810 receives the planning-reference promotion and confirms that main's Showcase
+runtime remains unchanged. The next visual receiver is the #811 compact dev
+Showcase pass, followed by direct handoff routing (#812) and cassette/deck
+integration (#813). The approved study remains available for comparison.
+The duration panel retains its geometry and fixed-lighting reference; production
+controllers retain their editing and recovery meanings. Future percentage
+semantics remain with #798 and broader removal with #773.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains
