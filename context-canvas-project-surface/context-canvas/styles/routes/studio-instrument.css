@@ -325,3 +325,15 @@
   .native-coordination .studio-rack-record-key { background: ButtonFace; color: ButtonText; border-color: ButtonText; box-shadow: none; }
   .native-coordination .studio-rack-record-key[aria-pressed='true'] { background: ButtonFace; color: ButtonText; border-color: Highlight; outline: 1px solid Highlight; }
 }
+
+/* Local rack header: owner return, current record and its acceptance boundary. */
+.studio-rack-header__identity { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .7rem; min-inline-size:0; }
+.native-coordination .studio-rack-header__owner { display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .5rem; min-inline-size:0; min-block-size:2.5rem; border:1px solid #668b73; border-radius:3px; background:transparent; color:#d8eadc; box-shadow:none; font:600 .75rem/1.35 system-ui,sans-serif; }
+.native-coordination .studio-rack-header__owner::before { content:'‹'; font-size:1.2em; }
+.studio-rack-header__owner[hidden],.studio-rack-header__saved[hidden] { display:none; }
+.studio-rack-header__saved { color:#a8e4c6; font:600 .72rem/1.3 ui-monospace,monospace; }
+.native-coordination .studio-rack-header .studio-rack-editor__tools > button:not(.studio-apply-control) { background:transparent; color:#f7f0d6; border:1px solid #668b73; box-shadow:none; }
+@media(forced-colors:active) {
+ .native-coordination .studio-rack-header__owner,.native-coordination .studio-rack-header .studio-rack-editor__tools > button:not(.studio-apply-control) { color:ButtonText; background:ButtonFace; border-color:ButtonText; }
+ .studio-rack-header__saved { color:CanvasText; }
+}

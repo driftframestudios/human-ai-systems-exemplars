@@ -4,6 +4,7 @@ import { describeScoreReference } from './score-reference.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
 import { focusSubmitControl } from './rack-controls.mjs';
+import { animateRackChange } from './reel-control.mjs';
 
 const INSTANCES = new WeakMap();
 const FIELDS = Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'status']);
@@ -106,7 +107,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const row = works.get(id), checkbox = previous.get(id) ?? document.createElement('input');
       let item = checkbox.closest('li');
       if (!item) {
-        item = document.createElement('li'); item.className = 'native-coordination__member';
+        item = document.createElement('li'); item.className = 'native-coordination__member'; item.dataset.connectionWorkRow = id;
         const label = document.createElement('label'), words = document.createElement('span');
         const text = document.createElement('span'), state = document.createElement('small');
         text.dataset.memberName = ''; state.className = 'native-coordination__member-status';
@@ -303,8 +304,10 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    changed(operate('setIds', view.draft.token, 'workIds', ids), epoch, () =>
-      (memberControls.get(id) ?? elements.members.querySelector('input') ?? elements.apply).focus());
+    const update = () => changed(operate('setIds', view.draft.token, 'workIds', ids), epoch, () =>
+      (memberControls.get(id) ?? elements.members.querySelector('input') ?? elements.apply).focus({ preventScroll: true }));
+    if (delta === null) update();
+    else animateRackChange(elements.members, update, { selector: '[data-connection-work-row]', key: 'connectionWorkRow' });
   }
   function edit(event) {
     if (disposed || inputs[event.target.name] !== event.target) return;

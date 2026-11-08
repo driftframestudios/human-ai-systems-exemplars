@@ -3,7 +3,7 @@ import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from '
 import { money } from './display.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { revealStudioDestination } from './motion.mjs';
-import { mountSubmitMirror, focusSubmitControl } from './rack-controls.mjs';
+import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const COLLECTION = Object.freeze({ ability: 'abilities', practice: 'practices' });
@@ -30,10 +30,10 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   const catalogues = new Map(['ability', 'practice'].map(kind => [kind, root.querySelector(`[data-capability-catalogue="${kind}"]`)]));
   const rack = document.createElement('section'); rack.className = 'native-capability-rack'; rack.id = `${instance}-rack`; rack.setAttribute('aria-label', 'Selected ability or practice');
   elements.selected.before(rack); rack.append(elements.selected, elements.configure);
-  const closeControl = button('Close', 'close'); closeControl.classList.add('native-control--cancel');
-  elements.selected.querySelector('.native-capability-card__actions').append(closeControl);
-  const topApply = mountSubmitMirror(closeControl.parentElement, { before: closeControl });
-  topApply.setSource(actions.get('apply'));
+  const localHeader = mountRackHeader(rack, { title: 'Abilities', owner: 'Abilities',
+    closeAttribute: 'data-ability-rack-close', applyAttribute: 'data-editor-apply',
+    onClose: event => { event.stopPropagation(); closeLocal(); } });
+  localHeader.close.dataset.capabilityAction = 'close';
   const editor = editing.capability;
   let disposed = false, generation = 0, composing = false, acknowledged = false, projection = null;
   let selection = null, target = null, builtTarget = null, builtProjection = null;
@@ -291,7 +291,10 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       builtTarget = draft?.capabilityId ?? null; builtProjection = projection; buildFields(descriptor, draft?.raw);
     }
     root.dataset.capabilityState = draft ? view.status : 'idle';
-    closeControl.hidden = !draft;
+    localHeader.element.hidden = !draft;
+    localHeader.update({ title: definition()?.action ?? 'Abilities',
+      owner: selection?.kind === 'practice' ? 'How the team works' : 'What people can do',
+      source: draft ? actions.get('apply') : null });
     elements.configure.hidden = !draft; actions.get('configure').hidden = Boolean(draft && elements.configure.open); elements.fields.disabled = !draft || view.status !== 'editing';
     elements.recovery.hidden = !draft || !['stale', 'parked'].includes(view.status);
     elements.current.textContent = view.creationConflict ? 'This identifier is already in the plan. Keep your entries and choose a new identifier.'
@@ -299,7 +302,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     actions.get('fresh-id').hidden = !view.creationConflict;
     for (const action of ['review', 'current', 'discard', 'fresh-id']) actions.get(action).disabled = !draft;
     actions.get('apply').disabled = !draft || view.status !== 'editing'; actions.get('cancel').disabled = !draft;
-    topApply.setSource(draft ? actions.get('apply') : null);
+
     if (draft) {
       elements.summary.textContent = `${descriptor.mode === 'remove' ? 'Remove' : 'Settings'} · ${descriptor.definition.action}`;
       for (const [key, control] of controls) {
@@ -454,17 +457,18 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const focus = phase === 'observation' ? elements.fields.querySelector('[data-capability-example]') : controls.get(phase === 'responsibility' ? 'teamId' : `support.${key}`)?.input;
     focus?.focus({ preventScroll: true }); revealStudioDestination(elements.configure);
   }
+  function closeLocal() {
+    if (disposed || !isActive()) return;
+      close(); const epoch = generation; render(); onEditing();
+      if (!owns(epoch) || !selection) return;
+      catalogues.get(selection.kind).querySelector(`[data-capability-action="select"][data-capability-definition="${selection.definitionId}"]`)?.focus({ preventScroll: true });
+  }
   listen(root, 'click', event => {
     const control = event.target.closest('[data-capability-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.capabilityAction;
     if (action === 'apply') return;
     if (action === 'add-record') { addRecord(control); return; }
-    if (action === 'close') {
-      close(); const epoch = generation; render(); onEditing();
-      if (!owns(epoch) || !selection) return;
-      catalogues.get(selection.kind).querySelector(`[data-capability-action="select"][data-capability-definition="${selection.definitionId}"]`)?.focus({ preventScroll: true });
-      return;
-    }
+    if (action === 'close') { closeLocal(); return; }
     if (action === 'select') { selectedSection = 'context'; selectCard(control); showSection('context'); elements.title.tabIndex = -1; elements.title.focus({ preventScroll: true }); revealStudioDestination(rack); return; }
     if (action === 'inspect-section') { showSection(control.dataset.capabilitySectionKey); return; }
     if (action === 'example') { showExample(control.dataset.capabilityExample); return; }
@@ -517,7 +521,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (disposed) return;
     close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const control of actions.values()) control.disabled = true;
-    topApply.dispose(); closeControl.remove(); root.append(elements.selected, elements.configure); rack.remove();
+    localHeader.dispose(); root.append(elements.selected, elements.configure); rack.remove();
     INSTANCES.delete(root); projection = null; controls.clear(); workGroups.clear();
   }
   render();

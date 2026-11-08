@@ -1,55 +1,71 @@
-# Quiet controls and direct rack creation
+# Direct controls and local rack navigation
 
 ## Receiving decision
 
-The dev Studio should let a visitor load a plan and change its arrangement with
-little explanation. The cassette artwork, period board, sequencer and selected
-pads provide the hierarchy. This bounded spike supports #820 and #821: reduce
-competing action treatments, preserve one meaningful operation per control, and
-use empty rack space as a creation entry where its object is clear.
+A visitor should recognize where a rack control will act, see the result beside
+that control, and return to the same working area. The cassette artwork, period
+board, sequencer and selected pads provide the hierarchy. The current dev
+synthesis supports #831 and #832: add a useful item with editing closed, keep
+creation inside its lane, distinguish direct relationship changes from proposals,
+and give every editor a visible owner and selected record.
 
 Read alongside [usable controls](usability-research.md) and
-[removal and recovery](removal-recovery-research.md). The 8 November 2026 synthesis
-supersedes their broad raised-action recommendation for ordinary local rack
-controls. Their native semantics, stable membership positions and shared history
-remain current.
+[removal and recovery](removal-recovery-research.md). This synthesis preserves
+native semantics, stable membership positions and shared history. It supersedes
+#820/#821's automatic editor opening after an addition and Shared sessions'
+former routing into the full session form above it. `main` remains the approved
+comparison anchor until a human authorizes promotion.
 
 ## Evidence and transfer
 
 | Source and class | What it establishes | Studio consequence and limit |
 | --- | --- | --- |
-| [GOV.UK Button](https://design-system.service.gov.uk/components/button/), official design-system guidance | Clear action labels and limited primary emphasis help people identify the next operation; strong warnings belong to serious, hard-to-reverse actions. | Reserve raised treatment for accepting a form or a major outside-rack workflow. Reversible Remove uses quiet rose treatment and a named object. This guidance informs hierarchy, not the Studio palette. |
-| [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Primary, tertiary and ghost variants have distinct emphasis and repeated local tasks can use lower prominence. | Local rack selection and manipulation use restrained borders and little shadow; Cancel stays ghost. Carbon's exact component taxonomy and page-level quotas are not transplanted into a multi-panel instrument. |
-| [WAI Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/), accessibility practice | Buttons have action semantics, keyboard activation, accessible names and truthful pressed state; focus follows the resulting task. | Empty creation areas are named native buttons. Selection uses pressed state; opening an editor uses expanded state. Existing pads inspect work, while a new-item region creates it. Decorative empty space receives no container-wide click handler. |
-| Human observations of the running Studio, local evidence | Repeated raised buttons and detached editing views make it harder to understand scope. The workbench's compact modules and direct pads were preferred. | Use the preserved cassette and duration specimens, attach the shelf to the board, load plans with editors closed, and keep team edits within their delivery board. This is a design direction with focused browser evidence, rather than a claim of population-level usability validation. |
+| [WAI Breadcrumb Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/), accessibility practice | A hierarchy identifies a current location and its parents. | Show the owning rack before the selected record. In-page return controls remain native buttons; their action changes local scope rather than following a fabricated page URL. The pattern supplies hierarchy semantics, while the Studio owns this local adaptation. |
+| [GOV.UK Back link](https://design-system.service.gov.uk/components/back-link/), official design-system guidance | A return should restore prior state; an explicit destination helps when the route is complex. | An owner control returns to the originating board, phase or shared-session view with focus restored. One owner path supplies the route; Close offers the same local dismissal. The page-level placement prescription belongs to GOV.UK journeys, not an embedded rack. |
+| [WAI Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), accessibility practice | A small set of related views can share one surface with selected state, associated panels and keyboard navigation. | Shared sessions uses People and Handoffs views. Both operate on the same accepted work; selection changes what the matrix relates. Immediate local rendering supports arrow-key selection. |
+| [WAI Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/), accessibility practice | Buttons carry an action, accessible name, keyboard activation and truthful state. | Native creation targets name the added object. Track keys identify the selected/open record. Checkbox cells change participation or support links; empty cells in that matrix retain the same relationship meaning. |
+| [GOV.UK Button](https://design-system.service.gov.uk/components/button/), official design-system guidance | Clear action labels and limited primary emphasis make the next operation easier to identify. | Raised Apply accepts a prepared form. Direct team and membership edits show Saved. Quiet rose Remove and amp Undo keep recovery visible. This guidance informs hierarchy, not the Studio palette. |
+| [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
+| Human observations of the running Studio and preserved workbench, local evidence | Detached editors, repeated creation controls and unclear saving made scope difficult to follow. Compact modules and direct pads were preferred. | Preserve the art, duration module and separate delivery/shared-session working areas. This establishes a collaboration direction; focused browser checks establish the resulting behavior, rather than population-level usability. |
 
-## Synthesis
+## Compared routes
 
-| Visitor goal | Treatment | Acceptance and recovery |
+A full shared-session inspector would reuse every field but repeat the Plan
+overview editor. An Events list would provide another chronological reading
+already supplied by the period board. The selected route gives Shared sessions
+a smaller distinct job: relate people and handoffs to the work. It adapts the
+workbench's People × sessions matrix while retaining the Showcase's accepted
+commands, draft coordinator and amp recovery.
+
+| Visitor goal | Local treatment | Acceptance and return |
 | --- | --- | --- |
-| Load a plan or comparison | Preserved cassette/deck artwork; selected outline | Changes the visible scope. A plan opens with detail closed. |
-| Inspect an existing record | Compact track key or pad; visible selected/open cue | Opens its local detail; Close returns to the same scope. |
-| Add in a known period | Empty lane/track target, plus and concise label on hover/focus; visible on touch | Creates one useful record through the existing owner, then opens editing. Amp Undo recovers the accepted addition. |
-| Add a different scope | Explicit New plan or Add sprint/quarter | Keeps the object clear when no single empty slot implies it. |
-| Adjust membership or ordering | Native checkbox pad and compact movement controls | Team changes accept directly; one shared history supports recovery. |
-| Accept an unfinished form | Raised Apply action | Accepts its canonical proposal; preserves existing validation and parked edits. |
-| Cancel or close | Ghost control with a literal label | Cancel discards the proposal; Close retains the coordinator's saved work. |
-| Remove a named object | Muted rose, explicit scope | Uses the existing dependency and recovery owner. |
-| Undo accepted work | Stable native amp control | Acts on the latest accepted change, independently of cassette selection. |
+| Load or inspect a plan | Preserved cassette and selected track key | The selected period stays visible; Close returns to its initiating control. |
+| Add in a known lane | Named plus target inside the lane; hover/focus cue and visible touch affordance | A useful accepted record appears there with editing closed. Amp Undo recovers the addition. |
+| Choose people for a session | Native checkbox pads in Shared sessions · People | Each change accepts directly. The current contract requires one participant; the final selected pad explains that another person must be added before it can be cleared. |
+| Adjust a shared session's host or participant order | Compact selected-row module beside the matrix | Changes accept directly and show Saved. Closing restores the row key. Duration and cadence remain in Plan overview. |
+| Connect shared work to a handoff | Checkbox pads in Shared sessions · Handoffs | Each support-link change accepts directly; amp Undo reverses it. |
+| Edit a handoff | Select its matrix heading or delivery card | The canonical handoff form appears inside the originating module. Apply accepts the draft; owner return and Close preserve its entries and restore the origin. |
+| Edit a team | Delivery lane's team key | Name, membership and order update directly with visible saving state. The delivery board and Shared sessions keep separate visibility roles. |
+| Edit a prepared form | Current record and owner at left; Apply and Close at right | The top Apply delegates to the canonical submitter, sharing validation and focus behavior. |
+| Undo accepted work | Stable native amp control | Recovers the latest accepted change independently of cassette or matrix selection. |
 
-## Challenge and observation
+Delivery-lane placement for a newly added team or handoff belongs to the current
+receiver view. It survives local refresh and Undo/redo. A freshly mounted receiver derives imported
+phase placement from existing relationships; this change introduces no
+new exported lifecycle field.
 
-An empty intersection in a people/session matrix means participation, so creating
-a new session there would be ambiguous. Keep those cells dedicated to inclusion
-or inspection. A separate new-session row and the empty remainder of a period
-lane have a clear receiving context. A named compact choice is preferable when
-several object types could fit.
+## Source and observation
 
-Desktop pointer hover and keyboard focus must expose the same creation target;
-touch presents it directly. Check one accepted addition, local editing and amp
-Undo; confirm an existing clip still opens its record. Ordinary phone and desktop
-observations also cover text contrast, local table scrolling and fixed dial
-lighting. These distinguish useful directness from invisible or accidental
-creation. Additional research can resume if actual visitor behavior challenges
-this mapping. Further source collection would presently add examples without
-changing the implementation decision.
+[Rack controls](rack-controls.mjs) owns the shared header and submit mirror.
+[Shared sessions](shared-session-rack.mjs) owns its two views, relationship pads
+and selected-row controls. [Team planning](connection-template-controller.mjs)
+accepts their commands, while [the integration controller](controller.mjs) lends
+the existing handoff editor to its local slot. [Delivery board](delivery-board.mjs)
+owns the phase projection and lane creation entries.
+
+The fitting proof is a direct membership change and Undo, a visible last-person
+boundary, a handoff link change and local Apply/Close, and an addition that stays
+in its originating delivery lane. Ordinary phone and desktop observations cover
+local scrolling, readable labels and independent rack visibility. The receiving
+PR records the checks run. Reopen the decision if visitor use reveals confusing
+scope, lost entries or a return that changes the working context.

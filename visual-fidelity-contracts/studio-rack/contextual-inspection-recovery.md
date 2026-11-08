@@ -6,9 +6,9 @@ its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 dev receiving contract revised 8 November 2026 for
-[#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833),
-retaining the local editors and shared Apply from
-[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
+[#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832),
+retaining the removal and focus recovery from
+[#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833).
 It inherits [Studio Rack Composition](README.md). `main` remains the approved
 comparison anchor; a human cue authorizes promotion from `dev`.
 
@@ -17,16 +17,17 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Working area | Local editing and return |
 | --- | --- |
 | Plan overview | A cassette loads scope with detail closed. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
-| Team planning | Selecting a team replaces Delivery overview with its name, membership and order controls. A person opens the canonical person form in that working area. Shared sessions remains visible as an independent module throughout person, team and handoff editing. |
-| Handoff settings | Create a team accepts a useful new team and opens its controls in Team planning. Handoff settings returns to the saved handoff and its requested team field. The existing recovery control reviews saved entries against the updated plan. |
+| Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
+| Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
+| Handoff settings | Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | From work, To work and optional Team connection define the relation. Its fresh draft offers creation, Cancel and Close; decisions, delays and removal become available after acceptance. |
-| People | Add person and Add team accept useful starting records and open their local editors within the corresponding roster or team rack. Name, rate and funded time share the person owner; team membership keeps its own owner. |
+| People | Add person and Add team accept useful starting records with editing closed. Selecting the new record opens its local editor within the corresponding roster or team rack. Name, rate and funded time share the person owner; team membership keeps its own owner. |
 | Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. |
 
 The Delivery working area and Shared sessions have separate visibility roles.
 Changing the selected person or team affects the first area; the participation
 matrix remains available below it. Person controls retain their readable peach
-surface inside the dark rack, with a compact Back to Delivery overview action.
+surface inside the dark rack. A shared header names the owning view, current record and its acceptance action. The owner return and Close restore the originating record and local scope.
 Team membership uses the sequencer's clear selected face and available state.
 
 ## Recognizable controls
@@ -51,7 +52,9 @@ explains the local distinction between selection, creation and acceptance.
 ## Acceptance and recovery
 
 Creation and later editing are separate accepted-state decisions. A new person,
-team, handoff or session enters shared history once. Apply accepts subsequent
+team, handoff or session enters shared history once with editing closed and a
+clear New {item} N label. Creation inside a prepared form keeps that parent
+form open and selects the new prerequisite there. Apply accepts subsequent
 form changes; Cancel restores that accepted record; Close retains the proposal.
 Direct Team planning name, membership and reorder changes accept immediately.
 People's team editor and the session, person and handoff forms retain Apply.
@@ -98,7 +101,7 @@ explicit movement changes their order and retains focus on the same person.
 
 ## Layout and motion
 
-The selected name, Apply and Close/Return sit above local controls. Desktop uses the
+The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an Apply action. Team naming visibly distinguishes editing from saved state. Desktop uses the
 available rack width; ordinary mobile widths reflow controls while tables and
 cassette shelves scroll locally. A short downward unfurl marks loaded detail.
 Reduced motion settles the same state directly. Attached People and available
@@ -121,6 +124,7 @@ would need the separate focus and inert-background contract in the
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing coordinator](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Receiver placement, active identity, saved drafts, shared Apply delegation, local returns and amp Undo |
 | [Session removal](../../collaboration/native-investment-studio/work-removal.mjs), [command owner](../../collaboration/native-investment-studio/commands.mjs), [removal checks](../../tests/native-investment-studio/work-removal.test.mjs), [session checks](../../tests/native-investment-studio/session.browser.mjs) | Atomic reference cleanup, occurrence distinction, concise confirmation and exact history recovery |
 | [Rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [capability](../../collaboration/native-investment-studio/capability-controller.mjs) controllers | Accepted creation and the existing person, team and support proposal owners |
+| [Shared sessions](../../collaboration/native-investment-studio/shared-session-rack.mjs) | Independent People/Handoffs views, direct participation/support commands and compact row selection |
 | [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [Abilities/People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) | Independent rack modules, direct team controls and local chapter skins |
 | [Rack browser checks](../../tests/native-investment-studio/rack-controls.browser.mjs), [People checks](../../tests/native-investment-studio/assembly.browser.mjs), [Abilities checks](../../tests/native-investment-studio/capability.browser.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Exercised creation, visibility, top Apply, draft retention, return, Undo and ordinary phone/desktop geometry |
 
@@ -129,6 +133,8 @@ those operations and dimensions; human walkthrough establishes whether the
 composition and return cues feel clear.
 
 ## Supersession and next boundary
+
+The #832 local Shared sessions views supersede its former full-session editor jump. Its handoff editor now belongs to that matrix, while delivery edits retain their own receiver. The shared owner/current header supersedes inconsistent local title/return layouts.
 
 This dev contract supersedes the accumulated below-rack inspector placements,
 the separate Customize teams and handoffs form, and a cassette-local Undo.

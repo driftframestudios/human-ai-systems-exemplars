@@ -50,6 +50,33 @@ export function mountSubmitMirror(container, { before = null, attribute = 'data-
   } });
 }
 
+// Every local receiver identifies its owner before the selected record. Draft
+// receivers mirror their canonical Apply; direct receivers expose saved state.
+export function mountRackHeader(container, { title = '', owner = '', onClose, id, closeAttribute = 'data-rack-editor-close', applyAttribute = 'data-rack-editor-apply' } = {}) {
+  const document = container.ownerDocument;
+  const header = document.createElement('header'); header.className = 'studio-rack-editor__heading studio-rack-header';
+  const identity = document.createElement('div'); identity.className = 'studio-rack-header__identity';
+  const parent = document.createElement('button'); parent.type = 'button'; parent.className = 'studio-rack-header__owner';
+  const current = document.createElement('h4'); current.textContent = title;
+  if (id) current.id = id;
+  const tools = document.createElement('div'); tools.className = 'studio-rack-editor__tools';
+  const saved = document.createElement('span'); saved.className = 'studio-rack-header__saved'; saved.setAttribute('role', 'status'); saved.hidden = true;
+  const close = document.createElement('button'); close.type = 'button'; close.textContent = 'Close'; close.setAttribute(closeAttribute, '');
+  tools.append(saved, close); identity.append(parent, current); header.append(identity, tools); container.prepend(header);
+  const apply = mountSubmitMirror(tools, { before: close, attribute: applyAttribute });
+  parent.addEventListener('click', onClose); close.addEventListener('click', onClose);
+  function update({ title: nextTitle = current.textContent, owner: nextOwner = parent.textContent,
+    source = null, saved: savedText = '' } = {}) {
+    current.textContent = nextTitle; parent.textContent = nextOwner; parent.hidden = !nextOwner;
+    parent.setAttribute('aria-label', `Back to ${nextOwner}`);
+    close.setAttribute('aria-label', `Close ${nextTitle}`);
+    saved.textContent = savedText; saved.hidden = !savedText; apply.setSource(source);
+  }
+  update({ title, owner });
+  return Object.freeze({ element: header, title: current, parent, close, tools, apply, update,
+    dispose() { apply.dispose(); parent.removeEventListener('click', onClose); close.removeEventListener('click', onClose); header.remove(); } });
+}
+
 // Session and team membership share ordering semantics while retaining their
 // own draft actions and receiving skins.
 export function syncReorderButtons(up, down, { label, index, count }) {
@@ -96,17 +123,10 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   const host = document.createElement('section');
   host.className = 'studio-rack-editor'; host.hidden = true;
   host.id = `studio-rack-editor-${++editorSequence}`;
-  const heading = document.createElement('header'); heading.className = 'studio-rack-editor__heading';
-  const title = document.createElement('h4'); title.id = `${host.id}-title`;
-  const context = document.createElement('small'); context.className = 'studio-rack-editor__origin'; context.hidden = true;
-  host.setAttribute('aria-labelledby', title.id);
-  const close = document.createElement('button'); close.type = 'button';
-  close.textContent = 'Close'; close.dataset.rackEditorClose = '';
-  const body = document.createElement('div'); body.className = 'studio-rack-editor__body';
-  const identity = document.createElement('div'); identity.append(title, context);
-  const tools = document.createElement('div'); tools.className = 'studio-rack-editor__tools'; tools.append(close);
-  const apply = mountSubmitMirror(tools, { before: close, attribute: 'data-rack-editor-apply' });
-  heading.append(identity, tools); host.append(heading, body); root.append(host);
+  const body = document.createElement('div'); body.className = 'studio-rack-editor__body'; host.append(body);
+  const header = mountRackHeader(host, { id: `${host.id}-title`, onClose: () => onClose() });
+  const { title, close, apply } = header;
+  host.setAttribute('aria-labelledby', title.id); root.append(host);
   const homes = new Map(Object.entries(editors).map(([kind, nodes]) => [kind, nodes.map(node => {
     const marker = document.createComment(`home: ${kind} editor`); node.before(marker);
     return { node, marker };
@@ -121,11 +141,8 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     apply.setSource(body.querySelector('button[type="submit"]'));
     if (selected) {
       const label = readLabel(selected) ?? selected.label;
-      title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`;
-      context.textContent = selected.originLabel ?? ''; context.hidden = !selected.originLabel;
-      close.setAttribute('aria-label', `Close ${label} settings`);
-      close.textContent = selected.returnLabel ?? 'Close';
-      if (selected.returnLabel) close.setAttribute('aria-label', `${selected.returnLabel}; close ${label} settings`);
+      header.update({ title: `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`,
+        owner: selected.ownerLabel ?? selected.originLabel ?? 'Delivery overview', source: body.querySelector('button[type="submit"]') });
     }
     for (const control of controls()) {
       const matches = selected?.kind === control.dataset.studioRecordKind && selected.id === control.dataset.studioRecordId;
@@ -168,8 +185,6 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     target?.focus({ preventScroll: true });
     if (host.dataset.rackPlacement !== 'inset') revealStudioDestination(target);
   }
-  const requestClose = () => onClose();
-  close.addEventListener('click', requestClose);
   return Object.freeze({
     element: host,
     read: () => selected && { ...selected, open: !host.hidden },
@@ -198,7 +213,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     },
     sync,
     dispose() {
-      apply.dispose(); restore(); close.removeEventListener('click', requestClose); host.remove();
+      header.dispose(); restore(); host.remove();
       for (const records of homes.values()) for (const { marker } of records) marker.remove();
     },
   });

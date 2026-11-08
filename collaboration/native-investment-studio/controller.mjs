@@ -198,6 +198,7 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     const current = rackEditor.read();
     const horizonSource = source?.closest('[data-score-projection]');
+    const sharedSource = source?.closest('[data-shared-session-rack]');
     const toggle = target.kind !== 'session' || horizonSource || source?.classList.contains('studio-track-key');
     if (toggle && current?.open && current.kind === target.kind && current.id === target.id
       && rackEditor.isOrigin(source)) { closeRackEditor(source); return; }
@@ -232,12 +233,14 @@ export function mountCoordinationPanel(root, options = {}) {
       render(); announce(result?.error?.message ?? 'Finish or cancel the open edits, then choose another record.');
       return;
     }
-    const container = target.kind === 'session' && horizonSource ? scorePanel.getSessionSlot()
+    const container = sharedSource && target.kind === 'connection' ? sharedSource.querySelector('[data-shared-rack-editor]')
+      : target.kind === 'session' && horizonSource ? scorePanel.getSessionSlot()
       : anchor.matches('[data-connection-templates]') ? anchor.querySelector('[data-team-rack-editor]') : null;
     workPanel?.setRackMode?.(target.kind === 'session' && Boolean(container));
     rackEditor.show({ ...target, label: record.label ?? record.sharedObject, originLabel,
+      ownerLabel: sharedSource ? 'Shared sessions · Handoffs' : horizonSource ? 'Plan overview' : 'Delivery overview',
       returnLabel: target.kind === 'person' && container ? 'Back to Delivery overview' : null }, source, anchor,
-      { container, arrival: current?.open ? 'change' : 'open', originRoot: horizonSource ?? anchor });
+      { container, arrival: current?.open ? 'change' : 'open', originRoot: sharedSource ?? horizonSource ?? anchor });
     render();
     const panel = rackEditor.element.querySelector('details');
     if (!panel.open || panel.hidden) { rackEditor.hide(); return; }
@@ -338,17 +341,22 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!parked.ok) { announce(parked.error.message); return; }
     const held = editing.read().parked.some(record => record.kind === kind && record.targetId === target);
     if (activeChapter === 'coordination' && kind === 'connection' && creating === 'team') {
-      const source = captureRackEntry(button, root);
       const result = createRackRecord(studio, editing, 'team');
       if (!result.ok) { announce(result.error.message); render(); return; }
-      pendingReturnFocus = null;
-      retainReturnAncestors(kind, target);
-      returnRoutes.push({ kind, target, creating, held, createdId: result.id, createdKind: 'team',
-        field: button.dataset.nativeReturnField, rackSource: source });
-      rackEditor?.hide({ home: true });
-      templatePanel?.openTeam(result.id, source(), { onReturn: returnToDraft, returnLabel: '← Handoff settings' });
+      // This accepted addition changes only the new team. Recover the saved
+      // handoff against that exact projection and keep its current receiver.
+      if (studio.read() !== result.projection) { render(); return; }
+      let resumed;
+      try { openingRackKind = 'connection'; resumed = connectionPanel.open(target, false); }
+      finally { openingRackKind = null; }
+      if (resumed?.view?.status === 'stale')
+        resumed = editing.connection.review(resumed.view.draft.token, result.projection);
+      const field = button.dataset.nativeReturnField;
+      if (resumed?.ok && resumed.view.status === 'editing' && ['senderTeamId', 'receiverTeamId'].includes(field))
+        editing.connection.setText(resumed.view.draft.token, field, result.id);
       render(); syncSessionReceiver();
-      announce('Team added. Edit it here, then return to the handoff. Undo is available.');
+      rackEditor?.element.querySelector(`[name="${field}"]`)?.focus({ preventScroll: true });
+      announce('Team added and selected. Apply the handoff when ready. Undo is available.');
       return;
     }
     chapterShell?.select(creating === 'session' ? 'coordination' : 'people');

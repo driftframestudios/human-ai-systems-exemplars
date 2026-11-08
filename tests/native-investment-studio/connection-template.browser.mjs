@@ -82,7 +82,7 @@ for (const engine of names) {
     await expect(record).toBeVisible();
     await expect(panel(page).locator('.studio-delivery')).toHaveCount(0);
     await expect(panel(page).locator('[data-team-rack-editor] [data-assembly-configure]')).toHaveCount(0);
-    await expect(record.getByRole('button', { name: '← Delivery overview', exact: true })).toBeFocused();
+    await expect(record.getByRole('button', { name: 'Back to Delivery overview', exact: true })).toBeFocused();
     const member = record.locator('[data-team-rack-member="researcher"]');
     const renderedOrder = () => record.locator('[data-team-member-row][data-selected="true"]')
       .evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow));
@@ -116,7 +116,7 @@ for (const engine of names) {
       'clicking a member after typing a team name accepts both interactions');
     await expect(member).toBeFocused();
     await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
-    await record.getByRole('button', { name: '← Delivery overview', exact: true }).click();
+    await record.getByRole('button', { name: 'Back to Delivery overview', exact: true }).click();
     await expect(panel(page).locator('.studio-delivery')).toBeVisible();
     await expect(key).toContainText('Shared outcome team');
     await expect(key).toBeFocused();
