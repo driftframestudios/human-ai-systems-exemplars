@@ -390,17 +390,26 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   function acceptScoreAddition(update, message) {
     if (disposed || !isActive()) return;
+    const epoch = ++generation;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
+    if (!owns(epoch) || !isActive() || editing.read().active) return;
+    const prior = boundary();
     const base = studio.read(), settings = update(base.state.scoreSettings, base.state);
     if (!settings) return;
     const focusKey = document.activeElement?.dataset.cadenceKey;
     const result = studio.replace({ ...base.state, revision:base.state.revision + 1, scoreSettings:settings }, base);
     if (!result.ok) { announce(result.error.message); return; }
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return;
     inspectorOpen = false; fieldSignature = '';
     onAccepted(result.projection);
-    if (disposed) return;
-    render(); onEditing(); announce(message);
+    if (!retains(epoch, accepted)) return;
+    render();
+    if (!retains(epoch, accepted)) return;
+    onEditing();
+    if (!retains(epoch, accepted)) return;
+    announce(message);
     [...root.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === focusKey)?.focus({ preventScroll:true });
   }
   function addStage() {

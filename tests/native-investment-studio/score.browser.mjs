@@ -423,6 +423,38 @@ for (const engine of names) {
     assert.deepEqual(observed, ['onBegin', 'onEditing'].map(callback => ({ callback, beforeDisposal: expected, afterDisposal: expected })));
   });
 
+  test(`${engine}: direct score creation preserves a successor editor's focus`, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountScorePanel } = await import('/collaboration/native-investment-studio/score-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.scoreFixture.controller.dispose();
+      const element = document.querySelector('[data-native-score]'), results = [];
+      const external = document.createElement('input'); document.body.append(external);
+      for (const callback of ['onAccepted', 'onEditing']) {
+        const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
+        const initialCount = studio.read().state.scoreSettings.stages.length;
+        let successor;
+        const receiver = mountScorePanel(element, { studio, editing, [callback]() {
+          if (successor) return;
+          editing.purpose.begin('purpose', studio.read());
+          successor = editing.read().active.token; external.focus();
+        } });
+        const add = element.querySelector('[data-cadence-key="rack-add-stage"]');
+        add.focus(); add.click();
+        results.push({ callback, added: studio.read().state.scoreSettings.stages.length - initialCount,
+          active: editing.read().active.kind, retained: editing.read().active.token === successor,
+          focusRetained: document.activeElement === external });
+        receiver.dispose(); editing.dispose();
+      }
+      external.remove(); return results;
+    });
+    assert.deepEqual(observed, ['onAccepted', 'onEditing'].map(callback =>
+      ({ callback, added: 1, active: 'purpose', retained: true, focusRetained: true })));
+  });
+
   test(`${engine}: disposal during preview releases the score lease and owned controls`, async t => {
     const page = await open(t, engine);
     const observed = await page.evaluate(async () => {
