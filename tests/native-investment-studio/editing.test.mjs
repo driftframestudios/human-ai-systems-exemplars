@@ -233,7 +233,7 @@ test('parked records own only frozen bounded raw fields and tiny acceptance mark
   editing.park();
   const record = editing.read().parked[0];
   assert.deepEqual(Object.keys(record).sort(), ['baseAcceptance', 'kind', 'raw', 'status', 'targetExists', 'targetId', 'token']);
-  assert.deepEqual(Object.keys(record.raw).sort(), ['fundedHours', 'fundedMinutes', 'ratePerHour']);
+  assert.deepEqual(Object.keys(record.raw).sort(), ['fundedHours', 'fundedMinutes', 'label', 'ratePerHour']);
   assert.deepEqual(Object.keys(record.baseAcceptance).sort(), ['instance', 'sequence', 'token']);
   assert.equal(typeof record.baseAcceptance.instance, 'symbol');
   assert.equal(typeof record.baseAcceptance.token, 'symbol');

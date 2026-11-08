@@ -206,20 +206,13 @@ for (const engine of names) {
     await expect(support.locator('input[value="research"]')).toBeChecked();
     assert.equal(await bytes(page), initial); await expect(total(page)).toHaveText('$3,980.00');
     await panel(page).screenshot({ path: resolve(captures, `${engine}-compact-proposal.png`) });
-    await prepare.locator('[data-native-create="session"]').click();
-    const session = root(page).locator('[data-native-configure]');
-    await session.locator('[name="label"]').fill('History walkthrough');
-    await session.locator('[name="teamId"]').selectOption('engineering');
-    await session.locator('[data-session-person="ari"]').check();
-    await session.getByRole('radio', { name: 'Included in funded time', exact: true }).check();
-    await session.locator('[data-action="apply"]').click();
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
-    await action(page, 'review').click();
-    await expect(prepare).toBeVisible(); await expect(support).toBeFocused();
+    await prepare.locator('[data-capability-record-kind="session"][data-capability-receiver-field="support.preparation"]').click();
+    await expect(tab(page, 'work')).toHaveAttribute('aria-selected', 'true');
+    await expect(panel(page)).toHaveAttribute('data-capability-state', 'editing');
+    await expect(prepare).toBeVisible();
     await expect(support.locator('input[value="research"]')).toBeChecked();
-    await expect(prepare.getByRole('checkbox', { name: 'History walkthrough' })).not.toBeChecked();
-    await prepare.getByRole('checkbox', { name: 'History walkthrough' }).check();
+    await expect(prepare.getByRole('checkbox', { name: 'Review the next step' })).toBeChecked();
+    await expect(prepare.getByRole('checkbox', { name: 'Review the next step' })).toBeFocused();
     assert.equal((await page.evaluate(() => window.capabilityFixture.studio.read().state.abilities.length)), 0,
       'returning supplies the new session while keeping the capability proposal unaccepted');
   });
@@ -252,34 +245,35 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$16,000.00'); assert.equal(await bytes(page), initial);
   });
 
-  test(`${engine}: adding a person returns to the saved card chooser, which stays usable at enlarged narrow sizes and releases on disposal`, { timeout: 60000 }, async t => {
+  test(`${engine}: adding a person stays in the support rack, which remains usable at enlarged narrow sizes and releases on disposal`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await choice(page, 'inspect-history').click(); await field(page, 'context').fill('  Return to this card  ');
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     const reviewGroup = panel(page).locator('[data-capability-requirement="review"]');
     await section(page, 'review').click();
     await field(page, 'new.review.enabled').selectOption('yes');
-    await panel(page).locator('[data-native-create="person"][data-native-return-field="new.review.personIds"]').click();
-    const assembly = root(page).locator('[data-native-assembly]');
-    await assembly.locator('[data-assembly-form] [name="label"]').fill('Quality reviewer');
-    await assembly.locator('[data-assembly-form] [name="ratePerHour"]').fill('100');
-    await assembly.locator('[data-assembly-apply]').click();
+    await panel(page).locator('[data-capability-record-kind="person"][data-capability-receiver-field="new.review.personIds"]').click();
+    await expect(tab(page, 'work')).toHaveAttribute('aria-selected', 'true');
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeFocused();
+    await action(page, 'close').click();
+    await expect(panel(page).locator('[data-capability-configure]')).not.toHaveAttribute('open', '');
+    await expect(choice(page, 'inspect-history')).toBeFocused();
+    await supportCell(page, 'inspect-history', 'review').click();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
     await page.evaluate(() => {
       const { studio, controller } = window.capabilityFixture;
       const source = JSON.parse(studio.exportText()); source.purpose.changedAbility = 'Changed plan';
       source.people[1].rateCentsPerHour = null;
       const result = studio.importText(JSON.stringify(source), studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
     });
-    const returnButton = root(page).locator('[data-native-return-action]');
-    await expect(returnButton).toHaveText('Return to card');
-    await returnButton.click(); await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
+    await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
     await expect(field(page, 'context')).toHaveValue('  Return to this card  '); await action(page, 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     await expect(reviewGroup).toBeVisible();
-    await expect(ids(page, 'new.review.personIds')).toBeFocused();
-    await ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Quality reviewer' }).check();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
     await field(page, 'new.review.enabled').selectOption('no');
-    await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,000.00. Known accepted investment: $8,000.00.');
+    await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,400.00. Known accepted investment: $8,400.00.');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Add missing hourly rates in People to complete the amounts.');
     await field(page, 'new.review.enabled').selectOption('yes');
     await field(page, 'new.review.minutesPerSession').fill('later');

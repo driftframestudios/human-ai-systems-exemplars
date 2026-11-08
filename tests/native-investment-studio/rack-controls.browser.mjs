@@ -236,7 +236,11 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(designTeam.locator('.studio-delivery__team-key')).toBeFocused();
     const person = designTeam.locator('[data-delivery-person]').first();
     await person.click();
-    await expect(adjacent(page).locator('[data-person-configure] [name="ratePerHour"]')).toBeFocused();
+    await expect(adjacent(page).locator('[data-person-configure] [name="ratePerHour"]')).toBeVisible();
+    await expect(shared(page)).toBeVisible();
+    await expect(board).toBeHidden();
+    await expect(adjacent(page).locator('[data-rack-editor-close]')).toHaveText('Back to Delivery overview');
+    if (engine === 'chromium') await rack.screenshot({ path:resolve(captures, `person-in-team-rack-${width}.png`) });
     await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(person).toBeFocused();
     await delivery.locator('[data-delivery-overview]').click();
@@ -412,6 +416,20 @@ for (const engine of names) for (const width of [390, 1440]) {
     });
     assert.equal(geometry.nestedForm, false);
     assert.ok(geometry.left >= 0 && geometry.right <= width + 1 && geometry.targets.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
+    const modules = await configure(page).evaluate(node => {
+      const rect = selector => node.querySelector(selector).getBoundingClientRect().toJSON();
+      return { duration:rect('.studio-duration'), sessions:rect('.studio-occurrences'),
+        add:rect('[data-session-occurrence-add]'), remove:rect('[data-session-occurrence-remove]'),
+        pads:rect('.studio-occurrences__pads'), funding:rect('#native-session-funding label') };
+    });
+    assert.ok(modules.add.right > modules.sessions.right - 24 && modules.add.bottom <= modules.pads.top,
+      'Add is at the working-session module top right');
+    assert.ok(modules.remove.left < modules.sessions.left + 24 && modules.remove.top > modules.pads.bottom,
+      'Remove follows the session controls at the bottom left');
+    if (width === 1440) assert.ok(Math.abs(modules.duration.height - modules.sessions.height) < 2,
+      'duration fills the height of its neighboring rack module');
+    assert.ok(modules.funding.height >= 64, 'Funding choices use touchable pads');
+    await expect(configure(page).getByRole('heading', { name:'Funding and status', exact:true })).toBeVisible();
     await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' }));
     await page.screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}-viewport.png`) });
     await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}.png`) });
@@ -522,6 +540,15 @@ for (const engine of names) for (const width of [390, 1440]) {
     const teamRecord = rack.locator('[data-team-rack-record]');
     const teamName = teamRecord.locator('[data-team-rack-name]');
     await expect(teamName).toHaveValue(team.label);
+    await expect(shared(page)).toBeVisible();
+    const membership = teamRecord.locator('[data-team-rack-member]').first();
+    const memberPad = membership.locator('..').locator('..');
+    const inactive = await skin(memberPad);
+    await membership.check();
+    assert.notEqual((await skin(memberPad)).backgroundColor, inactive.backgroundColor,
+      'membership uses a distinct pressed sequencer face');
+    await root(page).locator('[data-studio-undo]').click();
+    await expect(membership).not.toBeChecked();
     await expect(adjacent(page)).toBeHidden();
     await teamRecord.locator('[data-template-action="team-back"]').click();
     await expect(teamKey).toHaveCount(1);
@@ -731,6 +758,34 @@ for (const engine of names) for (const width of [390, 1440]) {
     await root(page).locator('[data-rack-creation-undo]').click();
     assert.equal(await bytes(page), quarterBytes);
     await expect(newWithPerson).toBeFocused();
+    await contained(page, width);
+  });
+
+  test(`${engine}: handoff team creation stays in the rack and returns to the retained handoff at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width);
+    const templates = root(page).locator('[data-connection-templates]');
+    await templates.locator('[data-template-action="create-connection"]').click();
+    const connection = adjacent(page).locator('[data-connection-configure]');
+    await connection.locator('[name="sharedObject"]').fill('Prototype ready for review');
+    const before = await page.evaluate(() => window.rackFixture.studio.read().state.teams.map(team => team.id));
+    await connection.locator('[data-native-create="team"][data-native-return-field="senderTeamId"]').click();
+    await expect(root(page).locator('[data-native-chapter="coordination"]')).toHaveAttribute('aria-selected', 'true');
+    const team = templates.locator('[data-team-rack-record]');
+    await expect(team).toBeVisible(); await expect(shared(page)).toBeVisible();
+    await expect(adjacent(page)).toBeHidden();
+    const created = await page.evaluate(ids => window.rackFixture.studio.read().state.teams.filter(team => !ids.includes(team.id)), before);
+    assert.equal(created.length, 1, 'the entry immediately adds one real team');
+    await team.locator('[data-team-rack-name]').fill('Review partners');
+    await team.locator('[data-team-rack-name]').press('Tab');
+    await team.locator('[data-template-action="team-back"]').click();
+    await expect(connection).toBeVisible(); await expect(shared(page)).toBeVisible();
+    await expect(connection.locator('[name="sharedObject"]')).toHaveValue('Prototype ready for review');
+    await expect(connection.locator('[data-connection-action="review"]')).toBeVisible();
+    await connection.locator('[data-connection-action="review"]').click();
+    await connection.locator('[name="senderTeamId"]').selectOption(created[0].id);
+    await connection.locator('[data-connection-apply]').click();
+    const result = await page.evaluate(id => window.rackFixture.studio.read().state.connections.find(row => row.senderTeamId === id), created[0].id);
+    assert.equal(result.sharedObject, 'Prototype ready for review');
     await contained(page, width);
   });
 }

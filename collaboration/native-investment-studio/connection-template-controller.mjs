@@ -37,7 +37,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   let arrangementId = null, dirty = false, committing = false, undoProjection = null;
   let projection = studio.read();
   const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
-  let selectedTeamId = null, memberOrder = [], previousMemberIds = null, teamReturnKey = null, teamReturnPhase = null;
+  let selectedTeamId = null, memberOrder = [], previousMemberIds = null, teamReturnKey = null, teamReturnPhase = null, teamReturn = null;
   const configurations = new Map();
   const form = document.createElement('div'); form.className = 'native-connection-template__form';
   const choice = document.createElement('select'); choice.dataset.templateChoice = '';
@@ -273,18 +273,21 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     teamFields.replaceChildren(label, members);
     return true;
   }
-  function openTeam(id, source) {
+  function openTeam(id, source, { onReturn = null, returnLabel = '← Delivery overview' } = {}) {
     if (!studio.read().state.teams.some(team => team.id === id) || !open()) return false;
     if (selectedTeamId !== id) { memberOrder = []; previousMemberIds = null; teamFieldsSignature = null; }
     selectedTeamId = id; teamReturnKey = source?.dataset.studioEntryKey ?? teamReturnKey;
     teamReturnPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null;
+    teamReturn = onReturn; teamBack.textContent = returnLabel;
     setEditorOpen(false); renderStructure();
     teamBack.focus({ preventScroll: true });
     return true;
   }
   function setEditorOpen(opened) { delivery.dataset.editorOpen = String(opened); }
   function closeTeam() {
+    const returnToOrigin = teamReturn; teamReturn = null;
     selectedTeamId = null; renderStructure();
+    if (returnToOrigin) { returnToOrigin(); return; }
     const source = [...panel.querySelectorAll('[data-studio-entry-key]')]
       .find(node => node.dataset.studioEntryKey === teamReturnKey
         && (node.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null) === teamReturnPhase);
@@ -582,6 +585,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   configuration = startingConfiguration(TEMPLATES[0]); receiveAccepted(); build(); retirePreview(); panel.hidden = false;
   if (disclosure && exposed) panel.open = true;
   const controller = Object.freeze({ open, resume: open, close, detach, settleText, openTeam, setEditorOpen,
+    isTeamOpen: () => selectedTeamId !== null && teamEditor.isConnected,
     focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
     isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
   INSTANCES.set(panel, controller);

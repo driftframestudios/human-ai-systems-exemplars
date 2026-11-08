@@ -417,7 +417,8 @@
                   <p class="native-coordination__hint" data-native-session-people-empty hidden>This team needs participants. <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="session">Add a person</button></p>
                   <p class="native-coordination__error" id="native-session-people-error" data-native-error="personIds"></p>
                 </div>
-                <div class="native-session__settings-grid">
+                <div class="native-session__settings-grid studio-session-state" role="group" aria-labelledby="native-session-state-heading">
+                  <h4 id="native-session-state-heading">Funding and status</h4>
                   <fieldset id="native-session-funding"><legend>Funding</legend><ul class="native-session__exclusive">
                     <li><label><input type="radio" name="funding" value="additional" aria-describedby="native-session-funding-error" checked><span>Extra investment</span></label></li>
                     <li><label><input type="radio" name="funding" value="allocated" aria-describedby="native-session-funding-error"><span>Included in funded time</span></label></li>
@@ -475,6 +476,11 @@
             </div>
             <form novalidate>
               <fieldset disabled aria-label="Person rate and funded time">
+                <div class="studio-person-name">
+                  <label for="person-label">Name or role</label>
+                  <textarea id="person-label" name="label" rows="1" autocomplete="off" aria-describedby="person-label-error"></textarea>
+                  <p class="native-coordination__error" id="person-label-error" data-person-error="label"></p>
+                </div>
                 <div class="native-coordination__controls">
                   <div class="native-coordination__control">
                     <label for="person-ratePerHour">Hourly rate · USD</label>

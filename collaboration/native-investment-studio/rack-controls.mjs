@@ -71,6 +71,8 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
       title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`;
       context.textContent = selected.originLabel ?? ''; context.hidden = !selected.originLabel;
       close.setAttribute('aria-label', `Close ${label} settings`);
+      close.textContent = selected.returnLabel ?? 'Close';
+      if (selected.returnLabel) close.setAttribute('aria-label', `${selected.returnLabel}; close ${label} settings`);
     }
     for (const control of controls()) {
       const matches = selected?.kind === control.dataset.studioRecordKind && selected.id === control.dataset.studioRecordId;

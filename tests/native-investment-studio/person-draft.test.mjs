@@ -31,7 +31,7 @@ function rejected(result, code) { assert.equal(result.ok, false); assert.equal(r
 test('one person draft converts exact dollars and funded time into a coherent accepted row', () => {
   const { studio, editor, token } = setup();
   const before = studio.capture();
-  assert.deepEqual(editor.read().draft.raw, { ratePerHour: '100.00', fundedHours: '0', fundedMinutes: '0' });
+  assert.deepEqual(editor.read().draft.raw, { label: PERSON, ratePerHour: '100.00', fundedHours: '0', fundedMinutes: '0' });
   editor.setText(token, 'ratePerHour', '101.01');
   editor.setText(token, 'fundedHours', '2');
   editor.setText(token, 'fundedMinutes', '30');
@@ -339,4 +339,23 @@ test('failed person publication returns its error while a newer editor retains i
   assert.strictEqual(result.view.draft.token, replacement);
   assert.equal(result.view.error.code, 'text');
   assert.strictEqual(studio.read(), before);
+});
+
+
+test('person names use the same preview, retained edit and accepted history as rates', () => {
+  const { studio, editor, token } = setup();
+  const before = studio.read();
+  editor.setText(token, 'label', '  Service designer  ');
+  assert.equal(editor.read().draft.changed, true);
+  assert.equal(editor.preview(token).projection.state.people[0].label, 'Service designer');
+  editor.setText(token, 'label', 'Research lead');
+  assert.equal(editor.preview(token).projection.state.people[0].label, 'Research lead');
+  assert.equal(studio.read(), before);
+  editor.setText(token, 'label', ' ');
+  assert.equal(editor.apply(token).ok, false);
+  editor.setText(token, 'label', 'Research lead');
+  assert.equal(editor.apply(token).ok, true);
+  assert.equal(studio.read().state.people[0].label, 'Research lead');
+  assert.equal(studio.undo(studio.read()).ok, true);
+  assert.deepEqual(studio.read().state, before.state);
 });
