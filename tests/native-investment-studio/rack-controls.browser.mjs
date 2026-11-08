@@ -448,6 +448,12 @@ for (const engine of names) for (const width of [390, 1440]) {
         && Boolean(slot.previousElementSibling.closest('.native-cadence__screen'))
         && tracks.matches('.native-cadence__tracks');
     }), true, 'the deck sits inside the persistent screen before Session tracks');
+    const clearance = await adjacent(page).evaluate(node => {
+      const board = node.closest('.native-cadence__screen').querySelector('.native-cadence__board');
+      const paintedBottom = Math.max(...[...board.querySelectorAll('button')].map(control => control.getBoundingClientRect().bottom + 6));
+      return node.getBoundingClientRect().top - paintedBottom;
+    });
+    assert.ok(clearance >= 8, `the opened editor clears the board controls and their painted depth: ${clearance}px`);
     assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true, 'the adjacent panel borrows the canonical session owner');
     await expect(configure(page)).toHaveCount(1);
     const geometry = await adjacent(page).evaluate(node => {

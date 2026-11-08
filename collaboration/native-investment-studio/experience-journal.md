@@ -36,7 +36,8 @@ session tracks, then small People and Stages routes. An existing clip opens the
 canonical session controls between board and tracks. Close restores the originating
 scope. A first opening uses the downward reveal; changing the selected record
 keeps the same receiver and its position. The detail border stays flush with its
-rack. Duration and Working sessions fill neighboring slots on a wide rack.
+rack; the receiving slot reserves one rem above and below the module, replacing
+the former zero-gap insertion so adjacent controls and painted borders stay clear. Duration and Working sessions fill neighboring slots on a wide rack.
 Working sessions uses the regular dark module housing, with its heading/count
 and Add in the top row and Remove at the bottom right. Funding and Status have a
 named module with large stateful pads beside Participants. Each radio sits at
