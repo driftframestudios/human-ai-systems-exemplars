@@ -19,7 +19,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Plan overview | A cassette loads scope with detail closed. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
-| Handoff settings | Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
+| Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | From work, To work and optional Team connection define the relation. Its fresh draft offers creation, Cancel and Close; decisions, delays and removal become available after acceptance. |
 | People | Add person and Add team accept useful starting records with editing closed. Selecting the new record opens its local editor within the corresponding roster or team rack. Name, rate and funded time share the person owner; team membership keeps its own owner. |
 | Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. |
@@ -113,8 +113,12 @@ Reduced motion settles the same state directly. Attached People and available
 time and Stages & handoffs disclosures retain their editorial skin and spring
 reveal; their compact rack entries reach the same records. Working sessions
 Remove and existing relationship removal occupy the bottom-right action position.
-The horizon handoff shows concise relationship controls without a repeated cost
-preview.
+Both handoff receivers keep relationship controls concise. The team handoff
+uses two equal halves at laptop widths: name, sender, receiver and status beside
+a dark supporting-session pad module. Mobile stacks them. Its existing rose
+Remove remains bottom-right. Response content stays in the canonical record;
+new connections receive a concise default and appear in Delivery and Shared
+sessions immediately. Long textareas and repeated cost previews are superseded.
 
 [Ableton's Clip View](https://www.ableton.com/en/live-manual/12/clip-view/)
 provides the selected-record/detail precedent. The Studio adapts it as a
