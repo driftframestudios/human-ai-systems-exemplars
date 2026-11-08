@@ -75,9 +75,10 @@
 .native-coordination .native-assembly__team-list details > summary { background: transparent; font-weight: 650; }
 .native-coordination .native-assembly__team-list details .native-coordination__actions { gap: .35rem; margin: .4rem 0 0; }
 .native-coordination .native-assembly__team-list details button { box-shadow: none; }
-.native-coordination .studio-team-planning { background: var(--studio-editorial-surface); }
+.native-coordination .studio-team-planning { padding: clamp(.5rem, 1vw, .75rem); background: var(--studio-editorial-surface); }
 .native-coordination [data-template-exposed] { border: 0; background: transparent; box-shadow: none; margin: 0; }
 .native-coordination [data-template-exposed] > summary { display: none; }
+.native-coordination [data-template-exposed] > [data-connection-template-body] { padding: 0; }
 .native-coordination .native-connection-template__form > .native-coordination__hint { margin: 0; }
 .native-coordination .native-arrangement__identity { margin: 0; font-size: .9rem; }
 .native-coordination .native-arrangement__status { font-size: .75rem; }

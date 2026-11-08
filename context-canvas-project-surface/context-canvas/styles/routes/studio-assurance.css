@@ -113,6 +113,7 @@
 .native-quality-tracks th:first-child { inline-size: 12rem; }
 .native-quality-tracks th:not(:first-child) { min-inline-size: 6rem; }
 .native-quality-tracks td { max-inline-size: 12rem; }
+.native-coordination .native-quality-tracks button[data-assurance-action='propose'] { min-inline-size: max-content; white-space: nowrap; }
 .native-quality-tracks .native-quality-lock { color: var(--studio-screen-text); }
 .native-quality-tracks .native-quality-tracks__pad:disabled { opacity: 1; border-style: double; }
 @media (max-width: 40rem) {

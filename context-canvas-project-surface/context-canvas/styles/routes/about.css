@@ -2276,7 +2276,7 @@ p#on-dark-iron-ore {
 
 /* Session selection and one complete draft share Coordination's native controls.
    The form uses the chapter width; the accepted amount remains in the amp head. */
-.native-coordination__body[data-native-chapter-panel='coordination'] { container: native-coordination-chapter / inline-size; grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-coordination__body[data-native-chapter-panel='coordination'] { container: native-coordination-chapter / inline-size; grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.5rem, 1.5vw, 1rem); }
 .native-session { display: grid; gap: 1.5rem; min-inline-size: 0; }
 .native-session > * { min-inline-size: 0; }
 
@@ -2963,7 +2963,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 
 /* Coordination shell and inspector. cadence-view.mjs owns the period display;
    score-controller.mjs owns horizon controls and contextual editing. */
-.native-score { min-inline-size: 0; padding: clamp(.65rem, 2vw, 1.5rem); border: .15rem solid var(--native-ink); border-radius: .55rem; background: #dfe8df; box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
+.native-score { min-inline-size: 0; padding: clamp(.5rem, 1vw, .75rem); border: .15rem solid var(--native-ink); border-radius: .55rem; background: #dfe8df; box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
 .native-score [hidden] { display: none !important; }
 .native-score__heading { border-block-end: .15rem solid var(--native-ink); padding-block-end: .75rem; margin-block-end: 1rem; }
 .about-page .native-score :is(h3,h4,h5) { max-inline-size: none; margin: 0 0 .55rem; color: var(--native-text); font-family: system-ui, sans-serif; font-weight: 750; line-height: 1.3; }
