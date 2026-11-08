@@ -92,11 +92,11 @@ test('removed saved sessions remain inspectable and can release their held capac
   assert.equal(editing.discard(result.view.draft.token).ok, true); assert.equal(editing.read().slots, 1);
 });
 
-test('a transient removal confirmation parks no empty draft and preserves dependency diagnostics', () => {
+test('a transient removal confirmation parks no empty draft and keeps the accepted plan until Apply', () => {
   const { studio, editing } = setup();
   const draft = editing.session.begin('work.remove:review', studio.read()).view.draft;
-  assert.deepEqual(rejected(editing.session.preview(draft.token), 'dependencies').error.references,
-    [{ collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' }]);
+  assert.equal(editing.session.preview(draft.token).ok, true);
+  assert.equal(studio.read().state.work.length, 1);
   assert.equal(editing.park().ok, true); assert.equal(editing.read().slots, 0);
   assert.equal(editing.session.read().draft, null);
 });

@@ -206,10 +206,10 @@ for (const engine of names) {
     await expect(event.locator('summary')).toContainText('Repeat the interrupted request');
     await event.locator('[data-assurance-action="work"]').click(); await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
     await root(page).locator('[data-rack-remove-plan]').click();
-    const dependencies = root(page).locator('[data-native-session-dependencies]');
-    await expect(dependencies).toContainText('Recovery event: Recover the interrupted request.');
-    await expect(root(page).locator('[data-native-configure] [data-action="apply"]')).toBeDisabled();
-    await dependencies.locator('[data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();
+    await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
+    await expect(root(page).locator('[data-native-configure] [data-action="apply"]')).toBeEnabled();
+    await root(page).locator('[data-native-configure] [data-action="cancel"]').click();
+    await tab(page, 'assurance').click(); await expect(panel(page)).toBeVisible();
     await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
     await tab(page, 'assurance').click(); if (await action(page, 'current').isVisible()) await action(page, 'current').click();

@@ -1,12 +1,13 @@
 import { PlanError, prepareAssemblyCommand, preparePlan } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
 import { replaceWorkPlacements } from './cadence.mjs';
+import { removeWorkAndReferences } from './work-removal.mjs';
 
 const WORK_CHANGE_FIELDS = new Map([
   ['work.participants.replace', 'personIds'], ['work.funding.set', 'funding'], ['work.status.set', 'status'],
 ]);
 const REMOVAL_TARGETS = new Map([
-  ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']], ['work.remove', ['work', 'workId']],
+  ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']],
   ['contribution.remove', ['contributions', 'contributionId']], ['connection.remove', ['connections', 'connectionId']],
   ['capability.evidence.remove', ['capabilityEvidence', 'evidenceId']],
   ['arrangement.remove', ['arrangements', 'arrangementId']],
@@ -334,9 +335,12 @@ export function prepareAssembly(base, candidate) {
       rows = reordered(state[collection], command.ids);
       if (rows.every((row, index) => row === state[collection][index])) return { projection: base };
       break;
+    case 'work.remove': {
+      position(state.work, command.workId, 'command.workId');
+      return { projection: preparePlan({ ...removeWorkAndReferences(state, command.workId), revision: state.revision + 1 }) };
+    }
     case 'person.remove':
     case 'team.remove':
-    case 'work.remove':
     case 'contribution.remove':
     case 'connection.remove':
     case 'arrangement.remove':
@@ -345,11 +349,6 @@ export function prepareAssembly(base, candidate) {
       const next = removal(base, targetCollection, command[targetField], targetField);
       if (next.error) return next;
       ({ collection, rows } = next);
-      if (command.type === 'work.remove' && state.scoreSettings.cadence) {
-        const scoreSettings = { ...state.scoreSettings, cadence: { ...state.scoreSettings.cadence,
-          placements: state.scoreSettings.cadence.placements.filter(row => row.workId !== command.workId) } };
-        return { projection: preparePlan({ ...state, revision: state.revision + 1, work: rows, scoreSettings }) };
-      }
       break;
     }
   }

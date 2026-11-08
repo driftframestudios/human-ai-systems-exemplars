@@ -6,6 +6,8 @@ its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 dev receiving contract revised 8 November 2026 for
+[#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833),
+retaining the local editors and shared Apply from
 [#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
 It inherits [Studio Rack Composition](README.md). `main` remains the approved
 comparison anchor; a human cue authorizes promotion from `dev`.
@@ -37,7 +39,8 @@ Team membership uses the sequencer's clear selected face and available state.
 | Accept a prepared proposal | Raised Apply beside Close delegates to the canonical bottom action. A final confirmation carries acceptance meaning and its matching label. |
 | Close or return | Ghost action retains unfinished entries and restores the initiating control or named working area. |
 | Cancel edits | Ghost action restores accepted values. A record added earlier remains accepted. |
-| Remove | Muted rose action names the object or relationship and uses its current reference-aware recovery route. |
+| Remove a plan/session record | Muted rose action opens a concise confirmation. Acceptance removes the record and dissolves its links together; amp Undo restores both. |
+| Remove a working-session occurrence | Bottom-right rose action edits repetition and placement within the current proposal; the plan's supporting relationships remain attached. |
 | Undo | The stable native amp control reverses the latest accepted change through shared history. Its disabled state remains in place at zero. |
 
 The [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
@@ -58,6 +61,16 @@ canonical validation and return-focus behavior. An editor that stays open can
 retain header focus; a completed score edit closes its inspector and returns to
 the originating marker. The bottom action row remains available. A canonical
 Remove confirmation stays with its own bottom control.
+
+Removing a plan/session record retains a short confirmation with its name and
+Undo guidance. Acceptance clears that record from supporting-work selections,
+period placements and stage membership. Its incident handoffs, dependencies and
+anchored delays leave together. A decision with its own stage remains available;
+a decision attached only to a removed handoff leaves with it. Proposed work
+retains its entries and becomes independent of that removed decision. Supporting
+teams, contributions, abilities, practices and quality/recovery records remain
+available for new work. The canonical command accepts this complete change as
+one history entry; amp Undo restores the original record and relationships.
 
 Adding through an existing plan's track appends one accepted occurrence with
 all earlier placements retained. Period-lane and track New plan creation add
@@ -106,6 +119,7 @@ would need the separate focus and inert-background contract in the
 | Route | What it establishes or owns |
 | --- | --- |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing coordinator](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Receiver placement, active identity, saved drafts, shared Apply delegation, local returns and amp Undo |
+| [Session removal](../../collaboration/native-investment-studio/work-removal.mjs), [command owner](../../collaboration/native-investment-studio/commands.mjs), [removal checks](../../tests/native-investment-studio/work-removal.test.mjs), [session checks](../../tests/native-investment-studio/session.browser.mjs) | Atomic reference cleanup, occurrence distinction, concise confirmation and exact history recovery |
 | [Rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [capability](../../collaboration/native-investment-studio/capability-controller.mjs) controllers | Accepted creation and the existing person, team and support proposal owners |
 | [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [Abilities/People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) | Independent rack modules, direct team controls and local chapter skins |
 | [Rack browser checks](../../tests/native-investment-studio/rack-controls.browser.mjs), [People checks](../../tests/native-investment-studio/assembly.browser.mjs), [Abilities checks](../../tests/native-investment-studio/capability.browser.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Exercised creation, visibility, top Apply, draft retention, return, Undo and ordinary phone/desktop geometry |
@@ -121,12 +135,16 @@ the separate Customize teams and handoffs form, and a cassette-local Undo.
 Current local receivers, direct creation and amp history are the receiving
 pattern. #828 also supersedes bottom-only Apply access, automatic cassette
 filtering after period creation, and follow-on actions in a fresh handoff draft.
+#833 supersedes the session-removal requirement to reassign each reference
+manually. The confirmation now accepts one recoverable cleanup; other record
+types retain their existing relationship checks. Dark session surfaces use the
+dark-surface link palette for readable remaining navigation.
 Working sessions Remove moves from #825's bottom-left to bottom-right; its
 duration artwork remains preserved. `main` keeps its earlier approved runtime until promotion; Git
 history retains the earlier contract narrative.
 
 The [removal research](../../collaboration/native-investment-studio/removal-recovery-research.md)
-continues to inform future removal refinements. Direct acceptance for every
-removal, independent response cards and per-person allocation percentages retain
+continues to inform future removal refinements. Immediate acceptance for every
+record type, independent response cards and per-person allocation percentages retain
 their own implementation decisions. Revisit this contract when an operation,
 acceptance boundary, receiver placement or recovery route changes.

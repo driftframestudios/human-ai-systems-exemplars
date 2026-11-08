@@ -416,7 +416,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
           : 'This session was removed. Your saved entries remain below.';
     elements.fields.hidden = removing;
     elements.confirm.hidden = !removing;
-    elements.confirm.textContent = removing ? `Remove ${row?.label ?? descriptor.id} from this plan?` : '';
+    elements.confirm.textContent = removing ? `Remove ${row?.label ?? descriptor.id} and its links? Undo restores them.` : '';
     const accepted = row ? { label: row.label, teamId: row.teamId, personIds: row.personIds,
       cadencePlacements: JSON.stringify((projection.state.scoreSettings.cadence?.placements ?? [])
         .filter(item => item.workId === row.id).map(({ workId, ...item }) => item)),

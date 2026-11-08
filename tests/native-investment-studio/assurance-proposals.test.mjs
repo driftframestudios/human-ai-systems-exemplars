@@ -116,9 +116,11 @@ test('assurance reference guards name dependent records and settings commands pr
   const changedCommand = studio.applyCommand({ type: 'assurance.settings.replace', assuranceSettings: changedSubject.assuranceSettings }, before);
   assert.equal(changedCommand.error.code, 'rehearsal-definition-change');
   assert.strictEqual(studio.read(), before); assert.strictEqual(studio.readAcceptance(), marker);
-  const removedWork = studio.applyCommand({ type: 'work.remove', workId: 'recovery-check' }, before);
-  assert.equal(removedWork.error.code, 'dependencies');
-  assert.deepEqual(removedWork.error.references.map(row => row.field), ['quality.concepts[7].workIds', 'recoveryEvents[0].workIds', 'rehearsals[0].workIds']);
+  const removedWork = studio.previewCommand({ type: 'work.remove', workId: 'recovery-check' }, before);
+  assert.equal(removedWork.ok, true);
+  for (const row of [removedWork.projection.state.assuranceSettings.quality.concepts[7],
+    removedWork.projection.state.assuranceSettings.recoveryEvents[0], removedWork.projection.state.assuranceSettings.rehearsals[0]])
+    assert.ok(!row.workIds.includes('recovery-check'));
   const removedConnection = studio.applyCommand({ type: 'connection.remove', connectionId: 'readiness' }, before);
   assert.deepEqual(removedConnection.error.references, [{ collection: 'assuranceSettings', id: 'pilot-recovery', field: 'rehearsals[0].connectionIds' },
     { collection: 'scoreSettings', id: 'pairing-before-rehearsal', field: 'dependencies[1].connectionId' },

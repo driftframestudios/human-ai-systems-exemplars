@@ -314,7 +314,7 @@ for (const engine of names) {
     assert.equal(state.scoreSettings.stages.find(row => row.id === 'understand').label, 'Understand the receiving team’s request');
   });
 
-  test(`${engine}: removing a handoff clears its retained dependency and legacy diagnostics offer recovery`, async t => {
+  test(`${engine}: removing a handoff or its session clears the retained dependency and Undo restores it`, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
       const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
@@ -353,13 +353,12 @@ for (const engine of names) {
       const retained = await bytes(page);
       await root(page).locator('[data-connection-templates] [data-session-track="followup"] .studio-session-tracks__name').click();
       await root(page).locator('[data-rack-remove-plan]').click();
-      await root(page).locator('[data-native-session-dependencies] [data-native-open-score="dependency"]').click();
-      await expect(inspector(page).getByRole('heading', { name: 'Inspect retained handoff' })).toBeVisible();
-      await expect(inspector(page)).toContainText('Receive the review');
-      assert.equal(await bytes(page), retained, 'inspection preserves the retained relationship with or without a cadence');
-      await inspector(page).getByRole('button', { name: 'Remove this retained handoff', exact: true }).click();
-      await score(page).locator('.native-score__pending').getByRole('button', { name: 'Apply horizon', exact: true }).click();
-      assert.equal(await page.evaluate(() => window.scoreFixture.studio.previewCommand({ type: 'work.remove', workId: 'followup' }, window.scoreFixture.studio.read()).ok), true);
+      await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
+      assert.equal(await bytes(page), retained, 'confirmation preserves the relationship with or without a cadence');
+      await root(page).locator('[data-native-configure] [data-action="apply"]').click();
+      const removedSession = JSON.parse(await bytes(page));
+      assert.equal(removedSession.work.some(row => row.id === 'followup'), false);
+      assert.deepEqual(removedSession.scoreSettings.dependencies, []);
       await undo(page); assert.equal(await bytes(page), retained);
     }
   });

@@ -98,9 +98,9 @@ test('settings commands preserve money, exact no-op identity and linked-record r
   const identity = studio.read(), chronology = studio.readAcceptance();
   assert.equal(studio.applyCommand({ type: 'change.settings.replace', changeSettings: settings }, identity).ok, true);
   assert.strictEqual(studio.read(), identity); assert.strictEqual(studio.readAcceptance(), chronology);
-  const removeWork = studio.applyCommand({ type: 'work.remove', workId: 'review' }, identity);
-  assert.equal(removeWork.error.code, 'dependencies');
-  assert.deepEqual(removeWork.error.references.at(-1), { collection: 'changeSettings', id: 'kotter', field: 'frameworkMaps[0].components[0].workIds' });
+  const removeWork = studio.previewCommand({ type: 'work.remove', workId: 'review' }, identity);
+  assert.equal(removeWork.ok, true);
+  assert.deepEqual(component(removeWork.projection.state.changeSettings).workIds, []);
   const removePractice = studio.applyCommand({ type: 'capability.remove', kind: 'practice', instanceId: 'shared-expectations' }, identity);
   assert.deepEqual(removePractice.error.references, [{ collection: 'changeSettings', id: 'kotter', field: 'frameworkMaps[0].components[0].capabilityRefs' }]);
   component(settings).capabilityRefs = [];
