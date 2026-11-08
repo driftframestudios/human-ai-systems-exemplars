@@ -1,7 +1,7 @@
 import { createTimeControls, mountDurationDials, renderTimeReadout } from './time-controls.mjs';
 import { CHANGE_FIELDS, changeSettingsFromRaw } from './change-draft.mjs';
 import { listChangeFrameworks, listInterpretiveLenses, listAttentionChannels, getChangeSuggestion,
-  CHANGE_STATUSES, CHANGE_SOURCE_FILTERS, FOUR_ACTIONS_METHOD, createChangeSettings, projectChange } from './change-models.mjs';
+  CHANGE_STATUSES, CHANGE_SOURCE_FILTERS, FOUR_ACTIONS, FOUR_ACTIONS_METHOD, createChangeSettings, projectChange } from './change-models.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { money } from './display.mjs';
 import { getChangeMethod } from './change-methods.mjs';
@@ -35,7 +35,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   const editor = editing.change, componentNodes = [], faders = new Map(), selectedComponents = new Map(), selectedMethods = new Map();
   for (const name of ['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work', 'lens-wheel']) elements[name].replaceChildren();
   root.querySelector('[data-change-attention-note]')?.remove();
-  let disposed = false, generation = 0, composing = false, sequence = 0, lastProjection = null;
+  let disposed = false, generation = 0, composing = false, sequence = 0, lastProjection = null, selectedDiscussion = null;
   const owns = epoch => !disposed && generation === epoch;
   function listen(element, event, handler) { element.addEventListener(event, handler); cleanup.push(() => element.removeEventListener(event, handler)); }
   function node(tag, text, className) {
@@ -157,6 +157,14 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     lane.append(node('h4', label)); componentKeys.append(lane); return [id, lane];
   }));
   const tracks = node('div', undefined, 'native-change__tracks'); tracks.dataset.changeTracks = '';
+  const discussionPads = new Map(FOUR_ACTIONS.map(action => {
+    const pad = button('', 'component'), componentLabel = node('span');
+    pad.className = 'native-change__discussion'; pad.dataset.changeDiscussion = action.id;
+    pad.append(node('strong', action.label), componentLabel);
+    return [action.id, { pad, componentLabel }];
+  }));
+  elements['four-actions'].setAttribute('aria-label', 'Change planning actions');
+  elements['four-actions'].replaceChildren(...[...discussionPads.values()].map(entry => entry.pad));
   elements.matrix.append(componentKeys, elements['four-actions'], tracks, inspectors, elements.work);
   for (const framework of listChangeFrameworks()) for (const component of framework.components) {
     if (!selectedComponents.has(framework.id)) selectedComponents.set(framework.id, component.id);
@@ -252,13 +260,15 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         && active?.kind === 'change' && active.token === view.draft.token };
   }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   let trackSignature = '';
-  function syncTrackDisclosures() {
-    for (const control of tracks.querySelectorAll('.native-change__track-label')) {
+  function syncComponentDisclosures() {
+    for (const control of [...tracks.querySelectorAll('.native-change__track-label'), ...[...discussionPads.values()].map(entry => entry.pad)]) {
       const { changeFramework, changeComponent } = control.dataset;
-      control.setAttribute('aria-expanded', String(inspectors.open && selectedComponents.get(changeFramework) === changeComponent));
+      const selected = selectedComponents.get(changeFramework) === changeComponent
+        && (!control.dataset.changeDiscussion || control.dataset.changeDiscussion === selectedDiscussion);
+      control.setAttribute('aria-expanded', String(inspectors.open && selected));
     }
   }
-  listen(inspectors, 'toggle', syncTrackDisclosures);
+  listen(inspectors, 'toggle', syncComponentDisclosures);
   function renderTracks(reading, view, editable) {
     const works = view.projection.state.work.filter(work => work.lifecycle === 'active');
     const signature = JSON.stringify([reading.framework.id, reading.components, selectedComponents.get(reading.framework.id), inspectors.open,
@@ -295,7 +305,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
     table.append(caption, head, body); tracks.replaceChildren(table);
     if (!works.length) tracks.replaceChildren(node('p', 'Add a working session to connect it to this change.'));
-    syncTrackDisclosures();
+    syncComponentDisclosures();
     if (focusedPad) [...tracks.querySelectorAll('button')].find(pad => pad.dataset.changeMap === focusedPad.map && pad.dataset.changeWork === focusedPad.work)?.focus({ preventScroll: true });
   }
 
@@ -392,11 +402,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
     for (const lane of lanes.values()) lane.hidden = ![...lane.querySelectorAll('button')].some(key => !key.hidden);
     renderTracks(reading, view, editable);
-    elements['four-actions'].replaceChildren(...reading.fourActions.map(action => {
-      const pad = button('', 'component'); pad.className = 'native-change__discussion';
+    for (const action of reading.fourActions) {
+      const { pad, componentLabel } = discussionPads.get(action.actionId);
       Object.assign(pad.dataset, { changeFramework: reading.framework.id, changeComponent: action.componentId });
-      pad.append(node('strong', action.label), node('span', action.component.label)); return pad;
-    }));
+      pad.setAttribute('aria-controls', `${instance}-component-${reading.framework.id}-${action.componentId}`);
+      componentLabel.textContent = action.component.label;
+    }
+    syncComponentDisclosures();
     elements['four-actions'].title = `${FOUR_ACTIONS_METHOD.name} · ${FOUR_ACTIONS_METHOD.authors.join(' and ')}`;
     const attentionError = view.draft?.errors.some(error => error.path.startsWith('draft.attention.'));
     const greatestParts = Math.max(...emphasized.map(component => component.emphasis));
@@ -474,6 +486,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const action = control.dataset.changeAction;
     if (action === 'apply') return;
     if (action === 'component') {
+      selectedDiscussion = control.dataset.changeDiscussion ?? null;
       const origin = control.closest('.native-change__tracks') ?? control.closest('.native-change__four-actions') ?? componentKeys;
       origin.after(inspectors); inspectors.after(elements.work);
       selectedComponents.set(control.dataset.changeFramework, control.dataset.changeComponent); inspectors.open = true; render();
