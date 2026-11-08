@@ -258,3 +258,33 @@
  .native-coordination .studio-shared__tabs [aria-selected='true'] { background:Highlight; color:HighlightText; }
  .native-coordination .studio-shared__selected-body > label { color:CanvasText; }
 }
+
+/* The canonical handoff form travels between Delivery and Shared sessions.
+   Its route controls and supporting-work pads share one compact rack reading. */
+.native-handoff { display:grid; gap:.75rem; min-inline-size:0; }
+.native-handoff[hidden] { display:none; }
+.native-handoff__routing { display:grid; align-content:start; gap:.65rem; min-inline-size:0; }
+.native-handoff .native-connection__grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+.native-handoff .native-connection__field { grid-template-rows:none; gap:.35rem; }
+.native-handoff .native-connection__field > label { font-size:.8rem; }
+.native-handoff .native-connection__field > :is(select,input:not([type='hidden'])) { inline-size:100%; min-inline-size:0; min-block-size:2.75rem; padding:.5rem; text-align:start; font:inherit; }
+.native-handoff .native-connection__field > button { min-inline-size:0; font-size:.75rem; padding:.4rem .5rem; }
+.native-handoff .native-connection__field > .native-control--navigate { padding-inline-end:1.8rem; }
+.native-handoff .native-coordination__error:empty { display:none; }
+.native-handoff .native-connection__sessions { align-content:start; gap:.5rem; margin:0; padding:.65rem; border:1px solid #668b73; border-radius:3px; background:#20382f; }
+.native-coordination .native-handoff .native-connection__sessions > .native-coordination__control-title { color:#f7f0d6; margin:0; font-size:.85rem; }
+.native-handoff .native-connection__work { grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr)); gap:.5rem; margin:0; }
+.native-coordination .native-handoff .native-connection__work > li { display:grid; gap:.35rem; align-content:start; padding:.5rem; margin:0; color:var(--native-text); font-size:.85rem; }
+.native-handoff .native-connection__work label { gap:.45rem; min-block-size:2.75rem; }
+.native-handoff .native-coordination__member-status { font-size:.7rem; }
+.native-handoff .native-coordination__manipulation { gap:.4rem; }
+.native-coordination .native-handoff .native-coordination__manipulation > button { padding:.3rem .4rem; min-block-size:2rem; font-size:.7rem; }
+.native-handoff > [data-connection-action='remove'] { grid-column:1/-1; justify-self:end; margin-block-start:.2rem; }
+.native-connection__configuration .native-connection__general-error:empty { display:none; }
+@media(min-width:60rem) {
+ .native-handoff { grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; }
+}
+@media(forced-colors:active) {
+ .native-handoff .native-connection__sessions { background:Canvas; border-color:CanvasText; }
+ .native-coordination .native-handoff .native-connection__sessions > .native-coordination__control-title { color:CanvasText; }
+}

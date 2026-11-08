@@ -18,7 +18,7 @@ test('rack additions accept editable team and directed handoff records with one 
   assert.equal(handoff.accepted, true, handoff.error?.message);
   assert.deepEqual(studio.read().state.connections.find(row => row.id === handoff.id), {
     id: handoff.id, senderTeamId: 'engineering', receiverTeamId: team.id, receiverPersonId: null,
-    sharedObject: 'New handoff 1', responseExpectation: null, workIds: [], status: 'active',
+    sharedObject: 'New handoff 1', responseExpectation: 'Confirm what is ready and name the next step.', workIds: [], status: 'active',
   });
   assert.equal(studio.readHistory().undoCount, 2);
   assert.equal(studio.undo(handoff.projection).ok, true);

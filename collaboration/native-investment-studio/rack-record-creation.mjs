@@ -30,7 +30,7 @@ function startingValues(state, kind, context) {
   if (sender.id === receiver.id) return failure('reference', 'Choose another receiving team for this handoff.');
   return { ok: true, raw: { senderTeamId: sender.id, receiverTeamId: receiver.id,
     receiverPersonId: receiver.personIds[0] ?? '', sharedObject: nextCreatedLabel(state.connections, 'handoff', 'sharedObject'),
-    responseExpectation: '', workIds: [], status: 'active' } };
+    responseExpectation: 'Confirm what is ready and name the next step.', workIds: [], status: 'active' } };
 }
 
 // Direct rack additions use the same ID allocation, saved edits and acceptance
