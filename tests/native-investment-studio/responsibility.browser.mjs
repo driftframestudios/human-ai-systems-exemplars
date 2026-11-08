@@ -76,7 +76,7 @@ const expectedRole = Object.freeze({ functionId: 'engineering', seniorityId: 'pr
 const categories = ['scenario-generation', 'source-retrieval', 'dependency-mapping', 'draft-artifacts', 'cross-source-synthesis', 'transparent-calculation'];
 async function role(page, id = 'product-one') {
   await people(page).locator(`[data-person-id="${id}"]`).click();
-  await settings(page, 'role').locator('summary').click();
+  await field(page, 'role', 'functionId').focus();
 }
 async function draftField(page, kind, name, value) {
   await field(page, kind, name).evaluate((control, value) => {
@@ -155,6 +155,10 @@ for (const engine of names) {
         rows: [...element.querySelectorAll('[data-people-team]')].map(lane => Math.round(lane.getBoundingClientRect().top)) }));
       assert.equal(new Set(geometry.rows).size, 1, 'teams remain one row of parallel groups');
       if (width === 390) assert.ok(geometry.scroll > geometry.width, 'phone team lanes remain locally reachable');
+      await expect(settings(page, 'role').locator('.studio-role-pads')).toBeVisible();
+      await expect(field(page, 'role', 'functionId')).toBeVisible();
+      await expect(field(page, 'role', 'functionId')).toBeEnabled();
+      await expect(people(page).locator('.studio-person-order .native-control--remove').first()).toHaveCSS('background-color', 'rgb(243, 216, 223)');
       await expect(people(page).locator('.studio-people-rates')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
       await people(page).screenshot({ path: resolve(captures, `${engine}-people-racks-${width}.png`) });
       await people(page).locator('[data-person-id="maya"]').click();
@@ -180,7 +184,7 @@ for (const engine of names) {
     }
     await people(page).locator('[data-person-id="maya"]').click();
     await people(page).locator('[data-person-configure] [name="ratePerHour"]').fill('unfinished');
-    await settings(page, 'role').locator('summary').click();
+    await field(page, 'role', 'functionId').focus();
     await field(page, 'role', 'functionId').focus();
     await field(page, 'role', 'functionId').selectOption('engineering');
     await expect(field(page, 'role', 'functionId')).toBeFocused();
@@ -204,6 +208,10 @@ for (const engine of names) {
   test(`${engine}: role choices and all six contribution categories retain literal investment and exchange meaning`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
+    await expect(field(page, 'role', 'functionId')).toBeVisible();
+    await field(page, 'role', 'functionId').selectOption('design-research');
+    assert.equal((await state(page)).people[0].role.functionId, 'design-research', 'the visible facet accepts its first change without opening a disclosure');
+    await root(page).locator('[data-studio-undo]').click();
     await role(page);
     await expect(settings(page, 'role').locator('summary')).toHaveText('Role mix · product-one · Add role details');
     for (const [name, value] of Object.entries(expectedRole)) {
@@ -453,7 +461,7 @@ for (const engine of names) {
           onEditing: () => { if (transitioned) lateCallbacks++; } });
         if (action === 'cancel') currentReceiver.selectPerson('product-one');
         else currentReceiver.open('contribution.remove:review-output');
-        const returnTarget = action === 'cancel' ? element.querySelector('[data-responsibility-configure="role"] summary')
+        const returnTarget = action === 'cancel' ? element.querySelector('[data-role-field="functionId"]')
           : element.querySelector('[data-responsibility-action="create"]');
         returnTarget.addEventListener('focus', () => {
           transitioned = true; currentReceiver.dispose();

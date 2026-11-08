@@ -35,7 +35,8 @@
 .native-coordination .studio-people-rack [data-person-id][aria-pressed='true'] { background:var(--native-signal); border-style:solid; box-shadow:inset 0 2px 3px #173c3155; }
 .native-coordination .studio-people-rack .native-team__roster p { margin:0; font-size:.72rem; line-height:1.4; }
 .studio-person-order { display:flex; flex-wrap:wrap; gap:.3rem; margin-block-start:.2rem; }
-.native-coordination .studio-person-order button { min-inline-size:0; min-block-size:2.5rem; padding:.3rem .45rem; border:1px solid #8a9d85; background:transparent; color:var(--native-text); box-shadow:none; font-size:.72rem; }
+.native-coordination .studio-person-order button { min-inline-size:0; min-block-size:2.5rem; padding:.3rem .45rem; box-shadow:none; font-size:.72rem; }
+.native-coordination .studio-person-order button:not(.native-control--remove) { border:1px solid #8a9d85; background:transparent; color:var(--native-text); }
 .native-coordination .studio-people-rack .native-team__roster > .studio-roster-add { display:flex; align-self:stretch; min-block-size:6rem; padding:0; border:0; background:transparent; box-shadow:none; }
 .native-coordination .studio-roster-add > .studio-rack-create-zone { flex:1; min-block-size:6rem; }
 .studio-people-reading { margin-block:.5rem; min-inline-size:0; max-inline-size:100%; }
@@ -81,7 +82,8 @@
 .native-coordination .studio-role-pads button { display:grid; align-content:start; gap:.2rem; min-inline-size:0; min-block-size:3.5rem; padding:.45rem; background:#29483a; color:#f7f0d6; border:1px solid #668b73; border-radius:2px; box-shadow:none; text-align:start; font-size:.75rem; }
 .native-coordination .studio-role-pads button small { font-size:.7rem; line-height:1.35; font-weight:400; }
 .native-coordination .studio-role-pads button[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 2px 3px #173c3155; }
-.native-coordination [data-responsibility-configure='role'] .native-responsibility__accepted { margin:0 0 .5rem; font-size:.75rem; }
+.native-coordination [data-responsibility-configure='role'] .native-responsibility__accepted { display:none; }
+.native-coordination [data-responsibility-configure='role'][data-editing='false'] :is(.studio-rack-header__owner,.studio-rack-editor__tools) { display:none; }
 .native-coordination [data-responsibility-configure='role'] .native-responsibility__grid { display:block; max-inline-size:32rem; }
 .native-coordination [data-responsibility-configure] .native-responsibility__field { grid-template-rows:none; gap:.35rem; }
 .native-coordination [data-responsibility-configure] .native-responsibility__field[hidden] { display:none; }

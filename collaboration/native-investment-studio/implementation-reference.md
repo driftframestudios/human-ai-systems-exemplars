@@ -65,7 +65,12 @@ then identifies each behavior's implementation owner.
   Each receiving editor retains its raw draft, validation and acceptance.
 - `responsibility-controller.mjs` owns selected-person role details and human
   contribution records within the People chapter. Both forms use the shared
-  command-draft engine and its single active coordinator lease.
+  command-draft engine and its single active coordinator lease. The visible
+  facet rail enters that owner when its selected field is used; bounded role and
+  contribution choices accept through the same owner and shared history.
+- `studio-people.css` follows `studio-arrangements.css` in the About route and its
+  primary asset manifest. It owns parallel team lanes, the recessed roster, role
+  and contribution geometry, and the canonical Person form borrowed by Coordination.
 - `capabilities.mjs` owns the versioned ability/practice definitions and legacy interpretation.
 - `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
 - `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
@@ -1561,10 +1566,13 @@ visits those bounded values. Catalogue lookup sets initialize once; receiving
 reference maps rebuild once per accepted projection. Material preview and
 Apply retain the measured full-preparation path.
 
-`responsibility-controller.mjs` presents Role details for the selected person
-and a Human review list within People. Native disclosures keep these editors
-local to the chapter. One grouped selector preserves the framework/component
-pair; adjacent labels and ordered session controls describe each operation.
+`responsibility-controller.mjs` presents the selected person's visible Role mix
+rail and a contribution/session matrix within People. The rail shows eight current
+values and one selected native field; a contribution opens compact Work and
+Receiver and decision sections. Native choices and support changes accept
+directly. One grouped selector preserves the framework/component pair; receiver
+and decision owner remain independent. Retained proposals still use the canonical
+Apply, Cancel and stale-recovery routes.
 `responsibility-draft.test.mjs` and `responsibility-editing.test.mjs` own the
 raw/accepted boundary. `responsibility.browser.mjs` owns complete-field meaning,
 unchanged monetary totals, retained and stale targets, narrow reading, focus
@@ -1735,9 +1743,11 @@ same draft coordinator. Their separate forms and action attributes keep input
 and submission with the selected editor. The root resumes the selected editor
 after Purpose or another chapter; saved entries also have their existing tray.
 
-A person creation previews funded cost before Apply. A team creation or update
-changes membership and its order; session participants remain their own work
-records. Referenced removals display the accepted team, work or practice labels
+Rack Add controls accept useful person/team defaults with editing closed.
+Selecting the record opens its existing editor; person names, rates and funded
+time retain Apply and its preview. Direct team membership and member order enter
+shared accepted history; team names and explicit creation proposals retain Apply.
+Session participants remain their own work records. Referenced removals display the accepted team, work or practice labels
 that still use the record. The visitor can change those relationships first.
 An imported creation collision offers a fresh identity while retaining all
 entered text and ordered selections. Undo restores accepted identities and order.
@@ -1755,8 +1765,11 @@ The receiver retains its displayed projection, bounded maps, selected target
 and listener group. Callback epochs protect a newer editor or disposed receiver
 from late focus and announcement writes.
 
-The About route stylesheet owns the shared palette and form geometry. Circular
-step buttons stay below numeric inputs; feedback follows all input rows. The
+The About route supplies the shared palette. `studio-people.css` owns the compact
+People composition and canonical person form, including its borrowed Coordination
+receiver. Team lanes scroll as one horizontal row; person/team cards carry their
+own arrangement controls. Circular step buttons remain next to numeric values;
+feedback follows the input rows. The
 focused assembly browser route observes literal monetary outcomes, membership
 order, removal references, stale and collision recovery, callback ownership,
 compact controls, and document scrolling. The existing person browser route

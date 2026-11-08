@@ -6,7 +6,7 @@ its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 dev receiving contract revised 8 November 2026 for
-[#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832),
+[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836),
 retaining the removal and focus recovery from
 [#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833).
 It inherits [Studio Rack Composition](README.md). `main` remains the approved
@@ -21,7 +21,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | From work, To work and optional Team connection define the relation. Its fresh draft offers creation, Cancel and Close; decisions, delays and removal become available after acceptance. |
-| People | Add person and Add team accept useful starting records with editing closed. Selecting the new record opens its local editor within the corresponding roster or team rack. Name, rate and funded time share the person owner; team membership keeps its own owner. |
+| People | Add person, team and contribution accept useful starting records with editing closed. Per-record controls arrange the roster and parallel team lanes. Compact Person settings, the visible role rail and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
 | Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. |
 
 The Delivery working area and Shared sessions have separate visibility roles.
@@ -59,10 +59,15 @@ explains the local distinction between selection, creation and acceptance.
 Creation and later editing are separate accepted-state decisions. A new person,
 team, handoff or session enters shared history once with editing closed and a
 clear New {item} N label. Creation inside a prepared form keeps that parent
-form open and selects the new prerequisite there. Apply accepts subsequent
-form changes; Cancel restores that accepted record; Close retains the proposal.
-Direct Team planning name, membership and reorder changes accept immediately.
-People's team editor and the session, person and handoff forms retain Apply.
+form open and selects the new prerequisite there. Accepted bounded choices in
+People—role facets, contribution category/receiver/decision owner, team membership
+and supporting sessions—enter shared history directly and keep the initiating
+control focused. The role rail remains visible when its edit owner closes; using
+its selected field enters the canonical owner and parks any unfinished work.
+Team planning name, membership and reorder changes also accept immediately.
+Session, person and handoff proposals, People team names and retained responsibility
+drafts keep their Apply, Cancel and Close routes. Invalid person entries stay
+visible in the draft until corrected or cancelled.
 The shared top Apply mirrors its canonical submitter's label, disabled state
 and validation. It invokes that submitter's existing operation and preserves
 canonical validation and return-focus behavior. An editor that stays open can
@@ -106,7 +111,7 @@ explicit movement changes their order and retains focus on the same person.
 
 ## Layout and motion
 
-The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an Apply action. Team naming visibly distinguishes editing from saved state. Desktop uses the
+The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an idle Apply action. People role facets remain visible with the current person heading; the active field enters editing without another disclosure. Its contribution receiver pairs Work with Receiver and decision, stacking those halves at phone widths. The compact Person settings skin follows the same mounted form into Coordination. Team naming visibly distinguishes editing from saved state. Desktop uses the
 available rack width; ordinary mobile widths reflow controls while tables and
 cassette shelves scroll locally. A short downward unfurl marks loaded detail.
 Reduced motion settles the same state directly. Attached People and available
@@ -132,16 +137,22 @@ would need the separate focus and inert-background contract in the
 | --- | --- |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing coordinator](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Receiver placement, active identity, saved drafts, shared Apply delegation, local returns and amp Undo |
 | [Session removal](../../collaboration/native-investment-studio/work-removal.mjs), [command owner](../../collaboration/native-investment-studio/commands.mjs), [removal checks](../../tests/native-investment-studio/work-removal.test.mjs), [session checks](../../tests/native-investment-studio/session.browser.mjs) | Atomic reference cleanup, occurrence distinction, concise confirmation and exact history recovery |
-| [Rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [capability](../../collaboration/native-investment-studio/capability-controller.mjs) controllers | Accepted creation and the existing person, team and support proposal owners |
+| [Rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs), [capability](../../collaboration/native-investment-studio/capability-controller.mjs) controllers | Accepted creation, direct People choices and the existing person, team and support proposal owners |
 | [Shared sessions](../../collaboration/native-investment-studio/shared-session-rack.mjs) | Independent People/Handoffs views, direct participation/support commands and compact row selection |
-| [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [Abilities/People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) | Independent rack modules, direct team controls and local chapter skins |
-| [Rack browser checks](../../tests/native-investment-studio/rack-controls.browser.mjs), [People checks](../../tests/native-investment-studio/assembly.browser.mjs), [Abilities checks](../../tests/native-investment-studio/capability.browser.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Exercised creation, visibility, top Apply, draft retention, return, Undo and ordinary phone/desktop geometry |
+| [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) | Independent rack modules, direct team controls and local chapter skins |
+| [Rack browser checks](../../tests/native-investment-studio/rack-controls.browser.mjs), [People checks](../../tests/native-investment-studio/assembly.browser.mjs), [responsibility checks](../../tests/native-investment-studio/responsibility.browser.mjs), [Abilities checks](../../tests/native-investment-studio/capability.browser.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Exercised creation, visibility, top Apply, draft retention, return, Undo and ordinary phone/desktop geometry |
 
 The receiving PR records the checks actually run. Browser evidence establishes
 those operations and dimensions; human walkthrough establishes whether the
 composition and return cues feel clear.
 
 ## Supersession and next boundary
+
+#836 replaces the Person-to-arrange selector and Arrange team disclosure with
+visible record-local controls. Its role rail stays in view, and bounded
+role/contribution choices plus team/support membership supersede their extra
+Apply step. Canonical proposals, validation, saved-edit recovery and Undo retain
+their owners. Accepted callbacks and focus returns yield to a newer editing intent.
 
 The #832 local Shared sessions views supersede its former full-session editor jump. Its handoff editor now belongs to that matrix, while delivery edits retain their own receiver. The shared owner/current header supersedes inconsistent local title/return layouts.
 

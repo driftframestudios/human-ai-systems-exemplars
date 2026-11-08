@@ -8,8 +8,12 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 
 ## Current state
 
-`main` retains the approved showcase. `dev` receives the compact rack integration,
-with creation and recovery established in #831/#833 and local navigation in
+`main` retains the approved showcase. `dev` receives the compact rack integration.
+The current People receiver belongs to
+[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836),
+with its shared creation-control dependency supplied through
+[#837](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/837).
+Creation and recovery were established in #831/#833, with local navigation in
 [#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
@@ -39,11 +43,30 @@ creates a visible Delivery card and Shared sessions column with a useful default
 response. Creating its missing team retains the handoff entries and selects the
 new team. Existing response text remains in the model and exports.
 
-People combines its roster, local person/team editors, role facets and
-contribution/session matrix. Add creates a useful record immediately; its name,
-rate and funded time can be edited in place. Abilities retains both support tables
-and opens one compact selected module. Add people, teams or sessions directly to
-that module's support selection, then Apply to accept the relationship. The preserved
+People keeps teams, people and contributions together in compact racks. Teams
+occupy one horizontal row of editorial lanes; each lane represents a group.
+Visible movement controls arrange the teams, people and ordered team members.
+The roster and contribution matrix sit in black recessed modules. A selected
+person opens compact name, rate and funded-time settings inside the roster;
+Apply accepts those typed values. Coordination borrows this same compact form.
+Role mix remains visible with the current person's name, eight pads showing their
+current values, and one native selector for the selected facet. Changing a role
+value accepts it directly.
+
+A contribution opens Work beside Receiver and decision, with those sections
+stacked at phone widths. Category, human receiver, decision owner and supporting
+session choices accept directly, as do People team membership and member order.
+Receiver and decision owner remain independent choices. Empty slots add a useful
+person, team or contribution immediately with editing closed; selecting the
+record opens its local controls. The amp's Undo recovers each accepted change.
+The live showcase enables two additional contributions through
+`createShowcasePlan({ peopleExamples: true })`: Source retrieval and Draft
+artifacts, alongside Cross-source synthesis. The default preset retains its
+smaller fixture.
+
+Abilities retains both support tables and opens one compact selected module.
+Add people, teams or sessions directly to that module's support selection, then
+Apply to accept the relationship. The preserved
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,
 peach Hours, paper Minutes, a shared readout and circular steps. Session pads own
 repetition inside a neighboring dark module, with Add at the top right and Remove
@@ -75,9 +98,11 @@ saved-plan owners. Deeper independently editable financial decks remain with
    its pads and return through **Delivery overview**. In Shared sessions, choose
    **People** to assign participants or **Handoffs** to link the work. The last
    participant stays selected until another person is included.
-5. Add or select a person/team in People, or choose an Abilities support cell.
-   Local controls retain your place. Close keeps unfinished entries; amp Undo
-   recovers an accepted addition.
+5. In People, arrange team lanes or person cards, then choose a person. Apply
+   accepts their name, rate and funded time; Role mix choices save directly.
+   Choose a contribution to connect its work, receiver and decision owner.
+   Empty slots add records with editing closed, and amp Undo restores accepted
+   changes. An Abilities support cell opens its own local proposal controls.
 6. Turn a Change or Quality reel, or compare a baseline in Investment. Each
    reading uses the same accepted people and work.
 
@@ -96,8 +121,11 @@ commitments and findings.
 | Add another session to a plan | Plus target in its track cell; keeps earlier placements and the current scope |
 | Create separate work in a period | Lane creation or New plan row; the board keeps all records visible |
 | Add a different scope | Explicit New plan or Add sprint/quarter |
-| Add a person, team or supporting session | Unique named record in the current rack, closed until selected; later field/link changes use their existing Apply boundary |
-| Change membership or order | Checkbox pads and compact movement controls |
+| Add a person, team or contribution in People | Empty-slot plus accepts a useful record, closed until selected; pointer hover or keyboard focus reveals it, and touch keeps it visible |
+| Add a supporting person, team or session in Abilities | Creation accepts the record; Apply accepts its assignment to the current proposal |
+| Arrange People team lanes or roster cards | Movement controls sit on the record and accept its new order with shared motion and Undo |
+| Change People team membership, member order, role values or contribution choices | Native selectors, checkbox pads and movement controls accept directly and retain local focus |
+| Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
 | Remove a named object | Muted rose control; session removal clears its links in one recoverable edit |
@@ -143,8 +171,18 @@ Choose the affected browser journey, for example:
 ```sh
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:score-browser
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:team-browser
+NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:assembly-browser
+NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:responsibility-browser
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:capability-browser
 ```
+
+The [assembly journey](../../tests/native-investment-studio/assembly.browser.mjs)
+observes direct membership and ordering, Undo, removal dependencies, retained
+drafts and the borrowed person form. The
+[responsibility journey](../../tests/native-investment-studio/responsibility.browser.mjs)
+observes the visible role rail, contribution choices, retained note data and the
+People composition at phone and desktop widths. These routes establish local
+source behavior; the receiving release owns hosted verification.
 
 Browser fixtures need local HTTP binding and the installed Playwright engines.
 Their shared [lifecycle owner](../../tests/native-investment-studio/browser-fixture-lifecycle.mjs)
@@ -170,8 +208,12 @@ actual checks and their scope. Performance refinement stays with
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Cassette and Investment deck presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
-| People, contributions and abilities | [team-controller.mjs](team-controller.mjs), [responsibility-controller.mjs](responsibility-controller.mjs), [capability-controller.mjs](capability-controller.mjs) |
-| Shared direct record creation and names | [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs), [assembly-controller.mjs](assembly-controller.mjs) |
+| People lanes, roster and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
+| Visible role mix and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs) |
+| People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
+| Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs) |
+| Shared creation target, accepted additions and names | [rack-creation-controls.mjs](rack-creation-controls.mjs), [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs) |
+| Populated showcase and opt-in People examples | [presets.mjs](presets.mjs), with live selection in [controller.mjs](controller.mjs) |
 | Current rationale and supersessions | [experience journal](experience-journal.md) |
 
 The visual contracts map further chapter-specific source and CSS owners. Follow

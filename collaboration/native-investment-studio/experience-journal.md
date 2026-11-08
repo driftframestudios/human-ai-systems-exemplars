@@ -14,10 +14,12 @@ understandable through direct exploration. Useful examples and visible changes
 lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
-`main` retains the approved reference. The living integration is `dev`, where
+`main` retains the approved reference. The living integration is `dev`.
+#836 carries the compact People receiver with shared creation controls from #837.
 #831/#833 establish accepted creation and recoverable session removal; #832
-consolidates local headers and Shared sessions. The #827 browser-fixture
-repair keeps focused verification usable across that integration. Promotion to main and a tagged public release each await
+consolidates local headers and Shared sessions. The #827 browser-fixture repair
+keeps focused verification usable across that integration. Promotion to main and
+a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
 
@@ -132,16 +134,41 @@ The evidence and alternatives are reconciled in the control research.
 
 ### People, Abilities and the other chapters
 
-People keeps its person and team editors inside their own roster racks. Add
-accepts useful, uniquely named defaults immediately and leaves their editor
-closed; amp Undo recovers that creation. The person
-draft now owns Name or role alongside rate and funded time, so a new person can
-be refined locally. Apply accepts field edits, while Close retains the draft and
-returns focus to its record. Roles use
-one compact facet rail instead of showing every dimension at once. Contributions
-appear as rows against supporting sessions; accepted links light their cells.
-Receiver choice and linked work remain meaningful. Removed free-text review and
-decision-boundary editors leave previously stored values intact.
+People has one continuous rack composition: horizontal editorial team lanes,
+a black recessed roster with local settings and Role mix, then a black
+contribution/session matrix. Team lanes represent parallel groups. Their visible
+Move left/right controls change display order; person cards offer Move
+earlier/later and Remove beside the record. Team membership and member order
+accept directly through canonical commands. Shared keyed movement connects each
+record's old and new position while reduced motion retains the final state.
+
+Empty team, roster and contribution slots share one creation control. Pointer
+hover and keyboard focus reveal the plus; touch keeps it visible. Add accepts a
+useful record immediately with editing closed, and amp Undo recovers that
+creation. Person and team defaults receive unique names. Selecting a record
+opens its local controls. The compact person draft owns Name or role, rate and
+funded time; Apply accepts those typed values, while Close retains the draft and
+returns focus to its record. Coordination borrows that same mounted form and
+compact treatment.
+
+Role mix stays visible with its heading and current person. Eight pads display
+the current facet values, and one native selector edits the selected facet.
+Choosing a facet changes the inspected dimension; changing its value accepts a
+role update directly. Each role dimension keeps its independent stored meaning.
+The selected contribution places Work beside Receiver and decision, stacking
+them at phone widths. Category, human receiver, decision owner, supporting
+sessions and support order accept directly. The two human choices preserve
+their separate responsibilities. Accepted links light the matrix's session
+cells. Earlier stored review and decision-boundary notes remain in the plan and
+exports while the compact controls edit their current fields.
+
+`presets.mjs` adds Source retrieval and Draft artifacts when
+`peopleExamples: true`. The live showcase opts in alongside its existing
+Cross-source synthesis contribution; the default fixture keeps its earlier
+scope. `studio-people.css`, loaded after Arrangement styles, owns this
+composition and the canonical person form in both receiving chapters.
+`rack-creation-controls.mjs` owns the shared empty-slot button; record creation,
+validation and accepted history retain their existing owners.
 
 Abilities retains both native support tables: What people can do and How the
 team works, with responsibility, preparation, review and observation columns.
@@ -170,8 +197,8 @@ remain preserved references.
 | Owned meaning | Current behavior |
 | --- | --- |
 | Accepted plan | One immutable projection supplies accepted amounts, relationships, comparisons and downloads. |
-| Ordinary editor proposal | Raw values and selections remain in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
-| Direct rack operation | Arrangement selection, Coordination team membership/name/order, period creation, existing-plan occurrence append and record additions use canonical accepted commands. People team edits retain their existing Apply boundary. |
+| Ordinary editor proposal | Typed person settings and other proposal forms keep raw values in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
+| Direct rack operation | Arrangement selection, Coordination team membership/name/order, People collection/member order and membership, role values, contribution choices/support, period creation, existing-plan occurrence append and record additions use canonical accepted commands. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
 | Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
 | Baseline | An independent comparison and restore point, separate from Undo and unfinished edits. |
@@ -210,8 +237,9 @@ its approved size. Local tables scroll within their rack at phone widths.
 
 Ordinary local controls have light borders and restrained depth. A selected pad
 has a clear pressed state; a disclosure caret reflects the receiver's actual
-visibility. Apply retains a raised primary treatment beside Close and at the
-bottom of the form. The top control delegates to the canonical submitter and
+visibility. Proposal Apply retains a raised primary treatment beside Close and at
+the bottom of the form. Direct People controls show the saved state locally.
+The top Apply control delegates to the canonical submitter and
 mirrors its label, disabled/validation state and return focus. Removal confirmation
 keeps its own bottom action. Cancel is ghost. Reversible
 Remove is muted rose with a named object. A plus means starting creation, never
@@ -260,7 +288,13 @@ participant time shares remain with #798; production Reset remains with #808.
 | Shared-session references block removing a session | #833 clears the session and its dependent links atomically; amp Undo restores them together. |
 | Per-file root teardown inspects only resources already assigned | #827 joins pending setup through one shared lifecycle owner, then releases every acquired browser and server once. |
 | #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
-| Team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
+| Coordination team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
+| People arrangement begins with a separate Person to arrange selector | Each roster card carries its own Move earlier/later and Remove controls. |
+| Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
+| People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
+| Role mix opens from a separate disclosure | The current person's heading, eight value pads and selected native facet remain visible in the People rack. |
+| Role and contribution selections wait for Apply | Role values, contribution category, human responsibility and supporting sessions accept directly; typed person settings retain Apply. |
+| Person settings use a large chapter-local form | One compact canonical form serves both People and the borrowed Coordination receiver. |
 | Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
 | People creation starts a detached form; Abilities creation changes chapter | Useful accepted defaults and local editors retain the current rack and support selection. |
 | #825 Working-session Remove sits bottom-left | #828 moves it to the bottom right; Add remains top-right and duration retains its full-height slot. |
@@ -304,7 +338,17 @@ Controlled resource tests and a bounded child runner exercise this ownership;
 real-browser runs establish the affected fixtures' integration. This supersedes
 the temporary workaround of excluding every file without a matching case.
 
+For People, the [assembly browser route](../../tests/native-investment-studio/assembly.browser.mjs)
+observes accepted membership/order, keyed movement, shared Undo, removal
+dependencies, retained drafts and the borrowed person receiver. The
+[responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
+observes the visible role rail, direct contribution changes, preserved note data,
+and phone/desktop composition. These checks establish the named local behavior;
+the receiving release supplies the hosted observation.
+
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
-Shared sessions workflow; #833 owns atomic session removal and recovery. Broader financial models, response records,
+Shared sessions workflow; #833 owns atomic session removal and recovery.
+#836 owns the People composition and direct responsibility choices, with #837
+supplying its shared creation-control dependency. Broader financial models, response records,
 performance and public release retain their separate issues.

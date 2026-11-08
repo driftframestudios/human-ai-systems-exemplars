@@ -73,7 +73,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     group.configure.dataset.directAcceptance = 'true';
     group.header = mountRackHeader(group.configure, { title: group.kind === 'role' ? 'Role mix' : 'Contribution settings',
       owner: group.kind === 'role' ? 'People' : 'Contributions', onClose: () => {
-        const target = group.kind === 'role' ? group.summary : contributionButtons.get(describe(group.target)?.id) ?? add;
+        const target = group.kind === 'role' ? rolePads.get(selectedRoleField) : contributionButtons.get(describe(group.target)?.id) ?? add;
         close(); const epoch = generation, intent = editing.read().intent;
         onEditing(); if (owns(epoch) && editing.read().intent === intent && target?.isConnected) target.focus({ preventScroll: true });
       } });
@@ -236,7 +236,8 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     const removing = descriptor?.mode === 'remove' && Boolean(draft);
     const row = group.kind === 'role' ? people.get(descriptor?.id ?? selectedPerson) : contributions.get(descriptor?.id);
     const raw = draft?.raw ?? (group.kind === 'role' ? roleRaw(row) : contributionRaw(row));
-    group.fieldset.disabled = !draft || view.status !== 'editing';
+    group.fieldset.disabled = group.kind === 'role' && !draft ? false : !draft || view.status !== 'editing';
+    group.configure.dataset.editing = String(group.acknowledged);
     group.recovery.hidden = !draft || view.status !== 'stale';
     group.configure.hidden = group.kind === 'role' ? selectedPerson === null && !draft : !group.target && !draft;
     group.summary.textContent = summaryText(group.kind, row, descriptor, draft);
@@ -299,7 +300,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (disposed) return editing[mode].read();
     const epoch = generation;
     index(studio.read());
-    if (!groups.role.configure.open) {
+    if (!groups.role.acknowledged) {
       const person = editing.read().selected.person;
       selectedPerson = people.has(person) ? person : people.has(selectedPerson) ? selectedPerson : projection.state.people[0]?.id ?? null;
       groups.role.target = selectedPerson ? makeRoleTarget('role.update', selectedPerson) : null;
@@ -321,7 +322,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     else if (view.status === 'editing') (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.kind === 'role' ? selectedRoleField : group.fields[0]]).focus();
   }
   function reveal(kind) {
-    for (const group of Object.values(groups)) { group.acknowledged = group.kind === kind; group.configure.open = group.kind === kind; }
+    for (const group of Object.values(groups)) { group.acknowledged = group.kind === kind; group.configure.open = group.kind === 'role' || group.kind === kind; }
   }
   function opened(kind, result, epoch, focus) {
     if (!owns(epoch)) return result;
@@ -371,7 +372,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     const epoch = ++generation;
     if (park && ['role', 'contribution'].includes(editing.read().active?.kind)) editing.park();
     if (!owns(epoch)) return;
-    for (const group of Object.values(groups)) { group.acknowledged = false; group.configure.open = false; }
+    for (const group of Object.values(groups)) { group.acknowledged = false; group.configure.open = group.kind === 'role'; }
     renderDisclosureState();
   }
   function changed(kind, result, epoch, focus = null) {
@@ -411,7 +412,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     } : null); return; }
     if (action === 'cancel') {
       group.target = descriptor.mode === 'create' ? null : group.target;
-      finishClosed('Changes cancelled.', () => group.configure.hidden ? add : group.summary);
+      finishClosed('Changes cancelled.', () => group.configure.hidden ? add : kind === 'role' ? rolePads.get(selectedRoleField) : group.summary);
       return;
     }
     const accepted = result.projection ?? studio.read();
@@ -465,10 +466,15 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function edit(kind, event) {
     const group = groups[kind], field = event.target.name;
     if (disposed || group.inputs[field] !== event.target) return;
+    const value = event.target.value;
+    if (kind === 'role' && !group.acknowledged && canOpen()) {
+      const target = group.target; open(target, false);
+      if (group.target !== target) return;
+    }
     const draft = editing[kind].read().draft;
-    if (!draft) return;
+    if (!draft || !group.acknowledged) return;
     const epoch = ++generation;
-    changed(kind, operate(kind, 'setText', draft.token, field, event.target.value), epoch);
+    changed(kind, operate(kind, 'setText', draft.token, field, value), epoch);
   }
   function click(event) {
     const control = event.target.closest('[data-responsibility-action]');
@@ -505,11 +511,11 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     delete root.dataset.responsibilityReady; INSTANCES.delete(root);
   }
   const receiver = Object.freeze({ read: () => editing[mode].read(), render, refresh: render, selectPerson, open, create, close,
-    isOpen: () => !disposed && Object.values(groups).some(group => group.configure.open),
+    isOpen: () => !disposed && Object.values(groups).some(group => group.acknowledged),
     resume() {
       if (disposed) return;
       const group = groups[mode]; group.composing = false;
-      if (group.configure.open && group.target) open(group.target, false); else render();
+      if (group.acknowledged && group.target) open(group.target, false); else render();
     }, dispose });
   try {
     for (const [field, rows] of Object.entries(ROLE_CATALOGUES)) groups.role.inputs[field].replaceChildren(option('', 'Unassigned'), ...rows.map(row => option(row.id, row.label)));
@@ -523,6 +529,9 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const group = groups[kind];
       for (const field of group.fields) if (group.inputs[field].tagName === 'TEXTAREA') group.inputs[field].maxLength = form.fields[field].maxLength;
       listen(group.form, 'input', event => edit(kind, event));
+      if (kind === 'role') listen(group.form, 'focusin', event => {
+        if (!disposed && group.inputs[event.target.name] === event.target && !group.acknowledged && group.target && canOpen()) open(group.target, false);
+      });
       listen(group.form, 'change', event => {
         if (disposed || group.inputs[event.target.name] !== event.target || group.composing) return;
         const view = editing[kind].read(), descriptor = describe(keyFor(kind, view.draft));
@@ -535,7 +544,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
         if (!disposed && !group.configure.open && group.target && canOpen()) { event.preventDefault(); open(group.target, false); }
       });
       listen(group.configure, 'toggle', () => {
-        if (disposed) return;
+        if (disposed || kind === 'role') return;
         if (group.configure.open) {
           if (!group.acknowledged && isActive() && group.target) open(group.target, false);
         } else if (group.acknowledged) { close(); onEditing(); }
@@ -552,6 +561,8 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       label.textContent = RESPONSIBILITY_LABELS[field]; pad.append(label, value);
       pad.dataset.roleField = field; rolePads.set(field, pad); rail.append(pad);
     }
+    // Role values stay visible; acknowledged tracks entry to the canonical edit owner.
+    groups.role.configure.open = true;
     groups.role.fieldset.prepend(rail); cleanup.push(() => rail.remove()); selectRoleField(selectedRoleField);
     render();
     if (disposed) return receiver;

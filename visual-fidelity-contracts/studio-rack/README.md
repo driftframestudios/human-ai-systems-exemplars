@@ -8,7 +8,7 @@ is the implementation reference.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:studio-rack-composition`;
 dev receiving contract revised 8 November 2026 for
-[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
+[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836).
 `main` retains the approved Showcase reference. Promotion from `dev` and a
 tagged public release each require a human cue. The receiving PR records actual
 verification and independent review.
@@ -33,10 +33,16 @@ updates keep the matrix visible. Person and handoff editors use the delivery
 working area while Shared sessions remains independent. Creating a team from
 a handoff returns to that retained handoff and its requested team field.
 
-People contains local person/team editors in its roster racks. Abilities retains
-both support tables and one selected module for responsibility, preparation,
-review or observation. Useful record additions accept immediately; later field
-and support-assignment proposals keep their own Apply boundary. Investment's
+People groups Teams into one horizontal row of parallel editorial lanes. Its
+black recessed roster holds direct arrangement controls, compact Person settings
+and a visible Role mix rail with the current value on each facet. Contributions
+retain their session matrix and open a compact Work / Receiver and decision pair.
+Role choices, contribution choices and team/support membership accept directly
+through shared history; person quantities and text retain Apply.
+
+Abilities retains both support tables and one selected module for responsibility,
+preparation, review or observation. Useful record additions accept immediately;
+Abilities support assignments keep their own Apply boundary. Investment's
 VHS-C decks organize Plan investment, Compare a change and Keep a plan using the
 existing pricing, baseline and saved-plan owners.
 
@@ -69,7 +75,7 @@ and hit targets.
 | Add a working session to an existing plan | Plus target in that plan's track cell; appends one accepted occurrence in the chosen period and retains earlier placements |
 | Create a separate plan | Period-lane creation or the New plan track row adds a distinct record and keeps All plans visible; shelf New plan deliberately loads its new cassette |
 | Inspect work or a relationship | Named pad or key; pressed state identifies the record and its caret follows the visible receiver |
-| Include a person or choose a setting | Native checkbox/radio pad with persistent selected state |
+| Include a person or choose a setting | Native checkbox/radio pad with persistent selected state; People team membership and bounded role/contribution choices accept directly |
 | Accept a proposal | Raised Apply beside Close, delegated to the canonical bottom action; both carry the same label, validation and disabled state |
 | Close or return | Ghost control retains unfinished entries and restores the named source |
 | Cancel edits | Ghost control restores accepted values; an earlier accepted addition remains available |
@@ -109,7 +115,10 @@ treatments. Loaded detail has the short downward unfurl; attached editorial
 drawers keep their spring reveal. Motion remains outside serialized plan state.
 
 Ordinary phone and laptop/wide layouts are the receiving range. Controls reflow;
-two-dimensional tables and cassette shelves use named local scroll regions.
+two-dimensional tables, parallel team lanes and cassette shelves use named local
+scroll regions. People uses the established paper, peach and green palette on
+pure-black recessed modules. Its shared Person settings skin also follows the
+canonical form into Coordination.
 Headers contrast against their actual background. The pale Sessions to place
 tray uses dark text, while dark rack captions retain light text. Forced colors
 keeps native controls and selection available.
@@ -140,11 +149,13 @@ receivers need the same behavior; retain chapter-specific geometry and art.
 | --- | --- |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Shared palette, keys, creation zones, editors, Apply and recovery treatment |
 | [Session CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-session.css) | Duration/Working sessions placement, participant layout, Funding and Status pads |
+| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Parallel team lanes, recessed roster, visible role facets, contribution halves and compact canonical Person settings; loaded after Arrangement CSS |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | Editorial delivery board, local team controls and darker participation rack |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) CSS | Chapter-specific compositions |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Live receivers, retained drafts, shared Apply delegation and return focus |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Period scope, session append/new-plan distinction and relationship inspection |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs) | Canonical session fields, repetition and placement |
+| [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs) controllers | Per-record arrangement, Person drafts, direct role/contribution choices and their retained recovery owners |
 | [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Direct arrangement acceptance, phase scope and participation reading |
 
 ## Evidence, supersession and re-entry
@@ -162,6 +173,9 @@ Meaningful supersessions are explicit:
 
 | Earlier direction | Current receiving contract |
 | --- | --- |
+| Person-to-arrange selector and Arrange team disclosure | Visible movement/removal actions belong to each person or team card, with keyed movement and retained focus |
+| Role mix requires opening a separate disclosure | Current person, facet values and the selected native choice remain visible in the roster rack |
+| People membership and responsibility choices require a second Apply | Bounded choices accept directly; person text/quantities and retained proposals keep canonical validation and recovery |
 | A blank existing-plan track cell is descriptive only | It can append a working session to that plan; earlier placements remain visible |
 | Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |
 | #825 Working sessions Remove sits bottom-left | #828 places it bottom-right; Add remains top-right |
@@ -170,7 +184,9 @@ Meaningful supersessions are explicit:
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)
-records the broader current rationale. #828 is the receiving increment on dev.
+records the broader current rationale. #836 carries the compact People receiving
+increment on dev. The primary route manifest registers its CSS alongside the
+shared browser module closure.
 Participant shares (#798), independent response records (#816), deeper financial
 decks (#818), performance (#679), production Reset (#808) and public release
 (#686) keep their own outcomes and authority. Revisit a contract when its data
