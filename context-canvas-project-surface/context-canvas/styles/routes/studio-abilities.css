@@ -1,36 +1,86 @@
-/* Abilities: comparable support tables followed by an adjacent Editorial Rack.
-   capability-controller.mjs owns selection and the one retained draft inspector. */
-.native-capability-rack { display: grid; gap: .65rem; margin-block: .7rem; padding: .65rem; background: var(--studio-editorial); border: 1px solid var(--native-rule); border-radius: .3rem; min-inline-size: 0; scroll-margin-block-start: 5rem; }
-.native-coordination .native-capabilities__choice { background: var(--about-cool-blue); }
-.native-coordination .native-capabilities__choice[aria-pressed='true'] { background: var(--native-signal); box-shadow: inset 0 .15rem .2rem var(--native-key-shadow); }
-.native-capability-rack .native-capability-card { box-shadow: none; border-block-start-width: .2rem; padding: .8rem; gap: .65rem; }
-.native-capability-rack .native-capability-card__front { display: grid; gap: .4rem; }
-.native-capability-rack .native-capability-card__front p { font-size: .875rem; }
-.native-capability-rack .native-capability-settings { box-shadow: none; }
-.native-capability-pad-rail, .native-capability-example-pads { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr)); gap: .4rem; padding: .5rem; background: var(--studio-screen); border-radius: .3rem; margin-block: .5rem .75rem; }
-.native-coordination .native-capability-pad-rail button, .native-coordination .native-capability-example-pads button { min-inline-size: 0; min-block-size: 3.5rem; border: 1px solid var(--native-rule); border-block-end-width: .25rem; box-shadow: none; border-radius: .2rem; background: var(--native-paper); font-size: .85rem; }
-.native-coordination .native-capability-pad-rail button[aria-pressed='true'], .native-coordination .native-capability-example-pads button[aria-pressed='true'] { background: var(--native-signal); border-block-end-width: 1px; box-shadow: inset 0 .15rem .25rem var(--native-rule); }
-.native-capability-rack [data-capability-fields] > :is(section,details) { margin: 0; padding: .8rem; border: 1px solid var(--native-rule); background: var(--studio-peach); }
-.native-capability-rack [data-capability-fields] > details > summary { margin-block-end: .7rem; }
-.native-capability-rack .native-capability__choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: .4rem; padding: 0; margin: .5rem 0; }
-.native-capability-rack .native-capability__choices li { list-style: none; margin: 0; }
-.native-capability-rack .native-capability__choices label { min-block-size: 3rem; background: var(--native-paper); }
-.native-capability-example-reading { padding: .8rem; border-inline-start: .25rem solid var(--about-cobalt); background: var(--about-cool-blue); display: grid; gap: .5rem; }
-.native-capability-example-reading p { font-size: .9rem; }
-@media (min-width: 48rem) {
- .native-capability-rack [data-capability-people] { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .7rem; }
- .native-capability-rack [data-capability-people] > summary { grid-column: 1 / -1; }
-}
-@media (forced-colors: active) {
- .native-capability-pad-rail, .native-capability-example-pads { background: Canvas; }
- .native-coordination .native-capability-pad-rail button[aria-pressed='true'], .native-coordination .native-capability-example-pads button[aria-pressed='true'] { outline: .2rem solid Highlight; }
-}
-/* One selected support module keeps its bounded choices at rack scale. */
-.native-capability-rack .native-capability__choices label { display:flex; align-items:center; gap:.5rem; padding:.45rem; border:1px solid #668b73; border-radius:3px; color:var(--native-text); }
-.native-capability-rack .native-capability__choices label:has(:checked) { background:var(--native-signal); }
-.native-capability-rack .native-capability__choices input { flex:0 0 auto; }
-.native-capability-rack [data-capability-configure] > summary { display:none; }
-.native-capability-rack [data-capability-people] > h5 { grid-column:1/-1; }
-.native-capability__linked-work { display:flex; flex-wrap:wrap; gap:.45rem; }
+/* Abilities owns two comparable support tables and one selected support rack.
+   Loaded after about.css and shared studio-instrument.css. The controller owns
+   retained proposals; Support Matrix & Stateful Pads owns their meaning. */
+.native-coordination .native-capabilities__choice { background:var(--about-cool-blue); color:var(--native-text); }
+.native-coordination .native-capabilities__choice:hover { background:var(--studio-peach); color:var(--native-text); }
+.native-coordination .native-capabilities__choice[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 .15rem .2rem var(--native-key-shadow); }
 
-.native-capability-rack [data-capability-configure]:not([open]) { display:none; }
+.native-capability-rack { display:grid; gap:.55rem; margin-block:.75rem; padding:.65rem; min-inline-size:0; max-inline-size:100%; border:1px solid #668b73; border-radius:.3rem; background:#20382f; color:var(--native-paper); scroll-margin-block-start:5rem; box-shadow:inset 0 1px #809484,inset 0 -3px #0b1b14; }
+.native-coordination .native-capability-rack .studio-rack-header { margin:0; padding:.4rem .25rem .65rem; border-block-end:1px solid #668b73; background:transparent; color:var(--native-paper); }
+.native-coordination .native-capability-rack .studio-rack-header h4 { margin:0; color:inherit; font-size:1rem; }
+.native-capability-rack .native-capability-card { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.5rem .75rem; padding:.6rem .7rem; border:1px solid #a2b09a; border-inline-start:.2rem solid #00776b; background:var(--studio-peach); color:var(--native-text); box-shadow:none; }
+.native-capability-rack .native-capability-card > header { grid-column:1/-1; }
+.native-capability-rack[data-editing='true'] .native-capability-card > header { display:none; }
+.native-capability-rack .native-capability-card__faces { grid-column:1; grid-row:2; }
+.native-capability-rack[data-editing='true'] .native-capability-card__faces { grid-row:1; }
+.native-capability-rack .native-capability-card__front { display:block; }
+.native-capability-rack .native-capability-card__front p { margin:0; font-size:.82rem; line-height:1.45; }
+.native-capability-rack .native-capability-card__actions { grid-column:2; grid-row:2; gap:.35rem; margin:0; padding:0; border:0; }
+.native-capability-rack[data-editing='true'] .native-capability-card__actions { grid-row:1; }
+.native-coordination .native-capability-rack .native-capability-card__actions button { min-inline-size:0; min-block-size:2.5rem; padding:.35rem .5rem; font-size:.75rem; }
+.native-capability-rack [data-capability-action='remove']:disabled, .native-capability-rack .native-capability-card__actions:has(> [data-capability-action='configure'][hidden]):has(> [data-capability-action='remove']:disabled) { display:none; }
+
+.native-coordination .native-capability-rack .native-capability-settings { margin:0; border:0; background:transparent; box-shadow:none; }
+.native-capability-rack [data-capability-configure] > summary { display:none; }
+.native-capability-rack [data-capability-configure]:not([open]), .native-capability-rack [hidden] { display:none; }
+.native-coordination .native-capability-rack .native-capability-settings form { gap:.6rem; padding:0; background:transparent; color:var(--native-paper); }
+.native-capability-rack [data-capability-fields] { gap:.55rem; }
+.native-capability-pad-rail, .native-capability-example-pads { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,7rem),1fr)); gap:.35rem; margin:0; padding:.4rem; border:1px solid #526a5c; border-radius:.25rem; background:#000; }
+.native-coordination .native-capability-pad-rail button, .native-coordination .native-capability-example-pads button { min-inline-size:0; min-block-size:2.75rem; padding:.45rem .5rem; border:1px solid #668b73; border-block-end-width:.2rem; border-radius:.15rem; background:var(--native-paper); color:var(--native-text); box-shadow:none; font-size:.8rem; }
+.native-coordination .native-capability-pad-rail button[aria-pressed='true'], .native-coordination .native-capability-example-pads button[aria-pressed='true'] { background:var(--native-signal); border-block-end-width:1px; box-shadow:inset 0 .15rem .25rem #173c3155; }
+
+/* Section keys select one receiver. Hidden receivers retain their raw entries. */
+.native-coordination .native-capability-rack [data-capability-fields] > section { gap:.6rem; margin:0; padding:.65rem; border:1px solid #668b73; border-radius:.2rem; background:#152c23; color:var(--native-paper); }
+.native-coordination .native-capability-rack :is(h5,legend,label) { color:inherit; font-size:.8rem; }
+.native-capability-rack h5 { margin:0; font-weight:700; }
+.native-capability-rack .native-capability__section > p { margin:0; font-size:.78rem; }
+.native-capability-rack .native-capability__half-rack { display:grid; align-content:start; gap:.65rem; min-inline-size:0; }
+.native-coordination .native-capability-rack .native-capability__field { align-content:start; gap:.35rem; min-inline-size:0; padding:0; border:0; background:transparent; }
+.native-capability-rack .native-capability__field > legend { margin-block-end:.35rem; }
+.native-capability-rack .native-coordination__error:empty { display:none; }
+.native-capability-rack .native-coordination__error { margin:.15rem 0; padding:.3rem .45rem; background:var(--studio-peach); font-size:.78rem; }
+.native-coordination .native-capability-rack :is(input:not([type='checkbox'],[type='radio']),select,textarea) { min-block-size:2.5rem; padding:.4rem .5rem; border:1px solid #91a18b; background:var(--native-paper); color:var(--native-text); font-size:.85rem; }
+.native-capability-rack textarea { resize:vertical; }
+.native-capability-rack .native-capability__outcome > .native-capability__section { align-content:start; gap:.4rem; padding:.65rem; border:0; border-inline-start:.2rem solid #a38b60; background:#3e2d27; color:var(--native-paper); }
+.native-capability-rack .native-capability__outcome > .native-capability__section p { font-size:.85rem; }
+.native-capability-rack .native-capability__choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); align-items:stretch; gap:.35rem; margin:0; padding:0; }
+.native-capability-rack [data-capability-people] .native-capability__choices { grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr)); }
+.native-capability-rack .native-capability__choices li { min-inline-size:0; margin:0; padding:0; list-style:none; }
+.native-coordination .native-capability-rack .native-capability__choices label { display:flex; align-items:center; gap:.5rem; min-block-size:2.75rem; block-size:100%; padding:.45rem; border:1px solid #668b73; border-radius:.15rem; background:var(--native-paper); color:var(--native-text); font-size:.8rem; cursor:pointer; }
+.native-coordination .native-capability-rack .native-capability__choices label:has(:checked) { background:var(--native-signal); border-color:#164d3d; box-shadow:inset 0 2px 3px #173c3155; }
+/* Native choice geometry remains independent of text-field sizing. Checkboxes
+   retain the shared physical-switch skin; radio buttons retain native paint. */
+.native-coordination .native-capability-rack .native-capability__choices input { flex:0 0 auto; margin:0; padding:0; }
+.native-coordination .native-capability-rack .native-capability__choices input[type='checkbox'] { inline-size:2.25rem; min-inline-size:2.25rem; block-size:1.35rem; min-block-size:1.35rem; }
+.native-coordination .native-capability-rack .native-capability__choices input[type='radio'] { appearance:auto; inline-size:1.1rem; min-inline-size:1.1rem; block-size:1.1rem; min-block-size:1.1rem; accent-color:#006b60; }
+.native-capability-rack .native-capability__linked-work { display:flex; flex-wrap:wrap; gap:.4rem; }
+.native-capability-rack .native-capability__linked-work:empty { display:none; }
+.native-coordination .native-capability-rack .native-capability__linked-work button { min-inline-size:0; min-block-size:2.5rem; padding:.4rem 1.4rem .4rem .5rem; color:var(--native-paper); background:transparent; border-color:#668b73; box-shadow:none; font-size:.75rem; }
+.native-capability-rack .native-capability__new-work { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-content:start; gap:.65rem; min-inline-size:0; padding:.6rem; border:1px solid #668b73; background:#000; }
+.native-capability-rack .native-capability__new-work > :has([data-capability-field$='.personIds']), .native-capability-rack .native-capability__new-work > :has([data-capability-field$='.label']) { grid-column:1/-1; }
+.native-coordination .native-capability-rack .native-capability__steps { inline-size:7rem; max-inline-size:100%; justify-content:space-between; gap:.4rem; margin:0; }
+.native-coordination .native-capability-rack .native-capability__steps button { flex:0 0 2.75rem; min-inline-size:2.75rem; min-block-size:2.75rem; inline-size:2.75rem; block-size:2.75rem; padding:0; border-radius:50%; color:var(--native-text); background:var(--native-paper); }
+.native-capability-rack .native-capability__field--numeric input { inline-size:7rem; max-inline-size:100%; text-align:center; font-family:ui-monospace,monospace; }
+.native-capability-example-reading { display:grid; gap:.4rem; padding:.65rem; border-inline-start:.2rem solid #a38b60; background:#3e2d27; color:var(--native-paper); }
+.native-capability-example-reading p { margin:0; font-size:.85rem; }
+.native-capability-rack [data-capability-preview] { margin:0; padding:.5rem .6rem; color:var(--native-text); font-size:.78rem; }
+.native-coordination .native-capability-rack form > .native-coordination__actions { gap:.45rem; margin:0; }
+.native-coordination .native-capability-rack form > .native-coordination__actions button { min-block-size:2.5rem; min-inline-size:0; font-size:.8rem; }
+.native-coordination .native-capability-rack [data-capability-action='cancel'] { color:var(--native-paper); background:transparent; border-color:#668b73; box-shadow:none; }
+@media (min-width:48rem) {
+ .native-capability-rack [data-capability-people], .native-capability-rack .native-capability__outcome, .native-capability-rack [data-capability-requirement]:has(.native-capability__new-work:not([hidden])) { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .native-capability-rack [data-capability-people] > h5, .native-capability-rack .native-capability__outcome > h5, .native-capability-rack [data-capability-requirement] > :is(h5,p,.native-capability__linked-work) { grid-column:1/-1; }
+}
+@media (max-width:47.99rem) {
+ .native-capability-rack .native-capability-card { grid-template-columns:minmax(0,1fr); }
+ .native-capability-rack .native-capability-card__actions, .native-capability-rack[data-editing='true'] .native-capability-card__actions { grid-column:1; grid-row:auto; }
+ .native-capability-rack .native-capability__new-work { grid-template-columns:minmax(0,1fr); }
+}
+@media (forced-colors:active) {
+ .native-coordination .native-capability-rack, .native-coordination .native-capability-rack :is(.studio-rack-header,.native-capability__half-rack,.native-capability__outcome,.native-capability__section,.native-capability-example-reading) { color:CanvasText; background:Canvas; border-color:CanvasText; }
+ .native-coordination .native-capability-rack :is(button,.native-capability__choices label) { background:ButtonFace; color:ButtonText; border-color:ButtonText; }
+ .native-capability-rack .native-capability__choices input[type='checkbox'] { appearance:auto; }
+ .native-coordination .native-capability-pad-rail button[aria-pressed='true'], .native-coordination .native-capability-example-pads button[aria-pressed='true'] { outline:.2rem solid Highlight; }
+}
+/* Visibility wins over responsive grids while the selected receiver changes. */
+.native-coordination .native-capability-rack [hidden] { display:none; }

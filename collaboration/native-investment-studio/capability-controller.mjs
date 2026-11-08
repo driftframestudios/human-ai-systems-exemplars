@@ -2,6 +2,7 @@ import { listCapabilities, getCapabilityDefinition } from './capabilities.mjs';
 import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from './capability-draft.mjs';
 import { money } from './display.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 
@@ -210,8 +211,9 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     }
     if (['people', 'teams', 'work'].includes(metadata.source)) {
       const type = { people: 'person', teams: 'team', work: 'session' }[metadata.source];
-      const create = node('button', `Add ${type === 'person' ? 'a person' : type === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
-      create.type = 'button'; create.dataset.capabilityAction = 'add-record'; create.dataset.capabilityRecordKind = type; create.dataset.capabilityReceiverField = key; group.append(create);
+      const label = `Add ${type === 'person' ? 'a person' : type === 'team' ? 'a team' : 'a working session'}`;
+      group.append(createRackAddControl(document, { label, text: label, className: 'studio-rack-create-zone--persistent',
+        dataset: { capabilityAction: 'add-record', capabilityRecordKind: type, capabilityReceiverField: key } }));
     }
     group.append(error); parent.append(group); controls.set(key, { input, error, metadata, checkboxes, radios });
   }
@@ -226,13 +228,17 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       const pad = button(label, 'inspect-section'); pad.dataset.capabilitySectionKey = key; pad.setAttribute('aria-controls', `${instance}-section-${key}`);
       region.id = `${instance}-section-${key}`; sections.set(key, region); sectionKeys.set(key, pad); rail.append(pad);
     }
-    const basics = section('Use in this plan'); elements.fields.append(basics); register('context', 'Outcome', basics);
+    const basics = section('Use in this plan'); basics.classList.add('native-capability__outcome'); elements.fields.append(basics); register('context', 'Outcome', basics);
     field(basics, 'context', descriptor.fields.context, raw.context);
     basics.append(section('What to look for', descriptor.definition.acceptanceJob));
     peopleGroup = node('section', undefined, 'native-capability__section'); peopleGroup.dataset.capabilityPeople = '';
     peopleGroup.append(node('h5')); elements.fields.append(peopleGroup);
     register('responsibility', 'People', peopleGroup);
-    for (const key of ['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle']) field(peopleGroup, key, descriptor.fields[key], raw[key]);
+    for (const keys of [['teamId', 'responsiblePersonIds'], ['decisionOwnerPersonId', 'lifecycle']]) {
+      const half = node('div', undefined, 'native-capability__half-rack');
+      for (const key of keys) field(half, key, descriptor.fields[key], raw[key]);
+      peopleGroup.append(half);
+    }
     const prerequisites = section('Supporting abilities and practices');
     field(prerequisites, 'prerequisites', descriptor.fields.prerequisites, raw.prerequisites); elements.fields.append(prerequisites); prerequisiteGroup = prerequisites; register('prerequisites', 'Before this', prerequisites);
     for (const requirement of descriptor.definition.supportRequirements) {
@@ -240,11 +246,12 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       const supportKey = `support.${requirement.id}`, prefix = `new.${requirement.id}.`;
       const linked = node('div', undefined, 'native-capability__linked-work');
       group.append(linked);
-      field(group, supportKey, descriptor.fields[supportKey], raw[supportKey]);
-      field(group, prefix + 'enabled', descriptor.fields[prefix + 'enabled'], raw[prefix + 'enabled']);
+      const work = node('div', undefined, 'native-capability__half-rack');
+      field(work, supportKey, descriptor.fields[supportKey], raw[supportKey]);
+      field(work, prefix + 'enabled', descriptor.fields[prefix + 'enabled'], raw[prefix + 'enabled']);
       const newWork = node('div', undefined, 'native-capability__new-work');
       for (const [key, metadata] of Object.entries(descriptor.fields)) if (key.startsWith(prefix) && !key.endsWith('.enabled')) field(newWork, key, metadata, raw[key]);
-      group.append(newWork); elements.fields.append(group); workGroups.set(requirement.id, { group, newWork, linked });
+      group.append(work, newWork); elements.fields.append(group); workGroups.set(requirement.id, { group, newWork, linked });
       const phaseLabel = { preparation: 'Prepare', coordination: 'Handoff', review: 'Review', maintenance: 'Maintain' }[requirement.phase] ?? requirement.label;
       register(requirement.id, phaseLabel, group);
     }
@@ -291,6 +298,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       builtTarget = draft?.capabilityId ?? null; builtProjection = projection; buildFields(descriptor, draft?.raw);
     }
     root.dataset.capabilityState = draft ? view.status : 'idle';
+    rack.dataset.editing = String(Boolean(draft));
     localHeader.element.hidden = !draft;
     localHeader.update({ title: definition()?.action ?? 'Abilities',
       owner: selection?.kind === 'practice' ? 'How the team works' : 'What people can do',

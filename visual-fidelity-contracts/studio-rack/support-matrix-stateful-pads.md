@@ -14,7 +14,7 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 
 | Surface | Comparison and interaction |
 | --- | --- |
-| Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one selected support module at the relevant section. |
+| Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one dark support rack at the relevant section. Its pale editorial overview sits below the local header; native choice pads fill compact paired modules. |
 | People | Teams are parallel editorial groups in one horizontal scroll row. The recessed roster combines per-person arrangement, compact settings and a visible role-facet rail. The contribution/session matrix opens Work and Receiver and decision controls while preserving stored responsibility values. |
 | Delivery overview | Teams, work and handoffs share delivery-phase lanes. Lane creation keeps a new team or handoff in its local phase while Shared sessions remains an independent working area. |
 | Shared sessions | People and Handoffs tabs select the relationship shown by a checkbox matrix. Rows are accepted sessions; columns are people or handoffs. A row opens compact host-team and participant-order controls. Handoff headings open the canonical editor inside this module. |
@@ -81,6 +81,16 @@ history, independently of cassette selection. Top Apply beside Close delegates
 to the same canonical bottom action, with matching label, disabled state,
 validation and return focus. The existing bottom row remains available.
 
+The Abilities People receiver pairs team and participation with decision owner
+and lifecycle. These groups sit beside each other at laptop widths and stack
+at phone widths. Outcome pairs the editable use context with a chocolate
+observation prompt. Supporting work pairs existing session choices with a small
+new-session module when selected. The same shared ghost creation control supplies
+a named, persistent entry beside those bounded choices. Native switch and radio
+geometry remains independent of text-field sizing. Selecting another section
+keeps its earlier raw entries; Close returns to the selected catalogue key with
+that proposal retained.
+
 Membership toggles keep available cards mounted in place. Move up/down changes
 ordered IDs explicitly, with the shared keyed transition and focus on the moved
 person. People team lanes, roster order and contribution supporting-work order
@@ -101,6 +111,10 @@ that same scrollable collection, with the module heading outside it.
 Long labels wrap and headers contrast against their actual background. The pale
 Sessions to place tray uses dark text; dark rack captions retain light text. Shape,
 text and focus styling preserve state in forced colors.
+Abilities catalogue keys use explicit dark text on their pale blue faces;
+their selected mint faces retain it. Its shared header's light Close and owner
+controls sit on the dark rack housing. Hidden support receivers stay hidden
+through responsive layout changes.
 
 Reels and faders may rearrange keyed pads into an authored configuration. Stable
 identity carries the movement, and the shared motion preference governs it.
@@ -131,6 +145,12 @@ operation check establishes that journey; visual inspection and human review
 supply the composition and interpretation observations.
 
 ## Supersession and next boundary
+
+#848 replaces the pale Abilities editor housing and tall, flat responsibility
+fields with one dark receiver and paired compact modules. The native support
+tables, underlying capability definitions and proposal acceptance boundary remain
+the same. Its visibility and native-control geometry rules supersede inherited
+text-field sizing that obscured the People receiver.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 record-local controls. Its visible role rail replaces the extra disclosure, and
