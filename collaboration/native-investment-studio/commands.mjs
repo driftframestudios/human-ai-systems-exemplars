@@ -208,6 +208,9 @@ export function prepareAssembly(base, candidate) {
         && JSON.stringify(scoreSettings) === JSON.stringify(state.scoreSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, work, people, scoreSettings }) };
     }
+    case 'investment.settings.replace':
+      if (JSON.stringify(command.investmentSettings) === JSON.stringify(state.investmentSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, investmentSettings: command.investmentSettings }) };
     case 'change.settings.replace':
       if (JSON.stringify(command.changeSettings) === JSON.stringify(state.changeSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, changeSettings: command.changeSettings }) };

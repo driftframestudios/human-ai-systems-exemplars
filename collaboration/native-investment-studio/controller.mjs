@@ -1104,7 +1104,7 @@ export function mountCoordinationPanel(root, options = {}) {
       isActive: () => activeChapter === 'assurance' && !purposePanel?.isOpen(),
       onSourceWork: (id, origin) => inspectSupportingWork('assurance', id, origin), onAccepted: () => render(), onEditing: () => render(),
     });
-    investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
+    investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render(), onOpenSession: id => navigateFromScore({ kind: 'work', id }) });
     reportsPanel = mountStudioReports(requireElement('.native-investment'), { studio });
     // Resolve chapter fragments against the completed enhanced amp layout.
     root.dataset.nativeReady = 'true';

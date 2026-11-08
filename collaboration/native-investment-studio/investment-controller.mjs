@@ -2,7 +2,9 @@ import { createPlanExchange } from './exchange.mjs';
 import { listPresets } from './presets.mjs';
 import { money } from './display.mjs';
 import { createDownloadOwner } from './browser-download.mjs';
-import { createTapePicker } from './tape-picker.mjs';
+import { createInvestmentWorkbench } from './investment-workbench.mjs';
+import { projectInvestment } from './investment-projection.mjs';
+import { encodeInvestment } from './investment-state.mjs';
 
 const DECKS = Object.freeze([
   { id: 'plan', title: 'Plan investment', eyebrow: 'Accepted plan', detail: 'Staffing and shared work' },
@@ -10,7 +12,7 @@ const DECKS = Object.freeze([
   { id: 'exchange', title: 'Keep a plan', eyebrow: 'Plans and reports', detail: 'Open, replace or download' },
 ]);
 
-export function mountInvestmentPanel(root, { studio, editing, onChange }) {
+export function mountInvestmentPanel(root, { studio, editing, onChange, onOpenSession }) {
   const document = root.ownerDocument;
   const exchange = createPlanExchange(studio, editing);
   const get = name => root.querySelector(`[data-investment-${name}]`);
@@ -31,6 +33,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
   function selectDeck(id) {
     if (disposed || !panels.has(id)) return;
     selectedDeck = id;
+    if (id !== 'plan') workbench.release();
     for (const [key, panel] of panels) panel.hidden = key !== id;
     for (const button of shelf.querySelectorAll('[data-investment-deck]'))
       button.setAttribute('aria-pressed', String(button.dataset.investmentDeck === id));
@@ -43,31 +46,17 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     }));
   }
   function refreshDecks() {
-    const result = projection.result;
-    const oldShelf = shelf.querySelector('.studio-tape-shelf');
-    const scroll = { left: oldShelf?.scrollLeft ?? 0, top: oldShelf?.scrollTop ?? 0 };
-    const focusedId = shelf.contains(document.activeElement) ? document.activeElement.dataset.investmentDeck : null;
-    const amounts = {
-      plan: money(result.knownCommitmentCents),
-      compare: baseline ? money(result.knownCommitmentCents - baseline.projection.result.knownCommitmentCents) : 'Set a baseline',
-      exchange: 'Current plan',
-    };
-    const entries = DECKS.map(deck => ({ ...deck, amount: amounts[deck.id],
-      ...(deck.id === 'plan' && result.plannedCommitmentCents === null ? { eyebrow: 'Known plan cost' } : {}),
-      ...(deck.id === 'compare' && baseline ? { detail: result.plannedCommitmentCents === null || baseline.projection.result.plannedCommitmentCents === null ? 'Change in known amount' : 'Change from baseline' } : {}),
-      attributes: { 'data-investment-deck': deck.id, 'aria-controls': `native-investment-deck-${deck.id}` } }));
-    shelf.replaceChildren(createTapePicker(document, { variant: 'investment', label: 'Investment decks',
-      entries, selectedId: selectedDeck, onSelect: selectDeck }));
-    renderReadings(get('plan-readings'), [
-      [result.plannedCommitmentCents === null ? 'Known total' : 'Accepted investment', money(result.knownCommitmentCents)],
-      ['Staffing', money(result.fundedKnownCents)],
-      ['Extra work', money(result.additionalKnownCents)],
-      ['Included in staffing', money(result.allocatedKnownCents)],
-    ]);
+    if (!shelf.children.length) {
+      const rail = document.createElement('nav'); rail.className = 'investment-utility-rail'; rail.setAttribute('aria-label', 'Investment views');
+      for (const deck of DECKS) {
+        const button = document.createElement('button'); button.type = 'button'; button.textContent = deck.title;
+        button.dataset.investmentDeck = deck.id; button.setAttribute('aria-controls', `native-investment-deck-${deck.id}`);
+        button.addEventListener('click', () => selectDeck(deck.id)); rail.append(button);
+      }
+      shelf.append(rail);
+    }
+    workbench.render(get('financials'));
     selectDeck(selectedDeck);
-    const nextShelf = shelf.querySelector('.studio-tape-shelf');
-    nextShelf.scrollLeft = scroll.left; nextShelf.scrollTop = scroll.top;
-    if (focusedId) shelf.querySelector(`[data-investment-deck="${focusedId}"]`)?.focus({ preventScroll: true });
   }
 
   function listen(element, name, callback) {
@@ -199,13 +188,34 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     announce(result.ok ? 'Review the changes, then use this plan.' : result.error.message);
     if (result.ok) { selectDeck('exchange'); root.querySelector('#native-plan-preview-title').focus({ preventScroll: true }); }
   });
+  const workbench = createInvestmentWorkbench({
+    getModel: () => projectInvestment(studio.read()),
+    change(mutator, message, gesture = null) {
+      if (disposed) return;
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      const expected = studio.read(), model = projectInvestment(expected);
+      mutator(model);
+      const result = studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(model.investment.decks) }, expected, gesture);
+      refreshAll();
+      if (!disposed && (!result.ok || message)) announce(result.ok ? message : result.error.message);
+    },
+    setFunding(id, funding) {
+      if (disposed) return;
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      const result = studio.applyCommand({ type: 'work.funding.set', workId: id, funding: funding === 'funded' ? 'allocated' : 'additional' }, studio.read());
+      refreshAll(); if (!disposed) announce(result.ok ? 'Session funding updated. Undo restores it.' : result.error.message);
+    },
+    openSession: onOpenSession,
+  });
   refresh();
   return Object.freeze({ refresh, previewPreset, selectDeck, dispose() {
     if (disposed) return;
     disposed = true; fileSelection += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
-    exchange.dispose(); downloads.dispose();
+    exchange.dispose(); downloads.dispose(); workbench.dispose();
     select.replaceChildren();
     for (const button of Object.values(buttons)) button.disabled = true;
     file.disabled = true;

@@ -3,10 +3,11 @@ import { createChangeSettings } from './change-models.mjs';
 import { createAssuranceSettings } from './assurance-models.mjs';
 import { createScoreSettings } from './score-models.mjs';
 import { CADENCE_PERIOD_LIMIT } from './cadence.mjs';
+import { INVESTMENT_DECK_LIMIT } from './investment-state.mjs';
 export { PRACTICES } from './capabilities.mjs';
 // Immutable vocabulary shared by independent Studio instances.
 export const CONTRACT = Object.freeze({
-  kind: 'native-investment-plan', schemaVersion: '0.9.0', modelVersion: '0.1.0',
+  kind: 'native-investment-plan', schemaVersion: '0.10.0', modelVersion: '0.1.0',
   currency: 'USD', minutesPerHour: 60,
 });
 
@@ -96,6 +97,8 @@ export const CADENCE_JSON_BYTES = 1024 + CADENCE_PLACEMENT_BYTES
   + COLLECTION_LIMITS.scoreDependencies * (256 + 3 * VALUE_LIMITS.identifier)
   + COLLECTION_LIMITS.scoreGates * (128 + 2 * VALUE_LIMITS.identifier)
   + COLLECTION_LIMITS.scoreWaits * (256 + 5 * VALUE_LIMITS.identifier + LABEL_JSON_BYTES + RELATIONSHIP_TEXT_JSON_BYTES);
+// Each financial record has a closed field set and bounded integer tokens.
+const INVESTMENT_JSON_BYTES = INVESTMENT_DECK_LIMIT * 2048;
 export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.1.0': BASE_SCHEMA_JSON_BYTES,
   '0.2.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES,
@@ -106,6 +109,7 @@ export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.7.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES,
   '0.8.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES,
   '0.9.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES + CADENCE_JSON_BYTES,
+  '0.10.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES + CADENCE_JSON_BYTES + INVESTMENT_JSON_BYTES,
 });
 
 export const LIMITS = Object.freeze({

@@ -1,3 +1,4 @@
+import { createInvestmentSettings, admitInvestment } from './investment-state.mjs';
 import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
 import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from './roles.mjs';
 import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityWorkIds, createLegacyPractice } from './capabilities.mjs';
@@ -21,6 +22,7 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
+  investmentPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings', 'arrangements', 'investmentSettings'],
   plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings', 'arrangements'],
   scorePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings'],
   assurancePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings'],
@@ -94,6 +96,7 @@ const PROFILES = new Map([
   ['0.7.0', { fields: 'scorePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, references: 16384 }],
   ['0.8.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, arrangements: true, references: LIMITS.references }],
   ['0.9.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
+  ['0.10.0', { fields: 'investmentPlan', investment: true, purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
@@ -126,6 +129,7 @@ const COMMAND_FIELDS = Object.freeze({
   'capability.remove': ['type', 'kind', 'instanceId'],
   'capability.evidence.record': ['type', 'evidence'],
   'capability.evidence.remove': ['type', 'evidenceId'],
+  'investment.settings.replace': ['type', 'investmentSettings'],
   'change.settings.replace': ['type', 'changeSettings'],
   'assurance.settings.replace': ['type', 'assuranceSettings'],
   'score.arrangement.replace': ['type', 'scoreSettings', 'workTiming', 'availability', 'fundProposalIds'],
@@ -453,6 +457,7 @@ export function prepareAssemblyCommand(candidate) {
     case 'capability.remove': return { type, kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true) };
     case 'capability.evidence.record': return { type, evidence: prepareCapabilityEvidence(raw.evidence, `${path}.evidence`) };
     case 'capability.evidence.remove': return { type, evidenceId: text(raw.evidenceId, `${path}.evidenceId`, true) };
+    case 'investment.settings.replace': return { type, investmentSettings: prepareInvestmentSettings(raw.investmentSettings, `${path}.investmentSettings`) };
     case 'change.settings.replace': return { type, changeSettings: prepareChangeSettings(raw.changeSettings, `${path}.changeSettings`) };
     case 'assurance.settings.replace': return { type, assuranceSettings: prepareAssuranceSettings(raw.assuranceSettings, `${path}.assuranceSettings`) };
     case 'score.arrangement.replace': {
@@ -1124,6 +1129,10 @@ function prepareArrangements(candidate, teams, connections, budget) {
   return rows;
 }
 
+export function prepareInvestmentSettings(value, path = 'plan.investmentSettings') {
+  return admitInvestment(value, path, { dataRecord, list, text, integer, reject });
+}
+
 function prepareVersion(candidate, version) {
   const profile = PROFILES.get(version), raw = record(candidate, profile.fields, 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
@@ -1216,6 +1225,7 @@ function prepareVersion(candidate, version) {
     state.scoreSettings = prepareScoreSettings(raw.scoreSettings, 'plan.scoreSettings', !profile.cadence);
     prepareScoreReferences(state, peopleById, teamsById, workById, budget);
   }
+  if (profile.investment) state.investmentSettings = prepareInvestmentSettings(raw.investmentSettings);
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
@@ -1245,7 +1255,8 @@ function prepareSelectedVersion(candidate, version) {
     changeSettings: admitted.state.changeSettings ?? createChangeSettings(),
     assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings(),
     scoreSettings: prepareScoreSettings(admitted.state.scoreSettings ?? createScoreSettings()),
-    arrangements: admitted.state.arrangements ?? [] }, CONTRACT.schemaVersion);
+    arrangements: admitted.state.arrangements ?? [],
+    investmentSettings: admitted.state.investmentSettings ?? createInvestmentSettings() }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -1295,6 +1306,7 @@ export function createExamplePlan() {
     kind: CONTRACT.kind, schemaVersion: CONTRACT.schemaVersion, modelVersion: CONTRACT.modelVersion,
     currency: CONTRACT.currency, planId: 'coordination-example', revision: 0, horizonWeeks: 6,
     purpose: emptyPurpose(),
+    investmentSettings: createInvestmentSettings(),
     changeSettings: createChangeSettings(),
     assuranceSettings: createAssuranceSettings(),
     scoreSettings: createScoreSettings(),
