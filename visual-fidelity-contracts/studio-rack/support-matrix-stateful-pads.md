@@ -45,6 +45,15 @@ signal border and a signal inset; available pads use the resting face and dashed
 border. A native checkbox retains the membership operation. Change and Quality
 keep their intentionally different fader treatments.
 
+Change's Raise, Reduce, Eliminate and Create keys borrow Quality's compact rail
+face: paper at rest, signal color and inset depth for the open action. Each native
+button names its component receiver with `aria-controls`; `aria-expanded` follows
+the actual inspector and clears when it closes. One action keeps the active face
+even when a small framework maps more than one action to the same component.
+Stable keyed buttons retain focus through selection and projection updates.
+These keys inspect the current proposal; selection leaves accepted plan history
+unchanged. The four-key row becomes two columns at ordinary phone widths.
+
 ## Creation, assignment and recovery
 
 Named creation regions state the object and scope they add. A plus inside an

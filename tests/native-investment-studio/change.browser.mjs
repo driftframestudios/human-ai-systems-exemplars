@@ -60,6 +60,50 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: four-action keys identify the open inspection without changing the plan`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const rail = panel(page).locator('[data-change-four-actions]');
+    const keys = rail.locator('button');
+    const inspector = panel(page).locator('.native-change__inspectors');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await expect(keys).toHaveCount(4);
+      await expect(rail.locator('[aria-expanded="true"]')).toHaveCount(0);
+      for (const id of ['raise', 'reduce', 'eliminate', 'create']) {
+        const key = rail.locator(`[data-change-discussion="${id}"]`);
+        await key.focus(); await page.keyboard.press('Enter');
+        await expect(key).toBeFocused();
+        await expect(key).toHaveAttribute('aria-expanded', 'true');
+        await expect(rail.locator('[aria-expanded="true"]')).toHaveCount(1);
+        await expect(panel(page).locator(`[id="${await key.getAttribute('aria-controls')}"]`)).toBeVisible();
+        const faces = await keys.evaluateAll(buttons => buttons.map(button => {
+          const style = getComputedStyle(button);
+          return { active: button.getAttribute('aria-expanded') === 'true', color: style.color, background: style.backgroundColor, shadow: style.boxShadow };
+        }));
+        const active = faces.find(face => face.active), resting = faces.find(face => !face.active);
+        assert.notEqual(active.background, resting.background, 'the open action has its own visible face');
+        assert.notEqual(active.shadow, resting.shadow, 'pressed depth differs from resting depth');
+        assert.notEqual(active.color, active.background, 'the active label stays visible');
+      }
+      await rail.screenshot({ path: resolve(captures, `${engine}-four-actions-${width}.png`) });
+      await inspector.locator(':scope > summary').focus(); await page.keyboard.press('Space');
+      await expect(rail.locator('[aria-expanded="true"]')).toHaveCount(0);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    }
+    assert.equal(await bytes(page), initial, 'inspection selection remains outside accepted plan history');
+    await field(page, 'framework').selectOption('dual@1.0.0');
+    const raise = rail.locator('[data-change-discussion="raise"]');
+    const create = rail.locator('[data-change-discussion="create"]');
+    assert.equal(await raise.getAttribute('aria-controls'), await create.getAttribute('aria-controls'), 'small frameworks reuse a component across distinct actions');
+    await create.click();
+    await expect(create).toHaveAttribute('aria-expanded', 'true');
+    await expect(raise).toHaveAttribute('aria-expanded', 'false');
+    await expect(rail.locator('[aria-expanded="true"]')).toHaveCount(1);
+    await panel(page).locator('.native-change__track-label').first().click();
+    await expect(rail.locator('[aria-expanded="true"]')).toHaveCount(0);
+    assert.equal(await bytes(page), initial, 'changing the inspection route also preserves accepted plan history');
+  });
+
   test(`${engine}: Change track carets follow their local inspector through selection and collapse`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     const trackControls = id => panel(page).locator(`.native-change__track-label[data-change-component="${id}"]`);
