@@ -74,6 +74,46 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: Trace evidence keeps readable choices in one compact support rack`, async t => {
+    const page = await open(t, engine, true), accepted = await bytes(page);
+    const trace = choice(page, 'trace-evidence'), rack = panel(page).locator('.native-capability-rack');
+    const contrast = locator => locator.evaluate(element => {
+      const rgb = value => value.match(/[\d.]+/gu).slice(0, 3).map(Number);
+      const light = value => rgb(value).map(channel => channel / 255).map(channel => channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4)
+        .reduce((sum, channel, i) => sum + channel * [.2126, .7152, .0722][i], 0);
+      let backdrop = element;
+      while (backdrop.parentElement && getComputedStyle(backdrop).backgroundColor === 'rgba(0, 0, 0, 0)') backdrop = backdrop.parentElement;
+      const pair = [light(getComputedStyle(element).color), light(getComputedStyle(backdrop).backgroundColor)].sort((a, b) => b - a);
+      return (pair[0] + .05) / (pair[1] + .05);
+    });
+    assert.ok(await contrast(trace) >= 4.5, 'the pale Trace evidence key has readable text');
+    await trace.click(); await section(page, 'responsibility').click();
+    const people = panel(page).locator('[data-capability-people]');
+    await expect(people).toBeVisible();
+    assert.ok(await contrast(action(page, 'close')) >= 4.5, 'Close remains readable on the rack header');
+    for (const width of [1440, 768, 767, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await people.evaluate(element => {
+        const box = element.getBoundingClientRect();
+        return { left: box.left, right: box.right, page: document.documentElement.scrollWidth,
+          halves: [...element.querySelectorAll('.native-capability__half-rack')].map(half => ({ x: half.offsetLeft, y: half.offsetTop })),
+          choices: [...element.querySelectorAll('input')].map(input => { const box = input.getBoundingClientRect(); return { width: box.width, height: box.height }; }) };
+      });
+      assert.ok(geometry.left >= 0 && geometry.right <= width && geometry.page <= width, JSON.stringify(geometry));
+      assert.ok(geometry.choices.length > 10 && geometry.choices.every(box => box.width <= 40 && box.height <= 24), 'native choices stay distinct from full-width text inputs');
+      assert.equal(geometry.halves.length, 2);
+      if (width >= 768) assert.equal(geometry.halves[0].y, geometry.halves[1].y, 'team and participation sit beside decision ownership');
+      else assert.ok(geometry.halves[1].y > geometry.halves[0].y, 'the same groups stack on a phone');
+      if ([1440, 390].includes(width)) await rack.screenshot({ path: resolve(captures, `${engine}-trace-people-${width}.png`) });
+    }
+    await choose(page, 'decisionOwnerPersonId', 'leo');
+    await action(page, 'close').click(); await expect(trace).toBeFocused();
+    await trace.click(); await section(page, 'responsibility').click();
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Researcher', exact: true })).toBeChecked();
+    await section(page, 'context').click(); await expect(people).toBeHidden();
+    await page.setViewportSize({ width: 1440, height: 1000 }); await expect(people).toBeHidden();
+    assert.equal(await bytes(page), accepted, 'inspection and Close retain the support proposal without accepting it');
+  });
   test(`${engine}: support cells distinguish recorded observations, linked work and current gaps`, async t => {
     const page = await open(t, engine, true);
     await page.evaluate(() => {
@@ -230,6 +270,7 @@ for (const engine of names) {
     await field(page, 'new.review.label').fill('History review');
     await ids(page, 'new.review.personIds').locator('input[value="product-one"]').check(); await field(page, 'new.review.hoursPerSession').fill('1');
     await field(page, 'new.review.minutesPerSession').fill('30'); await field(page, 'new.review.funding').selectOption('additional');
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-paired-support.png`) });
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('$16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
     const topApply = panel(page).locator('[data-editor-apply]');
     await expect(topApply).toHaveCount(1); await expect(topApply).toBeEnabled();
