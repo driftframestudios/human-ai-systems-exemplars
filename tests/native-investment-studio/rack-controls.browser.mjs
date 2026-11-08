@@ -181,10 +181,11 @@ for (const engine of names) for (const width of [390, 1440]) {
       return { work, placements:state.scoreSettings.cadence.placements.filter(row => row.workId === work.id) };
     });
     assert.deepEqual(addition.placements, [{ workId:addition.work.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 }]);
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(addition.work.label);
-    await root(page).locator('[data-rack-creation-undo]').click();
+    await expect(adjacent(page)).toBeHidden();
+    await expect(cassette(addition.work.id)).toHaveAttribute('aria-pressed', 'true');
+    await root(page).locator('[data-studio-undo]').click();
     assert.equal(await bytes(page), edited);
-    await expect(create).toBeFocused();
+    await expect(root(page).locator('[data-studio-undo]')).toBeFocused();
     await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
     await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(4);
     await contained(page, width);
@@ -608,6 +609,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     const memberPad = membership.locator('..').locator('..');
     const inactive = await skin(memberPad);
     await membership.check();
+    await expect(teamRecord.locator('.studio-rack-header__saved')).toHaveText('Saved');
     assert.notEqual((await skin(memberPad)).backgroundColor, inactive.backgroundColor,
       'membership uses a distinct pressed sequencer face');
     await root(page).locator('[data-studio-undo]').click();
@@ -750,8 +752,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(created.label, 'New session 1'); assert.deepEqual(created.personIds, [researcher.id]);
     await expect(adjacent(page)).toBeHidden();
     await sharedTrack(page, created.id).click();
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(created.label);
-    await adjacent(page).locator('[data-rack-editor-close]').click();
+    const selected = shared(page).locator('.studio-shared__selection');
+    await expect(selected.locator('h4')).toHaveText(created.label);
+    await expect(selected.locator('.studio-rack-header__owner')).toHaveText('Shared sessions · People');
+    await selected.locator('[data-rack-editor-close]').click();
     await root(page).locator('[data-studio-undo]').click();
     assert.deepEqual((await read()).state, accepted.state);
     await contained(page, width);
