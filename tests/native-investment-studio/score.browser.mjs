@@ -92,31 +92,22 @@ for (const engine of names) {
     assert.equal(await bytes(page), accepted);
   });
 
-  test(`${engine}: a period starts a new session with people and placement through Apply or Cancel`, async t => {
-    const page = await open(t, engine), accepted = await bytes(page);
-    const session = root(page).locator('[data-native-session-editor]');
-    for (const keep of [false, true]) {
-      await period(page, 'period-2').getByRole('button', { name: 'Add session', exact: true }).click();
-      await expect(session.locator('[data-native-remote-title]')).toHaveText('New session settings');
-      await expect(session.locator('[name="label"]')).toHaveValue('Review the next step');
-      await expect(session.locator('[name="label"]')).toBeFocused();
-      await expect(session.getByRole('combobox', { name: 'Session 1 · Sprint', exact: true })).toHaveValue('period-2');
-      assert.ok(await session.locator('[data-session-person]:checked').count() > 0, 'a known team supplies editable participants');
-      assert.equal(await bytes(page), accepted, 'opening creation leaves the plan intact');
-      if (!keep) {
-        await session.getByRole('button', { name: 'Cancel changes', exact: true }).click();
-        const back = root(page).locator('[data-native-return-action]'); if (await back.isVisible()) await back.click();
-        assert.equal(await bytes(page), accepted);
-      } else {
-        await session.locator('[name="label"]').fill('Review the receiving team’s questions');
-        await session.locator('form').getByRole('button', { name: 'Add session', exact: true }).click();
-        const state = JSON.parse(await bytes(page)), work = state.work.find(row => row.label === 'Review the receiving team’s questions');
-        assert.ok(work); assert.equal(work.minutesPerOccurrence, 30); assert.equal(work.occurrences, 1);
-        assert.deepEqual(state.scoreSettings.cadence.placements.find(row => row.workId === work.id),
-          { workId: work.id, occurrenceIndex: 0, periodId: 'period-2', subdivision: 1 });
-        await undo(page); assert.equal(await bytes(page), accepted);
-      }
-    }
+  test(`${engine}: a quarter adds an accepted session and opens its in-rack settings`, async t => {
+    const page = await open(t, engine);
+    await score(page).locator('[data-cadence-basis][value="quarter"]').check();
+    const accepted = await bytes(page), before = JSON.parse(accepted);
+    await period(page, 'period-2').getByRole('button', { name: 'Add session', exact: true }).click();
+    const deck = root(page).locator('.studio-rack-editor');
+    await expect(deck).toHaveAttribute('data-rack-placement', 'inset');
+    const state = JSON.parse(await bytes(page));
+    const work = state.work.find(row => !before.work.some(previous => previous.id === row.id));
+    assert.ok(work); assert.equal(work.minutesPerOccurrence, 30);
+    assert.deepEqual(state.scoreSettings.cadence.placements.find(row => row.workId === work.id),
+      { workId: work.id, occurrenceIndex: 0, periodId: 'period-2', subdivision: 1 });
+    await expect(deck.locator('[name="label"]')).toHaveValue(work.label);
+    await root(page).locator('[data-rack-creation-undo]').click();
+    assert.equal(await bytes(page), accepted);
+    await expect(deck).toBeHidden();
   });
 
   for (const { width, basis, origin } of [

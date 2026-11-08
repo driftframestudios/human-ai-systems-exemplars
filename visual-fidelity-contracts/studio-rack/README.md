@@ -63,7 +63,7 @@ Decorative ASCII and CRT texture stay clear of labels, hit targets and focus.
 
 | Control purpose | Shared visual reading |
 | --- | --- |
-| Begin creating an item | Written Add action with a plus cue |
+| Add an item or enter guided creation | Written Add action with a plus cue |
 | Confirm the prepared item | Ordinary Add or Apply commit treatment |
 | Choose among visible options | Persistent pressed selection |
 | Reveal nearby content | Caret reflecting that content's open state |
@@ -75,7 +75,8 @@ Decorative ASCII and CRT texture stay clear of labels, hit targets and focus.
 
 One accepted plan supplies the amp amount, relationships and downloads. An
 ordinary editor’s proposal has its own reading until Apply. Team arrangement
-choices settle directly with local Undo. Cancel, saved edits, history and baseline
+choices and Coordination rack session additions settle directly with local Undo.
+Later field edits retain Apply/Cancel. Cancel, saved edits, history and baseline
 comparison retain their existing owners. Selected-for-inspection,
 included-in-plan and observed evidence remain separate meanings.
 
@@ -216,9 +217,13 @@ retain value and acceptance ownership. Coordination's
 [person/team editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 use the shared placement owner. #789 refines the horizon's existing-session
-composition; [immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-is the next authorized increment, followed by empty-space entry (#770). Current
-Add session confirmation remains in use during the detail-deck increment.
+composition. [Immediate addition](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+accepts a useful session from Coordination rack Add controls, then opens that
+canonical editor. Cancel reverts later edits while preserving the new record.
+Local **Undo session addition** reverses creation while it remains the latest
+accepted change; Investment retains complete history. Plans needing a team or
+person use guided creation. Empty-space entry (#770) is the next authorized
+increment and will reuse this owner.
 Attached editorial
 companions and refined removal remain prospective; their focused issues retain
 acceptance and delivery ownership.

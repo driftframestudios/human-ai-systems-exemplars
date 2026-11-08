@@ -294,7 +294,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
         sessionIds: acceptedSessionIds,
-        onAdd: () => navigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
+        onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' }));
     const board = rackBody.querySelector('.studio-delivery__board');
     if (deliveryView.phaseId === null) board.scrollLeft = deliveryView.overviewScroll;
     if (focusKey) {

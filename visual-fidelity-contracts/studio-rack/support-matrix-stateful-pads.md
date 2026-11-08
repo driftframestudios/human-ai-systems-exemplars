@@ -144,8 +144,11 @@ while preserving their distinct inclusion, ordering and placement meanings.
 The exact repetition field stays available. Apply accepts these changes together;
 Cancel reverts them, and Close retains their unfinished draft.
 
-An unused participation cell keeps its person/session meaning. Following #789,
-#758 supplies the authorized immediate-creation owner before the
+An unused participation cell keeps its person/session meaning. #758's Coordination
+rack Add session accepts useful defaults, then opens the canonical editor with
+its known team/person context. Cancel reverts later edits and preserves the new
+session; local Undo reverses its creation while that change remains latest.
+Plans needing a team or person retain guided creation. The next authorized
 [empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 uses a named new-session row or gutter in the surrounding rack; a ghost
 plus indicates that action on hover and focus, with a visible touch equivalent.

@@ -13,6 +13,22 @@ export function syncSessionControls(root, { selectedId, expanded, controlsId }) 
 
 let editorSequence = 0;
 
+const entryKey = control => control?.dataset.studioEntryKey ?? control?.dataset.cadenceKey ?? control?.dataset.deliverySession
+  ?? (control?.dataset.studioSessionPerson ? `participant:${control.dataset.studioSessionPerson}` : null)
+  ?? (control?.classList.contains('studio-track-key') ? 'session-row' : control?.getAttribute('aria-label'));
+
+// Projection refreshes replace entry controls. Keep the semantic origin so
+// publication and recovery can return to its current DOM instance.
+export function captureRackEntry(source, scope) {
+  const key = entryKey(source), phase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
+  const sessionId = source?.dataset.studioSessionId, recordId = source?.dataset.studioRecordId,
+    recordKind = source?.dataset.studioRecordKind;
+  return () => source?.isConnected ? source : key && [...scope?.querySelectorAll('button') ?? []]
+    .find(control => entryKey(control) === key && control.dataset.studioSessionId === sessionId
+      && control.dataset.studioRecordId === recordId && control.dataset.studioRecordKind === recordKind
+      && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === phase);
+}
+
 // Placement borrows mounted controls. Drafts, validation and acceptance stay
 // with the existing editor, including when its controls return to their home.
 export function mountRackEditor(root, { editors, onClose, readLabel = record => record.label }) {
@@ -37,9 +53,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   const recordOf = control => control.dataset.studioSessionId
     ? { kind: 'session', id: control.dataset.studioSessionId }
     : { kind: control.dataset.studioRecordKind, id: control.dataset.studioRecordId };
-  const keyOf = control => control?.dataset.studioEntryKey ?? control?.dataset.cadenceKey ?? control?.dataset.deliverySession
-    ?? (control?.dataset.studioSessionPerson ? `participant:${control.dataset.studioSessionPerson}` : null)
-    ?? (control?.classList.contains('studio-track-key') ? 'session-row' : control?.getAttribute('aria-label'));
+  const keyOf = entryKey;
   const controls = () => [...root.querySelectorAll('[data-studio-record-kind]')];
   function sync() {
     if (selected) {
@@ -65,8 +79,10 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
       const record = recordOf(control);
       return selected?.kind === record.kind && selected.id === record.id && control.getClientRects().length;
     });
+    const currentOrigin = captureRackEntry(origin, originScope)();
     const target = preferred?.isConnected && preferred.getClientRects().length ? preferred
       : origin?.isConnected && origin.getClientRects().length ? origin
+      : currentOrigin?.getClientRects().length ? currentOrigin
       : candidates.find(control => originScope?.contains(control) && originKey
         && keyOf(control) === originKey
         && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)

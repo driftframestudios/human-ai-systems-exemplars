@@ -63,9 +63,10 @@ coarse/fine dial geometry. PR #793 repaired the current-entry browser routes
 (#777), enlarged-text readout (#791) and idempotent editor restoration (#792).
 #789 now places the Session detail deck inside Plan overview while Team planning
 keeps its adjacent receiver. One canonical form and session owner serve both.
-The next authorized increments are immediate session creation (#758), then
-empty-space entry (#770); their acceptance boundaries remain separate from
-editing an existing session.
+PR #794 delivered that focused deck increment after independent review. #758 now
+adds immediate session creation from Coordination racks, then #770 will supply
+contextual empty-space entry. Creation Undo remains distinct from cancelling
+later edits to the added session.
 
 ### State, people and evidence
 
@@ -74,6 +75,7 @@ editing an existing session.
 | Accepted plan | One immutable projection supplies the accepted amount, work relationships, comparisons and downloads. |
 | Editor proposal | Ordinary editors retain raw text and selections until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
 | Team arrangement | A deliberate reel choice revises one accepted arrangement. Bounded customization choices settle immediately; text settles on field exit or Enter. Local Undo restores the preceding plan. |
+| Session addition from a Coordination rack | Add session accepts useful defaults and opens the canonical editor. Cancel reverts later draft edits while retaining that record. Local Undo reverses creation only while it remains the latest accepted change. |
 | Saved edit | The shared coordinator retains target-bound unfinished work. A changed accepted identity can require explicit review even when values happen to match. |
 | History and baseline | Undo/Redo traverse accepted changes. A baseline is an independent comparison and restore point. Saved drafts retain their separate recovery route. |
 | Person | One identity, hourly rate and funded-time account can participate in several teams and sessions. Role labels identify the illustrative people. |
@@ -121,9 +123,12 @@ Undo. Period-count changes use a visible horizon proposal with Apply and Cancel.
 Shortening the horizon retains affected sessions for placement. Older plans keep
 their recorded timing until an explicit period-arrangement proposal is accepted.
 
-A period's Add session action opens a new draft in that period with useful
-example context. Confirming Add session accepts the prepared item. More
-occurrences create additional placements to choose. The deck's numbered pads
+A Coordination rack's Add session action accepts a useful starting record:
+Review the next step, one planned 30-minute occurrence with extra investment.
+Its period/week/month or team/person context supplies the starting arrangement.
+The canonical session editor then opens for adjustment. A plan needing a team
+or person uses the existing guided creation route. More occurrences create
+additional placements to choose. The deck's numbered pads
 select one repetition; native radio pads then choose its sprint/quarter and
 week/month. Add occurrence increases the existing work's count. More Hours or
 Minutes makes every occurrence longer, and the ordered participant switches
@@ -178,8 +183,9 @@ refinement remains separate from correcting an observed interaction defect.
 
 ### Controls and recovery
 
-- A plus starts a creation flow. The final Add or Apply confirms the item already
-  being prepared. A nested creation action retains its own entry treatment.
+- A plus identifies creation. Coordination rack Add session accepts a useful
+  starting record and opens its editor. Guided creation forms retain ordinary
+  final Add/Apply confirmation. A nested creation entry keeps its own plus cue.
 - An arrow announces another view or inspector; a caret opens nearby content.
   Change track labels and Plan session controls share their actual inspector's
   expanded state, including closure through its native summary.
@@ -294,7 +300,7 @@ entry, screenshot or technical description presents the earlier behavior.
 | Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
 | Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 introduced canonical session editing below the originating horizon or Team planning rack, preserving session identity, draft and return focus. #789 refines the horizon placement in the next row. |
 | #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. Team planning retains the adjacent placement. The exact initiating control toggles the deck, while another occurrence selects its placement; one owner preserves the shared draft and session properties. |
-| Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
+| Every Coordination rack Add session requiring preparation and final confirmation | #758 accepts a useful session immediately and opens its canonical editor. Cancel reverts subsequent edits; creation Undo removes the added record while its accepted change remains latest. Plans needing a team or person retain guided creation. #770's empty-space entry remains a separate increment. |
 
 ## Coordination consolidation
 
@@ -389,8 +395,8 @@ Cross-entry moves the same form and proposal. Close retains the draft and return
 to the initiating key or pad; Cancel reverts; Apply accepts through the existing
 owner. Period/subdivision and delivery-phase scope remain with their presentation
 owners. The duration readout, peach Hours, paper Minutes and circular step pairs
-stay together. Creation continues through the existing draft/confirmation route
-until #758, followed by #770, delivers the authorized replacement.
+stay together. #758 uses this same edit/return owner after a Coordination rack
+adds a useful accepted session. #770 will add contextual empty-space entry.
 
 The whole Studio supplies reusable compositions: Quality tracks' preferred
 matrix skin separates inspect, include, link and create actions; Abilities
@@ -462,12 +468,20 @@ occurrences and participant tracks provide direct operations through existing
 setters. The supersession above changes the horizon placement; Team planning's
 adjacent receiver remains useful for its participation reading.
 
-#758 recommends an immediately created session with useful defaults and creation
-Undo. It precedes #770's empty New session regions, whose ghost plus appears on
-fine-pointer hover and focus, with a visible touch entry. Existing temporal row
-cells still represent occurrences; person/session cells still represent
-participation. These creation increments are independent of #789's editing of
-existing sessions. Creation Undo and later edit Cancel keep separate meanings.
+#758's `session-creation.mjs` prepares one planned 30-minute session with extra
+investment from the initiating period, team or person context. The existing
+session adapter allocates and accepts its identity; the canonical receiver opens
+to edit that accepted record. This adds a visible example in one action while
+preserving ordinary Apply/Cancel for subsequent adjustments. A missing team or
+person uses the guided creation route.
+
+**Undo session addition** is bound to the exact accepted creation state. A later
+accepted change retires that local action; Investment retains complete history.
+Undo parks unfinished edits before removing the newly created record and closing
+its editor. Cancel reverts the editing proposal while keeping the created session.
+#770 will reuse that owner in empty New session regions, with a ghost plus on
+fine-pointer hover/focus and a visible touch entry. Existing temporal cells keep
+their occurrence meaning; person/session cells keep their participation meaning.
 
 #771 reuses keyed pad movement for explicit participant reordering; inclusion
 keeps card positions stable. Its future percentage proposal names Time in this
@@ -662,14 +676,15 @@ rate composition. PR #786 supplies #757's canonical person/team receiver.
 PR #787 delivered the #768 session receiver with that placement and return owner;
 it owns the focused occurrence/participation entry, switching, retained draft,
 acceptance and return observations.
-PR #764 remains the accepted scope-navigation reference. Retain
-the current creation/confirmation contract while #758 defines its separate replacement.
+PR #764 remains the accepted scope-navigation reference. Guided creation remains
+available where required context must first be supplied; #758 gives Coordination
+rack Add session its direct accepted-record route and scoped local Undo.
 PR #790 owns #788's duration skin and pointer observation. #789's receiving PR
 records the stable in-rack Session detail deck, existing-session draft/return
 behavior and occurrence/participant controls. This journal records the design
-and ownership; that PR supplies its checked-source receipt. #758 then #770 are
-the authorized next increments for immediate creation and contextual empty-space
-entry.
+and ownership; PR #794 records its completed review and delivery. #758's receiving PR
+owns the immediate-add, later-edit and exact-creation Undo observations. #770 is
+the authorized next increment for contextual empty-space entry.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

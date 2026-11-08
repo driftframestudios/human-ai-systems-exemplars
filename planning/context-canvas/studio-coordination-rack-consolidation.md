@@ -21,8 +21,9 @@ receiver and PR #787 extends it to sessions from either rack. PR #790 delivered
 #788's duration skin and shared dial artwork. PR #793 repaired the current-entry
 browser routes (#777), enlarged-text readout (#791) and editor restoration (#792).
 #789 places the canonical Session detail deck inside Plan overview; Team planning
-retains the adjacent receiver. Immediate creation (#758), then empty-space entry
-(#770), are the next authorized increments with separate acceptance boundaries.
+retains the adjacent receiver. PR #794 delivered that increment after independent
+review. Immediate creation (#758) is the active focused increment; empty-space
+entry (#770) follows with its own affordance boundary.
 The current aesthetic, compact landing and existing operations remain the reference.
 
 ## Same work, distinct readings
@@ -64,10 +65,12 @@ receiver. Delivery cards and participation pads inspect their session; choosing 
 entry supplies that entry's occurrence or participation context.
 
 `studio-rack-add` supplies the shared Add session treatment in the existing
-instrument stylesheet; receiving styles retain column geometry. A plus begins
-creation. The final Add confirms the item being prepared. Horizon entry supplies
-its period/subdivision; Team planning supplies its known context. Both continue
-through the current creation owner, including cross-team participants.
+instrument stylesheet; receiving styles retain column geometry. A plus identifies
+creation. #758 makes Coordination rack Add session accept a useful starting
+record directly. Horizon entry supplies its period/subdivision; Team planning
+supplies its known team/person context. The canonical editor then opens for
+adjustment through its existing Apply owner. Guided creation still uses ordinary
+final Add confirmation when a team or person must first be supplied.
 
 The darker Team planning rack adopts the horizon's bezel, compact header and
 readout alignment. Its heading, amount and Add session sit outside the named
@@ -111,13 +114,24 @@ region creates a distinct session. This keeps a click's result understandable
 before activation and preserves scrolling and existing-pad operations.
 
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-now identifies sessions as the recommended first immediate-add record. One
-deliberate action creates a useful example in the known context, then selects
-its editor. The visitor adjusts duration and returns; creation Undo and later
-edit Cancel remain distinct. #768 supplies the adjacent receiver. This is a
-future acceptance change; current draft/confirmation flows continue to work.
-#758 precedes #770's immediate empty-space entry. Both can follow the in-rack
-editing deck: an existing session already has its identity and draft owner.
+supplies the immediate-creation owner before #770 adds these entry points.
+Coordination rack Add session accepts **Review the next step** with one planned
+30-minute occurrence and extra-investment funding. Known period/subdivision and
+team/person context inform its placement and participants; the existing adapter
+allocates the record identity. The canonical deck or adjacent editor opens to
+adjust this accepted session. Plans needing a team or person retain guided creation.
+
+Creation Undo and later edit Cancel have distinct meanings. Cancel reverts the
+editing proposal and preserves the added record. **Undo session addition** is
+available only while creation remains the latest accepted change. It parks
+unfinished edits, reverses that creation through shared history and closes the
+removed record's editor. A later accepted change retires the local shortcut;
+Investment retains complete Undo history.
+
+`session-creation.mjs` prepares useful values and validates initiating references.
+`work-controller.mjs` uses the existing adapter and acceptance path;
+`controller.mjs` opens the receiver and binds local Undo to the returned accepted
+state. #770 can reuse this owner without changing existing cell meanings.
 
 ### Participants: movement first, a named quantity later
 
@@ -284,9 +298,10 @@ The evidence supports this composition choice within a bounded transfer:
 The approved delivery sequence is #789's existing-session deck, #758's useful
 creation defaults and Undo, then #770's contextual empty-space entries. #777's
 repair in PR #793 supplies current People/Investment browser entry points;
-runnable source remains the behavior authority. During #789, Add session keeps
-its existing draft/confirmation route, and Add occurrence changes only the
-selected session's count. #773 supplies the separate shared recovery surface.
+runnable source remains the behavior authority. #758 supersedes the rack's
+draft/confirmation entry with direct accepted creation and contextual editing.
+Add occurrence continues to change only the selected session's draft count.
+#773 supplies the separate shared recovery surface.
 The deck's receiving PR records focused retained-draft, placement, participant,
 return and stable-slot observations at phone/laptop widths; this design decision
 alone establishes no browser result.
@@ -404,8 +419,9 @@ expanding the first style PR into a deletion-model rewrite.
 | [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Delivered in #787; supplies origin, occurrence and session-draft context |
 | [#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788) | Duration skin and shared dial artwork | Delivered in #790; borderless peach Hours and paper Minutes with reusable coarse/fine geometry |
 | [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777) | Current-entry observations for two legacy browser journeys | Delivered in #793 with readout (#791) and editor-restoration (#792) repairs |
-| [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789) | Session detail deck inside Plan overview | Current focused increment: stable slot, canonical editor and occurrence/participant controls; its receiving PR owns verification and delivery |
-| [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) → [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Immediate session acceptance, then empty-space entry | Authorized next sequence after #789; receives common creation controls and the existing edit/return owner |
+| [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789) | Session detail deck inside Plan overview | PR #794 delivered the stable slot, canonical editor and occurrence/participant controls after independent review |
+| [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) | Immediate session addition and exact-creation Undo | Current focused increment: useful accepted defaults followed by canonical editing; Cancel preserves creation, local Undo reverses it while latest |
+| [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Contextual empty-space entry | Authorized next increment; reuses #758's creation owner and keeps existing cell meanings |
 | [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant movement; separately, scoped percentage semantics | Movement can accompany shared controls; the percentage model remains independent future work |
 | [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Receives the shared shell; prepares contextual editors without changing their draft ownership |
 | [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773) | Scoped removal, amp Undo, then a Coordination local-recovery example | Receives shared controls/history; human review releases cross-chapter removal adoption |
@@ -413,9 +429,9 @@ expanding the first style PR into a deletion-model rewrite.
 The reviewed #757/#768 implementations supply shared panel placement and session
 editing ownership. #789 composes that owner inside Plan overview.
 #771's movement can accompany participant tracks, and #772's companion shell can
-develop alongside the deck. Percentage modeling and immediate-add acceptance
-retain separate increments. #758 precedes #770's new-record entry, while both
-remain independent of the existing-session composition.
+develop alongside the deck. Percentage modeling retains its own increment.
+#758 supplies the acceptance/Undo owner before #770's new-record entry;
+existing-session composition keeps its current draft boundaries.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
@@ -424,8 +440,8 @@ as accepted foundations. #765’s reviewed composition, #779’s delivery board 
 created through the new entry when arrangements change; #767 supplies the shared
 duration hierarchy; #757 supplies the shared placement/return owner used by
 #768. A matrix is a permitted receiving composition where
-relationships benefit from comparison. #758 has a recommended first record and
-#770 its contextual entry.
+relationships benefit from comparison. #758 creates sessions with useful defaults;
+#770 supplies their contextual empty-space entry.
 The underlying issue acceptance remains with each receiver.
 
 [#717](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/717)
@@ -462,3 +478,8 @@ next issue. #789's observations must distinguish retained live form nodes from
 replacement controls, exact-trigger closure from another occurrence's selection,
 and shared session participation from per-occurrence placement. Team planning's
 adjacent entry remains part of the cross-rack draft and return observation.
+
+#758's receiving PR records the useful accepted session, its contextual receiver,
+Cancel preserving that record, local Undo reversing only the latest creation,
+and the guided fallback when people or teams need to be supplied. A later accepted
+edit must retire the local creation shortcut while preserving global history.

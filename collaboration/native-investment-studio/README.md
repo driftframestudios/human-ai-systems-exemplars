@@ -8,9 +8,10 @@ visitor something useful to inspect and change immediately.
 
 Semantic HTML, CSS and vanilla JavaScript carry the experience. One accepted
 plan connects Coordination, People, Abilities, Change, Quality & recovery and
-Investment. Team arrangement choices update the accepted plan directly with Undo.
-Other editors retain their proposals until Apply; Cancel, saved edits and baseline
-comparison make exploration recoverable.
+Investment. Team arrangement choices and Coordination's rack Add session actions
+update the accepted plan directly with Undo. Subsequent field edits retain their
+proposals until Apply; Cancel, saved edits and baseline comparison make exploration
+recoverable.
 
 ## Current state
 
@@ -76,8 +77,8 @@ uses the current People, arrangement and populated-showcase entries, delivered
 in PR #793. Its responsive journey also protects the shared duration readout at
 enlarged text (#791); returning an editor to its home preserves focus (#792).
 PR #790 delivered the duration skin and shared dial artwork (#788).
-Existing-session editing precedes immediate creation (#758), then empty-space
-entry (#770).
+PR #794 delivered the deck after independent review. Immediate session creation
+(#758) now supplies the accepted record; empty-space entry (#770) follows.
 
 The continued planning route adds empty-space session creation
 ([#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)),
@@ -94,9 +95,12 @@ recovery example before the new removal pattern spreads to other chapters.
 These are prospective increments. The arrangement reel already uses its direct
 acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-names sessions as the first immediate-add record, with later editing and creation
-Undo kept distinct. The authorized sequence is #789, then #758, then #770. The
-existing Add session and confirmation route remains in use during the deck increment.
+gives Coordination rack Add session actions a useful accepted starting record,
+then opens its existing editor. **Undo session addition** reverses that creation
+while it remains the latest accepted change. Cancel reverts later draft edits
+and preserves the added session. The guided creation route remains available
+when a team or person must first be supplied. #770 will reuse this owner for
+contextual empty-space entries.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -165,8 +169,17 @@ accepts the proposal; **Cancel changes** reverts it.
 Choose a numbered occurrence, then its sprint or quarter and week or month.
 **Add occurrence** increases this session's repetition count; the exact
 **Working sessions** field remains available. Hours, Minutes and the ordered
-participant switches apply to every occurrence. **Add session** begins a distinct
-work record in the selected period; its final confirmation accepts that draft.
+participant switches apply to every occurrence.
+
+**Add session** in a Coordination rack immediately adds **Review the next step**:
+one planned 30-minute session funded as extra investment. Its known period,
+week/month, team or person supplies context; available people and teams supply a
+usable starting selection. The same canonical deck or adjacent editor opens for
+adjustment. **Cancel changes** preserves the added record and reverts only its
+later edits. **Undo session addition** reverses creation while it is still the
+latest accepted change, parking unfinished edits and closing the removed record's
+editor. Investment retains the complete Undo history. Plans needing a team or
+person use the existing guided creation route.
 
 **Stages & handoffs** reveals the work's relationships and their editors.
 Decisions attach to a stage or handoff. Delays name affected work and can propose
@@ -252,8 +265,10 @@ Cancel keeps the accepted plan; Undo and Redo traverse accepted changes.
 
 ### Recognize the controls
 
-A plus begins creation; the final Add or Apply confirms the item already being
-prepared. An arrow identifies a destination or inspector. A caret reveals nearby
+A plus identifies creation. Coordination rack Add session accepts a useful
+starting record immediately; guided forms use an ordinary final Add or Apply to
+confirm the item being prepared. An arrow identifies a destination or inspector.
+A caret reveals nearby
 content and points down while it is open. Small fixed choice sets remain visible,
 and selected choices stay visually pressed. Cancel uses a shadow-free ghost treatment.
 
@@ -328,6 +343,7 @@ checked source and remaining review boundary.
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs); [`session-occurrence-controls.mjs`](session-occurrence-controls.mjs) presents one occurrence's placement through the session owner's setters |
+| Immediate Coordination session addition and its local Undo | [`session-creation.mjs`](session-creation.mjs) prepares useful values from known context; [`work-controller.mjs`](work-controller.mjs) uses the existing creation/acceptance owner; [`controller.mjs`](controller.mjs) opens the canonical receiver and binds local Undo to the creation's accepted state |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
 | In-rack session deck and adjacent record editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon slot or Team planning's adjacent host. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
