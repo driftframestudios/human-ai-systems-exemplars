@@ -206,6 +206,11 @@ for (const engine of names) {
     await legacy(page, 'apply').click();
     const accepted = JSON.parse(await bytes(page));
     assert.deepEqual(accepted.work, []);
+    assert.equal(await root(page).evaluate(node => {
+      const active = document.activeElement;
+      return node.contains(active) && active.matches('button') && Boolean(active.getClientRects().length)
+        && !active.closest('[data-rack-editor-kind="session"]');
+    }), true, 'removing the selected record returns keyboard focus to a surviving rack control');
     const assurance = accepted.assuranceSettings;
     assert.deepEqual(assurance.quality.concepts.find(row => row.conceptId === 'acceptance-criteria').workIds, []);
     assert.deepEqual(assurance.recoveryEvents[0].workIds, []);

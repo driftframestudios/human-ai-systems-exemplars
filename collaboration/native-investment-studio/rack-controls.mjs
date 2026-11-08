@@ -139,6 +139,17 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     for (const records of homes.values()) for (const { node, marker } of records)
       if (marker.nextSibling !== node) marker.after(node);
   }
+  function survivingLocalTarget() {
+    // Removing the selected record also removes its initiating control. Return
+    // to the nearest surviving rack control so keyboard navigation can continue.
+    for (let scope = originScope?.isConnected ? originScope : host.parentElement;
+      scope && root.contains(scope); scope = scope.parentElement) {
+      const control = [...scope.querySelectorAll('button')].find(item =>
+        !host.contains(item) && !item.matches(':disabled') && item.getClientRects().length);
+      if (control) return control;
+    }
+    return null;
+  }
   function returnFocus(preferred) {
     const candidates = [...controls(), ...root.querySelectorAll('[data-studio-session-id]')].filter(control => {
       const record = recordOf(control);
@@ -153,7 +164,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
         && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)
       ?? candidates.find(control => originScope?.contains(control)
         && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)
-      ?? candidates[0];
+      ?? candidates[0] ?? survivingLocalTarget();
     target?.focus({ preventScroll: true });
     if (host.dataset.rackPlacement !== 'inset') revealStudioDestination(target);
   }
