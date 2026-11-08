@@ -211,8 +211,8 @@ for (const engine of names) {
     await expect(panel(page)).toHaveAttribute('data-capability-state', 'editing');
     await expect(prepare).toBeVisible();
     await expect(support.locator('input[value="research"]')).toBeChecked();
-    await expect(prepare.getByRole('checkbox', { name: 'Review the next step' })).toBeChecked();
-    await expect(prepare.getByRole('checkbox', { name: 'Review the next step' })).toBeFocused();
+    await expect(prepare.getByRole('checkbox', { name: 'New session 1' })).toBeChecked();
+    await expect(prepare.getByRole('checkbox', { name: 'New session 1' })).toBeFocused();
     assert.equal((await page.evaluate(() => window.capabilityFixture.studio.read().state.abilities.length)), 0,
       'returning supplies the new session while keeping the capability proposal unaccepted');
   });
@@ -256,13 +256,13 @@ for (const engine of names) {
     await field(page, 'new.review.enabled').selectOption('yes');
     await panel(page).locator('[data-capability-record-kind="person"][data-capability-receiver-field="new.review.personIds"]').click();
     await expect(tab(page, 'work')).toHaveAttribute('aria-selected', 'true');
-    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
-    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeFocused();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeFocused();
     await action(page, 'close').click();
     await expect(panel(page).locator('[data-capability-configure]')).not.toHaveAttribute('open', '');
     await expect(choice(page, 'inspect-history')).toBeFocused();
     await supportCell(page, 'inspect-history', 'review').click();
-    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
     await page.evaluate(() => {
       const { studio, controller } = window.capabilityFixture;
       const source = JSON.parse(studio.exportText()); source.purpose.changedAbility = 'Changed plan';
@@ -273,7 +273,7 @@ for (const engine of names) {
     await expect(field(page, 'context')).toHaveValue('  Return to this card  '); await action(page, 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     await expect(reviewGroup).toBeVisible();
-    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Person 3' })).toBeChecked();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
     await field(page, 'new.review.enabled').selectOption('no');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,400.00. Known accepted investment: $8,400.00.');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Add missing hourly rates in People to complete the amounts.');

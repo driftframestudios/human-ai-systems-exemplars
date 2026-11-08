@@ -590,7 +590,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     showPane(kind === 'rehearsal' ? 'rehearsal' : 'recovery');
     const raw = editor.read().draft.raw, list = collectionKeys[kind]; let sequence = 1; while (raw[list].includes(`${kind}-${sequence}`)) sequence += 1; const id = `${kind}-${sequence}`;
     edit([[list, [...raw[list], id]], ...Object.entries(values).map(([key, value]) => [`${kind}.${id}.${key}`, value])]);
-    const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = false; card.summary.focus(); return id;
+    const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = kind !== 'event'; card.summary.focus(); return id;
   }
   function settle(method) {
     rateControls.release();
