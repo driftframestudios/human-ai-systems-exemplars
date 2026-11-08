@@ -223,29 +223,37 @@ for (const engine of names) {
     assert.deepEqual([...released.revoked].sort(), released.created.map(row => row.url).sort(),
       'idempotent root disposal releases each owned report URL and removes its action listener');
   });
-  test(`${engine}: authored showcase enters through the shared plan, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
+  test(`${engine}: authored showcase changes examples in place, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, false, true);
-    const brief = root(page).locator('[data-native-showcase]');
+    const score = root(page).locator('[data-native-score]');
+    const connections = root(page).locator('[data-native-connection-view]');
     const reviewSession = async () => {
-      await openSession(page);
-      await root(page).locator('[data-native-session-select]').selectOption('review');
-      const settings = root(page).locator('[data-native-configure]');
-      if (!await settings.evaluate(node => node.open)) await settings.locator(':scope > summary').click();
+      await score.locator('[data-cadence-key="track-work:review"]').click();
+      await expect(root(page).locator('.studio-rack-editor')).toBeVisible();
       await expect(work(page, 'minutesPerSession')).toBeEditable();
     };
     const readiness = async () => {
-      if (!await brief.evaluate(node => node.open)) await brief.locator(':scope > summary').click();
-      const request = brief.locator('.native-showcase__request');
-      if (!await request.evaluate(node => node.open)) await request.locator(':scope > summary').click();
-      await request.locator('[data-native-showcase-action="readiness"]').click();
+      const accepted = connections.locator('.studio-accepted-connections');
+      if (!await accepted.evaluate(node => node.open)) await accepted.locator(':scope > summary').click();
+      await connections.locator('button[data-connection-select="readiness"]').click();
     };
-    await expect(brief).toBeVisible();
+    await expect(chapter(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(score.locator('.native-cadence__period')).toHaveCount(4);
     await expect(root(page).locator('[data-native-workspace="session"]')).not.toHaveAttribute('open', '');
     await expect(root(page).locator('section[data-native-workspace="connection"]')).toBeVisible();
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');
     await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,480.00');
+    await score.getByRole('button', { name: 'Two-quarter rollout', exact: true }).click();
+    await expect(chapter(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(score.locator('.native-cadence__period')).toHaveCount(2);
+    await expect(score.locator('[data-cadence-basis][value="quarter"]')).toBeChecked();
+    await score.getByRole('button', { name: 'Four-sprint pilot', exact: true }).click();
+    await expect(chapter(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(score.locator('.native-cadence__period')).toHaveCount(4);
+    await expect(score.locator('[data-cadence-basis][value="sprint"]')).toBeChecked();
+    await expect(total(page)).toHaveText('$3,980.00');
     await expect(work(page, 'occurrences')).toHaveValue('4');
     await chapter(page, 'investment').click(); await action(page, 'baseline').click();
     await chapter(page, 'coordination').click(); await reviewSession();
@@ -388,6 +396,7 @@ for (const engine of names) {
     await chapter(page, 'people').click();
     await expect(purpose(page)).not.toHaveAttribute('open', '');
     await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
+    await root(page).locator('.studio-people-rates > summary').click();
     await root(page).locator('[data-team-roster] [data-person-id="product-one"]').click();
     await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();

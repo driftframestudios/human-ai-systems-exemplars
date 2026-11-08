@@ -163,7 +163,7 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
     name: input.name, top: input.getBoundingClientRect().top + scrollY,
   })));
   const baseline = await positions();
-  const unchanged = async state => {
+  const unchanged = async (state, feedbackVisible = true) => {
     const actual = await positions();
     assert.deepEqual(actual.map(item => item.name), baseline.map(item => item.name));
     for (let index = 0; index < baseline.length; index += 1) {
@@ -172,11 +172,13 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
     }
     const order = await panel(page).evaluate(root => {
       const lastInputBottom = Math.max(...[...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().bottom));
-      return { lastInputBottom, feedbackTop: root.querySelector('.native-session__quantity-feedback').getBoundingClientRect().top,
+      const feedback = root.querySelector('.native-session__quantity-feedback');
+      return { lastInputBottom, feedbackVisible: feedback.getClientRects().length > 0, feedbackTop: feedback.getBoundingClientRect().top,
         previewTop: root.querySelector('[data-native-session-preview]').getBoundingClientRect().top };
     });
-    assert.ok(order.feedbackTop >= order.lastInputBottom && order.previewTop >= order.lastInputBottom,
-      `variable field feedback and investment preview follow every quantity control: ${JSON.stringify(order)}`);
+    assert.equal(order.feedbackVisible, feedbackVisible, 'quantity feedback occupies space when it has a message');
+    assert.ok((!feedbackVisible || order.feedbackTop >= order.lastInputBottom) && order.previewTop >= order.lastInputBottom,
+      `visible field feedback and investment preview follow every quantity control: ${JSON.stringify(order)}`);
   };
   for (const raw of ['', '-1']) {
     await input(page).fill(raw);
@@ -194,7 +196,7 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
   await setDuration(page, '0', '45');
   await expect(preview(page)).toHaveText('$1,800.00');
   await expect(panel(page).locator('[data-native-error="minutesPerSession"]')).toHaveText('');
-  await unchanged('recovery to a complete draft');
+  await unchanged('recovery to a complete draft', false);
   await input(page).focus();
 }
 
@@ -210,10 +212,12 @@ async function assertAmount(page, value) {
 async function assertContained(page) {
   const observed = await panel(page).evaluate(root => {
     const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
+    const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks';
     const rendered = node => {
-      // The chapter suite owns the local horizontal strip, including labels
-      // wider than its viewport. This oracle measures the visible form reading.
-      if (node.closest('[data-native-chapter-list]')) return false;
+      // Chapter and rack journeys own content inside their local scroll regions.
+      // This oracle measures those outer receivers and the visible form reading.
+      const scrollOwner = node.closest(localScroll);
+      if (scrollOwner && scrollOwner !== node) return false;
       if (node.getClientRects().length === 0) return false;
       for (let parent = node; parent && parent !== root; parent = parent.parentElement) {
         if (parent.hidden) return false;
@@ -221,7 +225,7 @@ async function assertContained(page) {
       }
       return true;
     };
-    const visible = [...root.querySelectorAll('button,input,summary,output,table,[data-native-total]')]
+    const visible = [...root.querySelectorAll(`button,input,summary,output,table,[data-native-total],${localScroll}`)]
       .filter(rendered);
     const text = [];
     for (const node of root.querySelectorAll('label,button,summary,output,p,th,td,h3,h4,dt,dd')) {
@@ -312,6 +316,7 @@ for (const engine of names) {
 
     await expect(total(page)).toHaveText('$1,200.00');
     await tab('people').click();
+    await people.locator('.studio-people-rates > summary').click();
     await people.locator('[data-person-id="product-one"]').click();
     await people.locator('[data-person-configure] [name="ratePerHour"]').fill('105');
     await people.locator('[data-person-action="apply"]').click();
@@ -329,12 +334,12 @@ for (const engine of names) {
 
     await tab('coordination').click();
     await expect(panel(page).getByRole('heading', { name: 'Team planning', exact: true })).toBeVisible();
+    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(0);
     await arrangements.locator('[data-reel-choice="pod"]').click();
     await expect(arrangements.locator('[data-template-total]')).toHaveText('$1,822.50');
-    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(0);
-    await arrangements.locator('[data-template-action="apply"]').click();
     await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(2);
     await expect(total(page)).toHaveText('$1,822.50');
+    await graph.locator('.studio-accepted-connections > summary').click();
     const selected = graph.locator('.native-connections__list button[data-connection-select]').first();
     const selectedId = await selected.getAttribute('data-connection-select'); assert.ok(selectedId);
     await selected.click();
@@ -473,20 +478,26 @@ for (const engine of names) {
     const page = await open(t, engine);
     await begin(page); await input(page).fill('45');
     const wide = await panel(page).evaluate(root => {
-      const form = root.querySelector('[data-native-configure] form'), style = getComputedStyle(form);
-      return { contentWidth: form.getBoundingClientRect().width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight),
-        threshold: 31 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
-        tops: [...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().top) };
+      const module = root.querySelector('[data-native-configure] .studio-duration');
+      const fields = [...module.querySelectorAll('input[inputmode]')];
+      const count = root.querySelector('[data-native-configure] input[name="occurrences"]');
+      return { fields: fields.map(input => input.name), tops: fields.map(input => input.getBoundingClientRect().top),
+        readoutBottom: module.querySelector('output').getBoundingClientRect().bottom,
+        separateRepetition: !module.contains(count) && Boolean(count.closest('.native-time-controls')) };
     });
-    assert.ok(wide.contentWidth >= wide.threshold, `the wide fixture reaches the three-control row: ${JSON.stringify(wide)}`);
-    assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < 1, `all three wide inputs share one top alignment: ${JSON.stringify(wide)}`);
+    assert.deepEqual(wide.fields, ['hoursPerSession', 'minutesPerSession']);
+    assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < 1 && wide.readoutBottom < Math.min(...wide.tops),
+      `Hours and Minutes share a row beneath their combined readout: ${JSON.stringify(wide)}`);
+    assert.equal(wide.separateRepetition, true, 'Working sessions remains a nearby repetition control');
     await assertMaximumDigitsFit(page);
     if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-desktop.png') });
     const configure = panel(page).locator('[data-native-configure]');
     const summary = configure.locator('summary');
     // Native summary activation owns focus; reopening receives the same editor.
-    await summary.focus(); await summary.press('Enter'); await expect(summary).toBeFocused();
-    await summary.press('Enter'); await expect(summary).toBeFocused();
+    await summary.focus(); await summary.press('Enter');
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(summary).toBeFocused();
+    await summary.press('Enter');
+    await expect(configure).toHaveAttribute('open', ''); await expect(summary).toBeFocused();
     await expect(input(page)).toHaveValue('45');
     await input(page).focus();
     for (const width of [833, 390, 1440]) {
@@ -498,10 +509,10 @@ for (const engine of names) {
       await assertMaximumDigitsFit(page);
       if ([1440, 390].includes(width)) await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? String(width) : null);
       if (width === 833) {
-        const agreement = await panel(page).locator('.native-coordination__agreement').boundingBox();
+        const supportedWork = await panel(page).locator('.studio-session-details').boundingBox();
         const configuration = await configure.boundingBox();
-        assert.ok(configuration.y >= agreement.y + agreement.height, 'the complete session editor follows its accepted summary');
-        assert.ok(configuration.width >= agreement.width - 1, 'the complete form receives the chapter width');
+        assert.ok(configuration.y >= supportedWork.y + supportedWork.height, 'the complete session editor follows the supported-work disclosure');
+        assert.ok(configuration.width >= supportedWork.width - 1, 'the complete form receives the chapter width');
       }
     }
     await page.setViewportSize({ width: 390, height: 1000 });
@@ -512,7 +523,10 @@ for (const engine of names) {
       await assertContained(page);
       await assertMaximumDigitsFit(page);
       await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? `${width}-enlarged` : null);
-      if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-enlarged.png') });
+      if (engine === 'webkit') {
+        await panel(page).screenshot({ path: resolve(captures, 'coordination-enlarged.png') });
+        await configure.locator('.studio-duration').screenshot({ path: resolve(captures, 'coordination-duration-enlarged.png') });
+      }
     }
     await page.setViewportSize({ width: 390, height: 1000 });
     await expect(input(page)).toHaveValue('45');

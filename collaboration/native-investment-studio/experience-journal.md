@@ -626,15 +626,18 @@ repairs the visible reel return in
 [#776](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/776):
 the template receiver now owns focus after a person is added.
 
-Two legacy browser journeys still target superseded visitor entries. Both fail
-on the clean shared-control baseline: one reaches a closed People rate editor,
-and one expects the removed showcase brief. Their focused observation repair is
-tracked in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777).
-Repair these routes in a narrow check-focused PR before #789's deeper in-rack
-composition, using today's accepted People and Investment entries. This gives
-the next increment a meaningful cross-chapter baseline while preserving the
-current interface. The earlier composition PR's passing current journeys and
-these known baseline failures remain distinct evidence.
+The #777 browser-route repair supersedes the earlier known-failure standing.
+People journeys open the rate disclosure; arrangement choices use direct
+acceptance; the populated-showcase journey enters through horizon session keys
+and accepted connections. Editing, comparison, downloads and recovery remain
+the observed outcomes. The responsive journey follows the enclosed duration
+module, separate repetition control and local rack scroll boundaries.
+Its enlarged-text check exposed #791: wrapping numeric readouts changed height
+when a value became unknown. The shared output now reflows its quantity columns
+and keeps each value on one line, preserving the controls below it.
+The same journey exposed #792: restoring an editor already at home needlessly
+moved its focused subtree. Restoration now moves only displaced controls,
+retaining native-summary focus on keyboard reopen.
 
 For re-entry, use PR #781 for the delivery-board projection and PR #783 for the
 direct replacement transaction, local Undo and accepted-record routing. The
@@ -646,7 +649,7 @@ acceptance and return observations.
 PR #764 remains the accepted scope-navigation reference. Retain
 the current creation/confirmation contract while #758 defines its separate replacement.
 #788's receiving PR owns the duration skin and pointer observation. #789 receives
-the proposed in-rack Session detail deck; its first boundary is existing-session
+the approved in-rack Session detail deck; its first boundary is existing-session
 editing, followed by visual occurrence and participant controls. #758 then #770
 receive immediate creation and contextual empty-space entry.
 Pause before general performance refinement in
