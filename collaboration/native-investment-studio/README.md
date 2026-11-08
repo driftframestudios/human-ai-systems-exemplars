@@ -9,8 +9,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration,
-with the compact creation refinement in
-[#831](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/831).
+with creation and recovery established in #831/#833 and local navigation in
+[#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -22,12 +22,14 @@ a plus in that plan's track adds another session while retaining earlier placeme
 Period-lane creation and the New plan row create separate records and keep All
 plans visible. New records use unique names such as **New session 1** and stay
 closed until selected. Week/month creation areas fill each track cell; pointer
-hover and keyboard focus reveal the plus, while touch keeps it visible. The selected period and Plan overview return remain visible.
-Team planning follows with its arrangement reel, delivery
-board and shared-session matrix. Team name, membership and order update directly
-inside the board. Person and handoff controls use that same local working area;
-Shared sessions remains available as its own module. Create a team from a handoff,
-then return to that handoff with its entries intact.
+hover and keyboard focus reveal the plus, while touch keeps it visible. The
+selected period and Plan overview return remain visible.
+Team planning follows with its arrangement reel and delivery board. Each lane
+can add a team or handoff in place. Team name, membership and order update directly
+with a Saved indicator. Shared sessions has its own **People / Handoffs** switch:
+checkbox pads assign participants or link work, and a row key opens compact host
+and ordering controls. Handoff editing stays inside the selected working area.
+Creating its missing team retains the handoff entries and selects the new team.
 
 People combines its roster, local person/team editors, role facets and
 contribution/session matrix. Add creates a useful record immediately; its name,
@@ -39,8 +41,9 @@ peach Hours, paper Minutes, a shared readout and circular steps. Session pads ow
 repetition inside a neighboring dark module, with Add at the top right and Remove
 at the bottom right. Duration fills its slot; Funding and Status use named,
 large radio pads with short hints beside Participants at wider widths.
-Editors offer Apply beside Close and retain their bottom action row; both Apply
-entries use the same validation and accepted-state owner.
+Local headers identify the owning rack and current item, with an owner return
+and Close. Prepared forms offer Apply beside Close and at the bottom, sharing
+validation and the accepted-state owner. Direct edits show Saved.
 
 Investment has three VHS-C navigation decks: **Plan investment**, **Compare a
 change** and **Keep a plan**. They reveal the existing pricing, baseline and
@@ -59,8 +62,9 @@ saved-plan owners. Deeper independently editable financial decks remain with
    recovers them. Select a period to edit its short caption while keeping the
    Sprint/Quarter heading. The live example includes a paused follow-up.
 4. Turn the Team arrangement reel, then choose a team. Change membership through
-   its pads and return through **Delivery overview**. Inspect a person while
-   keeping Shared sessions in view.
+   its pads and return through **Delivery overview**. In Shared sessions, choose
+   **People** to assign participants or **Handoffs** to link the work. The last
+   participant stays selected until another person is included.
 5. Add or select a person/team in People, or choose an Abilities support cell.
    Local controls retain your place. Close keeps unfinished entries; amp Undo
    recovers an accepted addition.
@@ -69,8 +73,8 @@ saved-plan owners. Deeper independently editable financial decks remain with
 
 The authored people use work-based names such as Researcher and Quality reviewer.
 Known people may participate across teams. Removing a session clears its supporting
-links and dependent timing relationships; amp Undo restores the whole change. Their rates and example arrangements
-help a visitor explore relationships; people doing real work retain authority over
+links and dependent timing relationships; amp Undo restores the whole change.
+Rates and example arrangements help a visitor explore relationships; people doing real work retain authority over
 commitments and findings.
 
 ## Recognize the controls
@@ -95,9 +99,9 @@ preserve the artwork and interaction grammar. Ordinary mobile layouts use local
 scrolling for two-dimensional tables and shelves. System reduced-motion and the
 visitor's motion choice retain operability without the animated treatment.
 
-The horizon's new handoff asks for From work, To work and an optional team
-connection. Apply accepts it; decisions and delays become available afterward.
-Existing handoffs keep their bottom-right Remove action.
+The horizon creates a handoff between available work records, with its details
+closed. Select that relationship to change its endpoints, team connection,
+decisions or delays. Existing handoffs keep their bottom-right Remove action.
 
 ## Run a local preview
 
@@ -149,9 +153,10 @@ actual checks and their scope. Performance refinement stays with
 | --- | --- |
 | Accepted plan and history | [state.mjs](state.mjs), [commands.mjs](commands.mjs) |
 | Draft coordination and recovery | [editing.mjs](editing.mjs), [implementation reference](implementation-reference.md) |
-| Chapter integration and live form receivers | [controller.mjs](controller.mjs), [rack-controls.mjs](rack-controls.mjs) |
+| Local owner/current headers and live form receivers | [controller.mjs](controller.mjs), [rack-controls.mjs](rack-controls.mjs) |
 | Period board, cassette scope and sequencer | [cadence-view.mjs](cadence-view.mjs), [score-controller.mjs](score-controller.mjs) |
 | Team arrangement and direct team editing | [connection-template-controller.mjs](connection-template-controller.mjs), [delivery-board.mjs](delivery-board.mjs) |
+| Shared participation and support links | [shared-session-rack.mjs](shared-session-rack.mjs) |
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Cassette and Investment deck presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |

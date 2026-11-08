@@ -15,7 +15,8 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`, with
-#831 refines accepted creation and the quiet add targets. The #827 browser-fixture
+#831/#833 establish accepted creation and recoverable session removal; #832
+consolidates local headers and Shared sessions. The #827 browser-fixture
 repair keeps focused verification usable across that integration. Promotion to main and a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
@@ -67,9 +68,10 @@ both active and paused work without changing the canonical test fixture.
 Session pads own repetition in the rack, with Add session and selected-session
 removal; the synchronized numeric field remains an implementation detail. The
 selected pad retains its subtle movement. A stage or handoff opens its existing
-relationship owner in the rack. New handoff shows From work, To work and optional
-Team connection; creation, Cancel and Close lead. After acceptance, decisions,
-delays and bottom-right removal become available. Its relationship fields carry
+relationship owner in the rack. New handoff accepts a relationship between
+available work records with editing closed. Selecting it reveals From work,
+To work and optional Team connection, followed by decisions, delays and
+bottom-right removal. Its relationship fields carry
 the useful context; a repeated cost preview is hidden. These operations preserve
 the accepted model, reference checks, proposals and shared history.
 
@@ -77,7 +79,10 @@ Team planning follows the horizon with its arrangement reel and concise preview,
 then the delivery-phase board and shared-session matrix. A selected team replaces
 the board contents with its name, stable membership pads and reorder controls.
 The Delivery overview breadcrumb returns locally. Name, membership and ordering
-changes accept directly. Custom teams follow their authored work stage where
+changes accept directly with visible Saved feedback. Each delivery lane adds a
+team or handoff there, replacing duplicate header additions. The placement of
+new IDs is local view state: refresh and Undo/redo retain it; a new mount derives
+imported phase placement from relationships. Custom teams follow their authored work stage where
 available, otherwise spread across phases; their handoffs follow the receiving
 team. Template-authored placements retain their meaning.
 
@@ -86,9 +91,24 @@ Team planning receiver. Delivery overview and Shared sessions are independent
 working modules: inspecting a person replaces the delivery area while the
 sequencer stays visible. The local return restores Delivery overview. Handoff
 Create team accepts a uniquely named team while retaining the handoff and its
-requested field. The visitor can select that team to refine its direct controls. The separate connection diagram and detached Working
+requested field. The visitor can select that team to refine its direct controls. The separate
+connection diagram and detached Working
 sessions panel are retired from the visible composition. Their retained source
 owners continue to supply shared state and forms where needed.
+
+Shared sessions keeps two small related views. People pads change participation;
+Handoffs pads change supporting-work links. Both accept directly and use amp Undo.
+A selected row opens only host-team and ordered-participant controls inside its
+own module. The final selected participant explains the existing one-person
+minimum; another person can be included before clearing that pad. Selecting a
+handoff heading borrows its canonical form into this same local receiver.
+Duration and period placement stay with Plan overview.
+
+All borrowed receivers, People editors and the Abilities support module share
+an owner/current header. Owner return and Close restore the initiating working
+area and its focus. Apply mirrors the canonical form when a proposal exists;
+direct controls show Saved. Native buttons express the local scope operation.
+The evidence and alternatives are reconciled in the control research.
 
 ### People, Abilities and the other chapters
 
@@ -229,7 +249,10 @@ participant time shares remain with #798; production Reset remains with #808.
 | Every period caption is derived from stages | A short optional caption overrides the summary while retaining the Sprint/Quarter heading; clearing restores derivation. |
 | Every period addition loads the newest cassette | Lane/track New plan additions keep All plans visible; shelf New plan deliberately loads the new cassette. |
 | Apply appears only below the form | Shared top Apply beside Close delegates to the canonical bottom action, including validation and focus. |
-| New handoff exposes decisions, delays, removal and a repeated amount immediately | From work, To work and optional Team connection lead; follow-on operations become available after acceptance. |
+| New handoff opens a creation form | A default relationship appears in place; selecting it opens endpoints and follow-on operations. |
+| Shared-session cells reopen the complete duration form above the matrix | #832 gives them local People/Handoffs relationship views and a compact row receiver. |
+| Team changes save silently | Direct controls show Saved; prepared forms keep the shared top and bottom Apply boundary. |
+| Each editor invents its own return arrangement | An owner/current header shares native return, Close and canonical Apply behavior. |
 | Funding has small ungrouped choices | Named large radio pads provide top-left selection controls, short hints and clear pressed state. |
 | All custom teams fall into Planning | Existing stage relationships or distributed phase placement keep the delivery board balanced. |
 | Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
