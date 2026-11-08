@@ -14,8 +14,9 @@ understandable through direct exploration. Useful examples and visible changes
 lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
-`main` retains the approved reference. The living integration is `dev`, currently
-receiving #828 after the #825 direct-editor integration. Promotion to main and a tagged public release each await
+`main` retains the approved reference. The living integration is `dev`, with
+#825 and #828 accepted. The #827 browser-fixture repair keeps focused verification
+usable across that integration. Promotion to main and a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
 
@@ -206,6 +207,7 @@ participant time shares remain with #798; production Reset remains with #808.
 
 | Earlier direction | Current receiving decision |
 | --- | --- |
+| Per-file root teardown inspects only resources already assigned | #827 joins pending setup through one shared lifecycle owner, then releases every acquired browser and server once. |
 | #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
 | Team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
 | Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
@@ -238,6 +240,15 @@ creation and Undo, selected scope, direct membership, parked drafts, support-cel
 routing, ordinary mobile containment and readable focus. Arithmetic inventories
 and repeated all-page screenshots are unnecessary for these changes.
 
-Use the README to run the current proof, the Visual Fidelity Contracts for
-composition, and #828 for the present delivery. Broader financial models,
-response records, performance and public release retain their separate issues.
+The browser suites share one test-local resource lifecycle. Setup awaits each
+owned acquisition; teardown joins setup, including the zero-match root-hook
+ordering observed on the declared Node runtime. Partial setup releases acquired
+resources, and cleanup attempts every close while preserving the original error.
+Controlled resource tests and a bounded child runner exercise this ownership;
+real-browser runs establish the affected fixtures' integration. This supersedes
+the temporary workaround of excluding every file without a matching case.
+
+Use the README to run the current proof and the Visual Fidelity Contracts for
+composition. #827 owns the focused verification repair; #828 records the latest
+visitor-facing integration. Broader financial models, response records,
+performance and public release retain their separate issues.

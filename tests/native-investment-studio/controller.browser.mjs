@@ -2,7 +2,8 @@ import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { after, before, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -18,7 +19,7 @@ const captures = resolve(import.meta.dirname, '../../.visual-runs/native-coordin
 let server;
 let aboutFixture;
 
-before(async () => {
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const aboutSource = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   const objectSource = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
@@ -29,12 +30,8 @@ before(async () => {
   // About. Keep its fallback link and every native receiver byte; this bounded
   // fixture leaves that diagram's loading behavior with the Prompt owner.
   aboutFixture = aboutSource.replace(objectSource, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
-  server = await startStaticServer();
-  for (const name of names) browsers.set(name, await engines[name].launch());
-});
-after(async () => {
-  try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
-  finally { await server?.close(); }
+  server = await own(startStaticServer());
+  for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
 
 async function open(t, engine, options = {}) {

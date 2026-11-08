@@ -128,6 +128,11 @@ NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:capability-
 ```
 
 Browser fixtures need local HTTP binding and the installed Playwright engines.
+Their shared [lifecycle owner](../../tests/native-investment-studio/browser-fixture-lifecycle.mjs)
+joins pending setup before releasing browsers and the server, including when a
+name filter selects zero cases. Each suite awaits `own(...)` for resource
+acquisition; case-specific contexts and telemetry stay with the case. The source
+bundle includes controlled failure and bounded child-runner cleanup checks.
 Use ordinary phone and desktop views for a changed composition; select WebKit or
 Firefox when input or layout behavior warrants it. The receiving PR records the
 actual checks and their scope. Performance refinement stays with
