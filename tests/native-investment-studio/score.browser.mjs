@@ -457,7 +457,7 @@ for (const engine of names) {
         const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
       }, hasCadence);
       const retained = await bytes(page);
-      await root(page).locator('[data-connection-templates] [data-session-track="followup"] .studio-session-tracks__name').click();
+      await root(page).locator(hasCadence ? '[data-cadence-key="track-work:followup"]' : '[data-delivery-session="followup"]').click();
       await root(page).locator('[data-rack-remove-plan]').click();
       await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
       assert.equal(await bytes(page), retained, 'confirmation preserves the relationship with or without a cadence');
