@@ -56,6 +56,9 @@ then identifies each behavior's implementation owner.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `rate-controls.mjs` owns relative $10 and $5 dial gestures beside existing hourly-rate fields. People and Quality retain parsing, unknown values, exact cents, $1 steps and accepted-state ownership.
 - `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the amp-head Off / Lower / Full controls. It leaves accepted state and editor history with their existing owners.
+- `rack-creation-controls.mjs` owns the shared native creation target, its accessible
+  label and optional visible wording. `rack-record-creation.mjs` owns useful
+  accepted record defaults, parked-edit coordination and shared history.
 - `arrangement-surfaces.mjs` composes team lanes and person/session tracks from accepted or explicitly proposed records; existing controllers own editing and acceptance.
 - `change-showcase.mjs` and `assurance-showcase.mjs` hold authored exploration configurations; their controllers apply those entries through existing draft adapters.
 - `reel-control.mjs` owns reusable native-button reels. `select()` synchronizes a choice without dispatch, `vary()` changes decorative rotation, `revealReelResult()` cues a refreshed board, and the caller owns preset changes. `studio-instrument.css` supplies the shared visual control family after `about.css`; chapter rack styles extend it.
@@ -1489,12 +1492,14 @@ preview, apply, cancel, review, useCurrent, and freshId operations as the assemb
 form family. The private form engine selects only those two source-owned
 families; callers receive their named finite adapters.
 
-Creation starts with an empty name and team, an empty ordered participant list,
-a 30-minute duration, one session, additional funding, and planned status.
-The visitor supplies a team and at least one participant before preview or
-Apply. Current admission requires every participant to belong to the selected
-team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Historical schema 0.5 required null timing.
+The lower-level session draft port starts creation with an empty name and team,
+an empty ordered participant list, a 30-minute duration, one session, additional
+funding and planned status. A caller supplies a team and at least one known person
+before preview or Apply. Known people may participate across team boundaries;
+team membership and session participation remain independent relationships.
+The rack creation route supplies useful populated defaults through
+`rack-record-creation.mjs` and accepts the new record with editing closed. The
+canonical editor retains selected people while reporting a missing reference. Historical schema 0.5 required null timing.
 Current creation starts with unknown timing, and updates carry the accepted
 row's timing value through the existing work owner. The Score contract owns
 authored timing; session edits retain that accepted placement.
@@ -1580,9 +1585,11 @@ and receiver disposal across the three engines.
 
 ## Native connection patch bay
 
-[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
-places accepted team connections above the complete working-session editor in
-Coordination. `connection-view.mjs` derives the SVG, ordered connection list
+This section records the retained patch-bay component contract from
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668).
+The current About surface uses Delivery and Shared sessions local receivers;
+the former visible patch bay remains available to reference consumers. Its
+canonical handoff form is still owned by `connection-controller.mjs`. `connection-view.mjs` derives the SVG, ordered connection list
 and selected detail from one immutable accepted projection. Its private
 identity and adjacency maps rebuild when that projection changes. Equal
 numeric revisions from separate imports retain their separate cache identity.
@@ -1657,10 +1664,12 @@ listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
 history restoration; an actual departure disposes it.
 
-Mounting prepares Session settings with a fresh draft inside the collapsed
-Working sessions workspace. Explicit session navigation opens that workspace;
-its native summaries handle later opening and closing. Cancel returns focus to
-the Session settings summary.
+The current About integration starts with Plan overview and session detail
+closed. Selecting a session or occurrence mounts its canonical form inside the
+local rack between board and tracks; the originating control and local return
+preserve scope. The earlier collapsed, detached Working sessions workspace is
+a superseded placement. The form owner retains its native configuration and
+Cancel behavior within the selected receiver.
 `work-controller.mjs` owns one complete session form: name, team, ordered
 participants, duration, count, funding and status. Raw text and circular step
 buttons share the `editing.session` lease with every other chapter. The in-card
@@ -2168,16 +2177,21 @@ remain separate staffing references.
 
 ## Create entry and confirmation controls
 
-The **create entry** starts a new item or nested addition. It receives
-`native-control--create`, a compact plus mark, and a concrete label such as
-**Add session**, **Add a person**, or **Add a decision**. The mark tells the
-visitor that a new editing task begins.
+The **create entry** adds a record or occurrence at its named scope. It receives
+`native-control--create`, a compact plus mark, and a concrete accessible label
+such as **Add session**, **Add a person**, or **Add a decision**. Where the rack
+supplies useful defaults, the entry accepts the addition with editing closed;
+selecting the new representation opens its editor. A creation route that needs
+prerequisite data opens the corresponding guided proposal. The shared
+`rack-creation-controls.mjs` factory owns the native target; receiving controllers
+retain acceptance and recovery.
 
 The **confirmation** accepts the item already being prepared. It uses the
 ordinary commit treatment and the form's action label, such as **Add session**,
 **Create team**, or **Apply proposal**. Its appearance stays with Apply/Save;
 the plus mark remains on the entry control. Copy can share the same verb while
-position and treatment distinguish beginning the task from completing it.
+position and treatment distinguish creating an addition from accepting a
+prepared proposal.
 
 Class assignment follows the operation and editor mode, rather than matching
 an “Add” word. Nested Add actions inside a form still begin their own item and

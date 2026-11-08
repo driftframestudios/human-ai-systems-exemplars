@@ -90,10 +90,11 @@ confirmation remains with the bottom action rather than acquiring an Apply
 alias. A final Add-to-plan confirmation describes acceptance and carries no
 creation plus.
 
-A fresh handoff asks for From work, To work and an optional Team connection.
-Its initial actions complete, cancel or close that proposal. After acceptance,
-decisions, delays and removal become meaningful neighboring operations. A
-handoff's fields explain the relationship; a repeated cost preview is unnecessary.
+New handoff in the horizon accepts a relationship between available work
+records with editing closed. Selecting it reveals From work, To work and an
+optional Team connection, followed by decisions, delays and removal. Apply
+accepts later field proposals. The relationship fields carry the useful context;
+a repeated cost preview is unnecessary.
 
 One immutable accepted projection supplies money, relationships and downloads.
 Drafts, saved edits, Undo and baseline each retain their existing owner.
@@ -180,7 +181,7 @@ Meaningful supersessions are explicit:
 | Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |
 | #825 Working sessions Remove sits bottom-left | #828 places it bottom-right; Add remains top-right |
 | Apply appears only at the end of an editor | Shared top Apply delegates to that same canonical action; the bottom action remains |
-| A new handoff shows every follow-on action | Its creation fields and acceptance lead; decisions/delays/removal follow acceptance |
+| A new handoff opens a creation proposal immediately | The rack accepts useful defaults with editing closed; selecting the relationship opens its fields and follow-on actions |
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)

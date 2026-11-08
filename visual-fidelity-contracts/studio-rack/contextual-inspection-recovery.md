@@ -20,7 +20,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
-| Horizon handoff | From work, To work and optional Team connection define the relation. Its fresh draft offers creation, Cancel and Close; decisions, delays and removal become available after acceptance. |
+| Horizon handoff | New handoff accepts a relationship between available work records with editing closed. Selecting it opens From work, To work, optional Team connection, decisions, delays and removal. Apply accepts later field changes. |
 | People | Add person, team and contribution accept useful starting records with editing closed. Per-record controls arrange the roster and parallel team lanes. Compact Person settings, the visible role rail and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
 | Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. |
 
@@ -161,6 +161,8 @@ the separate Customize teams and handoffs form, and a cassette-local Undo.
 Current local receivers, direct creation and amp history are the receiving
 pattern. #828 also supersedes bottom-only Apply access, automatic cassette
 filtering after period creation, and follow-on actions in a fresh handoff draft.
+The later accepted-creation route creates a useful handoff with editing closed;
+selection reveals its complete relationship editor.
 #833 supersedes the session-removal requirement to reassign each reference
 manually. The confirmation now accepts one recoverable cleanup; other record
 types retain their existing relationship checks. Dark session surfaces use the

@@ -6,7 +6,8 @@ each route changes the same editor proposal. Session time, hourly rates and the
 Change/Quality fader banks are current receivers.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-reviewed 7 November 2026. It inherits the shared control and motion treatment in
+reviewed 8 November 2026 for the compact Person receiver in
+[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836). It inherits the shared control and motion treatment in
 [Studio Rack Composition](README.md).
 The separately approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
 preserves an exact `dev` study reference. Its smaller equal-sized dials and
@@ -75,6 +76,7 @@ values, and Undo operates on accepted history.
 | [About session markup](../../context-canvas-project-surface/context-canvas/index.html) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Static duration controls, field identities and session readout projection |
 | [Change](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controllers](../../collaboration/native-investment-studio/assurance-controller.mjs) | Fader meaning and result projection |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Quantity-module enclosures, duration hierarchy and responsive control grouping |
+| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Compact canonical Person form, 64px coarse and 56px fine rate dials, exact fields and steps; same owner when Coordination borrows the form |
 | [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Retained dial artwork, base steppers and chapter-specific faders |
 | [Team browser checks](../../tests/native-investment-studio/team-controller.browser.mjs) and [session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Exact value agreement, gesture/cancellation, retained drafts and Apply/Undo |
 | [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Framework-specific values and visible consequences |
@@ -129,7 +131,10 @@ Apply/Cancel owners continue to govern values.
 
 The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 borrows the canonical controls, including the person's enclosed rate module.
-Its local close retains the current proposal; returning to People restores the
+#836 gives that same form its compact `studio-people.css` geometry in both
+People and Coordination. The 64px coarse and 56px fine faces preserve distinct
+$10/$5 gesture roles beside exact entry and $1 steps; Apply still accepts the
+person proposal. Its local close retains the current proposal; returning to People restores the
 same controls and value owner. [Session editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 places the canonical duration module in its Coordination receiver. Plan overview's
 Session detail deck (#789) holds that module between its period board and Session
