@@ -12,24 +12,27 @@ the accepted design and its implementation boundaries. Prospective receiving
 decisions below retain their own Issues and delivery evidence. Each receiving PR
 owns its actual verification result. Publication remains a separately reviewed action.
 
-The [loaded-tape dev study](../../planning/context-canvas/studio-rack-tape-workbench.md)
-in [#804](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804)
-explores a compact composition across these existing contracts. It maps every
-outside Coordination operation to a proposed rack home, consolidates repetition
-around occurrence pads, and separates session identity from plan/period scope.
-Its proposed refinements remain reviewable alongside this accepted grammar;
-production changes receive their own focused implementation and review.
+The [chapter workbench study](../../planning/context-canvas/studio-rack-tape-workbench.md)
+in [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
+extends #804's loaded-tape illustration across all Studio chapters. Its
+[development composition contract](chapter-workbench-study.md) connects team
+lanes, support tables, reels, check pads and investment lanes through shared
+illustrative identities and Undo. The study maps outside Coordination operations
+to proposed rack homes, consolidates repetition around occurrence pads, and
+separates session identity from plan/period scope. Production retains its current
+owners; each adopted change receives focused implementation and review.
 The human-approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
 is a dedicated component reference within this family. It preserves the exact
-dev panel and its neighboring Working sessions layout for later recall while
-the surrounding cassette art continues to evolve. Merging remains held during
-that dev iteration.
+dev panel and its neighboring Working sessions layout for later recall. The
+chapter expansion reuses that exact reference while surrounding cassette art
+and chapter compositions can evolve. Merging remains held during the dev study.
 
 ## Choose a visual mode and an operation
 
-The family contains this composition contract and five operation contracts.
-They describe reusable relationships across chapters, rather than a separate
-visual system for every chapter.
+Choose the operation contract that explains what the visitor can do. These
+contracts describe reusable relationships across chapters, with room for each
+chapter's own composition. The development workbench and its approved duration
+panel retain the separate standing described above.
 
 | Mode | Useful work | Stable visual relationship |
 | --- | --- | --- |

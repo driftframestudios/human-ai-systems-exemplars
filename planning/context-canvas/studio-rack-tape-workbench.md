@@ -1,23 +1,58 @@
-# A tape workbench inside the Studio rack
+# A shared chapter workbench inside the Studio rack
 
-Let visitors define a session, place its occurrences in a sprint or quarter,
-choose who takes part, and route the resulting work while keeping the arrangement
-in view. The rack becomes the working surface for these operations, with compact
-modules attached to the selected item.
+Let visitors see how people, shared sessions, useful outcomes and investment fit
+together. Each chapter presents a compact visual reading of the same illustrative
+work. A selected pad loads its controls nearby; a marked session route opens the
+shared tape module and returns to the originating chapter.
 
 **Standing — 7 November 2026:** active design exploration on `dev`, coordinated in
-[#804](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804). The
-[interactive study](studio-rack-tape-study.html) uses illustrative local state to
-make the composition reviewable. It is not a production model migration.
-The [running Studio source](../../collaboration/native-investment-studio/README.md)
-continues to define accepted behavior. This proposal develops the
-[Coordination consolidation](studio-coordination-rack-consolidation.md); its
-prospective reductions replace earlier layout recommendations only when a
-focused implementation receives review. The duration and Working sessions
-panels now have a human-approved development layout, frozen in the
+[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
+This expands the approved direction from
+[#804](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804),
+which established the loaded-tape Coordination study. The
+[interactive study](studio-rack-tape-study.html) now gives all Studio chapters
+their own compact workbench, shared illustrative state and Undo. The
+[Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
+records this receiving composition. The
+[running Studio source](../../collaboration/native-investment-studio/README.md)
+continues to define production behavior and its accepted-state boundaries.
+
+The exact duration and neighboring Working sessions layout remains frozen in the
 [Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
-Work continues on `dev`; merging remains held while the illustrated composition
-is refined.
+The all-chapter direction supersedes the single-chapter study boundary while
+preserving that approval. Work continues on `dev`; merging remains held while
+the human reviews the connected experience. The production bridges described
+below remain prospective.
+
+## One workbench, different questions
+
+The compact chapter rail changes the reading without replacing the illustration.
+Team lanes, support tables, reels, check pads and funding lanes give different
+questions an appropriate visual shape. Reuse the rack enclosure, selected-record
+relationship and concise control language; keep the underlying operations
+distinct.
+
+| Chapter and visitor question | Visual composition | Shared consequence |
+| --- | --- | --- |
+| **Coordination:** Where does this work happen? | Sprint board, cassette shelf, sequencer and loaded duration/occurrence module | Session duration, occurrence placement and people feed the other chapter readings. The study starts with four sprints; production retains its sprint/quarter model. |
+| **People:** Who takes part, and what time is available? | Team lanes, loaded person/team controls and a people-by-session matrix | Rate and participation changes update the same sessions' illustrative investment. Team membership stays independent from session participation. |
+| **Abilities:** What should become possible? | The two existing support-table forms, followed by a loaded ability/practice editor | Responsibility, preparation, review and authored observation choices refer to the shared people, teams and session IDs. |
+| **Change:** What helps this practice take hold? | Framework/viewpoint reels, emphasis faders and Prepare/Practice/Carry forward lanes | Framework and emphasis choices visibly change the work reading. Supporting-session pads connect a selected component to existing work. |
+| **Quality & recovery:** What should people rehearse or review? | Before/after-release reels, a compact CRT and selected check pads | Included checks link to shared sessions. Sigma attention and Change urgency vary an authored attention illustration with a calm 4σ starting state. |
+| **Investment:** Where does the planned effort go? | Session cost cards in funded/extra lanes, selected-session people and sprint bars | Amounts use the current people, rates, duration and occurrences. A saved comparison makes the effect of an edit visible. Funding groups retain the same total. |
+
+The shell owns page-local model snapshots and Undo. Chapter adapters read that
+model and submit changes through one mutation callback. A supporting-session link
+reuses an existing session; repeated links across chapters add no separate cost.
+Selection and navigation remain view state. An open-session route retains the
+originating chapter and provides a visible return after inspection.
+
+This study makes a best-attempt composition reviewable. It deliberately uses a
+smaller authored example and simplified investment. Production's funded-time
+allocation, retained drafts, portable plans and full baseline/report behavior
+keep their existing owners. The study's saved comparison is a single amount;
+its quality trace is an illustration of attention, rather than measured process
+capability or a forecast.
 
 ## Four viable compositions
 
@@ -63,11 +98,12 @@ silently treated as a sprint, week or additional session definition.
 
 ## A compact rack with persistent modules
 
-The first view remains the period board and sequencer. A small tape shelf,
-selected-tape strip and scope breadcrumb create the working context. Selecting
-a tape unfurls a compact module in normal flow between the board and tracks.
-Its heading, duration and occurrence pads remain visible while the visitor
-switches among People, Placement and Routing controls inside that module.
+Coordination's first view keeps the period board, tape shelf and sequencer.
+The loaded-session heading and scope breadcrumb create the working context.
+Selecting a tape opens a compact module in normal flow between the board and
+tracks. Duration and occurrence placement share that module; the participation
+matrix and response routing remain directly below in the same rack. Each chapter
+uses the same selected-object relationship for its own concise controls.
 
 The duration and Working sessions panels preserve the approved scale and layout
 from study revision `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`. Their `.modules`
@@ -89,7 +125,8 @@ names **Prototype pairing · Occurrence 2**. The overview control returns to tha
 scope. A session can span several periods, so the selected occurrence supplies
 context while the session retains its identity. Choosing another occurrence
 retains the session's shared duration and people. Closing the module returns to
-its exact source and preserves unfinished values through the current draft owner.
+its source. The dev study keeps immediate changes in its page-local model; a
+production bridge preserves unfinished values through the current draft owner.
 
 Task navigation uses pads, object selection and the breadcrumb. Show/hide controls
 express display preferences, such as whether the Event list or capacity reading
@@ -146,10 +183,12 @@ a focused change explicitly replaces a route.
 | Apply, Cancel, Close, local Undo and removal | Compact action strip attached to the selected module | Current acceptance and history owners retain their meanings. Add starts creation; final confirmation keeps the ordinary commit treatment. |
 | Whole-plan cost detail and long chronological readings | Existing Investment/report routes | The amp and rack retain concise amounts. The Event list provides a bounded local reading rather than a second full-plan ledger. |
 
-The same consolidation method can guide the remaining chapters: map the existing
-operation to a selected pad and its compact module before moving its controls.
-Each chapter keeps the distinctions that its values require. Change and Quality
-retain their deliberate fader differences; rates retain their monetary units.
+The all-chapter study applies this method beyond Coordination: map each operation
+to a selected pad and its compact module. Each chapter keeps the distinctions
+that its values require. Change and Quality retain different emphasis and
+attention controls; rates retain their monetary units. The maps below remain
+production proposals, while the dev chapter adapters supply an illustrated
+receiving experience now.
 
 ## A bounded Event list
 
@@ -201,6 +240,7 @@ that family; accepted contracts remain the runtime reference during review.
 
 | Contract | Proposed refinement |
 | --- | --- |
+| [Chapter Workbench Study](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md) | Compose all chapters in the compact dev shell, retaining shared identities, immediate illustrative edits, Undo and a marked route to the single session module. The contract names the chapter-specific modules and their source boundaries. |
 | [Period Kanban & Session Sequencer](../../visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md) | Name the tape/session and clip/occurrence distinction; keep overview/period/session scope visible; give placement and repetition separate controls. |
 | [Support Matrix & Stateful Pads](../../visual-fidelity-contracts/studio-rack/support-matrix-stateful-pads.md) | Distinguish checked participation, selected row and selected occurrence. Quality's matrix remains the visual reference for native checkbox pads. |
 | [Precision Dials & Faders](../../visual-fidelity-contracts/studio-rack/precision-dials-faders.md) | Preserve the enclosed duration module and its peach Hours/paper Minutes hierarchy; compose occurrence pads alongside it and remove the duplicate visible count editor. |
@@ -216,11 +256,13 @@ Ordinary phone widths retain usable controls and a named local matrix scroller.
 
 ## A bounded route to the working Studio
 
-1. Review the isolated study for the complete visitor sequence: define a tape,
-   place an occurrence, choose people, inspect a response and return to the
-   overview. Record which compositions make the relationship immediately clear.
-2. Deliver the view-only consolidation in a focused PR: stable loaded-tape
-   module, compact duration and occurrence pads, scoped selection, and a bounded
+1. Review the connected dev experience: define and place a tape, change its
+   participation from People, link it to an ability or check, inspect the
+   investment consequence and Undo. Inspect each chapter's compact first view
+   and the return from its session route. Preserve the exact duration reference.
+2. Choose a first production bridge after that review. A view-only consolidation
+   can use a focused PR: stable loaded-tape module, compact duration and occurrence
+   pads, scoped selection, and a bounded
    optional Event list. Preserve current acceptance and one canonical editor.
 3. Consolidate Team planning's outside controls, including Customize teams and
    handoffs, into selected-object modules. Reuse current arrangement, team and
@@ -232,9 +274,16 @@ Ordinary phone widths retain usable controls and a named local matrix scroller.
    one response, changing its receiver and recovering the change. Reconcile
    existing expected-response text with the new representation explicitly.
 
-Verification stays tied to the changed behavior: one populated phone/laptop
-journey through selection, adjustment and return; a focused observation that
-checkboxes update the intended session; and boundary checks for each new stored
-contract. Existing unit and owner checks remain the regression route. Independent
-review precedes merging each production increment. Public release and performance
-refinement retain their separate human-cued scope.
+The shell at [studio-rack-tape-study.html](studio-rack-tape-study.html) receives
+the chapter adapters through a small shared model/change/open-session interface.
+The [Chapter Workbench source map](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md#source-and-extension-ownership)
+identifies their JavaScript and CSS owners. Study changes stay in those files;
+the production duration factory is a reused input.
+
+Verification stays tied to the changed behavior: populated phone/laptop journeys
+through chapter selection, adjustment, return and Undo; a focused observation
+that checkboxes update the intended session; and an exact duration comparison
+when shell styles change. The receiving Issue records the observed result.
+Later production contracts receive their own boundary checks and existing owner
+regression route. Independent review precedes each production merge. Public
+release and performance refinement retain their separate human-cued scope.

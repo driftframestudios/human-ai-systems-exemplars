@@ -31,34 +31,45 @@ describe the accepted composition and reusable interaction patterns. Current
 work is coordinated under
 [milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
 
-### Explore the loaded-tape workbench on dev
+### Explore the chapter workbench on dev
 
-`dev` receives the current `main` before the
-[#804 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804).
 Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
-through the repository's local server. Load a session tape, turn its duration
-dials, add an occurrence, assign people through the matrix and route a response.
-The [design proposal](../../planning/context-canvas/studio-rack-tape-workbench.md)
-compares four compositions and maps every Coordination operation—including
-**Customize teams and handoffs**—to a proposed rack home and an existing owner.
+through the repository's local server. The
+[#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
+extends #804's loaded-tape composition across all Studio chapters. One compact
+chapter rail connects the same illustrative people, teams and sessions:
 
-The study uses illustrative page-local state. It reuses the duration-dial
-mechanics while exploring unassigned tapes and independent response records.
-Those two model extensions remain separate from the accepted Studio contract.
-Occurrence pads are the study's sole repetition control; the current showcase
-retains its numeric Working sessions field until this consolidation is reviewed.
-The human approved the study's compact **Time per person** and **Working sessions**
-layout and scale. The dedicated
-[Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
-preserves the exact duration panel, its dials and the neighboring module geometry
-at a named source revision for later recall. That panel stays visually unchanged
-while the surrounding study explores the Studio's existing palette and angled,
-blocky cassette artwork. Tape styling remains open to further iteration.
+| Chapter | Try in the study |
+| --- | --- |
+| Coordination | Load a tape, adjust duration, place occurrences and choose participants. |
+| People | Select a person from team lanes; adjust rate or funded time and change session participation. |
+| Abilities | Select a cell in either support table; connect responsibility, preparation, review or an illustrative observation. |
+| Change | Turn the framework/viewpoint reels, vary the emphasis and connect work in the stage lanes. |
+| Quality & recovery | Explore preparation/recovery presets, the attention display and linked check pads. |
+| Investment | Read the session cost lanes, save a comparison and inspect the effect of a shared-session edit. |
 
-Merging is held while exploration continues on `dev`. The next decision is which
-remaining compositions should enter the working Studio through focused PRs.
-The narrow Plan session label and rack-width repairs are also available on `dev`
-without changing the Studio's transaction behavior.
+Edits take effect directly in the study's page-local model with shared Undo.
+Marked session routes open the Coordination module and offer a return to the
+originating chapter. Reload starts the authored example again. The
+[design proposal](../../planning/context-canvas/studio-rack-tape-workbench.md)
+maps these operations and the later production bridges; the
+[Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
+records the shared composition, chapter distinctions and source owners.
+
+The human-approved **Time per person** panel retains its exact scale and
+appearance, with the neighboring **Working sessions** layout preserved through the
+[Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
+Occurrence pads remain the study's repetition control. Other chapters reach that
+same duration module; the surrounding palette and blocky cassette artwork retain
+their own room for iteration.
+
+The working showcase on `main` keeps its accepted plan, canonical editors and
+recovery behavior. The study's unassigned tapes, response cards and simplified
+investment are illustrative contracts to review before production adoption.
+Merging remains held. The next receiver is human review of the connected chapter
+experience, followed by a separately chosen, focused production bridge.
+The narrow Plan session label and rack-width repairs also remain available on
+`dev`, preserving the Studio's transaction behavior.
 
 ### Continuing routes
 
