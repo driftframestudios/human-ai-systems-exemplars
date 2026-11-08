@@ -52,7 +52,8 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
   heading.append(node(document, 'h5', '', label));
   if (onAdd) {
     const add = node(document, 'button', 'native-control--create studio-rack-add', 'Add session'); add.type = 'button';
-    add.addEventListener('click', onAdd); heading.append(add);
+    add.dataset.studioEntryKey = 'shared-session-add';
+    add.addEventListener('click', event => onAdd({}, event.currentTarget)); heading.append(add);
   }
   const scroll = node(document, 'div', 'studio-session-tracks__scroll');
   scroll.setAttribute('role', 'region'); scroll.setAttribute('aria-label', label); scroll.tabIndex = 0;

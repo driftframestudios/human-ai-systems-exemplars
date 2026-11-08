@@ -12,7 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, makeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
-import { syncSessionControls, mountRackEditor } from './rack-controls.mjs';
+import { syncSessionControls, mountRackEditor, captureRackEntry } from './rack-controls.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
 import { mountConnectionView } from './connection-view.mjs';
@@ -103,6 +103,7 @@ export function mountCoordinationPanel(root, options = {}) {
   const returnButton = returnRegion?.querySelector('[data-native-return-action]');
   const returnTeamButton = returnRegion?.querySelector('[data-native-return-team]');
   let pendingReturnFocus = null;
+  let sessionCreation = null, creationUndo = null;
 
   function listen(target, type, handler) {
     target.addEventListener(type, handler);
@@ -111,6 +112,13 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function syncSessionReceiver() {
+    const selected = rackEditor?.read();
+    if (selected?.open && selected.kind === 'session' && !studio.read().state.work.some(work => work.id === selected.id)) {
+      workPanel?.close({ park: false });
+      rackEditor.hide({ focus: true, source: sessionCreation?.entry() });
+    }
+    if (creationUndo) creationUndo.hidden = !(sessionCreation?.projection === studio.read()
+      && rackEditor?.isOpen('session') && rackEditor.read().id === sessionCreation.id);
     if (!disposed && workPanel) {
       const receiver = workPanel.readReceiver();
       if (rackEditor?.isOpen('session')) receiver.controlsId = rackEditor.element.id;
@@ -351,6 +359,7 @@ export function mountCoordinationPanel(root, options = {}) {
       render(); return;
     }
     if (target.kind === 'create-session') {
+      if (source && activeChapter === 'coordination') { createSessionInRack(target, source); return; }
       const parked = editing.park();
       if (!parked.ok) { announce(parked.error.message); return; }
       returnRoutes.push({ kind: 'connectionsView', target: 'connections', held: false });
@@ -418,6 +427,35 @@ export function mountCoordinationPanel(root, options = {}) {
         : navigation.kind === 'connection' ? root.querySelector('[data-native-connection-editor]') : root.querySelector(`[data-native-chapter-panel="${navigation.id}"]`);
     revealStudioDestination(destination);
     destination?.querySelector('select, button, summary, input')?.focus({ preventScroll: true });
+  }
+  function createSessionInRack(context, source) {
+    if (disposed) return;
+    const anchor = source?.closest('[data-score-projection]') ?? source?.closest('[data-native-connection-view]')
+      ?? requireElement('[data-connection-templates]');
+    const entry = captureRackEntry(source, anchor);
+    let result;
+    try {
+      openingRackKind = 'session';
+      result = workPanel?.createAccepted(context);
+    } finally { openingRackKind = null; }
+    if (result?.fallback) { createSessionFromHorizon(context); return; }
+    if (!result?.accepted) { announce(result?.error?.message ?? 'Open the session editor to continue.'); return; }
+    sessionCreation = { id: result.id, projection: result.projection, entry };
+    if (result.opened && !disposed && studio.read() === result.projection) {
+      openRackEditor({ kind: 'session', id: result.id, periodId: context?.periodId }, entry());
+    }
+    syncSessionReceiver();
+    announce('Session added. Adjust its settings or undo the addition.');
+  }
+  function undoSessionCreation() {
+    if (disposed || sessionCreation?.projection !== studio.read()) return;
+    const creation = sessionCreation;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const result = studio.undo(creation.projection);
+    if (!result.ok) { announce(result.error.message); return; }
+    render(); sessionCreation = null;
+    announce('Session addition undone.');
   }
   function createSessionFromHorizon(context) {
     if (disposed) return;
@@ -851,7 +889,7 @@ export function mountCoordinationPanel(root, options = {}) {
       onBegin: () => beginCoordination('score'), canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       onNavigate: navigateFromScore, onInspect: element => motion?.indicate(element, { kind: 'inspection' }),
-      onCreateSession: createSessionFromHorizon, onExample: useHorizonExample, onViewChanged: syncSessionReceiver,
+      onCreateSession: createSessionInRack, onExample: useHorizonExample, onViewChanged: syncSessionReceiver,
       onAccepted: () => render(), onEditing: () => render() });
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
@@ -889,6 +927,15 @@ export function mountCoordinationPanel(root, options = {}) {
       }, onClose: closeRackEditor,
       readLabel: record => studio.read().state[{ person: 'people', team: 'teams', session: 'work' }[record.kind]].find(row => row.id === record.id)?.label,
     });
+    if (rackEditor) {
+      creationUndo = document.createElement('button'); creationUndo.type = 'button';
+      creationUndo.textContent = 'Undo session addition'; creationUndo.dataset.rackCreationUndo = '';
+      creationUndo.hidden = true;
+      const heading = rackEditor.element.querySelector('.studio-rack-editor__heading');
+      const actions = document.createElement('div'); actions.className = 'studio-rack-editor__tools';
+      actions.append(creationUndo, heading.querySelector('[data-rack-editor-close]')); heading.append(actions);
+      listen(creationUndo, 'click', undoSessionCreation);
+    }
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
       onBegin: () => {
         peopleEditor = 'responsibility';

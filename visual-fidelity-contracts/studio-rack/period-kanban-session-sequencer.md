@@ -52,8 +52,12 @@ return in the rack header, outside the board and tracks' horizontal scroll
 regions. The return names its destination. One scope owner supplies this cue,
 the board and the tracks. Returning restores the originating period control and
 local scroll, whether the visitor entered from a lane heading or a track heading.
-Changing scope preserves pending edits as well as accepted work. Add session
-starts an editor draft in the selected period; confirmation accepts that item.
+Changing scope preserves pending edits as well as accepted work. A Coordination
+rack Add session accepts one planned 30-minute session with extra-investment
+funding, using the selected period and known team/person context. It opens the
+canonical editor afterward. Cancel reverts later edits while retaining the added
+record; local Undo reverses creation while it remains the latest accepted change.
+Plans needing a team or person use the existing guided creation route.
 Hours and Minutes change the length of each occurrence; Working sessions changes
 how many occurrences need placement. People may participate across team bounds.
 
@@ -68,8 +72,8 @@ draft and its distinct phase/participation reading.
 Numbered occurrence pads select a repetition. Native radio pads choose its
 sprint/quarter and week/month; Add occurrence changes this work's count through
 the current draft. Shared duration and ordered participant switches govern every
-occurrence. A different session still begins through Add session and its current
-confirmation route. Apply accepts the proposal; Cancel reverts it.
+occurrence. Add occurrence edits that session's draft count; the rack's Add session
+accepts a distinct work record. Apply accepts later field edits; Cancel reverts them.
 
 The board uses headed sections and buttons. Session tracks use a captioned native
 table with row and column headers. A named keyboard-reachable scroll region
@@ -160,7 +164,7 @@ new-session row names a new record. Shared sessions has a different empty-cell
 meaning: the named person is outside that session. Its dedicated new-session
 row/gutter carries a written Add session label, while a future action at a
 person/session intersection names participation or editing. Both new-record
-routes are to use the creation owner selected in
+routes will reuse the immediate-creation owner in
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 and the [contextual return contract](contextual-inspection-recovery.md).
 
@@ -180,6 +184,6 @@ the same retained form from a replacement during refresh, exact-trigger closure
 from another occurrence's selection, and draft placement from accepted work.
 The receiving PR also records cross-rack retention, Apply/Cancel, return focus
 and period/phase context. The duration module and exact repetition input remain
-available. #758's immediate creation, then #770's empty-space entry, follow as
-separate authorized increments. Exact calendar or performance expansion needs
-its own consequential question.
+available. #758 adds direct accepted creation and its exact-creation Undo;
+#770's empty-space entry follows as a separate authorized increment. Exact
+calendar or performance expansion needs its own consequential question.

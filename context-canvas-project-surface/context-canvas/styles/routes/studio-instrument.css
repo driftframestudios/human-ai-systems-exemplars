@@ -94,7 +94,8 @@
 .native-coordination .studio-record-key[aria-pressed='true'] { outline: .13rem solid var(--native-focus); outline-offset: -.13rem; box-shadow: inset .2rem 0 0 var(--native-signal); }
 .studio-rack-editor { min-inline-size: 0; margin-block: .5rem 1rem; border: .25rem solid var(--native-rule); border-radius: .3rem; background: var(--studio-screen); color: var(--native-paper); scroll-margin-block-start: 5rem; }
 .studio-rack-editor[hidden] { display: none; }
-.studio-rack-editor__heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .65rem .8rem; }
+.studio-rack-editor__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .65rem .8rem; }
+.studio-rack-editor__tools { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .native-coordination .studio-rack-editor__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 system-ui, sans-serif; }
 .studio-rack-editor__origin { display: block; margin-block-start: .25rem; color: #c2decc; font: 500 .75rem/1.4 ui-monospace, monospace; }
 .studio-rack-editor__origin[hidden] { display: none; }

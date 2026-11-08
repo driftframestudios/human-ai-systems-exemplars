@@ -380,4 +380,84 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toHaveText('Inspect Research synthesis with operating context');
     await contained(page, width);
   });
+
+  test(`${engine}: rack session creation accepts once and separates creation Undo from later edits at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width), original = await bytes(page);
+    const readPlan = () => page.evaluate(() => {
+      const state = window.rackFixture.studio.read().state;
+      return { work:state.work, placements:state.scoreSettings.cadence.placements,
+        undoCount:window.rackFixture.studio.readHistory().undoCount };
+    });
+    const before = await readPlan(), originalIds = new Set(before.work.map(work => work.id));
+    await page.evaluate(() => { window.rackFixture.sessionNode = document.querySelector('[data-native-configure]'); });
+    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
+    const currentPeriod = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
+    const add = horizon(page).locator('[data-cadence-key="add-session:period-2:1"]');
+    await add.click();
+    const first = await readPlan(), created = first.work.filter(work => !originalIds.has(work.id));
+    assert.equal(created.length, 1, 'one Add activation publishes one session');
+    const session = created[0];
+    assert.ok(session.label.trim() && session.personIds.length > 0, 'authored defaults create visible, populated work');
+    assert.deepEqual({ minutes:session.minutesPerOccurrence, occurrences:session.occurrences,
+      funding:session.funding, status:session.status },
+    { minutes:30, occurrences:1, funding:'additional', status:'planned' });
+    assert.equal(first.undoCount, before.undoCount + 1, 'creation contributes one accepted history entry');
+    assert.deepEqual(first.placements.filter(row => row.workId === session.id), [
+      { workId:session.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 },
+    ]);
+    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(session.label);
+    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true);
+    await contained(page, width);
+    if (engine === 'chromium') await adjacent(page).locator('.studio-rack-editor__heading')
+      .screenshot({ path:resolve(captures, `session-creation-heading-${width}.png`) });
+    const acceptedCreation = await bytes(page);
+    await configure(page).locator('[name="minutesPerSession"]').fill('45');
+    await configure(page).locator('[data-action="cancel"]').click();
+    assert.equal(await bytes(page), acceptedCreation, 'Cancel discards later edits and retains the created session');
+    await expect(adjacent(page)).toBeHidden(); await expect(add).toBeFocused();
+
+    await track(page, session.id).click();
+    await expect(configure(page).locator('[name="minutesPerSession"]')).toHaveValue('30');
+    await root(page).locator('[data-rack-creation-undo]').click();
+    assert.equal(await bytes(page), original, 'local creation Undo restores the preceding accepted plan');
+    await expect(adjacent(page)).toBeHidden();
+    await expect(track(page, session.id)).toHaveCount(0);
+    await expect(add).toBeFocused();
+    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
+
+    await add.click();
+    const second = (await readPlan()).work.find(work => !originalIds.has(work.id));
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(add).toBeFocused();
+    await add.click();
+    const repeated = await readPlan(), added = repeated.work.filter(work => !originalIds.has(work.id));
+    assert.equal(added.length, 2); assert.equal(new Set(added.map(work => work.id)).size, 2,
+      'each deliberate Add creates a distinct accepted session');
+    assert.equal(repeated.undoCount, before.undoCount + 2);
+    const latest = added.find(work => work.id !== second.id);
+    await configure(page).locator('[name="minutesPerSession"]').fill('45');
+    await configure(page).locator('[data-action="apply"]').click();
+    const edited = await readPlan();
+    assert.equal(edited.work.find(work => work.id === latest.id).minutesPerOccurrence, 45);
+    assert.equal(edited.undoCount, repeated.undoCount + 1, 'a later Apply accepts its edit once');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+
+    const addShared = shared(page).getByRole('button', { name:'Add session', exact:true });
+    await addShared.click();
+    const teamPlan = await readPlan(), previousIds = new Set(edited.work.map(work => work.id));
+    const teamSessions = teamPlan.work.filter(work => !previousIds.has(work.id));
+    assert.equal(teamSessions.length, 1);
+    assert.equal(teamPlan.undoCount, edited.undoCount + 1);
+    assert.deepEqual(teamPlan.placements.filter(row => row.workId === teamSessions[0].id), [],
+      'unscoped Team planning creation leaves its occurrence awaiting placement');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'adjacent');
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(teamSessions[0].label);
+    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true);
+    await expect(configure(page).locator('[data-placement-index="0"][data-placement-field="periodId"]')).toHaveValue('');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(addShared).toBeFocused();
+    await contained(page, width);
+  });
 }

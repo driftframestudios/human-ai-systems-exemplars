@@ -11,6 +11,7 @@ import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
+import { prepareSessionCreation } from './session-creation.mjs';
 
 const INSTANCES = new WeakMap();
 let receiverSequence = 0;
@@ -531,6 +532,47 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (team) result = operate('setIds', token, 'personIds', team.personIds.filter(id => people.has(id)));
     return opened(result, epoch, true);
   }
+  function createAccepted(context = {}) {
+    if (disposed) return { ok: false, error: { code: 'disposed', path: 'session', message: 'Open another session editor.' }, view: editor.read() };
+    const base = projection, prepared = prepareSessionCreation(base.state, context);
+    if (!prepared.ok) return { ...prepared, view: editor.read() };
+    durationDials?.release();
+    if (disposed) return;
+    const epoch = ++generation;
+    const superseded = () => ({ ok: false, error: { code: 'superseded', path: 'session',
+      message: 'Continue with the current edit.' }, view: editor.read() });
+    let result = operate('create', 'work.create', base);
+    if (!result.ok) return result;
+    if (!owns(epoch)) return superseded();
+    const token = result.view.draft.token, descriptor = describeSessionTarget(result.view.draft.sessionId);
+    // Admit the draft before changing the visible owner. A full saved-edit rack
+    // leaves its current form and raw values in place.
+    onBegin();
+    if (!owns(epoch) || editor.read().draft?.token !== token) return superseded();
+    for (const [field, value] of Object.entries(prepared.raw)) {
+      result = operate(Array.isArray(value) ? 'setIds' : 'setText', token, field, value);
+      if (!owns(epoch)) return superseded();
+      if (!result.ok) return opened(result, epoch, false);
+    }
+    result = operate('apply', token);
+    if (!result.ok) return opened(result, epoch, false);
+    const accepted = result.projection ?? studio.read();
+    // Publication has happened even when a callback selects another editor.
+    // Report that fact so a caller never repeats creation to recover its view.
+    const receipt = opened => ({ ok: true, accepted: true, id: descriptor.id,
+      projection: accepted, opened, view: editor.read() });
+    if (!owns(epoch)) return receipt(false);
+    onAccepted(accepted);
+    if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return receipt(false);
+    onRecordCreated(descriptor);
+    if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return receipt(false);
+    selectedId = descriptor.id; lastAcceptedId = descriptor.id;
+    const next = operate('begin', makeSessionTarget('work.update', descriptor.id), accepted);
+    if (!owns(epoch)) return receipt(false);
+    if (!next.ok) { announce(next.error.message); return receipt(false); }
+    opened(next, epoch, false);
+    return receipt(owns(epoch) && editor.read().draft?.token === next.view.draft.token);
+  }
   function close({ park = true } = {}) {
     if (disposed) return;
     durationDials?.release();
@@ -698,7 +740,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     durationDials?.dispose();
     delete root.dataset.sessionReady; INSTANCES.delete(root);
   }
-  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close, focusOccurrence, setRackMode,
+  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, createAccepted, close, focusOccurrence, setRackMode,
     isOpen: () => !disposed && elements.configure.open,
     readReceiver: () => ({ selectedId: disposed ? null : selectedId,
       expanded: !disposed && isActive() && elements.configure.open

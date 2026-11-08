@@ -83,7 +83,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   root.append(toolbar, pending, projectionRoot, flowPanel, status);
   const view = createCadenceView(projectionRoot, {
     onSelect: (target, source) => select(target, true, source), onNavigate: (target, source) => navigate(target, source),
-    onPeriod: id => { periodId = id; render(); }, onAddSession: context => createSession(context),
+    onPeriod: id => { periodId = id; render(); }, onAddSession: createSession,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot,
     onTryReview: () => tryLaterReview(),
@@ -153,7 +153,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     }
     onNavigate(target, { kind: 'score', targetId: 'score', routeKind: 'context', source });
   }
-  function createSession(context) {
+  function createSession(context, source) {
     if (disposed || !isActive()) return;
     const accepted = studio.read().state.scoreSettings.cadence;
     const draft = editor.read().draft, proposed = draft && cadenceFrom(draft.raw);
@@ -162,7 +162,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       announce('Apply this horizon before adding a session to its new periods.'); return;
     }
     const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
-    onCreateSession(context);
+    onCreateSession(context, source);
   }
   function writeRaw(key, value) {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;

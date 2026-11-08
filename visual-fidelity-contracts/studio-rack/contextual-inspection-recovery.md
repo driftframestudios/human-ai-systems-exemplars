@@ -25,10 +25,10 @@ documentation or report routes.
 | Open nearby detail | Caret follows the receiver's open state; expanded semantics agree |
 | Inspect another object or view | Arrow and destination wording identify the move |
 | Select a persistent view | Pressed state remains visible while selected |
-| Begin creating an item | Plus and Add wording identify the entry |
+| Add an item or enter guided creation | Plus and Add wording identify the entry |
 | Confirm the prepared item | Final Add or Apply completes that draft |
 | Close the adjacent editor | Hide its controls, retain its draft and restore the initiating card's focus |
-| Cancel edits | Ghost action returns to accepted values |
+| Cancel edits | Ghost action returns to accepted values, preserving a previously added record |
 | Remove a relationship or record | Rose action names its scope and keeps the recovery route clear |
 
 Native `details`/`summary` can own a simple reveal. Enhanced disclosure buttons
@@ -66,6 +66,7 @@ at ordinary phone widths and enlarged text.
 | Owner or observation | Responsibility |
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
+| [Session creation](../../collaboration/native-investment-studio/session-creation.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Useful Coordination session defaults, existing acceptance owner, contextual opening and local Undo bound to the accepted creation state |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session form in Plan overview's stable deck or Team planning's adjacent receiver, with identity and visibility mirrored into both readings |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Canonical person/team controls move to one adjacent receiver; existing owners retain draft and acceptance state |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
@@ -176,9 +177,10 @@ the inert background and contained focus described by the
 This recommendation preserves context and existing switching behavior; a visitor
 walkthrough determines how clearly the tape/deck metaphor reads.
 
-#758 is the next authorized increment for immediate accepted creation and Undo;
-#770 then composes that owner into empty-space entry. #789 preserves the current
-Add session/confirmation journey. The repaired #777 browser routes supply
+#758 accepts a useful session directly from Coordination rack Add controls and
+opens this same canonical editor. The new record survives cancellation of later
+draft edits; the local creation Undo has its own accepted-state boundary.
+#770 will compose that owner into empty-space entry. The repaired #777 browser routes supply
 current cross-chapter entry points. #771 retains broader participant movement
 and percentage semantics; the deck uses the existing inclusion and order owner.
 Phone reflow retains the title, exact fields, independent inclusion and visible
@@ -209,13 +211,25 @@ choices settle immediately; text settles on blur or Enter, with invalid entries
 retained for correction. Local Undo is bound to the arrangement change that
 created it; a later accepted edit retires the shortcut. Investment continues to
 own the complete history controls. Existing person, session and other editor
-proposals retain their current Apply and recovery owners. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-remains a separate future creation decision. The
-[blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) reveals
-the same named Add control on pointer hover or keyboard focus and retains a
-visible touch route. The created item becomes identifiable in its parent rack;
-an optional adjacent edit keeps that origin available. Each receiving PR owns
-the scoped focus, retention and recovery observations for its actual controls.
+proposals retain their current Apply and recovery owners.
+
+[Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+gives Coordination rack Add session a useful accepted starting point: one planned
+30-minute occurrence with extra-investment funding. The initiating period and
+team/person context inform the record. The canonical deck or adjacent editor
+then receives that accepted identity. Cancel reverts its later editing proposal;
+Close retains it. A plan needing a team or person uses guided creation.
+
+**Undo session addition** is available while creation remains the latest accepted
+change. It parks unfinished edits before reversing the addition through shared
+history and closing the removed record's editor. A later accepted change retires
+that local shortcut. Investment retains complete Undo history. This preserves
+the distinction between recovering creation and discarding an editing proposal.
+
+The future [blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
+will reuse that owner with a named Add control on hover or keyboard focus and a
+visible touch route. Each receiving PR owns the scoped focus, retention and
+recovery observations for its actual controls.
 Revisit this contract when a control changes operation, its receiver moves or
 recovery changes.
 
