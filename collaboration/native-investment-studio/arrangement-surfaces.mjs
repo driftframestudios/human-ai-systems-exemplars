@@ -46,7 +46,8 @@ export function createTeamLanes(document, { plan, teams = plan.teams, onNavigate
   return board;
 }
 
-export function createSessionTracks(document, { plan, onSession, onAdd, sessionIds = new Set(plan.work.map(work => work.id)), label = 'People in working sessions' }) {
+export function createSessionTracks(document, { plan, onSession, onAdd, sessionIds = new Set(plan.work.map(work => work.id)),
+  acceptedPersonIds = new Set(), label = 'People in working sessions' }) {
   const screen = node(document, 'div', 'studio-session-tracks');
   const heading = node(document, 'header', 'studio-session-tracks__heading');
   heading.append(node(document, 'h5', '', label));
@@ -88,6 +89,21 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
         else pad.dataset.nativeWorkOpen = work.id;
         cell.append(pad);
       } else { const empty = node(document, 'span', 'studio-session-tracks__empty', '·'); empty.setAttribute('aria-label', `${person.label}: not included in this session`); cell.append(empty); }
+      row.append(cell);
+    }
+    body.append(row);
+  }
+  if (onAdd && plan.people.some(person => acceptedPersonIds.has(person.id))) {
+    const row = node(document, 'tr', 'studio-rack-create-row');
+    const title = node(document, 'th', '', 'New session'); title.scope = 'row'; row.append(title);
+    for (const person of plan.people) {
+      const cell = node(document, 'td');
+      if (acceptedPersonIds.has(person.id)) {
+        const add = node(document, 'button', 'native-control--create studio-rack-add studio-rack-create-zone', 'Add session');
+        add.type = 'button'; add.dataset.studioEntryKey = `shared-session-add:${person.id}`;
+        add.setAttribute('aria-label', `Add a session with ${person.label}`);
+        add.addEventListener('click', event => onAdd({ personId: person.id }, event.currentTarget)); cell.append(add);
+      }
       row.append(cell);
     }
     body.append(row);

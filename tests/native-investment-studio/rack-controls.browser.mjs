@@ -33,8 +33,8 @@ const configure = page => root(page).locator('[data-native-configure]');
 const track = (page, id) => horizon(page).locator(`[data-cadence-key="track-work:${id}"]`);
 const sharedTrack = (page, id) => shared(page).locator(`[data-session-track="${id}"] .studio-session-tracks__name`);
 const bytes = page => page.evaluate(() => window.rackFixture.studio.exportText());
-async function open(t, engine, width, full = false) {
-  const context = await browsers.get(engine).newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
+async function open(t, engine, width, full = false, touch = false) {
+  const context = await browsers.get(engine).newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce', hasTouch:touch });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request));
   page.on('requestfinished', request => pending.delete(request));
@@ -382,7 +382,7 @@ for (const engine of names) for (const width of [390, 1440]) {
   });
 
   test(`${engine}: rack session creation accepts once and separates creation Undo from later edits at ${width}px`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine, width), original = await bytes(page);
+    const page = await open(t, engine, width, false, width === 390), original = await bytes(page);
     const readPlan = () => page.evaluate(() => {
       const state = window.rackFixture.studio.read().state;
       return { work:state.work, placements:state.scoreSettings.cadence.placements,
@@ -458,6 +458,70 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(configure(page).locator('[data-placement-index="0"][data-placement-field="periodId"]')).toHaveValue('');
     await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(addShared).toBeFocused();
+
+    const acceptedTeam = await bytes(page);
+    const existingPad = shared(page).locator('[data-studio-session-person][data-studio-session-id]').first();
+    const existingId = await existingPad.getAttribute('data-studio-session-id');
+    await existingPad.click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(teamPlan.work.find(work => work.id === existingId).label);
+    assert.equal(await bytes(page), acceptedTeam, 'an existing participation pad inspects its session and creates no work');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+
+    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
+    await root(page).getByRole('button', { name:'Two-quarter rollout', exact:true }).click();
+    const quarterPlan = await readPlan(), quarterBytes = await bytes(page);
+    const quarterIds = new Set(quarterPlan.work.map(work => work.id));
+    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
+    const quarter = horizon(page).getByRole('heading', { name:'Quarter 2', exact:true });
+    const newMonth = horizon(page).locator('[data-cadence-key="new-session:period-2:3"]');
+    await expect(newMonth).toHaveAccessibleName('Add a session in Quarter 2, Month 3');
+    if (width === 1440) {
+      await newMonth.hover();
+      assert.equal(await bytes(page), quarterBytes, 'revealing a ghost creation pad leaves accepted work unchanged');
+    }
+    await newMonth.focus();
+    if (engine === 'chromium') {
+      await newMonth.evaluate(node => node.scrollIntoView({ block:'center', inline:'center', behavior:'instant' }));
+      await (width === 390 ? page : horizon(page).locator('.studio-rack-create-row'))
+        .screenshot({ path:resolve(captures, `quarter-creation-row-${width}.png`) });
+    }
+    await page.keyboard.press('Enter');
+    const monthPlan = await readPlan(), monthSessions = monthPlan.work.filter(work => !quarterIds.has(work.id));
+    assert.equal(monthSessions.length, 1, 'one keyboard activation creates one session from the empty rack row');
+    assert.equal(monthPlan.undoCount, quarterPlan.undoCount + 1);
+    assert.deepEqual(monthPlan.placements.filter(row => row.workId === monthSessions[0].id), [
+      { workId:monthSessions[0].id, occurrenceIndex:0, periodId:'period-2', subdivision:3 },
+    ]);
+    await expect(quarter).toHaveAttribute('aria-current', 'page');
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(monthSessions[0].label);
+    await root(page).locator('[data-rack-creation-undo]').click();
+    assert.equal(await bytes(page), quarterBytes);
+    await expect(newMonth).toBeFocused();
+    await expect(quarter).toHaveAttribute('aria-current', 'page');
+
+    const researcher = await page.evaluate(() => window.rackFixture.studio.read().state.people.find(person => person.label === 'Researcher'));
+    const newWithPerson = shared(page).locator(`[data-studio-entry-key="shared-session-add:${researcher.id}"]`);
+    await expect(newWithPerson).toHaveAccessibleName('Add a session with Researcher');
+    if (width === 1440) {
+      await newWithPerson.hover();
+      assert.equal(await bytes(page), quarterBytes, 'hovering a person-context creation pad leaves accepted work unchanged');
+    } else await newWithPerson.scrollIntoViewIfNeeded();
+    if (engine === 'chromium') {
+      await newWithPerson.evaluate(node => node.scrollIntoView({ block:'center', inline:'center', behavior:'instant' }));
+      await (width === 390 ? page : shared(page).locator('.studio-rack-create-row'))
+        .screenshot({ path:resolve(captures, `people-creation-row-${width}.png`) });
+    }
+    if (width === 390) await newWithPerson.tap(); else await newWithPerson.click();
+    const personalPlan = await readPlan(), personalSessions = personalPlan.work.filter(work => !quarterIds.has(work.id));
+    assert.equal(personalSessions.length, 1);
+    assert.deepEqual(personalSessions[0].personIds, [researcher.id], 'the creation pad uses its named accepted person');
+    assert.equal(personalPlan.undoCount, quarterPlan.undoCount + 1);
+    assert.deepEqual(personalPlan.placements.filter(row => row.workId === personalSessions[0].id), []);
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'adjacent');
+    await expect(configure(page).locator(`[data-session-person="${researcher.id}"]`)).toBeChecked();
+    await root(page).locator('[data-rack-creation-undo]').click();
+    assert.equal(await bytes(page), quarterBytes);
+    await expect(newWithPerson).toBeFocused();
     await contained(page, width);
   });
 }

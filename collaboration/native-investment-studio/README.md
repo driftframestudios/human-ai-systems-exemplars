@@ -77,12 +77,12 @@ uses the current People, arrangement and populated-showcase entries, delivered
 in PR #793. Its responsive journey also protects the shared duration readout at
 enlarged text (#791); returning an editor to its home preserves focus (#792).
 PR #790 delivered the duration skin and shared dial artwork (#788).
-PR #794 delivered the deck after independent review. Immediate session creation
-(#758) now supplies the accepted record; empty-space entry (#770) follows.
+PR #794 delivered the deck after independent review. PR #795 delivered immediate
+session creation (#758) after independent review and passing hosted checks. #770 completes this sequence with a **New session** row inside both
+Coordination sequencers, reusing that accepted-creation and Undo owner.
 
-The continued planning route adds empty-space session creation
-([#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)),
-participant movement and future time-share controls
+The continued planning route covers participant movement and future time-share
+controls
 ([#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)),
 and attached editorial companions
 ([#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)).
@@ -99,8 +99,10 @@ gives Coordination rack Add session actions a useful accepted starting record,
 then opens its existing editor. **Undo session addition** reverses that creation
 while it remains the latest accepted change. Cancel reverts later draft edits
 and preserves the added session. The guided creation route remains available
-when a team or person must first be supplied. #770 will reuse this owner for
-contextual empty-space entries.
+when a team or person must first be supplied. The
+[contextual creation rows](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
+pass the chosen period/subdivision or accepted person into this same owner.
+Their receiving PR records the focused entry and recovery observations.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -181,6 +183,12 @@ latest accepted change, parking unfinished edits and closing the removed record'
 editor. Investment retains the complete Undo history. Plans needing a team or
 person use the existing guided creation route.
 
+The sequencers' **New session** rows make that action available in context.
+Choose a period or week/month column in Session tracks, or an accepted person's
+column in Shared sessions. Outlined buttons retain their plus and Add session
+labels; pointer hover adds emphasis, and keyboard/touch entries stay visible.
+Existing occurrence gaps and participation dots keep their reading meaning.
+
 **Stages & handoffs** reveals the work's relationships and their editors.
 Decisions attach to a stage or handoff. Delays name affected work and can propose
 its later placement. Availability opens beside the person and period it concerns;
@@ -231,11 +239,13 @@ Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
 same working-session records with the same session-key and Add treatment. The
 selected key stays identifiable when its editor closes; its caret opens only
-with the visible session-settings receiver. A future New session row
-will provide ghosted creation space inside the rack; existing row cells retain
-their occurrence or participation meaning. People and available time and
-Stages & handoffs will remain compact editorial companions attached below the
-rack, with equivalent in-rack entries and clear onward routes to People.
+with the visible session-settings receiver. The **New session** row creates work
+from a period/subdivision or accepted-person column. Shared sessions uses current
+people identities and leaves proposed team structures with their arrangement
+owner. The People chapter's read-only session table keeps its existing scope.
+The prospective attached companions in #772 retain People and available time
+and Stages & handoffs as compact readings below the rack, with equivalent in-rack
+entries and clear onward routes to People.
 
 ### Inspect support and keep the result
 
@@ -344,6 +354,7 @@ checked source and remaining review boundary.
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs); [`session-occurrence-controls.mjs`](session-occurrence-controls.mjs) presents one occurrence's placement through the session owner's setters |
 | Immediate Coordination session addition and its local Undo | [`session-creation.mjs`](session-creation.mjs) prepares useful values from known context; [`work-controller.mjs`](work-controller.mjs) uses the existing creation/acceptance owner; [`controller.mjs`](controller.mjs) opens the canonical receiver and binds local Undo to the creation's accepted state |
+| Contextual New session rows | [`cadence-view.mjs`](cadence-view.mjs) supplies period/subdivision context; [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs) supplies accepted-person context received from [`connection-template-controller.mjs`](connection-template-controller.mjs). Shared `studio-rack-create-zone` styling lives in the instrument CSS. |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
 | In-rack session deck and adjacent record editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon slot or Team planning's adjacent host. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |

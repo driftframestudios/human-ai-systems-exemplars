@@ -148,13 +148,17 @@ An unused participation cell keeps its person/session meaning. #758's Coordinati
 rack Add session accepts useful defaults, then opens the canonical editor with
 its known team/person context. Cancel reverts later edits and preserves the new
 session; local Undo reverses its creation while that change remains latest.
-Plans needing a team or person retain guided creation. The next authorized
+Plans needing a team or person retain guided creation. The
 [empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
-uses a named new-session row or gutter in the surrounding rack; a ghost
-plus indicates that action on hover and focus, with a visible touch equivalent.
-An eventual participation action in the cell names the person and the session.
-This separates creating work, adding participation and inspecting an existing
-record even when they share a pad-shaped control.
+uses a named **New session** row with native Add buttons under accepted-person
+columns in Shared sessions. It passes the selected person to the existing
+creation owner; proposed team structures keep their separate acceptance path.
+The same outlined `studio-rack-create-zone` serves horizon period/subdivision
+columns. A plus and written Add session label remain visible, with fine-pointer
+hover emphasis and a visible keyboard/touch route. Participation dots and
+occurrence gaps keep their descriptive meaning. The People chapter's read-only
+table receives no creation row. A future participation action in an existing
+cell must name that person/session relationship explicitly.
 
 The [participant-control increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
 is to reuse the keyed movement of Change's component

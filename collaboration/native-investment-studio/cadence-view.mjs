@@ -277,6 +277,21 @@ export function createCadenceView(root, {
       }
       trackBody.append(tr);
     }
+    const newSession = node('tr', undefined, 'studio-rack-create-row');
+    const newSessionHeading = node('th', 'New session'); newSessionHeading.scope = 'row'; newSession.append(newSessionHeading);
+    for (const column of trackColumns) {
+      const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');
+      pads.style.setProperty('--cadence-pad-columns', '1');
+      const add = create('Add session', 'add-session',
+        { periodId: column.period.id, subdivision: column.subdivision ?? 1 },
+        `new-session:${column.period.id}:${column.subdivision ?? 'overview'}`);
+      add.classList.add('studio-rack-create-zone');
+      const destination = `${column.period.label}${column.subdivision === null ? '' : `, ${subdivisionLabel(column.subdivision)}`}`;
+      add.setAttribute('aria-label', `Add a session in ${destination}`);
+      add.dataset.cadencePreview = `Add a session in ${destination}, then adjust its people and duration.`;
+      pads.append(add); cell.append(pads); newSession.append(cell);
+    }
+    trackBody.append(newSession);
     const markers = node('tr', undefined, 'native-cadence__track-markers'), markerHeading = node('th', 'Handoffs & decisions'); markerHeading.scope = 'row'; markers.append(markerHeading);
     let hasMarkers = false;
     for (const column of trackColumns) {
