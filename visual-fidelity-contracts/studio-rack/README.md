@@ -19,6 +19,11 @@ outside Coordination operation to a proposed rack home, consolidates repetition
 around occurrence pads, and separates session identity from plan/period scope.
 Its proposed refinements remain reviewable alongside this accepted grammar;
 production changes receive their own focused implementation and review.
+The human-approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
+is a dedicated component reference within this family. It preserves the exact
+dev panel and its neighboring Working sessions layout for later recall while
+the surrounding cassette art continues to evolve. Merging remains held during
+that dev iteration.
 
 ## Choose a visual mode and an operation
 

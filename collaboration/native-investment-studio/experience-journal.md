@@ -94,15 +94,24 @@ study. Production retains that field pending review of the composition.
 
 The recommended composition keeps a stable loaded-session module, the existing
 duration mechanics, a compact participation matrix and the plan/period return.
+The human approved the dev illustration's panel scale and the layout of **Time
+per person** beside **Working sessions**. Its
+[dedicated duration-panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+pins the complete duration panel at `be8ec7f`, including its palette, readout,
+dial faces, circular steppers and responsive geometry. The current art pass
+preserves that panel exactly while applying the existing Studio palette to the
+surrounding rack and exploring angled, blocky cassette artwork. The tape concept
+is promising; the particular cassette treatment remains experimental.
 Events provides an optional bounded reading. Show/hide expresses a display
 preference instead of introducing a required step in editing. A separate
 response card illustrates routing a result to receiving work; unassigned tapes
 and independent response identity each need a small production model contract.
 Participant percentages remain separately scoped in #798.
 
-This is a prospective supersession of layout guidance, with the accepted
-interaction and recovery contracts intact. A human choice of composition is the
-next receiver before runtime integration. The dev CSS repair separately aligns
+The approved dev panel is now a recallable design reference; production keeps
+its accepted interaction and recovery contracts. Merging is held for further
+iteration on `dev`. The next receiver is human review of the remaining composition
+and tape artwork before runtime integration. The dev CSS repair separately aligns
 the two Coordination racks, reduces nested gutters and keeps Plan session labels
 readable at ordinary phone widths. It preserves their current transaction owners.
 
@@ -325,6 +334,7 @@ entry, screenshot or technical description presents the earlier behavior.
 
 | Earlier direction | Current replacement and reason |
 | --- | --- |
+| The complete dev illustration treated as tentative layout | The duration and Working sessions panel scale/layout is now human-approved as the dev reference. The dedicated duration-panel contract preserves its exact baseline; surrounding cassette art and further rack integration remain iterative, with merging held. |
 | Separate numeric Working sessions and occurrence pads | In the #804 dev study, occurrence pads become the single visible repetition control. This is a prospective consolidation; production keeps its accepted field until review. Add session, Add occurrence and Add sprint/quarter retain separate meanings. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |

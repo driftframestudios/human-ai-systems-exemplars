@@ -47,9 +47,18 @@ mechanics while exploring unassigned tapes and independent response records.
 Those two model extensions remain separate from the accepted Studio contract.
 Occurrence pads are the study's sole repetition control; the current showcase
 retains its numeric Working sessions field until this consolidation is reviewed.
-The next decision is which parts of this composition should enter the working
-Studio through focused PRs. The narrow Plan session label and rack-width repairs
-are also available on `dev` without changing the Studio's transaction behavior.
+The human approved the study's compact **Time per person** and **Working sessions**
+layout and scale. The dedicated
+[Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+preserves the exact duration panel, its dials and the neighboring module geometry
+at a named source revision for later recall. That panel stays visually unchanged
+while the surrounding study explores the Studio's existing palette and angled,
+blocky cassette artwork. Tape styling remains open to further iteration.
+
+Merging is held while exploration continues on `dev`. The next decision is which
+remaining compositions should enter the working Studio through focused PRs.
+The narrow Plan session label and rack-width repairs are also available on `dev`
+without changing the Studio's transaction behavior.
 
 ### Continuing routes
 

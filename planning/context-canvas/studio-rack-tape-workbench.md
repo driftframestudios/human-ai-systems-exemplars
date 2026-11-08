@@ -13,7 +13,11 @@ The [running Studio source](../../collaboration/native-investment-studio/README.
 continues to define accepted behavior. This proposal develops the
 [Coordination consolidation](studio-coordination-rack-consolidation.md); its
 prospective reductions replace earlier layout recommendations only when a
-focused implementation receives review.
+focused implementation receives review. The duration and Working sessions
+panels now have a human-approved development layout, frozen in the
+[Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
+Work continues on `dev`; merging remains held while the illustrated composition
+is refined.
 
 ## Four viable compositions
 
@@ -64,6 +68,21 @@ selected-tape strip and scope breadcrumb create the working context. Selecting
 a tape unfurls a compact module in normal flow between the board and tracks.
 Its heading, duration and occurrence pads remain visible while the visitor
 switches among People, Placement and Routing controls inside that module.
+
+The duration and Working sessions panels preserve the approved scale and layout
+from study revision `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`. Their `.modules`
+container uses `minmax(230px,1fr) minmax(240px,1fr)` columns with `.7rem` gap and
+padding above `1000px`, and one column at `1000px` and below. Duration retains
+its concise title/readout row, neighboring peach Hours and paper Minutes groups,
+equal `64px` dials, exact fields and circular steppers. Numbered occurrence pads
+remain beside it in Working sessions, with placement and host controls; the
+duplicate numeric count stays hidden. The dedicated contract records the entire
+duration panel for exact later recall.
+
+This approval supersedes the study's earlier open-ended panel-sizing exploration.
+Angled, blocky 16/32-bit cassette artwork can develop within the Studio palette
+around that fixed composition. The art direction remains experimental; the
+approved panel's geometry, colors and readout retain their own reference.
 
 The scope trail reads **Plan overview › Sprint 2**; the loaded module separately
 names **Prototype pairing · Occurrence 2**. The overview control returns to that
@@ -185,6 +204,7 @@ that family; accepted contracts remain the runtime reference during review.
 | [Period Kanban & Session Sequencer](../../visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md) | Name the tape/session and clip/occurrence distinction; keep overview/period/session scope visible; give placement and repetition separate controls. |
 | [Support Matrix & Stateful Pads](../../visual-fidelity-contracts/studio-rack/support-matrix-stateful-pads.md) | Distinguish checked participation, selected row and selected occurrence. Quality's matrix remains the visual reference for native checkbox pads. |
 | [Precision Dials & Faders](../../visual-fidelity-contracts/studio-rack/precision-dials-faders.md) | Preserve the enclosed duration module and its peach Hours/paper Minutes hierarchy; compose occurrence pads alongside it and remove the duplicate visible count editor. |
+| [Loaded Tape Duration Panel](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) | Preserve the human-approved development panel exactly at the named study revision, including equal 64px dials, readout, steppers, local colors, neighboring occurrence panel and responsive geometry. Production adoption retains a separate review. |
 | [Contextual Inspection & Recovery](../../visual-fidelity-contracts/studio-rack/contextual-inspection-recovery.md) | Extend the stable deck into persistent compact modules; task selection opens the relevant work surface, while show/hide expresses display preference. Preserve draft, exact return focus and the actual open-state cue. |
 | [Zoetrope Preset Selection](../../visual-fidelity-contracts/studio-rack/zoetrope-preset-selection.md) | Presets visibly change the board, tape choices and routing through their existing arrangement transaction and recovery. |
 
