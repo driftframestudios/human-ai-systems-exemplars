@@ -582,6 +582,43 @@ for (const engine of names) for (const width of [390, 1440]) {
     if (engine === 'chromium') await rack.screenshot({path:resolve(captures, `shared-local-${width}.png`)});
   });
 
+  test(`${engine}: Shared sessions keeps enabled focus and truthful local selection at ${width}px`, { timeout:60000 }, async t => {
+    const page = await open(t, engine, width), rack = shared(page);
+    await rack.locator('[data-shared-work="pairing"][data-shared-participant="leo"]').check();
+    await sharedTrack(page, 'pairing').click();
+    const selected = rack.locator('.studio-shared__selection');
+    const person = selected.locator('[data-shared-person-row="leo"]');
+    const up = person.getByRole('button', {name:'Move up: Researcher', exact:true});
+    const down = person.getByRole('button', {name:'Move down: Researcher', exact:true});
+    await up.click(); await expect(up).toBeFocused();
+    await up.click(); await expect(up).toBeDisabled(); await expect(down).toBeFocused();
+    assert.deepEqual(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'pairing').personIds),
+      ['leo','ari','jules']);
+    await down.click(); await expect(down).toBeFocused();
+    await down.click(); await expect(down).toBeDisabled(); await expect(up).toBeFocused();
+    const people = rack.getByRole('tab', {name:'People', exact:true});
+    const handoffs = rack.getByRole('tab', {name:'Handoffs', exact:true});
+    await handoffs.click(); await expect(handoffs).toBeFocused();
+    await sharedTrack(page, 'pairing').click();
+    await expect(sharedTrack(page, 'pairing')).toHaveAttribute('aria-expanded','true');
+    const handoff = rack.locator('[data-studio-record-kind="connection"]').first();
+    await handoff.click();
+    await expect(selected).toBeHidden();
+    await expect(sharedTrack(page, 'pairing')).toHaveAttribute('aria-expanded','false');
+    await expect(sharedTrack(page, 'pairing')).toHaveAttribute('aria-pressed','false');
+    await expect(adjacent(page)).toBeVisible();
+    await people.click(); await expect(people).toBeFocused(); await expect(adjacent(page)).toBeHidden();
+    for (const key of ['Enter','Space']) {
+      await handoffs.click(); await handoff.click(); await expect(adjacent(page)).toBeVisible();
+      await people.focus(); await people.press(key);
+      await expect(people).toBeFocused(); await expect(people).toHaveAttribute('aria-selected','true');
+      await expect(adjacent(page)).toBeHidden();
+    }
+    await people.press('ArrowRight'); await expect(handoffs).toBeFocused();
+    await expect(handoffs).toHaveAttribute('aria-selected','true');
+    await contained(page,width);
+  });
+
   test(`${engine}: Team planning creates visible teams and handoffs with shared Undo at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), original = await bytes(page);
     const templates = root(page).locator('[data-connection-templates]');

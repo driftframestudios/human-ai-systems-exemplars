@@ -36,7 +36,7 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
     tab.addEventListener('keydown', event => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault(); const next = event.key === 'Home' ? 'people' : event.key === 'End' ? 'handoffs' : key === 'people' ? 'handoffs' : 'people';
-      chooseView(next); keys.get(next).focus({ preventScroll: true });
+      chooseView(next);
     });
   }
   const selection = node('section', undefined, 'studio-shared__selection'); selection.hidden = true;
@@ -48,14 +48,22 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
   const editorSlot = node('div'); editorSlot.dataset.sharedRackEditor = '';
   root.append(selection, editorSlot); container.append(root);
   function chooseView(next) {
-    if (next === view) return;
-    onCloseEditor(); view = next; selectedId = null; render();
+    if (next !== view) { onCloseEditor(); view = next; selectedId = null; render(); }
+    // Closing a borrowed editor restores its origin before this view replaces
+    // that matrix. The persistent tab owns focus after every activation mode.
+    keys.get(next).focus({ preventScroll: true });
   }
-  function accept(command, text, focusKey) {
-    if (!onCommand(command, text)) { render(); return false; }
-    message = text; render();
-    [...root.querySelectorAll('[data-shared-focus]')].find(control => control.dataset.sharedFocus === focusKey)?.focus({ preventScroll: true });
-    return true;
+  function accept(command, text, ...focusKeys) {
+    const accepted = onCommand(command, text);
+    if (accepted) message = text;
+    render();
+    const controls = [...root.querySelectorAll('[data-shared-focus]')];
+    for (const key of focusKeys) {
+      const control = controls.find(item => item.dataset.sharedFocus === key
+        && !item.disabled && item.getClientRects().length);
+      if (control) { control.focus({ preventScroll: true }); break; }
+    }
+    return accepted;
   }
   function shell(label, columns) {
     const scroll = node('div', undefined, 'studio-session-tracks__scroll'); scroll.tabIndex = 0;
@@ -73,7 +81,6 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
       root.querySelector(`[data-shared-select="${work.id}"]`)?.focus({ preventScroll: true });
     });
     choose.dataset.sharedSelect = work.id; choose.dataset.sharedFocus = `row:${work.id}`;
-    choose.setAttribute('aria-expanded', String(selectedId === work.id)); choose.setAttribute('aria-pressed', String(selectedId === work.id));
     choose.setAttribute('aria-controls', `${id}-selected`);
     choose.append(node('strong', work.label), node('small', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
     th.append(choose); row.append(th); return row;
@@ -113,7 +120,7 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
   function renderHandoffs() {
     const columns = plan.connections.map(connection => {
       const inspect = button(connection.sharedObject, 'studio-track-key studio-shared__handoff', event => {
-        selectedId = null; selection.hidden = true; onNavigate({ kind: 'connection', id: connection.id }, event.currentTarget);
+        selectedId = null; renderSelected(); onNavigate({ kind: 'connection', id: connection.id }, event.currentTarget);
       });
       inspect.dataset.studioRecordKind = 'connection'; inspect.dataset.studioRecordId = connection.id;
       inspect.dataset.studioEntryKey = `shared-handoff:${connection.id}`;
@@ -139,6 +146,10 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
   }
   function renderSelected() {
     const work = plan.work.find(row => row.id === selectedId); selection.hidden = !work;
+    for (const control of root.querySelectorAll('[data-shared-select]')) {
+      const selected = Boolean(work && control.dataset.sharedSelect === work.id);
+      control.setAttribute('aria-expanded', String(selected)); control.setAttribute('aria-pressed', String(selected));
+    }
     if (!work) return;
     selectedHeader.update({ title: work.label, owner: `Shared sessions · ${view === 'people' ? 'People' : 'Handoffs'}`, saved: 'Saved' });
     const host = node('label', 'Hosted by'), team = node('select'); team.setAttribute('aria-label', `Team for ${work.label}`);
@@ -155,7 +166,9 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
       const actions = node('div', undefined, 'native-coordination__actions'); actions.append(up, down); row.append(node('strong', person.label), actions); order.append(row);
       function move(delta) {
         const ids = [...work.personIds]; [ids[index], ids[index + delta]] = [ids[index + delta], ids[index]];
-        animateRackChange(selectedBody, () => accept({ type: 'work.participants.replace', workId: work.id, personIds: ids }, 'Order saved', up.dataset.sharedFocus),
+        const [origin, fallback] = delta < 0 ? [up, down] : [down, up];
+        animateRackChange(selectedBody, () => accept({ type: 'work.participants.replace', workId: work.id, personIds: ids },
+          'Order saved', origin.dataset.sharedFocus, fallback.dataset.sharedFocus, `row:${work.id}`),
           { selector: '[data-shared-person-row]', key: 'sharedPersonRow' });
       }
     }
