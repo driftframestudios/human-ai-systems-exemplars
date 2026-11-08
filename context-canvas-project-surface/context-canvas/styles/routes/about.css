@@ -389,6 +389,12 @@ p#on-dark-iron-ore {
     max-inline-size: 86rem;
 }
 
+/* The Studio uses the available canvas; surrounding prose retains its reading measure. */
+.about-field--studio > .about-reading--wide {
+    inline-size: calc(100% - clamp(2rem, 4vw, 4rem));
+    max-inline-size: none;
+}
+
 .about-reading > h2 {
     font-size: clamp(2rem, 4.5vw, 4.2rem);
     letter-spacing: -.045em;
@@ -3045,7 +3051,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-score__banks { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: .75rem; }
 .native-score__bank { padding: .8rem; border: .15rem dashed var(--native-rule); background: #d7e5dc; }
 .native-score__bank > button { inline-size: 100%; margin-block: .5rem; }
-.native-score__inspector { scroll-margin-block-start: 5rem; margin-block-start: 1.25rem; padding-block-start: .8rem; border-block-start: .2rem solid var(--native-ink); min-inline-size: 0; }
+.native-coordination .native-score__inspector { scroll-margin-block-start: 5rem; margin-block-start: 1rem; padding-block-start: .6rem; border: 0; box-shadow: none; background: transparent; min-inline-size: 0; }
 .native-score__inspector > summary { padding: .5rem .65rem; font-weight: 750; font-size: 1rem; }
 .about-page .native-score__inspector > summary > h4 { display: inline; margin: 0; }
 .native-score__keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr)); gap: .35rem; padding: .5rem; margin-block: .75rem; border: .15rem solid #3f5147; background: #283a32; }

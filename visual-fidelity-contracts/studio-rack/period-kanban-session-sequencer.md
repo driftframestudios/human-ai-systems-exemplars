@@ -149,6 +149,15 @@ columns. Team arrangement choices use their direct replacement and Undo owner;
 ordinary session editors retain their existing proposal/Apply boundary. Other attached
 summaries preserve the existing spring reveal.
 
+The dev #811 receiving skin fills each Shared sessions cell with its existing
+participation pad, preserving the legend and person/session meaning. A deliberate
+Team arrangement selection loads the changed Teams and shared work rack with a
+short downward unfurl: opacity .3 and translateY(-6px) settle to full opacity and
+the resting position over 200ms ease-out at full speed. The shared speed setting
+scales that duration; Off and system reduced motion settle directly. This
+receiver-specific motion adopts the preserved workbench's load effect while
+attached editorial drawers retain their spring treatment.
+
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 makes creation available inside each sequencer through a named **New session**
 row. In the horizon, native buttons sit under every visible period/subdivision
