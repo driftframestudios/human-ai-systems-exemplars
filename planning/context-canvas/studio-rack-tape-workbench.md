@@ -6,8 +6,10 @@ work. A selected pad loads its controls nearby; a marked session route opens the
 shared tape module and returns to the originating chapter.
 
 **Standing — 8 November 2026:** active design exploration on `dev`, with the
-current financial-reel and recovery increment coordinated in
-[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807).
+current deck, allocation-reel and monetary-scale refinement coordinated in
+[#809](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809).
+[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+established the deeper comparisons and plan recovery.
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
 retains the approved cassette, duration-lighting and panel references.
 The all-chapter composition arrived through
@@ -49,7 +51,7 @@ distinct.
 | **Abilities:** What should become possible? | The two existing support-table forms, followed by a loaded ability/practice editor | Responsibility, preparation, review and authored observation choices refer to the shared people, teams and session IDs. |
 | **Change:** What helps this practice take hold? | Framework/viewpoint reels, emphasis faders and Prepare/Practice/Carry forward lanes | Framework and emphasis choices visibly change the work reading. Supporting-session pads connect a selected component to existing work. |
 | **Quality & recovery:** What should people rehearse or review? | Before/after-release reels, a compact CRT and selected check pads | Included checks link to shared sessions. Sigma attention and Change urgency vary an authored attention illustration with a calm 4σ starting state. |
-| **Investment:** Where does the planned effort go, and what else can be compared? | VHS-C master decks: Plan investment retains session costs, funding lanes and sprint bars; additional tapes offer bounded enterprise comparisons | The shared amount uses current people, rates, duration and sessions. Other tapes keep their own units and assumptions; their outputs stay separate from the shared-session total. |
+| **Investment:** Where does the planned effort go, and what else can be compared? | VHS-C master decks: Plan investment retains session costs, funding lanes and sprint bars; additional decks offer bounded enterprise comparisons | The shared amount uses current people, rates, duration and sessions. Other decks keep their own units and assumptions; their outputs stay separate from the shared-session total. |
 
 The shell owns page-local model snapshots and Undo. Chapter adapters read that
 model and submit changes through one mutation callback. A supporting-session link
@@ -67,21 +69,34 @@ capability or a forecast.
 ## Investment comparisons inside one deck
 
 A vertical VHS-C channel starts with Plan investment, Customer rollout,
-Commercial cohort, Service operations and Capital choices. Each tape opens a
-compact comparison rack. New investment tape creates another independently adjustable
-copy, and Remove tape participates in the shared Undo history. This supersedes
+Commercial cohort, Service operations and Capital choices. Each deck opens a
+compact comparison rack. New investment deck creates another independently
+adjustable copy, and Remove deck participates in the shared Undo history. This supersedes
 #806's optional one-of-each shelf. Phone widths use the preserved horizontal
-shelf pattern, with chunky Investment artwork and its larger left reel.
+shelf pattern, with wider VHS-C bodies, deeper extrusion and a larger left reel.
+The stippled grip sits inside the body and moves with its illustrated face.
 
 The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
 connects the financial meaning, art direction, source owners and controls.
 Chocolate brown panels offset the dark rack around related comparisons and
-controls; Extra investment retains its approved lane treatment. The $100/$5
-module borrows the duration panel's scale and fixed lighting while presenting
-one monetary amount. Circular $1 steps and direct entry remain available.
+controls; Extra investment retains its approved lane treatment even when it is
+the only visible funding lane. Money modules borrow the duration panel's scale
+and fixed lighting. Aggregate amounts use $1,000/$100 steps; unit prices and
+costs retain $100/$5. Expected thousands sit below the heading, and small unit
+costs can sit at its right. This position stays fixed while values change.
+Circular $1 steps and direct entry remain available.
+
+Plan investment pairs the approach and funding-lens reels. Deliver now, Protect
+delivery and Explore options change authored reserve/opportunity set-asides;
+the selected funding lens filters the actual work board and sprint amounts.
+Allocation pads show planned work, reserve, options and the remaining budget or
+shortfall. Budget, allocation and funding adjustments show Custom. The shared
+work price retains its existing owner, and a named preset restores its allocation
+pair in one Undo edit. This gives the landing view a larger visual response while
+keeping the values' meanings visible.
 
 The [existing investment analysis domains](../../collaboration/investment-analysis/README.md#two-axes)
-supply populated questions. A domain reel selects the corresponding tape;
+supply populated questions. A domain reel selects the corresponding deck;
 lifecycle and alternative reels change bounded assumptions; metric choices
 bring retention, acquisition, net contribution, discounted return or recovery
 into the foreground. Compact bars and cash-flow strips make those changes

@@ -15,8 +15,13 @@ function button(text, label, action, key, className) {
   element.addEventListener('click', action); return element;
 }
 
-export function createMoneyControl({ id, label, read, write, min = 0, max = 1000000, step = 1 }) {
+export function createMoneyControl({ id, label, read, write, min = 0, max = 1000000, step = 1, increments = [100, 5], readout = 'inline' }) {
+  if (increments.length !== 2 || increments.some(value => !Number.isFinite(value) || value <= 0)) throw new TypeError('Money controls need two positive dial increments.');
+  if (!['inline', 'stacked'].includes(readout)) throw new TypeError('Choose an inline or stacked money readout.');
   const instance = `${id}-${++sequence}`, element = node('section', undefined, 'study-money');
+  element.dataset.readout = readout;
+  // Reserve the configured range once so changing an amount keeps the heading and controls in place.
+  element.style.setProperty('--study-money-readout-chars', Math.max(money(min).length, money(max).length));
   const window = element.ownerDocument.defaultView, lifetime = new window.AbortController();
   const forcedColors = window.matchMedia('(forced-colors: active)');
   const title = node('span', label), output = node('output', '', 'study-money__readout');
@@ -48,9 +53,9 @@ export function createMoneyControl({ id, label, read, write, min = 0, max = 1000
   });
   input.addEventListener('blur', () => { input.value = String(current()); });
 
-  const mounted = [100, 5].map(dollars => {
-    const kind = dollars === 100 ? 'coarse' : 'fine', part = node('div', undefined, `study-money__part study-money__part--${kind}`);
-    const caption = node('label', `$${dollars} steps`), dial = node('div', undefined, 'study-money__dial');
+  const mounted = increments.map((dollars, index) => {
+    const kind = index === 0 ? 'coarse' : 'fine', part = node('div', undefined, `study-money__part study-money__part--${kind}`);
+    const caption = node('label', `$${dollars.toLocaleString('en-US')} steps`), dial = node('div', undefined, 'study-money__dial');
     const face = node('span', undefined, 'study-money__face'), pointer = node('span', undefined, 'study-money__pointer');
     face.setAttribute('aria-hidden', 'true'); face.append(pointer);
     const knob = node('input'); Object.assign(knob, { type: 'range', min: '-1', max: '1', step: '1', value: '0', id: `${instance}-${kind}` });

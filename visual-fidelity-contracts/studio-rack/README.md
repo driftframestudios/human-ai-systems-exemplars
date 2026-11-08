@@ -15,10 +15,12 @@ owns its actual verification result. Publication remains a separately reviewed a
 The [chapter workbench study](../../planning/context-canvas/studio-rack-tape-workbench.md)
 extends #804's loaded-tape illustration across all Studio chapters through
 [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
-The current [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-deepens preloaded Investment comparisons and recoverable plan exploration.
+The current [#809 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+refines Investment deck depth, connected allocation reels and money scale after
+#807 established the deeper comparisons and recoverable plan exploration.
 The [Investment Master Shelf & Financial Reels](investment-master-reels.md)
-contract adds the VHS-C channel, chocolate companions and $100/$5 controls,
+contract owns the VHS-C channel, chocolate companions, $1,000/$100 and $100/$5
+controls with stable readout placement,
 while #806 retains the approved cassette art and duration-lighting correction. Its
 [development composition contract](chapter-workbench-study.md) connects team
 lanes, support tables, reels, check pads and investment lanes through shared

@@ -5,11 +5,11 @@ without learning a new interface at every stop. Compact lanes, sequencer tracks,
 support tables and selected-record modules give each question a useful visual
 form inside one shared rack.
 
-**Standing:** active `dev` composition study, version `0.1.1`, ID
+**Standing:** active `dev` composition study, version `0.1.2`, ID
 `vfc:chapter-workbench-study`; updated 8 November 2026. The all-chapter work was
 received in [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
-The current [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-deepens preloaded Investment comparison reels and recoverable plan removal;
+The current [#809 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+refines VHS-C depth, connected budget allocation and money scale after #807;
 #806 preserves the approved duration lighting and cassette references.
 The [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
 has its own illustrative page-local state. This contract guides that study;
@@ -60,7 +60,7 @@ panel; refreshing a value should preserve the active control.
 | Abilities | **What people can do** and **How the team works** support tables | A cell loads responsibility, preparation, review or observation for that ability or practice. Supporting-work pads refer to the same sessions used elsewhere. |
 | Change | Framework/viewpoint reels, an emphasis bank and work-stage lanes | Framework choice supplies different named components; faders visibly redistribute the illustration. A selected component exposes its stage and supporting-session pads. |
 | Quality & recovery | Before/after-release reels, a compact CRT-style reading and check pads | The selected check exposes inclusion and supporting work. Sigma attention and Change urgency alter the authored attention reading; the initial 4σ setting presents a calm starting example. |
-| Investment | A VHS-C channel preloaded with each comparison type, with Plan investment loaded initially | Money dials and domain/lifecycle/metric reels expose financial relationships. Each added tape owns independent settings; Plan investment retains shared-session costs and sprint bars. |
+| Investment | A VHS-C channel preloaded with each comparison type, with Plan investment loaded initially | Money dials and domain/lifecycle/metric reels expose financial relationships. Each added deck owns independent settings; Plan investment retains shared-session costs and sprint bars. |
 
 The two Abilities tables keep their native row/column relationships and legible
 headers. Session participation is a native table with checkbox pads, rather than
@@ -107,16 +107,21 @@ Preserve these distinctions:
 The [Investment Master Shelf & Financial Reels contract](investment-master-reels.md)
 owns the VHS-C channel, compact financial modules and chocolate companion
 panels. It preserves Plan investment's original funding board and the Extra
-investment lane at `#403d32`. A populated tape of every type is available at
+investment lane at `#403d32`. A populated deck of every type is available at
 entry. Visitors can add independent comparison copies and remove or recover
-any tape through Undo. This supersedes the earlier one-of-each restriction.
+any deck through Undo. This supersedes the earlier one-of-each restriction.
 
 The domain reel selects a type; lifecycle and alternative reels adjust populated
-assumptions; metric reels foreground the relevant result. A shared monetary
-module offers $100/$5 relative dials, one amount and circular direct steps.
+assumptions; metric reels foreground the relevant result. Plan investment pairs
+approach and funding-lens reels: allocation pads respond to reserve/options,
+while actual work and sprint amounts follow the selected funding view. Direct
+adjustments show Custom. The shared money module offers $1,000/$100 steps for
+aggregate amounts and $100/$5 for unit prices and costs, plus circular $1 steps.
+Readout positions stay fixed while adjusted; expected thousands sit below their
+headings. The cassette's stippled grip stays inside its deeper illustrated body.
 Financial values retain their period and unit, with the canonical calculation
 core supplying the existing formulas. Comparison settings remain local to their
-tape; the amp's shared-session total keeps its original pricing owner.
+deck; the amp's shared-session total keeps its original pricing owner.
 
 Coordination's Remove plan clears the removed identity from explicit support
 and funding links. Independent response cards retain visible unassigned source

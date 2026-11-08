@@ -87,9 +87,11 @@ extended that compact composition to all chapters. It supersedes treating the
 illustration as Coordination-only.
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
 preserves the cassette treatment, visible naming and fixed duration lighting.
-The current [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-adds preloaded independent comparison tapes, connected financial reels, money
-dials and recoverable removal of a complete Coordination plan. The
+The [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+added preloaded independent financial comparisons and recoverable plan removal.
+The current [#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+strengthens the VHS-C bodies, connects Plan investment's allocation reels and
+matches monetary steps to each comparison's scale. The
 [proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
 [Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
 now describe the connected experience and its receiving owners.
@@ -111,9 +113,9 @@ the same session, rather than pricing another copy. The study's funding lanes
 group session amounts; production's allocation rules and full baseline/report
 semantics retain their existing owners. The added comparison decks use the
 shared Undo owner while keeping their assumptions and outputs separate from
-the shared-session amount. One of every financial tape type is preloaded; New investment tape
+the shared-session amount. One of every financial deck type is preloaded; New investment deck
 creates another independent instance. Domain navigation selects a
-tape type. Lifecycle presets, alternatives and metric choices change a compact
+deck type. Lifecycle presets, alternatives and metric choices change a compact
 loaded reading with visible consequences. Customer rollout carries price and
 contribution; Commercial cohort separates opening-cohort retention from new
 revenue and acquisition; Service operations keeps time, budget and capacity
@@ -121,12 +123,29 @@ units visible; Capital choices carries quarterly flows, NPV, IRR and payback.
 The canonical core supplies financial formulas through a small study adapter.
 
 The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
-records the larger-left-reel VHS-C art, stippled body and vertical shelf with a
-horizontal phone presentation. Chocolate companion panels now offset the dark
-rack around money controls and related comparisons, extending the preserved
-Extra investment treatment. $100 and $5 relative dials share one amount, exact
-entry and circular $1 steps. Their face lighting remains fixed. Reusable controls
-retain stable nodes and return edits through the existing history owner.
+records the wider VHS-C art, stronger depth and vertical channel with a
+horizontal phone presentation. The stippled grip now sits inside the moving
+cassette face. This supersedes texture attached to its stationary outer button.
+Chocolate companions offset the dark rack around money controls and comparisons,
+extending the preserved Extra investment treatment. Funding identity owns that
+lane's color, including when it appears alone through the lens.
+
+Plan investment now pairs Investment approach with Investment lens. Deliver now,
+Protect delivery and Explore options vary explicit reserve/opportunity budget
+allocations. Four pads make the work, set-asides and remaining amount or shortfall
+visible. The funding lens filters session pads and sprint amounts; the allocation
+still accounts for the whole plan. Manual budget, allocation or funding changes
+show Custom, and a named approach restores its pair through one Undo edit.
+The approach describes spending allocation; actual shared work keeps its price,
+and a claim about improved delivery would require separate evidence.
+
+Aggregate budgets, revenue and capital use $1,000/$100 relative dials. Unit prices
+and costs retain $100/$5, with exact entry and circular $1 steps throughout.
+Readout layout is fixed by the field: expected thousands sit below the heading;
+small unit costs may sit top-right. Crossing a numeric threshold keeps that
+placement. Face lighting remains fixed and reusable controls retain stable nodes
+through the existing history owner. This supersedes the earlier all-$100/$5
+scale while preserving the approved duration controls.
 
 Quality starts at 4σ with balanced attention. Its response to urgency remains
 an authored illustration, separate from observed process capability or a forecast.
@@ -397,6 +416,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
 | Investment limited to one shared-session cost reading in the dev study | Plan investment retains that reading. #807 preloads financial comparison tapes with connected reels and money dials, preserving separate units and shared Undo. |
 | #806's optional comparison decks, limited to one of each type | #807 preloads all five types and gives every added copy its own identity, settings and comparison state. Domain navigation changes the loaded view; financial edits stay in their tape. |
+| Investment texture on the outer cassette button and a universal $100/$5 money pair | #809 puts the grip inside the face, widens and deepens the VHS-C body, and uses $1,000/$100 for aggregate amounts. Unit costs retain $100/$5; readout placement is fixed per field. |
+| Plan investment driven only by a funding lens | #809 pairs the lens with explicit reserve/opportunity approaches and visible allocation/shortfall. Direct changes show Custom; shared work retains its original pricing owner. |
 | Coordination plans available only for creation and editing in the study | #807 adds direct Remove plan, explicit reference cleanup, an empty-shelf New plan route and snapshot Undo. Production Reset stays separately scoped in #808. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
@@ -839,11 +860,11 @@ also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-The next receiving decision is the #807 dev refinement of the all-chapter
-workbench. Its receiving Issue records matching source and browser observations;
+The next receiving decision is the #809 dev refinement of Investment decks,
+allocation reels and monetary controls. Its receiving Issue records matching source and browser observations;
 #805 retains the earlier connected-chapter evidence. Human review now assesses
-the independent financial comparison tapes, connected reels, chocolate
-companions and recoverable plan removal before choosing a production bridge. The approved
+the independent financial decks, connected budget allocation, fixed monetary
+readouts and preserved chocolate companions before choosing a production bridge. The approved
 duration panel retains its geometry and palette with the approved fixed-lighting
 revision. Future percentage
 semantics remain with #798 and broader removal with #773.

@@ -38,10 +38,11 @@ through the repository's local server. The
 [#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
 extended #804's loaded-tape composition across all Studio chapters. The preservation work in
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
-keeps the approved cassette art and duration panel. The current
-[#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-deepens financial comparisons through preloaded VHS-C tapes, connected reels
-and coarse/fine money dials. One chapter rail connects the same illustrative
+keeps the approved cassette art and duration panel. The financial comparisons in
+[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+now receive the
+[#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809):
+chunkier VHS-C decks, connected budget reels and money controls matched to scale. One chapter rail connects the same illustrative
 people, teams and work:
 
 | Chapter | Try in the study |
@@ -51,7 +52,7 @@ people, teams and work:
 | Abilities | Select a cell in either support table; connect responsibility, preparation, review or an illustrative observation. |
 | Change | Turn the framework/viewpoint reels, vary the emphasis and connect work in the stage lanes. |
 | Quality & recovery | Explore preparation/recovery presets, the attention display and linked check pads. |
-| Investment | Load any preloaded comparison, turn its reels or money dials, and add another independent tape to explore a variation. |
+| Investment | Load any preloaded comparison, turn its reels or money dials, and add another independent deck to explore a variation. |
 
 Edits take effect directly in the study's page-local model with shared Undo.
 Marked session routes open the Coordination module and offer a return to the
@@ -76,12 +77,20 @@ The separate
 preserves the current artwork, hover motion and narrow horizontal shelf at
 `cedafc3`. The detail panel keeps its short downward easing. The
 [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
-records the companion VHS-C channel, larger left reel, stippling and additional
-chocolate brown panels. One of every comparison type is ready to explore;
-New investment tape creates another independent instance. Lifecycle, domain,
-alternative and metric reels connect concise financial readings, with $100/$5
-money dials and direct controls. Plan investment retains the original funding
-board and shared-session costs; other comparison outputs keep their own units.
+records the wider VHS-C bodies, deeper extrusion, larger left reel and stippling
+inside each cassette. The dark green channel and chocolate companion panels preserve the
+existing art direction. One of every comparison type is ready to explore;
+**New investment deck** creates an independent copy and **Remove deck** has Undo.
+
+Plan investment pairs an **Investment approach** reel with an **Investment lens**.
+Approaches visibly change budget reserve and opportunity allocations. The lens
+filters the funding board and sprint amounts. Direct adjustments show Custom;
+the shared-session cost continues to come from the same people and work.
+Lifecycle, alternative and metric reels retain concise financial readings in
+the other decks. Larger amounts use $1,000/$100 dials; unit costs retain $100/$5.
+Each money readout has a fixed position, with expected thousands below the
+heading and smaller unit costs at its right. Values retain that placement while
+adjusted.
 
 Remove plan also supports an empty Coordination shelf. New plan starts again;
 Undo restores the removed item and its links. Independent response cards retain
@@ -91,8 +100,8 @@ planned separately in
 [#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
 
 The working showcase on `main` keeps its accepted plan, canonical editors and
-recovery behavior. The study's unassigned tapes, response cards and simplified
-investment are illustrative contracts to review before production adoption.
+recovery behavior. The study's unassigned plans, response cards and financial
+comparisons are illustrative contracts to review before production adoption.
 Merging remains held. The next receiver is human review of the connected chapter
 experience, followed by a separately chosen, focused production bridge.
 The narrow Plan session label and rack-width repairs also remain available on

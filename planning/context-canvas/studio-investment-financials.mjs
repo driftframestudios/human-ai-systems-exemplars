@@ -9,6 +9,11 @@ export const INVESTMENT_TYPES = [
   { id: 'service', title: 'Service operations', strip: 'Working experience', detail: 'Time, budget & capacity' },
   { id: 'capital', title: 'Capital choices', strip: 'Investment decision', detail: 'Cash flow, return & sensitivity' },
 ];
+export const PLAN_APPROACHES = [
+  { id: 'deliver', label: 'Deliver now', reserve: 10, opportunity: 5 },
+  { id: 'protect', label: 'Protect delivery', reserve: 30, opportunity: 5 },
+  { id: 'explore', label: 'Explore options', reserve: 10, opportunity: 30 },
+];
 export const FINANCIAL_PRESETS = {
   rollout: [
     { id: 'pilot', label: 'Pilot', values: { teams: 2, setup: 1500, training: 12, listPrice: 1500, discount: 5, variableCost: 450, serviceCost: 300 } },
@@ -28,12 +33,12 @@ export const FINANCIAL_PRESETS = {
 };
 export function financialSettings(type) {
   switch (type) {
-    case 'plan': return { funding: { synthesis: 'funded', pairing: 'funded', decision: 'extra' }, baseline: null, domain: 'all', budget: 10000 };
+    case 'plan': return { funding: { synthesis: 'funded', pairing: 'funded', decision: 'extra' }, baseline: null, domain: 'all', budget: 10000, approach: 'deliver', reserve: 10, opportunity: 5 };
     case 'rollout': return { lifecycle: 'pilot', domain: 'pricing', ...FINANCIAL_PRESETS.rollout[0].values };
     case 'commercial': return { lifecycle: 'deepen', domain: 'retention', metric: 'nrr', openingRevenue: 100000, contributionMargin: 70, ...FINANCIAL_PRESETS.commercial[1].values };
     case 'service': return { lifecycle: 'pilot', domain: 'time', baselineCost: 500, ...FINANCIAL_PRESETS.service[1].values };
     case 'capital': return { alternative: 'pilot', lifecycle: 'ramp', metric: 'npv', quarters: 4, upfront: 20000, benefit: 8000, discount: 2, sensitivity: 100 };
-    default: throw new Error('Choose a supported investment tape.');
+    default: throw new Error('Choose a supported investment deck.');
   }
 }
 function metrics(inputs) {
@@ -75,7 +80,9 @@ export function analyseInvestment(record, pricing) {
     case 'capital': return capitalComparison(value);
     default: {
       const sessions = pricing.sessions.map(item => ({ ...item, funding: value.funding[item.tape.id] || 'extra' }));
-      return { sessions, amount: sessions.filter(item => value.domain === 'all' || item.funding === value.domain).reduce((sum, item) => sum + item.cost, 0) };
+      const visibleSessions = sessions.filter(item => value.domain === 'all' || item.funding === value.domain);
+      const reserve = value.budget * value.reserve / 100, opportunity = value.budget * value.opportunity / 100;
+      return { sessions, visibleSessions, amount: visibleSessions.reduce((sum, item) => sum + item.cost, 0), reserve, opportunity, remaining: value.budget - pricing.total - reserve - opportunity };
     }
   }
 }
