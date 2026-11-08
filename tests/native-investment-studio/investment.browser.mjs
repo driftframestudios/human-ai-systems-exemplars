@@ -89,10 +89,10 @@ async function open(t, engine, complete = false, showcase = false) {
 }
 
 async function openSession(page) {
-  const workspace = root(page).locator('[data-native-workspace="session"]');
-  if (!await workspace.evaluate(node => node.open)) await workspace.locator(':scope > summary').click();
   const settings = root(page).locator('[data-native-configure]');
-  if (!await settings.evaluate(node => node.open)) await settings.locator(':scope > summary').click();
+  if (!await settings.isVisible())
+    await root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible').click();
+  await expect(settings).toBeVisible();
 }
 
 async function downloadText(page) {
@@ -298,16 +298,13 @@ for (const engine of names) {
   test(`${engine}: authored showcase changes examples in place, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, false, true);
     const score = root(page).locator('[data-native-score]');
-    const connections = root(page).locator('[data-native-connection-view]');
     const reviewSession = async () => {
       await score.locator('[data-cadence-key="track-work:review"]').click();
-      await expect(root(page).locator('.studio-rack-editor')).toBeVisible();
+      await expect(root(page).locator('[data-rack-editor-kind]')).toBeVisible();
       await expect(work(page, 'minutesPerSession')).toBeEditable();
     };
     const readiness = async () => {
-      const accepted = connections.locator('.studio-accepted-connections');
-      if (!await accepted.evaluate(node => node.open)) await accepted.locator(':scope > summary').click();
-      await connections.locator('button[data-connection-select="readiness"]').click();
+      await root(page).locator('[data-template-rack] [data-studio-record-kind="connection"][data-studio-record-id="readiness"]').click();
     };
     await expect(chapter(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
     await expect(score.locator('.native-cadence__period')).toHaveCount(4);
@@ -353,7 +350,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$4,350.00');
     await chapter(page, 'coordination').click();
     await readiness();
-    const connection = root(page).locator('[data-native-connection-editor]');
+    const connection = root(page).locator('[data-connection-configure]');
     await expect(connection.locator('[name="sharedObject"]')).toHaveValue('Prototype, acceptance evidence and exception log');
     await expect(connection.locator('[name="receiverPersonId"]')).toHaveValue('noor');
     await connection.locator('[name="status"]').selectOption('paused');
@@ -471,7 +468,6 @@ for (const engine of names) {
     await chapter(page, 'people').click();
     await expect(purpose(page)).not.toHaveAttribute('open', '');
     await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
-    await root(page).locator('.studio-people-rates > summary').click();
     await root(page).locator('[data-team-roster] [data-person-id="product-one"]').click();
     await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();

@@ -4,9 +4,10 @@ import { prepareWorkDraftValues } from './draft.mjs';
 import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate, projectCoordinationArrangements } from './coordination-arrangements.mjs';
-import { createReel, revealReelResult } from './reel-control.mjs';
+import { createReel, revealReelResult, animateRackChange } from './reel-control.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
 import { createDeliveryBoard } from './delivery-board.mjs';
+import { syncReorderButtons } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
@@ -36,6 +37,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   let arrangementId = null, dirty = false, committing = false, undoProjection = null;
   let projection = studio.read();
   const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
+  let selectedTeamId = null, memberOrder = [], previousMemberIds = null, teamReturnKey = null, teamReturnPhase = null;
   const configurations = new Map();
   const form = document.createElement('div'); form.className = 'native-connection-template__form';
   const choice = document.createElement('select'); choice.dataset.templateChoice = '';
@@ -60,7 +62,17 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   rackActions.append(addTeam, addHandoff);
   rackHeading.append(rackTitle, readout, rackActions);
   const rackBody = element('div', undefined, 'studio-team-rack__body');
+  const boardSlot = element('div'); boardSlot.dataset.teamRackBoard = '';
   const editorSlot = element('div'); editorSlot.dataset.teamRackEditor = '';
+  const teamEditor = element('section', undefined, 'studio-team-rack__record'); teamEditor.dataset.teamRackRecord = '';
+  const teamScope = element('header', undefined, 'studio-team-rack__record-scope');
+  const teamBack = button('← Delivery overview', 'team-back'); teamBack.className = 'studio-delivery__return';
+  const teamTitle = element('h5', 'Team settings'); teamTitle.id = `${instance}-team-title`;
+  teamEditor.setAttribute('aria-labelledby', teamTitle.id); teamScope.append(teamBack, teamTitle);
+  const teamFields = element('div', undefined, 'studio-team-rack__record-fields');
+  let teamFieldsSignature = null;
+  teamEditor.append(teamScope, teamFields);
+  rackBody.append(boardSlot, editorSlot);
   delivery.append(rackHeading, rackBody);
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
@@ -183,6 +195,101 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function teamLabel(row) {
     return row.selection === 'new' ? row.label : projection.state.teams.find(team => team.id === row.selection.slice(5))?.label ?? `${row.selection.slice(5)} · removed team`;
   }
+  function directCommand(command, message) {
+    if (!active()) return false;
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!owns(epoch)) return false;
+    if (!parked.ok) { announce(parked.error.message); return false; }
+    const result = studio.applyCommand(command, studio.read());
+    if (!owns(epoch)) return false;
+    if (!result.ok) { announce(result.error.message); return false; }
+    refresh(true); onAccepted(result.projection);
+    if (owns(epoch)) announce(message);
+    return true;
+  }
+  function renderTeam() {
+    const team = projection.state.teams.find(row => row.id === selectedTeamId);
+    if (!team) { selectedTeamId = null; return false; }
+    const signature = JSON.stringify([team.id, team.personIds, projection.state.people.map(person => [person.id, person.label])]);
+    if (signature === teamFieldsSignature) {
+      teamFields.querySelector('[data-team-rack-name]').value = team.label;
+      return true;
+    }
+    teamFieldsSignature = signature;
+    const label = element('label', 'Team name');
+    const name = element('input'); name.value = team.label; name.dataset.teamRackName = '';
+    name.addEventListener('change', () => {
+      const current = studio.read().state.teams.find(row => row.id === team.id);
+      if (current) directCommand({ type: 'team.update', teamId: team.id,
+        team: { ...current, label: name.value.trim() } }, 'Team name updated. Undo is available.');
+    });
+    label.append(name);
+    const members = element('fieldset', undefined, 'studio-team-members');
+    members.append(element('legend', 'People in this team'));
+    const people = new Map(projection.state.people.map(person => [person.id, person]));
+    memberOrder = memberOrder.filter(id => people.has(id));
+    for (const id of people.keys()) if (!memberOrder.includes(id)) memberOrder.push(id);
+    const included = new Set(team.personIds), previous = new Set(previousMemberIds ?? []);
+    const retainedBefore = previousMemberIds?.filter(id => included.has(id));
+    const retainedNow = team.personIds.filter(id => previous.has(id));
+    // Inclusion leaves every card in place. Accepted ordering changes, including
+    // Undo, reorder the included slots while available cards keep their positions.
+    if (!retainedBefore || retainedBefore.some((id, index) => id !== retainedNow[index])) {
+      let position = 0;
+      memberOrder = memberOrder.map(id => included.has(id) ? team.personIds[position++] : id);
+    }
+    previousMemberIds = [...team.personIds];
+    const positions = new Map(team.personIds.map((id, index) => [id, index]));
+    for (const id of memberOrder) {
+      const person = people.get(id), index = positions.get(id);
+      const row = element('div', undefined, 'studio-team-member'); row.dataset.teamMemberRow = id;
+      row.dataset.selected = String(index !== undefined);
+      const choose = element('label'), checkbox = element('input'); checkbox.type = 'checkbox';
+      checkbox.checked = index !== undefined; checkbox.dataset.teamRackMember = id;
+      const words = element('span');
+      words.append(element('strong', person.label), element('small', index === undefined ? 'Available' : `Included · ${index + 1}`));
+      choose.append(checkbox, words);
+      checkbox.addEventListener('change', () => {
+        const ids = checkbox.checked ? [...team.personIds, id] : team.personIds.filter(member => member !== id);
+        if (directCommand({ type: 'team.members.replace', teamId: team.id, personIds: ids }, 'Team updated. Undo is available.'))
+          teamFields.querySelector(`[data-team-rack-member="${id}"]`)?.focus({ preventScroll: true });
+      });
+      const actions = element('div', undefined, 'native-coordination__actions native-coordination__manipulation');
+      const up = element('button', 'Move up'), down = element('button', 'Move down');
+      up.type = down.type = 'button'; up.dataset.teamMemberMove = 'up'; down.dataset.teamMemberMove = 'down';
+      syncReorderButtons(up, down, { label: `${person.label} in the team`, index, count: team.personIds.length });
+      for (const [control, direction] of [[up, -1], [down, 1]]) control.addEventListener('click', () => {
+        const ids = [...team.personIds], destination = index + direction;
+        if (index === undefined || destination < 0 || destination >= ids.length) return;
+        [ids[index], ids[destination]] = [ids[destination], ids[index]];
+        animateRackChange(teamFields, () => {
+          directCommand({ type: 'team.members.replace', teamId: team.id, personIds: ids }, 'Team order updated. Undo is available.');
+          teamFields.querySelector(`[data-team-rack-member="${id}"]`)?.focus({ preventScroll: true });
+        }, { selector: '[data-team-member-row]', key: 'teamMemberRow' });
+      });
+      actions.append(up, down); row.append(choose, actions); members.append(row);
+    }
+    teamFields.replaceChildren(label, members);
+    return true;
+  }
+  function openTeam(id, source) {
+    if (!studio.read().state.teams.some(team => team.id === id) || !open()) return false;
+    if (selectedTeamId !== id) { memberOrder = []; previousMemberIds = null; teamFieldsSignature = null; }
+    selectedTeamId = id; teamReturnKey = source?.dataset.studioEntryKey ?? teamReturnKey;
+    teamReturnPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null;
+    setEditorOpen(false); renderStructure();
+    teamBack.focus({ preventScroll: true });
+    return true;
+  }
+  function setEditorOpen(opened) { delivery.dataset.editorOpen = String(opened); }
+  function closeTeam() {
+    selectedTeamId = null; renderStructure();
+    const source = [...panel.querySelectorAll('[data-studio-entry-key]')]
+      .find(node => node.dataset.studioEntryKey === teamReturnKey
+        && (node.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null) === teamReturnPhase);
+    (source ?? addTeam).focus({ preventScroll: true });
+  }
   function renderStructure() {
     const focused = document.activeElement;
     const focusKey = ['deliveryOpen', 'deliveryOverview', 'deliverySession', 'deliveryConnection', 'deliveryPerson']
@@ -234,13 +341,18 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     }
     function inspectTemplate(target, source) {
       if (!active(canOpen)) return;
-      if (['person', 'team', 'connection'].includes(target.kind)) { navigate(target, source); return; }
+      if (target.kind === 'team') { openTeam(target.id, source); return; }
+      if (['person', 'connection'].includes(target.kind)) { navigate(target, source); return; }
       const kind = target.kind === 'template-team' ? 'team' : 'connection';
       if (!accepted && !acceptStarter()) return;
       const row = currentArrangement();
       const id = kind === 'team' ? row?.teams.find(binding => binding.slotId === target.id)?.team.id
         : row?.connections.find(binding => binding.slotId === target.id)?.connection.id;
-      if (id) navigate({ kind, id }, acceptedSource(kind, id, source));
+      if (id) {
+        const acceptedControl = acceptedSource(kind, id, source);
+        if (kind === 'team') openTeam(id, acceptedControl);
+        else navigate({ kind, id }, acceptedControl);
+      }
     }
     const inspectSession = (id, source) => {
       const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
@@ -255,23 +367,28 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     };
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
-    rackBody.replaceChildren(createDeliveryBoard(document, { arrangement: rackArrangement, plan: previewPlan, acceptedSessionIds,
+    const board = createDeliveryBoard(document, { arrangement: rackArrangement, plan: previewPlan, acceptedSessionIds,
       acceptedTeamIds: new Set(projection.state.teams.map(team => team.id)),
       acceptedConnectionIds: new Set(projection.state.connections.map(connection => connection.id)),
-      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }), editorSlot,
-      createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
-        sessionIds: acceptedSessionIds, acceptedPersonIds: new Set(projection.state.people.map(person => person.id)),
-        onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' }));
-    const board = rackBody.querySelector('.studio-delivery__board');
-    if (deliveryView.phaseId === null) board.scrollLeft = deliveryView.overviewScroll;
-    if (focusKey) {
+      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView });
+    const nextBoard = renderTeam() ? teamEditor : board;
+    if (boardSlot.firstElementChild !== nextBoard) boardSlot.replaceChildren(nextBoard);
+    const nextTracks = createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
+      sessionIds: acceptedSessionIds, acceptedPersonIds: new Set(projection.state.people.map(person => person.id)),
+      onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' });
+    const currentTracks = rackBody.querySelector(':scope > .studio-session-tracks');
+    if (currentTracks) currentTracks.replaceWith(nextTracks);
+    else rackBody.append(nextTracks);
+    const boardScroller = rackBody.querySelector('.studio-delivery__board');
+    if (boardScroller && deliveryView.phaseId === null) boardScroller.scrollLeft = deliveryView.overviewScroll;
+    if (boardScroller && focusKey) {
       const target = [...rackBody.querySelectorAll('button')].find(node => node.dataset[focusKey] === focusValue
         && (!focusPhase || node.closest('[data-delivery-phase]')?.dataset.deliveryPhase === focusPhase));
       if (target) {
-        const bounds = board.getBoundingClientRect(), key = target.getBoundingClientRect();
-        if (key.left < bounds.left) board.scrollLeft += key.left - bounds.left;
-        else if (key.right > bounds.right) board.scrollLeft += key.right - bounds.right;
-        if (deliveryView.phaseId === null) deliveryView.overviewScroll = board.scrollLeft;
+        const bounds = boardScroller.getBoundingClientRect(), key = target.getBoundingClientRect();
+        if (key.left < bounds.left) boardScroller.scrollLeft += key.left - bounds.left;
+        else if (key.right > bounds.right) boardScroller.scrollLeft += key.right - bounds.right;
+        if (deliveryView.phaseId === null) deliveryView.overviewScroll = boardScroller.scrollLeft;
         target.focus({ preventScroll: true });
       }
     }
@@ -330,6 +447,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (id === configuration.templateId && currentArrangement() && !dirty) return;
     if (!active(canOpen) || (!active() && !open())) return;
     configurations.set(configuration.templateId, configuration);
+    selectedTeamId = null;
     touch(); projection = studio.read();
     configuration = configurations.get(id) ?? startingConfiguration(BY_ID.get(id));
     configuration.proposalId = arrangementId ?? configuration.proposalId;
@@ -448,6 +566,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!owns(focusedAt) || !active()) return;
     switch (target.dataset.templateAction) {
       case 'apply': apply(); break;
+      case 'team-back': closeTeam(); break;
       case 'undo': undo(); break;
       case 'preserve': if (fresh(proposal)) commit({ preserveShared: true }); break;
       case 'cancel':
@@ -462,7 +581,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   });
   configuration = startingConfiguration(TEMPLATES[0]); receiveAccepted(); build(); retirePreview(); panel.hidden = false;
   if (disclosure && exposed) panel.open = true;
-  const controller = Object.freeze({ open, resume: open, close, detach, settleText,
+  const controller = Object.freeze({ open, resume: open, close, detach, settleText, openTeam, setEditorOpen,
     focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
     isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
   INSTANCES.set(panel, controller);

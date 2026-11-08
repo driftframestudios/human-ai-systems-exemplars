@@ -40,12 +40,14 @@ const total = page => root(page).locator('[data-native-total]');
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.assemblyFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-const adjacent = page => root(page).locator('.studio-rack-editor');
-const record = (page, kind, id) => root(page).locator(`.studio-accepted-connections [data-studio-record-kind="${kind}"][data-studio-record-id="${id}"]`).first();
+const adjacent = page => root(page).locator('[data-rack-editor-kind]');
+const record = (page, kind, id) => root(page).locator(`[data-connection-templates] .studio-delivery [data-studio-record-kind="${kind}"][data-studio-record-id="${id}"]`).first();
+const teamRecord = page => root(page).locator('[data-team-rack-record]');
+const closeBorrowed = page => adjacent(page).locator('[data-rack-editor-close]').click();
 async function openTeamPlanning(page) {
   await tab(page, 'coordination').click();
-  const reading = root(page).locator('.studio-accepted-connections');
-  if (!(await reading.evaluate(node => node.open))) await reading.locator(':scope > summary').click();
+  await expect(root(page).locator('[data-connection-templates]')).toBeVisible();
+  if (await adjacent(page).isVisible()) await closeBorrowed(page);
 }
 
 async function open(t, engine, full = false) {
@@ -80,7 +82,6 @@ async function open(t, engine, full = false) {
   });
   await tab(page, 'people').click();
   await expect(people(page)).toHaveAttribute('data-assembly-ready', 'true');
-  await people(page).locator('.studio-people-rates > summary').click();
   return page;
 }
 
@@ -99,23 +100,21 @@ for (const engine of names) {
     await expect(track).toHaveClass(/native-control--navigate/);
     await track.click();
     await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
-    await expect(root(page).locator('[data-native-session-editor] [data-native-configure]')).toHaveAttribute('open', '');
+    await expect(root(page).locator('[data-native-configure]')).toHaveAttribute('open', '');
     await root(page).getByRole('button', { name: 'Return to people and teams', exact: true }).click();
     await expect(tab(page, 'people')).toHaveAttribute('aria-selected', 'true');
     await expect(people(page).locator('.studio-people-reading button').first()).toBeFocused();
     await expect(action(page, 'person-create')).toBeVisible();
-    await tab(page, 'coordination').click();
+    await openTeamPlanning(page);
     const workspace = root(page).locator('[data-native-workspace="connection"]');
     await expect(workspace.getByRole('heading', { name: 'Team planning', exact: true })).toBeVisible();
-    await workspace.locator('.studio-accepted-connections > summary').click();
-    const lane = root(page).locator('[data-team-lane="delivery"]');
-    await lane.getByRole('button', { name: 'Choose people', exact: true }).click();
+    await record(page, 'team', 'delivery').click();
     await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
-    await expect(adjacent(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
-    await expect(adjacent(page).locator('[data-assembly-members]')).toBeVisible();
+    await expect(teamRecord(page).locator('[data-team-rack-name]')).toHaveValue('Product and Engineering');
+    await expect(teamRecord(page).getByRole('group', { name:'People in this team' })).toBeVisible();
     assert.equal(await bytes(page), accepted);
   });
-  test(`${engine}: adjacent person editing retains one owner through Close, switching, Cancel and Apply`, { timeout: 60000 }, async t => {
+  test(`${engine}: in-rack person editing retains one owner through Close, switching, Cancel and Apply`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, true), accepted = await bytes(page);
     await page.evaluate(() => { window.assemblyFixture.personNode = document.querySelector('[data-person-configure]'); });
     await openTeamPlanning(page);
@@ -125,7 +124,7 @@ for (const engine of names) {
     await first.click();
     await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
     await expect(adjacent(page)).toBeVisible(); await expect(rate).toBeFocused();
-    assert.equal(await adjacent(page).evaluate(node => node.previousElementSibling.matches('[data-native-connection-view]')), true, 'the receiver follows the rack that supplied the pointer target');
+    assert.equal(await adjacent(page).evaluate(node => Boolean(node.closest('[data-team-rack-editor]'))), true, 'the person receiver occupies the Team planning rack');
     await expect(editor).toHaveCount(1); await expect(adjacent(page).locator('[data-person-configure]')).toHaveCount(1);
     await expect(first).toHaveAttribute('aria-expanded', 'true');
     assert.equal(await first.evaluate(node => document.getElementById(node.getAttribute('aria-controls'))?.contains(document.querySelector('[data-person-configure]'))), true);
@@ -159,15 +158,16 @@ for (const engine of names) {
     assert.equal(await bytes(page), accepted);
     await first.click(); await expect(rate).toHaveValue('00101.50');
     assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.token === window.assemblyFixture.personToken), true);
-    await first.click(); await expect(adjacent(page)).toBeHidden();
+    await closeBorrowed(page); await expect(adjacent(page)).toBeHidden();
     await first.click(); await expect(rate).toHaveValue('00101.50');
     assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.token === window.assemblyFixture.personToken), true, 'same-record disclosure keeps its existing draft lease');
-    await second.click(); await rate.fill('123.45');
-    await first.click(); await expect(rate).toHaveValue('00101.50');
+    await closeBorrowed(page); await second.click(); await rate.fill('123.45');
+    await closeBorrowed(page); await first.click(); await expect(rate).toHaveValue('00101.50');
     assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.personId), 'product-one');
-    await record(page, 'team', 'delivery').click();
-    await expect(adjacent(page).locator('[data-assembly-configure]')).toBeVisible();
-    await expect(adjacent(page).locator('[data-person-configure]')).toHaveCount(0);
+    await closeBorrowed(page); await record(page, 'team', 'delivery').click();
+    await expect(teamRecord(page)).toBeVisible();
+    await expect(adjacent(page)).toBeHidden();
+    await teamRecord(page).locator('[data-template-action="team-back"]').click();
     await first.click(); await expect(rate).toHaveValue('00101.50');
     assert.equal(await page.evaluate(() => window.assemblyFixture.editing.read().active.kind), 'person');
     assert.equal(await bytes(page), accepted);
@@ -186,28 +186,21 @@ for (const engine of names) {
     await expect(root(page).locator('[data-person-configure]')).toHaveCount(1);
   });
 
-  test(`${engine}: adjacent team editing preserves membership controls and phone/laptop rack geometry`, { timeout: 60000 }, async t => {
+  test(`${engine}: direct team editing accepts in-rack membership and restores it through shared Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, true), accepted = await bytes(page);
-    await page.evaluate(() => { window.assemblyFixture.teamNode = document.querySelector('[data-assembly-configure]'); });
     await openTeamPlanning(page);
-    const trigger = record(page, 'team', 'delivery'), editor = root(page).locator('[data-assembly-configure]');
-    const name = editor.locator('[name="label"]'), member = editor.locator('[data-assembly-member="engineering-two"]');
-    const laneGeometry = () => root(page).locator('.studio-accepted-connections [data-team-lane], .studio-accepted-connections [data-team-lane] [data-studio-record-kind]').evaluateAll(nodes => nodes.map(node => {
-      const box = node.getBoundingClientRect(), rack = node.closest('.studio-team-lanes').getBoundingClientRect();
-      const rounded = value => Math.round(value * 1000) / 1000;
-      return { id:node.dataset.teamLane ?? `${node.dataset.studioRecordKind}/${node.dataset.studioRecordId}`,
-        top:rounded(box.top-rack.top), left:rounded(box.left-rack.left), width:rounded(box.width), height:rounded(box.height) };
-    }));
+    const trigger = record(page, 'team', 'delivery'), editor = teamRecord(page);
+    const name = editor.locator('[data-team-rack-name]'), member = editor.locator('[data-team-rack-member="engineering-two"]');
+    const back = () => editor.locator('[data-template-action="team-back"]').click();
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height:1000 }); await frames(page);
-      const before = await laneGeometry();
-      await trigger.click(); await expect(adjacent(page)).toBeVisible();
+      await trigger.click(); await expect(editor).toBeVisible();
       await expect(name).toHaveValue('Product and Engineering');
-      await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-      assert.deepEqual(await laneGeometry(), before, 'opening the adjacent editor preserves the initiating lanes');
-      const geometry = await adjacent(page).evaluate(node => {
+      await expect(root(page).locator('[data-team-rack-board] .studio-delivery')).toHaveCount(0);
+      await expect(adjacent(page)).toBeHidden();
+      const geometry = await editor.evaluate(node => {
         const outer=node.getBoundingClientRect(), chapter=node.closest('[data-native-chapter-panel]').getBoundingClientRect();
-        const controls=[...node.querySelectorAll('input,button,select,textarea')].filter(target => target.getClientRects().length);
+        const controls=[...node.querySelectorAll('input,button')].filter(target => target.getClientRects().length);
         return { left:outer.left, right:outer.right, chapterLeft:chapter.left, chapterRight:chapter.right,
           targets:controls.map(target => { const box=target.getBoundingClientRect(); return { left:box.left, right:box.right }; }),
           overflow:document.documentElement.scrollWidth > innerWidth + 1 };
@@ -215,37 +208,30 @@ for (const engine of names) {
       assert.ok(geometry.left >= geometry.chapterLeft && geometry.right <= geometry.chapterRight && geometry.left >= 0 && geometry.right <= width, JSON.stringify(geometry));
       assert.ok(geometry.targets.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
       assert.equal(geometry.overflow, false);
-      await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' })); await frames(page);
-      await page.screenshot({ path:resolve(captures, `${engine}-adjacent-team-${width}-viewport.png`) });
-      await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-team-${width}.png`) });
-      await adjacent(page).locator('[data-rack-editor-close]').click();
-      await expect(trigger).toBeFocused(); await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      await editor.screenshot({ path:resolve(captures, `${engine}-direct-team-${width}.png`) });
+      await back(); await expect(trigger).toBeFocused();
     }
     await trigger.click(); await name.fill('Delivery together'); await member.uncheck();
-    await editor.getByRole('button', { name:'Move up: product-two in the team', exact:true }).click();
-    await page.evaluate(() => { window.assemblyFixture.teamToken = window.assemblyFixture.editing.assembly.read().draft.token; });
-    await adjacent(page).locator('[data-rack-editor-close]').click(); await trigger.click();
-    await expect(name).toHaveValue('Delivery together'); await expect(member).not.toBeChecked();
-    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.assembly.read().draft.token === window.assemblyFixture.teamToken), true);
-    assert.equal(await bytes(page), accepted);
-    await editor.locator('[data-assembly-cancel]').click();
-    await expect(adjacent(page)).toBeHidden(); await expect(trigger).toBeFocused();
-    await trigger.click(); await expect(name).toHaveValue('Product and Engineering'); await expect(member).toBeChecked();
-    await name.fill('Delivery together'); await member.uncheck();
-    await editor.getByRole('button', { name:'Move up: product-two in the team', exact:true }).click();
-    await editor.locator('[data-assembly-apply]').click(); await expect(adjacent(page)).toBeVisible();
-    await expect(adjacent(page).getByRole('heading', {name:'Team settings · Delivery together', exact:true})).toBeVisible();
+    await editor.locator('[data-team-member-row="product-two"] [data-team-member-move="up"]').click();
     assert.deepEqual(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0]), {
       id:'delivery', label:'Delivery together', personIds:['product-two', 'product-one', 'engineering-one'], lifecycle:'active',
     });
-    await adjacent(page).locator('[data-rack-editor-close]').click(); await expect(trigger).toBeFocused();
-    await tab(page, 'people').click(); await people(page).locator('[data-assembly-team="delivery"]').click();
+    await expect(editor.locator('[data-assembly-apply]')).toHaveCount(0);
+    await back(); await trigger.click();
+    await expect(name).toHaveValue('Delivery together'); await expect(member).not.toBeChecked();
+    for (let count=0; count<3; count+=1) await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), accepted, 'shared Undo restores name, membership and order');
+    await expect(name).toHaveValue('Product and Engineering'); await expect(member).toBeChecked();
+    assert.deepEqual(await editor.locator('[data-team-member-row][data-selected="true"]').evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow)),
+      ['product-one','product-two','engineering-one','engineering-two']);
+    await back(); await tab(page, 'people').click();
+    await people(page).locator('[data-assembly-team="delivery"]').click();
     await expect(people(page).locator('[data-assembly-configure]')).toBeVisible();
-    assert.equal(await editor.evaluate(node => node === window.assemblyFixture.teamNode), true, 'the People chapter receives its original membership editor');
+    await expect(people(page).locator('[data-assembly-member="engineering-two"]')).toBeChecked();
     await expect(root(page).locator('[data-assembly-configure]')).toHaveCount(1);
   });
 
-  test(`${engine}: a refused adjacent record switch keeps the visible identity with its existing draft`, { timeout: 60000 }, async t => {
+  test(`${engine}: a refused in-rack record switch keeps its existing draft recoverable`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {
       const { studio, controller } = window.assemblyFixture;
@@ -264,10 +250,13 @@ for (const engine of names) {
     for (let index = 0; index < 8; index += 1) {
       await record(page, 'person', `additional-person-${index}`).click();
       await rate.fill(String(101 + index));
+      await closeBorrowed(page);
     }
     await page.evaluate(() => { window.assemblyFixture.retainedToken = window.assemblyFixture.editing.person.read().draft.token; });
     const next = record(page, 'person', 'additional-person-8');
     await next.click();
+    await expect(adjacent(page)).toBeHidden();
+    await record(page, 'person', 'additional-person-7').click();
     await expect(adjacent(page).getByRole('heading', { name:'Person settings · Additional person 8', exact:true })).toBeVisible();
     await expect(rate).toHaveValue('108');
     await expect(next).toHaveAttribute('aria-expanded', 'false');

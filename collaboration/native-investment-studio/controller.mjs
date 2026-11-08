@@ -80,9 +80,17 @@ export function mountCoordinationPanel(root, options = {}) {
   let rackEditor = null;
   let openingRackKind = null;
   const ampTools = root.querySelector('[data-native-amp-tools]');
+  const ampUndo = document.createElement('button');
+  ampUndo.type = 'button'; ampUndo.className = 'native-amp-control';
+  ampUndo.dataset.studioUndo = ''; ampUndo.textContent = 'Undo (0)'; ampUndo.disabled = true;
+  ampTools?.append(ampUndo);
+  let ampHistoryProjection = null;
   const ampPanels = new Map([...root.querySelectorAll('[data-amp-panel]')].map(button =>
     [button.dataset.ampPanel, { button, panel: root.querySelector(`#${button.getAttribute('aria-controls')}`) }]));
   function syncAmpTools() {
+    const { undoCount } = studio.readHistory();
+    ampHistoryProjection = studio.read();
+    ampUndo.textContent = `Undo (${undoCount})`; ampUndo.disabled = undoCount === 0;
     for (const [name, { button, panel }] of ampPanels) {
       button.setAttribute('aria-expanded', String(panel.open && !panel.hidden));
       if (name === 'saved') {
@@ -105,7 +113,6 @@ export function mountCoordinationPanel(root, options = {}) {
   const returnTeamButton = returnRegion?.querySelector('[data-native-return-team]');
   let pendingReturnFocus = null;
   let rackCreation = null, creationUndo = null, removePlan = null;
-  let planShelfUndo = null, planShelfUndoProjection = null;
   const rackCollections = Object.freeze({ person: 'people', team: 'teams', session: 'work', connection: 'connections' });
 
   function listen(target, type, handler) {
@@ -115,14 +122,9 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function syncSessionReceiver() {
-    const shelf = root.querySelector('.studio-plan-library .studio-tape-library');
-    if (shelf && planShelfUndo) {
-      planShelfUndoProjection = studio.read();
-      planShelfUndo.hidden = studio.readHistory().undoCount === 0;
-      shelf.append(planShelfUndo);
-    }
     const selected = rackEditor?.read();
-    if (selected?.open && !studio.read().state[rackCollections[selected.kind]].some(record => record.id === selected.id)) {
+    if (selected?.open && !studio.read().state[rackCollections[selected.kind]].some(record => record.id === selected.id)
+      && !(selected.kind === 'session' && describeSessionTarget(workPanel?.read().draft?.sessionId)?.mode === 'create')) {
       closeRackEditor(rackCreation?.entry());
     }
     if (creationUndo) {
@@ -137,7 +139,10 @@ export function mountCoordinationPanel(root, options = {}) {
       if (rackEditor?.isOpen('session')) receiver.controlsId = rackEditor.element.id;
       syncSessionControls(root, receiver);
     }
-    if (!disposed) rackEditor?.sync();
+    if (!disposed) {
+      rackEditor?.sync();
+      templatePanel?.setEditorOpen(Boolean(selected?.open && rackEditor.element.closest('[data-team-rack-editor]')));
+    }
   }
   function closeRackEditor(source = null) {
     const selected = rackEditor?.read();
@@ -146,7 +151,34 @@ export function mountCoordinationPanel(root, options = {}) {
     else if (selected.kind === 'session') workPanel?.close({ park: false });
     else if (selected.kind === 'connection') connectionPanel?.close({ park: false });
     else assemblyPanel?.close({ park: false });
+    templatePanel?.setEditorOpen(false);
     rackEditor.hide({ focus: true, source });
+    syncSessionReceiver();
+    return true;
+  }
+  function borrowCurrentSession() {
+    if (!mounted || activeChapter !== 'coordination' || openingRackKind || rackEditor?.isOpen('session')) return;
+    const view = workPanel?.read(), target = describeSessionTarget(view?.draft?.sessionId);
+    // A stale draft owns a visible recovery view before it can regain an edit
+    // lease. Borrow that view too so an explicit return can focus its review.
+    if (!target || !rackEditor || coordinationEditor !== 'session' || !workPanel.isOpen()) return;
+    const hasCadence = Boolean(studio.read().state.scoreSettings.cadence);
+    const anchor = root.querySelector(hasCadence ? '[data-score-projection]' : '[data-connection-templates]');
+    const container = hasCadence ? scorePanel?.getSessionSlot() : anchor?.querySelector('[data-team-rack-editor]');
+    if (!anchor || !container) return;
+    const source = [...anchor.querySelectorAll('[data-studio-session-id]')].find(control => control.dataset.studioSessionId === target.id)
+      ?? anchor.querySelector('[data-cadence-key="cassette-add"]');
+    const record = studio.read().state.work.find(item => item.id === target.id);
+    workPanel.setRackMode(true);
+    rackEditor.show({ kind: 'session', id: target.id, label: record?.label ?? 'New plan', originLabel: hasCadence ? 'Coordination horizon' : 'Team planning' },
+      source, anchor, { container });
+  }
+  function preparePlanLoad() {
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return false; }
+    workPanel?.close({ park: false });
+    rackEditor?.hide({ home: true });
+    templatePanel?.setEditorOpen(false);
     syncSessionReceiver();
     return true;
   }
@@ -158,13 +190,19 @@ export function mountCoordinationPanel(root, options = {}) {
     const collection = rackCollections[target.kind];
     const record = studio.read().state[collection].find(row => row.id === target.id);
     if (!record || !rackEditor) return;
+    if (target.kind === 'team') {
+      rackEditor.hide({ home: true });
+      templatePanel?.openTeam(target.id, source);
+      syncSessionReceiver();
+      return;
+    }
     const current = rackEditor.read();
     const horizonSource = source?.closest('[data-score-projection]');
     const toggle = target.kind !== 'session' || horizonSource || source?.classList.contains('studio-track-key');
     if (toggle && current?.open && current.kind === target.kind && current.id === target.id
       && rackEditor.isOrigin(source)) { closeRackEditor(source); return; }
-    const anchor = horizonSource ?? source?.closest('[data-native-connection-view]')
-      ?? requireElement('[data-connection-templates]');
+    const anchor = target.kind === 'person' ? requireElement('[data-connection-templates]')
+      : horizonSource ?? source?.closest('[data-native-connection-view]') ?? requireElement('[data-connection-templates]');
     const originLabel = target.kind === 'session' ? (source?.closest('[data-score-projection]')
       ? `Coordination horizon${target.periodId ? ` · ${studio.read().state.scoreSettings.cadence?.periods.find(period => period.id === target.periodId)?.label ?? ''}` : ''}`
       : source?.closest('[data-native-connection-view]') ? 'Coordination connections'
@@ -197,7 +235,8 @@ export function mountCoordinationPanel(root, options = {}) {
     const container = target.kind === 'session' && horizonSource ? scorePanel.getSessionSlot()
       : anchor.matches('[data-connection-templates]') ? anchor.querySelector('[data-team-rack-editor]') : null;
     workPanel?.setRackMode?.(target.kind === 'session' && Boolean(container));
-    rackEditor.show({ ...target, label: record.label ?? record.sharedObject, originLabel }, source, anchor, { container });
+    rackEditor.show({ ...target, label: record.label ?? record.sharedObject, originLabel }, source, anchor,
+      { container, arrival: current?.open ? 'change' : 'open', originRoot: horizonSource ?? anchor });
     render();
     const panel = rackEditor.element.querySelector('details');
     if (!panel.open || panel.hidden) { rackEditor.hide(); return; }
@@ -209,7 +248,8 @@ export function mountCoordinationPanel(root, options = {}) {
         ?? fields.find(control => control.matches('input,select,textarea')) ?? fields[0])?.focus({ preventScroll: true });
     }
     motion?.indicate(rackEditor.element, { kind: 'inspection' });
-    revealStudioDestination(occurrenceFocused ? document.activeElement : rackEditor.element);
+    if (!container || target.kind === 'person' && horizonSource)
+      revealStudioDestination(occurrenceFocused ? document.activeElement : rackEditor.element);
   }
   function announce(message) { text('status', message); }
   function resumePeople() {
@@ -429,6 +469,9 @@ export function mountCoordinationPanel(root, options = {}) {
     if (disposed) return;
     const navigation = resolveScoreDestination(target, studio.read().state);
     if (!navigation) return;
+    if (navigation.kind === 'person' && origin.source && activeChapter === 'coordination') {
+      openRackEditor({ kind: 'person', id: target.id }, origin.source); return;
+    }
     if (navigation.kind === 'work' && origin.source) {
       openRackEditor({ ...target, kind: 'session' }, origin.source); return;
     }
@@ -456,9 +499,16 @@ export function mountCoordinationPanel(root, options = {}) {
       openingRackKind = 'session';
       result = workPanel?.createAccepted(context);
     } finally { openingRackKind = null; }
-    if (result?.fallback) { createSessionFromHorizon(context); return; }
+    if (result?.fallback) {
+      // Empty plans need the canonical creation draft. Its local rack already
+      // supplies Close; there is no separate score form to return through.
+      const draft = workPanel?.create(context);
+      if (!draft?.ok) announce(draft?.error?.message ?? 'Open the session editor to continue.');
+      return;
+    }
     if (!result?.accepted) { announce(result?.error?.message ?? 'Open the session editor to continue.'); return; }
     rackCreation = { kind: 'session', id: result.id, projection: result.projection, entry };
+    if (anchor.matches('[data-score-projection]')) scorePanel?.showPlan(result.id);
     if (result.opened && !disposed && studio.read() === result.projection) {
       openRackEditor({ kind: 'session', id: result.id, periodId: context?.periodId }, entry());
     }
@@ -485,18 +535,6 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!result.ok) { announce(result.error.message); return; }
     render(); rackCreation = null;
     announce(`${creation.kind === 'connection' ? 'Handoff' : creation.kind === 'team' ? 'Team' : 'Session'} addition undone.`);
-  }
-  function createSessionFromHorizon(context) {
-    if (disposed) return;
-    const held = editing.read().parked.some(row => row.kind === 'score');
-    const result = workPanel?.create(context);
-    if (!result?.ok) { announce(result?.error?.message ?? 'Open the session editor to continue.'); return; }
-    retainReturnAncestors('score', 'score');
-    returnRoutes.push({ kind: 'score', target: 'score', held, creating: 'session', creationTarget: result.view.draft.sessionId });
-    render(); renderReturnRoute();
-    const destination = root.querySelector('[data-native-session-editor]');
-    revealStudioDestination(destination);
-    destination?.querySelector('[name="label"]')?.focus({ preventScroll: true });
   }
   function useHorizonExample(id) {
     const create = { 'service-request-pilot': createShowcasePlan, 'service-request-rollout': createQuarterShowcasePlan }[id];
@@ -536,7 +574,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const { kind, target, field } = request, view = editing[kind].read();
     const key = { session: 'sessionId', connection: 'connectionId', contribution: 'contributionId', assembly: 'assemblyId', capability: 'capabilityId', change: 'changeId', assurance: 'assuranceId' }[kind];
     if (view.status !== 'editing' || view.draft?.[key] !== target) return;
-    const scope = { session: '[data-native-session-editor]', connection: '[data-native-connection-editor]', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]', capability: '[data-capability-form]', change: '[data-change-form]', assurance: '[data-assurance-form]' }[kind];
+    const scope = { session: '[data-native-configure] form', connection: '[data-connection-configure] form', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]', capability: '[data-capability-form]', change: '[data-change-form]', assurance: '[data-assurance-form]' }[kind];
     const form = root.querySelector(scope), input = form?.querySelector(`[name="${field}"]`)
       ?? form?.querySelector(`[data-${kind}-field="${field}"]`);
     if (!input) return;
@@ -864,6 +902,7 @@ export function mountCoordinationPanel(root, options = {}) {
     responsibilityPanel?.dispose();
     assemblyPanel?.dispose();
     teamPanel?.dispose();
+    ampUndo.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
     returnRoutes.length = 0; pendingReturnFocus = null; renderReturnRoute();
@@ -882,6 +921,17 @@ export function mountCoordinationPanel(root, options = {}) {
 
   const receiver = Object.freeze({ read: () => workPanel?.read() ?? editor.read(), refresh: render, dispose });
   try {
+    listen(ampUndo, 'click', () => {
+      if (disposed || ampUndo.disabled) return;
+      const expected = ampHistoryProjection;
+      if (expected !== studio.read()) { render(); return; }
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      if (disposed) return;
+      const result = studio.undo(expected);
+      render();
+      if (!disposed) announce(result.ok ? 'Edit undone.' : result.error.message);
+    });
     motion = mountStudioMotion(root);
     render();
     listen(root, 'click', click);
@@ -893,7 +943,7 @@ export function mountCoordinationPanel(root, options = {}) {
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
       onBegin: () => beginCoordination('session'), onRecordCreated: prerequisiteCreated,
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
-      onClose: closeRackEditor, onAccepted: () => render(), onEditing: () => render(),
+      onClose: closeRackEditor, onAccepted: () => render(), onEditing: () => { borrowCurrentSession(); render(); },
     });
     const sessionWorkspace = root.querySelector('[data-native-workspace="session"]');
     if (sessionWorkspace) listen(sessionWorkspace, 'toggle', syncSessionReceiver);
@@ -918,7 +968,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (scoreRoot) scorePanel = mountScorePanel(scoreRoot, { studio, editing,
       onBegin: () => beginCoordination('score'), canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
-      onNavigate: navigateFromScore, onInspect: element => motion?.indicate(element, { kind: 'inspection' }),
+      onNavigate: navigateFromScore, onLoadPlan: preparePlanLoad, onInspect: element => motion?.indicate(element, { kind: 'inspection' }),
       onCreateSession: createSessionInRack, onExample: useHorizonExample, onViewChanged: syncSessionReceiver,
       onAccepted: () => render(), onEditing: () => render() });
     const teamRoot = root.querySelector('[data-native-team-editor]');
@@ -962,17 +1012,6 @@ export function mountCoordinationPanel(root, options = {}) {
       },
     });
     if (rackEditor) {
-      planShelfUndo = document.createElement('button'); planShelfUndo.type = 'button';
-      planShelfUndo.textContent = 'Undo edit'; planShelfUndo.dataset.planShelfUndo = '';
-      listen(planShelfUndo, 'click', () => {
-        if (disposed || planShelfUndoProjection !== studio.read()) return;
-        const parked = editing.park();
-        if (!parked.ok) { announce(parked.error.message); return; }
-        const result = studio.undo(planShelfUndoProjection);
-        if (!result.ok) { announce(result.error.message); return; }
-        render(); announce('Edit undone.');
-        (planShelfUndo.hidden ? root.querySelector('[data-cadence-key="cassette-add"]') : planShelfUndo)?.focus();
-      });
       creationUndo = document.createElement('button'); creationUndo.type = 'button';
       creationUndo.textContent = 'Undo session addition'; creationUndo.dataset.rackCreationUndo = '';
       creationUndo.hidden = true;

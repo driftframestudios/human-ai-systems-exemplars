@@ -5,7 +5,7 @@ let sequence = 0;
 
 // A presentation of the session owner's placement field. Selection stays local;
 // all value changes return to the same draft token and acceptance route.
-export function mountSessionOccurrenceControls(document, { onPlacement, onAdd }) {
+export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, onRemove }) {
   const instance = ++sequence;
   const node = (tag, className, text) => {
     const element = document.createElement(tag);
@@ -18,14 +18,16 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
   const legend = node('legend', '', 'Working sessions');
   const header = node('div', 'studio-occurrences__header');
   const count = node('output', 'studio-occurrences__count');
-  const add = node('button', 'native-control--create studio-rack-add', 'Add occurrence');
+  const add = node('button', 'native-control--create studio-rack-add', 'Add session');
   add.type = 'button'; add.dataset.sessionOccurrenceAdd = '';
+  const remove = node('button', 'native-control--remove', 'Remove session');
+  remove.type = 'button'; remove.dataset.sessionOccurrenceRemove = '';
   const pads = node('div', 'studio-occurrences__pads');
-  pads.setAttribute('role', 'group'); pads.setAttribute('aria-label', 'Choose a working session occurrence');
+  pads.setAttribute('role', 'group'); pads.setAttribute('aria-label', 'Choose a working session');
   const pager = node('div', 'studio-occurrences__pager');
   const previous = node('button', '', 'Previous'), next = node('button', '', 'Next');
   previous.type = next.type = 'button';
-  previous.setAttribute('aria-label', 'Previous occurrences'); next.setAttribute('aria-label', 'Next occurrences');
+  previous.setAttribute('aria-label', 'Previous sessions'); next.setAttribute('aria-label', 'Next sessions');
   const pageLabel = node('span');
   pager.append(previous, pageLabel, next);
   const placement = node('div', 'studio-occurrences__placement');
@@ -36,8 +38,8 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
   periodField.append(periodLegend, periods); subdivisionField.append(subdivisionLegend, subdivisions);
   placement.append(periodField, subdivisionField);
   const error = node('p', 'native-coordination__error');
-  const meaning = node('p', 'studio-occurrences__meaning', 'Duration and people apply to every occurrence.');
-  header.append(count, add); root.append(legend, header, pads, pager, placement, meaning, error);
+  const meaning = node('p', 'studio-occurrences__meaning', 'Duration and people apply to every session.');
+  header.append(count, add, remove); root.append(legend, header, pads, pager, placement, meaning, error);
   let selected = 0, current = null, signature = null, padSignature = null, identity = null, disposed = false;
   let periodControls = new Map(), subdivisionControls = new Map(), padControls = new Map();
   const cleanup = [];
@@ -55,8 +57,10 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
     current = value;
     if (identity !== value.identity) { identity = value.identity; selected = 0; }
     selected = Math.max(0, Math.min(selected, value.count - 1));
-    count.textContent = `${value.count} ${value.count === 1 ? 'occurrence' : 'occurrences'}`;
+    count.textContent = `${value.count} ${value.count === 1 ? 'session' : 'sessions'}`;
     add.disabled = !value.canAdd;
+    remove.disabled = !value.canRemove || value.count === 0;
+    remove.setAttribute('aria-label', `Remove session ${selected + 1}`);
     placement.hidden = value.count === 0;
     const page = Math.floor(selected / PAGE_SIZE), first = page * PAGE_SIZE, last = Math.min(value.count, first + PAGE_SIZE);
     const nextPads = `${value.count}:${page}`;
@@ -77,7 +81,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
     for (const [index, button] of padControls) {
       const entry = placements.get(index), label = entry ? labels.get(entry.periodId) ?? 'Unplaced' : 'Unplaced';
       button.querySelector('small').textContent = label;
-      button.setAttribute('aria-label', `Occurrence ${index + 1} · ${label}${entry ? ` · ${unit} ${entry.subdivision}` : ''}`);
+      button.setAttribute('aria-label', `Session ${index + 1} · ${label}${entry ? ` · ${unit} ${entry.subdivision}` : ''}`);
       button.setAttribute('aria-pressed', String(index === selected));
       button.dataset.placed = String(Boolean(entry));
     }
@@ -94,7 +98,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
         radio(String(part), `${unit} ${part}`, 'subdivision', subdivisions, subdivisionControls);
     }
     const entry = placements.get(selected);
-    periodLegend.textContent = `Occurrence ${selected + 1} · ${value.cadence.basis === 'sprint' ? 'Sprint' : 'Quarter'}`;
+    periodLegend.textContent = `Session ${selected + 1} · ${value.cadence.basis === 'sprint' ? 'Sprint' : 'Quarter'}`;
     subdivisionLegend.textContent = unit;
     for (const [id, input] of periodControls) input.checked = id === (entry?.periodId ?? '');
     for (const [part, input] of subdivisionControls) input.checked = part === String(entry?.subdivision ?? '');
@@ -122,6 +126,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd })
     onAdd();
     if (current?.count > selected) select(selected, { focus: true });
   });
+  listen(remove, 'click', () => { if (current?.canRemove && current.count > 0) onRemove?.(selected); });
   listen(previous, 'click', () => select(Math.max(0, selected - PAGE_SIZE), { focus: true }));
   listen(next, 'click', () => select(Math.min(current.count - 1, selected + PAGE_SIZE), { focus: true }));
   return Object.freeze({ root, render, select, dispose() {

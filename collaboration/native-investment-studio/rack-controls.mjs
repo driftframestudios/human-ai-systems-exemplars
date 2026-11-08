@@ -100,7 +100,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
         && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)
       ?? candidates[0];
     target?.focus({ preventScroll: true });
-    revealStudioDestination(target);
+    if (host.dataset.rackPlacement !== 'inset') revealStudioDestination(target);
   }
   const requestClose = () => onClose();
   close.addEventListener('click', requestClose);
@@ -110,12 +110,14 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     isOpen: kind => !host.hidden && selected?.kind === kind,
     isOrigin: source => Boolean(source && originScope?.contains(source) && originKey === keyOf(source)
       && originPhase === source.closest('[data-delivery-phase]')?.dataset.deliveryPhase),
-    show(record, source, anchor, { container = null } = {}) {
+    show(record, source, anchor, { container = null, arrival = null, originRoot = null } = {}) {
+      host.dataset.rackArrival = arrival ?? (host.hidden ? 'open' : 'change');
+      host.dataset.rackArrivalVariant = host.dataset.rackArrivalVariant === 'a' ? 'b' : 'a';
       if (selected?.kind !== record.kind) restore();
       selected = { ...record }; origin = source;
       host.dataset.rackEditorKind = record.kind;
       host.dataset.rackPlacement = container ? 'inset' : 'adjacent';
-      originScope = anchor; originPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
+      originScope = originRoot ?? anchor; originPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
       originKey = keyOf(source);
       if (container) { if (host.parentElement !== container) container.append(host); }
       else if (anchor.nextSibling !== host) anchor.after(host);

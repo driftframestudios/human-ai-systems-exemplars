@@ -1,3 +1,4 @@
+import { animateRackChange } from './reel-control.mjs';
 import { ROLE_CATALOGUES, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { ROLE_FORMS, CONTRIBUTION_FORMS, makeRoleTarget, describeRoleTarget,
   makeContributionTarget, describeContributionTarget } from './command-draft.mjs';
@@ -11,7 +12,7 @@ export const RESPONSIBILITY_LABELS = Object.freeze({
   workIds: 'Supporting sessions', reviewBoundary: 'Review before use', decisionBoundary: 'Decision boundary',
 });
 const ROLE_FIELDS = Object.freeze(['functionId', 'seniorityId', 'postureId', 'enablerId', 'change', 'qualityId', 'aiId', 'decisionId']);
-const CONTRIBUTION_FIELDS = Object.freeze(['categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'reviewBoundary', 'decisionBoundary']);
+const CONTRIBUTION_FIELDS = Object.freeze(['categoryId', 'receiverPersonId', 'decisionOwnerPersonId']);
 const CATEGORY_LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
 const CATALOGUE_LABELS = new Map(Object.entries(ROLE_CATALOGUES).map(([field, rows]) => [field, new Map(rows.map(row => [row.id, row.label]))]));
 const CHANGE_LABELS = new Map(CHANGE_FRAMEWORKS.flatMap(framework => framework.components.map(component =>
@@ -64,6 +65,8 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   let selectedPerson = null, mode = 'role', generation = 0, disposed = false, retired = null;
   let membershipProjection = null, membershipIds = null, memberControls = new Map();
   let contributionButtons = new Map(), membersTarget = null, memberOrder = [];
+  let selectedRoleField = 'functionId';
+  const rolePads = new Map();
 
   function listen(element, type, handler) { element.addEventListener(type, handler); cleanup.push(() => element.removeEventListener(type, handler)); }
   function owns(epoch) { return !disposed && epoch === generation; }
@@ -104,7 +107,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (kind === 'role') {
       const raw = roleRaw(row);
       const facts = ROLE_FIELDS.filter(field => raw[field]).slice(0, 2).map(field => responsibilityValue(field, raw[field]));
-      return `Roles · ${named(row)} · ${facts.join(' · ') || 'Add role details'}${draft?.changed ? ' · Unsaved edits' : ''}`;
+      return `Role mix · ${named(row)} · ${facts.join(' · ') || 'Add role details'}${draft?.changed ? ' · Unsaved edits' : ''}`;
     }
     if (descriptor?.mode === 'remove' && draft) return `Remove ${CATEGORY_LABELS.get(row?.categoryId) ?? 'contribution'}`;
     if (descriptor?.mode === 'create' && draft) return 'New contribution';
@@ -131,23 +134,32 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       contribution.inputs[field].replaceChildren(option('', 'Unassigned'), ...next.state.people.map(person => option(person.id, named(person))));
     }
     contributionButtons = new Map();
-    const fragment = document.createDocumentFragment();
-    for (const row of next.state.contributions) {
-      const item = document.createElement('li'), open = button(CATEGORY_LABELS.get(row.categoryId), 'open', row.id);
-      open.dataset.contributionId = row.id;
-      open.classList.add('native-responsibility__selector');
-      open.setAttribute('aria-controls', contribution.configure.id);
-      open.setAttribute('aria-expanded', 'false');
-      const detail = document.createElement('p');
-      detail.textContent = `Receiver: ${named(people.get(row.receiverPersonId))}. Who decides: ${named(people.get(row.decisionOwnerPersonId))}.`;
-      const sessions = document.createElement('p');
-      sessions.textContent = row.workIds.length ? row.workIds.map(id => named(works.get(id))).join(' · ') : 'Supporting sessions are unassigned.';
-      const remove = button('Remove contribution', 'remove', row.id);
-      remove.className = 'native-control--remove';
-      remove.setAttribute('aria-label', `Remove contribution: ${CATEGORY_LABELS.get(row.categoryId)}`);
-      item.append(open, detail, sessions, remove); fragment.append(item); contributionButtons.set(row.id, open);
+    const table = document.createElement('table'); table.className = 'studio-contribution-tracks';
+    const caption = document.createElement('caption'); caption.textContent = 'Supporting sessions'; table.append(caption);
+    const head = document.createElement('thead'), headings = document.createElement('tr');
+    for (const text of ['Contribution', ...next.state.work.map(work => work.label), '']) {
+      const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = text; headings.append(cell);
     }
-    list.replaceChildren(fragment); empty.hidden = contributions.size > 0;
+    head.append(headings); table.append(head);
+    const body = document.createElement('tbody');
+    for (const row of next.state.contributions) {
+      const item = document.createElement('tr'), title = document.createElement('th'); title.scope = 'row';
+      const open = button(CATEGORY_LABELS.get(row.categoryId), 'open', row.id);
+      open.dataset.contributionId = row.id; open.classList.add('native-responsibility__selector', 'studio-track-key');
+      open.setAttribute('aria-controls', contribution.configure.id); open.setAttribute('aria-expanded', 'false');
+      const receiver = document.createElement('small'); receiver.textContent = `For ${named(people.get(row.receiverPersonId))}`;
+      open.append(receiver); title.append(open); item.append(title); contributionButtons.set(row.id, open);
+      for (const work of next.state.work) {
+        const cell = document.createElement('td'), included = row.workIds.includes(work.id);
+        const pad = button(included ? '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
+        pad.dataset.included = String(included); pad.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? 'linked' : 'available'}. Edit contribution.`);
+        pad.setAttribute('aria-controls', contribution.configure.id); cell.append(pad); item.append(cell);
+      }
+      const removal = document.createElement('td'), remove = button('Remove', 'remove', row.id);
+      remove.className = 'native-control--remove'; remove.setAttribute('aria-label', `Remove contribution: ${CATEGORY_LABELS.get(row.categoryId)}`);
+      removal.append(remove); item.append(removal); body.append(item);
+    }
+    table.append(body); table.hidden = contributions.size === 0; list.replaceChildren(table); empty.hidden = contributions.size > 0;
   }
   function renderMembers(ids) {
     if (membersTarget !== contribution.target) { membersTarget = contribution.target; memberOrder = []; membershipIds = null; }
@@ -174,7 +186,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
         actions.append(button('Move up', 'work-up', id), button('Move down', 'work-down', id)); item.append(label, actions);
       }
       const position = positions.get(id);
-      item.dataset.selected = String(positions.has(id)); input.checked = positions.has(id);
+      item.dataset.responsibilityMember = id; item.dataset.selected = String(positions.has(id)); input.checked = positions.has(id);
       item.querySelector('[data-member-name]').textContent = row ? named(row) : `${id} · removed session`;
       item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button');
@@ -184,6 +196,15 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     }
     if (rows.length !== contribution.members.children.length || rows.some((row, index) => row !== contribution.members.children[index]))
       contribution.members.replaceChildren(...rows);
+  }
+
+  function selectRoleField(field) {
+    if (!ROLE_FIELDS.includes(field)) return;
+    selectedRoleField = field;
+    for (const [key, pad] of rolePads) {
+      pad.setAttribute('aria-pressed', String(key === field));
+      groups.role.inputs[key].closest('.native-responsibility__field').hidden = key !== field;
+    }
   }
 
   function renderGroup(group) {
@@ -271,7 +292,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function focusForm(kind) {
     const view = editing[kind].read(), group = groups[kind], descriptor = describe(keyFor(kind, view.draft));
     if (view.status === 'stale') (view.creationConflict ? contribution.fresh : group.recovery.querySelector('button')).focus();
-    else if (view.status === 'editing') (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.fields[0]]).focus();
+    else if (view.status === 'editing') (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.kind === 'role' ? selectedRoleField : group.fields[0]]).focus();
   }
   function reveal(kind) {
     for (const group of Object.values(groups)) { group.acknowledged = group.kind === kind; group.configure.open = group.kind === kind; }
@@ -387,7 +408,9 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    changed('contribution', operate('contribution', 'setIds', view.draft.token, 'workIds', ids), epoch, () => memberControls.get(id)?.focus());
+    const update = () => changed('contribution', operate('contribution', 'setIds', view.draft.token, 'workIds', ids), epoch, () => memberControls.get(id)?.focus());
+    if (delta !== null) animateRackChange(contribution.members, update, { selector: '[data-responsibility-member]', key: 'responsibilityMember' });
+    else update();
   }
   function edit(kind, event) {
     const group = groups[kind], field = event.target.name;
@@ -401,6 +424,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     const control = event.target.closest('[data-responsibility-action]');
     if (!control || !root.contains(control) || control.disabled || disposed) return;
     const action = control.dataset.responsibilityAction, id = control.dataset.responsibilityId;
+    if (action === 'role-field') { selectRoleField(control.dataset.roleField); return; }
     if (action === 'create') { create(); return; }
     if (action === 'open' || action === 'remove') {
       const target = makeContributionTarget(action === 'open' ? 'contribution.update' : 'contribution.remove', id);
@@ -467,6 +491,11 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const id = event.target.dataset.responsibilityWork;
       if (memberControls.get(id) === event.target) membership(id, null, event.target.checked);
     });
+    const rail = document.createElement('div'); rail.className = 'studio-role-pads'; rail.setAttribute('role', 'group'); rail.setAttribute('aria-label', 'Role details');
+    for (const field of ROLE_FIELDS) {
+      const pad = button(RESPONSIBILITY_LABELS[field], 'role-field'); pad.dataset.roleField = field; rolePads.set(field, pad); rail.append(pad);
+    }
+    groups.role.fieldset.prepend(rail); cleanup.push(() => rail.remove()); selectRoleField(selectedRoleField);
     render();
     if (disposed) return receiver;
     toolbar.hidden = false; list.hidden = false; add.disabled = false;

@@ -11,8 +11,8 @@ reviewed 7 November 2026. It inherits the shared control and motion treatment in
 The separately approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
 preserves an exact `dev` study reference. Its smaller equal-sized dials and
 neighboring occurrence panel have their own scope. Main retains the established
-geometry below; dev's loaded session receiver adapts its compact form factor in
-#811 while keeping the same acceptance owners.
+geometry below; dev duration receivers adopt the complete preserved module in
+#820 while keeping the same acceptance owners.
 
 ## Fit and smallest useful dose
 
@@ -148,8 +148,7 @@ its own [Loaded Tape Duration Panel contract](loaded-tape-duration-panel.md) at
 revision `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`. The complete panel retains its
 compact title/readout row, peach Hours and paper Minutes, equal `64px` dials,
 exact fields and circular steppers. These dimensions define the preserved study
-specimen. The receiving dev session deck below adopts its scale through the
-Showcase's own artwork.
+specimen. The receiving dev duration module below adopts its exact face and step geometry.
 
 The two neighboring modules use `minmax(230px,1fr) minmax(240px,1fr)` columns,
 with `.7rem` gap and padding, above `1000px`. They stack at `1000px` and below.
@@ -163,22 +162,19 @@ The planning specimen itself is authorized for main/dev preservation in #810.
 
 ### Receiving dev session composition
 
-[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
-applies compact geometry only within `studio-session-deck`. Shared instrument CSS
-owns the dark duration enclosure, title/readout row, equal 4rem dials and 2rem
-circular steps. Session CSS owns the dark form and chocolate occurrence/count
-housing. Hours keeps peach and Minutes paper. Their fixed light, face inset,
-pointer and raised combined output retain Showcase artwork; exact fields and
-their separated circular step pair sit below-right of each dial and wrap locally
-when space is narrow.
+#820 supersedes #811's partial adaptation with the preserved workbench duration
+module throughout the dev Showcase. Shared instrument CSS owns the dark enclosure,
+title/readout row, equal 64px dials, 8px face inset and 30px circular steps. The
+stationary gradient, rim and shadow surround a rotating 4×12px pointer. Hours
+keeps peach and Minutes paper; the 68px exact field and two circular buttons sit
+below-right with the preserved .5rem horizontal gap. This is the adopted duration
+skin; monetary dials retain their distinct coarse/fine contract.
 
-Duration and placement share equal columns at the Studio's 44rem container seam,
-then stack. The count remains a compact chocolate footer to duration because it
-currently supplies decrement. Occurrence pads select and place repetitions;
-Add occurrence and the count still use the canonical draft owner. This adaptation
-supersedes the prior loaded-session geometry on dev while preserving the exact
-planning specimen and other rate/duration receivers. Main adoption remains
-human-cued.
+Duration and placement share equal columns in a wide session rack, then stack.
+Session pads select and place repetitions, with Add session and Remove session
+using the canonical draft owner. The duplicate numeric count stays synchronized
+and hidden in rack mode. Main retains its accepted reference until promotion is
+human-cued. The planning specimen itself remains unchanged.
 
 ### Participant time shares
 

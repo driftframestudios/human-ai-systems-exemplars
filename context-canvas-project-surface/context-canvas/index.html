@@ -247,7 +247,7 @@
               <div data-connection-template-body></div>
               <p class="native-coordination__status" data-connection-template-status role="status" aria-live="polite" aria-atomic="true"></p>
             </div>
-            <div data-native-connection-view></div>
+            <div data-native-connection-view hidden></div>
             <section class="native-connection" data-native-connection-editor aria-labelledby="native-connection-title">
               <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" class="native-control--create" data-connection-action="create" disabled>Add connection</button></div>
               <details class="native-coordination__configuration native-connection__configuration" data-connection-configure hidden>
@@ -313,7 +313,7 @@
               <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
             </section>
           </section>
-          <details class="native-coordination__workspace" data-native-workspace="session"><summary>Working sessions</summary>
+          <details class="native-coordination__workspace" data-native-workspace="session" hidden><summary>Working sessions</summary>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
@@ -455,8 +455,7 @@
             <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
           </section>
             <button type="button" class="native-control--create" data-assembly-action="person-create" disabled>Add person</button>
-          <details class="studio-people-rates">
-            <summary>Rates and available time</summary>
+          <section class="studio-people-rates" aria-label="People and available time">
           <div class="native-assembly__toolbar">
             <div class="native-assembly__arrange" data-assembly-people-tools>
               <label for="assembly-person-order">Person to arrange</label>
@@ -466,7 +465,7 @@
           </div>
           <ul class="native-team__roster" data-team-roster></ul>
           <p data-team-empty hidden>This plan has no people.</p>
-          </details>
+          </section>
           <details class="native-coordination__configuration" data-person-configure hidden>
             <summary>Settings · <span data-person-name></span></summary>
             <div class="native-coordination__recovery" data-person-recovery hidden>
@@ -644,8 +643,8 @@
           </details>
           <p class="native-coordination__status" data-assembly-status role="status" aria-live="polite" aria-atomic="true"></p>
           <section class="native-responsibility" aria-labelledby="native-responsibility-title">
-            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Human review</h4><button type="button" class="native-control--create" data-responsibility-action="create" disabled>Add contribution</button></div>
-            <ul class="native-responsibility__list" data-responsibility-list hidden></ul>
+            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Contributions and sessions</h4><button type="button" class="native-control--create" data-responsibility-action="create" disabled>Add contribution</button></div>
+            <div class="native-responsibility__list" data-responsibility-list hidden></div>
             <p class="native-coordination__hint" data-responsibility-empty hidden>Add an output and name who reviews it.</p>
             <details class="native-coordination__configuration native-responsibility__configuration" data-responsibility-configure="contribution" hidden>
               <summary>Contribution settings</summary>
@@ -682,18 +681,6 @@
                       <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="contribution">Add a session</button>
                       <p class="native-coordination__error" id="contribution-workIds-error" data-responsibility-error="workIds"></p>
                     </div>
-                    <div class="native-responsibility__grid">
-                  <div class="native-responsibility__field">
-                    <label for="contribution-reviewBoundary">Review before use</label>
-                    <textarea id="contribution-reviewBoundary" name="reviewBoundary" rows="3" aria-describedby="contribution-reviewBoundary-error"></textarea>
-                    <p class="native-coordination__error" id="contribution-reviewBoundary-error" data-responsibility-error="reviewBoundary"></p>
-                  </div>
-                  <div class="native-responsibility__field">
-                    <label for="contribution-decisionBoundary">Decision boundary</label>
-                    <textarea id="contribution-decisionBoundary" name="decisionBoundary" rows="3" aria-describedby="contribution-decisionBoundary-error"></textarea>
-                    <p class="native-coordination__error" id="contribution-decisionBoundary-error" data-responsibility-error="decisionBoundary"></p>
-                  </div>
-                    </div>
                   </div>
                   <p class="native-responsibility__confirm" data-responsibility-confirm hidden></p>
                   <ul class="native-responsibility__dependencies" data-responsibility-dependencies hidden></ul>
@@ -709,7 +696,7 @@
           <header class="native-capabilities__heading">
             <p class="native-coordination__plate">Plan what your users can do</p>
             <h3 id="native-capabilities-title" class="native-zine__heading">Customer abilities and team practices</h3>
-            <p>Choose an action, turn its card over, and plan the work that supports it. Several cards can share the same session and its cost.</p>
+            <p>Choose a cell to connect people, preparation, or review to the work.</p>
           </header>
           <div class="native-capabilities__catalogues">
             <section aria-labelledby="native-ability-catalogue-title">
@@ -726,14 +713,11 @@
           <article class="native-capability-card" data-capability-selected hidden aria-labelledby="native-capability-title">
             <header><h4 id="native-capability-title" data-capability-title></h4></header>
             <div class="native-coordination__actions native-capability-card__actions">
-              <button type="button" data-capability-action="reverse" disabled>Inspect reverse</button>
-              <button type="button" data-capability-action="beside" disabled>Open beside</button>
               <button type="button" data-capability-action="configure" disabled>Plan this ability</button>
               <button type="button" class="native-control--remove" data-capability-action="remove" disabled>Remove from plan</button>
             </div>
             <div class="native-capability-card__faces">
               <section class="native-capability-card__front" data-capability-front aria-label="Card overview"></section>
-              <section class="native-capability-card__reverse" data-capability-reverse aria-label="Supporting work and observations" hidden></section>
             </div>
           </article>
           <details class="native-capability-settings" data-capability-configure>

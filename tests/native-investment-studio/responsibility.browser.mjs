@@ -87,8 +87,6 @@ async function contribution(page, category = 'source-retrieval') {
   await field(page, 'contribution', 'receiverPersonId').selectOption('product-one');
   await field(page, 'contribution', 'decisionOwnerPersonId').selectOption('engineering-one');
   await member(page, 'review').check();
-  await field(page, 'contribution', 'reviewBoundary').fill('Check the original sources.');
-  await field(page, 'contribution', 'decisionBoundary').fill('Choose which sources to use.');
 }
 
 for (const engine of names) {
@@ -96,8 +94,11 @@ for (const engine of names) {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
     await role(page);
-    await expect(settings(page, 'role').locator('summary')).toHaveText('Roles · product-one · Add role details');
-    for (const [name, value] of Object.entries(expectedRole)) await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
+    await expect(settings(page, 'role').locator('summary')).toHaveText('Role mix · product-one · Add role details');
+    for (const [name, value] of Object.entries(expectedRole)) {
+      await settings(page, 'role').locator(`[data-role-field="${name}"]`).click();
+      await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
+    }
     await apply(page, 'role').click();
     await expect(settings(page, 'role')).toHaveAttribute('open', '');
     await expect(apply(page, 'role')).toBeFocused();
@@ -115,19 +116,19 @@ for (const engine of names) {
     const accepted = await state(page);
     assert.deepEqual(accepted.contributions.map(({ id, ...row }) => row), categories.map(categoryId => ({
       categoryId, receiverPersonId: 'product-one', decisionOwnerPersonId: 'engineering-one', workIds: ['review'],
-      reviewBoundary: 'Check the original sources.', decisionBoundary: 'Choose which sources to use.',
+      reviewBoundary: null, decisionBoundary: null,
     })));
     assert.deepEqual(await page.evaluate(() => window.responsibilityFixture.studio.read().result), before);
-    await expect(people(page).locator('[data-responsibility-list] > li')).toHaveCount(6);
-    await expect(people(page).locator('[data-responsibility-list]')).toContainText('Who decides: engineering-one');
-    const opener = people(page).locator('[data-responsibility-action="open"]').last();
+    await expect(people(page).locator('[data-responsibility-list] tbody tr')).toHaveCount(6);
+    await expect(people(page).locator('[data-responsibility-list]')).toContainText('For product-one');
+    const opener = people(page).locator('.native-responsibility__selector[data-responsibility-action="open"]').last();
     await expect(opener).toHaveAttribute('aria-expanded', 'true');
     assert.equal(await opener.getAttribute('aria-controls'), await settings(page, 'contribution').getAttribute('id'));
-    await field(page, 'contribution', 'reviewBoundary').fill('Keep this proposed review.');
+    await field(page, 'contribution', 'receiverPersonId').selectOption('engineering-one');
     await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'false');
     await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
     await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'true');
-    await expect(field(page, 'contribution', 'reviewBoundary')).toHaveValue('Keep this proposed review.');
+    await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('engineering-one');
     assert.deepEqual((await state(page)).contributions, accepted.contributions);
     await action(page, 'contribution', 'cancel').click();
     await tab(page, 'investment').click();
@@ -136,6 +137,27 @@ for (const engine of names) {
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="redo"]').click();
     assert.deepEqual((await state(page)).contributions, accepted.contributions);
     await expect(total(page)).toHaveText('$1,200.00');
+  });
+
+  test(`${engine}: session support pads reflect edits while stored contribution notes survive`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.responsibilityFixture;
+      const plan = structuredClone(studio.read().state);
+      plan.contributions.push({ id: 'kept-source', categoryId: 'source-retrieval', receiverPersonId: 'product-one', decisionOwnerPersonId: 'engineering-one',
+        workIds: [], reviewBoundary: 'Check source dates.', decisionBoundary: 'Product lead decides.' });
+      studio.replace(plan, studio.read()); controller.refresh();
+    });
+    const support = people(page).locator('.studio-contribution-tracks__pad');
+    await expect(support).toHaveAttribute('data-included', 'false');
+    await support.click();
+    await expect(settings(page, 'contribution').locator('textarea')).toHaveCount(0);
+    await member(page, 'review').check(); await apply(page, 'contribution').click();
+    await expect(support).toHaveAttribute('data-included', 'true');
+    const contribution = (await state(page)).contributions.find(row => row.id === 'kept-source');
+    assert.deepEqual(contribution.workIds, ['review']);
+    assert.equal(contribution.reviewBoundary, 'Check source dates.');
+    assert.equal(contribution.decisionBoundary, 'Product lead decides.');
   });
 
   test(`${engine}: saved role and contribution forms retain exact targets through renamed, retired and conflicting records`, { timeout: 60000 }, async t => {
@@ -168,16 +190,16 @@ for (const engine of names) {
     if (await root(page).locator('[data-native-saved]').getAttribute('open') === null) await root(page).locator('[data-native-saved] > summary').click();
     await root(page).locator(`[data-saved-open="${contributionKey}"]`).click();
     await expect(action(page, 'contribution', 'freshId')).toBeVisible();
-    await expect(field(page, 'contribution', 'reviewBoundary')).toHaveValue('Check the original sources.');
+    await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('product-one');
     await action(page, 'contribution', 'freshId').click();
     await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('product-one');
     await expect(field(page, 'contribution', 'receiverPersonId').locator('option:checked')).toHaveText('Research lead · retired');
     await apply(page, 'contribution').click();
     const accepted = await state(page), added = accepted.contributions.find(row => row.id !== id);
     assert.ok(added); assert.equal(added.receiverPersonId, 'product-one');
-    assert.equal(added.reviewBoundary, 'Check the original sources.');
+    assert.equal(added.reviewBoundary, null);
     await expect(total(page)).toHaveText('$1,200.00');
-    await field(page, 'contribution', 'reviewBoundary').fill('Keep this draft.');
+    await field(page, 'contribution', 'receiverPersonId').selectOption('product-two');
     await page.evaluate(() => {
       const { studio, controller } = window.responsibilityFixture;
       const plan = structuredClone(studio.read().state); plan.people[1].label = 'First new name';
@@ -190,11 +212,11 @@ for (const engine of names) {
     });
     await action(page, 'contribution', 'review').click();
     await expect(settings(page, 'contribution').locator('fieldset')).toHaveAttribute('disabled', '');
-    await expect(field(page, 'contribution', 'reviewBoundary')).toHaveValue('Keep this draft.');
+    await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('product-two');
     await action(page, 'contribution', 'review').click();
     await expect(settings(page, 'contribution').locator('fieldset')).not.toHaveAttribute('disabled');
     await action(page, 'contribution', 'cancel').click();
-    assert.equal((await state(page)).contributions.find(row => row.id === added.id).reviewBoundary, 'Check the original sources.');
+    assert.equal((await state(page)).contributions.find(row => row.id === added.id).receiverPersonId, 'product-one');
   });
 
   test(`${engine}: supporting-session order, unresolved responsibility and explicit removal remain separate from pricing`, { timeout: 60000 }, async t => {
@@ -210,13 +232,12 @@ for (const engine of names) {
     await people(page).locator('[data-responsibility-action="work-up"][data-responsibility-id="follow-up"]').click();
     await field(page, 'contribution', 'receiverPersonId').selectOption('');
     await field(page, 'contribution', 'decisionOwnerPersonId').selectOption('');
-    await field(page, 'contribution', 'reviewBoundary').fill('');
     await apply(page, 'contribution').click();
     const row = (await state(page)).contributions[0];
     assert.deepEqual(row.workIds, ['follow-up', 'review']);
     assert.equal(row.receiverPersonId, null); assert.equal(row.decisionOwnerPersonId, null); assert.equal(row.reviewBoundary, null);
-    await expect(people(page).locator('[data-responsibility-list]')).toContainText('Receiver: Unassigned. Who decides: Unassigned.');
-    await expect(people(page).locator('[data-responsibility-list]')).toContainText('Follow-up session · retired');
+    await expect(people(page).locator('[data-responsibility-list]')).toContainText('For Unassigned');
+    await expect(people(page).locator('[data-responsibility-list]')).toContainText('Follow-up session');
     await page.evaluate(() => {
       const { studio } = window.responsibilityFixture;
       const result = studio.applyCommand({ type: 'work.remove', workId: 'follow-up' }, studio.read());
@@ -255,7 +276,7 @@ for (const engine of names) {
     const page = await open(t, engine, true);
     await role(page);
     await page.screenshot({ path: resolve(captures, `${engine}-1440.png`), fullPage: false });
-    await page.setViewportSize({ width: 320, height: 900 });
+    await page.setViewportSize({ width: 390, height: 900 });
     await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
     await contribution(page);
     await frames(page);
@@ -268,14 +289,14 @@ for (const engine of names) {
       }) }));
     assert.ok(overflow.scroll <= overflow.width + 2, JSON.stringify(overflow));
     assert.ok(overflow.controls.every(control => control.left >= -2 && control.right <= 2), JSON.stringify(overflow));
-    await field(page, 'contribution', 'reviewBoundary').focus();
-    await expect(field(page, 'contribution', 'reviewBoundary')).toBeFocused();
+    await field(page, 'contribution', 'receiverPersonId').focus();
+    await expect(field(page, 'contribution', 'receiverPersonId')).toBeFocused();
     await field(page, 'contribution', 'categoryId').scrollIntoViewIfNeeded();
     const box = await field(page, 'contribution', 'categoryId').boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     const prior = await page.evaluate(() => scrollY); await page.mouse.wheel(0, 260);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(prior);
-    await page.screenshot({ path: resolve(captures, `${engine}-320-enlarged.png`), fullPage: false });
+    await page.screenshot({ path: resolve(captures, `${engine}-390-enlarged.png`), fullPage: false });
 
     const lifecycle = await page.evaluate(async () => {
       const { mountResponsibilityPanel } = await import('/collaboration/native-investment-studio/responsibility-controller.mjs');

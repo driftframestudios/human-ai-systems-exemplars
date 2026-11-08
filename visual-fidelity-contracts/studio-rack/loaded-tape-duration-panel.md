@@ -5,7 +5,7 @@ one compact panel. Hours and Minutes share a readout, neighboring dial groups
 and exact fields, while the adjacent Working sessions panel owns repetitions
 and their placement.
 
-**Standing:** human-approved visual reference, version `0.1.1`, ID
+**Standing:** human-approved visual reference, version `0.1.2`, ID
 `vfc:loaded-tape-duration-panel`; updated 8 November 2026. The panel preserves
 its approved scale, geometry and palette with one deliberate lighting correction:
 the dial face stays still while its pointer turns. The original recall baseline is
@@ -99,8 +99,9 @@ The current study hides `.native-time__part > p`, `.native-time__feedback` and
 `.studio-repetition`. The visible quantity module therefore stays concise.
 The numeric Working sessions editor supplied by the factory remains hidden;
 numbered session pads in the neighboring panel are the visible repetition owner.
-This is the study's composition, with production validation and recovery still
-governed by their existing owners.
+The dev receiving rack uses these session pads while retaining canonical
+validation, raw fields and recovery. The quantity stepper remains synchronized
+underneath the pad interaction.
 
 ## Neighboring module and responsive context
 
@@ -181,8 +182,9 @@ reference. A proposed production adoption receives its own review for placement,
 state ownership and responsive integration.
 
 This reference supersedes the earlier open-ended sizing exploration for the
-development study's duration and Working sessions panels. The approved production
-coarse/fine duration sizes remain in [Precision Dials & Faders](precision-dials-faders.md).
+development study's duration and Working sessions panels. The dev Showcase now adopts this exact duration geometry under #820. This
+supersedes its earlier Showcase-specific duration faces and sizes; monetary
+coarse/fine controls retain [Precision Dials & Faders](precision-dials-faders.md).
 The 8 November lighting correction supersedes only the original face-rotation
 mechanism. The plan cassette's separate preserved treatment and any new VHS-C
 comparison art leave the duration geometry and colors intact.

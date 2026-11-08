@@ -5,7 +5,7 @@ select, load and revisit. The tilted cassette face carries its name, host,
 duration and session count; its stable button remains easy to point at and use
 with a keyboard. A narrow viewport turns the shelf into a horizontal strip.
 
-**Standing:** human-preserved visual reference, version `0.1.1`, ID
+**Standing:** human-preserved visual reference, version `0.1.2`, ID
 `vfc:cassette-plan-shelf`; recorded 8 November 2026. The exact art and animation
 baseline is `cedafc3f17c417cf5c90cacb5b1a696acf9cc3c1` in
 `planning/context-canvas/studio-rack-tape-study.html`. This records the approved
@@ -21,25 +21,18 @@ Showcase adoption continues on dev; its promotion to main retains human review.
 Issue #813 adopts this artwork on `dev` through
 [`tape-picker.mjs`](../../collaboration/native-investment-studio/tape-picker.mjs)
 and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css).
-The sheet loads after chapter rack styles. `cadence-view.mjs` supplies the Plans
-shelf beside its existing board, loaded editor and tracks. A cassette uses the
-canonical work ID; scoped periods show their own sessions and load the matching
-occurrence. Whole plan remains the return to all work.
+Issue #820 refines its receiving interaction: the unchanged-size shelf attaches
+directly to the full height of the period rack. A cassette loads its canonical
+work identity and filters the board/tracks while closing detail. The selected
+sprint/quarter remains visible; All plans removes the plan filter and Whole plan
+removes the period filter. Existing board/track clips open editing locally.
 
-New plan uses the existing direct creation owner. The loaded rack offers Remove
-plan through canonical confirmation and reference review. Undo edit alongside
-the shelf uses shared accepted history. Duration, participants and funding keep
-their current owners and Apply/Cancel behavior. The planning specimen remains
-intact as the exact artwork comparison.
+New plan retains direct accepted creation. Remove plan retains the canonical
+reference review. Accepted recovery belongs to the stable native amp Undo control;
+the cassette shelf contains no Undo button. This supersedes #813's local shelf
+Undo and edit-on-cassette-selection behavior. Artwork, focus target, stationary
+shelf, narrow horizontal orientation and hover motion retain the exact specimen.
 
-The Showcase uses rem equivalents of the documented shelf widths so enlarged
-text retains usable faces. At the normal 16px root, artwork dimensions match the
-reference. Desktop shelves scroll locally after 40rem of content; phone shelves
-retain their horizontal orientation and stable local scroll through refresh.
-The native key remains still during hover and press; only the illustrated face
-moves. System reduced motion stops the transform; the Studio's Lower motion
-setting removes the transition. Forced colors keeps native text and selected
-borders. The shelf title retains light text on its dark housing.
 
 ## The preserved object
 

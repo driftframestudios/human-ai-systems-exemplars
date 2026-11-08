@@ -47,6 +47,27 @@ receives the cassette and Investment deck pickers through a shared semantic
 button/face component and the current session, pricing, baseline and exchange
 owners. Broader financial deck state continues in #818, with main retaining its reference runtime until the human cues promotion.
 
+## Current dev simplification
+
+#820 makes the board and tracks the primary interaction surface. Cassette selection
+loads scope with detail closed; the shelf joins the rack at its existing scale.
+Team names/membership/order accept directly within the delivery board. Abilities
+retains its two support tables and uses one compact selected module. The duration
+receiver now adopts the preserved workbench's exact 64px dial/readout/step geometry.
+Main retains its reference behavior until a human cues promotion.
+
+Local controls use lighter borders and restrained depth, while Apply keeps its
+raised emphasis. Cancel is ghost; Remove is muted rose with a named object. Undo
+is a stable native amp control, independent of cassette selection. The
+[control research](../../collaboration/native-investment-studio/rack-control-research.md)
+records the source evidence, local inference and scope limits.
+
+#821 extends empty-space creation from sequencer rows to period lanes. The empty
+region is a native named button: hover/focus exposes its plus and label, touch
+shows it directly. It creates through the existing owner and opens local editing.
+Populated clips and membership cells retain their distinct operations. This
+supersedes requiring a separate raised Add button for every local creation entry.
+
 ## Choose a visual mode and an operation
 
 Choose the operation contract that explains what the visitor can do. These

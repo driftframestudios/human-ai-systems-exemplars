@@ -62,6 +62,68 @@ const history = page => page.evaluate(() => window.templateFixture.studio.readHi
 const arrangement = page => page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0]);
 
 for (const engine of names) {
+  test(`${engine}: team membership changes directly inside the delivery board and shared Undo restores it`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const f = window.templateFixture, base = f.studio.read();
+      const people = [...base.state.people,
+        { ...base.state.people[0], id: 'researcher', label: 'Researcher' },
+        { ...base.state.people[0], id: 'engineer', label: 'Engineer' }];
+      const result = f.studio.replace({ ...base.state, people }, base);
+      assertAccepted(result);
+      f.controller.render();
+      function assertAccepted(result) { if (!result.ok) throw Error(result.error.message); }
+    });
+    await choose(page, 'pod');
+    const key = panel(page).locator('.studio-delivery__team-key[data-studio-record-id]').first();
+    const id = await key.getAttribute('data-studio-record-id');
+    await key.click();
+    const record = panel(page).locator('[data-team-rack-record]');
+    await expect(record).toBeVisible();
+    await expect(panel(page).locator('.studio-delivery')).toHaveCount(0);
+    await expect(panel(page).locator('[data-team-rack-editor] [data-assembly-configure]')).toHaveCount(0);
+    await expect(record.getByRole('button', { name: '← Delivery overview', exact: true })).toBeFocused();
+    const member = record.locator('[data-team-rack-member="researcher"]');
+    const renderedOrder = () => record.locator('[data-team-member-row][data-selected="true"]')
+      .evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow));
+    const cardOrder = await record.locator('[data-team-member-row]').evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow));
+    const before = await bytes(page), count = (await history(page)).undoCount;
+    const prior = await member.isChecked();
+    await member.setChecked(!prior);
+    assert.equal((await history(page)).undoCount, count + 1);
+    const ids = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    assert.equal(ids.includes('researcher'), !prior, 'membership accepts without an Apply action');
+    assert.deepEqual(await record.locator('[data-team-member-row]').evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow)), cardOrder,
+      'inclusion preserves the position of every card');
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    assert.equal(await bytes(page), before);
+    await expect(member).toBeChecked({ checked: prior });
+    await record.locator('[data-team-rack-member="engineer"]').check();
+    await record.locator('[data-team-rack-member="researcher"]').check();
+    const ordered = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    const lastId = ordered.at(-1);
+    await record.locator(`[data-team-member-row="${lastId}"] [data-team-member-move="up"]`).click();
+    const afterOrder = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    assert.deepEqual(afterOrder, [...ordered.slice(0, -2), ordered.at(-1), ordered.at(-2)]);
+    assert.deepEqual(await renderedOrder(), afterOrder, 'the rendered member order follows the accepted move');
+    await expect(record.locator(`[data-team-rack-member="${lastId}"]`)).toBeFocused();
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    assert.deepEqual(await renderedOrder(), ordered, 'Undo restores the rendered order as well as the accepted member order');
+    await record.locator('[data-team-rack-name]').fill('Shared outcome team');
+    await member.uncheck();
+    assert.equal(await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).label, id), 'Shared outcome team');
+    assert.equal(await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds.includes('researcher'), id), false,
+      'clicking a member after typing a team name accepts both interactions');
+    await expect(member).toBeFocused();
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    await record.getByRole('button', { name: '← Delivery overview', exact: true }).click();
+    await expect(panel(page).locator('.studio-delivery')).toBeVisible();
+    await expect(key).toContainText('Shared outcome team');
+    await expect(key).toBeFocused();
+    await key.click();
+    assert.deepEqual(await renderedOrder(), ordered, 'reopening the team starts with its accepted member order');
+  });
+
   test(`${engine}: reel selections replace one accepted arrangement and Undo restores its complete preceding state`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     assert.equal((await history(page)).undoCount, 0, 'mounting the starter illustration leaves accepted history untouched');
@@ -190,7 +252,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), before);
   });
 
-  test(`${engine}: accepted arrangement controls retain topology, editor routes and recoverable detach`, { timeout: 60000 }, async t => {
+  test(`${engine}: accepted arrangement controls keep team editing and recovery inside the rack`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
       const f = window.templateFixture; f.controller.dispose();
@@ -198,31 +260,26 @@ for (const engine of names) {
       mountCoordinationPanel(document.querySelector('[data-native-coordination]')).dispose();
       f.nativeController = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: f.studio });
     });
-    const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
+    const root = page.locator('[data-native-coordination]');
     await choose(page, 'pod');
     const id = (await arrangement(page)).id;
-    await accepted.locator('.studio-accepted-connections > summary').click();
-    const reading = accepted.locator('[data-arrangement-reading="accepted"]');
+    const reading = panel(page).locator('[data-arrangement-reading="accepted"]');
     await expect(reading).toHaveAttribute('data-arrangement-id', id);
-    await reading.locator('.studio-team-lane__title').first().click();
+    const teamKey = panel(page).locator('.studio-delivery__team-key').first();
+    await teamKey.click();
     await expect(root.locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
-    await expect(root.locator('.studio-rack-editor [data-assembly-form] [name="label"]')).toBeFocused();
-    await root.locator('[data-rack-editor-close]').click();
-    await expect(reading.locator('.studio-team-lane__title').first()).toBeFocused();
-    const beforeDetach = await bytes(page);
-    await accepted.locator('[data-connection-action="detach-arrangement"]').click();
-    await expect(panel(page).locator('[data-template-preview]')).toContainText('teams, current connections and working sessions remain available');
-    assert.equal(await bytes(page), beforeDetach);
-    await action(page, 'apply').click();
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 0);
-    await expect(accepted).toContainText('Custom connections');
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
-    assert.equal(await bytes(page), beforeDetach);
+    await expect(panel(page).locator('[data-team-rack-record]')).toBeVisible();
+    await panel(page).locator('[data-template-action="team-back"]').click();
+    await expect(teamKey).toBeFocused();
+    const beforeChange = await bytes(page);
+    await choose(page, 'guild');
+    await root.locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), beforeChange);
     await expect(reading).toHaveAttribute('data-arrangement-id', id);
     await page.setViewportSize({ width: 390, height: 1000 });
     await expect(reading).toBeVisible();
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-    await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
+    await panel(page).screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
   });
 
   test(`${engine}: callback remount owns focus and status after arrangement acceptance`, { timeout: 60000 }, async t => {

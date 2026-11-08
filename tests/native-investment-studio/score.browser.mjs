@@ -52,13 +52,9 @@ async function showFlow(page) {
   if (!await flow(page).evaluate(element => element.open)) await flow(page).locator(':scope > summary').click();
 }
 async function undo(page) {
-  await page.evaluate(() => {
-    const { studio, controller } = window.scoreFixture;
-    const result = studio.undo(studio.read());
-    if (!result.ok) throw Error(result.error.code);
-    controller.refresh();
-  });
+  await root(page).locator('[data-studio-undo]').click();
 }
+
 for (const engine of names) {
   test(`${engine}: sprint overview drills into weeks without changing the accepted plan`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
@@ -96,8 +92,8 @@ for (const engine of names) {
     const page = await open(t, engine);
     await score(page).locator('[data-cadence-basis][value="quarter"]').check();
     const accepted = await bytes(page), before = JSON.parse(accepted);
-    await period(page, 'period-2').getByRole('button', { name: 'Add session', exact: true }).click();
-    const deck = root(page).locator('.studio-rack-editor');
+    await period(page, 'period-2').getByRole('button', { name: /^Add a session in /u }).click();
+    const deck = root(page).locator('[data-rack-editor-kind]');
     await expect(deck).toHaveAttribute('data-rack-placement', 'inset');
     const state = JSON.parse(await bytes(page));
     const work = state.work.find(row => !before.work.some(previous => previous.id === row.id));
@@ -118,8 +114,9 @@ for (const engine of names) {
   ]) test(`${engine}: ${basis} scope stays in the rack and returns to its ${origin} at ${width}px`, async t => {
     const page = await open(t, engine, { viewport: { width, height: 1000 } });
     if (basis === 'quarter') await score(page).locator('[data-cadence-basis][value="quarter"]').check();
-    const accepted = await bytes(page), count = score(page).locator('[data-cadence-count]');
-    await count.fill('5'); await count.blur();
+    while (await cadence(page).locator('.native-cadence__period').count() < 5)
+      await cadence(page).getByRole('button', { name: basis === 'quarter' ? 'Add quarter' : 'Add sprint', exact:true }).click();
+    const accepted = await bytes(page);
     const entry = cadence(page).locator(`[data-cadence-key="${origin}:period-4"]`);
     await entry.focus();
     const positions = () => cadence(page).evaluate(element => ['board', 'tracks'].map(name => element.querySelector(`.native-cadence__${name}`).scrollLeft));
@@ -141,29 +138,24 @@ for (const engine of names) {
     await expect(entry).toBeFocused();
     const after = await positions();
     before.forEach((value, index) => assert.ok(Math.abs(after[index] - value) <= 1, `${origin} scroll ${index}: ${value} → ${after[index]}`));
-    await expect(count).toHaveValue('5');
-    await expect(cadence(page)).toHaveAttribute('data-cadence-reading', 'proposed');
-    assert.equal(await bytes(page), accepted, 'scope changes retain the accepted plan and pending horizon');
+    await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(5);
+    await expect(cadence(page)).toHaveAttribute('data-cadence-reading', 'accepted');
+    assert.equal(await bytes(page), accepted, 'scope changes retain the accepted horizon');
   });
 
-  test(`${engine}: horizon changes preview before Apply and a shorter plan retains unplaced sessions`, async t => {
-    const page = await open(t, engine), accepted = await bytes(page);
-    const count = score(page).locator('[data-cadence-count]');
-    await count.fill('2'); await count.blur();
-    await expect(cadence(page)).toHaveAttribute('data-cadence-reading', 'proposed');
-    await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(2);
-    await expect(cadence(page).getByRole('heading', { name: 'Choose a period', exact: true })).toBeVisible();
+  test(`${engine}: an in-board period addition is accepted immediately and Undo restores it`, async t => {
+    const page = await open(t, engine), accepted = await bytes(page), original = JSON.parse(accepted);
+    const board = cadence(page).locator('.native-cadence__board');
+    await board.getByRole('button', { name:'Add sprint', exact:true }).click();
+    const changed = JSON.parse(await bytes(page));
+    assert.equal(changed.scoreSettings.cadence.periods.length, 5);
+    assert.deepEqual(changed.work, original.work);
+    await expect(score(page).locator('.native-score__pending')).toBeHidden();
+    await period(page, 'period-5').getByRole('button', { name:/^Add a session in /u }).click();
+    const created = JSON.parse(await bytes(page));
+    assert.equal(created.work.length, original.work.length + 1, 'the new sprint immediately accepts working sessions');
+    await undo(page); await undo(page);
     assert.equal(await bytes(page), accepted);
-    await score(page).locator('.native-score__pending').getByRole('button', { name: 'Cancel changes', exact: true }).click();
-    await expect(count).toHaveValue('4'); assert.equal(await bytes(page), accepted);
-    await count.fill('3'); await count.blur();
-    await score(page).getByRole('button', { name: 'Apply horizon', exact: true }).click();
-    const changed = JSON.parse(await bytes(page)), original = JSON.parse(accepted);
-    assert.equal(changed.scoreSettings.cadence.periods.length, 3);
-    assert.deepEqual(changed.work, original.work, 'shortening the horizon retains work and effort');
-    assert.ok(changed.scoreSettings.cadence.placements.some(row => row.periodId === null));
-    await expect(root(page).locator('[data-native-total]')).toHaveText('$3,980.00');
-    await undo(page); assert.equal(await bytes(page), accepted);
   });
 
   test(`${engine}: horizon units switch immediately while preserving work and Undo`, async t => {
@@ -184,6 +176,13 @@ for (const engine of names) {
     await showFlow(page);
     const stage = flow(page).locator('[data-cadence-key="stage:understand"]');
     await stage.click();
+    await expect(cadence(page).locator('[data-studio-session-slot] > .native-score__inspector')).toBeVisible();
+    await input(page, 'stage.understand.label').fill('Understand the service request');
+    await inspector(page).getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(inspector(page)).toBeHidden();
+    await expect(stage).toBeFocused();
+    await stage.click();
+    await expect(input(page, 'stage.understand.label')).toHaveValue('Understand the service request');
     await inspector(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
     await expect(stage).toBeFocused();
     await flow(page).getByRole('button', { name: 'Add a decision for Understand the request', exact: true }).click();
@@ -213,17 +212,19 @@ for (const engine of names) {
   test(`${engine}: a quarter example replaces the view in place and Undo restores the pilot`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
     await score(page).getByRole('button', { name: 'Add sprint', exact: true }).click();
-    await expect(score(page).locator('[data-cadence-count]')).toHaveValue('5');
+    await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(5);
+    const extended = await bytes(page);
     await score(page).getByRole('button', { name: 'Two-quarter rollout', exact: true }).click();
     await expect(root(page).locator('[data-native-chapter="coordination"]')).toHaveAttribute('aria-selected', 'true');
     await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(2);
     const state = JSON.parse(await bytes(page));
-    await expect(score(page).locator('[data-cadence-count]')).toHaveValue('2');
+    await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(2);
     await expect(score(page).locator('[data-cadence-basis][value="quarter"]')).toBeChecked();
     assert.equal(state.planId, 'service-request-rollout'); assert.equal(state.scoreSettings.cadence.basis, 'quarter');
     await period(page, 'period-2').getByRole('button', { name: 'Quarter 2 Open quarter detail', exact: true }).click();
     for (const month of [1, 2, 3]) await expect(cadence(page).getByRole('heading', { name: `Month ${month}`, exact: true })).toBeVisible();
     await expect(cadence(page)).toContainText('Receiving-team walkthrough');
+    await undo(page); assert.equal(await bytes(page), extended);
     await undo(page); assert.equal(await bytes(page), accepted);
   });
 
@@ -284,10 +285,9 @@ for (const engine of names) {
         else candidate.scoreSettings.cadence = null;
         const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
       }, hasCadence);
-      const retained = await bytes(page), workspace = root(page).locator('[data-native-workspace="session"]');
-      if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
-      await root(page).locator('[data-native-session-select]').selectOption('followup');
-      await root(page).locator('[data-session-action="remove"]').click();
+      const retained = await bytes(page);
+      await root(page).locator('[data-connection-templates] [data-session-track="followup"] .studio-session-tracks__name').click();
+      await root(page).locator('[data-rack-remove-plan]').click();
       await root(page).locator('[data-native-session-dependencies] [data-native-open-score="dependency"]').click();
       await expect(inspector(page).getByRole('heading', { name: 'Inspect retained handoff' })).toBeVisible();
       await expect(inspector(page)).toContainText('Receive the review');

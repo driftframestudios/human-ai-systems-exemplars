@@ -185,3 +185,24 @@
   .native-coordination .studio-delivery :is(h5, h6, p, small) { color: CanvasText; }
   .native-coordination .studio-delivery__session[aria-pressed='true'] { outline-color: Highlight; }
 }
+
+/* Delivery-board drilldown: direct team controls replace its board content. */
+.studio-team-rack__record { padding:.7rem; border:1px solid #668b73; border-radius:3px; background:#20382f; color:#f7f0d6; min-inline-size:0; }
+.native-coordination .studio-team-rack__record :is(h4,legend,label) { color:#f7f0d6; }
+.studio-team-rack__record-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap:.7rem; }
+.native-coordination .studio-team-rack__record-scope button { background:transparent; color:#f7f0d6; border:1px solid #668b73; box-shadow:none; }
+.native-coordination .studio-team-members { grid-column:1/-1; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:.5rem; padding:.5rem; border:0; }
+.studio-team-members > legend { padding:.4rem 0; font-weight:700; }
+.studio-team-member { display:grid; align-content:start; gap:.4rem; min-inline-size:0; padding:.5rem; background:#29483a; border:1px solid #668b73; border-radius:3px; }
+.studio-team-member[data-selected='false'] { background:#142e25; border-style:dashed; }
+.studio-team-member label { display:flex; align-items:center; gap:.5rem; }
+.studio-team-member label > span { display:grid; gap:.2rem; }
+.studio-team-member small { color:#c2decc; }
+.native-coordination .studio-team-member button { background:#f7f0d6; color:#172724; border:1px solid #668b73; box-shadow:none; font-size:.75rem; min-block-size:2rem; padding:.35rem; }
+[data-template-rack][data-editor-open='true'] [data-team-rack-board],
+[data-template-rack][data-editor-open='true'] .studio-session-tracks { display:none; }
+@media(forced-colors:active) {
+ .native-coordination :is(.studio-team-rack__record,.studio-team-member,.studio-team-member[data-selected='false']) { color:CanvasText; background:Canvas; border-color:CanvasText; }
+ .native-coordination .studio-team-rack__record :is(h4,legend,label,small) { color:CanvasText; }
+ .native-coordination :is(.studio-team-rack__record-scope,.studio-team-member) button { color:ButtonText; background:ButtonFace; border-color:ButtonText; }
+}
