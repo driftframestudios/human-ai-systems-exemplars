@@ -655,147 +655,76 @@ for (const engine of names) for (const width of [390, 1440]) {
 
   });
 
-  test(`${engine}: rack session creation accepts once and separates creation Undo from later edits at ${width}px`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine, width, false, width === 390), original = await bytes(page);
-    const readPlan = () => page.evaluate(() => {
-      const state = window.rackFixture.studio.read().state;
-      return { work:state.work, placements:state.scoreSettings.cadence.placements,
-        undoCount:window.rackFixture.studio.readHistory().undoCount };
-    });
-    const before = await readPlan(), originalIds = new Set(before.work.map(work => work.id));
-    await page.evaluate(() => { window.rackFixture.sessionNode = document.querySelector('[data-native-configure]'); });
-    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
-    const currentPeriod = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
-    const add = horizon(page).locator('[data-cadence-key="add-session:period-2:1"]');
+  test(`${engine}: rack additions remain closed, fill their selected slot and retain Undo at ${width}px`, { timeout:60000 }, async t => {
+    const page = await open(t, engine, width, false, width === 390);
+    const read = () => page.evaluate(() => ({ state:window.rackFixture.studio.read().state,
+      history:window.rackFixture.studio.readHistory().undoCount }));
+    const before = await read(), original = await bytes(page);
+    const lane = horizon(page).locator('[data-cadence-period="period-2"]');
+    const add = lane.getByRole('button', { name:'Add a session in Sprint 2', exact:true });
     await add.click();
-    const first = await readPlan(), created = first.work.filter(work => !originalIds.has(work.id));
-    assert.equal(created.length, 1, 'one Add activation publishes one session');
-    const session = created[0];
-    assert.ok(session.label.trim() && session.personIds.length > 0, 'authored defaults create visible, populated work');
-    assert.deepEqual({ minutes:session.minutesPerOccurrence, occurrences:session.occurrences,
-      funding:session.funding, status:session.status },
-    { minutes:30, occurrences:1, funding:'additional', status:'planned' });
-    assert.equal(first.undoCount, before.undoCount + 1, 'creation contributes one accepted history entry');
-    assert.deepEqual(first.placements.filter(row => row.workId === session.id), [
-      { workId:session.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 },
-    ]);
-    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(session.label);
-    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true);
-    await contained(page, width);
-    if (engine === 'chromium') await adjacent(page).locator('.studio-rack-editor__heading')
-      .screenshot({ path:resolve(captures, `session-creation-heading-${width}.png`) });
-    const acceptedCreation = await bytes(page);
+    const first = await read(), session = first.state.work.find(row => !before.state.work.some(old => old.id === row.id));
+    assert.equal(session.label, 'New session 1'); assert.equal(first.history, before.history + 1);
+    assert.deepEqual(first.state.scoreSettings.cadence.placements.filter(row => row.workId === session.id),
+      [{ workId:session.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 }]);
+    await expect(adjacent(page)).toBeHidden();
+    const clip = lane.locator(`[data-studio-session-id="${session.id}"]`);
+    await expect(clip).toBeVisible();
+    await clip.click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('New session 1');
     await configure(page).locator('[name="minutesPerSession"]').fill('45');
     await configure(page).locator('[data-action="cancel"]').click();
-    assert.equal(await bytes(page), acceptedCreation, 'Cancel discards later edits and retains the created session');
-    await expect(adjacent(page)).toBeHidden(); await expect(add).toBeFocused();
-
-    await track(page, session.id).click();
-    await expect(configure(page).locator('[name="minutesPerSession"]')).toHaveValue('30');
-    await root(page).locator('[data-rack-creation-undo]').click();
-    assert.equal(await bytes(page), original, 'local creation Undo restores the preceding accepted plan');
+    assert.equal((await read()).state.work.find(row => row.id === session.id).minutesPerOccurrence, 30);
     await expect(adjacent(page)).toBeHidden();
-    await expect(track(page, session.id)).toHaveCount(0);
-    await expect(add).toBeFocused();
-    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
-
     await add.click();
-    const second = (await readPlan()).work.find(work => !originalIds.has(work.id));
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await expect(add).toBeFocused();
-    await add.click();
-    const repeated = await readPlan(), added = repeated.work.filter(work => !originalIds.has(work.id));
-    assert.equal(added.length, 2); assert.equal(new Set(added.map(work => work.id)).size, 2,
-      'each deliberate Add creates a distinct accepted session');
-    assert.equal(repeated.undoCount, before.undoCount + 2);
-    const latest = added.find(work => work.id !== second.id);
-    await configure(page).locator('[name="minutesPerSession"]').fill('45');
-    await configure(page).locator('[data-action="apply"]').click();
-    const edited = await readPlan();
-    assert.equal(edited.work.find(work => work.id === latest.id).minutesPerOccurrence, 45);
-    assert.equal(edited.undoCount, repeated.undoCount + 1, 'a later Apply accepts its edit once');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
+    assert.equal((await read()).state.work.at(-1).label, 'New session 2');
+    await expect(adjacent(page)).toBeHidden();
+    await root(page).locator('[data-studio-undo]').click();
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), original);
 
-    const addShared = shared(page).getByRole('button', { name:'Add session', exact:true });
-    await addShared.click();
-    const teamPlan = await readPlan(), previousIds = new Set(edited.work.map(work => work.id));
-    const teamSessions = teamPlan.work.filter(work => !previousIds.has(work.id));
-    assert.equal(teamSessions.length, 1);
-    assert.equal(teamPlan.undoCount, edited.undoCount + 1);
-    assert.deepEqual(teamPlan.placements.filter(row => row.workId === teamSessions[0].id), [],
-      'unscoped Team planning creation leaves its occurrence awaiting placement');
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(teamSessions[0].label);
-    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true);
-    await expect(configure(page).locator('[data-placement-index="0"][data-placement-field="periodId"]')).toHaveValue('');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await expect(addShared).toBeFocused();
-
-    const acceptedTeam = await bytes(page);
-    const existingPad = shared(page).locator('[data-studio-session-person][data-studio-session-id]').first();
-    const existingId = await existingPad.getAttribute('data-studio-session-id');
-    await existingPad.click();
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(teamPlan.work.find(work => work.id === existingId).label);
-    assert.equal(await bytes(page), acceptedTeam, 'an existing participation pad inspects its session and creates no work');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-
-    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
-    await root(page).getByRole('button', { name:'Two-quarter rollout', exact:true }).click();
-    const quarterPlan = await readPlan(), quarterBytes = await bytes(page);
-    const quarterIds = new Set(quarterPlan.work.map(work => work.id));
-    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
-    const quarter = horizon(page).getByRole('heading', { name:'Quarter 2', exact:true });
-    const newMonth = horizon(page).locator('[data-cadence-key="new-session:period-2:3"]');
-    await expect(newMonth).toHaveAccessibleName('Add a new plan in Quarter 2, Month 3');
-    if (width === 1440) {
-      await newMonth.hover();
-      assert.equal(await bytes(page), quarterBytes, 'revealing a ghost creation pad leaves accepted work unchanged');
+    // Each temporal subdivision owns an empty target, including the far-right
+    // week/month; insertion preserves every earlier occurrence and its identity.
+    for (const basis of ['sprint', 'quarter']) {
+      if (basis === 'quarter') await root(page).locator('[data-cadence-basis][value="quarter"]').check();
+      const current = await read(), work = current.state.work.find(row => row.id === 'research');
+      const subdivision = basis === 'quarter' ? 3 : 2;
+      const target = horizon(page).locator(`[data-cadence-key="add-occurrence:${work.id}:period-4:${subdivision}"]`);
+      await target.scrollIntoViewIfNeeded();
+      const cell = target.locator('xpath=ancestor::td');
+      const box = await target.boundingBox(), boundary = await cell.boundingBox();
+      assert.ok(box.x + box.width > boundary.x + boundary.width * .8, 'the final subdivision reaches the right side of its cell');
+      if (width === 1440) {
+        await page.mouse.move(0, 0);
+        assert.equal(await target.evaluate(node => getComputedStyle(node).color), 'rgba(0, 0, 0, 0)');
+        await target.hover();
+      } else {
+        assert.notEqual(await target.evaluate(node => getComputedStyle(node).color), 'rgba(0, 0, 0, 0)', 'touch invitations remain visible');
+      }
+      if (engine === 'chromium') await cell.screenshot({ path:resolve(captures, `quiet-${basis}-addition-${width}.png`) });
+      if (width === 390) await target.tap(); else await target.click();
+      const added = await read();
+      assert.equal(added.state.work.length, current.state.work.length);
+      assert.equal(added.state.work.find(row => row.id === work.id).occurrences, work.occurrences + 1);
+      assert.deepEqual(added.state.scoreSettings.cadence.placements.filter(row => row.workId === work.id), [
+        ...current.state.scoreSettings.cadence.placements.filter(row => row.workId === work.id),
+        { workId:work.id, occurrenceIndex:work.occurrences, periodId:'period-4', subdivision },
+      ]);
+      await expect(adjacent(page)).toBeHidden();
+      await root(page).locator('[data-studio-undo]').click();
     }
-    await newMonth.focus();
-    if (engine === 'chromium') {
-      await newMonth.evaluate(node => node.scrollIntoView({ block:'center', inline:'center', behavior:'instant' }));
-      await (width === 390 ? page : horizon(page).locator('.studio-rack-create-row'))
-        .screenshot({ path:resolve(captures, `quarter-creation-row-${width}.png`) });
-    }
-    await page.keyboard.press('Enter');
-    const monthPlan = await readPlan(), monthSessions = monthPlan.work.filter(work => !quarterIds.has(work.id));
-    assert.equal(monthSessions.length, 1, 'one keyboard activation creates one session from the empty rack row');
-    assert.equal(monthPlan.undoCount, quarterPlan.undoCount + 1);
-    assert.deepEqual(monthPlan.placements.filter(row => row.workId === monthSessions[0].id), [
-      { workId:monthSessions[0].id, occurrenceIndex:0, periodId:'period-2', subdivision:3 },
-    ]);
-    await expect(quarter).toHaveAttribute('aria-current', 'page');
-    await expect(configure(page).locator('[name="label"]')).toHaveValue(monthSessions[0].label);
-    await root(page).locator('[data-rack-creation-undo]').click();
-    assert.equal(await bytes(page), quarterBytes);
-    await expect(newMonth).toBeFocused();
-    await expect(quarter).toHaveAttribute('aria-current', 'page');
 
-    const researcher = await page.evaluate(() => window.rackFixture.studio.read().state.people.find(person => person.label === 'Researcher'));
-    const newWithPerson = shared(page).locator(`[data-studio-entry-key="shared-session-add:${researcher.id}"]`);
-    await expect(newWithPerson).toHaveAccessibleName('Add a session with Researcher');
-    if (width === 1440) {
-      await newWithPerson.hover();
-      assert.equal(await bytes(page), quarterBytes, 'hovering a person-context creation pad leaves accepted work unchanged');
-    } else await newWithPerson.scrollIntoViewIfNeeded();
-    if (engine === 'chromium') {
-      await newWithPerson.evaluate(node => node.scrollIntoView({ block:'center', inline:'center', behavior:'instant' }));
-      await (width === 390 ? page : shared(page).locator('.studio-rack-create-row'))
-        .screenshot({ path:resolve(captures, `people-creation-row-${width}.png`) });
-    }
-    if (width === 390) await newWithPerson.tap(); else await newWithPerson.click();
-    const personalPlan = await readPlan(), personalSessions = personalPlan.work.filter(work => !quarterIds.has(work.id));
-    assert.equal(personalSessions.length, 1);
-    assert.deepEqual(personalSessions[0].personIds, [researcher.id], 'the creation pad uses its named accepted person');
-    assert.equal(personalPlan.undoCount, quarterPlan.undoCount + 1);
-    assert.deepEqual(personalPlan.placements.filter(row => row.workId === personalSessions[0].id), []);
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
-    await expect(configure(page).locator(`[data-session-person="${researcher.id}"]`)).toBeChecked();
-    await root(page).locator('[data-rack-creation-undo]').click();
-    assert.equal(await bytes(page), quarterBytes);
-    await expect(newWithPerson).toBeFocused();
+    const accepted = await read(), researcher = accepted.state.people.find(row => row.label === 'Researcher');
+    const withPerson = shared(page).locator(`[data-studio-entry-key="shared-session-add:${researcher.id}"]`);
+    await withPerson.click();
+    const personal = await read(), created = personal.state.work.find(row => !accepted.state.work.some(old => old.id === row.id));
+    assert.equal(created.label, 'New session 1'); assert.deepEqual(created.personIds, [researcher.id]);
+    await expect(adjacent(page)).toBeHidden();
+    await sharedTrack(page, created.id).click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(created.label);
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual((await read()).state, accepted.state);
     await contained(page, width);
   });
 

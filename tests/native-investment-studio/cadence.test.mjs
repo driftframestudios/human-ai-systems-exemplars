@@ -139,3 +139,14 @@ test('strict previous-version migration retains arrangement identities and curre
   assert.ok(describeScoreChanges(before.state, receipt.view.preview.projection.state).some(text => text.includes('Sprint 1 · week 2')));
   exchange.dispose(); editing.dispose();
 });
+
+
+test('period captions round-trip independently from identity and remain bounded', () => {
+  const plan = periodPlan(); plan.scoreSettings.cadence.periods[0].caption = 'Discover the receiving work';
+  const accepted = preparePlan(plan);
+  const imported = prepareImport(accepted.serialized).projection;
+  assert.deepEqual(imported.state.scoreSettings.cadence.periods, plan.scoreSettings.cadence.periods);
+  assert.equal(resizeCadence(plan.scoreSettings.cadence, 3).periods[0].caption, 'Discover the receiving work');
+  plan.scoreSettings.cadence.periods[0].caption = 'x'.repeat(121);
+  assert.throws(() => preparePlan(plan), error => error.code === 'text');
+});

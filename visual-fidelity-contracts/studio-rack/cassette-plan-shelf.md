@@ -27,7 +27,8 @@ work identity and filters the board/tracks while closing detail. The selected
 sprint/quarter remains visible; All plans removes the plan filter and Whole plan
 removes the period filter. Existing board/track clips open editing locally.
 
-New plan retains direct accepted creation. Remove plan retains the canonical
+New plan retains direct accepted creation with a unique **New session N** name
+and detail closed. Selecting a clip opens editing. Remove plan retains the canonical
 reference review. Accepted recovery belongs to the stable native amp Undo control;
 the cassette shelf contains no Undo button. This supersedes #813's local shelf
 Undo and edit-on-cassette-selection behavior. Artwork, focus target, stationary

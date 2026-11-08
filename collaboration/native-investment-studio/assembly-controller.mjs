@@ -307,7 +307,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (!result.ok) { render(); announce(result.error.message); return; }
     onAccepted(result.projection); if (!currentOperation(epoch)) return;
     if (kind === 'person') { selectedPerson = result.id; close({ park: false }); render(); onPersonCreated(result.id); }
-    else open(makeAssemblyTarget('team.update', result.id));
+    else { close({ park: false }); render(); }
   }
   function close({ park = true } = {}) {
     if (disposed) return;

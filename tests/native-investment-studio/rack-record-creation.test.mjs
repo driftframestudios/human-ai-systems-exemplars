@@ -12,13 +12,13 @@ test('rack additions accept editable team and directed handoff records with one 
   const team = createRackRecord(studio, editing, 'team');
   assert.equal(team.accepted, true, team.error?.message);
   assert.deepEqual(studio.read().state.teams.find(row => row.id === team.id),
-    { id: team.id, label: 'New team', personIds: [], lifecycle: 'active' });
+    { id: team.id, label: 'New team 1', personIds: [], lifecycle: 'active' });
   assert.equal(studio.readHistory().undoCount, 1);
   const handoff = createRackRecord(studio, editing, 'connection', { senderTeamId: 'engineering', receiverTeamId: team.id });
   assert.equal(handoff.accepted, true, handoff.error?.message);
   assert.deepEqual(studio.read().state.connections.find(row => row.id === handoff.id), {
     id: handoff.id, senderTeamId: 'engineering', receiverTeamId: team.id, receiverPersonId: null,
-    sharedObject: 'Share the next step', responseExpectation: null, workIds: [], status: 'active',
+    sharedObject: 'New handoff 1', responseExpectation: null, workIds: [], status: 'active',
   });
   assert.equal(studio.readHistory().undoCount, 2);
   assert.equal(studio.undo(handoff.projection).ok, true);
@@ -76,7 +76,7 @@ test('a successor edit interrupts creation before publication and keeps its owne
   assert.equal(studio.read(), before); assert.equal(studio.readHistory().undoCount, 0);
   assert.equal(editing.read().active.kind, 'purpose');
   assert.equal(editing.read().active.token, successor.view.draft.token);
-  assert.equal(editing.read().parked.find(row => row.kind === 'assembly').raw.label, 'New team');
+  assert.equal(editing.read().parked.some(row => row.kind === 'assembly'), false, 'an unchanged interrupted creation needs no saved edit');
 });
 
 
@@ -85,7 +85,7 @@ test('direct person and session additions are usable records with separate Undo 
   const before = studio.read(), person = createRackRecord(studio, editing, 'person');
   assert.equal(person.ok, true, person.error?.message);
   const row = studio.read().state.people.find(row => row.id === person.id);
-  assert.equal(row.label, 'Person 7');
+  assert.equal(row.label, 'New person 1');
   assert.equal(row.rateCentsPerHour, 10000);
   const session = createRackRecord(studio, editing, 'session', { personId: person.id });
   assert.equal(session.ok, true, session.error?.message);

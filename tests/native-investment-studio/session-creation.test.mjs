@@ -15,7 +15,7 @@ test('a rack session starts with usable people, one short occurrence and the sel
     const before = structuredClone(plan);
     const result = prepareSessionCreation(plan, { periodId: 'period-2', subdivision });
     assert.equal(result.ok, true);
-    assert.deepEqual(result.raw, { label: 'Review the next step', hoursPerSession: '0', minutesPerSession: '30',
+    assert.deepEqual(result.raw, { label: 'New session 1', hoursPerSession: '0', minutesPerSession: '30',
       occurrences: '1', funding: 'additional', status: 'planned', teamId: 'product', personIds,
       cadencePlacements: JSON.stringify([{ occurrenceIndex: 0, periodId: 'period-2', subdivision }]) });
     assert.deepEqual(plan, before);
@@ -82,9 +82,18 @@ test('prepared values publish one ordinary creation; cancelling its update retai
   assert.equal(update.view.draft.changed, false);
   editing.session.setText(update.view.draft.token, 'label', 'A later edit');
   assert.equal(editing.session.cancel(update.view.draft.token).ok, true);
-  assert.equal(studio.read().state.work.find(row => row.id === id).label, 'Review the next step');
+  assert.equal(studio.read().state.work.find(row => row.id === id).label, 'New session 1');
   assert.equal(studio.readHistory().undoCount, 1);
   assert.equal(studio.undo(studio.read()).ok, true);
   assert.deepEqual(studio.read().state.work, before.state.work);
   assert.equal(studio.readHistory().undoCount, 0);
+});
+
+
+test('creation labels distinguish new records from imported and renamed records', () => {
+  const plan = createShowcasePlan();
+  plan.work[0].label = 'New session 1'; plan.work[1].label = 'New session 3';
+  assert.equal(prepareSessionCreation(plan).raw.label, 'New session 2');
+  plan.work[0].label = 'Pilot decision review';
+  assert.equal(prepareSessionCreation(plan).raw.label, 'New session 1');
 });

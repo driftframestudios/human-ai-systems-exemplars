@@ -8,7 +8,7 @@ participation.
 
 **Standing:** review candidate `0.1.0`; ID
 `vfc:period-kanban-session-sequencer`; dev receiving contract revised
-8 November 2026 for [#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
+8 November 2026 for [#831](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/831).
 It inherits [Studio Rack Composition](README.md). Main retains its approved
 Showcase reference until the human cues promotion.
 
@@ -41,9 +41,9 @@ have text or accessible wording alongside their color and shape.
 | Entry | Result |
 | --- | --- |
 | Plus inside an existing plan's track cell | Appends one accepted occurrence to that plan in the named period/week/month, retaining every earlier placement |
-| Period-lane creation area | Creates a distinct work record with one initial placed session and opens its local settings |
-| New plan row in Session tracks | Creates a distinct work record in that column's period and opens its local settings |
-| New plan on the cassette shelf | Creates a distinct work record and deliberately loads its cassette |
+| Period-lane creation area | Creates a distinct, uniquely named work record with one initial placed session; editing stays closed |
+| New plan row in Session tracks | Creates a distinct, uniquely named work record in that column's period; editing stays closed |
+| New plan on the cassette shelf | Creates a distinct work record and deliberately loads its cassette with detail closed |
 | Existing occurrence pad | Opens its canonical session editor at that occurrence |
 | Working sessions Add/Remove | Changes the selected session draft's occurrence collection; Apply accepts the proposal |
 | Working sessions period choice | Moves the selected occurrence while leaving the others in their existing periods |
@@ -61,10 +61,17 @@ A plan needing people or a team uses the existing guided route. Later field
 edits retain their Apply/Cancel boundary.
 
 An empty lane is a named native button: fine-pointer hover and keyboard focus
-reveal the plus/label; touch keeps the invitation visible. A populated track
-cell uses a compact plus target with a full accessible name and hover/focus
-preview. Blank cells can show the short Session label. Existing pads keep their
+reveal its ghosted plus; touch keeps the invitation visible. Each week/month
+provides its own target across the track cell, including space to its right.
+The accessible name identifies the plan and exact destination. Newly created
+records use the first available **New {item} N** name. Creation keeps editing
+closed; the named representation opens its receiver when selected. Existing pads keep their
 inspection meaning; Shared sessions cells keep their participation meaning.
+
+A selected period offers a short caption override while its Sprint/Quarter
+heading stays stable. The caption travels with accepted state, download and Undo.
+Clearing it restores the derived stage summary. The live showcase includes a
+paused follow-up so the board and cassette shelf demonstrate that state.
 
 ## Session working area
 
@@ -151,6 +158,8 @@ evaluates whether the resulting composition is clear.
 ## Supersession and next boundary
 
 This current contract replaces the accumulated implementation chronology.
+#831 supersedes add-then-open with creation in place and deliberate inspection,
+and the single period-cell plus with week/month targets spanning the cell.
 #828 supersedes passive blanks in existing-plan tracks with explicit session
 append targets, and supersedes automatic new-cassette filtering after period
 creation with the visible All plans arrangement. It also supersedes #825's

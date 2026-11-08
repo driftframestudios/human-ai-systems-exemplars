@@ -15,8 +15,8 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`, with
-#825 and #828 accepted. The #827 browser-fixture repair keeps focused verification
-usable across that integration. Promotion to main and a tagged public release each await
+#831 refines accepted creation and the quiet add targets. The #827 browser-fixture
+repair keeps focused verification usable across that integration. Promotion to main and a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
 
@@ -44,18 +44,25 @@ these modules while preserving the Hours/Minutes pair.
 Existing-plan track cells expose a plus that appends an accepted working session
 in the chosen period or subdivision. Count and complete placements enter one
 canonical command, so earlier sessions keep their identity and location. Empty
-periods remain available even when a cassette is loaded. A compact plus fits
-populated cells; an accessible name and hover/focus preview identify the plan
-and destination.
+periods remain available even when a cassette is loaded. Each week/month has
+a creation area across the available cell width. Accessible names identify the
+plan and destination; fine-pointer hover and keyboard focus reveal a ghosted
+plus while touch keeps it visible.
 
 Empty period-lane space and the sequencer's New plan row create distinct work
-records, then open their canonical editor. Fine-pointer hover and keyboard focus
-expose the lane's plus and short label; touch keeps them visible. Those additions
+records with editing closed. Ordinary creation names follow **New {item} N**,
+using the first available name in that collection. Selecting the new record
+opens its canonical editor. Fine-pointer hover and keyboard focus expose the
+lane's plus; touch keeps it visible. Those additions
 retain All plans so every earlier clip stays visible. Shelf New plan deliberately
 loads the newly created cassette. This resolves the reported apparent replacement
 on repeated additions: accepted identities and placements were retained, while
 automatic cassette filtering hid previous clips. Add sprint/quarter retains its
-separate accepted horizon operation.
+separate accepted horizon operation. A selected period can retain its Sprint or
+Quarter name while a short caption replaces its derived stage summary. Clearing
+the caption restores that summary. Captions travel with the plan and Undo.
+The live example includes a paused follow-up, so its resting state demonstrates
+both active and paused work without changing the canonical test fixture.
 
 Session pads own repetition in the rack, with Add session and selected-session
 removal; the synchronized numeric field remains an implementation detail. The
@@ -78,16 +85,16 @@ Session, person and handoff forms remain canonical and can be borrowed into the
 Team planning receiver. Delivery overview and Shared sessions are independent
 working modules: inspecting a person replaces the delivery area while the
 sequencer stays visible. The local return restores Delivery overview. Handoff
-Create team accepts a new team, opens direct team controls, then returns to the
-retained handoff so the visitor can review it and choose the new team in the
-requested field. The separate connection diagram and detached Working
+Create team accepts a uniquely named team while retaining the handoff and its
+requested field. The visitor can select that team to refine its direct controls. The separate connection diagram and detached Working
 sessions panel are retired from the visible composition. Their retained source
 owners continue to supply shared state and forms where needed.
 
 ### People, Abilities and the other chapters
 
 People keeps its person and team editors inside their own roster racks. Add
-accepts useful defaults immediately; amp Undo recovers that creation. The person
+accepts useful, uniquely named defaults immediately and leaves their editor
+closed; amp Undo recovers that creation. The person
 draft now owns Name or role alongside rate and funded time, so a new person can
 be refined locally. Apply accepts field edits, while Close retains the draft and
 returns focus to its record. Roles use
@@ -213,7 +220,9 @@ participant time shares remain with #798; production Reset remains with #808.
 | Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
 | People creation starts a detached form; Abilities creation changes chapter | Useful accepted defaults and local editors retain the current rack and support selection. |
 | #825 Working-session Remove sits bottom-left | #828 moves it to the bottom right; Add remains top-right and duration retains its full-height slot. |
-| Blank existing-plan track cells only describe empty time | A plus appends a working session to that plan and preserves every earlier placement. |
+| One add target at the start of a period cell | Named week/month creation areas use the full cell width and append without moving earlier sessions. |
+| Adding a record immediately opens its editor | #831 creates a uniquely named stub in place; selecting its representation opens editing. |
+| Every period caption is derived from stages | A short optional caption overrides the summary while retaining the Sprint/Quarter heading; clearing restores derivation. |
 | Every period addition loads the newest cassette | Lane/track New plan additions keep All plans visible; shelf New plan deliberately loads the new cassette. |
 | Apply appears only below the form | Shared top Apply beside Close delegates to the canonical bottom action, including validation and focus. |
 | New handoff exposes decisions, delays, removal and a repeated amount immediately | From work, To work and optional Team connection lead; follow-on operations become available after acceptance. |
@@ -249,6 +258,6 @@ real-browser runs establish the affected fixtures' integration. This supersedes
 the temporary workaround of excluding every file without a matching case.
 
 Use the README to run the current proof and the Visual Fidelity Contracts for
-composition. #827 owns the focused verification repair; #828 records the latest
-visitor-facing integration. Broader financial models, response records,
+composition. #831 owns compact creation; #832 carries local navigation and the
+Shared sessions workflow; #833 owns atomic session removal and recovery. Broader financial models, response records,
 performance and public release retain their separate issues.

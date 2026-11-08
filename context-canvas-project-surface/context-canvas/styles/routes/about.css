@@ -3450,6 +3450,15 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-cadence__track-table thead th { background: #213f32; color: #fff4d4; }
 .native-cadence__track-table tr > :first-child { position: sticky; inset-inline-start: 0; z-index: 1; inline-size: 10rem; background: #213f32; box-shadow: .2rem 0 0 #10261e; }
 .native-coordination .native-cadence__track-period { inline-size: 100%; min-inline-size: 0; padding: .45rem 1.35rem .45rem .4rem; border: 0; border-radius: .1rem; background: #eee7c5; color: #18372b; box-shadow: inset 0 -.15rem #a7ae91; font-size: .75rem; text-align: start; }
+.native-cadence__part { display:flex; flex-wrap:wrap; align-content:center; gap:.3rem; min-inline-size:0; border-inline-end:1px solid #426b5b; padding-inline-end:.3rem; }
+.native-cadence__part:last-child { border-inline-end:0; padding-inline-end:0; }
+.native-cadence__part > .native-cadence__pad { flex:1 1 2.5rem; }
+.native-cadence__part > .studio-rack-create-zone { flex:1 1 2.5rem; inline-size:auto; }
+.native-cadence__period-label { margin:0; color:#c8decf; font-size:.72rem; }
+.native-coordination .native-cadence__period-label > summary { padding:.2rem .15rem; background:transparent; border:0; color:inherit; }
+.native-cadence__period-label form { display:grid; gap:.4rem; padding:.35rem 0; }
+.native-cadence__period-label label { display:grid; gap:.25rem; }
+.native-cadence__period-label input { min-inline-size:0; inline-size:100%; }
 .native-cadence__pads { display: grid; grid-template-columns: repeat(var(--cadence-pad-columns), minmax(0, 1fr)); grid-auto-flow: row dense; align-content: center; gap: .3rem; min-block-size: 2.75rem; }
 .native-coordination .native-cadence__pad { display: grid; align-content: center; gap: .15rem; inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .3rem 1rem .3rem .35rem; border: 1px solid #84e8c8; border-block-end: .25rem solid #379580; border-radius: .15rem; background: #64d5b7; color: #112f24; box-shadow: 0 .12rem 0 #02180d; font: 750 .7rem/1.25 ui-monospace, monospace; text-align: start; }
 .native-coordination .native-cadence__pad small { color: inherit; white-space: nowrap; font: 550 .63rem/1.3 ui-monospace, monospace; }

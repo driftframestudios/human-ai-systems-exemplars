@@ -2,6 +2,7 @@ import { CONTRACT, LIMITS } from './config.mjs';
 import { preparePersonDraftValues, stepPersonDraftValues, PERSON_DRAFT_TEXT_LIMIT } from './person-draft.mjs';
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 import { ROLE_CATALOGUES, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { nextCreatedLabel } from './creation-label.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const textField = (label, maxLength = LIMITS.label) => Object.freeze({ kind: 'text', label, maxLength });
@@ -154,7 +155,7 @@ function admittedIds(candidate, maximum, field) {
 }
 
 function initialRaw(descriptor, row, plan) {
-  if (descriptor.form === 'person.create') return { label: '', ratePerHour: '', fundedHours: '0', fundedMinutes: '0' };
+  if (descriptor.form === 'person.create') return { label: nextCreatedLabel(plan.people, 'person'), ratePerHour: '', fundedHours: '0', fundedMinutes: '0' };
   if (descriptor.mode === 'remove') return {};
   if (descriptor.form === 'role.update') return Object.fromEntries(Object.keys(roleFields).map(field => [field,
     field === 'change' ? (row.role.change ? `${row.role.change.frameworkId}:${row.role.change.componentId}` : '') : row.role[field] ?? '']));
@@ -165,16 +166,16 @@ function initialRaw(descriptor, row, plan) {
   };
   if (descriptor.collection === 'connections') return {
     senderTeamId: row?.senderTeamId ?? '', receiverTeamId: row?.receiverTeamId ?? '',
-    receiverPersonId: row?.receiverPersonId ?? '', sharedObject: row?.sharedObject ?? '',
+    receiverPersonId: row?.receiverPersonId ?? '', sharedObject: row?.sharedObject ?? nextCreatedLabel(plan.connections, 'handoff', 'sharedObject'),
     responseExpectation: row?.responseExpectation ?? '', workIds: row ? [...row.workIds] : [], status: row?.status ?? 'active',
   };
-  if (descriptor.collection === 'work') return { label: row?.label ?? '', teamId: row?.teamId ?? '',
+  if (descriptor.collection === 'work') return { label: row?.label ?? nextCreatedLabel(plan.work, 'session'), teamId: row?.teamId ?? '',
     cadencePlacements: JSON.stringify((plan?.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === descriptor.id).map(({ workId, ...item }) => item)),
     personIds: row ? [...row.personIds] : [],
     hoursPerSession: String(Math.floor((row?.minutesPerOccurrence ?? 30) / CONTRACT.minutesPerHour)),
     minutesPerSession: String((row?.minutesPerOccurrence ?? 30) % CONTRACT.minutesPerHour),
     occurrences: String(row?.occurrences ?? 1), funding: row?.funding ?? 'additional', status: row?.status ?? 'planned' };
-  return { label: row?.label ?? '', personIds: row ? [...row.personIds] : [] };
+  return { label: row?.label ?? nextCreatedLabel(plan.teams, 'team'), personIds: row ? [...row.personIds] : [] };
 }
 
 function roleValues(raw, errors) {

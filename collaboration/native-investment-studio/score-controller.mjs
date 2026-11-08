@@ -1,3 +1,4 @@
+import { nextCreatedLabel } from './creation-label.mjs';
 import { createCadenceView } from './cadence-view.mjs';
 import { createCadence, resizeCadence, regroupCadence, CADENCE_PERIOD_LIMIT } from './cadence.mjs';
 import { createShowcaseCadence } from './showcase-scenarios.mjs';
@@ -88,7 +89,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   root.append(toolbar, pending, projectionRoot, status);
   const view = createCadenceView(projectionRoot, {
-    onSelect: (target, source) => select(target, true, source), onLoadPlan: loadPlan, onAddPeriod: addPeriod, onNavigate: (target, source) => navigate(target, source),
+    onSelect: (target, source) => select(target, true, source), onLoadPlan: loadPlan, onAddPeriod: addPeriod, onRenamePeriod: renamePeriod, onNavigate: (target, source) => navigate(target, source),
     onPeriod: id => { periodId = id; render(); }, onAddSession: createSession, onAddOccurrence: addOccurrence,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot, flowPanel,
@@ -128,6 +129,15 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     inspectorOpen = false; flowPanel.open = false;
     onAccepted(result.projection);
     if (!disposed) { render(); onEditing(); announce(message); }
+  }
+  function renamePeriod({ id, label }) {
+    acceptCadence(current => {
+      const period = current?.periods.find(row => row.id === id);
+      if (!period || (period.caption ?? '') === label) return current;
+      const { caption: _previousCaption, ...identity } = period;
+      return { ...current, periods: current.periods.map(row => row.id === id
+        ? { ...identity, ...(label ? { caption: label } : {}) } : row) };
+    }, 'Period caption updated.');
   }
   function addPeriod() {
     acceptCadence(current => current && current.periods.length < CADENCE_PERIOD_LIMIT
@@ -378,47 +388,61 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     syncInspectorControls();
     return current;
   }
+  function acceptScoreAddition(update, message) {
+    if (disposed || !isActive()) return;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const base = studio.read(), settings = update(base.state.scoreSettings, base.state);
+    if (!settings) return;
+    const focusKey = document.activeElement?.dataset.cadenceKey;
+    const result = studio.replace({ ...base.state, revision:base.state.revision + 1, scoreSettings:settings }, base);
+    if (!result.ok) { announce(result.error.message); return; }
+    inspectorOpen = false; fieldSignature = '';
+    onAccepted(result.projection);
+    if (disposed) return;
+    render(); onEditing(); announce(message);
+    [...root.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === focusKey)?.focus({ preventScroll:true });
+  }
   function addStage() {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(); if (current.status !== 'editing') { render(); return; }
-    const id = freshId('stage', current.draft.raw.stageIds), token = current.draft.token;
-    operate('setIds', token, 'stageIds', [...current.draft.raw.stageIds, id]); operate('setText', token, 'stage.' + id + '.label', 'Prepare the next step');
-    created.set('stage:' + id, true); select({ kind: 'stage', id }, true);
+    acceptScoreAddition(settings => ({ ...settings, stages:[...settings.stages,
+      { id:freshId('stage', settings.stages), label:nextCreatedLabel(settings.stages, 'stage'), workIds:[] }] }),
+    'Stage added. Select it to choose its supporting sessions.');
   }
   function addHandoff() {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence) { proposeHorizon(); return; }
-    if (current.projection.state.work.length < 2) { announce('Add two working sessions before connecting them.'); return; }
-    const id = freshId('handoff', cadence.handoffs), [first, second] = current.projection.state.work;
-    const from = cadence.handoffs[0]?.from ?? { kind: 'work', id: first.id };
-    const to = cadence.handoffs[0]?.to ?? { kind: 'work', id: second.id };
-    changeCadence(next => ({ ...next, handoffs: [...next.handoffs, { id, from, to, connectionId: null }] }));
-    created.set('handoff:' + id, true); select({ kind: 'handoff', id }, true);
+    if (studio.read().state.work.length < 2) { announce('Add two working sessions before connecting them.'); return; }
+    acceptScoreAddition((settings, state) => {
+      const cadence = settings.cadence; if (!cadence) return null;
+      const id = freshId('handoff', cadence.handoffs), [first, second] = state.work;
+      const from = cadence.handoffs[0]?.from ?? { kind:'work', id:first.id };
+      const to = cadence.handoffs[0]?.to ?? { kind:'work', id:second.id };
+      return { ...settings, cadence:{ ...cadence, handoffs:[...cadence.handoffs, { id, from, to, connectionId:null }] } };
+    }, 'Handoff added. Select it to choose the connected work.');
   }
   function addDecision(anchor = selected) {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
-    const id = freshId('gate', current.draft.raw.gateIds), token = current.draft.token;
-    operate('setIds', token, 'gateIds', [...current.draft.raw.gateIds, id]);
-    operate('setText', token, 'gate.' + id + '.label', 'Review the next commitment');
-    operate('setText', token, 'gate.' + id + '.question', 'What evidence would let the receiving team proceed?');
-    if (anchor.kind === 'stage') operate('setText', token, 'gate.' + id + '.afterStageId', anchor.id);
-    changeCadence(next => ({ ...next, decisionAnchors: [...next.decisionAnchors, { gateId: id, kind: anchor.kind, id: anchor.id }] }));
-    created.set('gate:' + id, true); select({ kind: 'gate', id }, true);
+    acceptScoreAddition(settings => {
+      if (!settings.cadence) return null;
+      const id = freshId('gate', settings.gates);
+      return { ...settings, gates:[...settings.gates, { id, label:nextCreatedLabel(settings.gates, 'decision'),
+        afterStageId:anchor.kind === 'stage' ? anchor.id : null, reviewerPersonId:null,
+        question:'What evidence would let the receiving team proceed?', evidence:null, modeledDecision:'open' }],
+      cadence:{ ...settings.cadence, decisionAnchors:[...settings.cadence.decisionAnchors, { gateId:id, kind:anchor.kind, id:anchor.id }] } };
+    }, 'Decision added. Select it to adjust its question and reviewer.');
   }
   function addDelay(anchor = selected) {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
-    const id = freshId('delay', cadence.delays), affected = new Set(affectedWorkIds(anchor, cadence, current.draft.raw));
-    const placed = new Set(cadence.placements.filter(row => affected.has(row.workId)).map(row => row.periodId));
-    const from = periodId && placed.has(periodId) ? periodId : cadence.periods.find(row => placed.has(row.id))?.id ?? null;
-    const index = cadence.periods.findIndex(row => row.id === from);
-    changeCadence(next => {
-      if (index === next.periods.length - 1 && next.periods.length < CADENCE_PERIOD_LIMIT) next = resizeCadence(next, next.periods.length + 1);
-      const to = index >= 0 ? next.periods[index + 1]?.id ?? null : null;
-      return { ...next, delays: [...next.delays, { id, label: 'Allow time for review', anchor: { kind: anchor.kind, id: anchor.id }, fromPeriodId: from, toPeriodId: to, reason: 'Clarify the receiving team’s questions before proceeding.', receiverPersonId: null }] };
-    });
-    created.set('delay:' + id, true); select({ kind: 'delay', id }, true);
+    acceptScoreAddition((settings, state) => {
+      let cadence = settings.cadence;
+      if (!cadence) return null;
+      const id = freshId('delay', cadence.delays), affected = new Set(affectedWorkIds(anchor, cadence, startingScoreRaw(state)));
+      const placed = new Set(cadence.placements.filter(row => affected.has(row.workId)).map(row => row.periodId));
+      const from = periodId && placed.has(periodId) ? periodId : cadence.periods.find(row => placed.has(row.id))?.id ?? null;
+      const index = cadence.periods.findIndex(row => row.id === from);
+      if (index === cadence.periods.length - 1 && cadence.periods.length < CADENCE_PERIOD_LIMIT)
+        cadence = resizeCadence(cadence, cadence.periods.length + 1);
+      const to = index >= 0 ? cadence.periods[index + 1]?.id ?? null : null;
+      return { ...settings, cadence:{ ...cadence, delays:[...cadence.delays,
+        { id, label:nextCreatedLabel(cadence.delays, 'delay'), anchor:{ kind:anchor.kind, id:anchor.id },
+          fromPeriodId:from, toPeriodId:to, reason:'Clarify the receiving team’s questions before proceeding.', receiverPersonId:null }] } };
+    }, 'Delay added. Select it to adjust the affected work.');
   }
   function removeSelected() {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
