@@ -5,7 +5,7 @@ select, load and revisit. The tilted cassette face carries its name, host,
 duration and session count; its stable button remains easy to point at and use
 with a keyboard. A narrow viewport turns the shelf into a horizontal strip.
 
-**Standing:** human-preserved `dev` visual reference, version `0.1.0`, ID
+**Standing:** human-preserved visual reference, version `0.1.0`, ID
 `vfc:cassette-plan-shelf`; recorded 8 November 2026. The exact art and animation
 baseline is `cedafc3f17c417cf5c90cacb5b1a696acf9cc3c1` in
 `planning/context-canvas/studio-rack-tape-study.html`. This records the approved
@@ -13,7 +13,8 @@ cassette treatment before the visible **Session tapes** heading becomes
 **Plans**. The artwork, scale, hover movement and narrow shelf remain the
 reference while that wording changes in
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
-Production adoption and merging retain their separate human review.
+The planning reference is authorized for main/dev preservation in #810.
+Showcase adoption continues on dev; its promotion to main retains human review.
 
 ## The preserved object
 

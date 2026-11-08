@@ -31,10 +31,13 @@ describe the accepted composition and reusable interaction patterns. Current
 work is coordinated under
 [milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
 
-### Explore the chapter workbench on dev
+### Explore the preserved chapter workbench
 
 Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
-through the repository's local server. The
+through the repository's local server. The human approved its planning-source
+promotion to `main` and `dev` in
+[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+The approved Investment specimen is `93bc69a`. The
 [#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
 extended #804's loaded-tape composition across all Studio chapters. The preservation work in
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
@@ -102,10 +105,15 @@ planned separately in
 The working showcase on `main` keeps its accepted plan, canonical editors and
 recovery behavior. The study's unassigned plans, response cards and financial
 comparisons are illustrative contracts to review before production adoption.
-Merging remains held. The next receiver is human review of the connected chapter
-experience, followed by a separately chosen, focused production bridge.
-The narrow Plan session label and rack-width repairs also remain available on
-`dev`, preserving the Studio's transaction behavior.
+The workbench remains in `planning/` as a reference. The actual About Showcase
+now iterates on `dev`: [#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
+starts with wider rack compositions and compact session modules, preserving
+Showcase dials, zoetropes, output styling and canonical behavior. The Showcase
+on `main` remains the reference anchor. A human cue selects each later promotion.
+Direct team/handoff integration follows in
+[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812),
+and cassette/deck projection in
+[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
 
 ### Continuing routes
 

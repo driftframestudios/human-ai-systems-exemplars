@@ -37,7 +37,11 @@ hover movement, selected outline and horizontal shelf at `650px` and below.
 The loaded detail panel also retains its short downward unfurl. Investment's
 chocolate Extra investment lane remains `#403d32`; additional chocolate
 companion panels separate financial controls and readings within the rack. These local approvals leave the remaining chapter composition open to
-iteration. Merging remains held during the dev study.
+iteration. The planning reference is authorized for main/dev preservation in
+[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+The actual Showcase integrates on dev through
+[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811),
+with main retaining its reference runtime until the human cues promotion.
 
 ## Choose a visual mode and an operation
 

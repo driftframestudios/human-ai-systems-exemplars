@@ -5,11 +5,13 @@ together. Each chapter presents a compact visual reading of the same illustrativ
 work. A selected pad loads its controls nearby; a marked session route opens the
 shared tape module and returns to the originating chapter.
 
-**Standing — 8 November 2026:** active design exploration on `dev`, with the
-current deck, allocation-reel and monetary-scale refinement coordinated in
-[#809](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809).
-[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-established the deeper comparisons and plan recovery.
+**Standing — 8 November 2026:** approved collaboration reference in `planning/`,
+with promotion to `main` and `dev` authorized in
+[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+The Investment specimen is preserved at `93bc69a`; #809 owns its review.
+The About Showcase will integrate selected aspects on `dev` while `main`
+retains the accepted Showcase as its reference anchor. Each Showcase promotion
+receives a separate human cue.
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
 retains the approved cassette, duration-lighting and panel references.
 The all-chapter composition arrived through
@@ -33,8 +35,9 @@ The new [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-ra
 preserves the artwork, hover and narrow shelf at `cedafc3`. The visible shelf now
 reads Plans, with New plan and + Session for its two creation operations. The
 loaded panel's downward unfurl and Investment's chocolate Extra investment lane
-also remain. Work continues on `dev`; merging is held while the human reviews
-the connected experience. The production bridges below remain prospective.
+also remain. Reference promotion keeps this study intact in `planning/`.
+The first dev Showcase bridge starts with layout and form factor in #811;
+future behavioral integrations below retain their focused Issues.
 
 ## One workbench, different questions
 
@@ -329,23 +332,21 @@ Ordinary phone widths retain usable controls and a named local matrix scroller.
 
 ## A bounded route to the working Studio
 
-1. Review the connected dev experience: define and place a tape, change its
-   participation from People, link it to an ability or check, inspect the
-   investment consequence and Undo. Inspect each chapter's compact first view
-   and the return from its session route. Preserve the revised duration reference.
-2. Choose a first production bridge after that review. A view-only consolidation
-   can use a focused PR: stable loaded-tape module, compact duration and occurrence
-   pads, scoped selection, and a bounded
-   optional Event list. Preserve current acceptance and one canonical editor.
+1. Preserve this workbench and its exact approved specimens on main and dev
+   through #810. Keep the main Showcase runtime as the comparison anchor.
+2. Apply a first compact Showcase form-factor pass on dev through #811: broader
+   usable width, compact duration/repetition modules, chocolate companion housing
+   and full-width shared-session pads. Keep Showcase dial/reel art and existing
+   acceptance owners. Existing contextual Add controls create accepted records
+   and then open their canonical editor.
 3. Consolidate Team planning's outside controls, including Customize teams and
-   handoffs, into selected-object modules. Reuse current arrangement, team and
-   connection owners through explicit adapters.
-4. Add the session definition boundary in a separate PR if the reviewed flow
-   confirms defining work before assigning people. Cover a useful unassigned
-   example, assigning its first person, recovery and portable-plan agreement.
-5. Add independent response identity/routing in its own PR. Demonstrate creating
-   one response, changing its receiver and recovering the change. Reconcile
-   existing expected-response text with the new representation explicitly.
+   handoffs, into selected-object rack modules through #812. Preserve current
+   arrangement, team and connection owners; identify any independent response
+   model extension explicitly.
+4. Project the plan cassettes and Investment decks through #813. Map each to
+   canonical work or comparison meanings before changing its representation.
+5. Let human review select each promotion of the dev Showcase to main. Tagged
+   public release and performance refinement retain their separate cues.
 
 The shell at [studio-rack-tape-study.html](studio-rack-tape-study.html) receives
 the chapter adapters through a small shared model/change/open-session interface.

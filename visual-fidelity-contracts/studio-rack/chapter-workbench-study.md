@@ -5,17 +5,24 @@ without learning a new interface at every stop. Compact lanes, sequencer tracks,
 support tables and selected-record modules give each question a useful visual
 form inside one shared rack.
 
-**Standing:** active `dev` composition study, version `0.1.2`, ID
+**Standing:** approved planning workbench, version `0.1.3`, ID
 `vfc:chapter-workbench-study`; updated 8 November 2026. The all-chapter work was
 received in [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
-The current [#809 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
-refines VHS-C depth, connected budget allocation and money scale after #807;
+The [#809 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+preserves VHS-C depth, connected budget allocation and money scale at
+[`93bc69a`](https://github.com/driftframestudios/human-ai-systems-exemplars/commit/93bc69acaae6c1f604568449b6e4ace5151c3217)
+after #807;
 #806 preserves the approved duration lighting and cassette references.
 The [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
 has its own illustrative page-local state. This contract guides that study;
 the [working Studio](../../collaboration/native-investment-studio/README.md)
-retains its accepted model, editors and recovery contracts. Merging is held
-while the human reviews the development experience.
+retains its accepted model, editors and recovery contracts. The human authorized
+the workbench's promotion to `main` in its existing `planning/` directory,
+tracked in [#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+Showcase runtime integration proceeds on `dev`; the existing `main` Showcase
+remains its comparison anchor. A later human cue authorizes each approved
+runtime promotion to `main`. This supersedes the earlier workbench-wide merge
+hold; a public site release retains its separate human cue.
 
 ## One recognizable workbench
 
@@ -106,7 +113,11 @@ Preserve these distinctions:
 
 The [Investment Master Shelf & Financial Reels contract](investment-master-reels.md)
 owns the VHS-C channel, compact financial modules and chocolate companion
-panels. It preserves Plan investment's original funding board and the Extra
+panels. Its exact approved specimen is the shell, Investment adapter/sheet and
+reusable control adapter/sheet at **`93bc69acaae6c1f604568449b6e4ace5151c3217`**.
+That contract records their source paths, stylesheet order, cassette depth,
+connected-reel geometry, monetary readout modes and phone layout. It preserves
+Plan investment's original funding board and the Extra
 investment lane at `#403d32`. A populated deck of every type is available at
 entry. Visitors can add independent comparison copies and remove or recover
 any deck through Undo. This supersedes the earlier one-of-each restriction.
@@ -144,14 +155,33 @@ Participant percentages retain their separate route in #798.
 | [Change/Quality module](../../planning/context-canvas/studio-study-change-quality.mjs) and [CSS](../../planning/context-canvas/studio-study-change-quality.css) | Reels, framework components, emphasis channels, quality attention illustration, check and supporting-work pads |
 | [Investment module](../../planning/context-canvas/studio-study-investment.mjs) and [CSS](../../planning/context-canvas/studio-study-investment.css) | Study-only session pricing, preserved funding lanes, saved comparison, sprint distribution and additional VHS-C comparison decks |
 | [Investment financial adapter](../../planning/context-canvas/studio-investment-financials.mjs) | Populated presets and projections through the canonical investment-analysis calculation core |
-| [Investment controls](../../planning/context-canvas/studio-investment-controls.mjs) and [CSS](../../planning/context-canvas/studio-investment-controls.css) | Stable $100/$5 money dials, direct fields/steppers and reusable choice reels; receiving tape owns state/history |
+| [Investment controls](../../planning/context-canvas/studio-investment-controls.mjs) and [CSS](../../planning/context-canvas/studio-investment-controls.css) | Field-configured $1,000/$100 or $100/$5 money dials, static inline/stacked readouts, exact fields/steppers and reusable choice reels; receiving deck owns its settings and the shell owns history |
 | [Production time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Reused exact-field, circular-step and rotary duration behavior; production source remains unchanged by this study |
 
 Study CSS stays scoped to its own document and chapter roots. Shared component
-names follow their operation when multiple receivers actually use them. A later
-production bridge maps the selected operation to its existing canonical owner;
-copying an illustrative state container into production would leave that
-ownership unresolved.
+names follow their operation when multiple receivers actually use them. The
+`dev` Showcase receives selected operations through its existing canonical
+owners. Its accepted data model, history and recovery retain their existing
+authority while the visible composition becomes more direct.
+
+## Receive the form factor in Showcase
+
+The workbench is the preferred reference for scale, module placement and simple
+operations. The Showcase remains the preferred reference for dark rack,
+period-kanban and sequencer art, including the Team planning legend symbols
+and its existing zoetrope styling. Editorial secondary panels remain a useful
+counterpoint. The approved Investment deck/reel/money specimens preserve their
+own exact reference above while the human chooses how they enter the runtime.
+
+For duration and monetary modules, combine the workbench's compact enclosure
+and lower-right exact field with the Showcase's dial face and inset readout
+art. A receiving change should make that combination visible for human review.
+Use dark or chocolate rack fields for large in-rack areas; reserve apricot for
+fitted accents. Occurrence modules can use the chocolate companion skin while
+adopting the workbench's scale and arrangement. Receiving edits remove
+incidental inspector borders and give teams/handoffs a direct in-rack operation.
+These are `dev` integration directions; the approved planning specimen remains
+available unchanged for comparison, and the `main` Showcase changes on human cue.
 
 ## Review the experience at the level it changes
 
@@ -168,6 +198,7 @@ reading updates.
 Source inspection establishes the receiving modules and their mutation routes.
 Browser observations establish only the exercised interactions and viewports;
 human review determines whether this composition makes the showcase clearer and
-more engaging. The receiving Issue or PR records those results. Production
-integration, general performance refinement and public release retain their
+more engaging. The receiving Issue or PR records those results. The planning
+workbench's authorized promotion and each later runtime promotion are distinct
+receipts. General performance refinement and public release retain their
 separate decisions.

@@ -75,7 +75,7 @@ session and team editors and compact editorial drawers attached beneath the
 horizon. Its review and observations own that delivery. The future percentage
 model remains in #798; broader removal remains with #773.
 
-### Current exploration: a connected chapter workbench
+### Preserved workbench and current Showcase integration
 
 The human requested ideation on `dev`, refreshed from `main`, before deciding
 how to incorporate more operations directly into the rack. The
@@ -89,7 +89,7 @@ illustration as Coordination-only.
 preserves the cassette treatment, visible naming and fixed duration lighting.
 The [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
 added preloaded independent financial comparisons and recoverable plan removal.
-The current [#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+The approved [#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
 strengthens the VHS-C bodies, connects Plan investment's allocation reels and
 matches monetary steps to each comparison's scale. The
 [proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
@@ -185,10 +185,24 @@ teams and handoffs, to one useful home and its existing owner. Events remains an
 optional bounded reading. Unassigned tapes and independent response cards need
 explicit production model decisions; participant percentages stay with #798.
 The working showcase retains its accepted plan, draft, Apply, Cancel and recovery
-contracts while the study uses immediate illustrative edits. Merging remains
-held. Human review of the connected chapters precedes selecting a production
-bridge. The dev CSS repair separately aligns Coordination rack widths and keeps
-Plan session labels readable while preserving their transaction owners.
+contracts while the study uses immediate illustrative edits. The human now
+approved the planning workbench's promotion to main and dev in #810. This
+supersedes the blanket hold on merging the study. Its Investment art and controls
+are pinned at `93bc69a`; the main Showcase runtime remains anchored at `9338acc`.
+
+The active dev Showcase integration is #811. Study scale and form factor guide
+compact module placement; the Showcase remains the art-direction authority for
+dials, zoetropes, output depth, Kanban/sequence surfaces and participation legend.
+The initial bridge broadens the Studio's usable field and compacts the existing
+session deck. Chocolate repetition housing complements the dark instrument
+surfaces; editorial secondary panels retain their useful contrast. Existing
+contextual creation and Undo owners remain. The numeric count stays available
+until occurrence pads gain a decrement route.
+
+#812 owns direct team/handoff rack integration, and #813 owns cassette/deck
+projection. Future dev Showcase promotions require the human cue. The preserved
+planning reference continues to provide a comparison while canonical model,
+proposal and recovery behavior guide the actual Showcase implementation.
 
 ### State, people and evidence
 
@@ -410,7 +424,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Earlier direction | Current replacement and reason |
 | --- | --- |
 | Coordination-only loaded-tape illustration in #804 | #805 extends the compact workbench across People, Abilities, Change, Quality & recovery and Investment. Shared illustrative identities and Undo make the chapter relationships reviewable; production integration remains a later decision. |
-| The complete dev illustration treated as tentative layout | The duration panel and neighboring Working sessions geometry have their own exact reference. #806 also preserves the cassette artwork, hover and narrow shelf in a separate contract, plus the loaded-panel unfurl and chocolate Extra investment lane. Other chapter compositions remain iterative, with merging held. |
+| Blanket merge hold for the illustrative workbench | #810 authorizes preserving the planning specimen on main and dev. The actual Showcase now integrates on dev through #811–#813; its promotion to main remains human-cued. |
+| The complete dev illustration treated as tentative layout | The duration panel and neighboring Working sessions geometry have their own exact reference. #806 also preserves the cassette artwork, hover and narrow shelf in a separate contract, plus the loaded-panel unfurl and chocolate Extra investment lane. The planning reference is now authorized for main/dev preservation in #810; Showcase adoption continues on dev with human-cued promotion. |
 | Rotating the duration dial's entire face, including its gradient and shadow | The approved #806 lighting correction keeps the face and simulated light fixed. A full-face transparent carrier rotates only the existing pointer mark. Duration geometry, palette and value/gesture owners remain preserved; the duration contract is now version 0.1.1. |
 | Session tapes, New session and Occurrence as the study's shelf vocabulary | #806 uses Plans, New plan and + Session; faces show their session count. The same source identities and duration owner remain. This visible naming change leaves production's session model intact. |
 | Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
@@ -860,13 +875,12 @@ also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-The next receiving decision is the #809 dev refinement of Investment decks,
-allocation reels and monetary controls. Its receiving Issue records matching source and browser observations;
-#805 retains the earlier connected-chapter evidence. Human review now assesses
-the independent financial decks, connected budget allocation, fixed monetary
-readouts and preserved chocolate companions before choosing a production bridge. The approved
-duration panel retains its geometry and palette with the approved fixed-lighting
-revision. Future percentage
+#810 receives the planning-reference promotion and confirms that main's Showcase
+runtime remains unchanged. The next visual receiver is the #811 compact dev
+Showcase pass, followed by direct handoff routing (#812) and cassette/deck
+integration (#813). The approved study remains available for comparison.
+The duration panel retains its geometry and fixed-lighting reference; production
+controllers retain their editing and recovery meanings. Future percentage
 semantics remain with #798 and broader removal with #773.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).

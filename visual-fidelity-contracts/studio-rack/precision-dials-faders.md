@@ -156,7 +156,8 @@ the duplicate numeric Working sessions editor is hidden in this illustration.
 This approved development reference replaces open sizing exploration for those
 panels. Its standalone contract records the full cascade, source owner and recall
 route while cassette artwork continues to evolve. Production adoption remains a
-separate reviewed change; development merging is currently held.
+separate reviewed change on dev; Showcase promotion to main remains human-cued.
+The planning specimen itself is authorized for main/dev preservation in #810.
 
 The future [participant fader contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
 is separate from #771's shared movement controls. **Time in this session** would

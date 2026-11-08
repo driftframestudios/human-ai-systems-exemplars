@@ -5,7 +5,7 @@ one compact panel. Hours and Minutes share a readout, neighboring dial groups
 and exact fields, while the adjacent Working sessions panel owns repetitions
 and their placement.
 
-**Standing:** human-approved `dev` visual reference, version `0.1.1`, ID
+**Standing:** human-approved visual reference, version `0.1.1`, ID
 `vfc:loaded-tape-duration-panel`; updated 8 November 2026. The panel preserves
 its approved scale, geometry and palette with one deliberate lighting correction:
 the dial face stays still while its pointer turns. The original recall baseline is
@@ -15,8 +15,8 @@ factory at that revision. The approved correction below supersedes that baseline
 rotating face in [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
 This contract preserves the development illustration and its explicit revision;
 the [production quantity contract](precision-dials-faders.md) retains its current
-receivers and separate implementation authority. Merging remains held while the
-development study continues.
+receivers and separate implementation authority. The planning reference is authorized for main/dev preservation in #810.
+Showcase integration continues on dev, with promotion to main human-cued.
 
 ## The approved object
 
