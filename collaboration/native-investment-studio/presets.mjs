@@ -64,7 +64,7 @@ function fundedSessions() {
 
 // The showcase uses ordinary plan records. Editors, pricing and exchange share
 // the same owners as visitor-created plans; each entrance receives a fresh plan.
-export function createShowcasePlan({ pausedExample = false } = {}) {
+export function createShowcasePlan({ pausedExample = false, peopleExamples = false } = {}) {
   const plan = createExamplePlan();
   plan.planId = 'service-request-pilot';
   plan.horizonWeeks = 8;
@@ -117,6 +117,15 @@ export function createShowcasePlan({ pausedExample = false } = {}) {
     reviewBoundary: 'The researcher checks each draft claim against the interview notes. The quality reviewer checks exception-handling claims in the review.',
     decisionBoundary: 'The product lead chooses the pilot scope after the evidence and review conditions are recorded.',
   }];
+  if (peopleExamples) plan.contributions.push({
+    id: 'source-index', categoryId: 'source-retrieval', receiverPersonId: 'leo', decisionOwnerPersonId: 'maya',
+    workIds: ['research'], reviewBoundary: 'The researcher verifies source identity and dates before synthesis.',
+    decisionBoundary: 'The product lead chooses which evidence informs the pilot scope.',
+  }, {
+    id: 'prototype-draft', categoryId: 'draft-artifacts', receiverPersonId: 'ari', decisionOwnerPersonId: 'maya',
+    workIds: ['pairing', 'review'], reviewBoundary: 'The engineering lead checks the prototype behavior before the decision review.',
+    decisionBoundary: 'The product lead decides whether the reviewed prototype is ready for the pilot.',
+  });
   plan.connections = [
     ['scope', 'product', 'engineering', 'ari', 'Pilot scope and tested user journeys',
       'Confirm an implementable slice and flag evidence gaps', ['research', 'pairing']],

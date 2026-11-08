@@ -6,6 +6,17 @@ import { parsePlan, preparePlan } from '../../collaboration/native-investment-st
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 
 const VERSION = '1.0.0';
+test('the live People example adds two distinct contributions without changing investment', () => {
+  const baseline = createStudio(createShowcasePlan()).read();
+  const populated = createStudio(createShowcasePlan({ peopleExamples: true })).read();
+  assert.deepEqual(populated.state.contributions.slice(1).map(row => [row.categoryId, row.receiverPersonId, row.decisionOwnerPersonId, row.workIds]), [
+    ['source-retrieval', 'leo', 'maya', ['research']],
+    ['draft-artifacts', 'ari', 'maya', ['pairing', 'review']],
+  ]);
+  assert.deepEqual(populated.result, baseline.result);
+  assert.equal(parsePlan(populated.serialized).serialized, populated.serialized);
+});
+
 test('the finite native catalogue names its exact version and creates independently owned projections', () => {
   const list = listPresets();
   assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'service-request-rollout', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);

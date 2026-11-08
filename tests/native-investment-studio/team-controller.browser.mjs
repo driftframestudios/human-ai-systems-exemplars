@@ -86,13 +86,13 @@ async function assertContained(page) {
   const observation = await team(page).evaluate(root => {
     const width = document.documentElement.clientWidth;
     const entries = [...root.querySelectorAll('input,button,summary,h3,p,output')]
-      .filter(node => node.getClientRects().length && !node.closest('[hidden]') && !node.closest('.studio-session-tracks'))
+      .filter(node => node.getClientRects().length && !node.closest('[hidden]') && !node.closest('.studio-session-tracks,.studio-team-lanes,[data-responsibility-list]'))
       .map(node => {
         const box = node.getBoundingClientRect();
         return { tag: node.localName, name: node.name ?? '', label: node.getAttribute('aria-label'), className: node.className, parent: node.parentElement.className, left: box.left, right: box.right,
           scroll: node.scrollWidth, client: node.clientWidth };
       });
-    for (const screen of root.querySelectorAll('.studio-session-tracks')) {
+    for (const screen of root.querySelectorAll('.studio-session-tracks,.studio-team-lanes,[data-responsibility-list]')) {
       const box = screen.getBoundingClientRect();
       entries.push({ tag: 'scroll region', left: box.left, right: box.right, scroll: screen.clientWidth, client: screen.clientWidth });
     }
@@ -474,7 +474,7 @@ for (const engine of names) {
       for (const label of labels) assert.ok(label.textBottom <= label.inputTop,
         `the complete ${label.name} label precedes its input at ${width}px: ${JSON.stringify(label)}`);
       if (width === 1440) {
-        const rows = await team(page).locator('[data-team-roster] > li').evaluateAll(items => {
+        const rows = await team(page).locator('[data-team-roster] > [data-roster-person]').evaluateAll(items => {
           const rows = new Map();
           for (const item of items) { const box = item.getBoundingClientRect(), key = Math.round(box.top); rows.set(key, [...(rows.get(key) ?? []), box.bottom]); }
           return [...rows.values()];

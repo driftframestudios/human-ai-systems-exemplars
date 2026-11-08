@@ -319,8 +319,7 @@ for (const engine of names) {
     assert.equal(state.work.length, 4); assert.equal(state.work.find(row => row.id === 'rehearsal').minutesPerOccurrence, 30);
     assert.equal(state.assuranceSettings.rehearsals[0].definitionId, 'specialist-unavailable');
     await tab(page, 'people').click(); const people = root(page).locator('[data-native-assembly]');
-    await people.locator('[data-assembly-person]').selectOption(state.people.find(row => row.label === 'Additional reviewer').id);
-    await people.locator('[data-assembly-action="person-remove"]').click();
+    await people.locator(`[data-assembly-action="person-remove"][data-assembly-id="${state.people.find(row => row.label === 'Additional reviewer').id}"]`).click();
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('Rehearsal: A specialist is unavailable for the planned review');
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('reviewer'); await expect(people.locator('[data-assembly-apply]')).toBeDisabled();
     await people.locator('[data-assembly-dependencies] [data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();

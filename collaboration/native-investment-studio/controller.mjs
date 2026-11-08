@@ -569,7 +569,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function useHorizonExample(id) {
     const create = { 'service-request-pilot': createShowcasePlan, 'service-request-rollout': createQuarterShowcasePlan }[id];
     if (!create || disposed) return;
-    const result = studio.replace(create({ pausedExample: true }), studio.read());
+    const result = studio.replace(create({ pausedExample: true, peopleExamples: true }), studio.read());
     render();
     announce(result.ok ? 'Example updated. Undo restores your previous plan.' : result.error.message);
   }
@@ -1142,7 +1142,7 @@ export function mountCoordinationPanel(root, options = {}) {
 
 if (typeof document !== 'undefined') {
   for (const root of document.querySelectorAll('[data-native-coordination]')) {
-    try { mountCoordinationPanel(root, { studio: createStudio(createShowcasePlan({ pausedExample: true })) }); }
+    try { mountCoordinationPanel(root, { studio: createStudio(createShowcasePlan({ pausedExample: true, peopleExamples: true })) }); }
     catch {
       const fallback = root.querySelector('[data-native-fallback]');
       if (fallback) { fallback.hidden = false; fallback.textContent = 'Editing is unavailable.'; }

@@ -95,3 +95,18 @@ test('direct person and session additions are usable records with separate Undo 
   assert.equal(studio.undo(studio.read()).ok, true);
   assert.deepEqual(studio.read().state, before.state);
 });
+
+test('direct contribution creation keeps human responsibility open and restores one complete history step', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), before = studio.read();
+  const person = editing.person.begin('product-one', before);
+  editing.person.setText(person.view.draft.token, 'ratePerHour', 'unfinished');
+  const added = createRackRecord(studio, editing, 'contribution');
+  assert.equal(added.ok, true, added.error?.message);
+  assert.deepEqual(studio.read().state.contributions, [{ id: added.id, categoryId: 'draft-artifacts',
+    receiverPersonId: null, decisionOwnerPersonId: null, workIds: [], reviewBoundary: null, decisionBoundary: null }]);
+  assert.deepEqual(studio.read().result, before.result);
+  assert.equal(editing.read().parked.find(row => row.kind === 'person').raw.ratePerHour, 'unfinished');
+  assert.equal(studio.readHistory().undoCount, 1);
+  assert.equal(studio.undo(added.projection).ok, true);
+  assert.equal(studio.read().serialized, before.serialized);
+});

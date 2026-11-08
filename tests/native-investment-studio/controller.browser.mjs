@@ -327,9 +327,9 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,822.50');
     await tab('people').click();
     await people.locator('[data-person-id="product-one"]').click();
-    await role.locator('summary').click();
+    await role.locator('[data-role-field="functionId"]').click();
     await role.locator('[name="functionId"]').selectOption('engineering');
-    await role.locator('[data-responsibility-apply]').click();
+    await expect(role.locator('.studio-rack-header__saved')).toHaveText('Saved');
     await expect(total(page)).toHaveText('$1,822.50');
 
     await tab('coordination').click();

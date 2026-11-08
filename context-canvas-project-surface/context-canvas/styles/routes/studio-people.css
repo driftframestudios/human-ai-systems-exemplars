@@ -1,0 +1,149 @@
+/* People racks: editorial team groups, recessed roster and contribution controls.
+   Loaded after studio-arrangements.css. Studio Rack Composition supplies control
+   meaning; this owner supplies People geometry and the canonical person form,
+   including that form when Coordination borrows it into a local receiver. */
+.native-coordination .studio-people-rack { gap:.75rem; padding:clamp(.55rem,1.6vw,1rem); border:1px solid #668b73; border-radius:.4rem; background:#20382f; color:#f7f0d6; box-shadow:inset 0 1px #809484,inset 0 -3px #0b1b14; }
+.native-coordination .studio-people-rack > :is(h3,p) { margin:0; color:inherit; }
+.native-coordination .studio-people-rack > h3 { font-size:1.15rem; }
+.native-coordination :is(.studio-people-rates,.native-assembly__teams,.studio-people-rack .native-responsibility) { min-inline-size:0; max-inline-size:100%; padding:.65rem; border:1px solid #526a5c; border-radius:.3rem; background:#000; color:#f7f0d6; box-shadow:inset 0 3px 6px #000; }
+.native-coordination :is(.studio-people-rates,.native-assembly__teams,.studio-people-rack .native-responsibility) :is(h4,h5,legend) { margin:0; color:inherit; }
+.native-coordination :is(.native-assembly__heading,.native-responsibility__heading) { gap:.5rem; margin:0 0 .6rem; }
+.native-coordination :is(.native-assembly__heading,.native-responsibility__heading) h4 { font:700 .95rem/1.4 system-ui,sans-serif; }
+.native-coordination .studio-people-rack .native-coordination__status { margin:.4rem 0 0; font-size:.78rem; }
+
+/* Teams are parallel groups. Their single scroll row retains the same ordering
+   at every width; the heading and creation control sit outside that viewport. */
+.studio-people-rack .studio-team-lanes { display:block; min-inline-size:0; max-inline-size:100%; margin:0; padding:.15rem .15rem .55rem; overflow-x:auto; overscroll-behavior-inline:contain; scrollbar-color:#809484 #000; }
+.studio-people-rack .studio-team-lanes:focus-visible { outline:2px solid var(--native-focus); outline-offset:1px; }
+.native-coordination .studio-people-rack .native-assembly__team-list { display:grid; grid-auto-flow:column; grid-auto-columns:16rem; grid-template-columns:none; align-items:start; gap:.55rem; inline-size:max-content; min-inline-size:100%; margin:0; padding:0; list-style:none; }
+.native-coordination .studio-people-rack .native-assembly__team-list > li { display:flex; flex-direction:column; align-self:stretch; gap:.45rem; min-inline-size:0; margin:0; padding:.55rem; border:1px solid #8a9d85; border-block-start:.25rem solid #668b73; border-radius:.15rem; background:var(--studio-peach); color:var(--native-text); box-shadow:inset 0 1px #fffbe5; }
+.native-coordination .studio-people-rack [data-assembly-team] { inline-size:100%; min-inline-size:0; min-block-size:2.75rem; text-align:start; padding:.45rem 1.25rem .45rem .5rem; background:var(--native-paper); color:var(--native-text); border:1px solid #8a9d85; box-shadow:inset 0 -3px #b9c7af; font-size:.85rem; }
+.native-coordination .studio-people-rack [data-assembly-team][aria-pressed='true'] { background:var(--native-signal); border-color:#164d3d; box-shadow:inset 0 2px 3px #173c3155; }
+.native-coordination .studio-people-rack .studio-team-lane__person { background:var(--native-paper); color:var(--native-text); }
+.native-coordination .studio-people-rack .native-assembly__team-list :is(.native-coordination__actions,.native-coordination__manipulation) { gap:.3rem; margin:0; }
+.native-coordination .studio-people-rack .native-assembly__team-list .native-coordination__actions button { min-block-size:2.5rem; min-inline-size:0; padding:.3rem .45rem; font-size:.72rem; box-shadow:none; }
+.native-coordination .studio-people-rack .native-assembly__team-list details { margin:0; padding:0; border:0; border-block-start:1px solid #8a9d85; background:transparent; box-shadow:none; }
+.native-coordination .studio-people-rack .native-assembly__team-list details > summary { padding:.4rem; background:transparent; font-size:.75rem; }
+.native-coordination .studio-people-rack .native-assembly__team-list details .native-coordination__actions { margin-block-start:.4rem; }
+.native-coordination .studio-people-rack .native-assembly__team-list > .studio-team-add { min-block-size:6rem; padding:0; border:0; background:transparent; box-shadow:none; }
+.native-coordination .studio-team-add > .studio-rack-create-zone { flex:1; min-block-size:6rem; }
+
+.native-coordination .studio-people-rack .native-team__roster { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; margin:.5rem 0; padding:0; }
+.native-coordination .studio-people-rack .native-team__roster > li { gap:.3rem; min-inline-size:0; padding:.5rem; background:var(--native-paper); color:var(--native-text); border:1px solid #9aab93; border-inline-start:.2rem solid #668b73; border-radius:.15rem; box-shadow:inset 0 -3px #b9c7af; }
+.native-coordination .studio-people-rack .native-team__roster > li:has([data-person-id][aria-pressed='true']) { border-color:var(--native-signal); border-inline-start-color:var(--native-signal); background:#d5e5da; }
+.native-coordination .studio-people-rack [data-person-id] { min-inline-size:0; min-block-size:2.75rem; padding:.4rem 1.2rem .4rem .45rem; background:var(--studio-peach); color:var(--native-text); border:1px solid #8a9d85; box-shadow:none; font-size:.85rem; }
+.native-coordination .studio-people-rack [data-person-id][aria-pressed='true'] { background:var(--native-signal); border-style:solid; box-shadow:inset 0 2px 3px #173c3155; }
+.native-coordination .studio-people-rack .native-team__roster p { margin:0; font-size:.72rem; line-height:1.4; }
+.studio-person-order { display:flex; flex-wrap:wrap; gap:.3rem; margin-block-start:.2rem; }
+.native-coordination .studio-person-order button { min-inline-size:0; min-block-size:2.5rem; padding:.3rem .45rem; box-shadow:none; font-size:.72rem; }
+.native-coordination .studio-person-order button:not(.native-control--remove) { border:1px solid #8a9d85; background:transparent; color:var(--native-text); }
+.native-coordination .studio-people-rack .native-team__roster > .studio-roster-add { display:flex; align-self:stretch; min-block-size:6rem; padding:0; border:0; background:transparent; box-shadow:none; }
+.native-coordination .studio-roster-add > .studio-rack-create-zone { flex:1; min-block-size:6rem; }
+.studio-people-reading { margin-block:.5rem; min-inline-size:0; max-inline-size:100%; }
+
+/* These receivers move as mounted DOM between People and Coordination. */
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) { min-inline-size:0; margin:0; border:1px solid #668b73; border-radius:.2rem; box-shadow:none; color:var(--native-text); background:var(--studio-peach); }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) > summary { padding:.6rem .7rem; background:#d5e5da; color:var(--native-text); font-size:.8rem; }
+:is(.studio-people-rates,.native-assembly__teams) > .native-coordination__configuration[open] > summary { display:none; }
+[data-responsibility-configure][open] > summary { display:none; }
+.studio-people-editor__heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; padding:.55rem .65rem; background:#29483a; color:#f7f0d6; }
+.native-coordination .studio-people-editor__heading h4 { min-inline-size:0; margin:0; color:inherit; }
+.native-coordination .studio-people-editor__heading button:not(.studio-apply-control) { color:inherit; background:transparent; border-color:#668b73; box-shadow:none; }
+.studio-rack-editor .studio-people-editor__heading { display:none; }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) form { padding:.65rem; background:var(--studio-peach); }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) label { color:var(--native-text); font-size:.8rem; }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) .native-coordination__actions { gap:.4rem; }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) fieldset > .native-coordination__actions { margin-block-start:.65rem; }
+.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) .native-coordination__actions button { min-inline-size:0; min-block-size:2.5rem; font-size:.8rem; }
+.studio-person-name { display:grid; gap:.3rem; margin:0 0 .5rem; max-inline-size:28rem; }
+.studio-person-name textarea { inline-size:100%; min-inline-size:0; min-block-size:2.75rem; padding:.45rem; border:1px solid var(--native-rule); border-radius:3px; color:var(--native-text); background:var(--native-paper); font:inherit; resize:vertical; }
+.native-coordination [data-person-configure] .native-coordination__controls { display:grid; grid-template-columns:minmax(0,1.8fr) repeat(2,minmax(0,1fr)); gap:.55rem; margin:.5rem 0; }
+.native-coordination [data-person-configure] .native-coordination__control { gap:.35rem; padding:.5rem; background:var(--native-paper); border:1px solid #a2b09a; border-radius:3px; color:var(--native-text); }
+.native-coordination [data-person-configure] .studio-rate { display:grid; grid-template-columns:minmax(7rem,1fr) auto; background:#f2d0b6; box-shadow:none; }
+.native-coordination [data-person-configure] .studio-rate > label { grid-column:1/-1; }
+.native-coordination [data-person-configure] .studio-rate > .native-coordination__stepper { grid-column:1; grid-row:2; align-self:center; }
+.native-coordination [data-person-configure] .studio-rate > .native-coordination__hint { grid-column:1; grid-row:3; }
+.native-coordination [data-person-configure] .native-rate-controls { grid-column:2; grid-row:2/4; margin:0; align-self:center; }
+.native-coordination [data-person-configure] .native-rate__dials { gap:.45rem; }
+.native-coordination [data-person-configure] .native-rate__part { gap:.25rem; }
+.native-coordination [data-person-configure] .native-rate__dial { inline-size:4rem; }
+.native-coordination [data-person-configure] .native-rate__dial--fine { inline-size:3.5rem; }
+.native-coordination [data-person-configure] .native-rate__label { font-size:.65rem; white-space:nowrap; }
+.native-coordination [data-person-configure] .native-coordination__stepper { --native-input-measure:calc(7ch + 1rem); gap:.3rem; inline-size:min(var(--native-input-measure),100%); }
+.native-coordination [data-person-configure] .native-coordination__stepper input { font-size:1rem; min-block-size:2.5rem; }
+.native-coordination [data-person-configure] .native-coordination__stepper button { min-inline-size:2.75rem; inline-size:2.75rem; block-size:2.75rem; min-block-size:2.75rem; }
+.native-coordination [data-person-configure] .native-coordination__hint { margin:0; font-size:.72rem; line-height:1.4; }
+.native-coordination [data-person-configure] .native-coordination__preview { display:flex; flex-wrap:wrap; align-items:baseline; gap:.3rem .65rem; margin:.5rem 0; padding:.45rem .6rem; border-inline-start-width:.2rem; }
+.native-coordination [data-person-configure] .native-coordination__preview output { font:700 1rem/1.3 ui-monospace,monospace; }
+.native-coordination [data-person-configure] .native-coordination__preview p { margin:0; font-size:.75rem; }
+.native-coordination [data-person-configure] .native-coordination__feedback:has(> :not(:empty)) { margin-block:.4rem; }
+
+.native-coordination .studio-role-pads { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.35rem; margin-block:0 .65rem; padding:.45rem; background:#000; border:1px solid #668b73; border-radius:3px; }
+.native-coordination .studio-role-pads button { display:grid; align-content:start; gap:.2rem; min-inline-size:0; min-block-size:3.5rem; padding:.45rem; background:#29483a; color:#f7f0d6; border:1px solid #668b73; border-radius:2px; box-shadow:none; text-align:start; font-size:.75rem; }
+.native-coordination .studio-role-pads button small { font-size:.7rem; line-height:1.35; font-weight:400; }
+.native-coordination .studio-role-pads button[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 2px 3px #173c3155; }
+.native-coordination [data-responsibility-configure='role'] .native-responsibility__accepted { display:none; }
+.native-coordination [data-responsibility-configure='role'][data-editing='false'] :is(.studio-rack-header__owner,.studio-rack-editor__tools) { display:none; }
+.native-coordination [data-responsibility-configure='role'] .native-responsibility__grid { display:block; max-inline-size:32rem; }
+.native-coordination [data-responsibility-configure] .native-responsibility__field { grid-template-rows:none; gap:.35rem; }
+.native-coordination [data-responsibility-configure] .native-responsibility__field[hidden] { display:none; }
+.native-coordination [data-responsibility-configure] .native-responsibility__field select { font-size:.85rem; border-width:1px; }
+.native-coordination [data-responsibility-configure] .native-responsibility__general-error:empty { display:none; }
+
+.native-coordination .studio-people-rack .native-responsibility { display:grid; gap:.55rem; }
+[data-responsibility-list] { display:block; min-inline-size:0; max-inline-size:100%; overflow-x:auto; }
+.studio-contribution-tracks { inline-size:100%; margin:0; border-collapse:separate; border-spacing:.25rem; padding:.25rem; background:#000; }
+.native-coordination .studio-contribution-tracks :is(th,td) { background:transparent; color:#f7f0d6; padding:.2rem; min-inline-size:5rem; font-size:.75rem; }
+.native-coordination .studio-contribution-tracks th:first-child { min-inline-size:11rem; text-align:left; }
+.native-coordination .studio-contribution-tracks caption { padding:.25rem .2rem; color:#c2decc; text-align:start; font-size:.75rem; }
+.native-coordination .studio-contribution-tracks .studio-contribution-add > td { padding:.2rem; border:0; background:transparent; }
+.native-coordination .studio-contribution-add .studio-rack-create-zone { min-block-size:3.5rem; }
+.native-coordination .studio-contribution-tracks__pad { display:block; inline-size:100%; min-inline-size:2.75rem; min-block-size:2.75rem; padding:.25rem; border:1px solid #668b73; border-radius:2px; background:#142e25; color:#f7f0d6; box-shadow:none; }
+.native-coordination .studio-contribution-tracks__pad[data-included='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 -3px #3c8d7b; }
+.native-coordination .studio-contribution-tracks .native-responsibility__selector { position:relative; padding:.45rem 1.3rem .45rem .5rem; background:#2e5140; color:#f0f4d8; border:1px solid #668b73; box-shadow:none; text-align:start; }
+.studio-contribution-tracks .studio-track-key small { display:block; margin-block-start:.2rem; font-size:.7rem; font-weight:400; }
+.studio-contribution-tracks .native-responsibility__selector::after { border:0; border-block-start:.12rem solid currentColor; border-inline-end:.12rem solid currentColor; rotate:0deg; transform:translateY(-50%) rotate(45deg); }
+.studio-contribution-tracks .native-responsibility__selector[aria-expanded='true']::after { transform:translateY(-50%) rotate(135deg); }
+.native-coordination .studio-contribution-tracks .native-responsibility__selector[aria-pressed='true'] { background:#164d3d; }
+.native-coordination [data-responsibility-fields] { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+:is(.studio-contribution-work,.studio-contribution-people) { display:grid; align-content:start; gap:.6rem; min-inline-size:0; padding:.6rem; border:1px solid #a2b09a; border-radius:3px; background:var(--native-paper); }
+.native-coordination :is(.studio-contribution-work,.studio-contribution-people) > h5 { color:var(--native-text); font-size:.85rem; }
+.native-coordination .studio-contribution-people { background:#d5e5da; }
+.native-coordination [data-responsibility-configure] .native-responsibility__sessions { gap:.4rem; margin:0; }
+.native-coordination [data-responsibility-configure] .native-responsibility__work { gap:.35rem; margin:0; }
+.native-coordination [data-responsibility-configure] .native-responsibility__work > li { gap:.3rem; padding:.35rem; border-color:#a2b09a; background:var(--studio-peach); }
+.native-coordination [data-responsibility-configure] .native-responsibility__work label { flex-basis:7rem; min-block-size:2.5rem; gap:.4rem; }
+.native-coordination [data-responsibility-configure] .native-responsibility__work .native-coordination__actions { gap:.3rem; }
+.native-coordination [data-responsibility-configure] .native-responsibility__work .native-coordination__actions button { min-inline-size:2.5rem; min-block-size:2.5rem; padding:.3rem .45rem; font-size:1rem; box-shadow:none; }
+.native-coordination [data-responsibility-configure][data-direct-acceptance='true'] .studio-apply-control[aria-disabled='true'],
+.native-coordination [data-responsibility-configure][data-direct-acceptance='true'] fieldset > .native-coordination__actions:has([data-responsibility-apply][aria-disabled='true']) { display:none; }
+.native-coordination [data-responsibility-configure] .native-coordination__control-title { margin:0; font-size:.8rem; }
+
+@container (max-width:40rem) {
+  .native-coordination [data-person-configure] .native-coordination__controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .native-coordination [data-person-configure] .studio-rate { grid-column:1/-1; grid-template-columns:minmax(7rem,1fr) auto; }
+}
+@container (max-width:18rem) {
+  .native-coordination [data-person-configure] .native-coordination__controls,
+  .native-coordination [data-person-configure] .studio-rate { grid-template-columns:minmax(0,1fr); }
+  .native-coordination [data-person-configure] .studio-rate > .native-coordination__stepper,
+  .native-coordination [data-person-configure] .studio-rate > .native-coordination__hint,
+  .native-coordination [data-person-configure] .native-rate-controls { grid-column:1; grid-row:auto; }
+}
+@media (max-width:42rem) {
+  .native-coordination .studio-people-rack .native-team__roster { grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); }
+  .studio-person-order { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .studio-person-order .native-control--remove { grid-column:1/-1; }
+  .native-coordination .studio-role-pads { grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); }
+  .native-coordination [data-responsibility-fields] { grid-template-columns:minmax(0,1fr); }
+  .native-coordination .studio-people-rack .native-assembly__team-list { grid-auto-columns:14rem; }
+}
+@media (forced-colors:active) {
+  .native-coordination :is(.studio-people-rack,.studio-people-rates,.native-assembly__teams,.studio-people-rack .native-responsibility,.studio-role-pads,.studio-contribution-tracks,.studio-contribution-work,.studio-contribution-people) { color:CanvasText; background:Canvas; border-color:CanvasText; box-shadow:none; }
+  .native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]),.native-coordination :is([data-person-configure],[data-assembly-configure],[data-responsibility-configure]) :is(form,summary),.studio-people-editor__heading { color:CanvasText; background:Canvas; border-color:CanvasText; }
+  .native-coordination .studio-people-rack :is(.native-assembly__team-list > li,.native-team__roster > li),.native-coordination [data-person-configure] .native-coordination__control,.native-coordination [data-responsibility-configure] .native-responsibility__work > li { background:Canvas; color:CanvasText; border-color:CanvasText; box-shadow:none; }
+  .native-coordination :is(.studio-role-pads,.studio-contribution-tracks,.studio-person-order) button,.native-coordination .studio-people-rack :is([data-assembly-team],[data-person-id],.studio-team-lane__person) { color:ButtonText; background:ButtonFace; border-color:ButtonText; box-shadow:none; }
+  .native-coordination .studio-contribution-tracks :is(th,td,caption),.native-coordination .studio-contribution-people { color:CanvasText; }
+  .native-coordination .studio-role-pads button[aria-pressed='true'],.native-coordination .studio-contribution-tracks__pad[data-included='true'],.native-coordination .studio-people-rack :is([data-assembly-team],[data-person-id])[aria-pressed='true'] { outline:2px solid Highlight; background:ButtonFace; color:ButtonText; }
+  .native-coordination [data-person-configure] .native-rate__dial { inline-size:7rem; block-size:2.75rem; }
+}
