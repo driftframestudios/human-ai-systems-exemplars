@@ -9,7 +9,7 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
-People (#836), Abilities support racks with local shared-name editing (#856),
+People team lanes and a direct session arranger (#864), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
 retain their existing owners.
@@ -42,11 +42,15 @@ response. Creating its missing team retains the handoff entries and selects the
 new team. Existing response text remains in the model and exports.
 
 People keeps teams, people and contributions together in compact racks. Teams
-occupy one horizontal row of editorial lanes; each lane represents a group.
-Visible movement controls arrange the teams, people and ordered team members.
-The roster and contribution matrix sit in black recessed modules. A selected
-person opens compact name, rate and funded-time settings inside the roster;
-Apply accepts those typed values. Coordination borrows this same compact form.
+occupy one horizontal row of editorial lanes; a full-width team key identifies
+each parent group and toggles its compact settings. Movement and Remove sit
+together at the lane bottom. The people/session arranger places each person's
+rate, funded and available time, teams and quality indicators beside their
+participation pads. A checkbox changes session participation directly, with
+amp Undo available. Record-local controls arrange and remove people.
+A selected person opens compact name, rate and funded-time settings with an
+**All people** return; Apply accepts those typed values. Coordination borrows
+this same compact form.
 Role mix remains visible with the current person's name, eight pads showing their
 current values, and one native selector for the selected facet. Changing a role
 value accepts it directly.
@@ -93,6 +97,9 @@ large radio pads with short hints beside Participants at wider widths.
 Local headers identify the owning rack and current item, with an owner return
 and Close. Prepared forms offer Apply beside Close and at the bottom, sharing
 validation and the accepted-state owner. Direct edits show Saved.
+Shared stepper geometry keeps monetary, duration and ordinary numeric buttons
+circular within their route-specific skins. Quality's local labels and actions
+pair readable ink with their dark or editorial field.
 
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.

@@ -9,7 +9,9 @@ synthesis keeps creation inside its lane, distinguishes accepted relationship
 changes from proposals, and gives every editor a visible owner and selected
 record. Abilities also lets a visitor rename a shared person or team without
 leaving the support task. Change and Quality use compact attached receivers for
-the detail behind their primary instruments.
+the detail behind their primary instruments. People combines parallel team
+lanes with an arranger that relates people directly to working sessions; its
+selected record keeps a local return to that comparison.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -30,6 +32,8 @@ comparison anchor until a human authorizes promotion.
 | [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
 | [Atlassian inline edit](https://atlassian.design/patterns/inline-edit/), official design-system guidance | Reading and editing can occupy the same page, with aligned read and edit views. | A name beside an Abilities identity gets a small Rename action and one local field. The Studio uses native controls and its canonical record owner; the component implementation stays with Atlassian. |
 | [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/), accessibility practice | Enter/Space activation and expanded state identify the visibility of related content. | Local name and detail controls report their actual receiver state. A native input provides text editing; visible Save and Cancel define acceptance and recovery. |
+| [Ableton Arrangement View](https://www.ableton.com/en/live-manual/12/arrangement-view/), product practice | Arrangement tracks combine comparable content with local controls and explicit reorder operations. | People rows retain identity, resource readings and local editing beside session participation. Team lanes retain their parallel group meaning; this Studio adaptation represents enterprise work. |
+| [WAI tables with two headers](https://www.w3.org/WAI/tutorials/tables/two-headers/), accessibility practice | Row and column headers identify the meaning of their intersecting cells. | The People arranger uses native scoped headers and named checkbox pads for each person/session relationship. Its local scroll region retains those relationships on phone widths. |
 | Human observations of the running Studio and preserved workbench, local evidence | Detached editors, repeated creation controls and unclear saving made scope difficult to follow. Compact modules and direct pads were preferred. | Preserve the art, duration module and separate delivery/shared-session working areas. This establishes a collaboration direction; focused browser checks establish the resulting behavior, rather than population-level usability. |
 
 ## Compared routes
@@ -80,6 +84,33 @@ changes when the visitor saves it, while the surrounding support assignment
 changes when its proposal is applied. The design precedents establish an
 interaction shape; a focused browser journey establishes label propagation,
 draft preservation, keyboard recovery and Undo in this Studio.
+
+### Teams, people and their shared work
+
+| Candidate | Useful portion | Consequence for this composition |
+| --- | --- | --- |
+| A single people/session spreadsheet | Direct comparison and participation cells | Pair it with team lanes so group identity remains visible. |
+| Person cassettes with one inspector | A compact selected-record working area | Use the local owner/current return while retaining comparable rows. |
+| Team lanes above a people/session arranger | Distinct group and relationship readings | This is the selected structure for #864. |
+| Complete controls repeated inside every team lane | Immediate local editing | Shared people would repeat across groups; one canonical selected-person receiver serves those routes. |
+
+The synthesis gives Teams full-width parent keys in editorial lanes. A selected
+key opens its compact receiver; a second activation closes it. Movement and
+removal stay grouped at the lane bottom. The arranger carries the former roster's
+resource readings, saved-edit and quality indicators, record operations and
+direct session participation. Person and Role controls remain local; Contributions
+and sessions form a distinct companion working area. This keeps the semantic
+difference between team membership, session participation and contribution
+responsibility visible.
+
+The implementation sequence repairs removal descriptions first, then composes
+the People working areas and consolidates control geometry. Existing commands
+own accepted records, and the draft coordinator owns unfinished fields. Renaming,
+reordering, creation, removal and participation each retain their existing Undo
+or proposal boundary. A local return restores the originating record with the
+matrix still available. The public precedents support this interaction shape;
+the focused Studio journeys establish retained values, recovery and phone-width
+reachability for the actual implementation.
 
 ## Source and observation
 

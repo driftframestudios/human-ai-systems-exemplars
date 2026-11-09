@@ -33,9 +33,11 @@ updates keep the matrix visible. Person and handoff editors use the delivery
 working area while Shared sessions remains independent. Creating a team from
 a handoff returns to that retained handoff and its requested team field.
 
-People groups Teams into one horizontal row of parallel editorial lanes. Its
-black recessed roster holds direct arrangement controls, compact Person settings
-and a visible Role mix rail with the current value on each facet. Contributions
+People groups Teams into one horizontal row of parallel editorial lanes, with
+full-width parent keys and bottom-aligned movement/removal tools. Its recessed
+people/session arranger keeps resource readings and record operations beside
+direct participation pads. Compact Person settings provide an All people return,
+and Role mix retains the current value on each facet. Contributions
 retain their session matrix and open a compact Work / Receiver and decision pair.
 Role choices, contribution choices and team/support membership accept directly
 through shared history; person quantities and text retain Apply.

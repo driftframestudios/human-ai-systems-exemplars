@@ -15,7 +15,10 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
-#836 carries the compact People receiver with shared creation controls from #837.
+#864 carries the People team lanes and direct session arranger, extending #836's
+compact receiver and shared creation controls from #837. #863 completes the
+removal notice's reference descriptions; #865 consolidates circular steppers
+and repairs Quality control contrast and spacing.
 #848 carries that composition into Abilities, with local person/team naming in
 #856. #849 makes Change action selection visible; #857/#858 extend the compact
 local receiver into Change and Quality. #818 receives the full financial-deck
@@ -143,14 +146,24 @@ The evidence and alternatives are reconciled in the control research.
 ### People, Abilities and the other chapters
 
 People has one continuous rack composition: horizontal editorial team lanes,
-a black recessed roster with local settings and Role mix, then a black
-contribution/session matrix. Team lanes represent parallel groups. Their visible
-Move left/right controls change display order; person cards offer Move
-earlier/later and Remove beside the record. Team membership and member order
-accept directly through canonical commands. Shared keyed movement connects each
-record's old and new position while reduced motion retains the final state.
+a people/session arranger with local settings and Role mix, then a distinct
+contribution/session working area. Team lanes represent parallel groups. Their
+full-width parent key toggles the local editor; Move left/right and Remove stay
+together at the lane bottom. The arranger carries the former roster's rates,
+funded and available time, team names, saved-edit markers, quality indicators
+and per-person operations alongside session participation. Native checkbox pads
+accept participation through the existing work command. Team membership and
+member order retain their separate direct commands. Shared keyed movement
+connects each record's old and new position while reduced motion retains the
+final state.
 
-Empty team, roster and contribution slots share one creation control. Pointer
+This supersedes the separate roster cards and passive participation reading.
+The four-option comparison favored team lanes plus an arranger and one selected
+record receiver: teams keep their parent identity, shared people stay comparable,
+and local settings keep a visible All people return. The canonical person form
+retains typed edits; session participation retains accepted history and Undo.
+
+Empty team, people and contribution slots share one creation control. Pointer
 hover and keyboard focus reveal the plus; touch keeps it visible. Add accepts a
 useful record immediately with editing closed, and amp Undo recovers that
 creation. Person and team defaults receive unique names. Selecting a record
@@ -158,6 +171,15 @@ opens its local controls. The compact person draft owns Name or role, rate and
 funded time; Apply accepts those typed values, while Close retains the draft and
 returns focus to its record. Coordination borrows that same mounted form and
 compact treatment.
+
+The removal notice formerly recognized fewer reference collections than the
+accepted command layer emitted. Valid handoff, ability and contribution references
+could therefore display an undefined type. The repaired description boundary
+names each supported reference from its owning record or catalogue. If Undo
+removes a dependency while its earlier notice stays open, the notice retains the
+typed stable identity. The existing removal and recovery rules retain their
+authority. Focused unit and browser regressions distinguish this presentation
+omission from accepted-state integrity and exercise that retained-notice lifecycle.
 
 Role mix stays visible with its heading and current person. Eight pads display
 the current facet values, and one native selector edits the selected facet.
@@ -396,7 +418,10 @@ participant time shares remain with #798; production Reset remains with #808.
 | Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
 | Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
 | Live Investment repeats the specimen's illustrative reel artwork | The shared Showcase zoetrope control carries financial choices; the planning specimen retains its original illustration. |
-| Rates disclosure and long contribution note editors | Direct roster/rate controls, role facets and a contribution/session matrix; stored note data is retained. |
+| Rates disclosure and long contribution note editors | Direct rate controls, role facets and a contribution/session matrix; stored note data is retained. |
+| Separate roster cards and passive People participation reading | Team parent lanes and one person-by-session arranger retain readings, operations and direct membership. |
+| Removal notice covers only part of the emitted reference union | Typed record/catalogue descriptions retain meaningful names and earlier identities through Undo. |
+| Chapter button padding distorts circular steps | Shared instrument geometry owns the circles; receiving modules own placement and skin. |
 | Large raised buttons for most actions | Quiet local controls, preserved selected-state artwork and stronger Apply emphasis. |
 | Standalone Add controls in every lane | Named empty creation areas reuse the existing accepted creation command where scope is clear. |
 | Showcase-specific duration faces and duplicate repetition stepper | Exact workbench duration specimen plus session pads in the rack. |
@@ -426,6 +451,9 @@ the temporary workaround of excluding every file without a matching case.
 For People, the [assembly browser route](../../tests/native-investment-studio/assembly.browser.mjs)
 observes accepted membership/order, keyed movement, shared Undo, removal
 dependencies, retained drafts and the borrowed person receiver. The
+[person browser route](../../tests/native-investment-studio/team-controller.browser.mjs)
+observes direct session membership, local person settings, rates and the
+arranger's phone/desktop containment. The
 [responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
 observes the visible role rail, direct contribution changes, preserved note data,
 and phone/desktop composition. These checks establish the named local behavior;
@@ -434,8 +462,10 @@ the receiving release supplies the hosted observation.
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
-#836 owns the People composition and direct responsibility choices, with #837
-supplying its shared creation-control dependency. #848 applies the compact
-receiving pattern to Abilities; #849 settles Change action state; #818 receives
-the financial workbench. Independent response records, performance and public
-release retain their separate issues.
+#864 owns the current People composition and retains #836's direct responsibility
+choices, with #837 supplying shared creation controls. #863 covers dependency
+notice completeness and recovery; #865 owns circular control consistency and
+Quality readability. #848/#856 carry compact Abilities support and naming;
+#849/#857 settle Change action state and local receivers; #858 carries the
+Quality receiver; #818 receives the financial workbench. Independent response
+records, performance and public release retain their separate issues.
