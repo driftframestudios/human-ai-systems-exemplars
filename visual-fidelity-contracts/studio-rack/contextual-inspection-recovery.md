@@ -22,7 +22,9 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | New handoff accepts a relationship between available work records with editing closed. Selecting it opens From work, To work, optional Team connection, decisions, delays and removal. Apply accepts later field changes. |
 | People | Add person, team and contribution accept useful starting records with editing closed. Per-record controls arrange the roster and parallel team lanes. Compact Person settings, the visible role rail and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
-| Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. |
+| Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
+| Change | A component or action key opens one dark receiver with Support/Methods views. Its shared header names the selected component and owns local return, Apply and Close; session planning attaches to that working area. |
+| Quality & recovery | Check/support, assumptions, recovery and rehearsal details use compact local modules behind the primary instruments. The attached receiver shares the canonical Apply operation and retains unfinished entries when closed. |
 
 The Delivery working area and Shared sessions have separate visibility roles.
 Changing the selected person or team affects the first area; the participation
@@ -96,6 +98,15 @@ team or session accepts that record, then selects it within the current support
 proposal. Apply accepts the relationship. Cancel restores the prior support
 selection while retaining the added record; amp Undo can recover its creation.
 
+Renaming a shared identity from Abilities follows the same ownership distinction.
+Rename opens one local input with a concise plan-wide scope cue. Save or Enter
+accepts the canonical label; Cancel or Escape returns to the current name. The
+capability proposal keeps its raw entries and stable selected IDs while its
+record labels refresh. Blank names remain editable with a short error; an
+unchanged name leaves history intact. The local action receives focus on return,
+and amp Undo recovers an accepted rename. This single-field receiver borrows the
+record operation rather than the entire People form.
+
 An editor switch parks unfinished work. A saved draft returns to a visible
 receiver before focus enters its review control or requested field. Record,
 rack and phase identity recover the initiating control after a board refresh.
@@ -125,6 +136,15 @@ Remove remains bottom-right. Response content stays in the canonical record;
 new connections receive a concise default and appear in Delivery and Shared
 sessions immediately. Long textareas and repeated cost previews are superseded.
 
+Change and Quality use the same header and receiver scale, with their own
+instrument palettes preserved. Related local views switch visibility while
+their draft controls remain mounted. At laptop widths a supporting session's
+duration module sits beside compact identity, participation and funding fields;
+ordinary phone widths stack the modules. Selected keys and carets describe the
+visible receiver. Close retains the draft and returns locally; Apply delegates
+to the existing submitter. Primary reels, faders and reference displays retain
+their established shape and motion.
+
 [Ableton's Clip View](https://www.ableton.com/en/live-manual/12/clip-view/)
 provides the selected-record/detail precedent. The Studio adapts it as a
 nonmodal working area with native form controls. A future blocking overlay
@@ -147,6 +167,12 @@ those operations and dimensions; human walkthrough establishes whether the
 composition and return cues feel clear.
 
 ## Supersession and next boundary
+
+#856 replaces a chapter detour for a referenced name with one compact local
+Rename operation. #857/#858 replace the tall Change and Quality detail forms
+with attached rack receivers. Accepted record commands, raw proposal ownership
+and shared Undo remain the same boundaries; their presentation and local return
+now follow the established compact rack pattern.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 visible record-local controls. Its role rail stays in view, and bounded

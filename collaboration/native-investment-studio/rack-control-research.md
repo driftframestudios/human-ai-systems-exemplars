@@ -5,9 +5,11 @@
 A visitor should recognize where a rack control will act, see the result beside
 that control, and return to the same working area. The cassette artwork, period
 board, sequencer and selected pads provide the hierarchy. The current dev
-synthesis supports #831 and #832: add a useful item with editing closed, keep
-creation inside its lane, distinguish direct relationship changes from proposals,
-and give every editor a visible owner and selected record.
+synthesis keeps creation inside its lane, distinguishes accepted relationship
+changes from proposals, and gives every editor a visible owner and selected
+record. Abilities also lets a visitor rename a shared person or team without
+leaving the support task. Change and Quality use compact attached receivers for
+the detail behind their primary instruments.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -26,6 +28,8 @@ comparison anchor until a human authorizes promotion.
 | [WAI Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/), accessibility practice | Buttons carry an action, accessible name, keyboard activation and truthful state. | Native creation targets name the added object. Track keys identify the selected/open record. Checkbox cells change participation or support links; empty cells in that matrix retain the same relationship meaning. |
 | [GOV.UK Button](https://design-system.service.gov.uk/components/button/), official design-system guidance | Clear action labels and limited primary emphasis make the next operation easier to identify. | Raised Apply accepts a prepared form. Direct team and membership edits show Saved. Quiet rose Remove and amp Undo keep recovery visible. This guidance informs hierarchy, not the Studio palette. |
 | [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
+| [Atlassian inline edit](https://atlassian.design/patterns/inline-edit/), official design-system guidance | Reading and editing can occupy the same page, with aligned read and edit views. | A name beside an Abilities identity gets a small Rename action and one local field. The Studio uses native controls and its canonical record owner; the component implementation stays with Atlassian. |
+| [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/), accessibility practice | Enter/Space activation and expanded state identify the visibility of related content. | Local name and detail controls report their actual receiver state. A native input provides text editing; visible Save and Cancel define acceptance and recovery. |
 | Human observations of the running Studio and preserved workbench, local evidence | Detached editors, repeated creation controls and unclear saving made scope difficult to follow. Compact modules and direct pads were preferred. | Preserve the art, duration module and separate delivery/shared-session working areas. This establishes a collaboration direction; focused browser checks establish the resulting behavior, rather than population-level usability. |
 
 ## Compared routes
@@ -46,6 +50,7 @@ commands, draft coordinator and amp recovery.
 | Connect shared work to a handoff | Checkbox pads in Shared sessions · Handoffs | Each support-link change accepts directly; amp Undo reverses it. |
 | Edit a handoff | Select its matrix heading or delivery card | The canonical handoff form appears inside the originating module. Apply accepts the draft; owner return and Close preserve its entries and restore the origin. |
 | Edit a team | Delivery lane's team key | Name, membership and order update directly with visible saving state. The delivery board and Shared sessions keep separate visibility roles. |
+| Rename a shared identity from Abilities | Compact Rename beside the referenced person or team | Save accepts only the canonical name. The support proposal retains its entries and relationships; amp Undo recovers the name. |
 | Edit a prepared form | Current record and owner at left; Apply and Close at right | The top Apply delegates to the canonical submitter, sharing validation and focus behavior. |
 | Undo accepted work | Stable native amp control | Recovers the latest accepted change independently of cassette or matrix selection. |
 
@@ -53,6 +58,28 @@ Delivery-lane placement for a newly added team or handoff belongs to the current
 receiver view. It survives local refresh and Undo/redo. A freshly mounted receiver derives imported
 phase placement from existing relationships; this change introduces no
 new exported lifecycle field.
+
+### Renaming a referenced person or team
+
+| Candidate | Fit for this task |
+| --- | --- |
+| Travel to People | Provides the complete record controls, but requires a chapter return for a single name. Keep this route for broader person/team work. |
+| Borrow the full record editor | Reuses established fields, but introduces rate, availability or membership operations and a competing draft owner. Keep it for editing those relationships together. |
+| Edit the name beside its identity | Preserves the current support context and gives one explicit accepted operation. This is the selected route for #856. |
+
+The local field edits a label attached to a stable shared ID. It visibly names
+the entity, accepts a meaningful nonblank name through Save or Enter, and lets
+Cancel or Escape leave the accepted value intact. Save updates that identity
+through the canonical person/team command. The capability proposal keeps its
+raw fields and selected IDs, then resumes against the updated accepted state.
+An unchanged name leaves accepted history intact. A short scope cue identifies
+the name as shared across the plan. Local focus returns to the Rename action.
+
+This small operation deliberately keeps acceptance explicit: the shared name
+changes when the visitor saves it, while the surrounding support assignment
+changes when its proposal is applied. The design precedents establish an
+interaction shape; a focused browser journey establishes label propagation,
+draft preservation, keyboard recovery and Undo in this Studio.
 
 ## Source and observation
 
