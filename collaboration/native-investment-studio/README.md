@@ -10,7 +10,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
 People team lanes and a direct session arranger (#864), a unified person mixing
-desk with connected role reels and capacity readings (#884), contribution-local
+desk with connected role reels and capacity readings (#884), aligned participation
+pads and concise readings (#890), explicit Session spread choices (#891), contribution-local
 creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
@@ -51,12 +52,15 @@ lane bottom with Remove at the right. Team Settings pairs its name with the
 selected members' hourly subtotal; unknown rates remain explicit. Add person
 keeps a compact name/preview row and a return to the team or task that opened it.
 The people/session arranger keeps each person's rate, funded time, team and
-quality indicators beside direct participation pads. Selected cells show that
-person's planned time and known work value. The top reading and session-column
-footers retain explicit zero totals; available cells stay visibly available. Whole-dollar readings remain concise; unknown rates stay explicit and exact
-values remain in the plan. Equal columns and a named local scroll region preserve
-comfortable pads. The legend explains selected participation and paused work.
-Paused sessions retain their planned time and value in the canonical ledger.
+quality indicators beside direct participation pads. Each pad keeps its checkbox
+at the upper left, planned time at the lower left and stronger known-value reading
+at the lower right. Compact rows retain generous selection areas. **Card actions**
+collects reordering and removal; the person's name opens their settings. Top
+readings separate label, value and short context, while column footers retain
+explicit zero totals. Equal columns and local horizontal scrolling preserve the
+comparison on phones. Whole dollars, tabular figures and unknown-rate labels keep
+the readings concise. Paused columns carry hatching and a circled pause marker;
+their planned time and value remain in the ledger.
 
 Selecting a person opens one mixing desk with one **All people** return and Close.
 Rate dials sit left of funded Hours/Minutes, with a cool-blue information preview.
@@ -69,18 +73,23 @@ select connected role presets. Component pads and a small facet bank allow exact
 overrides. All reel options share canvas-paper resting and teal selected faces;
 the separate chromatic pressed specimen remains in the Visual Fidelity Contracts.
 Each preset accepts one role edit with amp Undo; Function and Seniority
-remain the visitor's own selections. The **Session spread** fader changes this
-person's participation in whole session plans and shows actual planned and funded
-time. It fills choices in visible plan order while keeping a session's sole
-participant assigned. A completed gesture has one Undo step. Its reel movement is
-decorative; hours confer no decision authority. Per-person fractional time remains
-separate future work in #798.
+remain the visitor's own selections. **Session spread** offers an analog three-way
+switch with **One plan**, **Half** and **All plans** as direct native pressed-state
+choices. Actual plan count, assigned time, funded time and sessions stay
+visible. A choice fills complete plans in visible order and has one Undo step.
+Choices below the number of plans that need this person remain disabled with a
+nearby explanation; adding another participant enables those reductions. Custom
+participation remains labeled **Custom spread**. Recorded role and decision
+authority keep their explicit choices. Per-person fractional time remains separate
+future work in #798.
 
 The contribution matrix gives a second scope: its rollup counts distinct linked
-work once, even when several contributions share a session. Column footers show
-the corresponding support and planned-time reading; a symbol legend distinguishes
-links, paused work and responsibility. Pause/Resume changes that session's shared
-status while preserving its planned ledger values.
+work once, even when several contributions share a session. Its **Supporting time**
+and **Known work value** readings name that scope. Supporting effort footers pair
+their totals with quiet **Pause session** / **Resume session** actions. Each action
+changes the session throughout the plan, updates the whole column's paused
+treatment and retains its planned ledger values. The legend names linked support,
+the circled pause marker and responsibility.
 A contribution opens Work beside Receiver and decision, with those sections
 stacked at phone widths. Category, human receiver, decision owner and supporting
 session choices accept directly, as do People team membership and member order.
@@ -176,7 +185,7 @@ meaning and leave the accepted work price intact. **Compare a change** and
    **People** to assign participants or **Handoffs** to link the work. The last
    participant stays selected until another person is included.
 5. In People, arrange team lanes or choose a person. Turn a role reel, refine a
-   component or facet, and move Session spread to compare whole-session
+   component or facet, and choose a Session spread preset to compare whole-session
    participation. These choices save directly with amp Undo. Apply accepts typed
    name, rate and funded time. Choose a contribution to connect its work, receiver
    and decision owner.
@@ -211,6 +220,7 @@ commitments and findings.
 | Rename a referenced person or team in Abilities | Rename opens one local field; Save accepts the shared name and retains the support proposal |
 | Arrange People team lanes or person rows | Movement controls sit on the record and accept its new order with shared motion and Undo |
 | Change People team membership, member order, role values or contribution choices | Native selectors, checkbox pads and movement controls accept directly and retain local focus |
+| Choose Session spread | One plan, Half and All plans select whole plans with one Undo; actual usage remains visible and sole-participant limits explain unavailable choices |
 | Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
@@ -269,7 +279,8 @@ drafts and the borrowed person form. The
 [responsibility journey](../../tests/native-investment-studio/responsibility.browser.mjs)
 observes the person mixing desk, connected role choices, contribution links and
 retained note data at phone and desktop widths. Focused capacity checks distinguish
-whole-session membership, one-gesture Undo, unknown rates and deduplicated readings. The Abilities journey observes
+whole-session membership, one-choice Undo, sole-participant limits, unknown rates
+and deduplicated readings. The Abilities journey observes
 readable choices, hidden-section behavior, retained proposals and accepted
 recovery. Investment checks independent deck identities, connected selections,
 saved round trips and grouped dial recovery. These routes establish local source

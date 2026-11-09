@@ -19,7 +19,9 @@ commands and recovery owners.
 spread in one visible mixing desk. Capacity readings distinguish person/session
 effort from the contribution matrix's distinct linked work. This supersedes #881's
 paired disclosure presentation while retaining its contribution-local creation
-and canonical draft owners. #882 owns the
+and canonical draft owners. #890 refines the matrix readings, stable pad alignment
+and footer session actions. #891 replaces the Session spread fader with an analog
+three-way switch and explains sole-participant limits at the control. #882 owns the
 follow-up global audit of circular increment shadows. #879 establishes People
 group identity, local hourly subtotals, compact readings and nested creation
 returns. These extend #864's team lanes and direct session arranger,
@@ -170,17 +172,22 @@ member order retain their separate direct commands. Shared keyed movement
 connects each record's old and new position while reduced motion retains the
 final state.
 
-Equal session columns preserve the large participation pads while the person
-readings use fewer lines. Rates display whole dollars per hour; the funded-time
-pair names available and funded time explicitly. The top reading totals assigned
-person-time and known work value; each selected cell shows that person's time and
-value for its session plan. Column footers retain zero for empty totals. A legend
-pairs funded, extra and paused symbols with their meanings. Paused work retains
-planned effort and money, matching the canonical ledger. Unknown rates remain
-visible. Tabular numerals keep the readings aligned, while exact editing retains
-stored precision. More collects each person's order and removal tools.
-This supersedes repeated full-sentence resource readings, while the comparison
-and native table headers remain intact. The bounded public-source synthesis in
+Equal session columns preserve large participation pads within more compact rows.
+Their checkbox stays upper left; planned time sits lower left and the stronger
+known-value reading lower right. Stable positions and tabular figures support
+comparison while exact editing retains stored precision. Rates display whole
+dollars per hour, and funded-time pills name both available and funded time.
+The top readings now use native description-list groups: label, prominent value
+and one short context line. Column footers retain explicit zero values. **Card
+actions** collects reordering and removal, replacing the ambiguous More label;
+the person's name remains the settings entry.
+
+A legend names funded, extra and paused work. Paused sessions keep their planned
+effort and money while hatching marks the entire header/body/footer column and a
+circled pause symbol marks participating pads. Available pads retain their
+participation meaning. Unknown rates remain explicit. This #890 pass supersedes
+centered cell readings and a single flat summary line while retaining native table
+headers and the existing ledger scope. The bounded public-source synthesis in
 [control research](rack-control-research.md#compact-readings-and-a-contextual-return)
 supplies the rationale; the receiving PR owns the browser observations.
 
@@ -250,25 +257,35 @@ remain independently chosen. Actual framework component pads and seven facet
 selectors provide exact overrides. Hydrating an existing person preserves their
 recorded role values; a deliberate choice invokes a recipe.
 
-Session spread gives the same desk an immediate relationship control. Its fader
-and One plan / Half / All plans presets select complete work rows in visible plan
-order. A sole participant stays assigned so each session remains usable. The
-readout shows selected sessions, actual assigned time and funded time. One
-completed gesture maps to one reversible participation command. Decorative reel
-movement responds to this spread while recorded role and decision authority keep
-their explicit choices. Fractional per-person session time remains #798's separate
-model decision. This scope makes the visual variation useful today without
-presenting a percentage as a stored allocation.
+Session spread gives the same desk an immediate relationship control. #891
+supersedes the fader with an analog three-way switch: **One plan**, **Half** and
+**All plans** remain direct native button choices. The matching accepted choice
+stays pressed; a
+different combination reads **Custom spread**. Actual plan count, assigned time,
+funded time and session count remain visible. Each choice selects complete work
+rows in visible plan order through one reversible participation command.
+
+A plan's sole participant stays assigned. Choices below the required plan count
+are disabled with a nearby reason, so their label accurately describes the result
+they can create. Adding another participant enables those reductions. Recorded
+role and decision authority keep their explicit choices. Fractional per-person
+session time remains #798's
+separate model decision.
 
 The selected contribution places Work beside Receiver and decision, stacking
 them at phone widths. Category, human receiver, decision owner, supporting
 sessions and support order accept directly. The two human choices preserve
 their separate responsibilities. Accepted links light the matrix's session
 cells. The contribution rollup selects the union of linked work IDs, so a shared
-session contributes its planned time and known value once. Column footers show
-support and time, and a concise legend names links, paused work and responsibility.
-Pause/Resume changes the shared session status; its planned ledger amounts remain
-visible. Earlier stored review and decision-boundary notes remain in the plan and
+session contributes its planned time and known value once. **Supporting time** and
+**Known work value** use the same label/value/context hierarchy as the People
+readings. Supporting effort footers show their totals and quiet **Pause session** /
+**Resume session** actions. These changing action labels use ordinary native
+button semantics. Each action changes the shared session status, retains local
+focus and supports amp Undo. Whole-column hatching, the circled pause marker and
+its legend identify paused work while planned ledger amounts remain visible.
+This supersedes status controls in the column headings. Earlier stored review and
+decision-boundary notes remain in the plan and
 exports while the compact controls edit their current fields.
 
 Add a person requested by a contribution stays inside that contribution's rack.
@@ -485,6 +502,9 @@ participant time shares remain with #798; production Reset remains with #808.
 | Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
 | People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
 | #881 paired Person/Role disclosure modules | One selected-person mixing desk combines rate/funded time, three connected role reels, exact overrides and whole-session spread; one header and Close serve the visible desk. |
+| #884 Session spread fader with additional preset shortcuts | #891 exposes One plan, Half and All plans as an analog three-way switch, with actual usage and explained unavailable reductions. |
+| Flat capacity summaries and centered participation readings | #890 separates label/value/context and fixes checkbox, time and value to stable pad positions; compact rows retain large selection areas. |
+| Contribution Pause/Resume in column headings | Supporting effort footers hold quiet session actions; paused columns carry hatching and circled pause markers while keeping ledger values. |
 | Contribution Add person opens the upper Team creation area | The canonical creation form occupies a half-rack inside the initiating contribution and returns to its retained human field. |
 | Role and contribution selections wait for Apply | Role values, contribution category, human responsibility and supporting sessions accept directly; typed person settings retain Apply. |
 | Person settings use a large chapter-local form | One compact canonical form serves both People and the borrowed Coordination receiver. |
@@ -549,7 +569,10 @@ observes local person settings, rates and quantity-control behavior. The
 [responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
 observes direct session membership, parked drafts and Undo, the connected role
 mixer, direct contribution changes, preserved note data, and phone/desktop
-composition. Focused source checks distinguish atomic whole-session spread,
+composition. #890's focused browser observations distinguish stable checkbox/time/
+value alignment, footer-only session actions, retained planned values and exact
+Pause/Resume Undo. #891 observes the three visible spread choices, explained
+sole-participant limits, retained person drafts and one-choice Undo. Focused source checks distinguish atomic whole-session spread,
 preserved Function/Seniority, known-value coverage and deduplicated support totals.
 The related #885 repair keeps grid layout on an ordinary wrapper inside native
 Person and creation fieldsets. This preserves disabled-state semantics while
@@ -563,7 +586,9 @@ the receiving release supplies the hosted observation.
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
-#884 carries the unified person mixing desk and capacity readings; #881 retains
+#884 carries the unified person mixing desk and capacity readings; #890 refines
+their presentation and footer actions, and #891 owns explicit spread choices.
+#881 retains
 contribution-local creation and the separate canonical form owners. #882 holds
 the global circular-stepper shadow audit. #879 refines the current
 People composition from #864 and retains #836's direct responsibility choices,

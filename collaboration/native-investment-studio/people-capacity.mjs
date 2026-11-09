@@ -33,7 +33,7 @@ export function readPersonSessionSpread(projection, personId) {
     fundedMinutes: person.fundedMinutes });
 }
 
-// A fader step selects complete work rows in their visible order. A session's
+// A spread choice selects complete work rows in their visible order. A session's
 // sole participant stays assigned, preserving the existing usable-plan rule.
 export function planPersonSessionSpread(projection, personId, count) {
   const current = readPersonSessionSpread(projection, personId);
