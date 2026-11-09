@@ -23,6 +23,8 @@ and source extract, rather than an Article draft.
   data meaning, art direction, possible forms and fitting observations. The
   expanded exploration connects an episode scatterplot, a reviewed Issue-to-PR
   map and box plots of recorded change, with shared work and promotion visible.
+  The accepted box-plot repair supplies a readable opening view and saved-choice
+  requirements for the later Article receiver.
 - [Native Studio README](../../../collaboration/native-investment-studio/README.md)
   owns current orientation; its
   [experience journal](../../../collaboration/native-investment-studio/experience-journal.md)

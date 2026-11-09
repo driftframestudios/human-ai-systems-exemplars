@@ -95,9 +95,11 @@ unreviewed linkage remains unresolved rather than becoming a zero-work finding.
 The first box plots use the earlier snapshot's **107 merged milestone-23 PRs**.
 Each PR supplies one observation for either commits or files changed; a measure
 switch updates the title, unit, values and interpretation together. The full
-population retains the 127-commit, 184-file showcase promotion #707. A clearly
-labelled detail selection can show the other 106 PRs while preserving that event
-as a separate source-bearing observation.
+population retains the 127-commit, 184-file showcase promotion #707. The readable
+opening view uses **files changed per PR for the other 106 PRs**, with the
+promotion's exact values and public source separately visible. The full 107-PR
+population remains selectable. A compatible saved selection takes precedence
+over the opening default.
 
 Use linearly interpolated quartiles at `(n - 1) × p`. A box spans the first to
 third quartile, with a median line. Tukey whiskers end at the most extreme observed
@@ -112,6 +114,38 @@ observation access. Potential later measures include scoped paths or textual
 changes per commit, and consistently extracted decision or review events per
 episode. Elapsed Issue lifetime receives a calendar-time label and a separate
 standing for ongoing work.
+
+### Readable default and saved selections
+
+The human accepted the repaired conversational box plot on 9 November 2026.
+Its receiving requirements are:
+
+- Give the box, median, whiskers and outside observations enough plotting space
+  to inspect at narrow and desktop widths. Keep the current population, axis
+  rescaling and separately displayed promotion visible. Display the median and
+  middle-half range as readable values beside the plot.
+- Preserve the chosen measure, population and source PR when the host returns a
+  saved-selection update. Restore compatible choices from either the direct
+  state object or its `modelContent` envelope; a valid full-population choice
+  remains a full-population choice.
+- Version the saved-selection contract. The repaired exploration uses version 2.
+  For an older saved selection, retain a valid measure and source PR while
+  adopting the readable detail default. During interaction, unrelated, malformed
+  or older-version echoes retain the active choices.
+- Keep restoration separate from saving. Save meaningful user changes; apply a
+  returned selection without resaving it. Update the plotted configuration,
+  native controls, units, population, summary values and source link together.
+- Make both measures work in both populations. Exercise commits/files ×
+  detail/full with a host-style saved-state envelope returned immediately after
+  selection, then inspect the settled chart marks as well as the control values.
+
+The accepted repair corrected a state reader that treated an enveloped return as
+an unrelated state and reset both selectors. A focused Chromium observation
+established all four measure/population combinations, immediate envelope echoes,
+source-PR selection and containment at 320 and 736 pixels. Independent checks
+reconciled the raw populations, quartiles, versioned restoration and unrelated
+echo handling. The observation covers the conversational specimen; the future
+Article retains its own rendered interaction and composition acceptance.
 
 Before reusing these views in the Article, reconcile selected Issue/PR relations,
 paginate commit membership to completion, check shared-SHA arithmetic, and inspect
