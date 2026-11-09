@@ -1,7 +1,5 @@
+import { renderRemovalReferences } from './removal-references.mjs';
 import { revealStudioDestination } from './motion.mjs';
-import { describeArrangementReference } from './coordination-arrangements.mjs';
-import { describeAssuranceReference } from './assurance-models.mjs';
-import { describeScoreReference } from './score-reference.mjs';
 import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './command-draft.mjs';
 import { money, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
@@ -16,7 +14,6 @@ import { createRackAddControl } from './rack-creation-controls.mjs';
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const NUMBER_FIELDS = new Set(['ratePerHour', 'fundedHours', 'fundedMinutes']);
-const REFERENCE_LABELS = Object.freeze({ people: 'Person', teams: 'Team', work: 'Work', practices: 'Practice' });
 
 // The host lends its accepted owner and assembly draft port. This receiver owns
 // only the People chapter's creation, membership, ordering and removal controls.
@@ -50,7 +47,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   localHeader.update({ source: elements.apply });
   const editor = editing.assembly;
   const cleanup = [];
-  let projection = null, people = new Map(), teams = new Map(), references = new Map();
+  let projection = null, people = new Map(), teams = new Map();
   let selectedTarget = null, memberProjection = null, memberIds = null;
   let memberControls = new Map(), teamControls = new Map(), memberOrder = [], membersTarget = null;
   let disposed = false, composing = false, acknowledgedOpen = false, generation = 0;
@@ -81,8 +78,6 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     projection = next;
     people = new Map(next.state.people.map(person => [person.id, person]));
     teams = new Map(next.state.teams.map(team => [team.id, team]));
-    references = new Map(['people', 'teams', 'work', 'practices'].map(collection =>
-      [collection, new Map(next.state[collection].map(row => [row.id, row.label ?? row.id]))]));
     teamControls = new Map();
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.teams.map(row => [row.teamId, row.badges]));
     const fragment = document.createDocumentFragment();
@@ -153,31 +148,9 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
 
   function renderReferences(error) {
-    const dependencies = error?.references ?? [];
-    elements.dependencies.hidden = dependencies.length === 0;
-    elements.dependencies.replaceChildren(...dependencies.map(reference => {
-      const item = document.createElement('li');
-      const arrangement = describeArrangementReference(projection.state, reference);
-      if (arrangement) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; link.dataset.nativeOpenArrangement = arrangement.id;
-        link.textContent = 'Review the arrangement'; item.append(`${arrangement.label}. `, link); return item;
-      }
-      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
-      const score = describeScoreReference(projection.state.scoreSettings, reference);
-      if (score) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
-        link.textContent = 'Review in the coordination horizon'; item.append(`${score.label}. `, link); return item;
-      }
-      if (assurance) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
-        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
-        item.append(`${assurance}. `, link); return item;
-      }
-      const name = references.get(reference.collection)?.get(reference.id) ?? reference.id;
-      item.textContent = `${REFERENCE_LABELS[reference.collection]}: ${name}`;
-      return item;
-    }));
+    renderRemovalReferences(elements.dependencies, projection.state, error?.references);
   }
+
   function render() {
     const view = editor.read();
     if (disposed) return view;

@@ -93,6 +93,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/purpose-controller.mjs',
   'collaboration/native-investment-studio/purpose-draft.mjs',
   'collaboration/native-investment-studio/browser-download.mjs',
+  'collaboration/native-investment-studio/removal-references.mjs',
   'collaboration/native-investment-studio/reports-controller.mjs',
   'collaboration/native-investment-studio/reports.mjs',
   'collaboration/native-investment-studio/responsibility-controller.mjs',

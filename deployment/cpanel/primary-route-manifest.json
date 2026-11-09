@@ -2598,6 +2598,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/removal-references.mjs",
+      "projected_path": "collaboration/native-investment-studio/removal-references.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/score-reference.mjs",
       "projected_path": "collaboration/native-investment-studio/score-reference.mjs",
       "media_type": "text/javascript"

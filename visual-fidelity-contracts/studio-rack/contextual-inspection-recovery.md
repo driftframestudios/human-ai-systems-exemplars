@@ -87,6 +87,14 @@ teams, contributions, abilities, practices and quality/recovery records remain
 available for new work. The canonical command accepts this complete change as
 one history entry; amp Undo restores the original record and relationships.
 
+Person and team removal keeps its existing relationship guard. A blocked
+confirmation names each dependent record from its accepted name or versioned
+catalogue: sessions, connections, contributions, abilities, practices and evidence
+remain distinguishable. Arrangement, Change, Quality and horizon references keep
+their review destinations. The shared reference renderer owns these descriptions;
+the command owner retains deletion authority. Inspecting or cancelling a blocked
+removal leaves accepted state and Undo unchanged.
+
 Adding through an existing plan's track appends one accepted occurrence with
 all earlier placements retained. Period-lane and track New plan creation add
 distinct records while keeping All plans visible. Shelf New plan deliberately
@@ -157,6 +165,7 @@ would need the separate focus and inert-background contract in the
 | --- | --- |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing coordinator](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Receiver placement, active identity, saved drafts, shared Apply delegation, local returns and amp Undo |
 | [Session removal](../../collaboration/native-investment-studio/work-removal.mjs), [command owner](../../collaboration/native-investment-studio/commands.mjs), [removal checks](../../tests/native-investment-studio/work-removal.test.mjs), [session checks](../../tests/native-investment-studio/session.browser.mjs) | Atomic reference cleanup, occurrence distinction, concise confirmation and exact history recovery |
+| [Removal references](../../collaboration/native-investment-studio/removal-references.mjs), [reference checks](../../tests/native-investment-studio/removal-references.test.mjs) | Named dependency families, catalogue-backed descriptions and retained review destinations; People browser checks exercise protected removal and amp Undo |
 | [Rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs), [team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs), [capability](../../collaboration/native-investment-studio/capability-controller.mjs) controllers | Accepted creation, direct People choices and the existing person, team and support proposal owners |
 | [Shared sessions](../../collaboration/native-investment-studio/shared-session-rack.mjs) | Independent People/Handoffs views, direct participation/support commands and compact row selection |
 | [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) | Independent rack modules, direct team controls and local chapter skins |

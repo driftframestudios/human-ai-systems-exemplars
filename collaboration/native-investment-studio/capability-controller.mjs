@@ -1,3 +1,4 @@
+import { renderRemovalReferences } from './removal-references.mjs';
 import { listCapabilities, getCapabilityDefinition } from './capabilities.mjs';
 import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from './capability-draft.mjs';
 import { money } from './display.mjs';
@@ -358,12 +359,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (disposed) return view;
     const error = view.error ?? (preview && !preview.ok ? preview.error : null);
     elements.error.textContent = error?.message ?? '';
-    elements.dependencies.hidden = !error?.references?.length;
-    elements.dependencies.replaceChildren(...(error?.references ?? []).map(ref => {
-      if (ref.collection !== 'changeSettings') return node('li', `${ref.collection ?? ref.kind}: ${ref.id ?? ref.instanceId}`);
-      const item = node('li'), link = node('a', 'Review this card’s links in Change');
-      link.href = '#native-studio-change'; link.classList.add('native-control--navigate'); link.dataset.nativeOpenChange = ''; item.append(link); return item;
-    }));
+    renderRemovalReferences(elements.dependencies, projection.state, error?.references);
     if (preview?.ok) {
       const needsRates = preview.projection.result.plannedCommitmentCents === null || projection.result.plannedCommitmentCents === null;
       elements.preview.textContent = `${investmentAmount('Proposed investment', preview.projection.result)} ${investmentAmount('Accepted investment', projection.result)}${needsRates ? ' Add missing hourly rates in People to complete the amounts.' : ''} Apply accepts this proposal together.`;

@@ -1,9 +1,9 @@
 import { revealStudioDestination } from './motion.mjs';
 import { mountDurationDials, renderTimeReadout } from './time-controls.mjs';
-import { describeScoreReference } from './score-reference.mjs';
-import { describeAssuranceReference, getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
+import { renderRemovalReferences } from './removal-references.mjs';
+import { getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
-import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
+import { CONTRACT, LIMITS } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
 import { CONTRIBUTION_CATEGORIES, ROLE_CATALOGUES } from './roles.mjs';
 import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
@@ -24,7 +24,6 @@ const LABELS = Object.freeze({ label: 'Session name', teamId: 'Team', hoursPerSe
   occurrences: 'Working sessions', personIds: 'Participants', funding: 'Funding', status: 'Status' });
 const FUNDING = Object.freeze({ additional: 'Extra investment', allocated: 'Included in funded time' });
 const PLACEMENT_PAGE_SIZE = 12;
-const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice.action]));
 const FUNCTION_LABELS = new Map(ROLE_CATALOGUES.functionId.map(role => [role.id, role.label]));
 
 // One complete session form borrows the host's shared draft coordinator. The
@@ -112,7 +111,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       note: root.querySelector(unit === 'hours' ? '[data-native-hours-knob-note]' : '[data-native-knob-note]') }];
   }));
   const cleanup = [];
-  let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
+  let projection = null, works = new Map(), people = new Map(), teams = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
   let membersProjection = null, membersIds = null, memberControls = new Map();
   let diagramProjection = null, diagramId = null;
@@ -165,7 +164,6 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     works = new Map(next.state.work.map(row => [row.id, row]));
     people = new Map(next.state.people.map(row => [row.id, row]));
     teams = new Map(next.state.teams.map(row => [row.id, row]));
-    practices = new Map(next.state.practices.map(row => [row.id, row]));
     renderedSelection = undefined; renderedTeam = undefined;
   }
   function renderSelection(view) {
@@ -363,39 +361,10 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function renderDependencies(error) {
     const references = error?.references ?? [];
-    elements.dependencies.hidden = references.length === 0;
     const records = new Map(references.map(reference => [`${reference.collection}:${['assuranceSettings', 'scoreSettings'].includes(reference.collection) ? reference.field.split('[')[0] : ''}:${reference.id}`, reference]));
-    elements.dependencies.replaceChildren(...[...records.values()].map(reference => {
-      const row = document.createElement('li');
-      const score = describeScoreReference(projection.state.scoreSettings, reference);
-      if (score) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
-        link.textContent = 'Review in the coordination horizon'; row.append(`${score.label}. `, link); return row;
-      }
-      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
-      if (assurance) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
-        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
-        row.append(`${assurance}. `, link); return row;
-      }
-      if (reference.collection === 'changeSettings') {
-        const map = projection.state.changeSettings.frameworkMaps.find(item => item.frameworkId === reference.id);
-        const name = getChangeFramework(map.frameworkId, map.version).name;
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
-        link.textContent = 'Review linked sessions in Change'; row.append(`${name}: `, link); return row;
-      }
-      const connection = reference.collection === 'connections' && projection.state.connections.find(row => row.id === reference.id);
-      if (connection) { row.textContent = `Connection: ${connection.sharedObject}`; return row; }
-      const ability = reference.collection === 'abilities' && projection.state.abilities.find(row => row.id === reference.id);
-      if (ability) { row.textContent = `Ability: ${getCapabilityDefinition('ability', ability.definitionId, ability.definitionVersion).action}`; return row; }
-      const contribution = reference.collection === 'contributions' && projection.state.contributions.find(row => row.id === reference.id);
-      if (contribution) { row.textContent = `Contribution: ${CONTRIBUTION_CATEGORIES.find(category => category.id === contribution.categoryId).label}`; return row; }
-      const practice = practices.get(reference.id);
-      const name = PRACTICE_LABELS.get(practice?.definitionId) ?? reference.id;
-      row.textContent = `Practice: ${name}${practice ? ` · ${teams.get(practice.teamId).label}` : ''}`;
-      return row;
-    }));
+    renderRemovalReferences(elements.dependencies, projection.state, [...records.values()]);
   }
+
   function render() {
     const epoch = generation;
     const view = editor.read();
