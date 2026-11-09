@@ -100,6 +100,37 @@ export function syncSessionControls(root, { selectedId, expanded, controlsId }) 
 
 let editorSequence = 0;
 
+// A nested task can borrow the canonical editor without copying its form or
+// changing who owns the draft. Markers retain the original sibling order.
+export function mountEditorPlacement(nodes) {
+  const homes = nodes.map(node => {
+    const marker = node.ownerDocument.createComment('home: local editor');
+    node.before(marker);
+    return { node, marker };
+  });
+  let container = null, disposed = false;
+  function restore() {
+    for (const { node, marker } of homes)
+      if (marker.parentNode && marker.nextSibling !== node) marker.after(node);
+    container = null;
+  }
+  return Object.freeze({
+    place(next) {
+      if (disposed) return;
+      if (!next) { restore(); return; }
+      for (const { node } of homes) if (node.parentNode !== next) next.append(node);
+      container = next;
+    },
+    isPlaced: () => !disposed && Boolean(container),
+    restore,
+    dispose() {
+      if (disposed) return;
+      restore(); disposed = true;
+      for (const { marker } of homes) marker.remove();
+    },
+  });
+}
+
 const entryKey = control => control?.dataset.studioEntryKey ?? control?.dataset.cadenceKey ?? control?.dataset.deliverySession
   ?? (control?.dataset.studioSessionPerson ? `participant:${control.dataset.studioSessionPerson}` : null)
   ?? (control?.classList.contains('studio-track-key') ? 'session-row' : control?.getAttribute('aria-label'));

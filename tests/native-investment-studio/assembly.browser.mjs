@@ -96,6 +96,167 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  for (const receivingField of ['receiverPersonId', 'decisionOwnerPersonId']) test(`${engine}: contribution person creation stays local and returns to ${receivingField}`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.assemblyFixture;
+      const result = studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
+    await root(page).locator('button[data-contribution-id="prototype-draft"]').click();
+    const before = JSON.parse(await bytes(page)), original = before.contributions.find(row => row.id === 'prototype-draft');
+    const review = 'Check the prototype against the agreed service request.';
+    await page.evaluate(review => {
+      const { editing } = window.assemblyFixture, draft = editing.contribution.read().draft;
+      const result = editing.contribution.setText(draft.token, 'reviewBoundary', review);
+      if (!result.ok) throw Error(result.error.code);
+    }, review);
+    await contribution.locator(`[data-native-create="person"][data-native-return-field="${receivingField}"]`).click();
+    const slot = contribution.locator('[data-contribution-creation]');
+    const creation = slot.locator('[data-assembly-configure]');
+    await expect(contribution).toHaveAttribute('open', '');
+    await expect(creation).toBeVisible();
+    await expect(creation).toHaveAttribute('data-form', 'person.create');
+    assert.equal(await slot.evaluate(node => Boolean(node.closest('form'))), false, 'local creation retains its own form boundary');
+    await expect(root(page).locator('[data-assembly-configure]')).toHaveCount(1);
+    await expect(creation.getByRole('button', { name: 'Back to Draft artifacts', exact: true })).toBeVisible();
+    const name = receivingField === 'receiverPersonId' ? 'Service designer' : 'Delivery sponsor';
+    await creation.locator('[name="label"]').fill(name);
+    await creation.locator('[name="ratePerHour"]').fill('125');
+    await creation.locator('[name="fundedHours"]').fill('2');
+    if (receivingField === 'receiverPersonId') for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await creation.scrollIntoViewIfNeeded(); await frames(page);
+      const geometry = await creation.evaluate(node => {
+        const box = node.getBoundingClientRect();
+        return { left: box.left, right: box.right, width: innerWidth,
+          nestedForms: Boolean(node.querySelector('form form')),
+          fields: [...node.querySelectorAll('input,select,button')].filter(control => control.getClientRects().length)
+            .map(control => { const rect = control.getBoundingClientRect(); return { left: rect.left, right: rect.right }; }) };
+      });
+      assert.equal(geometry.nestedForms, false);
+      assert.ok(geometry.left >= 0 && geometry.right <= width + 1
+        && geometry.fields.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
+      await creation.screenshot({ path: resolve(captures, `${engine}-contribution-add-person-${width}.png`) });
+    }
+    await creation.locator('[data-assembly-apply]').click();
+    await expect(slot).toBeHidden();
+    await expect(contribution).toHaveAttribute('open', '');
+    const afterPerson = JSON.parse(await bytes(page)), added = afterPerson.people.find(person => person.label === name);
+    assert.ok(added, 'person creation adds the requested record');
+    await expect(contribution.locator(`[name="${receivingField}"]`)).toHaveValue(added.id);
+    assert.deepEqual(afterPerson.contributions.find(row => row.id === original.id), original,
+      'creation preserves the accepted contribution until its retained proposal is applied');
+    const raw = await page.evaluate(() => window.assemblyFixture.editing.contribution.read().draft.raw);
+    assert.equal(raw.reviewBoundary, review);
+    assert.deepEqual(raw.workIds, original.workIds);
+    await contribution.locator('[data-responsibility-apply]').click();
+    const accepted = JSON.parse(await bytes(page)).contributions.find(row => row.id === original.id);
+    assert.deepEqual(accepted, { ...original, [receivingField]: added.id, reviewBoundary: review });
+    await root(page).locator('[data-studio-undo]').click();
+    const undone = JSON.parse(await bytes(page));
+    assert.deepEqual(undone.contributions.find(row => row.id === original.id), original);
+    assert.ok(undone.people.some(person => person.id === added.id), 'Undo treats person creation and contribution assignment as separate accepted edits');
+  });
+
+  test(`${engine}: closing local contribution creation returns to its retained working area`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.assemblyFixture;
+      const result = studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
+    await root(page).locator('button[data-contribution-id="prototype-draft"]').click();
+    const initial = await bytes(page);
+    await contribution.locator('[data-native-return-field="receiverPersonId"]').click();
+    const creation = contribution.locator('[data-contribution-creation] [data-assembly-configure]');
+    await creation.locator('[name="label"]').fill('Saved contributor');
+    await creation.locator('[data-team-rack-close]').click();
+    await expect(contribution.locator('[data-contribution-creation]')).toBeHidden();
+    await expect(contribution).toHaveAttribute('open', '');
+    await expect(contribution.locator('[name="receiverPersonId"]')).toBeFocused();
+    await expect(root(page).locator('.native-assembly__teams > [data-assembly-configure]')).toHaveCount(1);
+    assert.equal(await bytes(page), initial, 'Close changes placement while preserving accepted state');
+    const parked = await page.evaluate(() => window.assemblyFixture.editing.read().parked);
+    assert.ok(parked.some(draft => draft.kind === 'assembly' && draft.raw.label === 'Saved contributor'));
+    await contribution.locator('[data-native-return-field="decisionOwnerPersonId"]').click();
+    await creation.locator('[name="label"]').fill('Discarded contributor');
+    await creation.locator('[data-assembly-cancel]').click();
+    await expect(contribution.locator('[data-contribution-creation]')).toBeHidden();
+    await expect(contribution.locator('[name="decisionOwnerPersonId"]')).toBeFocused();
+    assert.equal(await bytes(page), initial, 'Cancel returns locally and leaves the plan unchanged');
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.read().parked.some(
+      draft => draft.kind === 'assembly' && draft.raw.label === 'Discarded contributor')), false);
+    await contribution.locator('[data-native-return-field="receiverPersonId"]').click();
+    await creation.locator('[name="label"]').fill('Contributor saved with parent');
+    await contribution.locator(':scope > .studio-rack-header [data-rack-editor-close]').click();
+    await expect(contribution).not.toHaveAttribute('open', '');
+    await expect(contribution.locator('[data-contribution-creation]')).toBeHidden();
+    const restored = root(page).locator('.native-assembly__teams > [data-assembly-configure]');
+    await expect(restored).toHaveCount(1);
+    await expect(restored).not.toHaveAttribute('open', '');
+    assert.ok(await page.evaluate(() => window.assemblyFixture.editing.read().parked.some(
+      draft => draft.kind === 'assembly' && draft.raw.label === 'Contributor saved with parent')));
+    await root(page).locator('button[data-contribution-id="prototype-draft"]').click();
+    await expect(contribution).toHaveAttribute('open', '');
+    await expect(contribution.locator('[data-contribution-creation]')).toBeHidden();
+    await expect(restored).not.toHaveAttribute('open', '');
+    assert.equal(await bytes(page), initial, 'closing the parent also dismisses its child while retaining saved entries');
+  });
+
+  test(`${engine}: local person creation preserves contribution review after an intervening accepted edit`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.assemblyFixture;
+      const result = studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
+    await root(page).locator('button[data-contribution-id="prototype-draft"]').click();
+    const pendingReview = 'Keep this proposed review with the contribution.';
+    await page.evaluate(value => {
+      const { editing } = window.assemblyFixture, draft = editing.contribution.read().draft;
+      const result = editing.contribution.setText(draft.token, 'reviewBoundary', value);
+      if (!result.ok) throw Error(result.error.code);
+    }, pendingReview);
+    await contribution.locator('[data-native-return-field="receiverPersonId"]').click();
+    const creation = contribution.locator('[data-contribution-creation] [data-assembly-configure]');
+    await creation.locator('[name="label"]').fill('Recovery reviewer');
+    const acceptedReview = 'The accepted review now includes the revised service conditions.';
+    await page.evaluate(reviewBoundary => {
+      const { studio, controller } = window.assemblyFixture;
+      const row = studio.read().state.contributions.find(item => item.id === 'prototype-draft');
+      const result = studio.applyCommand({ type: 'contribution.update', contributionId: row.id,
+        contribution: { ...row, reviewBoundary } }, studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    }, acceptedReview);
+    await expect(creation.locator('[data-assembly-recovery]')).toBeVisible();
+    await creation.locator('[data-assembly-action="review"]').click();
+    await expect(creation.locator('[name="label"]')).toBeEnabled();
+    await creation.locator('[data-assembly-apply]').click();
+    await expect(contribution.locator('[data-contribution-creation]')).toBeHidden();
+    await expect(contribution.locator('[data-responsibility-recovery]')).toBeVisible();
+    await expect(contribution.locator('[name="receiverPersonId"]')).toBeDisabled();
+    const after = JSON.parse(await bytes(page));
+    assert.ok(after.people.some(person => person.label === 'Recovery reviewer'));
+    assert.equal(after.contributions.find(row => row.id === 'prototype-draft').reviewBoundary, acceptedReview);
+    const retained = await page.evaluate(() => {
+      const view = window.assemblyFixture.editing.contribution.read();
+      return { status: view.status, review: view.draft.raw.reviewBoundary, receiver: view.draft.raw.receiverPersonId };
+    });
+    assert.deepEqual(retained, { status: 'stale', review: pendingReview, receiver: 'ari' },
+      'an intervening accepted edit keeps the original contribution proposal behind its explicit review boundary');
+    await contribution.locator('[data-responsibility-action="review"]').click();
+    await expect(contribution.locator('[name="receiverPersonId"]')).toBeEnabled();
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.contribution.read().draft.raw.reviewBoundary), pendingReview);
+    assert.equal(JSON.parse(await bytes(page)).contributions.find(row => row.id === 'prototype-draft').reviewBoundary, acceptedReview);
+  });
+
   test(`${engine}: team settings show selected hourly rates with explicit unknowns`, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {

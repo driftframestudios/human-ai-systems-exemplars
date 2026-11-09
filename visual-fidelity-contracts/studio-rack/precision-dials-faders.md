@@ -6,7 +6,9 @@ each route changes the same editor proposal. Session time, hourly rates and the
 Change/Quality fader banks are current receivers.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-dev receiving contract revised 9 November 2026 for compact creation controls in
+dev receiving contract revised 9 November 2026 for local People controls in
+[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+retaining compact creation controls from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
 retaining shared circular steps from
 [#865](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/865), following the compact Person receiver in
@@ -53,8 +55,14 @@ use a 7rem input-and-step measure so the circles align beneath the field ends.
 Generic action-button
 padding applies to actions, while these precision controls retain their shared
 geometry. This ownership supersedes competing circular sizing in chapter rules.
-The compact Add person module keeps the preserved workbench's fixed lower-right
-step-button shadow and centered circular face. Chocolate belongs primarily on
+The compact Person settings and Add person modules keep the preserved workbench's
+fixed lower-right step-button shadow and centered circular face. The raised
+resting face and pressed response remain visible beside exact entry, including
+when a contribution borrows the creation module. Forced colors uses the shared
+explicit border treatment. [#882](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882)
+owns the follow-up audit of these shadows across all Studio quantity controls;
+this People iteration establishes only its affected receivers.
+Chocolate belongs primarily on
 dial/knob enclosures and specific accents; the shared palette variables retain
 each chapter's effective color while allowing a named surface to evolve.
 

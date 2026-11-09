@@ -272,13 +272,13 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (!currentOperation(epoch)) return;
     return opened(editor.begin(target, projection), epoch, focus);
   }
-  function create(form) {
+  function create(form, focus = true) {
     if (disposed || !['person.create', 'team.create'].includes(form) || !ASSEMBLY_FORMS[form]) return;
     rateControls.release();
     const epoch = ++generation;
     onBegin();
     if (!currentOperation(epoch)) return;
-    return opened(editor.create(form, projection), epoch, true);
+    return opened(editor.create(form, projection), epoch, focus);
   }
   function addRecord(kind) {
     if (disposed || !canOpen()) return;
@@ -339,9 +339,10 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       }
       return;
     }
-    onAccepted(result.projection ?? studio.read());
+    const accepted = result.projection ?? studio.read();
+    onAccepted(accepted);
     if (!currentOperation(epoch)) return;
-    if (descriptor.mode === 'create') onRecordCreated(descriptor);
+    if (descriptor.mode === 'create') onRecordCreated(descriptor, accepted, view.draft.baseProjection);
     if (!currentOperation(epoch)) return;
     if (descriptor.form === 'person.create') {
       close({ park: false }); render(); announce('Person added.');

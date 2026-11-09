@@ -102,6 +102,66 @@ async function contribution(page, category = 'source-retrieval', { draft = false
 }
 
 for (const engine of names) {
+  test(`${engine}: person settings and role pads stay local through focus, acceptance and independent Close`, async t => {
+    const page = await open(t, engine);
+    const person = people(page).locator('[data-person-configure]');
+    await people(page).locator('[data-person-id="product-one"]').click();
+    await person.locator('[name="label"]').fill('Product lead draft');
+    await person.locator('[name="ratePerHour"]').fill('123');
+    await field(page, 'role', 'seniorityId').focus();
+    await expect(person).toHaveAttribute('open', '');
+    await expect(settings(page, 'role')).toHaveAttribute('open', '');
+    await expect(person.locator('[name="label"]')).toHaveValue('Product lead draft');
+    await field(page, 'role', 'seniorityId').selectOption('principal-plus');
+    await expect(person).toHaveAttribute('open', '');
+    await expect(person.locator('[name="ratePerHour"]')).toBeEnabled();
+    await expect(person.locator('[name="ratePerHour"]')).toHaveValue('123');
+    assert.equal((await state(page)).people[0].label, 'product-one', 'role acceptance retains the separate typed-name proposal');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect(settings(page, 'role').locator('.studio-role-pad select')).toHaveCount(8);
+      const geometry = await people(page).locator('.studio-person-receiver').evaluate(element => {
+        const outer = element.getBoundingClientRect();
+        return [...element.querySelectorAll('input,select,button')].filter(control => control.getClientRects().length)
+          .map(control => { const box = control.getBoundingClientRect(); return { name: control.name || control.textContent,
+            outside: box.left < outer.left - 1 || box.right > outer.right + 1 }; }).filter(control => control.outside);
+      });
+      assert.deepEqual(geometry, [], 'the paired local modules contain every visible control');
+      const shadows = await person.locator('.native-coordination__stepper button:enabled').evaluateAll(controls => controls.map(control => getComputedStyle(control).boxShadow));
+      assert.ok(shadows.length > 0 && shadows.every(shadow => shadow !== 'none'), 'circular increments retain their tactile shadows');
+      await people(page).locator('.studio-person-receiver').screenshot({ path: resolve(captures, `${engine}-person-role-local-${width}.png`) });
+    }
+    await person.locator('[data-person-action="apply"]').click();
+    const changed = (await state(page)).people[0];
+    assert.equal(changed.label, 'Product lead draft');
+    assert.equal(changed.rateCentsPerHour, 12300);
+    assert.equal(changed.role.seniorityId, 'principal-plus', 'Person Apply keeps the accepted role');
+    await settings(page, 'role').locator('[data-rack-editor-close]').click();
+    await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
+    await expect(person).toHaveAttribute('open', '');
+    await settings(page, 'role').locator('summary').click();
+    await expect(settings(page, 'role')).toHaveAttribute('open', '');
+    await settings(page, 'role').locator('.studio-rack-header__owner').click();
+    await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
+    await expect(people(page).locator('[data-person-id="product-one"]')).toBeFocused();
+    await expect(person).toHaveAttribute('open', '');
+    await settings(page, 'role').locator('summary').click();
+    await person.locator('[data-person-rack-close]').click();
+    await expect(person).not.toHaveAttribute('open', '');
+    await expect(settings(page, 'role')).toHaveAttribute('open', '');
+    await field(page, 'role', 'functionId').selectOption('engineering');
+    assert.equal((await state(page)).people[0].role.functionId, 'engineering');
+    await people(page).locator('[data-person-id="product-one"]').click();
+    await person.locator('[name="ratePerHour"]').fill('125');
+    await page.evaluate(() => {
+      const { studio, controller } = window.responsibilityFixture;
+      const current = studio.read(), row = current.state.people[0];
+      studio.updatePerson(row.id, { ...row, rateCentsPerHour: 14000 }, current); controller.refresh();
+    });
+    await expect(person.locator('[data-person-recovery]')).toBeVisible();
+    await expect(person.locator('[name="ratePerHour"]')).toHaveValue('125');
+    assert.equal((await state(page)).people[0].rateCentsPerHour, 14000, 'an independent conflicting edit retains the review boundary');
+  });
   test(`${engine}: visible role choices resume after Undo and Close and yield to a same-target successor`, async t => {
     const page = await open(t, engine);
     await field(page, 'role', 'functionId').selectOption('engineering');
@@ -110,6 +170,8 @@ for (const engine of names) {
     assert.equal((await state(page)).people[0].role.functionId, 'data-ml', 'Undo leaves the visible facet ready for another choice');
     await draftField(page, 'role', 'functionId', 'engineering');
     await settings(page, 'role').locator('[data-rack-editor-close]').click();
+    await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
+    await settings(page, 'role').locator('summary').click();
     await expect(field(page, 'role', 'functionId')).toBeEnabled();
     await field(page, 'role', 'functionId').focus();
     await expect(field(page, 'role', 'functionId')).toHaveValue('engineering');
@@ -314,6 +376,7 @@ for (const engine of names) {
       await expect(arranger.locator('.studio-people-arranger__value').first()).toHaveText('$120/hr');
       await expect(arranger.locator('.studio-people-arranger__value').nth(1)).toHaveText('2 h available / 4 h funded');
 
+      if (!await field(page, 'role', 'functionId').isVisible()) await settings(page, 'role').locator('summary').click();
       await expect(settings(page, 'role').locator('.studio-role-pads')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeEnabled();
@@ -350,7 +413,7 @@ for (const engine of names) {
     await field(page, 'role', 'functionId').selectOption('engineering');
     await expect(field(page, 'role', 'functionId')).toBeFocused();
     assert.equal((await state(page)).people[0].role.functionId, 'engineering');
-    const retained = await page.evaluate(() => window.responsibilityFixture.editing.read().parked.find(row => row.kind === 'person'));
+    const retained = await page.evaluate(() => window.responsibilityFixture.editing.person.read().draft);
     assert.equal(retained.raw.ratePerHour, 'unfinished');
     await people(page).locator('.native-responsibility__selector').first().click();
     const before = await state(page), investment = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
@@ -622,7 +685,7 @@ for (const engine of names) {
           onEditing: () => { if (transitioned) lateCallbacks++; } });
         if (action === 'cancel') currentReceiver.selectPerson('product-one');
         else currentReceiver.open('contribution.remove:review-output');
-        const returnTarget = action === 'cancel' ? element.querySelector('[data-role-field="functionId"]')
+        const returnTarget = action === 'cancel' ? element.querySelector('[data-responsibility-configure="role"] > summary')
           : element.querySelector('[data-responsibility-action="create"]');
         returnTarget.addEventListener('focus', () => {
           transitioned = true; currentReceiver.dispose();
