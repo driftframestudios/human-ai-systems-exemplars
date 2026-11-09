@@ -3,6 +3,8 @@ import { INVESTMENT_TYPES, PLAN_APPROACHES, FINANCIAL_PRESETS, financialSettings
 import { analyseInvestment } from './investment-financials.mjs';
 import { INVESTMENT_DECK_LIMIT, INVESTMENT_FIELDS } from './investment-state.mjs';
 import { createMoneyControl, createChoiceReel } from './investment-controls.mjs';
+import { INVESTMENT_DOMAINS, investmentPortrait, renderInvestmentPortrait, renderInvestmentDiagram } from './investment-portrait.mjs';
+import { revealReelResult } from './reel-control.mjs';
 
 const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
 const number = value => new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(value);
@@ -54,7 +56,7 @@ function bars(entries) {
 
 export function createInvestmentWorkbench({ getModel, change, openSession, setFunding }) {
   let selected = 'pairing', activeId = 'investment-plan-1', domain = 'plan', adding = false;
-  let outer, shelf, library, panel, loaded, domainControl;
+  let outer, shelf, library, panel, loaded, domainControl, domainReading, portraitKey;
   const editors = new Map();
   const records = () => getModel().investment.decks;
   const recordFor = id => records().find(record => record.id === id);
@@ -75,9 +77,13 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       shelf = node('nav', undefined, 'investment-study__masters'); shelf.setAttribute('aria-label', 'Investment comparison decks');
       library = node('section', undefined, 'investment-study__library'); library.setAttribute('aria-label', 'Add an investment comparison');
       panel = node('section', undefined, 'investment-study__loaded-master'); panel.id = 'investment-master-panel';
-      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', options: [{ id: 'plan', label: 'Internal' }, { id: 'rollout', label: 'Customer' }, { id: 'commercial', label: 'Commercial' }, { id: 'service', label: 'Operations' }, { id: 'capital', label: 'Planning' }], read: () => domain, write: value => { loaded?.release(); domain = value; activeId = records().find(record => record.type === value)?.id; render(container); } });
+      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', variant: 'chocolate', options: Object.entries(INVESTMENT_DOMAINS).map(([id, value]) => ({ id, label: value.label })), read: () => domain, write: value => { loaded?.release(); domain = value; activeId = records().find(record => record.type === value)?.id; render(container); } });
       domainControl.element.classList.add('investment-study__domain');
-      channel.append(shelf, library); outer.append(domainControl.element, channel, panel);
+      const body = node('div', undefined, 'investment-study__body'), domainRow = node('section', undefined, 'investment-study__orientation');
+      domainRow.setAttribute('aria-label', 'Investment domain');
+      domainReading = node('section', undefined, 'investment-domain');
+      domainRow.append(domainControl.element, domainReading);
+      body.append(domainRow, panel); channel.append(shelf, library); outer.append(channel, body);
     }
     if (outer.parentElement !== container) container.replaceChildren(outer);
     const focusedKey = outer.contains(document.activeElement) ? document.activeElement.dataset.focusKey : null;
@@ -104,15 +110,32 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       choice.append(node('strong', `＋ ${definition.title}`), node('small', definition.detail)); choices.append(choice);
     }
     library.append(choices);
-    const record = recordFor(activeId);
-    if (!record) { loaded?.release(); loaded = null; const definition = INVESTMENT_TYPES.find(type => type.id === domain); panel.replaceChildren(node('h3', definition.title), button(`＋ Add ${definition.title.toLowerCase()}`, () => addRecord(domain), 'add', 'master-empty-add')); panel.setAttribute('aria-label', 'Investment comparison'); return; }
+    const record = recordFor(activeId), description = INVESTMENT_DOMAINS[domain];
+    const title = node('h3', description.title), detail = node('p', description.detail);
+    domainReading.replaceChildren(title, detail);
+    if (record) domainReading.append(renderInvestmentPortrait(document, investmentPortrait(record, pricing)));
+    else {
+      domainReading.append(renderInvestmentDiagram(document, description));
+      const definition = INVESTMENT_TYPES.find(type => type.id === domain);
+      const restore = button(`＋ Add ${definition.title.toLowerCase()}`, () => addRecord(domain), 'add', 'master-empty-add');
+      restore.disabled = state.decks.length >= INVESTMENT_DECK_LIMIT;
+      domainReading.append(restore);
+    }
+    const nextPortraitKey = `${domain}:${activeId || 'empty'}`;
+    if (portraitKey !== nextPortraitKey) { revealReelResult(domainReading); portraitKey = nextPortraitKey; }
+    if (!record) {
+      loaded?.release(); loaded = null; panel.replaceChildren(); panel.hidden = true;
+      if (focusedKey) focus(outer, focusedKey);
+      return;
+    }
+    panel.hidden = false;
     panel.setAttribute('aria-label', titleFor(record));
     if (editors.has(record.id) && editors.get(record.id).type !== record.type) {
       editors.get(record.id).dispose(); editors.delete(record.id); if (loaded?.id === record.id) loaded = null;
     }
     if (loaded?.id !== record.id) {
       loaded?.release(); loaded = editors.get(record.id) || createEditor(record);
-      editors.set(record.id, loaded); panel.replaceChildren(loaded.root);
+      editors.set(record.id, loaded); panel.replaceChildren(loaded.root); revealReelResult(loaded.root);
     }
     loaded.update(record, pricing);
     shelf.scrollLeft = scroll.left; shelf.scrollTop = scroll.top;
@@ -129,13 +152,13 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       if (type === 'plan' && ['budget', 'reserve', 'opportunity'].includes(field)) record.settings.approach = 'custom';
       if (FINANCIAL_PRESETS[type]?.some(preset => Object.hasOwn(preset.values, field))) record.settings.lifecycle = 'custom';
     }, '', key);
-    const root = node('section', undefined, 'investment-comparison'); root.dataset.investmentEditor = id;
+    const root = node('section', undefined, 'investment-comparison'); root.dataset.investmentEditor = id; root.dataset.investmentType = type;
     const head = node('header', undefined, 'investment-comparison__head'), title = node('h3', titleFor(initial)), titles = node('div');
     titles.append(node('small', typeFor(initial).strip), title);
     const remove = button('Remove deck', () => {
       controls.forEach(control => control.release?.());
       change(model => { model.investment.decks = model.investment.decks.filter(record => record.id !== id); }, 'Investment deck removed. Undo restores it.');
-      focus(outer, activeId ? `master-${activeId}` : 'master-add');
+      focus(outer, activeId ? `master-${activeId}` : 'master-empty-add');
     }, 'remove', `remove-master-${id}`);
     head.append(titles, remove);
     const reels = node('div', undefined, 'investment-comparison__reels'), screen = node('div', undefined, 'investment-comparison__screen'), knobs = node('div', undefined, 'investment-comparison__controls'), companion = node('div', undefined, 'investment-comparison__companion'), plan = node('div'), note = node('p', undefined, 'investment-comparison__note');
@@ -147,16 +170,16 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     function moneyControl(field, label, domain = 'all', scale = 'unit', readout = scale === 'aggregate' ? 'stacked' : 'inline') {
       const control = createMoneyControl({ id: `investment-${id}-${field}`, label, read: () => read()[field], write: (value, key) => write(field, value, key), max: INVESTMENT_FIELDS[type][field].max, increments: scale === 'aggregate' ? [1000, 100] : [100, 5], readout }); controls.push(control); group(domain).append(control.element); updates.push(state => control.update(state[field]));
     }
-    function range(field, label, format = number, domain = 'all') {
+    function range(field, label, format = number, domain = 'all', besideReels = false) {
       const { min, max, step } = INVESTMENT_FIELDS[type][field];
       const fieldset = node('div', undefined, 'investment-comparison__fader'), labelNode = node('label', label), output = node('output'), input = node('input');
       input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.id = `investment-${id}-${field}`; input.dataset.focusKey = input.id; labelNode.htmlFor = input.id; output.htmlFor = input.id;
       let editKey; const begin = () => { editKey = Symbol(`investment-${id}-${field}`); };
       input.addEventListener('pointerdown', begin); input.addEventListener('keydown', event => { if (!event.repeat) begin(); }); input.addEventListener('input', () => write(field, Number(input.value), editKey));
-      fieldset.append(labelNode, output, input); group(domain).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
+      fieldset.append(labelNode, output, input); (besideReels ? reels : group(domain)).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
     }
     function reel(field, label, choices, receive) {
-      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, secondary: reels.children.length > 0, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
+      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, variant: type === 'capital' && field === 'metric' ? 'rose' : undefined, secondary: reels.children.length > 0, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
     }
     function lifecycle() {
       reel('lifecycle', 'Lifecycle', [...FINANCIAL_PRESETS[type].map(item => [item.id, item.label]), ['custom', 'Custom']], value => change(model => {
@@ -172,21 +195,21 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       reel('domain', 'Investment lens', [['all', 'Whole plan'], ['funded', 'Funded time'], ['extra', 'Extra investment']]); moneyControl('budget', 'Budget to compare', 'all', 'aggregate');
       approachReading = node('output', '', 'investment-comparison__reel-context'); lensReading = node('output', '', 'investment-comparison__reel-context');
       reels.children[0].append(approachReading); reels.children[1].append(lensReading); root.insertBefore(companion, knobs);
-      range('reserve', 'Reserve set aside', value => `${value}% of budget`); range('opportunity', 'Options set aside', value => `${value}% of budget`);
+      range('reserve', 'Reserve set aside', value => `${value}% of budget`, 'all', true); range('opportunity', 'Options set aside', value => `${value}% of budget`);
       note.textContent = 'Reserve and options use this deck’s budget. Shared work keeps its planned time and price.';
     } else if (type === 'rollout') {
       lifecycle(); reel('domain', 'Customer account', [['pricing', 'Price & margin'], ['implementation', 'Implementation']]);
-      moneyControl('listPrice', 'List price / team / quarter', 'pricing', 'unit', 'stacked'); range('discount', 'Price discount', value => `${value}%`, 'pricing'); moneyControl('variableCost', 'Delivery cost / team / quarter', 'pricing'); moneyControl('serviceCost', 'Service cost / team / quarter', 'pricing');
+      moneyControl('listPrice', 'List price / team / quarter', 'pricing', 'unit', 'stacked'); range('discount', 'Price discount', value => `${value}%`, 'all', true); moneyControl('variableCost', 'Delivery cost / team / quarter', 'pricing'); moneyControl('serviceCost', 'Service cost / team / quarter', 'pricing');
       range('teams', 'Customer teams', number, 'implementation'); moneyControl('setup', 'Setup per customer team', 'implementation', 'unit', 'stacked'); range('training', 'Training per team', value => `${value} hours`, 'implementation');
       note.textContent = 'Training uses $120/hour. Customer implementation stays separate from recurring price and contribution.';
     } else if (type === 'commercial') {
       lifecycle(); reel('metric', 'Commercial reading', [['grr', 'GRR'], ['nrr', 'NRR'], ['cac', 'CAC'], ['payback', 'Payback']], value => change(model => { const state = model.investment.decks.find(item => item.id === id).settings; state.metric = value; state.domain = ['grr', 'nrr'].includes(value) ? 'retention' : 'acquisition'; }, 'Commercial reading selected.'));
-      moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'retention'); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
+      moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'all', true); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
       moneyControl('acquisitionSpend', 'Acquisition spend', 'acquisition', 'aggregate'); range('newCustomers', 'New customers', number, 'acquisition'); moneyControl('newRevenue', 'New revenue / quarter', 'acquisition', 'aggregate'); range('contributionMargin', 'New revenue contribution margin', value => `${value}%`, 'acquisition');
       note.textContent = 'GRR and NRR track the opening cohort. New and reactivated revenue join the closing total separately.';
     } else if (type === 'service') {
       lifecycle(); reel('domain', 'Operational lens', [['time', 'Working time'], ['budget', 'Service budget'], ['capacity', 'Capacity']]);
-      range('people', 'People reached'); range('adoption', 'Adoption', value => `${value}%`); range('minutes', 'Time saved per use', value => `${value} minutes`, 'time');
+      range('people', 'People reached'); range('adoption', 'Adoption', value => `${value}%`, 'all', true); range('minutes', 'Time saved per use', value => `${value} minutes`, 'time');
       moneyControl('baselineCost', 'Current cost / person / quarter', 'budget'); moneyControl('candidateCost', 'Changed cost / person / quarter', 'budget'); range('capacity', 'People supported per quarter', number, 'capacity');
       note.textContent = 'The time comparison starts with a 30-minute workflow, twice each week. Budget and capacity retain their own units.';
     } else {

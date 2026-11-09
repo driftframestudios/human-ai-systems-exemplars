@@ -2198,21 +2198,34 @@ p#on-dark-iron-ore {
 }
 .native-coordination__actions [data-action='apply'] { background: var(--native-signal); }
 .native-coordination__trace { grid-column: 1 / -1; }
-.native-coordination__trace-body { padding: 1rem; }
-.native-coordination__trace-body > p { max-inline-size: 75ch; }
-.native-coordination__ledger { display: grid; gap: 1rem; list-style: none; padding: 0; margin-block-start: 1rem; }
-.native-coordination__ledger li { border: .0625rem solid var(--native-rule); border-inline-start: .25rem solid var(--about-deep-teal); padding: 1rem; min-inline-size: 0; background: var(--about-mint-green); }
-.about-page .native-coordination__ledger h4 { font: 700 1rem/1.4 ui-monospace, monospace; color: var(--native-text); }
-.native-coordination__ledger li > p { font-size: .875rem; margin-block: .25rem .75rem; }
-.native-coordination__ledger dl { display: grid; gap: .65rem; }
-.native-coordination__ledger dt { font-size: .8rem; }
-.native-coordination__ledger dd { font-size: .9rem; font-weight: 650; }
+/* The accepted whole-plan ledger reads as ruled paper inside the dark rack.
+   Source: controller.mjs; grammar: Support Matrix & Stateful Pads. */
+.native-coordination .native-coordination__trace-body { min-inline-size:0; padding:1rem; color:var(--native-text); background:var(--native-paper); }
+.native-coordination .native-cost-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.65rem; margin:0; padding-block-end:.7rem; border-block-end:2px solid var(--native-rule); color:var(--native-text); }
+.native-cost-summary > div { min-inline-size:0; }
+.native-coordination .native-cost-summary dt { margin:0 0 .15rem; color:var(--native-text); font:600 .75rem/1.4 system-ui,sans-serif; }
+.native-coordination .native-cost-summary dd { margin:0; color:var(--native-text); font:700 clamp(1rem,2vw,1.4rem)/1.4 ui-monospace,monospace; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.native-cost-summary > div:last-child { padding-inline-start:.6rem; border-inline-start:3px solid var(--about-deep-teal); }
+.native-coordination .native-cost-note { margin:.6rem 0; color:var(--native-text); font:.78rem/1.5 system-ui,sans-serif; }
+.native-cost-scroll { max-inline-size:100%; overflow-x:auto; overscroll-behavior-inline:contain; scrollbar-color:var(--native-rule) var(--native-paper); }
+.native-cost-scroll:focus-visible { outline:2px solid var(--native-focus); outline-offset:3px; }
+.native-coordination .native-cost-table { inline-size:100%; min-inline-size:39rem; border-collapse:collapse; background:var(--native-paper); color:var(--native-text); font:.8rem/1.4 system-ui,sans-serif; }
+.native-coordination .native-cost-table caption { padding:.35rem 0 .55rem; color:var(--native-text); font:650 .8rem/1.4 system-ui,sans-serif; }
+.native-coordination .native-cost-table :is(th,td) { padding:.55rem .65rem; border:0; border-block-end:1px solid color-mix(in srgb,var(--native-rule) 35%,transparent); background:transparent; color:var(--native-text); text-align:end; vertical-align:middle; }
+.native-coordination .native-cost-table th:first-child { min-inline-size:9rem; text-align:start; }
+.native-coordination .native-cost-table thead th { border-block-end:2px solid var(--native-rule); font-size:.72rem; font-weight:700; }
+.native-coordination .native-cost-table tbody th { font-weight:650; }
+.native-coordination .native-cost-table :is(strong,small) { display:block; margin:0; color:var(--native-text); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.native-coordination .native-cost-table strong { font:650 .84rem/1.4 ui-monospace,monospace; }
+.native-coordination .native-cost-table small { font:.72rem/1.4 system-ui,sans-serif; }
+.native-coordination .native-cost-table :is(th,td):last-child { background:color-mix(in srgb,var(--about-mint-green) 40%,transparent); }
+.native-coordination .native-cost-table tfoot :is(th,td) { border-block-start:2px solid var(--native-rule); border-block-end:0; font-weight:700; }
+.native-coordination .native-cost-table .native-cost-table__empty { text-align:start; }
 .native-coordination__fallback { border-block-start: .0625rem solid var(--native-rule); padding: 1rem clamp(1rem, 3vw, 2.5rem); font-size: .875rem; }
 @media (min-width: 52rem) {
     .native-coordination__amp { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
     .native-coordination__readout { text-align: end; }
     .native-coordination__body { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
-    .native-coordination__ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (forced-colors: active) {
     .native-coordination { --native-focus: Highlight; --native-text: CanvasText; --native-ink: CanvasText; --native-paper: Canvas; --native-signal: LinkText; --native-rule: CanvasText; --native-error: CanvasText; box-shadow: none; }
@@ -2930,7 +2943,6 @@ p#on-dark-iron-ore {
     .native-session-map__flow { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.2fr) auto minmax(0, 1.4fr); }
     .native-session-map__link::after { content: '⟶'; }
     .native-showcase__content { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
-    .native-session .native-coordination__ledger { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @keyframes native-amp-reveal { from { opacity: .6; translate: 0 -.25rem; } to { opacity: 1; translate: 0 0; } }
 @media (prefers-reduced-motion: reduce) { .native-coordination__amp > details[open] { animation: none; } .native-amp-tools button::before { transition: none; } }

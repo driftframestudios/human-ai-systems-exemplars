@@ -2653,6 +2653,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/investment-portrait.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-portrait.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/diagram-geometry.mjs",
+      "projected_path": "collaboration/native-investment-studio/diagram-geometry.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/investment-workbench.mjs",
       "projected_path": "collaboration/native-investment-studio/investment-workbench.mjs",
       "media_type": "text/javascript"

@@ -45,13 +45,15 @@
 .native-coordination .studio-session-tracks__pad[data-status='paused'] { background: var(--about-muted); border-style: dashed; color: var(--native-paper); }
 .studio-session-tracks__empty { color: var(--about-sea-glass); }
 .native-coordination .studio-session-tracks__legend { font: .7rem/1.4 ui-monospace, monospace; margin: .35rem; color: var(--native-paper); }
-.studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: start; min-inline-size: 0; }
+.studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: stretch; min-inline-size: 0; }
 .native-coordination :is(.native-connections, .native-connection-template__form, .studio-connections-tracks) { min-inline-size: 0; max-inline-size: 100%; }
 .native-coordination .native-connection-template__form, .native-coordination .native-patch-bay { grid-template-columns: minmax(0, 1fr); }
 .studio-arrangement-native-choice { display: none; }
 .native-coordination .native-arrangement__status { font-size: .8rem; margin-block: .3rem .6rem; }
-.native-coordination .native-arrangement__viewport { margin-block: .5rem; background: var(--studio-screen); color: var(--native-paper); }
-.native-coordination .native-arrangement__diagram { min-inline-size: 0; inline-size: 100%; block-size: auto; max-block-size: 17rem; }
+.studio-arrangement-deck [data-template-structure] { display: flex; min-inline-size: 0; }
+.studio-arrangement-deck .native-arrangement { display: flex; flex-direction: column; flex: 1; min-inline-size: 0; margin: 0; }
+.native-coordination .native-arrangement__viewport { display: grid; align-items: center; flex: 1; margin-block: .5rem 0; background: var(--studio-screen); color: var(--native-paper); }
+.native-coordination .native-arrangement__diagram { min-inline-size: 48rem; inline-size: 100%; block-size: auto; max-block-size: none; }
 .native-coordination .native-arrangement__companion { display: block; padding: 0; margin-block: .45rem; }
 .native-coordination .native-arrangement__companion > summary { min-block-size: 2.75rem; padding: .5rem; }
 .native-coordination .native-connection-template__groups { margin-block-start: .8rem; }
@@ -167,7 +169,6 @@
 }
 @media (max-width: 42rem) {
   .studio-team-lanes { grid-template-columns: minmax(0, 1fr); }
-  .native-coordination .native-arrangement__diagram { min-inline-size: 28rem; }
 }
 @media (forced-colors: active) {
   .studio-team-rack, .studio-session-tracks, .studio-team-lane { background: Canvas; color: CanvasText; box-shadow: none; }
@@ -273,4 +274,15 @@
 @media(forced-colors:active) {
  .native-handoff .native-connection__sessions { background:Canvas; border-color:CanvasText; }
  .native-coordination .native-handoff .native-connection__sessions > .native-coordination__control-title { color:CanvasText; }
+}
+
+/* Shared closed-path arrows keep the head attached to the same painted shape. */
+.native-coordination .studio-diagram__edge { color: var(--native-signal); }
+.native-coordination .studio-diagram__arrow { fill: currentColor; stroke: none; }
+.native-coordination .studio-diagram__edge[data-direction='return'] { color: var(--studio-extra-work); }
+.native-arrangement__edge[data-status='paused'] .studio-diagram__arrow { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 7 5; }
+.native-coordination .native-arrangement__edge[data-adapted='true'] { color: var(--studio-rose); }
+.native-coordination .native-arrangement__edge:hover { color: var(--native-paper); }
+@media (forced-colors: active) {
+  .native-coordination .studio-diagram__edge:is([data-direction], [data-adapted], :hover) { color: LinkText; }
 }

@@ -5,6 +5,7 @@ import { createStudio } from '../../collaboration/native-investment-studio/state
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { CONNECTION_PAGE_SIZE, CONNECTION_GEOMETRY, createConnectionViewModel,
   createConnectionViewState, connectionPageGeometry, mountConnectionView, arrangementGeometry } from '../../collaboration/native-investment-studio/connection-view.mjs';
+import { diagramArrowPath } from '../../collaboration/native-investment-studio/diagram-geometry.mjs';
 import { projectCoordinationArrangements } from '../../collaboration/native-investment-studio/coordination-arrangements.mjs';
 
 function plan(count = 2) {
@@ -29,9 +30,20 @@ test('adapted arrangement relationships sharing endpoints retain distinct visibl
   const geometry = arrangementGeometry(arrangement, accepted);
   assert.equal(new Set(geometry.edges.map(edge => edge.path)).size, 3);
   assert.equal(new Set(geometry.edges.map(edge => edge.path.split(' C ')[0])).size, 3);
-  assert.equal(new Set(geometry.edges.map(edge => edge.arrow.split(' ')[0])).size, 3);
+  assert.equal(new Set(geometry.edges.map(edge => edge.end.join(','))).size, 3);
   assert.deepEqual(geometry.edges.map(edge => [edge.connection.senderTeamId, edge.connection.receiverTeamId]),
     [['delivery', 'receiving'], ['delivery', 'receiving'], ['delivery', 'receiving']]);
+});
+
+test('a directed diagram arrow joins its shaft and head in one closed contour', () => {
+  const straight = diagramArrowPath({ start: [0, 0], end: [100, 0] });
+  assert.match(straight, /^M 0 2\.5 L /u);
+  assert.match(straight, /86 2\.5 L 86 7 L 100 0 L 86 -7 L 86 -2\.5 L /u);
+  assert.equal((straight.match(/M /gu) ?? []).length, 1);
+  assert.ok(straight.endsWith(' Z'));
+  const curved = diagramArrowPath({ start: [0, 0], control1: [0, 40], control2: [60, 100], end: [100, 100] });
+  assert.match(curved, /86 102\.5 L 86 107 L 100 100 L 86 93 L 86 97\.5 L /u,
+    'the final control point supplies the head direction, even when the endpoint is diagonally displaced');
 });
 
 test('one accepted model preserves exact directed endpoints, human/work references and source-owned standing', () => {

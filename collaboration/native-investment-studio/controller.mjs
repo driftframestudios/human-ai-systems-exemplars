@@ -1,7 +1,7 @@
 import { createStudio } from './state.mjs';
 import { createShowcasePlan, createQuarterShowcasePlan } from './presets.mjs';
 import { createDraftCoordinator } from './editing.mjs';
-import { INTEGER, money } from './display.mjs';
+import { duration, money } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
 import { mountChapterShell } from './shell.mjs';
 import { mountStudioMotion, revealStudioDestination } from './motion.mjs';
@@ -48,6 +48,7 @@ export function mountCoordinationPanel(root, options = {}) {
     ['funded', '[data-native-funded]'], ['additional', '[data-native-additional]'],
     ['allocated', '[data-native-allocated]'],
     ['traceList', '[data-native-trace-list]'],
+    ['traceTotals', '[data-native-trace-totals]'],
     ['traceSummary', '[data-native-trace-summary]'], ['status', '[data-native-status]'],
     ['saved', '[data-native-saved]'], ['savedCount', '[data-native-saved-count]'],
     ['savedList', '[data-native-saved-list]'],
@@ -823,32 +824,48 @@ export function mountCoordinationPanel(root, options = {}) {
     const people = new Map(state.people.map(person => [person.id, person]));
     const staffing = new Map(result.staffing.map(line => [line.personId, line.cents]));
     const fragment = document.createDocumentFragment();
+    const effort = { funded: 0, allocated: 0, additional: 0 };
+    const amountCell = (cents, minutes) => {
+      const cell = document.createElement('td'), amount = document.createElement('strong');
+      amount.textContent = money(cents); cell.append(amount);
+      if (minutes !== undefined) {
+        const time = document.createElement('small'); time.textContent = duration(minutes); cell.append(time);
+      }
+      return cell;
+    };
     for (const capacity of result.capacity) {
       const person = people.get(capacity.personId);
-      const item = document.createElement('li');
-      const heading = document.createElement('h4');
-      heading.textContent = person.label;
-      const rate = document.createElement('p');
-      rate.textContent = person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)} per hour`;
-      const ledger = document.createElement('dl');
-      for (const [label, minutes, cents] of [
-        ['Staffing', capacity.fundedMinutes, staffing.get(person.id)],
-        ['Extra work', capacity.additionalMinutes, capacity.additionalCents],
-        ['Included in staffing', capacity.allocatedMinutes, capacity.allocatedCents],
-      ]) {
-        const row = document.createElement('div');
-        const term = document.createElement('dt');
-        term.textContent = label;
-        const value = document.createElement('dd');
-        value.textContent = `${INTEGER.format(minutes)} min · ${money(cents)}`;
-        row.append(term, value);
-        ledger.append(row);
-      }
-      item.append(heading, rate, ledger);
+      const item = document.createElement('tr'), heading = document.createElement('th');
+      item.dataset.costPerson = person.id; heading.scope = 'row'; heading.textContent = person.label;
+      const fundedCents = staffing.get(person.id);
+      const totalCents = fundedCents === null || capacity.additionalCents === null ? null : fundedCents + capacity.additionalCents;
+      item.append(heading, amountCell(person.rateCentsPerHour),
+        amountCell(fundedCents, capacity.fundedMinutes),
+        amountCell(capacity.allocatedCents, capacity.allocatedMinutes),
+        amountCell(capacity.additionalCents, capacity.additionalMinutes), amountCell(totalCents));
       fragment.append(item);
+      effort.funded += capacity.fundedMinutes;
+      effort.allocated += capacity.allocatedMinutes;
+      effort.additional += capacity.additionalMinutes;
     }
+    if (!result.capacity.length) {
+      const row = document.createElement('tr'), cell = document.createElement('td');
+      cell.colSpan = 6; cell.className = 'native-cost-table__empty'; cell.textContent = 'Add people to see the investment by person.';
+      row.append(cell); fragment.append(row);
+    }
+    const totalsLabel = document.createElement('th'), rateTotal = document.createElement('td');
+    const totalLabel = result.plannedCommitmentCents === null ? 'Known total' : 'Plan total';
+    totalsLabel.scope = 'row'; totalsLabel.textContent = totalLabel; rateTotal.textContent = '—';
+    elements.traceTotals.replaceChildren(totalsLabel, rateTotal,
+      amountCell(result.fundedKnownCents, effort.funded), amountCell(result.allocatedKnownCents, effort.allocated),
+      amountCell(result.additionalKnownCents, effort.additional), amountCell(result.knownCommitmentCents));
     elements.traceList.replaceChildren(fragment);
-    text('traceSummary', `Staffing ${money(result.fundedKnownCents)} + extra work ${money(result.additionalKnownCents)} = ${money(result.knownCommitmentCents)} total. Work included in staffing: ${money(result.allocatedKnownCents)}.`);
+    const summary = document.createDocumentFragment();
+    for (const [label, cents] of [['Staffing', result.fundedKnownCents], ['Extra work', result.additionalKnownCents], [totalLabel, result.knownCommitmentCents]]) {
+      const group = document.createElement('div'), term = document.createElement('dt'), value = document.createElement('dd');
+      term.textContent = label; value.textContent = money(cents); group.append(term, value); summary.append(group);
+    }
+    elements.traceSummary.replaceChildren(summary);
     renderedProjection = projection;
   }
 

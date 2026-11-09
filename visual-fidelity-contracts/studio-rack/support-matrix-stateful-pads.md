@@ -27,6 +27,7 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 | Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
 | Working sessions | Numbered pads select an occurrence. Period and subdivision choices place it; participant switches and explicit order controls apply to the session as a whole. |
 | Funding and Status | Named large radio pads place the selection control at the top left, beside a short label and hint. Persistent pressed state carries the choice. |
+| Whole-plan cost breakdown | A closed reading opens a compact ruled-paper table comparing each person's rate, staffing, included work, extra work and total. The summary and table footer reconcile the same accepted investment. |
 
 Use a matrix when named row/column relationships help a visitor compare. A short
 pad rail fits a small choice set. A phase or period lane groups work by that
@@ -299,6 +300,41 @@ separating selection from parameter editing. Native table semantics and the
 Studio model establish these actual relationships. The precedent supplies an
 interaction analogy; human walkthrough evaluates whether it helps this visitor.
 
+## Whole-plan cost breakdown
+
+The Investment chapter's Whole-plan cost breakdown opens one compact comparison
+instead of separate person cards. Its paper face and explicit dark text keep the
+summary legible inside the dark rack. A three-part description list gives
+Staffing, Extra work and Plan total their own label/value hierarchy. When rates
+are incomplete, **Known total** identifies the available subtotal.
+
+The native table has an investment/currency caption, scoped column headers and
+each person's name as its row header. Columns compare Hourly rate, Staffing,
+Included work, Extra work and Total. Monetary values align right with tabular
+figures; compact duration readings sit beneath their amounts. Thin horizontal
+rules separate records, and a light mint total column supplies a quiet comparison
+cue. The footer totals the named funding scopes rather than repeating individual
+cards. A short note keeps the additive relationship explicit: total is staffing
+plus extra work, while included work is already part of staffing.
+
+The controller reads the accepted per-person staffing and settled funding pools.
+It retains exact stored-cent formatting, explicit zero amounts, and **Rate
+needed** for unpriced values. Paused work keeps its planned investment. The footer
+uses canonical known totals, so missing rates stay distinct from zero costs and
+included work contributes once. The hourly-rate footer remains inapplicable;
+hourly rates are individual prices rather than an additive plan quantity.
+
+At ordinary phone widths, a named keyboard-reachable scroll region keeps the
+columns together and makes the final Total column reachable. Summary and note
+reflow above it. The authored static About reading keeps the same caption,
+header topology, row structure and initial example meaning as the live table.
+
+The focused controller browser route observes column/row headers, an unknown
+rate, retained paused investment, included-work accounting, summary contrast,
+and phone containment. Its existing accepted-session journey verifies that the
+table updates after Apply. These are local comparison and interaction receipts;
+the receiving publication retains its own release boundary.
+
 ## Ownership and evidence
 
 | Route | Responsibility or observation |
@@ -315,6 +351,7 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Tables, local racks, membership pads and shared control treatment |
 | [Abilities](../../tests/native-investment-studio/capability.browser.mjs), [People arrangement](../../tests/native-investment-studio/assembly.browser.mjs), [responsibility](../../tests/native-investment-studio/responsibility.browser.mjs), [rack](../../tests/native-investment-studio/rack-controls.browser.mjs) browser checks | Exercised support meaning, direct creation, assignment boundaries, ordering, retained work and local geometry |
 | [People fit journey](../../tests/native-investment-studio/people-fit.browser.mjs) | Populated table fits horizontally at a 1512 × 982 laptop viewport, preserving the 15rem person column; phone comparison scrolls within the rack and reaches its final session |
+| [Integration controller](../../collaboration/native-investment-studio/controller.mjs), [About static source](../../context-canvas-project-surface/context-canvas/index.html), [About styles](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [controller browser route](../../tests/native-investment-studio/controller.browser.mjs) | Whole-plan cost table and summary; settled accepted values, native headers, ruled-paper comparison and local scroll boundary |
 
 The receiving PR names the checks actually run and their scope. A passing
 operation check establishes that journey; visual inspection and human review
