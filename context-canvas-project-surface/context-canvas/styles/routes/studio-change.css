@@ -38,15 +38,15 @@
 .native-change__discussion span { font-size: .75rem; }
 /* Selected Change work borrows the shared rack header and retains mounted fields
    behind a small local rail. Duration face and pointer art stay shared-owned. */
-.native-change__inspectors { min-inline-size: 0; margin-block: 0; padding: .65rem; color: var(--native-paper); background: #162d25; border: 1px solid #668b73; border-radius: .3rem; }
-.native-change__inspectors .studio-rack-header { padding: .1rem 0 .65rem; border-block-end: 1px solid #668b73; }
+.native-change__inspectors { min-inline-size: 0; margin-block: 0; padding: .65rem; color: var(--native-paper); background: #162d25; border: 1px solid var(--studio-rack-edge); border-radius: .3rem; }
+.native-change__inspectors .studio-rack-header { padding: .1rem 0 .65rem; border-block-end: 1px solid var(--studio-rack-edge); }
 .native-change__inspector-rail { display: flex; flex-wrap: wrap; gap: .4rem; margin-block: .65rem; }
-.native-coordination .native-change__inspector-rail button { flex: 1 1 5rem; min-inline-size: 0; min-block-size: 2.75rem; padding: .4rem .6rem; border: 1px solid #668b73; background: #29483a; color: #f7f0d6; box-shadow: inset 0 -.18rem #10261e; font-size: .8rem; }
+.native-coordination .native-change__inspector-rail button { flex: 1 1 5rem; min-inline-size: 0; min-block-size: 2.75rem; padding: .4rem .6rem; border: 1px solid var(--studio-rack-edge); background: var(--studio-track-face); color: var(--studio-rack-paper); box-shadow: inset 0 -.18rem var(--studio-deep-screen); font-size: .8rem; }
 .native-coordination .native-change__inspector-rail button[aria-pressed='true'] { background: var(--native-signal); color: var(--native-ink); box-shadow: inset 0 .15rem #346b5955; }
 .native-change .native-change__component { background: transparent; border: 0; box-shadow: none; padding: 0; }
-.native-change__component-preview { margin: 0 0 .65rem; padding: 0 0 .55rem; border-color: #668b73; color: #d8eadc; font-size: .78rem; }
+.native-change__component-preview { margin: 0 0 .65rem; padding: 0 0 .55rem; border-color: var(--studio-rack-edge); color: var(--studio-soft-mint); font-size: .78rem; }
 .native-change__component-body { padding: 0; gap: .65rem; }
-.native-change__component-introduction { grid-column: 1 / -1; gap: .35rem; font-size: .8rem; color: #d8eadc; }
+.native-change__component-introduction { grid-column: 1 / -1; gap: .35rem; font-size: .8rem; color: var(--studio-soft-mint); }
 .native-change__component-introduction p { margin: 0; }
 .native-change__support-editor { display: grid; gap: .65rem; }
 .native-change__inspectors .native-change__component-settings { gap: .65rem; }
@@ -67,10 +67,10 @@
 .native-coordination .native-change__method-keys button { min-block-size: 2.75rem; padding: .5rem .7rem; background: var(--about-paper); font-size: .8rem; }
 .native-coordination .native-change__method-keys button[aria-pressed='true'] { background: var(--about-tiffany); box-shadow: inset 0 .15rem var(--about-deep-teal); }
 .native-change .native-change__suggestions { display: block; }
-.native-change .native-change__suggestion { gap: .6rem; padding: .7rem; background: #392a22; color: #f7ecd7; border-color: #9f7f62; }
-.about-page .native-change__suggestion h5 { color: #f7ecd7; }
+.native-change .native-change__suggestion { gap: .6rem; padding: .7rem; background: #392a22; color: var(--studio-warm-label); border-color: #9f7f62; }
+.about-page .native-change__suggestion h5 { color: var(--studio-warm-label); }
 .native-change__suggestion > p { font-size: .85rem; }
-.native-coordination .native-change__method-example > summary, .native-change__method-example a { color: #f7ecd7; }
+.native-coordination .native-change__method-example > summary, .native-change__method-example a { color: var(--studio-warm-label); }
 .native-change__suggestion-actions button { inline-size: auto; font-size: .8rem; }
 .native-change__inspectors .native-change__work { padding: 0; border: 0; background: transparent; color: var(--native-paper); gap: .65rem; }
 .native-change__work > p { margin: 0; font-size: .8rem; }

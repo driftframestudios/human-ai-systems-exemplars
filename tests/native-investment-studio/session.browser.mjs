@@ -482,6 +482,7 @@ for (const engine of names) {
     const assemblyForm = assembly.locator('[data-assembly-form]');
     await assemblyForm.locator('[name="label"]').fill('First team');
     await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await expect(assembly.getByRole('button', { name: 'Back to Settings · First team', exact: true })).toBeVisible();
     await assemblyForm.locator('[name="label"]').fill('Taylor');
     await assemblyForm.locator('[name="ratePerHour"]').fill('120');
     await assemblyForm.locator('[name="fundedHours"]').fill('1');
@@ -495,7 +496,7 @@ for (const engine of names) {
     await assembly.locator('[data-assembly-member]').check();
     await assembly.locator('[data-assembly-apply]').click();
     await expect(returnButton).toHaveText('Return to session');
-    await returnButton.click();
+    await assembly.getByRole('button', { name: 'Back to Settings · First working session', exact: true }).click();
     await expect(field(page, 'label')).toHaveValue('First working session');
     await expect(field(page, 'minutesPerSession')).toHaveValue('45');
     await expect(legacy(page, 'review')).toBeFocused();

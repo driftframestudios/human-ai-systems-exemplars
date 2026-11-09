@@ -186,7 +186,7 @@ export function mountCoordinationPanel(root, options = {}) {
     return (activeChapter === 'people' || activeChapter === 'coordination'
       && (openingRackKind === kind || rackEditor?.isOpen(kind))) && !purposePanel?.isOpen();
   }
-  function openRackEditor(target, source) {
+  function openRackEditor(target, source, { allowToggle = true } = {}) {
     const collection = rackCollections[target.kind];
     const record = studio.read().state[collection].find(row => row.id === target.id);
     if (!record || !rackEditor) return;
@@ -200,7 +200,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const horizonSource = source?.closest('[data-score-projection]');
     const sharedSource = source?.closest('[data-shared-session-rack]');
     const toggle = target.kind !== 'session' || horizonSource || source?.classList.contains('studio-track-key');
-    if (toggle && current?.open && current.kind === target.kind && current.id === target.id
+    if (allowToggle && toggle && current?.open && current.kind === target.kind && current.id === target.id
       && rackEditor.isOrigin(source)) { closeRackEditor(source); return; }
     const anchor = target.kind === 'person' ? requireElement('[data-connection-templates]')
       : horizonSource ?? source?.closest('[data-native-connection-view]') ?? requireElement('[data-connection-templates]');
@@ -289,6 +289,25 @@ export function mountCoordinationPanel(root, options = {}) {
     if (kind !== 'score') scorePanel?.close({ park: false });
   }
 
+  function creationReturn(target) {
+    const route = returnRoutes.at(-1);
+    const created = describeAssemblyTarget(target) ?? describeSessionTarget(target);
+    const collection = { person: 'people', team: 'teams', session: 'work' }[route?.creating];
+    const fromCreation = target && route?.creationTarget === target;
+    const fromCreatedRecord = route?.createdId && created?.id === route.createdId && created.collection === collection;
+    if (!fromCreation && !fromCreatedRecord) return null;
+    const owner = TARGET_READERS[route.kind]?.(route.target);
+    const saved = editing.read().parked.find(record => record.kind === route.kind && record.targetId === route.target);
+    const record = owner && studio.read().state[owner.collection]?.find(item => item.id === owner.id);
+    const name = saved?.raw.label || saved?.raw.sharedObject || record?.label || record?.sharedObject;
+    const label = name ? `Settings · ${name}` : {
+      assembly: 'Team settings', session: 'Session settings', connection: 'Handoff settings',
+      contribution: 'Contribution settings', template: 'Team planning', capability: 'Abilities',
+      change: 'Change settings', assurance: 'Quality & recovery settings',
+    }[route.kind];
+    return label ? { label, action: returnToDraft } : null;
+  }
+
   function renderReturnRoute() {
     const drafts = editing.read();
     const state = studio.read().state;
@@ -297,6 +316,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (!isReturnRouteRetained(route, drafts, state, descriptor)) returnRoutes.splice(index, 1);
     }
     if (pendingReturnFocus && !hasReturnDraft(pendingReturnFocus, drafts)) pendingReturnFocus = null;
+    assemblyPanel?.refresh(); rackEditor?.sync();
     if (!returnRegion || !returnNote || !returnButton) return;
     const route = returnRoutes.at(-1);
     returnRegion.hidden = !route || Boolean(route.rackSource && templatePanel?.isTeamOpen());
@@ -332,6 +352,7 @@ export function mountCoordinationPanel(root, options = {}) {
   }
   function createPrerequisite(button) {
     const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
+    const originChapter = activeChapter, rackOrigin = rackEditor?.captureOrigin();
     if (kind === 'template') templatePanel?.settleText();
     if (!['session', 'connection', 'assembly', 'contribution', 'template', 'capability', 'change', 'assurance'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
     const view = kind === 'template' ? null : editing[kind].read();
@@ -364,7 +385,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!result?.ok) { announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
     pendingReturnFocus = null;
     retainReturnAncestors(kind, target);
-    returnRoutes.push({ kind, target, creating, held, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
+    returnRoutes.push({ kind, target, creating, held, originChapter, rackOrigin, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
       field: button.dataset.nativeReturnField ?? (kind === 'session' && creating === 'team' ? 'teamId' : kind === 'connection' && creating === 'person' ? 'receiverPersonId' : null),
       requiredTeamId: kind === 'connection' && creating === 'person' ? view.draft.raw.receiverTeamId : null });
     renderReturnRoute();
@@ -375,7 +396,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!route) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleView', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination');
+    chapterShell?.select(route.originChapter ?? (route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleView', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination'));
     if (route.kind === 'peopleSupportView') {
       if (route.origin?.kind === 'person') teamPanel?.select(route.origin.targetId);
       else if (route.origin?.kind === 'assembly') assemblyPanel?.open(route.origin.targetId);
@@ -409,7 +430,11 @@ export function mountCoordinationPanel(root, options = {}) {
     const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel, score: scorePanel }[route.kind];
     const result = panel.open(route.target);
     if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
-    if (route.rackSource && route.kind === 'connection') {
+    if (route.rackOrigin) {
+      const { record, source } = route.rackOrigin;
+      if (studio.read().state[rackCollections[record.kind]].some(item => item.id === record.id))
+        openRackEditor(record, source(), { allowToggle: false });
+    } else if (route.rackSource && route.kind === 'connection') {
       const descriptor = describeConnectionTarget(route.target);
       if (descriptor?.id) openRackEditor({ kind: 'connection', id: descriptor.id }, route.rackSource());
     }
@@ -1024,6 +1049,7 @@ export function mountCoordinationPanel(root, options = {}) {
       },
       canOpen: () => peopleOwnerAvailable('team'),
       isActive: () => peopleOwnerAvailable('team') && peopleEditor === 'assembly',
+      readReturn: creationReturn,
       onClose: closeRackEditor,
       onAccepted: () => render(), onEditing: () => render(),
       onRecordCreated: prerequisiteCreated,
@@ -1035,6 +1061,9 @@ export function mountCoordinationPanel(root, options = {}) {
         session: [requireElement('[data-native-session-editor] [data-native-configure]'), requireElement('[data-native-session-status]')],
         connection: [requireElement('[data-connection-configure]'), requireElement('[data-connection-status]')],
       }, onClose: closeRackEditor,
+      readReturn: record => record && creationReturn(record.kind === 'session'
+        ? workPanel?.read().draft?.sessionId : record.kind === 'team'
+          ? assemblyPanel?.read().draft?.assemblyId : null),
       readLabel: record => {
         const row = studio.read().state[rackCollections[record.kind]].find(row => row.id === record.id);
         return row?.label ?? row?.sharedObject;

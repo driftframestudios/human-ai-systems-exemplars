@@ -12,6 +12,9 @@ leaving the support task. Change and Quality use compact attached receivers for
 the detail behind their primary instruments. People combines parallel team
 lanes with an arranger that relates people directly to working sessions; its
 selected record keeps a local return to that comparison.
+The current refinement gives each team its own hourly subtotal and keeps nested
+creation's return attached to the preceding task. Short resource readings make
+the participation matrix easier to scan while retaining its large checkbox pads.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -34,6 +37,8 @@ comparison anchor until a human authorizes promotion.
 | [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/), accessibility practice | Enter/Space activation and expanded state identify the visibility of related content. | Local name and detail controls report their actual receiver state. A native input provides text editing; visible Save and Cancel define acceptance and recovery. |
 | [Ableton Arrangement View](https://www.ableton.com/en/live-manual/12/arrangement-view/), product practice | Arrangement tracks combine comparable content with local controls and explicit reorder operations. | People rows retain identity, resource readings and local editing beside session participation. Team lanes retain their parallel group meaning; this Studio adaptation represents enterprise work. |
 | [WAI tables with two headers](https://www.w3.org/WAI/tutorials/tables/two-headers/), accessibility practice | Row and column headers identify the meaning of their intersecting cells. | The People arranger uses native scoped headers and named checkbox pads for each person/session relationship. Its local scroll region retains those relationships on phone widths. |
+| [GOV.UK Table](https://design-system.service.gov.uk/components/table/), official design-system guidance | Captions and scoped headers support comparison; reducing displayed data and deliberate column widths help scanning. Numeric columns use right alignment. | Keep the native person/session relationship and equal session widths. Compact resource pills retain their units. The matrix cells represent participation, so their pads stay centered rather than adopting numeric-column alignment. |
+| [Carbon Data table](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines), official product guidance | Consistent sizing and sufficient room for content support readable density. | Use equal session measures and shorten repeated readings before shrinking targets. The Studio keeps its multi-line person identity and tactile pad scale rather than adopting Carbon's exact row heights. |
 | Human observations of the running Studio and preserved workbench, local evidence | Detached editors, repeated creation controls and unclear saving made scope difficult to follow. Compact modules and direct pads were preferred. | Preserve the art, duration module and separate delivery/shared-session working areas. This establishes a collaboration direction; focused browser checks establish the resulting behavior, rather than population-level usability. |
 
 ## Compared routes
@@ -96,7 +101,9 @@ draft preservation, keyboard recovery and Undo in this Studio.
 
 The synthesis gives Teams full-width parent keys in editorial lanes. A selected
 key opens its compact receiver; a second activation closes it. Movement and
-removal stay grouped at the lane bottom. The arranger carries the former roster's
+removal stay grouped at the lane bottom, with Remove at the right. Cobalt resting
+keys and the bright selected face distinguish the parent group from its members.
+The arranger carries the former roster's
 resource readings, saved-edit and quality indicators, record operations and
 direct session participation. Person and Role controls remain local; Contributions
 and sessions form a distinct companion working area. This keeps the semantic
@@ -111,6 +118,29 @@ or proposal boundary. A local return restores the originating record with the
 matrix still available. The public precedents support this interaction shape;
 the focused Studio journeys establish retained values, recovery and phone-width
 reachability for the actual implementation.
+
+### Compact readings and a contextual return
+
+For #879, three display routes were considered: keeping full sentences beneath
+each person, hiding all resource readings in a disclosure, and retaining concise
+unit-bearing pills beside the participation pads. The third preserves immediate
+comparison with less repeated text. A rate pill shows whole dollars per hour;
+a funded-time pill names both available and funded time. Tabular numerals support
+stable alignment. These are readings, with ordinary text semantics, rather than
+actions or status tags. Exact rates remain in the underlying plan and editor.
+
+Team Settings uses a different scope: its selected members' hourly subtotal.
+The readout identifies any unknown rates and updates with membership. A cool-blue
+inset distinguishes this local result from the amp's whole-plan investment.
+The Add person module keeps its name and preview together above its controls.
+Its return names the parent task that requested the person. The existing retained
+draft route supplies that context; a second navigation state owner would create
+an avoidable opportunity for the title and actual return to diverge.
+
+This is a design synthesis from official component guidance and the human's
+observations of this showcase. It does not establish population-level usability.
+Focused browser checks must establish equal columns, readable states, retained
+pad targets and return to the actual preceding team or supporting-work task.
 
 ## Source and observation
 

@@ -7,8 +7,8 @@ period or pad, adjust a useful quantity and see the related work change. The
 is the implementation reference.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:studio-rack-composition`;
-dev receiving contract revised 8 November 2026 for
-[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836).
+dev receiving contract revised 9 November 2026 for
+[#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 `main` retains the approved Showcase reference. Promotion from `dev` and a
 tagged public release each require a human cue. The receiving PR records actual
 verification and independent review.
@@ -34,8 +34,12 @@ working area while Shared sessions remains independent. Creating a team from
 a handoff returns to that retained handoff and its requested team field.
 
 People groups Teams into one horizontal row of parallel editorial lanes, with
-full-width parent keys and bottom-aligned movement/removal tools. Its recessed
-people/session arranger keeps resource readings and record operations beside
+full-width cobalt parent keys, a bright selected face and bottom-aligned
+movement/removal tools. Remove sits at the right end of that rail. Team Settings
+pairs its name with the selected members' hourly subtotal in a cool-blue inset.
+Nested person creation retains a named return to the preceding task.
+Its recessed people/session arranger keeps compact rate and available/funded-time
+readings and record operations beside
 direct participation pads. Compact Person settings provide an All people return,
 and Role mix retains the current value on each facet. Contributions
 retain their session matrix and open a compact Work / Receiver and decision pair.
@@ -134,6 +138,14 @@ two-dimensional tables, parallel team lanes and cassette shelves use named local
 scroll regions. People uses the established paper, peach and green palette on
 pure-black recessed modules. Its shared Person settings skin also follows the
 canonical form into Coordination.
+Chocolate is primarily an accent and a dial/knob-module background. Existing
+chocolate companions remain until a named refinement changes their surface;
+new general-purpose panels use the established rack or editorial palette.
+Repeated Studio colors have named variables in the shared instrument owner.
+Chapter skins select those roles while preserving their own density and emphasis.
+People's equal session columns retain comfortable participation targets. Resource
+pills use tabular numerals and explicit units, with whole-dollar rate display;
+the underlying rates retain their precision.
 Headers contrast against their actual background. The pale Sessions to place
 tray uses dark text, while dark rack captions retain light text. Forced colors
 keeps native controls and selection available.
@@ -191,6 +203,8 @@ Meaningful supersessions are explicit:
 | Person-to-arrange selector and Arrange team disclosure | Visible movement/removal actions belong to each person or team card, with keyed movement and retained focus |
 | Role mix requires opening a separate disclosure | Current person, facet values and the selected native choice remain visible beside the People arranger's local receiver |
 | People membership and responsibility choices require a second Apply | Bounded choices accept directly; person text/quantities and retained proposals keep canonical validation and recovery |
+| Chocolate team parent keys and whole-plan Team Settings preview | Cobalt resting keys, bright selected keys and a cool-blue team hourly subtotal identify the local group and its cost |
+| Nested Add person always returns to Teams | The local return names the preceding team or supporting-work task and uses its retained draft route |
 | A blank existing-plan track cell is descriptive only | It can append a working session to that plan; earlier placements remain visible |
 | Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |
 | #825 Working sessions Remove sits bottom-left | #828 places it bottom-right; Add remains top-right |
@@ -199,7 +213,8 @@ Meaningful supersessions are explicit:
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)
-records the broader current rationale. #836 carries the compact People receiver;
+records the broader current rationale. #879 refines People colors, readings and
+creation returns; #836 carries the compact People receiver;
 #848 extends the compact support pattern through Abilities, #849 settles Change
 action state and #818 receives the financial workbench on dev. The primary route
 manifest registers their CSS and shared browser module closure.

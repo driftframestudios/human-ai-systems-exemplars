@@ -5,8 +5,8 @@ record and unfinished entries intact. One canonical editor owns each proposal;
 its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-dev receiving contract revised 8 November 2026 for
-[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836),
+dev receiving contract revised 9 November 2026 for
+[#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
 retaining the removal and focus recovery from
 [#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833).
 It inherits [Studio Rack Composition](README.md). `main` remains the approved
@@ -31,6 +31,13 @@ Changing the selected person or team affects the first area; the participation
 matrix remains available below it. Person controls retain their readable peach
 surface inside the dark rack. A shared header names the owning view, current record and its acceptance action. The owner return and Close restore the originating record and local scope.
 Team membership uses the sequencer's clear selected face and available state.
+The compact Team Settings preview names the selected team's hourly subtotal,
+including unknown-rate coverage. Add person keeps its name and preview together
+and borrows the existing creation return route. When a team requested that
+person, the header returns to that team's settings and retained entries. Other
+creation origins name their own preceding task. This supersedes the unconditional
+Teams return on nested creation; one draft-route owner supplies both the label
+and return behavior.
 
 Adjacent editors reserve one rem above and below the receiving module. The in-rack
 session slot owns this padding where the borrowed editor itself is flush. The

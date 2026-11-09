@@ -6,7 +6,9 @@ each route changes the same editor proposal. Session time, hourly rates and the
 Change/Quality fader banks are current receivers.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-reviewed 8 November 2026 for shared circular steps in
+dev receiving contract revised 9 November 2026 for compact creation controls in
+[#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
+retaining shared circular steps from
 [#865](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/865), following the compact Person receiver in
 [#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836). It inherits the shared control and motion treatment in
 [Studio Rack Composition](README.md).
@@ -51,6 +53,10 @@ use a 7rem input-and-step measure so the circles align beneath the field ends.
 Generic action-button
 padding applies to actions, while these precision controls retain their shared
 geometry. This ownership supersedes competing circular sizing in chapter rules.
+The compact Add person module keeps the preserved workbench's fixed lower-right
+step-button shadow and centered circular face. Chocolate belongs primarily on
+dial/knob enclosures and specific accents; the shared palette variables retain
+each chapter's effective color while allowing a named surface to evolve.
 
 Change and Quality intentionally retain different fader skins. The shared
 contract is named quantity, readable endpoints, exact value and visible response;

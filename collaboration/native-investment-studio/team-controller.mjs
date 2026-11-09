@@ -1,7 +1,7 @@
 import { LIMITS } from './config.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { createDraftCoordinator } from './editing.mjs';
-import { money, duration } from './display.mjs';
+import { money, wholeMoney, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
@@ -119,6 +119,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
     const table = document.createElement('table'); table.className = 'studio-people-arranger'; table.dataset.emptySessions = String(next.state.work.length === 0);
+    table.style.setProperty('--studio-people-columns', String(next.state.work.length + 1));
     const caption = document.createElement('caption'); caption.textContent = 'People in working sessions';
     const head = document.createElement('thead'), headings = document.createElement('tr');
     const label = document.createElement('th'); label.scope = 'col'; label.textContent = 'People and funded time'; headings.append(label);
@@ -147,13 +148,17 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       saved.hidden = true;
       const team = document.createElement('p');
       team.textContent = memberships.get(person.id).join(' · ') || 'No team assigned';
-      const detail = document.createElement('p');
-      detail.textContent = `${person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`} · ${duration(person.fundedMinutes)} funded`;
+      const detail = document.createElement('span'); detail.className = 'studio-people-arranger__value';
+      detail.textContent = person.rateCentsPerHour === null ? 'Hourly rate needed' : `${wholeMoney(person.rateCentsPerHour)}/hr`;
       const remaining = capacity.get(person.id).remainingMinutes;
-      const space = document.createElement('p');
-      space.textContent = remaining < 0 ? `${duration(-remaining)} above funded time` : `${duration(remaining)} of funded time available`;
+      const space = document.createElement('span'); space.className = 'studio-people-arranger__value studio-people-arranger__funding';
+      const available = document.createElement('span'), funded = document.createElement('span');
+      available.textContent = remaining < 0 ? `${duration(-remaining)} over` : `${duration(remaining)} available`;
+      funded.textContent = `/ ${duration(person.fundedMinutes)} funded`;
+      space.append(available, document.createTextNode(' '), funded);
+      const values = document.createElement('div'); values.className = 'studio-people-arranger__values'; values.append(detail, space);
       const reading = document.createElement('div'); reading.className = 'studio-people-arranger__reading';
-      reading.append(team, detail, space); item.append(button, saved, reading);
+      reading.append(team, values); item.append(button, saved, reading);
       const order = document.createElement('div'); order.className = 'studio-person-order native-coordination__actions';
       for (const [action, label, disabled] of [['person-up', 'Move earlier', index === 0], ['person-down', 'Move later', index === next.state.people.length - 1], ['person-remove', 'Remove', false]]) {
         const control = document.createElement('button'); control.type = 'button'; control.textContent = label;
