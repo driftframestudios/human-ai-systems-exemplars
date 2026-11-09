@@ -1,3 +1,4 @@
+import { renderRemovalReferences } from './removal-references.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
@@ -80,7 +81,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     group.header.element.classList.add('studio-people-editor__heading');
     group.summary.after(group.header.element);
   }
-  let projection = null, people = new Map(), works = new Map(), contributions = new Map(), referenceLabels = new Map();
+  let projection = null, people = new Map(), works = new Map(), contributions = new Map();
   let selectedPerson = null, mode = 'role', generation = 0, disposed = false, retired = null;
   let membershipProjection = null, membershipIds = null, memberControls = new Map();
   let contributionButtons = new Map(), membersTarget = null, memberOrder = [];
@@ -147,8 +148,6 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     people = new Map(next.state.people.map(row => [row.id, row]));
     works = new Map(next.state.work.map(row => [row.id, row]));
     contributions = new Map(next.state.contributions.map(row => [row.id, row]));
-    referenceLabels = new Map(['people', 'teams', 'work', 'practices', 'contributions', 'connections'].map(collection =>
-      [collection, new Map(next.state[collection].map(row => [row.id, row.label ?? CATEGORY_LABELS.get(row.categoryId) ?? row.id]))]));
     for (const field of ['receiverPersonId', 'decisionOwnerPersonId']) {
       contribution.inputs[field].replaceChildren(option('', 'Unassigned'), ...next.state.people.map(person => option(person.id, named(person))));
     }
@@ -283,15 +282,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       (group.inputs[errorField] ?? contribution.members).setAttribute('aria-invalid', 'true');
     }
     group.general.textContent = error && !errorField && !draft?.errors.length ? error.message : '';
-    if (group.kind === 'contribution') {
-      const references = error?.references ?? [];
-      contribution.dependencies.hidden = references.length === 0;
-      contribution.dependencies.replaceChildren(...references.map(reference => {
-        const item = document.createElement('li');
-        item.textContent = `${referenceLabels.get(reference.collection)?.get(reference.id) ?? reference.id}: ${reference.field}`;
-        return item;
-      }));
-    }
+    if (group.kind === 'contribution') renderRemovalReferences(contribution.dependencies, projection.state, error?.references);
     group.apply.disabled = Boolean(error?.references?.length);
     group.apply.setAttribute('aria-disabled', String(!draft?.changed));
     group.apply.classList.toggle('native-control--remove', removing);

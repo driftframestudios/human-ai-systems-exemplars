@@ -96,6 +96,53 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: removal notices name valid team and person dependencies without changing the accepted plan`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { getCapabilityDefinition } = await import('/collaboration/native-investment-studio/capabilities.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const plan = createShowcasePlan(), definition = getCapabilityDefinition('ability', 'inspect-history', '1.0.0');
+      plan.abilities.push({ id: 'audit-history', definitionId: definition.id, definitionVersion: definition.version,
+        context: 'Inspect the pilot history.', teamId: 'engineering', responsiblePersonIds: ['maya'],
+        decisionOwnerPersonId: 'maya', lifecycle: 'active', prerequisites: [],
+        supportBindings: definition.supportRequirements.map(row => ({ requirementId: row.id, workIds: ['review'] })) });
+      plan.capabilityEvidence.push({ id: 'history-observation', subject: { kind: 'ability', instanceId: 'audit-history' },
+        stage: 'rehearsed', context: 'Pilot walkthrough', observation: 'The reviewer traced the saved request.',
+        recorderPersonId: 'maya', reviewBoundary: 'Review with operations.', observedPlanRevision: 0 });
+      window.assemblyFixture.controller.dispose(); window.assemblyFixture.editing.dispose();
+      const studio = createStudio(plan);
+      window.assemblyFixture = { studio, controller: mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio }),
+        editing: createDraftCoordinator(studio) };
+    });
+    await tab(page, 'people').click();
+    const accepted = await bytes(page), dependencies = people(page).locator('[data-assembly-dependencies]');
+    await people(page).getByRole('button', { name: 'Remove team: Engineering', exact: true }).click();
+    await expect(dependencies.locator('li')).toHaveText([
+      'Work: Pilot decision review', 'Work: Prototype pairing',
+      'Connection: Prototype, acceptance evidence and exception log', 'Connection: Pilot scope and tested user journeys',
+      'Ability: Inspect history', 'Practice: Actively negotiate expectations · Engineering',
+    ]);
+    await expect(apply(page)).toBeDisabled(); assert.equal(await bytes(page), accepted);
+    await cancel(page).click();
+    await people(page).locator('[data-assembly-action="person-remove"][data-assembly-id="maya"]').click();
+    await expect(dependencies).toContainText('Contribution: Cross-source synthesis');
+    await expect(dependencies).toContainText('Evidence: Inspect history · Pilot walkthrough');
+    await expect(dependencies).not.toContainText('undefined'); await expect(apply(page)).toBeDisabled();
+    assert.equal(await bytes(page), accepted);
+    assert.equal(await page.evaluate(() => window.assemblyFixture.studio.readHistory().undoCount), 0);
+    await cancel(page).click();
+    await action(page, 'team-create').click();
+    const newTeam = await page.evaluate(() => window.assemblyFixture.studio.read().state.teams.at(-1).id);
+    const withTeam = await bytes(page);
+    await people(page).locator(`[data-assembly-action="team-remove"][data-assembly-id="${newTeam}"]`).click();
+    await expect(dependencies).toBeHidden(); await expect(apply(page)).toBeEnabled(); await apply(page).click();
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), withTeam, 'a reference-free team removal still recovers through amp Undo');
+  });
+
   test(`${engine}: direct team membership preserves a same-instance successor's focus`, async t => {
     const page = await open(t, engine);
     const results = await page.evaluate(async () => {
