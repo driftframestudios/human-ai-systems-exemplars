@@ -9,7 +9,7 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
-People (#836), Abilities support racks with local shared-name editing (#856),
+People team lanes and a direct session arranger (#864), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
 retain their existing owners.
@@ -42,11 +42,15 @@ response. Creating its missing team retains the handoff entries and selects the
 new team. Existing response text remains in the model and exports.
 
 People keeps teams, people and contributions together in compact racks. Teams
-occupy one horizontal row of editorial lanes; each lane represents a group.
-Visible movement controls arrange the teams, people and ordered team members.
-The roster and contribution matrix sit in black recessed modules. A selected
-person opens compact name, rate and funded-time settings inside the roster;
-Apply accepts those typed values. Coordination borrows this same compact form.
+occupy one horizontal row of editorial lanes; a full-width team key identifies
+each parent group and toggles its compact settings. Movement and Remove sit
+together at the lane bottom. The people/session arranger places each person's
+rate, funded and available time, teams and quality indicators beside their
+participation pads. A checkbox changes session participation directly, with
+amp Undo available. Record-local controls arrange and remove people.
+A selected person opens compact name, rate and funded-time settings with an
+**All people** return; Apply accepts those typed values. Coordination borrows
+this same compact form.
 Role mix remains visible with the current person's name, eight pads showing their
 current values, and one native selector for the selected facet. Changing a role
 value accepts it directly.
@@ -68,6 +72,10 @@ dark rack with a readable item heading, local return, Apply and Close. Its Peopl
 view places team and participants beside decision owner and status. Supporting
 work uses compact paired groups; observation material uses chocolate companions.
 Native pads retain their written selected state and fit ordinary mobile widths.
+Adding a person or team from that rack immediately reveals and selects the new
+record, while retaining the current ability or practice proposal. This works
+before typing as well as after editing; Apply accepts its assignment and amp
+Undo retains the separate creation step.
 Add people, teams or sessions in that module, then Apply to accept the support
 relationship. Close retains unfinished work. In the People view, **Rename**
 opens a small field beside a person or team. Save updates that shared name while
@@ -93,6 +101,9 @@ large radio pads with short hints beside Participants at wider widths.
 Local headers identify the owning rack and current item, with an owner return
 and Close. Prepared forms offer Apply beside Close and at the bottom, sharing
 validation and the accepted-state owner. Direct edits show Saved.
+Shared stepper geometry keeps monetary, duration and ordinary numeric buttons
+circular within their route-specific skins. Quality's local labels and actions
+pair readable ink with their dark or editorial field.
 
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.
@@ -162,7 +173,7 @@ commitments and findings.
 | Add a person, team or contribution in People | Empty-slot plus accepts a useful record, closed until selected; pointer hover or keyboard focus reveals it, and touch keeps it visible |
 | Add a supporting person, team or session in Abilities | Creation accepts the record; Apply accepts its assignment to the current proposal |
 | Rename a referenced person or team in Abilities | Rename opens one local field; Save accepts the shared name and retains the support proposal |
-| Arrange People team lanes or roster cards | Movement controls sit on the record and accept its new order with shared motion and Undo |
+| Arrange People team lanes or person rows | Movement controls sit on the record and accept its new order with shared motion and Undo |
 | Change People team membership, member order, role values or contribution choices | Native selectors, checkbox pads and movement controls accept directly and retain local focus |
 | Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
@@ -260,7 +271,7 @@ actual checks and their scope. Performance refinement stays with
 | Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
-| People lanes, roster and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
+| People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
 | Visible role mix and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs) |
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
 | Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs), [Abilities styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) |

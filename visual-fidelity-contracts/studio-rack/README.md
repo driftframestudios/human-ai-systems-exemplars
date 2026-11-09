@@ -33,9 +33,11 @@ updates keep the matrix visible. Person and handoff editors use the delivery
 working area while Shared sessions remains independent. Creating a team from
 a handoff returns to that retained handoff and its requested team field.
 
-People groups Teams into one horizontal row of parallel editorial lanes. Its
-black recessed roster holds direct arrangement controls, compact Person settings
-and a visible Role mix rail with the current value on each facet. Contributions
+People groups Teams into one horizontal row of parallel editorial lanes, with
+full-width parent keys and bottom-aligned movement/removal tools. Its recessed
+people/session arranger keeps resource readings and record operations beside
+direct participation pads. Compact Person settings provide an All people return,
+and Role mix retains the current value on each facet. Contributions
 retain their session matrix and open a compact Work / Receiver and decision pair.
 Role choices, contribution choices and team/support membership accept directly
 through shared history; person quantities and text retain Apply.
@@ -162,7 +164,7 @@ receivers need the same behavior; retain chapter-specific geometry and art.
 | --- | --- |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Shared palette, keys, creation zones, editors, Apply and recovery treatment |
 | [Session CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-session.css) | Duration/Working sessions placement, participant layout, Funding and Status pads |
-| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Parallel team lanes, recessed roster, visible role facets, contribution halves and compact canonical Person settings; loaded after Arrangement CSS |
+| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Parallel team lanes, recessed people/session arranger, visible role facets, contribution halves and compact canonical Person settings; loaded after Arrangement CSS |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | Editorial delivery board, local team controls and darker participation rack |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) CSS | Chapter-specific compositions |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Live receivers, retained drafts, shared Apply delegation and return focus |
@@ -187,7 +189,7 @@ Meaningful supersessions are explicit:
 | Earlier direction | Current receiving contract |
 | --- | --- |
 | Person-to-arrange selector and Arrange team disclosure | Visible movement/removal actions belong to each person or team card, with keyed movement and retained focus |
-| Role mix requires opening a separate disclosure | Current person, facet values and the selected native choice remain visible in the roster rack |
+| Role mix requires opening a separate disclosure | Current person, facet values and the selected native choice remain visible beside the People arranger's local receiver |
 | People membership and responsibility choices require a second Apply | Bounded choices accept directly; person text/quantities and retained proposals keep canonical validation and recovery |
 | A blank existing-plan track cell is descriptive only | It can append a working session to that plan; earlier placements remain visible |
 | Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |

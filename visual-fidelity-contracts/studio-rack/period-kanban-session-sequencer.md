@@ -31,6 +31,8 @@ changes the accepted horizon and enters amp Undo history.
 | Session tracks | Periods or weeks/months; each plan's occurrence pads | A particular working session, with a separate plus target for another |
 | Delivery overview | Planning, Design, Implementation, Testing, Deployment, Maintenance | An authored phase grouping of people, work and handoffs |
 | Shared sessions | People or handoff columns against shared work rows | Direct participation/support links, separate from temporal placement |
+| People teams | Parallel editorial team lanes with full-width parent keys and bottom operation rails | Group membership and local team settings; lane order expresses arrangement |
+| People in working sessions | Person rows against named working-session columns | Direct participation with per-person rates, available time and local settings |
 
 Period position expresses an authored arrangement; duration and participant
 effort keep their own units. Funding, paused state and relationship markers

@@ -15,7 +15,7 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 | Surface | Comparison and interaction |
 | --- | --- |
 | Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one dark support rack at the relevant section. Its pale editorial overview sits below the local header; native choice pads fill compact paired modules. |
-| People | Teams are parallel editorial groups in one horizontal scroll row. The recessed roster combines per-person arrangement, compact settings and a visible role-facet rail. The contribution/session matrix opens Work and Receiver and decision controls while preserving stored responsibility values. |
+| People | Teams are parallel editorial lanes in one horizontal scroll row, with full-width parent keys and bottom movement/removal controls. A recessed people-by-session arranger combines participation with each person's rates, available time, saved edits and local settings. The contribution/session matrix opens Work and Receiver and decision controls while preserving stored responsibility values. |
 | Delivery overview | Teams, work and handoffs share delivery-phase lanes. Lane creation keeps a new team or handoff in its local phase while Shared sessions remains an independent working area. |
 | Shared sessions | People and Handoffs tabs select the relationship shown by a checkbox matrix. Rows are accepted sessions; columns are people or handoffs. A row opens compact host-team and participant-order controls. Handoff headings open the canonical editor inside this module. |
 | Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
@@ -137,6 +137,20 @@ choices and team/support membership accept directly; typed person settings keep
 Apply and their retained draft. Receiver and decision owner remain independent
 selections; team membership supplies neither authority.
 
+The People arranger uses person row headers and working-session column headers.
+Native participation pads accept the selected relationship directly and retain
+the row's rate, funded/remaining time, team membership and review cues. A session
+keeps at least one participant; the affected pad explains that boundary locally.
+Selecting a person opens the compact settings receiver beside its role choices;
+All people returns to the matrix. Typed settings keep their existing Apply
+boundary while direct participation enters the shared Undo history.
+
+Team keys fill their editorial lane and show the parent's name and open state.
+Selecting the same key again closes its editor. Move and Remove controls form
+one bottom row. Settings pair the short name field with the draft investment
+reading at laptop widths; membership pads span the row below. These controls
+stack within an ordinary phone width.
+
 Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
 Apply accepts its support assignment. Cancel restores the prior assignment while
@@ -144,6 +158,14 @@ the newly created record remains available. The stable amp Undo uses that same
 history, independently of cassette selection. Top Apply beside Close delegates
 to the same canonical bottom action, with matching label, disabled state,
 validation and return focus. The existing bottom row remains available.
+
+Person/team creation restores the exact selected ability or practice, including
+an untouched new proposal. A changed proposal returns through its parked-draft
+review route; a pristine proposal reopens its target against the accepted state.
+The new shared record becomes visible, selected and focused in the same module.
+This #868 correction supersedes the earlier silent creation path when parking
+discarded an unchanged proposal. Creation and assignment retain separate Undo
+and Apply boundaries.
 
 The Abilities People receiver pairs team and participation with decision owner
 and lifecycle. These groups sit beside each other at laptop widths and stack
@@ -167,7 +189,7 @@ native membership switches and decision-owner radio buttons keep their own jobs.
 
 Membership toggles keep available cards mounted in place. Move up/down changes
 ordered IDs explicitly, with the shared keyed transition and focus on the moved
-person. People team lanes, roster order and contribution supporting-work order
+person. People team lanes, arranger row order and contribution supporting-work order
 use the same keyed movement. The visible Move controls name their direction;
 team order expresses arrangement rather than a sequential workflow. Handoff
 supporting-work order uses the same keyed movement. The selected people currently receive the full session duration for
@@ -220,6 +242,11 @@ operation check establishes that journey; visual inspection and human review
 supply the composition and interpretation observations.
 
 ## Supersession and next boundary
+
+#864 supersedes the separate People roster and passive session-participation
+reading with one direct arranger. Its stronger team parents and compact local
+settings preserve the editorial groups, accepted identities, role facets and
+contribution semantics established by #836.
 
 #848 replaces the pale Abilities editor housing and tall, flat responsibility
 fields with one dark receiver and paired compact modules. The native support
