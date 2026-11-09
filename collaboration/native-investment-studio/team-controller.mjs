@@ -6,9 +6,9 @@ import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
-import { createSessionTracks } from './arrangement-surfaces.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
+import { createRackRecord } from './rack-record-creation.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -35,15 +35,18 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const summaryPreview = document.createElement('span');
   summaryPreview.className = 'native-coordination__summary-preview';
   elements.summary.append(summaryPreview);
-  const participation = document.createElement('section'); participation.className = 'studio-people-reading';
-  participation.setAttribute('aria-label', 'People and shared sessions');
+  elements.roster.classList.add('studio-people-reading');
+  elements.roster.setAttribute('role', 'region');
+  elements.roster.setAttribute('aria-label', 'People in working sessions');
+  elements.roster.tabIndex = 0;
   const ratesRack = elements.roster.closest('.studio-people-rates');
   const oldAdd = root.querySelector('[data-assembly-action="person-create"]');
-  const addPerson = createRackAddControl(document, { label: 'Add person', dataset: { assemblyAction: 'person-create' } });
+  const addPerson = createRackAddControl(document, { label: 'Add person', text: 'Person', className: 'studio-rack-create-zone--persistent', dataset: { assemblyAction: 'person-create' } });
   oldAdd?.replaceWith(addPerson);
-  if (ratesRack) ratesRack.before(participation); else elements.roster.after(participation);
-  if (ratesRack) ratesRack.append(elements.configure, elements.status);
-  const localHeader = mountRackHeader(elements.configure, { title: 'Person settings', owner: 'People',
+  const personReceiver = ratesRack?.querySelector('.studio-person-receiver') ?? document.createElement('div');
+  personReceiver.className = 'studio-person-receiver';
+  if (ratesRack) { personReceiver.append(elements.configure, elements.status); ratesRack.append(personReceiver); }
+  const localHeader = mountRackHeader(elements.configure, { title: 'Person settings', owner: 'All people',
     closeAttribute: 'data-person-rack-close', applyAttribute: 'data-editor-apply',
     onClose: event => { event.stopPropagation(); closeLocal(); } });
   localHeader.element.classList.add('studio-people-editor__heading');
@@ -115,13 +118,26 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     }
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
-    const fragment = document.createDocumentFragment();
+    const table = document.createElement('table'); table.className = 'studio-people-arranger'; table.dataset.emptySessions = String(next.state.work.length === 0);
+    const caption = document.createElement('caption'); caption.textContent = 'People in working sessions';
+    const head = document.createElement('thead'), headings = document.createElement('tr');
+    const label = document.createElement('th'); label.scope = 'col'; label.textContent = 'People and funded time'; headings.append(label);
+    for (const work of next.state.work) {
+      const cell = document.createElement('th'); cell.scope = 'col';
+      const open = document.createElement('button'); open.type = 'button';
+      open.className = 'studio-track-key studio-session-tracks__pad native-control--navigate';
+      open.dataset.nativeWorkOpen = work.id; open.dataset.studioSessionId = work.id;
+      const title = document.createElement('strong'), detail = document.createElement('small');
+      title.textContent = work.label; detail.textContent = `${duration(work.minutesPerOccurrence)} · ${work.occurrences} sessions${work.status === 'paused' ? ' · Paused' : ''}`;
+      open.append(title, detail); cell.append(open); headings.append(cell);
+    }
+    head.append(headings); const body = document.createElement('tbody'); table.append(caption, head, body);
     for (const [index, person] of next.state.people.entries()) {
-      const item = document.createElement('li');
-      item.className = 'studio-roster-card'; item.dataset.rosterPerson = person.id;
+      const row = document.createElement('tr'); row.dataset.rosterPerson = person.id;
+      const item = document.createElement('th'); item.scope = 'row'; item.className = 'studio-roster-card';
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'native-control--navigate';
+      button.className = 'studio-track-key native-control--navigate';
       button.dataset.personId = person.id;
       button.textContent = person.label;
       const saved = document.createElement('span');
@@ -136,7 +152,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const remaining = capacity.get(person.id).remainingMinutes;
       const space = document.createElement('p');
       space.textContent = remaining < 0 ? `${duration(-remaining)} above funded time` : `${duration(remaining)} of funded time available`;
-      item.append(button, saved, team, detail, space);
+      const reading = document.createElement('div'); reading.className = 'studio-people-arranger__reading';
+      reading.append(team, detail, space); item.append(button, saved, reading);
       const order = document.createElement('div'); order.className = 'studio-person-order native-coordination__actions';
       for (const [action, label, disabled] of [['person-up', 'Move earlier', index === 0], ['person-down', 'Move later', index === next.state.people.length - 1], ['person-remove', 'Remove', false]]) {
         const control = document.createElement('button'); control.type = 'button'; control.textContent = label;
@@ -147,11 +164,29 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       }
       item.append(order);
       appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });
-      fragment.append(item);
+      row.append(item);
+      for (const work of next.state.work) {
+        const cell = document.createElement('td'), pad = document.createElement('label'), check = document.createElement('input');
+        check.type = 'checkbox'; check.checked = work.personIds.includes(person.id);
+        check.dataset.peopleParticipant = person.id; check.dataset.peopleWork = work.id;
+        check.setAttribute('aria-label', `${person.label} in ${work.label}`);
+        const last = check.checked && work.personIds.length === 1;
+        check.disabled = last;
+        pad.className = 'studio-shared__pad'; pad.dataset.selected = String(check.checked);
+        pad.dataset.funding = work.funding; pad.dataset.status = work.status;
+        const text = document.createElement('small');
+        text.textContent = last ? 'Add another person first' : check.checked
+          ? `${duration(work.minutesPerOccurrence * work.occurrences)}${work.status === 'paused' ? ' · Paused' : ''}` : 'Available';
+        pad.append(check, text); cell.append(pad); row.append(cell);
+      }
+      body.append(row);
     }
-    const addition = document.createElement('li'); addition.className = 'studio-roster-add'; addition.append(addPerson); fragment.append(addition);
-    elements.roster.replaceChildren(fragment);
-    participation.replaceChildren(createSessionTracks(document, { plan: next.state }));
+    const addition = document.createElement('tr'), slot = document.createElement('td');
+    addition.className = 'studio-roster-add'; slot.colSpan = next.state.work.length + 1; const addSession = createRackAddControl(document, { label: 'Add session', text: 'Session', className: 'studio-rack-create-zone--persistent', dataset: { peopleCreateSession: '' } });
+    slot.append(addPerson, addSession); addition.append(slot); body.append(addition);
+    const empty = document.createElement('p'); empty.className = 'studio-people-arranger__empty';
+    empty.textContent = 'Add a session to choose who works together.'; empty.hidden = next.state.work.length > 0;
+    elements.roster.replaceChildren(empty, table);
     elements.empty.hidden = next.state.people.length > 0;
     projection = next;
   }
@@ -162,7 +197,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     renderRoster(view.projection);
     root.dataset.teamState = view.status;
     for (const button of elements.roster.querySelectorAll('[data-person-id]')) {
-      button.setAttribute('aria-pressed', String(button.dataset.personId === selectedId));
+      const expanded = button.dataset.personId === selectedId && elements.configure.open;
+      button.setAttribute('aria-pressed', String(expanded)); button.setAttribute('aria-expanded', String(expanded));
+      button.setAttribute('aria-controls', elements.configure.id);
     }
     const parked = new Set(editing.read().parked.filter(row => row.kind === 'person').map(row => row.targetId));
     for (const marker of elements.roster.querySelectorAll('[data-person-saved]')) marker.hidden = !parked.has(marker.dataset.personSaved);
@@ -215,6 +252,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     render();
     if (!owns(epoch)) return;
     if (selectedId !== null) elements.configure.open = true;
+    render();
     rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     notify(epoch, focus ? () => {
@@ -279,7 +317,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (disposed) return;
       rateControls.release(); const epoch = ++generation; composing = false;
       if (editing.read().active?.kind === 'person') editing.park();
-      elements.configure.open = false; onEditing();
+      elements.configure.open = false; render(); onEditing();
       if (owns(epoch) && onClose() !== true && owns(epoch)) elements.roster.querySelector(`[data-person-id="${selectedId}"]`)?.focus();
   }
 
@@ -287,8 +325,23 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (disposed) return;
     const button = event.target.closest('button');
     if (!button || (!root.contains(button) && !elements.configure.contains(button)) || button.disabled) return;
+    if (button.hasAttribute('data-people-create-session')) {
+      if (!canOpen()) return;
+      rateControls.release(); const epoch = ++generation;
+      const result = createRackRecord(studio, editing, 'session');
+      if (!owns(epoch)) return;
+      if (result.ok) { const mark = boundary(); onAccepted(result.projection); if (!retains(epoch, mark)) return; }
+      if (!owns(epoch)) return;
+      render(); announce(result.ok ? 'Session added. Choose its people in the arranger.' : result.error.message);
+      elements.roster.querySelector('[data-people-create-session]')?.focus({ preventScroll: true });
+      return;
+    }
     const personId = button.dataset.personId ?? button.dataset.teamPersonId;
-    if (personId) { select(personId); return; }
+    if (personId) {
+      if (personId === selectedId && elements.configure.open && root.contains(elements.configure)) closeLocal();
+      else select(personId);
+      return;
+    }
     const action = button.dataset.personAction;
     if (action === 'close') { closeLocal(); return; }
     if (action === 'review' || action === 'use-current' || action === 'discard') {
@@ -317,6 +370,25 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     render();
   }
 
+  function changeParticipation(event) {
+    const control = event.target;
+    if (!control.matches('[data-people-participant]') || disposed || !canOpen()) return;
+    const workId = control.dataset.peopleWork, personId = control.dataset.peopleParticipant;
+    const work = studio.read().state.work.find(row => row.id === workId);
+    if (!work || !studio.read().state.people.some(row => row.id === personId)) return;
+    rateControls.release(); const epoch = ++generation;
+    const parked = editing.park(); if (!owns(epoch)) return;
+    if (!parked.ok) { control.checked = work.personIds.includes(personId); announce(parked.error.message); return; }
+    const personIds = control.checked ? [...new Set([...work.personIds, personId])] : work.personIds.filter(id => id !== personId);
+    const result = studio.applyCommand({ type: 'work.participants.replace', workId, personIds }, studio.read());
+    if (!owns(epoch)) return;
+    if (result.ok) { const mark = boundary(); onAccepted(result.projection); if (!retains(epoch, mark)) return; }
+    else control.checked = work.personIds.includes(personId);
+    if (!owns(epoch)) return;
+    render(); announce(result.ok ? 'Session participation saved.' : result.error.message);
+    elements.roster.querySelector(`[data-people-work="${workId}"][data-people-participant="${personId}"]`)?.focus({ preventScroll: true });
+  }
+
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1;
@@ -325,7 +397,6 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     releaseRetiredLease();
     rateControls.dispose();
     localHeader.dispose(); summaryPreview.remove();
-    participation.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
     if (!sharedEditing) editing.dispose();
@@ -340,6 +411,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const [field, input] of Object.entries(inputs)) input.maxLength = field === 'label' ? LIMITS.label : 32;
+    if (!elements.configure.id) elements.configure.id = `${root.id || 'people'}-person-settings`;
+    listen(elements.roster, 'change', changeParticipation);
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
     listen(elements.form, 'input', edit);

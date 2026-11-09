@@ -40,7 +40,8 @@ const preview = page => team(page).locator('[data-person-total]');
 const settings = page => team(page).locator('[data-person-configure]');
 const choose = async (page, id = 'product-one') => {
   if (!(await team(page).isVisible())) await panel(page).locator('[data-native-chapter="people"]').click();
-  await team(page).locator(`[data-person-id="${id}"]`).click();
+  const key = team(page).locator(`[data-person-id="${id}"]`);
+  if (await key.getAttribute('aria-expanded') !== 'true') await key.click();
 };
 
 async function open(t, engine, fullAbout = false) {
@@ -86,13 +87,13 @@ async function assertContained(page) {
   const observation = await team(page).evaluate(root => {
     const width = document.documentElement.clientWidth;
     const entries = [...root.querySelectorAll('input,button,summary,h3,p,output')]
-      .filter(node => node.getClientRects().length && !node.closest('[hidden]') && !node.closest('.studio-session-tracks,.studio-team-lanes,[data-responsibility-list]'))
+      .filter(node => node.getClientRects().length && !node.closest('[hidden]') && !node.closest('.studio-session-tracks,.studio-team-lanes,.studio-people-reading,[data-responsibility-list]'))
       .map(node => {
         const box = node.getBoundingClientRect();
         return { tag: node.localName, name: node.name ?? '', label: node.getAttribute('aria-label'), className: node.className, parent: node.parentElement.className, left: box.left, right: box.right,
           scroll: node.scrollWidth, client: node.clientWidth };
       });
-    for (const screen of root.querySelectorAll('.studio-session-tracks,.studio-team-lanes,[data-responsibility-list]')) {
+    for (const screen of root.querySelectorAll('.studio-session-tracks,.studio-team-lanes,.studio-people-reading,[data-responsibility-list]')) {
       const box = screen.getBoundingClientRect();
       entries.push({ tag: 'scroll region', left: box.left, right: box.right, scroll: screen.clientWidth, client: screen.clientWidth });
     }
@@ -275,12 +276,12 @@ for (const engine of names) {
     await action(page, 'apply').click();
     await expect(accepted(page)).toHaveText('$900.00');
     await expect(panel(page).locator('[data-native-standing]')).toHaveText('Known total · USD');
-    await expect(team(page).locator('[data-team-roster] > li').first()).toContainText('Hourly rate needed');
+    await expect(team(page).locator('[data-team-roster] [data-roster-person]').first()).toContainText('Hourly rate needed');
     await input(page, 'ratePerHour').fill('0');
     await action(page, 'apply').click();
     await expect(accepted(page)).toHaveText('$900.00');
     await expect(panel(page).locator('[data-native-standing]')).toHaveText('Total · USD');
-    await expect(team(page).locator('[data-team-roster] > li').first()).toContainText('$0.00/hour');
+    await expect(team(page).locator('[data-team-roster] [data-roster-person]').first()).toContainText('$0.00/hour');
     await expect(page.locator('iframe[data-about-content-fit="studio-chapters"]')).toHaveCount(0);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toHaveCount(1);
   });
@@ -474,14 +475,11 @@ for (const engine of names) {
       for (const label of labels) assert.ok(label.textBottom <= label.inputTop,
         `the complete ${label.name} label precedes its input at ${width}px: ${JSON.stringify(label)}`);
       if (width === 1440) {
-        const rows = await team(page).locator('[data-team-roster] > [data-roster-person]').evaluateAll(items => {
-          const rows = new Map();
-          for (const item of items) { const box = item.getBoundingClientRect(), key = Math.round(box.top); rows.set(key, [...(rows.get(key) ?? []), box.bottom]); }
-          return [...rows.values()];
-        });
-        assert.equal(rows.flat().length, 4);
+        const rows = await team(page).locator('[data-team-roster] [data-roster-person]').evaluateAll(items =>
+          items.map(item => [...item.children].map(cell => cell.getBoundingClientRect().bottom)));
+        assert.equal(rows.length, 4);
         for (const bottoms of rows) assert.ok(Math.max(...bottoms) - Math.min(...bottoms) < .1,
-          `roster cards retain one lower edge within each visual row: ${JSON.stringify(bottoms)}`);
+          `person and session cells retain one lower edge within each arranger row: ${JSON.stringify(bottoms)}`);
       }
       // The panel owns this feedback geometry; document scrolling can continue
       // independently while a browser moves focus to the edited control.

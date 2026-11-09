@@ -187,6 +187,78 @@ for (const engine of names) {
       added: phase !== 'close', changes: phase === 'close' ? 0 : 1 })));
   });
 
+  test(`${engine}: People arranger accepts participation, retains raw edits and returns through local team keys`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.responsibilityFixture;
+      studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read()); controller.refresh();
+    });
+    const original = await state(page), work = original.work.find(row => row.label === 'Prototype pairing');
+    const person = original.people.find(row => row.label === 'Product lead');
+    const key = people(page).locator(`[data-person-id="${person.id}"]`);
+    await key.click();
+    const receiver = people(page).locator('[data-person-configure]');
+    await expect(key).toHaveAttribute('aria-expanded', 'true');
+    await receiver.locator('[name="ratePerHour"]').fill('unfinished');
+    await key.click();
+    await expect(receiver).not.toHaveAttribute('open', '');
+    await expect(key).toHaveAttribute('aria-expanded', 'false');
+    await key.click();
+    await expect(receiver.locator('[name="ratePerHour"]')).toHaveValue('unfinished');
+    const membership = people(page).locator(`[data-people-work="${work.id}"][data-people-participant="${person.id}"]`);
+    await membership.check();
+    assert.deepEqual((await state(page)).work.find(row => row.id === work.id).personIds, [...work.personIds, person.id]);
+    await expect(membership).toBeFocused();
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.read().parked.find(row => row.kind === 'person').raw.ratePerHour), 'unfinished');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await state(page), original);
+    await people(page).getByRole('button', { name: 'Add session', exact: true }).click();
+    const added = (await state(page)).work.at(-1);
+    assert.equal((await state(page)).work.length, original.work.length + 1);
+    await expect(people(page).locator(`[data-native-work-open="${added.id}"]`)).toBeVisible();
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.read().parked.find(row => row.kind === 'person').raw.ratePerHour), 'unfinished');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await state(page), original);
+    const teamKey = people(page).locator('[data-assembly-team]').first();
+    const teamEditor = people(page).locator('[data-assembly-configure]');
+    await teamKey.click();
+    await expect(teamKey).toHaveAttribute('aria-expanded', 'true');
+    await expect(teamEditor).toHaveAttribute('open', '');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await teamEditor.evaluate(element => {
+        const box = element.getBoundingClientRect(), name = element.querySelector('[data-assembly-name-group]').getBoundingClientRect();
+        const total = element.querySelector('[data-assembly-preview]').getBoundingClientRect();
+        return { width: box.width, height: box.height, name: { x: name.x, y: name.y }, total: { x: total.x, y: total.y } };
+      });
+      await teamEditor.screenshot({ path: resolve(captures, `${engine}-team-receiver-${width}.png`) });
+      assert.ok(geometry.height < (width === 390 ? 1000 : 800), `team controls remain a compact local receiver: ${width}/${geometry.height}`);
+      if (width === 1440) { assert.ok(geometry.width < 760); assert.ok(geometry.total.x > geometry.name.x); }
+      else assert.ok(geometry.total.y > geometry.name.y);
+      const overflow = await people(page).evaluate(element => element.scrollWidth > element.clientWidth + 1);
+      assert.equal(overflow, false, 'wide tables remain inside their local scroll regions');
+    }
+    await teamKey.click();
+    await expect(teamEditor).not.toHaveAttribute('open', '');
+    await expect(teamKey).toHaveAttribute('aria-expanded', 'false');
+    await expect(teamKey).toBeFocused();
+    await page.evaluate(async () => {
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const empty = createExamplePlan(); empty.work = []; empty.practices = [];
+      const { studio, controller } = window.responsibilityFixture;
+      const result = studio.replace(empty, studio.read()); if (!result.ok) throw new Error(result.error.message); controller.refresh();
+    });
+    await expect(people(page).getByText('Add a session to choose who works together.', { exact: true })).toBeVisible();
+    await people(page).getByRole('button', { name: 'Add session', exact: true }).click();
+    const first = (await state(page)).work[0];
+    assert.ok(first && first.personIds.length > 0, 'the empty arranger creates its first working session through the shared factory');
+    for (const id of first.personIds.slice(1)) await people(page).locator(`[data-people-work="${first.id}"][data-people-participant="${id}"]`).uncheck();
+    const sole = people(page).locator(`[data-people-work="${first.id}"][data-people-participant="${first.personIds[0]}"]`);
+    await expect(sole).toBeDisabled();
+    await expect(sole.locator('..')).toContainText('Add another person first');
+  });
+
   test(`${engine}: People racks retain parallel groups, direct responsibility choices and compact local receivers`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
@@ -210,6 +282,8 @@ for (const engine of names) {
       await people(page).screenshot({ path: resolve(captures, `${engine}-people-racks-${width}.png`) });
       await people(page).locator('[data-person-id="maya"]').click();
       const person = people(page).locator('[data-person-configure]');
+      const steps = await person.locator('.studio-rate .native-coordination__stepper button').evaluateAll(buttons => buttons.map(button => { const box = button.getBoundingClientRect(); return { width: box.width, height: box.height }; }));
+      assert.ok(steps.every(step => step.width === 44 && step.height === 44), 'rate increment controls retain circular 44px geometry');
       const personBox = await person.boundingBox();
       assert.ok(personBox.height < 700, `person controls fit a phone-height reading at ${width}: ${personBox.height}`);
       await person.screenshot({ path: resolve(captures, `${engine}-person-rack-${width}.png`) });
