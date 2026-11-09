@@ -431,8 +431,10 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (!owns(epoch)) return;
     if (!result.ok) { render(); announce(result.error.message); return; }
     const held = editor.read();
-    if (held.draft?.capabilityId !== beforeTarget) return;
-    const resumed = editor.review(held.draft.token, result.projection);
+    if (held.draft && held.draft.capabilityId !== beforeTarget) return;
+    // Creation parks changed entries; an untouched form reopens its same target.
+    const resumed = held.draft ? editor.review(held.draft.token, result.projection)
+      : editor.begin(beforeTarget, result.projection);
     if (!resumed.ok) { render(); announce(resumed.error.message); onAccepted(result.projection); return; }
     const token = resumed.view.draft.token, metadata = describeCapabilityTarget(beforeTarget).fields[key];
     const changed = metadata.kind === 'ids'

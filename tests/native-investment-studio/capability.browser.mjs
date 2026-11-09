@@ -74,6 +74,43 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  for (const [label, definitionId, collection] of [
+    ['new ability', 'trace-evidence', 'abilities'], ['existing practice', 'expectation', 'practices'],
+  ]) for (const [key, kind, records] of [
+    ['teamId', 'team', 'teams'], ['responsiblePersonIds', 'person', 'people'], ['decisionOwnerPersonId', 'person', 'people'],
+  ]) test(`${engine}: untouched ${label} keeps its proposal when adding ${key}`, async t => {
+    const page = await open(t, engine, true), initial = await bytes(page);
+    await choice(page, definitionId).click(); await section(page, 'responsibility').click();
+    const before = await page.evaluate(() => {
+      const { studio, editing } = window.capabilityFixture, draft = editing.capability.read().draft;
+      return { target: draft.capabilityId, id: draft.targetId, raw: draft.raw, state: studio.read().state,
+        history: studio.readHistory().undoCount };
+    });
+    await panel(page).locator(`[data-capability-record-kind="${kind}"][data-capability-receiver-field="${key}"]`).click();
+    const created = await page.evaluate(records => window.capabilityFixture.studio.read().state[records].at(-1), records);
+    const selected = ids(page, key).getByRole(key === 'responsiblePersonIds' ? 'checkbox' : 'radio', { name: created.label, exact: true });
+    await expect(selected).toBeChecked(); await expect(selected).toBeFocused();
+    await expect(panel(page).locator('[data-capability-status]')).toContainText('Apply to keep this support selection.');
+    const afterCreation = await bytes(page), accepted = JSON.parse(afterCreation);
+    assert.equal(accepted[records].length, before.state[records].length + 1, 'one creation accepts exactly one record');
+    assert.deepEqual(accepted[collection], before.state[collection], 'the support relationship remains a proposal');
+    assert.equal(await page.evaluate(() => window.capabilityFixture.studio.readHistory().undoCount), before.history + 1);
+    const expectedRaw = { ...before.raw, [key]: key === 'responsiblePersonIds' ? [...before.raw[key], created.id] : created.id };
+    const current = () => page.evaluate(() => {
+      const view = window.capabilityFixture.editing.capability.read();
+      return { status: view.status, target: view.draft?.capabilityId, raw: view.draft?.raw };
+    });
+    assert.deepEqual(await current(), { status: 'editing', target: before.target, raw: expectedRaw });
+    await action(page, 'close').click(); await choice(page, definitionId).click(); await section(page, 'responsibility').click();
+    await expect(selected).toBeChecked();
+    assert.deepEqual(await current(), { status: 'editing', target: before.target, raw: expectedRaw });
+    await panel(page).locator('[data-editor-apply]').click();
+    const applied = JSON.parse(await bytes(page))[collection].find(row => row.id === before.id);
+    assert.deepEqual(applied[key], expectedRaw[key]);
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), afterCreation);
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), initial);
+  });
+
   test(`${engine}: a rename callback can dispose its receiver without resuming stale UI work`, async t => {
     const page = await open(t, engine, true);
     await page.evaluate(async () => {
