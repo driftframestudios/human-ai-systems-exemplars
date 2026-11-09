@@ -159,7 +159,7 @@ keep the current palette, selected states, geometry and return behavior together
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.
 The vertical shelf stays at the left on tablet and larger views; mobile uses a
-horizontal strip above the Domain reel. The floating chocolate Domain wheel
+horizontal strip above the Domain reel. The floating navy Domain wheel
 loads a type beside a concise explanation and a rose chart of that deck's
 current values. Each chart compares one unit, with signed amounts and unavailable
 results readable beside it. A missing type shows its flow and a direct Add action.

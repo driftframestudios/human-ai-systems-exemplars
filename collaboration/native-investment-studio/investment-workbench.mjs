@@ -77,7 +77,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       shelf = node('nav', undefined, 'investment-study__masters'); shelf.setAttribute('aria-label', 'Investment comparison decks');
       library = node('section', undefined, 'investment-study__library'); library.setAttribute('aria-label', 'Add an investment comparison');
       panel = node('section', undefined, 'investment-study__loaded-master'); panel.id = 'investment-master-panel';
-      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', variant: 'chocolate', options: Object.entries(INVESTMENT_DOMAINS).map(([id, value]) => ({ id, label: value.label })), read: () => domain, write: value => { loaded?.release(); domain = value; activeId = records().find(record => record.type === value)?.id; render(container); } });
+      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', variant: 'navy', options: Object.entries(INVESTMENT_DOMAINS).map(([id, value]) => ({ id, label: value.label })), read: () => domain, write: value => { loaded?.release(); domain = value; activeId = records().find(record => record.type === value)?.id; render(container); } });
       domainControl.element.classList.add('investment-study__domain');
       const body = node('div', undefined, 'investment-study__body'), domainRow = node('section', undefined, 'investment-study__orientation');
       domainRow.setAttribute('aria-label', 'Investment domain');
