@@ -15,8 +15,11 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
-#879 refines People group identity, local hourly subtotals, compact readings and
-nested creation returns. It extends #864's team lanes and direct session arranger,
+#881 keeps Person settings and Role mix independently usable in one compact
+working area and localizes contribution-specific person creation. #882 owns the
+follow-up global audit of circular increment shadows. #879 establishes People
+group identity, local hourly subtotals, compact readings and nested creation
+returns. These extend #864's team lanes and direct session arranger,
 #836's compact receiver and shared creation controls from #837. #863 completes the
 removal notice's reference descriptions; #865 consolidates circular steppers
 and repairs Quality control contrast and spacing.
@@ -211,16 +214,35 @@ typed stable identity. The existing removal and recovery rules retain their
 authority. Focused unit and browser regressions distinguish this presentation
 omission from accepted-state integrity and exercise that retained-notice lifecycle.
 
-Role mix stays visible with its heading and current person. Eight pads display
-the current facet values, and one native selector edits the selected facet.
-Choosing a facet changes the inspected dimension; changing its value accepts a
-role update directly. Each role dimension keeps its independent stored meaning.
+Person settings and Role mix occupy one compact working area with independent
+visibility. Each role pad holds its label and native selector, combining the
+current value with its control. A bounded role change accepts directly; typed
+person name, rate and funded time retain their existing Apply boundary. Close
+and the owner return dismiss the module they name and retain unfinished work.
+This supersedes the always-open role rail, detached selected-facet field and
+the ownership switch that closed Person settings on role focus. The synthesis
+keeps useful simultaneous context from paired modules while preserving each
+command's existing acceptance meaning; exclusive tabs and one combined Apply
+were less fitting for these established interactions.
+
 The selected contribution places Work beside Receiver and decision, stacking
 them at phone widths. Category, human receiver, decision owner, supporting
 sessions and support order accept directly. The two human choices preserve
 their separate responsibilities. Accepted links light the matrix's session
 cells. Earlier stored review and decision-boundary notes remain in the plan and
 exports while the compact controls edit their current fields.
+
+Add a person requested by a contribution stays inside that contribution's rack.
+The canonical creation form occupies a half-rack slot at wide widths and stacks
+on a phone. Saving the new person returns to the initiating human field with
+that person selected; the contribution proposal keeps its explicit Apply step.
+An intervening accepted change retains the parent's explicit Review step and
+unfinished entries. Closing the parent parks the child draft and restores its
+canonical form to its home. It is a sibling of the contribution form, preserving
+native form ownership. The local header names the contribution that requested the person;
+the retained route carries the receiver or decision field and unfinished entries.
+This supersedes the detour to the upper Team creation area. Collection-level
+creation and other chapters retain their own entry routes.
 
 `presets.mjs` adds Source retrieval and Draft artifacts when
 `peopleExamples: true`. The live showcase opts in alongside its existing
@@ -423,7 +445,8 @@ participant time shares remain with #798; production Reset remains with #808.
 | People arrangement begins with a separate Person to arrange selector | Each person row carries its own Move earlier/later and Remove controls. |
 | Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
 | People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
-| Role mix opens from a separate disclosure | The current person's heading, eight value pads and selected native facet remain visible in the People rack. |
+| Always-open Role mix with one detached facet selector | Independent Person/Role modules keep current values and native selection together inside each role pad; local Close and return match visible state. |
+| Contribution Add person opens the upper Team creation area | The canonical creation form occupies a half-rack inside the initiating contribution and returns to its retained human field. |
 | Role and contribution selections wait for Apply | Role values, contribution category, human responsibility and supporting sessions accept directly; typed person settings retain Apply. |
 | Person settings use a large chapter-local form | One compact canonical form serves both People and the borrowed Coordination receiver. |
 | Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
@@ -485,7 +508,7 @@ dependencies, retained drafts and the borrowed person receiver. The
 [person browser route](../../tests/native-investment-studio/team-controller.browser.mjs)
 observes local person settings, rates and quantity-control behavior. The
 [responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
-observes direct session membership, parked drafts and Undo, the visible role rail,
+observes direct session membership, parked drafts and Undo, the role pads,
 direct contribution changes, preserved note data, and phone/desktop composition.
 These checks establish the named local behavior;
 the receiving release supplies the hosted observation.
@@ -493,8 +516,10 @@ the receiving release supplies the hosted observation.
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
-#879 refines the current People composition from #864 and retains #836's direct responsibility
-choices, with #837 supplying shared creation controls. #863 covers dependency
+#881 carries independent Person/Role editing and contribution-local creation;
+#882 holds the global circular-stepper shadow audit. #879 refines the current
+People composition from #864 and retains #836's direct responsibility choices,
+with #837 supplying shared creation controls. #863 covers dependency
 notice completeness and recovery; #865 owns circular control consistency and
 Quality readability. #848/#856 carry compact Abilities support and naming;
 #849/#857 settle Change action state and local receivers; #858 carries the

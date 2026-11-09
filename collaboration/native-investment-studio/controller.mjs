@@ -12,7 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, makeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget, makeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
-import { syncSessionControls, mountRackEditor, captureRackEntry } from './rack-controls.mjs';
+import { syncSessionControls, mountRackEditor, mountEditorPlacement, captureRackEntry } from './rack-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
@@ -79,6 +79,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let scorePanel = null;
   let rackEditor = null;
   let openingRackKind = null;
+  let localCreation = null, creationPlacement = null;
   const ampTools = root.querySelector('[data-native-amp-tools]');
   const ampUndo = document.createElement('button');
   ampUndo.type = 'button'; ampUndo.className = 'native-amp-control';
@@ -289,6 +290,21 @@ export function mountCoordinationPanel(root, options = {}) {
     if (kind !== 'score') scorePanel?.close({ park: false });
   }
 
+  function restoreCreationPlacement() {
+    creationPlacement?.restore();
+    if (localCreation) {
+      localCreation.container.hidden = true;
+      delete localCreation.owner.dataset.localCreation;
+      localCreation = null;
+    }
+  }
+  function closeCreationOrRack() {
+    if (localCreation && returnRoutes.at(-1) === localCreation.route) {
+      returnToDraft();
+      return true;
+    }
+    return closeRackEditor();
+  }
   function creationReturn(target) {
     const route = returnRoutes.at(-1);
     const created = describeAssemblyTarget(target) ?? describeSessionTarget(target);
@@ -299,8 +315,9 @@ export function mountCoordinationPanel(root, options = {}) {
     const owner = TARGET_READERS[route.kind]?.(route.target);
     const saved = editing.read().parked.find(record => record.kind === route.kind && record.targetId === route.target);
     const record = owner && studio.read().state[owner.collection]?.find(item => item.id === owner.id);
-    const name = saved?.raw.label || saved?.raw.sharedObject || record?.label || record?.sharedObject;
-    const label = name ? `Settings · ${name}` : {
+    const name = saved?.raw.label || saved?.raw.sharedObject || record?.label || record?.sharedObject
+      || (route.kind === 'contribution' && responsibilityValue('categoryId', saved?.raw.categoryId ?? record?.categoryId));
+    const label = name ? route.kind === 'contribution' ? name : `Settings · ${name}` : {
       assembly: 'Team settings', session: 'Session settings', connection: 'Handoff settings',
       contribution: 'Contribution settings', template: 'Team planning', capability: 'Abilities',
       change: 'Change settings', assurance: 'Quality & recovery settings',
@@ -319,7 +336,7 @@ export function mountCoordinationPanel(root, options = {}) {
     assemblyPanel?.refresh(); rackEditor?.sync();
     if (!returnRegion || !returnNote || !returnButton) return;
     const route = returnRoutes.at(-1);
-    returnRegion.hidden = !route || Boolean(route.rackSource && templatePanel?.isTeamOpen());
+    returnRegion.hidden = !route || route === localCreation?.route || Boolean(route.rackSource && templatePanel?.isTeamOpen());
     if (returnTeamButton) returnTeamButton.hidden = true;
     if (!route) return;
     const collection = { person: 'people', team: 'teams', session: 'work' }[route.createdKind];
@@ -380,23 +397,37 @@ export function mountCoordinationPanel(root, options = {}) {
       announce('Team added and selected. Apply the handoff when ready. Undo is available.');
       return;
     }
-    chapterShell?.select(creating === 'session' ? 'coordination' : 'people');
-    const result = creating === 'session' ? workPanel?.create() : assemblyPanel?.create(`${creating}.create`);
-    if (!result?.ok) { announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
+    const localPerson = kind === 'contribution' && creating === 'person';
+    if (localPerson) {
+      const owner = root.querySelector('[data-responsibility-configure="contribution"]');
+      const container = owner.querySelector('[data-contribution-creation]');
+      localCreation = { owner, container, route: null };
+      owner.dataset.localCreation = 'person'; container.hidden = false;
+      creationPlacement.place(container);
+    } else chapterShell?.select(creating === 'session' ? 'coordination' : 'people');
+    const result = creating === 'session' ? workPanel?.create() : assemblyPanel?.create(`${creating}.create`, !localPerson);
+    if (!result?.ok) { restoreCreationPlacement(); announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
     pendingReturnFocus = null;
     retainReturnAncestors(kind, target);
-    returnRoutes.push({ kind, target, creating, held, originChapter, rackOrigin, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
+    returnRoutes.push({ kind, target, creating, held, originChapter, rackOrigin, sourceProjection: view?.draft?.baseProjection, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
       field: button.dataset.nativeReturnField ?? (kind === 'session' && creating === 'team' ? 'teamId' : kind === 'connection' && creating === 'person' ? 'receiverPersonId' : null),
       requiredTeamId: kind === 'connection' && creating === 'person' ? view.draft.raw.receiverTeamId : null });
+    if (localPerson) localCreation.route = returnRoutes.at(-1);
     renderReturnRoute();
+    if (localPerson) {
+      localCreation.container.querySelector('[name="label"]')?.focus({ preventScroll: true });
+      motion?.indicate(localCreation.container, { kind: 'inspection' });
+    }
     announce(`Your ${kind === 'assembly' ? 'team' : kind === 'template' ? 'arrangement' : kind} entries are saved.`);
   }
-  function returnToDraft() {
+  function returnToDraft(creation = null) {
     const route = returnRoutes.at(-1);
     if (!route) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    chapterShell?.select(route.originChapter ?? (route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleView', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination'));
+    const returningLocally = localCreation?.route === route;
+    restoreCreationPlacement();
+    if (!returningLocally) chapterShell?.select(route.originChapter ?? (route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleView', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination'));
     if (route.kind === 'peopleSupportView') {
       if (route.origin?.kind === 'person') teamPanel?.select(route.origin.targetId);
       else if (route.origin?.kind === 'assembly') assemblyPanel?.open(route.origin.targetId);
@@ -428,8 +459,15 @@ export function mountCoordinationPanel(root, options = {}) {
       return;
     }
     const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel, score: scorePanel }[route.kind];
-    const result = panel.open(route.target);
+    let result = panel.open(route.target, !returningLocally);
     if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
+    if (creation && returningLocally && studio.read() === creation.projection
+        && route.sourceProjection === creation.previousProjection
+        && route.kind === 'contribution' && ['receiverPersonId', 'decisionOwnerPersonId'].includes(route.field)) {
+      if (result.view.status === 'stale') result = editing.contribution.review(result.view.draft.token, creation.projection);
+      if (result.ok && result.view.status === 'editing')
+        editing.contribution.setText(result.view.draft.token, route.field, creation.id);
+    }
     if (route.rackOrigin) {
       const { record, source } = route.rackOrigin;
       if (studio.read().state[rackCollections[record.kind]].some(item => item.id === record.id))
@@ -598,11 +636,15 @@ export function mountCoordinationPanel(root, options = {}) {
     render();
     announce(result.ok ? 'Example updated. Undo restores your previous plan.' : result.error.message);
   }
-  function prerequisiteCreated(descriptor) {
+  function prerequisiteCreated(descriptor, accepted, previousProjection) {
     const route = returnRoutes.at(-1);
     if (!route || (describeAssemblyTarget(route.creationTarget) ?? describeSessionTarget(route.creationTarget))?.id !== descriptor.id) return;
     route.createdId = descriptor.id;
     route.createdKind = descriptor.collection === 'people' ? 'person' : descriptor.collection === 'work' ? 'session' : 'team';
+    if (localCreation?.route === route && studio.read() === accepted) {
+      returnToDraft({ id: descriptor.id, projection: accepted, previousProjection });
+      return;
+    }
     renderReturnRoute();
   }
 
@@ -942,6 +984,8 @@ export function mountCoordinationPanel(root, options = {}) {
     renderGeneration += 1;
     chapterShell?.dispose();
     motion?.dispose();
+    creationPlacement?.dispose();
+    localCreation?.container.remove();
     rackEditor?.dispose();
     connectionView?.dispose();
     connectionPanel?.dispose();
@@ -1030,10 +1074,11 @@ export function mountCoordinationPanel(root, options = {}) {
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
       onBegin: () => {
         if (activeChapter === 'coordination') beginCoordination('record');
+        restoreCreationPlacement();
         peopleEditor = 'person';
         purposePanel?.close({ resume: false });
         assemblyPanel?.close({ park: false });
-        responsibilityPanel?.close({ park: false });
+        responsibilityPanel?.close({ park: false, keepRole: true });
       },
       canOpen: () => peopleOwnerAvailable('person'),
       isActive: () => peopleOwnerAvailable('person') && peopleEditor === 'person', onAccepted: () => render(),
@@ -1045,12 +1090,12 @@ export function mountCoordinationPanel(root, options = {}) {
         peopleEditor = 'assembly';
         purposePanel?.close({ resume: false });
         teamPanel?.close();
-        responsibilityPanel?.close({ park: false });
+        if (!localCreation) responsibilityPanel?.close({ park: false });
       },
       canOpen: () => peopleOwnerAvailable('team'),
       isActive: () => peopleOwnerAvailable('team') && peopleEditor === 'assembly',
       readReturn: creationReturn,
-      onClose: closeRackEditor,
+      onClose: closeCreationOrRack,
       onAccepted: () => render(), onEditing: () => render(),
       onRecordCreated: prerequisiteCreated,
     });
@@ -1092,16 +1137,36 @@ export function mountCoordinationPanel(root, options = {}) {
       });
     }
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
-      onBegin: () => {
+      onDismiss: kind => {
+        if (kind === 'role' || !localCreation) return;
+        const route = localCreation.route;
+        assemblyPanel?.close();
+        restoreCreationPlacement();
+        const index = returnRoutes.indexOf(route);
+        if (index >= 0) returnRoutes.splice(index);
+      },
+      onBegin: kind => {
+        restoreCreationPlacement();
         peopleEditor = 'responsibility';
         purposePanel?.close({ resume: false });
-        teamPanel?.close();
+        if (kind !== 'role') teamPanel?.close();
         assemblyPanel?.close({ park: false });
       },
       canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'people' && peopleEditor === 'responsibility' && !purposePanel?.isOpen(),
-      onAccepted: () => render(), onEditing: () => render(),
+      onAccepted: (next, context) => {
+        if (context?.kind === 'role' && teamPanel?.reconcileRoleChange(context.previousProjection, next))
+          peopleEditor = 'person';
+        render();
+      }, onEditing: () => render(),
     });
+    const contributionOwner = root.querySelector('[data-responsibility-configure="contribution"]');
+    if (contributionOwner) {
+      const container = document.createElement('div');
+      container.dataset.contributionCreation = ''; container.className = 'studio-contribution-creation'; container.hidden = true;
+      contributionOwner.append(container); cleanup.push(() => container.remove());
+      creationPlacement = mountEditorPlacement([requireElement('[data-assembly-configure]'), requireElement('[data-assembly-status]')]);
+    }
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
       trigger: ampPanels.get('purpose')?.button,
       onOpen: () => { editing.park(); },
@@ -1147,7 +1212,7 @@ export function mountCoordinationPanel(root, options = {}) {
       chapterShell = mountChapterShell(root, { motion, onSelect: chapter => {
         purposePanel?.close({ resume: false });
         if (activeChapter !== chapter) {
-          editing.park(); rackEditor?.hide({ home: true }); workPanel?.setRackMode?.(false);
+          editing.park(); restoreCreationPlacement(); rackEditor?.hide({ home: true }); workPanel?.setRackMode?.(false);
           if (coordinationEditor === 'record') coordinationEditor = 'template';
         }
         activeChapter = chapter;

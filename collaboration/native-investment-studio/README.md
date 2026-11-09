@@ -9,7 +9,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
-People team lanes and a direct session arranger (#864), Abilities support racks with local shared-name editing (#856),
+People team lanes and a direct session arranger (#864), local Person/Role editing
+and contribution creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
 retain their existing owners.
@@ -57,15 +58,21 @@ values remain in the plan and editor. Record-local controls arrange and remove p
 A selected person opens compact name, rate and funded-time settings with an
 **All people** return; Apply accepts those typed values. Coordination borrows
 this same compact form.
-Role mix remains visible with the current person's name, eight pads showing their
-current values, and one native selector for the selected facet. Changing a role
-value accepts it directly.
+Person settings and Role mix share a compact working area and keep independent
+visibility. Each role pad contains its label and native selector, so its current
+value is also its editing control. A role choice accepts directly with amp Undo;
+the person's typed name, rate and funded time retain their Apply boundary. Close
+and the local return dismiss the module they name while retaining unfinished work.
 
 A contribution opens Work beside Receiver and decision, with those sections
 stacked at phone widths. Category, human receiver, decision owner and supporting
 session choices accept directly, as do People team membership and member order.
-Receiver and decision owner remain independent choices. Empty slots add a useful
-person, team or contribution immediately with editing closed; selecting the
+Receiver and decision owner remain independent choices. Add a person from a
+contribution opens the canonical creation form inside that contribution's rack,
+beside its retained work at wide widths and stacked at phone widths. Its local
+return names the exact contribution. Saving the new person returns to its
+receiver or decision field with that person selected; Apply accepts the retained
+contribution proposal. Empty slots add a useful person, team or contribution immediately with editing closed; selecting the
 record opens its local controls. The amp's Undo recovers each accepted change.
 The live showcase enables two additional contributions through
 `createShowcasePlan({ peopleExamples: true })`: Source retrieval and Draft

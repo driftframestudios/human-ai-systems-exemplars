@@ -6,6 +6,8 @@ keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
 dev receiving contract revised 9 November 2026 for
+[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+retaining the People composition from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
 `main` remains the approved reference until a human cues dev promotion.
@@ -131,8 +133,9 @@ People's Add person, Add team and Add contribution accept useful records with
 editing closed. Named ghost creation slots occupy the end of their collections;
 hover/focus reveals the plus and touch keeps it visible. A new contribution starts
 as Draft artifacts with receiver and decision owner unassigned. Selecting the
-record opens its local editor. Role mix stays visible: eight named facet pads
-show current values and select one native choice. Bounded role/contribution
+record opens its local editor. Person settings and Role mix form a compact pair
+with independent visibility. Each named role pad contains its native selector,
+combining the current value and its editing control. Bounded role/contribution
 choices and team/support membership accept directly; typed person settings keep
 Apply and their retained draft. Receiver and decision owner remain independent
 selections; team membership supplies neither authority.
@@ -148,8 +151,11 @@ interactive pads. Local horizontal scrolling retains comfortable pad targets.
 A session
 keeps at least one participant; the affected pad explains that boundary locally.
 Selecting a person opens the compact settings receiver beside its role choices;
-All people returns to the matrix. Typed settings keep their existing Apply
-boundary while direct participation enters the shared Undo history.
+All people returns to the matrix. Each module's Close/return matches its actual
+visibility and retains the neighboring working area. Typed settings keep their
+existing Apply boundary while role choices and direct participation enter the
+shared Undo history. Entering a role selector preserves the person's unfinished
+name, rate and funded-time fields.
 
 Team keys fill their editorial lane and show the parent's name and open state.
 Their resting face uses `--about-cobalt`; the selected face uses
@@ -161,7 +167,11 @@ explicit. The preview uses `--canvas-cool-blue` with `--native-text` and its lef
 border. Membership pads span the row below. These controls stack within an
 ordinary phone width. This supersedes the former whole-plan draft reading and
 chocolate team key. Add person keeps a similarly compact name/preview row and
-returns through its originating task's retained draft route.
+returns through its originating task's retained draft route. When a contribution
+requests that person, the canonical creation form appears directly in the
+contribution rack as a half-width module beside its retained context. It remains
+a separate sibling form, and its local return identifies the exact contribution
+and the human field being supplied.
 
 Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
@@ -266,9 +276,13 @@ tables, underlying capability definitions and proposal acceptance boundary remai
 the same. Its visibility and native-control geometry rules supersede inherited
 text-field sizing that obscured the People receiver.
 
+#881 supersedes the earlier always-open role rail and its detached selected-facet
+control. Native selectors now live inside the pads, with independent Person/Role
+visibility. Contribution-specific person creation uses its own rack and retained
+parent route.
+
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
-record-local controls. Its visible role rail replaces the extra disclosure, and
-bounded role/contribution choices plus team/support membership accept directly.
+record-local controls. Bounded role/contribution choices plus team/support membership accept directly.
 Person text and quantities retain Apply. The live example adds source retrieval
 and draft-artifact contributions through an opt-in preset; the canonical fixture,
 stored notes, pricing and exported responsibility meaning keep their existing owners.

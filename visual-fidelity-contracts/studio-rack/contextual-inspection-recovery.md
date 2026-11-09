@@ -6,6 +6,8 @@ its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 dev receiving contract revised 9 November 2026 for
+[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+retaining contextual creation returns from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
 retaining the removal and focus recovery from
 [#833](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/833).
@@ -39,6 +41,22 @@ creation origins name their own preceding task. This supersedes the unconditiona
 Teams return on nested creation; one draft-route owner supplies both the label
 and return behavior.
 
+Person settings and Role mix are paired modules with independent visibility.
+Entering a role pad keeps the person's open settings in place. Each pad contains
+its native label and selector; its current value is the editing affordance.
+Close and owner return act on the named module while preserving the neighboring
+module and unfinished entries. Shared edit ownership remains an implementation
+boundary, rather than a reason to hide another visible working area.
+
+Add a person from a contribution borrows the canonical creation form into that
+contribution's rack. The half-rack slot sits beside the retained contribution at
+wide widths and stacks at phone widths. These remain sibling forms. The header
+names the exact parent contribution and its return retains the receiver or
+decision-owner intent. Closing the parent also parks the child draft and restores
+its canonical form. A new person can return selected in the initiating field;
+an intervening accepted edit keeps the parent's explicit Review boundary.
+Other creation origins retain their existing routes.
+
 Adjacent editors reserve one rem above and below the receiving module. The in-rack
 session slot owns this padding where the borrowed editor itself is flush. The
 clearance includes nearby button shadows and outlines, so opening a module keeps
@@ -71,8 +89,9 @@ clear New {item} N label. Creation inside a prepared form keeps that parent
 form open and selects the new prerequisite there. Accepted bounded choices in
 People—role facets, contribution category/receiver/decision owner, team membership
 and supporting sessions—enter shared history directly and keep the initiating
-control focused. The role rail remains visible when its edit owner closes; using
-its selected field enters the canonical owner and parks any unfinished work.
+control focused. Role pads keep their own visible state when acquiring an edit
+owner. The person's unfinished name, rate and funded time remain recoverable;
+role acceptance and person Apply retain their separate commands.
 Team planning name, membership and reorder changes also accept immediately.
 Session, person and handoff proposals, People team names and retained responsibility
 drafts keep their Apply, Cancel and Close routes. Invalid person entries stay
@@ -190,8 +209,13 @@ with attached rack receivers. Accepted record commands, raw proposal ownership
 and shared Undo remain the same boundaries; their presentation and local return
 now follow the established compact rack pattern.
 
+#881 supersedes the always-open role rail and detached selected-facet field.
+Each facet now has its native selector inside the pad, and Person/Role visibility
+remains independent. Contribution-specific creation stays inside its initiating
+rack instead of visiting the upper Team creation area.
+
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
-visible record-local controls. Its role rail stays in view, and bounded
+visible record-local controls. Bounded
 role/contribution choices plus team/support membership supersede their extra
 Apply step. Canonical proposals, validation, saved-edit recovery and Undo retain
 their owners. Accepted callbacks and focus returns yield to a newer editing intent.

@@ -1,4 +1,4 @@
-import { LIMITS } from './config.mjs';
+import { CONTRACT, LIMITS } from './config.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { createDraftCoordinator } from './editing.mjs';
 import { money, wholeMoney, duration } from './display.mjs';
@@ -58,7 +58,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const editing = sharedEditing ?? createDraftCoordinator(studio);
   const editor = editing.person;
   const cleanup = [];
-  let selectedId = null;
+  let selectedId = null, selectionProjection = null;
   let projection = null;
   let people = new Map();
   let disposed = false;
@@ -211,7 +211,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     elements.configure.hidden = selectedId === null;
     elements.name.textContent = people.get(selectedId)?.label ?? 'Person unavailable';
     localHeader.update({ title: people.get(selectedId)?.label ?? 'Person settings', source: elements.apply });
-    elements.fieldset.disabled = view.status !== 'editing';
+    elements.fieldset.disabled = !canOpen() || !['editing', 'parked', 'idle'].includes(view.status);
     elements.recovery.hidden = view.status !== 'stale';
     const currentPerson = people.get(selectedId);
     summaryPreview.textContent = currentPerson
@@ -221,8 +221,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       ? `Current values: ${currentPerson.rateCentsPerHour === null ? 'hourly rate unknown' : `${money(currentPerson.rateCentsPerHour)}/hour`} · ${duration(currentPerson.fundedMinutes)} funded.`
       : 'This person has been removed. The saved values remain below.';
     elements.apply.setAttribute('aria-disabled', String(!view.draft?.changed));
+    const accepted = currentPerson && { label: currentPerson.label, ratePerHour: currentPerson.rateCentsPerHour === null ? '' : (currentPerson.rateCentsPerHour / 100).toFixed(2),
+        fundedHours: String(Math.floor(currentPerson.fundedMinutes / CONTRACT.minutesPerHour)), fundedMinutes: String(currentPerson.fundedMinutes % CONTRACT.minutesPerHour) };
     for (const field of FIELDS) {
-      const raw = view.draft?.raw[field] ?? '';
+      const raw = view.draft?.raw[field] ?? accepted?.[field] ?? '';
       if (inputs[field].value !== raw) inputs[field].value = raw;
       const error = view.draft?.errors.find(item => item.path === `draft.${field}`);
       inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
@@ -254,6 +256,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const result = operate('begin', personId, studio.read());
     if (!owns(epoch)) return;
     selectedId = editing.read().selected.person;
+    if (result.ok) selectionProjection = studio.read();
     render();
     if (!owns(epoch)) return;
     if (selectedId !== null) elements.configure.open = true;
@@ -266,6 +269,29 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       revealStudioDestination(destination);
     } : null);
     return result;
+  }
+
+  // A role choice changes this same person's metadata, while these fields retain
+  // their own typed proposal. Only that owned acceptance can refresh its base.
+  function reconcileRoleChange(previous, next) {
+    if (disposed || !elements.configure.open || selectionProjection !== previous || studio.read() !== next) return false;
+    const before = previous.state.people.find(row => row.id === selectedId);
+    const after = next.state.people.find(row => row.id === selectedId);
+    if (!before || !after || ['label', 'rateCentsPerHour', 'fundedMinutes', 'lifecycle'].some(field => before[field] !== after[field])) return false;
+    const view = editor.read();
+    if (editing.read().active !== null || view.draft && view.draft.personId !== selectedId) return false;
+    const epoch = ++generation;
+    const result = view.draft ? operate('review', view.draft.token, next) : operate('begin', selectedId, next);
+    if (!owns(epoch) || !result.ok) return false;
+    selectionProjection = next;
+    return true;
+  }
+  function ensurePersonOwner() {
+    if (disposed || !elements.configure.open || !canOpen() || selectedId === null) return false;
+    const view = editor.read(), active = editing.read().active;
+    if (active?.kind === 'person' && view.status === 'editing' && active.targetId === selectedId) return true;
+    if (view.status === 'stale') return false;
+    return select(selectedId, false)?.ok === true;
   }
 
   function settle(action) {
@@ -286,8 +312,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     }
     composing = false;
     if (action === 'apply') {
-      operate('begin', selectedId, studio.read());
+      const begun = operate('begin', selectedId, studio.read());
       if (!owns(epoch)) return;
+      if (begun.ok) selectionProjection = studio.read();
       const mark = boundary();
       onAccepted(mark.projection);
       if (!retains(epoch, mark)) return;
@@ -355,6 +382,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const method = action === 'use-current' ? 'useCurrent' : action === 'discard' ? 'cancel' : 'review';
       const epoch = ++generation, result = operate(method, view.draft.token, projection);
       if (!owns(epoch)) return;
+      if (result.ok && method !== 'cancel') selectionProjection = studio.read();
       render();
       if (!owns(epoch)) return;
       announce(result.ok ? '' : result.error.message);
@@ -411,7 +439,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     INSTANCES.delete(root);
   }
 
-  const receiver = Object.freeze({ read: () => editor.read(), refresh: render,
+  const receiver = Object.freeze({ read: () => editor.read(), refresh: render, reconcileRoleChange,
     close: () => { if (!disposed) { rateControls.release(); generation += 1; composing = false; elements.configure.open = false; } },
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
@@ -420,6 +448,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     listen(elements.roster, 'change', changeParticipation);
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
+    listen(elements.form, 'focusin', event => { if (inputs[event.target.name] === event.target) ensurePersonOwner(); });
+    const acquirePerson = event => { if (event.target.closest('input,button')) ensurePersonOwner(); };
+    elements.form.addEventListener('pointerdown', acquirePerson, true);
+    cleanup.push(() => elements.form.removeEventListener('pointerdown', acquirePerson, true));
     listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { rateControls.release(); generation += 1; composing = true; render(); });

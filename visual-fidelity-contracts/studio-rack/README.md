@@ -8,6 +8,8 @@ is the implementation reference.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:studio-rack-composition`;
 dev receiving contract revised 9 November 2026 for
+[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+retaining the People composition refinements from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 `main` retains the approved Showcase reference. Promotion from `dev` and a
 tagged public release each require a human cue. The receiving PR records actual
@@ -40,9 +42,12 @@ pairs its name with the selected members' hourly subtotal in a cool-blue inset.
 Nested person creation retains a named return to the preceding task.
 Its recessed people/session arranger keeps compact rate and available/funded-time
 readings and record operations beside
-direct participation pads. Compact Person settings provide an All people return,
-and Role mix retains the current value on each facet. Contributions
-retain their session matrix and open a compact Work / Receiver and decision pair.
+direct participation pads. Compact Person settings and Role mix keep independent
+visibility in one paired working area. Each role pad contains its label and
+native selector, so the current value is directly editable. Their Close/return
+controls name the module they dismiss. Contributions retain their session matrix
+and open a compact Work / Receiver and decision pair. A requested Add person form
+stays in that contribution as a half-rack with a return to its exact parent task.
 Role choices, contribution choices and team/support membership accept directly
 through shared history; person quantities and text retain Apply.
 
@@ -201,10 +206,11 @@ Meaningful supersessions are explicit:
 | Earlier direction | Current receiving contract |
 | --- | --- |
 | Person-to-arrange selector and Arrange team disclosure | Visible movement/removal actions belong to each person or team card, with keyed movement and retained focus |
-| Role mix requires opening a separate disclosure | Current person, facet values and the selected native choice remain visible beside the People arranger's local receiver |
+| Always-open Role mix with a detached selected-facet field | Paired Person/Role modules have independent visibility; each role pad contains its native selector and current value |
 | People membership and responsibility choices require a second Apply | Bounded choices accept directly; person text/quantities and retained proposals keep canonical validation and recovery |
 | Chocolate team parent keys and whole-plan Team Settings preview | Cobalt resting keys, bright selected keys and a cool-blue team hourly subtotal identify the local group and its cost |
 | Nested Add person always returns to Teams | The local return names the preceding team or supporting-work task and uses its retained draft route |
+| Contribution-specific creation opens above its working area | The canonical creation form is borrowed inside the contribution as a separate half-rack form and returns to its initiating human field |
 | A blank existing-plan track cell is descriptive only | It can append a working session to that plan; earlier placements remain visible |
 | Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |
 | #825 Working sessions Remove sits bottom-left | #828 places it bottom-right; Add remains top-right |
@@ -213,7 +219,8 @@ Meaningful supersessions are explicit:
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)
-records the broader current rationale. #879 refines People colors, readings and
+records the broader current rationale. #881 carries local Person/Role editing
+and contribution-specific creation; #879 refines People colors, readings and
 creation returns; #836 carries the compact People receiver;
 #848 extends the compact support pattern through Abilities, #849 settles Change
 action state and #818 receives the financial workbench on dev. The primary route

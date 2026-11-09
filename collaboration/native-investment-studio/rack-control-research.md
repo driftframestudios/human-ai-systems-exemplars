@@ -12,9 +12,10 @@ leaving the support task. Change and Quality use compact attached receivers for
 the detail behind their primary instruments. People combines parallel team
 lanes with an arranger that relates people directly to working sessions; its
 selected record keeps a local return to that comparison.
-The current refinement gives each team its own hourly subtotal and keeps nested
-creation's return attached to the preceding task. Short resource readings make
-the participation matrix easier to scan while retaining its large checkbox pads.
+The current refinement keeps person settings and role choices independently
+usable inside one compact working area. Contribution-specific creation opens
+beside the contribution that requested it. Team hourly subtotals and short
+resource readings retain their local scope and the matrix's large checkbox pads.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -35,6 +36,7 @@ comparison anchor until a human authorizes promotion.
 | [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
 | [Atlassian inline edit](https://atlassian.design/patterns/inline-edit/), official design-system guidance | Reading and editing can occupy the same page, with aligned read and edit views. | A name beside an Abilities identity gets a small Rename action and one local field. The Studio uses native controls and its canonical record owner; the component implementation stays with Atlassian. |
 | [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/), accessibility practice | Enter/Space activation and expanded state identify the visibility of related content. | Local name and detail controls report their actual receiver state. A native input provides text editing; visible Save and Cancel define acceptance and recovery. |
+| [GOV.UK Select](https://design-system.service.gov.uk/components/select/), official design-system guidance | Labeled selectors can show preselected settings; the guidance also identifies difficulties with selects in public-service forms and favors fewer visible choices where practical. | Each role pad keeps its current value in its labeled native selector. This is a compact settings matrix with established role vocabularies; the Studio retains native keyboard behavior rather than introducing a custom popup widget. |
 | [Ableton Arrangement View](https://www.ableton.com/en/live-manual/12/arrangement-view/), product practice | Arrangement tracks combine comparable content with local controls and explicit reorder operations. | People rows retain identity, resource readings and local editing beside session participation. Team lanes retain their parallel group meaning; this Studio adaptation represents enterprise work. |
 | [WAI tables with two headers](https://www.w3.org/WAI/tutorials/tables/two-headers/), accessibility practice | Row and column headers identify the meaning of their intersecting cells. | The People arranger uses native scoped headers and named checkbox pads for each person/session relationship. Its local scroll region retains those relationships on phone widths. |
 | [GOV.UK Table](https://design-system.service.gov.uk/components/table/), official design-system guidance | Captions and scoped headers support comparison; reducing displayed data and deliberate column widths help scanning. Numeric columns use right alignment. | Keep the native person/session relationship and equal session widths. Compact resource pills retain their units. The matrix cells represent participation, so their pads stay centered rather than adopting numeric-column alignment. |
@@ -141,6 +143,42 @@ This is a design synthesis from official component guidance and the human's
 observations of this showcase. It does not establish population-level usability.
 Focused browser checks must establish equal columns, readable states, retained
 pad targets and return to the actual preceding team or supporting-work task.
+
+### Person settings and role choices in one working area
+
+The reported interaction crossed two boundaries: entering a role selector closed
+the person's settings, and closing Role mix reopened its visible panel. Its
+breadcrumb therefore described a return the visitor could not complete. #881
+separates module visibility from the canonical draft coordinator's current edit
+owner.
+
+| Candidate | Useful portion | Consequence for this task |
+| --- | --- | --- |
+| One combined form and Apply | One acceptance point for all person information | Changes established direct role acceptance and makes a small role choice wait on unrelated typed quantities. |
+| Exclusive Person / Role tabs | Small vertical footprint | Hides the comparison the visitor explicitly wants to retain and turns each switch into another navigation step. |
+| Facet pads with one detached selector | Shows current role values in a compact grid | Separates a value from its editing control and retains the selection step implicated in the reported confusion. |
+| Paired modules with a native selector in every role pad | Keeps identity, quantities and role values visible together | Selected synthesis: independent visibility and local Close/return, with each operation retaining its existing acceptance owner. |
+
+The paired composition keeps the person module's readable surface, monetary
+dials and chocolate preview accent. Role pads combine label, accepted value and
+selection in one place. The person name, rate and funded time retain their typed
+proposal; a role change accepts directly with Undo. Module titles identify the
+person and current operation. These are the meaningful distinctions; another
+summary, score or long instruction would repeat existing information.
+
+Contribution-specific creation follows the same locality. A visitor who needs a
+new receiver or decision owner opens Add a person directly in that contribution's
+working area. The existing creation editor is borrowed into a half-rack slot as
+a sibling of the contribution form. Its exact draft route supplies the parent
+label and return; canonical accepted commands remain the data owner. This keeps
+one person form and one navigation path while preserving valid separate forms.
+
+The disclosure precedent supports truthful visibility and state. The native
+settings precedent informs the pad control. The pairing and borrowed placement
+are a Studio design synthesis, whose fitting evidence is an unsaved person edit
+surviving role selection, meaningful local dismissal, and creation returning to
+the initiating contribution. Desktop and ordinary phone views establish the
+composition's reachability; the receiving PR records observations actually run.
 
 ## Source and observation
 
