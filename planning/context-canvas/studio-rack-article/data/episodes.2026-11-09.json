@@ -1,0 +1,1367 @@
+{
+  "schema_version": 1,
+  "description": "Curated Studio collaboration episodes with source-read Issue-to-PR relationships and complete selected PR branch-commit membership.",
+  "observed_at": "2026-11-09 18:58:01 UTC",
+  "repository": "driftframestudios/human-ai-systems-exemplars",
+  "methodology": {
+    "source_basis": "The earlier dated collaboration extract supplied episode candidates. This bounded follow-up reads current public Issue and PR bodies and complete commit membership for eight selected merged PRs; the earlier snapshot files remain unchanged.",
+    "population": "Eight editorial episodes selected for materially different collaboration methods: adaptation, native state, measurement, promotion, specimen preservation, compact reception, financial adoption and local interaction repair.",
+    "issue_measure": "Count distinct Issues directly addressed within the selected PR scope. A first tranche can address an umbrella Issue without completing all of it. Context, strategy recipients and successor Issues remain separately classified and excluded from the episode Issue count.",
+    "commit_measure": "Count distinct SHA-identified commit objects listed by GitHub for the selected PR branches. The all-member measure includes merge commits; the companion nonmerge measure excludes records with more than one parent. Each episode deduplicates its selected PR members.",
+    "receiving_commit_measure": "The PR's merge_commit_sha identifies the accepted receiving event separately. A PR member count is branch history, not the count of new receiving-branch commits or unique patches. Squash, merge and promotion conventions keep their own meanings.",
+    "relation_method": "Read each selected PR body and corresponding Issue scope. Retain a short paraphrased warrant and public sources for every edge. Explicit implementation, first-tranche, research resolution and primary-route completion relations count; information, prepared successors and held work remain context.",
+    "missingness": "An unselected or unclassified relation remains outside this bounded graph. A missing edge means no claim in this selection, rather than zero work or the absence of a relationship.",
+    "overlap": "An Issue may occur in several episodes. A commit may be shared by several PR branches, especially a promotion. Within-episode counts remain useful; global counts use unions rather than summed episode memberships.",
+    "interpretation": "These records describe scope and delivery history. They leave working hours, causal contribution shares, productivity, AI performance and the final future showcase endpoint unspecified.",
+    "public_boundary": "Only public repository URLs, public record identities, commit SHAs and normalized source-grounded summaries are retained. Raw bodies, query-bearing retrieval URLs, gated locators and machine paths remain outside this extract."
+  },
+  "relation_types": [
+    {
+      "key": "delivers",
+      "counts": true,
+      "label": "delivers the named scope"
+    },
+    {
+      "key": "advances",
+      "counts": true,
+      "label": "advances a named tranche"
+    },
+    {
+      "key": "resolves_research",
+      "counts": true,
+      "label": "resolves a research decision"
+    },
+    {
+      "key": "completes_primary_route",
+      "counts": true,
+      "label": "completes the primary showcase route"
+    },
+    {
+      "key": "delivers_first_pass",
+      "counts": true,
+      "label": "delivers the first receiving pass"
+    },
+    {
+      "key": "addresses",
+      "counts": true,
+      "label": "addresses the named repair"
+    },
+    {
+      "key": "informs",
+      "counts": false,
+      "label": "returns information to another owner"
+    },
+    {
+      "key": "prepares_successor",
+      "counts": false,
+      "label": "prepares later work"
+    },
+    {
+      "key": "holds_for_successor",
+      "counts": false,
+      "label": "leaves scope with a successor"
+    }
+  ],
+  "issues": [
+    {
+      "number": 625,
+      "title": "Keep a meaningful interactive Studio on About while preserving vertical scroll",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/625",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-10-28T18:59:03Z"
+    },
+    {
+      "number": 637,
+      "title": "Reimagine the About Investment Studio as a native coordination and decision instrument",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-05T22:21:14Z"
+    },
+    {
+      "number": 638,
+      "title": "Give the full Investment Studio an AI Systems reading route alongside the native About instrument",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-05T22:21:07Z"
+    },
+    {
+      "number": 641,
+      "title": "Measure native Studio edit cost and gate incremental calculation on receiver evidence",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-10-29T04:45:17Z"
+    },
+    {
+      "number": 643,
+      "title": "Operate native coordination work from About’s amp head and accessible controls",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/643",
+      "state": "open",
+      "state_reason": null,
+      "role": "context_or_successor",
+      "updated_at": "2026-11-05T14:56:34Z"
+    },
+    {
+      "number": 810,
+      "title": "Preserve the approved Studio workbench as a main-branch reference",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-08T16:18:08Z"
+    },
+    {
+      "number": 811,
+      "title": "Apply the compact workbench form factor to the dev Showcase racks",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-08T16:24:15Z"
+    },
+    {
+      "number": 812,
+      "title": "Consolidate team customization and handoff routing inside the Showcase rack",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "context_or_successor",
+      "updated_at": "2026-11-08T17:02:26Z"
+    },
+    {
+      "number": 813,
+      "title": "Project preserved plan cassettes and Investment decks into the dev Showcase",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "context_or_successor",
+      "updated_at": "2026-11-08T17:44:49Z"
+    },
+    {
+      "number": 818,
+      "title": "Adopt independently owned financial comparison decks from the preserved workbench",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-08T23:35:19Z"
+    },
+    {
+      "number": 881,
+      "title": "Keep People settings, role pads and contribution creation in their local rack",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881",
+      "state": "closed",
+      "state_reason": "completed",
+      "role": "addressed_in_selected_scope",
+      "updated_at": "2026-11-09T16:56:38Z"
+    },
+    {
+      "number": 882,
+      "title": "Audit circular increment controls for consistent raised shadows and pressed states",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882",
+      "state": "open",
+      "state_reason": null,
+      "role": "context_or_successor",
+      "updated_at": "2026-11-09T16:37:50Z"
+    }
+  ],
+  "pull_requests": [
+    {
+      "number": 628,
+      "title": "Keep interactive Studio chapters in About’s vertical reading",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/628",
+      "merged": true,
+      "merged_at": "2026-10-28T02:15:17Z",
+      "base_branch": "dev",
+      "head_branch": "codex/about-studio-chapters",
+      "base_sha": "f4bb6b09d86801e654325649a492c483849dbff1",
+      "head_sha": "01d9230a0155270c3896509c79286e97feffcc94",
+      "merge_commit_sha": "48b14e57541ce9c489c6098e380d6b63b962ae95",
+      "commits": 3,
+      "commit_shas": [
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94"
+      ],
+      "nonmerge_commit_shas": [
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "delivery",
+      "changed_files": 32
+    },
+    {
+      "number": 639,
+      "title": "Establish the native Investment Studio capability and state foundation",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/639",
+      "merged": true,
+      "merged_at": "2026-10-28T21:31:45Z",
+      "base_branch": "dev",
+      "head_branch": "codex/studio-capability-state",
+      "base_sha": "17a3e5ae7e4a474d9e37bd21de6dc0de628b2b79",
+      "head_sha": "f885bb3bfafdb1fc807713e51403c7146affda97",
+      "merge_commit_sha": "88226868237e64b4d35addc59240f032c87e5471",
+      "commits": 3,
+      "commit_shas": [
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97"
+      ],
+      "nonmerge_commit_shas": [
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "delivery",
+      "changed_files": 9
+    },
+    {
+      "number": 646,
+      "title": "Measure native Studio edit cost and recommend Team Assembly",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/646",
+      "merged": true,
+      "merged_at": "2026-10-29T00:01:28Z",
+      "base_branch": "research",
+      "head_branch": "res/641-native-studio-edit-cost",
+      "base_sha": "2539f2c6bd42d56353d083ee914dbeb31543bf59",
+      "head_sha": "8fa7bf13eea8c321c3e209c8e81ad61bd3779c9f",
+      "merge_commit_sha": "31012ca5ef3a51421ada3ae7abce7e0b9f0219a1",
+      "commits": 1,
+      "commit_shas": [
+        "8fa7bf13eea8c321c3e209c8e81ad61bd3779c9f"
+      ],
+      "nonmerge_commit_shas": [
+        "8fa7bf13eea8c321c3e209c8e81ad61bd3779c9f"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "research",
+      "changed_files": 16
+    },
+    {
+      "number": 707,
+      "title": "Complete the native Investment Studio showcase on About",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707",
+      "merged": true,
+      "merged_at": "2026-11-05T22:20:25Z",
+      "base_branch": "main",
+      "head_branch": "codex/studio-main-experience",
+      "base_sha": "27d339532af92cbf3ce1d5ed8687eb3ae709fb5c",
+      "head_sha": "740c35644f2ef8e5171d373791344c71c6a6f7ee",
+      "merge_commit_sha": "b65f5c5ba617068eebfd3d364b079146ed8dd92a",
+      "commits": 127,
+      "commit_shas": [
+        "5123f78099f4e58a0b9185f5eb831fd57a60dfd6",
+        "f20a5ffaf22e026f1150a30ebab4a0745e84f3df",
+        "ff695c6c3f6471bc19adb8a8c6487d2da8c2405a",
+        "c2d02f635ad3381796aa7dec68a726ab880518aa",
+        "3846a862d8a0c020ff6fc5b8dfaf112febba8623",
+        "74fc73962e99076033bfc4483531617dacd362a6",
+        "ee9b970b711f62303e703d4e682bd7e70e89c61a",
+        "02cf325328096eba5b9bb36caade760763ecab93",
+        "f848b2b3c94a63859c05468ebe9004fca352ae0c",
+        "52168f0e0ecd8b3e4e86319c62f0ea058db291c8",
+        "abff4fdbca39f75aca027c135335d5c2222dfe05",
+        "a8cd327b300e64fff64919823e0f1fdd3f13bafa",
+        "cbb0916bd63671bd00ee39947ab77b4ce319cc50",
+        "30bd2307a0894e06ecca82637bbca76f41bd194c",
+        "f3fc1b12d536516eaeb13ed3658534b90651f305",
+        "bac286bfad966a9d8cd2802cedbcdc34249551f0",
+        "4bc4adc494a45f40bcfedb51388ad028c209abb5",
+        "588e6c23ef273cefdc6474fab5a240077ebb841a",
+        "c17cfc35e9e4a7f57c84b7b375b5186fb48a24ff",
+        "51fcc31838e24e65ddab29f51b88267dbd9d343a",
+        "7be2a0575740a6405e18fb5805a032ed238c8746",
+        "d6d142b3c0878ae40945305037bd820a541bc71c",
+        "33d0031a23000251ad130b062291e2cd54998bcd",
+        "f89f9533bd6c9d3762d35cca1c81e44bb5815373",
+        "e7f224d815f79f46f57e45091f2a425665adf063",
+        "cdd5b1996d9478dedd6efd573bb546fa6e6e4bba",
+        "adfef18b8bb822c2bd20ff37b46bc01a18db3944",
+        "e2426f722cab9f7e28d49c8dbc9b3c1803762ec1",
+        "ba07eb8f8d7a5ff0a4f9ddd18c5f0ff48a6aa895",
+        "22db26f2e5f4379fe4a707e2667b451372b48871",
+        "2ea0518fe262a2ce29687599c3793c10eb2edd4e",
+        "6a54b44db2e549686906ab76b808ab25cce1d6ac",
+        "b47f47bb23d18ea27ae82b68da488d0397c36d71",
+        "982d1ddccb930e64d8e6816e69e7768968d2e1f4",
+        "a30c511547567fe32b2524e9963a22a49f4a59ac",
+        "5d8457883afd6f28235c0408f4b0acddaa257a51",
+        "1258c9212975adde85884ef51752dd7c22a5b1ac",
+        "f4bb6b09d86801e654325649a492c483849dbff1",
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94",
+        "48b14e57541ce9c489c6098e380d6b63b962ae95",
+        "c1834774a5b260d93f22804d4f049e9cb8526ef6",
+        "8a5c52a06b7b9e20566fef945659293d0142c8ee",
+        "ef97607153d106abe642470ac5bdd6d29e8c548b",
+        "17a3e5ae7e4a474d9e37bd21de6dc0de628b2b79",
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97",
+        "88226868237e64b4d35addc59240f032c87e5471",
+        "3b3bffd486e78ae7dfd3c4a2bb6b448c3141abb7",
+        "412c73ea76a0b2f037e363d235cce75008a40b1c",
+        "9840d4b3183f2dfc06b2fab5480156e50f9e7049",
+        "7ac98e71084e58da0486eae0a7284e2a31defd17",
+        "fb785970c70fd68a1f18fc66aeeeb7fcc3fa5599",
+        "bdc4be3ef73a56cef46e97c1b82623ad46aaddad",
+        "3f714dcb43770a1c2f4a85594e92e44139b1fbd5",
+        "541b8a933a9f244ad0532a1e701695ec8571b662",
+        "77c559d16ef2a19bd189009ce8ace85784382f4a",
+        "eb963ccc9a796a90d2ffec81bdea3e259a683f1e",
+        "db0f99fe0c98d3d17a2651558d86d1eddac27bc2",
+        "a5bbcf532e404abbe3b22b030ef116b200efcd4b",
+        "90b8f67358c56e484ac92e0a1b561870ae191239",
+        "df5107d9df638988de15c9b0c53f00280f2b4c13",
+        "b0e213213e417b666a1a691085895c5505d9dbf4",
+        "bdf3f4ccf03a345efd9758f98fc47c0d9bd9eb66",
+        "83d469bae6590ca3a87fdb3e8b7c1fbb52b57cb6",
+        "1ccb9f6dd55d422a2a7a427144bb2253adbb680d",
+        "b49380fc913f95135dcc03c9bc481e3359a37e45",
+        "4b2a8ff069bcd43049ff63615f47f71cb2e31280",
+        "dc7c23bc30b78a3f2997a2e55c734e6004e1344e",
+        "2d2332da7b149e436a67e9defb039c3a4db12dad",
+        "699203a230c1e35893e1a791596360068118e68c",
+        "d407f5553d679fafe0e3960fcc00347b86cc8d31",
+        "811f65d3cfe53528e51fc8258c5ef98fb80cc39e",
+        "eedf8189e5ad69813c92270af3b9c1045879d0f7",
+        "c2152124c8b64108fd6c55e55a785106f8708d83",
+        "087b8e5e8c0b40ab21cda9e5398d17c3b55677d7",
+        "e7d5006b945af8cb33a39b88dc7d5d5a4abcf305",
+        "e8fedfed1998d699bfd66e729c327a4c95099d9b",
+        "1c9cb600ca720b88a0b93a21e99ff155cb9ce726",
+        "f7e7aeb4105ba39881a70c0e5c24f1ed19f915cc",
+        "1758c71d815d6aa8b118284025d5328575060774",
+        "7ed609ed9f65ecc252358c8189db32af9c2136e9",
+        "348a2a853b21777d893f9ed46cd6103fab0a0358",
+        "d44aca9523224477f274a6bc5edb9573a63fd53a",
+        "2e75830041df7e8011091f22a5ca6d4d743ec962",
+        "e2ff8e097c5b756a9389caf8d53b7297ecdc5bb1",
+        "963b69350bb9e0bd42dd9c11bd3750f24bb9ccba",
+        "d9d681a8abcb018797c661482803a24cf251f436",
+        "79e14cc3672dbc24278ad094651f10cfdd7ac8c1",
+        "2b6bc10910d6ffb8d0fa88bd379814d03bf0dc07",
+        "0294216eda9743b3378676c70a4fd0feeca88d52",
+        "a571d4aebfc63bd58203c8a4302c7bc38660fa14",
+        "15386a0c65430959ff4d7f512554975a15b0b92e",
+        "cf16539e2871d948b0539f679fcbb0915c0fde0c",
+        "2b2ed0b631232ca5e14492e6eed5dd15df8ec299",
+        "2eaece505e4d942c49df50d4dc7d1177b195af64",
+        "031d2e0b0d2fb27935dbb1ec6e484f3413998d0e",
+        "251e57d16c4dd3c9f662070a8a7145c6b82a053f",
+        "8451f656d4f8eff159a8a55834bbb6291397f3cc",
+        "c5d3f206461217fea0ee213cbcb0797fda2eed9e",
+        "7035bc289a4dce2bddf019d12d689b03241f0e76",
+        "a799697144ba018907ffaea1fccb9629ade564a5",
+        "4fd8fbac3aa5588faef092a5a710a9cddd7314c8",
+        "38545ac19a2a99f44c8019c379677e353a5f868e",
+        "57f7b3d03a052ff21b7b46ca97ad768681421731",
+        "009e90934eba11d5070a22a309ee6e797396e12d",
+        "35223fe2e332e3eaf79bf1a50e6c09e5df6fd3f4",
+        "4d0f4908d012d6203327b70d5df35a4f6f331675",
+        "8bdbacc24ae02812e0a61a9842ee5281e286da15",
+        "c705d1bbb2ff2aabfb6ea3454558a75d4fe99988",
+        "1990ec28a4f5e995898cd277c5afcf6cf1c0d4c1",
+        "4ece9c76c7579c3ad63c8dc77669a0c3306f4900",
+        "839f4f1563849eb6f617f9e5b2d381a359ea2945",
+        "11d9299c8d5663270f2a35e58cde7ff1c985a544",
+        "eddcfcae110f50a12a668cf4336290c60f803319",
+        "9ce4badad9916ee3fb7eb92ce6529c7a581230ec",
+        "5f46fece801c7767afa21c92d407ffef3e64d60a",
+        "3e7b1ec8cb2de617431c52edac541d4373f0eb1a",
+        "da8ca309dc1a7b4ef7dfb3b7a6a455e8375721a9",
+        "cbeefed5e4c1e96a71c68faf176e6793792ef4af",
+        "7c5a57db682aa28f39382af00e4431a0268d70af",
+        "a6e9393e0860225837a510889a3e2d736e2c4995",
+        "aa8280d9f6ea694094d353e4aafb04ab767fe9e6",
+        "f9e4faf09c463d983675d1fcc5806462868a1f2b",
+        "740c35644f2ef8e5171d373791344c71c6a6f7ee"
+      ],
+      "nonmerge_commit_shas": [
+        "5123f78099f4e58a0b9185f5eb831fd57a60dfd6",
+        "f20a5ffaf22e026f1150a30ebab4a0745e84f3df",
+        "ff695c6c3f6471bc19adb8a8c6487d2da8c2405a",
+        "3846a862d8a0c020ff6fc5b8dfaf112febba8623",
+        "ee9b970b711f62303e703d4e682bd7e70e89c61a",
+        "bac286bfad966a9d8cd2802cedbcdc34249551f0",
+        "4bc4adc494a45f40bcfedb51388ad028c209abb5",
+        "588e6c23ef273cefdc6474fab5a240077ebb841a",
+        "c17cfc35e9e4a7f57c84b7b375b5186fb48a24ff",
+        "51fcc31838e24e65ddab29f51b88267dbd9d343a",
+        "7be2a0575740a6405e18fb5805a032ed238c8746",
+        "d6d142b3c0878ae40945305037bd820a541bc71c",
+        "33d0031a23000251ad130b062291e2cd54998bcd",
+        "cdd5b1996d9478dedd6efd573bb546fa6e6e4bba",
+        "2ea0518fe262a2ce29687599c3793c10eb2edd4e",
+        "b47f47bb23d18ea27ae82b68da488d0397c36d71",
+        "a30c511547567fe32b2524e9963a22a49f4a59ac",
+        "1258c9212975adde85884ef51752dd7c22a5b1ac",
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94",
+        "c1834774a5b260d93f22804d4f049e9cb8526ef6",
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97",
+        "3b3bffd486e78ae7dfd3c4a2bb6b448c3141abb7",
+        "412c73ea76a0b2f037e363d235cce75008a40b1c",
+        "7ac98e71084e58da0486eae0a7284e2a31defd17",
+        "fb785970c70fd68a1f18fc66aeeeb7fcc3fa5599",
+        "bdc4be3ef73a56cef46e97c1b82623ad46aaddad",
+        "541b8a933a9f244ad0532a1e701695ec8571b662",
+        "77c559d16ef2a19bd189009ce8ace85784382f4a",
+        "db0f99fe0c98d3d17a2651558d86d1eddac27bc2",
+        "90b8f67358c56e484ac92e0a1b561870ae191239",
+        "b0e213213e417b666a1a691085895c5505d9dbf4",
+        "83d469bae6590ca3a87fdb3e8b7c1fbb52b57cb6",
+        "b49380fc913f95135dcc03c9bc481e3359a37e45",
+        "dc7c23bc30b78a3f2997a2e55c734e6004e1344e",
+        "2d2332da7b149e436a67e9defb039c3a4db12dad",
+        "699203a230c1e35893e1a791596360068118e68c",
+        "811f65d3cfe53528e51fc8258c5ef98fb80cc39e",
+        "c2152124c8b64108fd6c55e55a785106f8708d83",
+        "087b8e5e8c0b40ab21cda9e5398d17c3b55677d7",
+        "e8fedfed1998d699bfd66e729c327a4c95099d9b",
+        "1c9cb600ca720b88a0b93a21e99ff155cb9ce726",
+        "1758c71d815d6aa8b118284025d5328575060774",
+        "7ed609ed9f65ecc252358c8189db32af9c2136e9",
+        "d44aca9523224477f274a6bc5edb9573a63fd53a",
+        "e2ff8e097c5b756a9389caf8d53b7297ecdc5bb1",
+        "d9d681a8abcb018797c661482803a24cf251f436",
+        "2b6bc10910d6ffb8d0fa88bd379814d03bf0dc07",
+        "a571d4aebfc63bd58203c8a4302c7bc38660fa14",
+        "15386a0c65430959ff4d7f512554975a15b0b92e",
+        "cf16539e2871d948b0539f679fcbb0915c0fde0c",
+        "2b2ed0b631232ca5e14492e6eed5dd15df8ec299",
+        "031d2e0b0d2fb27935dbb1ec6e484f3413998d0e",
+        "251e57d16c4dd3c9f662070a8a7145c6b82a053f",
+        "c5d3f206461217fea0ee213cbcb0797fda2eed9e",
+        "a799697144ba018907ffaea1fccb9629ade564a5",
+        "38545ac19a2a99f44c8019c379677e353a5f868e",
+        "009e90934eba11d5070a22a309ee6e797396e12d",
+        "4d0f4908d012d6203327b70d5df35a4f6f331675",
+        "c705d1bbb2ff2aabfb6ea3454558a75d4fe99988",
+        "4ece9c76c7579c3ad63c8dc77669a0c3306f4900",
+        "11d9299c8d5663270f2a35e58cde7ff1c985a544",
+        "9ce4badad9916ee3fb7eb92ce6529c7a581230ec",
+        "3e7b1ec8cb2de617431c52edac541d4373f0eb1a",
+        "cbeefed5e4c1e96a71c68faf176e6793792ef4af",
+        "7c5a57db682aa28f39382af00e4431a0268d70af",
+        "f9e4faf09c463d983675d1fcc5806462868a1f2b",
+        "740c35644f2ef8e5171d373791344c71c6a6f7ee"
+      ],
+      "merge_member_shas": [
+        "c2d02f635ad3381796aa7dec68a726ab880518aa",
+        "74fc73962e99076033bfc4483531617dacd362a6",
+        "02cf325328096eba5b9bb36caade760763ecab93",
+        "f848b2b3c94a63859c05468ebe9004fca352ae0c",
+        "52168f0e0ecd8b3e4e86319c62f0ea058db291c8",
+        "abff4fdbca39f75aca027c135335d5c2222dfe05",
+        "a8cd327b300e64fff64919823e0f1fdd3f13bafa",
+        "cbb0916bd63671bd00ee39947ab77b4ce319cc50",
+        "30bd2307a0894e06ecca82637bbca76f41bd194c",
+        "f3fc1b12d536516eaeb13ed3658534b90651f305",
+        "f89f9533bd6c9d3762d35cca1c81e44bb5815373",
+        "e7f224d815f79f46f57e45091f2a425665adf063",
+        "adfef18b8bb822c2bd20ff37b46bc01a18db3944",
+        "e2426f722cab9f7e28d49c8dbc9b3c1803762ec1",
+        "ba07eb8f8d7a5ff0a4f9ddd18c5f0ff48a6aa895",
+        "22db26f2e5f4379fe4a707e2667b451372b48871",
+        "6a54b44db2e549686906ab76b808ab25cce1d6ac",
+        "982d1ddccb930e64d8e6816e69e7768968d2e1f4",
+        "5d8457883afd6f28235c0408f4b0acddaa257a51",
+        "f4bb6b09d86801e654325649a492c483849dbff1",
+        "48b14e57541ce9c489c6098e380d6b63b962ae95",
+        "8a5c52a06b7b9e20566fef945659293d0142c8ee",
+        "ef97607153d106abe642470ac5bdd6d29e8c548b",
+        "17a3e5ae7e4a474d9e37bd21de6dc0de628b2b79",
+        "88226868237e64b4d35addc59240f032c87e5471",
+        "9840d4b3183f2dfc06b2fab5480156e50f9e7049",
+        "3f714dcb43770a1c2f4a85594e92e44139b1fbd5",
+        "eb963ccc9a796a90d2ffec81bdea3e259a683f1e",
+        "a5bbcf532e404abbe3b22b030ef116b200efcd4b",
+        "df5107d9df638988de15c9b0c53f00280f2b4c13",
+        "bdf3f4ccf03a345efd9758f98fc47c0d9bd9eb66",
+        "1ccb9f6dd55d422a2a7a427144bb2253adbb680d",
+        "4b2a8ff069bcd43049ff63615f47f71cb2e31280",
+        "d407f5553d679fafe0e3960fcc00347b86cc8d31",
+        "eedf8189e5ad69813c92270af3b9c1045879d0f7",
+        "e7d5006b945af8cb33a39b88dc7d5d5a4abcf305",
+        "f7e7aeb4105ba39881a70c0e5c24f1ed19f915cc",
+        "348a2a853b21777d893f9ed46cd6103fab0a0358",
+        "2e75830041df7e8011091f22a5ca6d4d743ec962",
+        "963b69350bb9e0bd42dd9c11bd3750f24bb9ccba",
+        "79e14cc3672dbc24278ad094651f10cfdd7ac8c1",
+        "0294216eda9743b3378676c70a4fd0feeca88d52",
+        "2eaece505e4d942c49df50d4dc7d1177b195af64",
+        "8451f656d4f8eff159a8a55834bbb6291397f3cc",
+        "7035bc289a4dce2bddf019d12d689b03241f0e76",
+        "4fd8fbac3aa5588faef092a5a710a9cddd7314c8",
+        "57f7b3d03a052ff21b7b46ca97ad768681421731",
+        "35223fe2e332e3eaf79bf1a50e6c09e5df6fd3f4",
+        "8bdbacc24ae02812e0a61a9842ee5281e286da15",
+        "1990ec28a4f5e995898cd277c5afcf6cf1c0d4c1",
+        "839f4f1563849eb6f617f9e5b2d381a359ea2945",
+        "eddcfcae110f50a12a668cf4336290c60f803319",
+        "5f46fece801c7767afa21c92d407ffef3e64d60a",
+        "da8ca309dc1a7b4ef7dfb3b7a6a455e8375721a9",
+        "a6e9393e0860225837a510889a3e2d736e2c4995",
+        "aa8280d9f6ea694094d353e4aafb04ab767fe9e6"
+      ],
+      "delivery_role": "promotion",
+      "changed_files": 184
+    },
+    {
+      "number": 814,
+      "title": "Preserve the illustrative Studio workbench and approved visual specimens",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814",
+      "merged": true,
+      "merged_at": "2026-11-08T16:18:07Z",
+      "base_branch": "main",
+      "head_branch": "codex/preserve-studio-workbench",
+      "base_sha": "9338acc83ca731f73198e1194a9d49e636057651",
+      "head_sha": "5f66c13e903ec46fe964bdb3f5937171b1e390d0",
+      "merge_commit_sha": "4597faf76507cf71baa7febf5d43f2c220d567bb",
+      "commits": 2,
+      "commit_shas": [
+        "1fc6dac501b55667ad4b03c2d2dab44bc915c1c1",
+        "5f66c13e903ec46fe964bdb3f5937171b1e390d0"
+      ],
+      "nonmerge_commit_shas": [
+        "1fc6dac501b55667ad4b03c2d2dab44bc915c1c1",
+        "5f66c13e903ec46fe964bdb3f5937171b1e390d0"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "reference",
+      "changed_files": 20
+    },
+    {
+      "number": 815,
+      "title": "Bring compact workbench form factor into dev Showcase racks",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/815",
+      "merged": true,
+      "merged_at": "2026-11-08T16:23:50Z",
+      "base_branch": "dev",
+      "head_branch": "codex/compact-studio-rack",
+      "base_sha": "821836299250ea16006243be508b7373084f281a",
+      "head_sha": "cc6b3107f137cb8db066aa4f2e49ce284b888e33",
+      "merge_commit_sha": "df79b22096b6547e5836b226793d162cb4c63f4c",
+      "commits": 3,
+      "commit_shas": [
+        "fc73ef09c7f9a6c8e5a9cc4015c869a648221c2a",
+        "6d36eed0e0a0b34738d2fe80c3b77195be2eebbf",
+        "cc6b3107f137cb8db066aa4f2e49ce284b888e33"
+      ],
+      "nonmerge_commit_shas": [
+        "fc73ef09c7f9a6c8e5a9cc4015c869a648221c2a",
+        "cc6b3107f137cb8db066aa4f2e49ce284b888e33"
+      ],
+      "merge_member_shas": [
+        "6d36eed0e0a0b34738d2fe80c3b77195be2eebbf"
+      ],
+      "delivery_role": "delivery",
+      "changed_files": 9
+    },
+    {
+      "number": 852,
+      "title": "Bring the complete financial deck workbench into Investment",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/852",
+      "merged": true,
+      "merged_at": "2026-11-08T23:34:56Z",
+      "base_branch": "dev",
+      "head_branch": "codex/studio-investment-workbench",
+      "base_sha": "d8f76b164dcdcc425236b0702577e958cc39f5d4",
+      "head_sha": "4030dcad423512128af1dc8b1eaf48ec9c9bbbe4",
+      "merge_commit_sha": "7f2c00fa1dee8054ed76154e28d44ca453ef99db",
+      "commits": 1,
+      "commit_shas": [
+        "4030dcad423512128af1dc8b1eaf48ec9c9bbbe4"
+      ],
+      "nonmerge_commit_shas": [
+        "4030dcad423512128af1dc8b1eaf48ec9c9bbbe4"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "delivery",
+      "changed_files": 33
+    },
+    {
+      "number": 883,
+      "title": "Keep People editors and contribution creation in their local rack",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/883",
+      "merged": true,
+      "merged_at": "2026-11-09T16:56:25Z",
+      "base_branch": "dev",
+      "head_branch": "codex/studio-people-local-editing",
+      "base_sha": "e717114c49647dc1dab45d64dd6eed74e7f84313",
+      "head_sha": "2c0a3349cfb5affd0c36e3aa56a0e1f7b625fb80",
+      "merge_commit_sha": "6c0e090e121f1d708d019bb3926868de9dc2a390",
+      "commits": 1,
+      "commit_shas": [
+        "2c0a3349cfb5affd0c36e3aa56a0e1f7b625fb80"
+      ],
+      "nonmerge_commit_shas": [
+        "2c0a3349cfb5affd0c36e3aa56a0e1f7b625fb80"
+      ],
+      "merge_member_shas": [],
+      "delivery_role": "repair",
+      "changed_files": 15
+    }
+  ],
+  "edges": [
+    {
+      "issue": 625,
+      "pr": 628,
+      "relation": "delivers",
+      "counted": true,
+      "warrant": "The PR says #625's source acceptance is satisfied; the Issue records the five-chapter delivery on dev.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/628",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/625"
+      ]
+    },
+    {
+      "issue": 637,
+      "pr": 639,
+      "relation": "advances",
+      "counted": true,
+      "warrant": "The PR identifies this as the first capability and state tranche of #637; the Issue lists it among the native foundation deliveries.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/639",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637"
+      ]
+    },
+    {
+      "issue": 641,
+      "pr": 646,
+      "relation": "resolves_research",
+      "counted": true,
+      "warrant": "The PR explicitly addresses #641, and the Issue records the completed frozen-source measurement and retained full-preparation decision.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/646",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641"
+      ]
+    },
+    {
+      "issue": 637,
+      "pr": 646,
+      "relation": "informs",
+      "counted": false,
+      "warrant": "The PR returns its strategy decision to #637, while #641 owns this research result.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/646",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637"
+      ]
+    },
+    {
+      "issue": 643,
+      "pr": 646,
+      "relation": "informs",
+      "counted": false,
+      "warrant": "The PR returns its strategy decision to the native receiver Issue; that Issue keeps its separate reader-comprehension observation.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/646",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/643"
+      ]
+    },
+    {
+      "issue": 637,
+      "pr": 707,
+      "relation": "completes_primary_route",
+      "counted": true,
+      "warrant": "The PR completes #637's primary showcase route and the Issue identifies it as the receiving record for the completed construction.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637"
+      ]
+    },
+    {
+      "issue": 638,
+      "pr": 707,
+      "relation": "delivers",
+      "counted": true,
+      "warrant": "The PR explicitly completes #638's native About placement and full-Studio discovery; the Issue records accepted main placement.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638"
+      ]
+    },
+    {
+      "issue": 810,
+      "pr": 814,
+      "relation": "delivers",
+      "counted": true,
+      "warrant": "The PR explicitly closes #810 by preserving the approved planning workbench and specimens while holding the main About runtime.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810"
+      ]
+    },
+    {
+      "issue": 811,
+      "pr": 814,
+      "relation": "prepares_successor",
+      "counted": false,
+      "warrant": "The PR names #811 as the next compact dev receiver of the preserved reference.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811"
+      ]
+    },
+    {
+      "issue": 812,
+      "pr": 814,
+      "relation": "prepares_successor",
+      "counted": false,
+      "warrant": "The PR continues the later team and handoff integration route owned by #812.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812"
+      ]
+    },
+    {
+      "issue": 813,
+      "pr": 814,
+      "relation": "prepares_successor",
+      "counted": false,
+      "warrant": "The PR continues the later cassette and deck integration route owned by #813.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813"
+      ]
+    },
+    {
+      "issue": 811,
+      "pr": 815,
+      "relation": "delivers_first_pass",
+      "counted": true,
+      "warrant": "The PR explicitly completes #811's first receiving pass; the Issue records the reviewed compact-form-factor delivery.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/815",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811"
+      ]
+    },
+    {
+      "issue": 812,
+      "pr": 815,
+      "relation": "holds_for_successor",
+      "counted": false,
+      "warrant": "The PR leaves team and handoff simplification with #812.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/815",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812"
+      ]
+    },
+    {
+      "issue": 813,
+      "pr": 815,
+      "relation": "holds_for_successor",
+      "counted": false,
+      "warrant": "The PR leaves cassette and deck integration with #813.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/815",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813"
+      ]
+    },
+    {
+      "issue": 818,
+      "pr": 852,
+      "relation": "delivers",
+      "counted": true,
+      "warrant": "The PR explicitly closes #818 and adopts the preserved workbench's five independently owned financial deck types.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/852",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818"
+      ]
+    },
+    {
+      "issue": 881,
+      "pr": 883,
+      "relation": "addresses",
+      "counted": true,
+      "warrant": "The PR explicitly addresses #881 through local People editors and contribution-specific person creation.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/883",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881"
+      ]
+    },
+    {
+      "issue": 882,
+      "pr": 883,
+      "relation": "holds_for_successor",
+      "counted": false,
+      "warrant": "The PR explicitly leaves the global circular-control audit with #882; the Issue confirms its broader scope.",
+      "source_urls": [
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/883",
+        "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882"
+      ]
+    }
+  ],
+  "episodes": [
+    {
+      "id": "chapter-bridge",
+      "title": "Keep the original Studio working inside About",
+      "short_label": "Chapter bridge",
+      "role": "delivery",
+      "issue_numbers": [
+        625
+      ],
+      "context_issue_numbers": [],
+      "pr_numbers": [
+        628
+      ],
+      "commit_shas": [
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94"
+      ],
+      "nonmerge_commit_shas": [
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94"
+      ],
+      "issue_count": 1,
+      "commit_count": 3,
+      "nonmerge_commit_count": 3,
+      "summary": "A presentation adapter preserves the complete original Studio while five working chapters participate in About's vertical reading."
+    },
+    {
+      "id": "native-foundation",
+      "title": "Establish one accepted-state owner",
+      "short_label": "Native foundation",
+      "role": "delivery",
+      "issue_numbers": [
+        637
+      ],
+      "context_issue_numbers": [],
+      "pr_numbers": [
+        639
+      ],
+      "commit_shas": [
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97"
+      ],
+      "nonmerge_commit_shas": [
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97"
+      ],
+      "issue_count": 1,
+      "commit_count": 3,
+      "nonmerge_commit_count": 3,
+      "summary": "A first native tranche creates the planning contract, immutable accepted state and focused evidence for later controls."
+    },
+    {
+      "id": "receiver-measurement",
+      "title": "Measure before changing the calculation strategy",
+      "short_label": "Receiver measurement",
+      "role": "research",
+      "issue_numbers": [
+        641
+      ],
+      "context_issue_numbers": [
+        637,
+        643
+      ],
+      "pr_numbers": [
+        646
+      ],
+      "commit_shas": [
+        "8fa7bf13eea8c321c3e209c8e81ad61bd3779c9f"
+      ],
+      "nonmerge_commit_shas": [
+        "8fa7bf13eea8c321c3e209c8e81ad61bd3779c9f"
+      ],
+      "issue_count": 1,
+      "commit_count": 1,
+      "nonmerge_commit_count": 1,
+      "summary": "The frozen receiver study retains full preparation and explicit Apply with live preview, then returns the next implementation decision."
+    },
+    {
+      "id": "showcase-promotion",
+      "title": "Bring the assembled native showcase to main",
+      "short_label": "Showcase promotion",
+      "role": "promotion",
+      "issue_numbers": [
+        637,
+        638
+      ],
+      "context_issue_numbers": [],
+      "pr_numbers": [
+        707
+      ],
+      "commit_shas": [
+        "5123f78099f4e58a0b9185f5eb831fd57a60dfd6",
+        "f20a5ffaf22e026f1150a30ebab4a0745e84f3df",
+        "ff695c6c3f6471bc19adb8a8c6487d2da8c2405a",
+        "c2d02f635ad3381796aa7dec68a726ab880518aa",
+        "3846a862d8a0c020ff6fc5b8dfaf112febba8623",
+        "74fc73962e99076033bfc4483531617dacd362a6",
+        "ee9b970b711f62303e703d4e682bd7e70e89c61a",
+        "02cf325328096eba5b9bb36caade760763ecab93",
+        "f848b2b3c94a63859c05468ebe9004fca352ae0c",
+        "52168f0e0ecd8b3e4e86319c62f0ea058db291c8",
+        "abff4fdbca39f75aca027c135335d5c2222dfe05",
+        "a8cd327b300e64fff64919823e0f1fdd3f13bafa",
+        "cbb0916bd63671bd00ee39947ab77b4ce319cc50",
+        "30bd2307a0894e06ecca82637bbca76f41bd194c",
+        "f3fc1b12d536516eaeb13ed3658534b90651f305",
+        "bac286bfad966a9d8cd2802cedbcdc34249551f0",
+        "4bc4adc494a45f40bcfedb51388ad028c209abb5",
+        "588e6c23ef273cefdc6474fab5a240077ebb841a",
+        "c17cfc35e9e4a7f57c84b7b375b5186fb48a24ff",
+        "51fcc31838e24e65ddab29f51b88267dbd9d343a",
+        "7be2a0575740a6405e18fb5805a032ed238c8746",
+        "d6d142b3c0878ae40945305037bd820a541bc71c",
+        "33d0031a23000251ad130b062291e2cd54998bcd",
+        "f89f9533bd6c9d3762d35cca1c81e44bb5815373",
+        "e7f224d815f79f46f57e45091f2a425665adf063",
+        "cdd5b1996d9478dedd6efd573bb546fa6e6e4bba",
+        "adfef18b8bb822c2bd20ff37b46bc01a18db3944",
+        "e2426f722cab9f7e28d49c8dbc9b3c1803762ec1",
+        "ba07eb8f8d7a5ff0a4f9ddd18c5f0ff48a6aa895",
+        "22db26f2e5f4379fe4a707e2667b451372b48871",
+        "2ea0518fe262a2ce29687599c3793c10eb2edd4e",
+        "6a54b44db2e549686906ab76b808ab25cce1d6ac",
+        "b47f47bb23d18ea27ae82b68da488d0397c36d71",
+        "982d1ddccb930e64d8e6816e69e7768968d2e1f4",
+        "a30c511547567fe32b2524e9963a22a49f4a59ac",
+        "5d8457883afd6f28235c0408f4b0acddaa257a51",
+        "1258c9212975adde85884ef51752dd7c22a5b1ac",
+        "f4bb6b09d86801e654325649a492c483849dbff1",
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94",
+        "48b14e57541ce9c489c6098e380d6b63b962ae95",
+        "c1834774a5b260d93f22804d4f049e9cb8526ef6",
+        "8a5c52a06b7b9e20566fef945659293d0142c8ee",
+        "ef97607153d106abe642470ac5bdd6d29e8c548b",
+        "17a3e5ae7e4a474d9e37bd21de6dc0de628b2b79",
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97",
+        "88226868237e64b4d35addc59240f032c87e5471",
+        "3b3bffd486e78ae7dfd3c4a2bb6b448c3141abb7",
+        "412c73ea76a0b2f037e363d235cce75008a40b1c",
+        "9840d4b3183f2dfc06b2fab5480156e50f9e7049",
+        "7ac98e71084e58da0486eae0a7284e2a31defd17",
+        "fb785970c70fd68a1f18fc66aeeeb7fcc3fa5599",
+        "bdc4be3ef73a56cef46e97c1b82623ad46aaddad",
+        "3f714dcb43770a1c2f4a85594e92e44139b1fbd5",
+        "541b8a933a9f244ad0532a1e701695ec8571b662",
+        "77c559d16ef2a19bd189009ce8ace85784382f4a",
+        "eb963ccc9a796a90d2ffec81bdea3e259a683f1e",
+        "db0f99fe0c98d3d17a2651558d86d1eddac27bc2",
+        "a5bbcf532e404abbe3b22b030ef116b200efcd4b",
+        "90b8f67358c56e484ac92e0a1b561870ae191239",
+        "df5107d9df638988de15c9b0c53f00280f2b4c13",
+        "b0e213213e417b666a1a691085895c5505d9dbf4",
+        "bdf3f4ccf03a345efd9758f98fc47c0d9bd9eb66",
+        "83d469bae6590ca3a87fdb3e8b7c1fbb52b57cb6",
+        "1ccb9f6dd55d422a2a7a427144bb2253adbb680d",
+        "b49380fc913f95135dcc03c9bc481e3359a37e45",
+        "4b2a8ff069bcd43049ff63615f47f71cb2e31280",
+        "dc7c23bc30b78a3f2997a2e55c734e6004e1344e",
+        "2d2332da7b149e436a67e9defb039c3a4db12dad",
+        "699203a230c1e35893e1a791596360068118e68c",
+        "d407f5553d679fafe0e3960fcc00347b86cc8d31",
+        "811f65d3cfe53528e51fc8258c5ef98fb80cc39e",
+        "eedf8189e5ad69813c92270af3b9c1045879d0f7",
+        "c2152124c8b64108fd6c55e55a785106f8708d83",
+        "087b8e5e8c0b40ab21cda9e5398d17c3b55677d7",
+        "e7d5006b945af8cb33a39b88dc7d5d5a4abcf305",
+        "e8fedfed1998d699bfd66e729c327a4c95099d9b",
+        "1c9cb600ca720b88a0b93a21e99ff155cb9ce726",
+        "f7e7aeb4105ba39881a70c0e5c24f1ed19f915cc",
+        "1758c71d815d6aa8b118284025d5328575060774",
+        "7ed609ed9f65ecc252358c8189db32af9c2136e9",
+        "348a2a853b21777d893f9ed46cd6103fab0a0358",
+        "d44aca9523224477f274a6bc5edb9573a63fd53a",
+        "2e75830041df7e8011091f22a5ca6d4d743ec962",
+        "e2ff8e097c5b756a9389caf8d53b7297ecdc5bb1",
+        "963b69350bb9e0bd42dd9c11bd3750f24bb9ccba",
+        "d9d681a8abcb018797c661482803a24cf251f436",
+        "79e14cc3672dbc24278ad094651f10cfdd7ac8c1",
+        "2b6bc10910d6ffb8d0fa88bd379814d03bf0dc07",
+        "0294216eda9743b3378676c70a4fd0feeca88d52",
+        "a571d4aebfc63bd58203c8a4302c7bc38660fa14",
+        "15386a0c65430959ff4d7f512554975a15b0b92e",
+        "cf16539e2871d948b0539f679fcbb0915c0fde0c",
+        "2b2ed0b631232ca5e14492e6eed5dd15df8ec299",
+        "2eaece505e4d942c49df50d4dc7d1177b195af64",
+        "031d2e0b0d2fb27935dbb1ec6e484f3413998d0e",
+        "251e57d16c4dd3c9f662070a8a7145c6b82a053f",
+        "8451f656d4f8eff159a8a55834bbb6291397f3cc",
+        "c5d3f206461217fea0ee213cbcb0797fda2eed9e",
+        "7035bc289a4dce2bddf019d12d689b03241f0e76",
+        "a799697144ba018907ffaea1fccb9629ade564a5",
+        "4fd8fbac3aa5588faef092a5a710a9cddd7314c8",
+        "38545ac19a2a99f44c8019c379677e353a5f868e",
+        "57f7b3d03a052ff21b7b46ca97ad768681421731",
+        "009e90934eba11d5070a22a309ee6e797396e12d",
+        "35223fe2e332e3eaf79bf1a50e6c09e5df6fd3f4",
+        "4d0f4908d012d6203327b70d5df35a4f6f331675",
+        "8bdbacc24ae02812e0a61a9842ee5281e286da15",
+        "c705d1bbb2ff2aabfb6ea3454558a75d4fe99988",
+        "1990ec28a4f5e995898cd277c5afcf6cf1c0d4c1",
+        "4ece9c76c7579c3ad63c8dc77669a0c3306f4900",
+        "839f4f1563849eb6f617f9e5b2d381a359ea2945",
+        "11d9299c8d5663270f2a35e58cde7ff1c985a544",
+        "eddcfcae110f50a12a668cf4336290c60f803319",
+        "9ce4badad9916ee3fb7eb92ce6529c7a581230ec",
+        "5f46fece801c7767afa21c92d407ffef3e64d60a",
+        "3e7b1ec8cb2de617431c52edac541d4373f0eb1a",
+        "da8ca309dc1a7b4ef7dfb3b7a6a455e8375721a9",
+        "cbeefed5e4c1e96a71c68faf176e6793792ef4af",
+        "7c5a57db682aa28f39382af00e4431a0268d70af",
+        "a6e9393e0860225837a510889a3e2d736e2c4995",
+        "aa8280d9f6ea694094d353e4aafb04ab767fe9e6",
+        "f9e4faf09c463d983675d1fcc5806462868a1f2b",
+        "740c35644f2ef8e5171d373791344c71c6a6f7ee"
+      ],
+      "nonmerge_commit_shas": [
+        "5123f78099f4e58a0b9185f5eb831fd57a60dfd6",
+        "f20a5ffaf22e026f1150a30ebab4a0745e84f3df",
+        "ff695c6c3f6471bc19adb8a8c6487d2da8c2405a",
+        "3846a862d8a0c020ff6fc5b8dfaf112febba8623",
+        "ee9b970b711f62303e703d4e682bd7e70e89c61a",
+        "bac286bfad966a9d8cd2802cedbcdc34249551f0",
+        "4bc4adc494a45f40bcfedb51388ad028c209abb5",
+        "588e6c23ef273cefdc6474fab5a240077ebb841a",
+        "c17cfc35e9e4a7f57c84b7b375b5186fb48a24ff",
+        "51fcc31838e24e65ddab29f51b88267dbd9d343a",
+        "7be2a0575740a6405e18fb5805a032ed238c8746",
+        "d6d142b3c0878ae40945305037bd820a541bc71c",
+        "33d0031a23000251ad130b062291e2cd54998bcd",
+        "cdd5b1996d9478dedd6efd573bb546fa6e6e4bba",
+        "2ea0518fe262a2ce29687599c3793c10eb2edd4e",
+        "b47f47bb23d18ea27ae82b68da488d0397c36d71",
+        "a30c511547567fe32b2524e9963a22a49f4a59ac",
+        "1258c9212975adde85884ef51752dd7c22a5b1ac",
+        "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+        "96027715f27aaf8cfd2937217c3330a8d83a3580",
+        "01d9230a0155270c3896509c79286e97feffcc94",
+        "c1834774a5b260d93f22804d4f049e9cb8526ef6",
+        "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+        "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+        "f885bb3bfafdb1fc807713e51403c7146affda97",
+        "3b3bffd486e78ae7dfd3c4a2bb6b448c3141abb7",
+        "412c73ea76a0b2f037e363d235cce75008a40b1c",
+        "7ac98e71084e58da0486eae0a7284e2a31defd17",
+        "fb785970c70fd68a1f18fc66aeeeb7fcc3fa5599",
+        "bdc4be3ef73a56cef46e97c1b82623ad46aaddad",
+        "541b8a933a9f244ad0532a1e701695ec8571b662",
+        "77c559d16ef2a19bd189009ce8ace85784382f4a",
+        "db0f99fe0c98d3d17a2651558d86d1eddac27bc2",
+        "90b8f67358c56e484ac92e0a1b561870ae191239",
+        "b0e213213e417b666a1a691085895c5505d9dbf4",
+        "83d469bae6590ca3a87fdb3e8b7c1fbb52b57cb6",
+        "b49380fc913f95135dcc03c9bc481e3359a37e45",
+        "dc7c23bc30b78a3f2997a2e55c734e6004e1344e",
+        "2d2332da7b149e436a67e9defb039c3a4db12dad",
+        "699203a230c1e35893e1a791596360068118e68c",
+        "811f65d3cfe53528e51fc8258c5ef98fb80cc39e",
+        "c2152124c8b64108fd6c55e55a785106f8708d83",
+        "087b8e5e8c0b40ab21cda9e5398d17c3b55677d7",
+        "e8fedfed1998d699bfd66e729c327a4c95099d9b",
+        "1c9cb600ca720b88a0b93a21e99ff155cb9ce726",
+        "1758c71d815d6aa8b118284025d5328575060774",
+        "7ed609ed9f65ecc252358c8189db32af9c2136e9",
+        "d44aca9523224477f274a6bc5edb9573a63fd53a",
+        "e2ff8e097c5b756a9389caf8d53b7297ecdc5bb1",
+        "d9d681a8abcb018797c661482803a24cf251f436",
+        "2b6bc10910d6ffb8d0fa88bd379814d03bf0dc07",
+        "a571d4aebfc63bd58203c8a4302c7bc38660fa14",
+        "15386a0c65430959ff4d7f512554975a15b0b92e",
+        "cf16539e2871d948b0539f679fcbb0915c0fde0c",
+        "2b2ed0b631232ca5e14492e6eed5dd15df8ec299",
+        "031d2e0b0d2fb27935dbb1ec6e484f3413998d0e",
+        "251e57d16c4dd3c9f662070a8a7145c6b82a053f",
+        "c5d3f206461217fea0ee213cbcb0797fda2eed9e",
+        "a799697144ba018907ffaea1fccb9629ade564a5",
+        "38545ac19a2a99f44c8019c379677e353a5f868e",
+        "009e90934eba11d5070a22a309ee6e797396e12d",
+        "4d0f4908d012d6203327b70d5df35a4f6f331675",
+        "c705d1bbb2ff2aabfb6ea3454558a75d4fe99988",
+        "4ece9c76c7579c3ad63c8dc77669a0c3306f4900",
+        "11d9299c8d5663270f2a35e58cde7ff1c985a544",
+        "9ce4badad9916ee3fb7eb92ce6529c7a581230ec",
+        "3e7b1ec8cb2de617431c52edac541d4373f0eb1a",
+        "cbeefed5e4c1e96a71c68faf176e6793792ef4af",
+        "7c5a57db682aa28f39382af00e4431a0268d70af",
+        "f9e4faf09c463d983675d1fcc5806462868a1f2b",
+        "740c35644f2ef8e5171d373791344c71c6a6f7ee"
+      ],
+      "issue_count": 2,
+      "commit_count": 127,
+      "nonmerge_commit_count": 71,
+      "summary": "One main-bound promotion carries earlier construction and integration history; its branch membership includes earlier chapter and foundation commits."
+    },
+    {
+      "id": "specimen-preservation",
+      "title": "Preserve an approved aesthetic reference",
+      "short_label": "Specimen preservation",
+      "role": "reference",
+      "issue_numbers": [
+        810
+      ],
+      "context_issue_numbers": [
+        811,
+        812,
+        813
+      ],
+      "pr_numbers": [
+        814
+      ],
+      "commit_shas": [
+        "1fc6dac501b55667ad4b03c2d2dab44bc915c1c1",
+        "5f66c13e903ec46fe964bdb3f5937171b1e390d0"
+      ],
+      "nonmerge_commit_shas": [
+        "1fc6dac501b55667ad4b03c2d2dab44bc915c1c1",
+        "5f66c13e903ec46fe964bdb3f5937171b1e390d0"
+      ],
+      "issue_count": 1,
+      "commit_count": 2,
+      "nonmerge_commit_count": 2,
+      "summary": "The approved planning workbench and visual specimens become a main-branch collaboration reference while About's runtime retains its named state."
+    },
+    {
+      "id": "compact-receiver",
+      "title": "Receive compact workbench geometry in dev",
+      "short_label": "Compact receiver",
+      "role": "delivery",
+      "issue_numbers": [
+        811
+      ],
+      "context_issue_numbers": [
+        812,
+        813
+      ],
+      "pr_numbers": [
+        815
+      ],
+      "commit_shas": [
+        "fc73ef09c7f9a6c8e5a9cc4015c869a648221c2a",
+        "6d36eed0e0a0b34738d2fe80c3b77195be2eebbf",
+        "cc6b3107f137cb8db066aa4f2e49ce284b888e33"
+      ],
+      "nonmerge_commit_shas": [
+        "fc73ef09c7f9a6c8e5a9cc4015c869a648221c2a",
+        "cc6b3107f137cb8db066aa4f2e49ce284b888e33"
+      ],
+      "issue_count": 1,
+      "commit_count": 3,
+      "nonmerge_commit_count": 2,
+      "summary": "The first dev receiving pass adopts the compact rack form factor while larger team and deck interactions keep their own Issues."
+    },
+    {
+      "id": "financial-deck-adoption",
+      "title": "Adopt independently owned financial decks",
+      "short_label": "Financial decks",
+      "role": "delivery",
+      "issue_numbers": [
+        818
+      ],
+      "context_issue_numbers": [],
+      "pr_numbers": [
+        852
+      ],
+      "commit_shas": [
+        "4030dcad423512128af1dc8b1eaf48ec9c9bbbe4"
+      ],
+      "nonmerge_commit_shas": [
+        "4030dcad423512128af1dc8b1eaf48ec9c9bbbe4"
+      ],
+      "issue_count": 1,
+      "commit_count": 1,
+      "nonmerge_commit_count": 1,
+      "summary": "The live Investment chapter receives five populated deck types with independent assumptions, connected controls and recovery."
+    },
+    {
+      "id": "local-people-editing",
+      "title": "Keep People edits beside their work",
+      "short_label": "Local People editing",
+      "role": "repair",
+      "issue_numbers": [
+        881
+      ],
+      "context_issue_numbers": [
+        882
+      ],
+      "pr_numbers": [
+        883
+      ],
+      "commit_shas": [
+        "2c0a3349cfb5affd0c36e3aa56a0e1f7b625fb80"
+      ],
+      "nonmerge_commit_shas": [
+        "2c0a3349cfb5affd0c36e3aa56a0e1f7b625fb80"
+      ],
+      "issue_count": 1,
+      "commit_count": 1,
+      "nonmerge_commit_count": 1,
+      "summary": "Independent local editors and contribution-specific creation preserve drafts, return destinations and accepted-state recovery."
+    }
+  ],
+  "shared_commit_memberships": [
+    {
+      "sha": "2177d8f9092cd2a1a20b118faeed42a80e55ba1e",
+      "episode_ids": [
+        "chapter-bridge",
+        "showcase-promotion"
+      ]
+    },
+    {
+      "sha": "96027715f27aaf8cfd2937217c3330a8d83a3580",
+      "episode_ids": [
+        "chapter-bridge",
+        "showcase-promotion"
+      ]
+    },
+    {
+      "sha": "01d9230a0155270c3896509c79286e97feffcc94",
+      "episode_ids": [
+        "chapter-bridge",
+        "showcase-promotion"
+      ]
+    },
+    {
+      "sha": "83bf8204390cbca0fc3f1ef6f5901306fd1cafc3",
+      "episode_ids": [
+        "native-foundation",
+        "showcase-promotion"
+      ]
+    },
+    {
+      "sha": "d121d0e7a176e1f470fa1a4e86d036a67736b247",
+      "episode_ids": [
+        "native-foundation",
+        "showcase-promotion"
+      ]
+    },
+    {
+      "sha": "f885bb3bfafdb1fc807713e51403c7146affda97",
+      "episode_ids": [
+        "native-foundation",
+        "showcase-promotion"
+      ]
+    }
+  ],
+  "totals": {
+    "episodes": 8,
+    "selected_pull_requests": 8,
+    "mapped_issues": 12,
+    "counted_issue_union": 8,
+    "episode_issue_memberships": 9,
+    "classified_edges": 17,
+    "counted_edges": 9,
+    "context_edges": 8,
+    "episode_commit_memberships": 141,
+    "unique_commit_union": 135,
+    "episode_nonmerge_memberships": 84,
+    "unique_nonmerge_union": 78,
+    "shared_commit_records": 6
+  },
+  "coverage": [
+    {
+      "pr": 628,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 3,
+      "retrieved_commits": 3,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/628"
+    },
+    {
+      "pr": 639,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 3,
+      "retrieved_commits": 3,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/639"
+    },
+    {
+      "pr": 646,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 1,
+      "retrieved_commits": 1,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/646"
+    },
+    {
+      "pr": 707,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 2,
+      "page_size": 100,
+      "reported_commits": 127,
+      "retrieved_commits": 127,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707"
+    },
+    {
+      "pr": 814,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 2,
+      "retrieved_commits": 2,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814"
+    },
+    {
+      "pr": 815,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 3,
+      "retrieved_commits": 3,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/815"
+    },
+    {
+      "pr": 852,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 1,
+      "retrieved_commits": 1,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/852"
+    },
+    {
+      "pr": 883,
+      "metadata_read": true,
+      "issue_scope_read": true,
+      "commit_pages": 1,
+      "page_size": 100,
+      "reported_commits": 1,
+      "retrieved_commits": 1,
+      "complete": true,
+      "source_url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/883"
+    }
+  ]
+}

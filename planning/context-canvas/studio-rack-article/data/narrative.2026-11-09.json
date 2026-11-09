@@ -1,0 +1,267 @@
+{
+  "source_revision": "6c0e090e121f1d708d019bb3926868de9dc2a390",
+  "mode": "read-only source research",
+  "standing": "Candidate material for a later human-cued Article; no Article or media created",
+  "coverage": "Selected materially related planning, threadkeeping, VFC, README, graph, catalog and media sources. Source inspection only; no rendered inspection or complete mention census.",
+  "records": [
+    {
+      "id": "early-instrument-first",
+      "path": "threadkeeping/context-canvas-cross-platform-iteration.md",
+      "line": 30,
+      "kind": "settled rationale",
+      "theme": "sequencing",
+      "observation": "The collaboration moved the priority instrument spine ahead of the shared shell because footer/navigation depended on settled instrument paths.",
+      "story_value": "Show a design-and-implementation dependency changing the sequence of work.",
+      "issue_refs": []
+    },
+    {
+      "id": "historical-name",
+      "path": "threadkeeping/context-canvas-cross-platform-iteration.md",
+      "line": 59,
+      "kind": "historical receipt",
+      "theme": "origin",
+      "observation": "Wave 1 records the tabbed Cross-Functional Investment Model Studio; the frozen machine node also retains collaboration/cross-functional-investment-model-studio/index.html as a historical path.",
+      "story_value": "Connect name variants and recover the earlier record without treating historical prose as current source.",
+      "issue_refs": []
+    },
+    {
+      "id": "controls-first-human-review",
+      "path": "threadkeeping/context-canvas-instrument-systems-iteration.md",
+      "line": 5,
+      "kind": "settled rationale",
+      "theme": "human direction",
+      "observation": "A later human review selected progressive disclosure, a controls-first living-instrument experience, Tiffany conditions/routing for About, and multiple source-native Debrief compositions.",
+      "story_value": "Anchor a scene in a human design decision and its implementation consequences.",
+      "issue_refs": []
+    },
+    {
+      "id": "derived-chapters",
+      "path": "collaboration/about-investment-studio-chapters/README.md",
+      "line": 8,
+      "kind": "source ownership",
+      "theme": "architecture",
+      "observation": "The full original Studio remains a separate source. A materializer derives a self-contained six-chapter presentation while preserving mounted controls and planning state.",
+      "story_value": "Explain an intermediate presentation adapter rather than a total rewrite.",
+      "issue_refs": [
+        625,
+        638
+      ]
+    },
+    {
+      "id": "native-receiver",
+      "path": "context-canvas-project-surface/context-canvas/README.md",
+      "line": 48,
+      "kind": "source ownership",
+      "theme": "architecture",
+      "observation": "About now uses a native coordination package and scoped chapter styles; the original and derived chapter instrument retain independent routes.",
+      "story_value": "Trace the move from embedding to native composition while retaining recovery and reuse.",
+      "issue_refs": [
+        638,
+        643,
+        645,
+        648
+      ]
+    },
+    {
+      "id": "research-composes",
+      "path": "collaboration/native-investment-studio/rack-control-research.md",
+      "line": 27,
+      "kind": "design research",
+      "theme": "method",
+      "observation": "The control research maps WAI, GOV.UK, Atlassian and Ableton precedents into bounded Studio decisions and states their transfer limits.",
+      "story_value": "Show research influencing specific controls while leaving art and domain behavior locally owned.",
+      "issue_refs": [
+        856,
+        864,
+        879,
+        881
+      ]
+    },
+    {
+      "id": "removal-options",
+      "path": "collaboration/native-investment-studio/removal-recovery-research.md",
+      "line": 22,
+      "kind": "options study",
+      "theme": "recovery",
+      "observation": "Five removal/recovery patterns are compared; scoped local feedback plus durable Undo is selected for recoverable operations, with reference-aware consequences retained.",
+      "story_value": "Show alternative comparison and smallest usable experiment before broader adoption.",
+      "issue_refs": [
+        773,
+        765,
+        757,
+        768
+      ]
+    },
+    {
+      "id": "rack-delivery-chain",
+      "path": "planning/context-canvas/studio-coordination-rack-consolidation.md",
+      "line": 444,
+      "kind": "delivery route",
+      "theme": "iteration",
+      "observation": "A source-owned table links shared enclosure, delivery board, direct arrangement, duration skin, adjacent editing, browser repairs and creation recovery to their receiving Issues/PRs.",
+      "story_value": "Supports a clickable sequence of design change, accepted behavior, observed defect and repair.",
+      "issue_refs": [
+        765,
+        779,
+        766,
+        767,
+        757,
+        768,
+        788,
+        777,
+        789,
+        758,
+        770,
+        771
+      ]
+    },
+    {
+      "id": "workbench-study",
+      "path": "planning/context-canvas/studio-rack-tape-workbench.md",
+      "line": 8,
+      "kind": "approved planning study",
+      "theme": "visual experimentation",
+      "observation": "The all-chapter illustrative study developed from Coordination to independent chapter readings. Approved duration/cassette/Investment specimens were preserved at named revisions.",
+      "story_value": "Show aesthetic experiments as reviewable artifacts with stable comparison points.",
+      "issue_refs": [
+        804,
+        805,
+        806,
+        807,
+        809,
+        810
+      ]
+    },
+    {
+      "id": "bridge-boundaries",
+      "path": "planning/context-canvas/studio-rack-tape-workbench.md",
+      "line": 282,
+      "kind": "implementation map",
+      "theme": "architecture",
+      "observation": "A table distinguishes presentation bridges using current identities from proposed model extensions for unassigned work, per-occurrence membership and routable responses.",
+      "story_value": "Explain how a compelling prototype is translated into existing state contracts without equating illustrative behavior with production.",
+      "issue_refs": [
+        798,
+        811,
+        812,
+        813
+      ]
+    },
+    {
+      "id": "promotion-separate",
+      "path": "planning/context-canvas/studio-rack-tape-workbench.md",
+      "line": 333,
+      "kind": "receiving route",
+      "theme": "human direction",
+      "observation": "The study is preserved on main and dev; selected runtime bridges proceed on dev, with each Showcase promotion and public release retaining a separate human cue.",
+      "story_value": "The future merged Showcase remains an open story endpoint.",
+      "issue_refs": [
+        810,
+        811,
+        812,
+        813
+      ]
+    },
+    {
+      "id": "fixed-light-dial",
+      "path": "visual-fidelity-contracts/studio-rack/chapter-workbench-study.md",
+      "line": 40,
+      "kind": "visual contract",
+      "theme": "aesthetic refinement",
+      "observation": "The duration reference preserves scale, palette and geometry while an explicit correction keeps the face/shadow fixed and rotates only the pointer.",
+      "story_value": "A small before/after animation can explain why aesthetic detail requires code-level ownership.",
+      "issue_refs": [
+        806
+      ]
+    },
+    {
+      "id": "current-rack",
+      "path": "visual-fidelity-contracts/studio-rack/README.md",
+      "line": 9,
+      "kind": "current receiving contract",
+      "theme": "composition",
+      "observation": "The 9 November dev contract records compact chapter controls, direct bounded choices, Apply for prepared quantities, shared history, distinct local visibility, and canonical owner reuse.",
+      "story_value": "A system graph can connect visitor chapters to shared state/recovery and chapter-specific display owners.",
+      "issue_refs": [
+        879,
+        881
+      ]
+    },
+    {
+      "id": "article-carrier",
+      "path": "context-canvas-project-surface/context-canvas/debriefs.html",
+      "line": 937,
+      "kind": "publication precedent",
+      "theme": "Article",
+      "observation": "The catalog already admits an Article with practice/data-visualization/instrument topics and a source-owned standalone reading. Nearby table/visualization Articles show alternative narrative forms.",
+      "story_value": "The future story can be an Article without inheriting a universal paired Debrief template.",
+      "issue_refs": []
+    },
+    {
+      "id": "wtb-graph-pattern",
+      "path": "context-canvas-project-surface/context-canvas/README.md",
+      "line": 724,
+      "kind": "interaction precedent",
+      "theme": "system graph",
+      "observation": "Who To Believe uses a finite page-local graph with architecture comparison, concern emphasis, direct node selection, neighbor traversal and a complete adjacent semantic reading.",
+      "story_value": "Reuse the inspectable topology pattern for Studio ownership and state flow.",
+      "issue_refs": []
+    },
+    {
+      "id": "wtb-graph-boundary",
+      "path": "context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js",
+      "line": 106,
+      "kind": "runtime boundary",
+      "theme": "system graph",
+      "observation": "The validator and initial state are case-specific, including four declared columns and a household initial selection; this is not currently a generic graph package.",
+      "story_value": "Adapt the interaction and companion contract rather than claim drop-in reuse.",
+      "issue_refs": []
+    },
+    {
+      "id": "raster-route",
+      "path": "planning/media-publication/draft-skills/responsive-raster-publication/SKILL.md",
+      "line": 26,
+      "kind": "draft skill",
+      "theme": "image pipeline",
+      "observation": "Measured slots determine finite derivative widths and sizes; source-or-smaller generation preserves aspect ratio and keeps semantic lineage/metadata observation separate.",
+      "story_value": "Supports later captured Studio comparison plates with correct responsive delivery.",
+      "issue_refs": [
+        286
+      ]
+    },
+    {
+      "id": "r2-route",
+      "path": "planning/media-publication/README.md",
+      "line": 8,
+      "kind": "media route",
+      "theme": "video hosting",
+      "observation": "Versioned R2 video objects, a same-origin delivery Worker, accepted-byte posters, native playback, accessibility companions and recovery are already documented; draft skills and runbooks have exercised receivers.",
+      "story_value": "Human-supplied video can use an existing publication route when selected and authorized.",
+      "issue_refs": [
+        430,
+        433,
+        434
+      ]
+    },
+    {
+      "id": "scored-film-precedent",
+      "path": "collaboration/impact-map-visual-variants/movie/render_style_cycle_movie.py",
+      "line": 1,
+      "kind": "renderer precedent",
+      "theme": "audiovisual narrative",
+      "observation": "A source script captures local views using headless Chrome, composes frames through Pillow, synthesizes a score, and encodes 1080p video/AAC through PyAV.",
+      "story_value": "Provides a concrete precedent for an aesthetic/code-layer film; its platform paths are local implementation assumptions.",
+      "issue_refs": []
+    },
+    {
+      "id": "manifest-sequence",
+      "path": "context-canvas-project-surface/context-canvas/README.md",
+      "line": 723,
+      "kind": "reproducible sequence",
+      "theme": "audiovisual narrative",
+      "observation": "The About sequence has eleven digest-verified frames, a versioned sequence manifest, six intentionally recaptured repository-rendered views, pinned-Pillow GIF/poster output and optional FFmpeg MP4.",
+      "story_value": "Separate source capture from repeated rendering, allowing later re-editing of a stable story sequence.",
+      "issue_refs": []
+    }
+  ]
+}
