@@ -159,7 +159,9 @@ keep the current palette, selected states, geometry and return behavior together
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.
 The vertical shelf stays at the left on tablet and larger views; mobile uses a
-horizontal strip above the Domain reel. The floating green-and-navy Domain wheel
+horizontal strip above the Domain reel. The approved Domain wheel combines a
+`#118c4f` green outer ring with a navy center, preserved in the
+[Investment contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md). It
 loads a type beside a concise explanation and a rose chart of that deck's
 current values. Each chart compares one unit, with signed amounts and unavailable
 results readable beside it. A missing type shows its flow and a direct Add action.
@@ -320,8 +322,21 @@ acquisition; case-specific contexts and telemetry stay with the case. The source
 bundle includes controlled failure and bounded child-runner cleanup checks.
 Use ordinary phone and desktop views for a changed composition; select WebKit or
 Firefox when input or layout behavior warrants it. The receiving PR records the
-actual checks and their scope. Performance refinement stays with
-[#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
+actual checks and their scope.
+
+[Performance work (#679)](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
+now follows adding plans and sessions, keeping editors stable, turning dials,
+switching chapters and Undo. The source review routes CSS ownership to
+[#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900),
+accepted-edit refresh to [#901](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/901),
+Investment model reuse to [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
+and occurrence indexing to [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
+Start JavaScript implementation with refresh ownership; CSS consolidation can
+proceed independently. These are scoped implementation opportunities from source
+review, with current browser measurements still to be taken. Earlier stress
+studies remain historical evidence; the accepted visual contracts and existing
+accounting behavior remain preservation boundaries. Work receives review on
+`dev`; promotion to `main` and public release await their separate human cues.
 
 ## Find the source owner
 

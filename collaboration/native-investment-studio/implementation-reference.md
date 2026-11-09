@@ -2119,9 +2119,14 @@ owns the final About placement and the full Studio's AI Systems discovery route,
 preserving its existing URL and capabilities. Main source delivery and tagged
 public release retain separate receiving events.
 
-Re-entry begins with the current journal checkpoint, the final main pull request
-and this package's focused tests. Issue #679 receives performance refinement
-after the human resumes that work; #705 owns broader economic translation.
+Re-entry begins with the current journal checkpoint, the accepted `dev` revision
+and this package's focused tests. Issue #679 coordinates visitor performance:
+#901 owns accepted-edit refresh, #902 Investment model/control reuse and #903
+occurrence indexing; #900 owns current CSS consolidation. Source findings define
+those implementation scopes; matched browser observations establish any latency
+claim. Earlier relationship measurements remain historical, and #260 retains
+About delivery measurement. #705 owns broader economic translation. Promotion
+to `main` remains a separate human-cued event.
 
 
 ## Sprint and quarter coordination

@@ -43,8 +43,26 @@ browser journeys to enter current visible rack owners, superseding their retired
 disclosure routes while retaining accepted-state and recovery observations.
 Promotion to main and
 a tagged public release each await
-the human's cue. Performance refinement belongs to #679. Ordinary mobile and
-laptop/wide layouts are the supported visual comparison points.
+the human's cue. Ordinary mobile and laptop/wide layouts are the supported
+visual comparison points.
+
+The 9 November review of `dev` at `fdb445d` reframes #679 around responsive
+creation, manipulation, navigation and recovery. #900 receives current CSS
+ownership and retirement candidates; #901 receives duplicate accepted-edit
+refreshes; #902 receives Investment model/control reuse; #903 receives occurrence
+indexes. Start JavaScript work with #901, then #902 and #903; CSS can proceed
+independently. This cycle records source findings and future implementation
+boundaries. Current interaction latency remains unmeasured.
+
+This supersedes the earlier relationship-option-retention experiment as #679's
+primary route. #641 and #673 retain their frozen measurements; the earlier
+candidate remains a hypothesis to inspect against current code. Reuse the
+[CSS settlement](../../threadkeeping/context-canvas-css-and-visual-reference-settlement.md)
+and [cost/ownership settlement](../../threadkeeping/collaboration-accounts/2026-10-01-cost-and-ownership-analysis.md).
+Preserve exact projection identity, independently owned drafts, focus and Undo.
+#676 supplies served-source/mounted-owner checks; #260 retains About delivery and
+cache measurement. Completion follows useful visitor behavior and fitting
+evidence rather than selector counts or expanded arithmetic suites.
 
 ### Coordination: load, arrange, inspect
 
@@ -383,10 +401,12 @@ matching Team planning, Change and Quality. A small financial adapter supplies
 choice identity and consequences; the shared control owns stationary perimeter
 buttons, central Next, arrow stepping, selected output, rotor and disposal.
 The green-and-navy Domain wheel floats in the main body beside a concise companion.
-The outer ring uses `#118c4f`, superseding the violet `#6b3399` ring. The existing
+The accepted outer ring uses `#118c4f`, superseding the violet `#6b3399` ring. The existing
 dark-blue core, navy rotor and pale-blue highlights retain the preceding iteration;
 these replace the initial chocolate Domain housing. Chocolate remains available
-for money/dial modules.
+for money/dial modules. The human confirmed the green/navy combination after
+PR #899; the Investment Visual Fidelity Contract preserves it through the
+forthcoming CSS and rendering work, including the shared paper/teal choices.
 The shelf remains vertical at the left on tablet and larger widths, then becomes
 a horizontal strip above Domain on mobile. This receiving arrangement supersedes
 the earlier shelf-contained Domain control; the planning specimen stays intact.
