@@ -259,6 +259,29 @@ for (const engine of names) {
     await expect(sole.locator('..')).toContainText('Add another person first');
   });
 
+  test(`${engine}: People readings wrap fractional-hour funding within the person cell`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const plan = createShowcasePlan({ peopleExamples: true }); plan.people[0].fundedMinutes = 270;
+      const { studio, controller } = window.responsibilityFixture;
+      const result = studio.replace(plan, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const reading = people(page).locator('.studio-people-arranger__funding').first();
+    await expect(reading).toHaveText('2 h 30 min available / 4 h 30 min funded');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await reading.evaluate(element => {
+        const pill = element.getBoundingClientRect(), cell = element.closest('th').getBoundingClientRect();
+        return { pill: { left: pill.left, right: pill.right }, cell: { left: cell.left, right: cell.right },
+          portions: [...element.children].map(part => { const box = part.getBoundingClientRect(); return { left: box.left, right: box.right }; }) };
+      });
+      assert.ok(geometry.pill.left >= geometry.cell.left && geometry.pill.right <= geometry.cell.right, 'the funding pill stays inside its fixed-width person column');
+      assert.ok(geometry.portions.every(part => part.left >= geometry.pill.left && part.right <= geometry.pill.right), 'each amount retains its unit and fits inside the wrapping pill');
+      await reading.locator('..').screenshot({ path: resolve(captures, `${engine}-funded-readings-${width}.png`) });
+    }
+  });
+
   test(`${engine}: People racks retain parallel groups, direct responsibility choices and compact local receivers`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
@@ -274,6 +297,23 @@ for (const engine of names) {
         rows: [...element.querySelectorAll('[data-people-team]')].map(lane => Math.round(lane.getBoundingClientRect().top)) }));
       assert.equal(new Set(geometry.rows).size, 1, 'teams remain one row of parallel groups');
       if (width === 390) assert.ok(geometry.scroll > geometry.width, 'phone team lanes remain locally reachable');
+      const teamKey = people(page).locator('[data-assembly-team]').first();
+      await expect(teamKey).toHaveCSS('background-color', 'rgb(40, 85, 243)');
+      await expect(teamKey).toHaveCSS('color', 'rgb(255, 255, 255)');
+      const caret = () => teamKey.evaluate(element => getComputedStyle(element, '::after').transform);
+      const closedCaret = await caret();
+      await teamKey.click();
+      assert.notEqual(await caret(), closedCaret, 'the caret opens with the team receiver');
+      await expect(teamKey).toHaveCSS('background-color', 'rgb(242, 255, 103)');
+      await expect(people(page).locator('[data-assembly-preview]')).toHaveCSS('background-color', 'rgb(233, 240, 255)');
+      await teamKey.click();
+      assert.equal(await caret(), closedCaret, 'the caret returns with the closed team receiver');
+      const arranger = people(page).locator('.studio-people-arranger');
+      const cells = await arranger.locator('tbody tr').first().locator(':scope > :is(th,td)').evaluateAll(elements => elements.map(element => element.getBoundingClientRect().width));
+      assert.ok(Math.max(...cells) - Math.min(...cells) < 1, 'person and working-session columns share one comfortable width');
+      await expect(arranger.locator('.studio-people-arranger__value').first()).toHaveText('$120/hr');
+      await expect(arranger.locator('.studio-people-arranger__value').nth(1)).toHaveText('2 h available / 4 h funded');
+
       await expect(settings(page, 'role').locator('.studio-role-pads')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeEnabled();

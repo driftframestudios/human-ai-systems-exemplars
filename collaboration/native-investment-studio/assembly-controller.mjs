@@ -1,7 +1,7 @@
 import { renderRemovalReferences } from './removal-references.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './command-draft.mjs';
-import { money, duration } from './display.mjs';
+import { money, wholeMoney, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
@@ -19,7 +19,7 @@ const NUMBER_FIELDS = new Set(['ratePerHour', 'fundedHours', 'fundedMinutes']);
 // only the People chapter's creation, membership, ordering and removal controls.
 export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
   onAccepted = () => {}, onRecordCreated = () => {}, onPersonCreated = () => {}, onClose = () => false,
-  isActive = () => true, canOpen = isActive }) {
+  isActive = () => true, canOpen = isActive, readReturn = () => null }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = name => {
@@ -41,7 +41,12 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   if (!elements.configure.id) elements.configure.id = `${root.id || 'people'}-team-settings`;
   const localHeader = mountRackHeader(elements.configure, { title: 'Team settings', owner: 'Teams',
     closeAttribute: 'data-team-rack-close', applyAttribute: 'data-editor-apply',
-    onClose: event => { event.stopPropagation(); closeLocal(); } });
+    onClose: event => { event.stopPropagation(); closeLocal(); },
+    onReturn: event => {
+      event.stopPropagation();
+      const route = readReturn(editor.read().draft?.assemblyId);
+      if (route) route.action(); else closeLocal();
+    } });
   localHeader.element.classList.add('studio-people-editor__heading');
   localHeader.close.dataset.assemblyAction = 'close';
   elements.summary.after(localHeader.element);
@@ -174,7 +179,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.summary.textContent = !descriptor ? 'Settings' : descriptor.mode === 'create'
       ? descriptor.collection === 'people' ? 'Add a person' : 'Add a team'
       : `${removing ? 'Remove' : 'Settings'} · ${target?.label ?? descriptor.id}`;
-    localHeader.update({ title: elements.summary.textContent, source: elements.apply });
+    elements.configure.dataset.form = descriptor?.form ?? '';
+    localHeader.update({ title: elements.summary.textContent, owner: readReturn(draft?.assemblyId)?.label ?? 'Teams', source: elements.apply });
     elements['name-group'].hidden = !descriptor || removing;
     elements['name-label'].textContent = personForm ? 'Name' : 'Team name';
     elements['person-fields'].hidden = !personForm;
@@ -211,8 +217,23 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements['general-error'].textContent = error && !localError ? error.message : '';
     renderReferences(error);
     elements.preview.hidden = !descriptor || removing;
-    elements.total.textContent = preview?.ok ? money(preview.projection.result.knownCommitmentCents) : '—';
-    elements['preview-note'].textContent = preview?.ok ? 'Apply to update the plan.' : 'Complete the settings to preview the total.';
+    const previewLabel = elements.preview.querySelector('.native-coordination__plate');
+    if (descriptor?.collection === 'teams' && !removing) {
+      const selected = (draft?.raw.personIds ?? []).map(id => people.get(id));
+      const known = selected.filter(person => person?.rateCentsPerHour !== null && person?.rateCentsPerHour !== undefined);
+      const unknown = selected.length - known.length;
+      const cents = known.reduce((sum, person) => sum + BigInt(person.rateCentsPerHour), 0n);
+      previewLabel.textContent = `${unknown ? 'Known team rate' : 'Team rate'} · USD / hour`;
+      elements.total.textContent = unknown && !known.length ? '—' : wholeMoney(cents);
+      elements.total.setAttribute('aria-label', 'Team hourly rate');
+      elements['preview-note'].textContent = unknown ? `${unknown} ${unknown === 1 ? 'rate' : 'rates'} unknown.`
+        : selected.length ? 'For one hour together.' : 'Choose people for this team.';
+    } else {
+      previewLabel.textContent = 'Draft known total · USD';
+      elements.total.textContent = preview?.ok ? money(preview.projection.result.knownCommitmentCents) : '—';
+      elements.total.setAttribute('aria-label', 'People and team settings draft total');
+      elements['preview-note'].textContent = preview?.ok ? 'Apply to update the plan.' : 'Complete the settings to preview the total.';
+    }
     elements.apply.classList.toggle('native-control--remove', removing);
     if (removing) elements.apply.setAttribute('aria-label', `${descriptor.collection === 'people' ? 'Remove from plan' : 'Remove team'}: ${target?.label ?? descriptor.id}`);
     else elements.apply.removeAttribute('aria-label');

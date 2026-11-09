@@ -93,8 +93,8 @@
 .native-coordination:is([data-native-motion='full'], [data-native-motion='lower']) .native-quality-rack[data-quality-extreme='true'] .native-reel__rotor { animation: quality-reel-stutter calc(900ms * var(--studio-speed)) ease-in-out infinite; }
 .native-quality-lock { display: block; margin-block-start: .3rem; font-size: .63rem; font-weight: 500; line-height: 1.35; }
 .native-quality-board label[data-locked='true'] { border-inline-start: .22rem solid var(--about-coral); }
-.native-quality-workbench { display:grid; gap:.6rem; margin-block:.75rem 0; padding:.65rem; min-inline-size:0; border:1px solid #668b73; border-radius:.3rem; background:#20382f; color:var(--native-paper); box-shadow:inset 0 1px #809484,inset 0 -3px #0b1b14; }
-.native-quality-workbench__rail { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.35rem; padding:.4rem; border:1px solid #526a5c; border-radius:.2rem; background:#000; }
+.native-quality-workbench { display:grid; gap:.6rem; margin-block:.75rem 0; padding:.65rem; min-inline-size:0; border:1px solid var(--studio-rack-edge); border-radius:.3rem; background:var(--studio-rack-shell); color:var(--native-paper); box-shadow:inset 0 1px var(--studio-rack-highlight),inset 0 -3px var(--studio-track-shadow); }
+.native-quality-workbench__rail { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.35rem; padding:.4rem; border:1px solid var(--studio-recess-edge); border-radius:.2rem; background:var(--studio-recess); }
 .native-coordination .native-quality-workbench__rail button { min-inline-size: 0; padding: .5rem; background: var(--native-paper); color:var(--native-text); font-size: .75rem; border: 1px solid var(--studio-line); box-shadow: inset 0 -.18rem var(--studio-line); }
 .native-coordination .native-quality-workbench__rail button[aria-expanded='true'] { background: var(--native-signal); box-shadow: inset 0 .15rem var(--studio-line); }
 .native-quality-workbench .native-quality-drilldown { margin-block: .6rem 0; border: 0; padding: 0; background: transparent; box-shadow: none; }
@@ -141,7 +141,7 @@
 /* Local controls share one proposal owner. Pale modules preserve readable native
    choices; chocolate readings keep financial interpretation beside its inputs. */
 .native-quality-workbench__receiver { display:grid; gap:.65rem; min-inline-size:0; scroll-margin-block-start:5rem; }
-.native-coordination .native-quality-workbench .studio-rack-header { margin:0; padding:.3rem .15rem .6rem; border-block-end:1px solid #668b73; background:transparent; color:var(--native-paper); }
+.native-coordination .native-quality-workbench .studio-rack-header { margin:0; padding:.3rem .15rem .6rem; border-block-end:1px solid var(--studio-rack-edge); background:transparent; color:var(--native-paper); }
 .native-coordination .native-quality-workbench .studio-rack-header h4 { margin:0; color:inherit; font-size:1rem; }
 .native-quality-workbench .native-quality-drilldown > :not(summary) { margin:.4rem 0; }
 .native-quality-workbench .native-quality-drilldown > section { min-inline-size:0; }
@@ -150,7 +150,7 @@
 .native-quality-workbench :is(p,li) { font-size:.8rem; line-height:1.45; }
 .native-quality-workbench p { margin:.35rem 0; }
 .native-quality-workbench .native-quality-module { display:grid; align-content:start; gap:.5rem; min-inline-size:0; padding:.65rem; border:1px solid #91a18b; border-radius:.2rem; background:var(--studio-editorial); color:var(--native-text); }
-.native-quality-workbench .native-quality-module--reading { border-color:#a38b60; border-inline-start-width:.2rem; background:#3e2d27; color:var(--native-paper); }
+.native-quality-workbench .native-quality-module--reading { border-color:var(--studio-gold-edge); border-inline-start-width:.2rem; background:var(--studio-chocolate); color:var(--native-paper); }
 .native-quality-workbench .native-quality-module--reading p { margin:0; }
 .native-quality-workbench .native-assurance__assumptions { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
 .native-quality-workbench .native-assurance__field { gap:.35rem; padding:0; border:0; background:transparent; }
@@ -191,13 +191,13 @@
 .native-quality-proposal .native-time-controls { max-inline-size:none; align-self:start; }
 .native-quality-proposal__people { display:grid; align-content:start; gap:.65rem; min-inline-size:0; }
 .native-quality-proposal .native-time-controls .studio-duration { flex:1 1 100%; }
-.native-quality-proposal .native-time-controls .studio-repetition { flex-basis:100%; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.35rem; background:#000; color:var(--native-paper); border:1px solid #668b73; }
+.native-quality-proposal .native-time-controls .studio-repetition { flex-basis:100%; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.35rem; background:var(--studio-recess); color:var(--native-paper); border:1px solid var(--studio-rack-edge); }
 .native-quality-proposal .studio-repetition > label { grid-column:1; grid-row:1; }
 .native-quality-proposal .studio-repetition > .native-coordination__stepper { grid-column:2; grid-row:1/3; }
 .native-quality-proposal .studio-repetition > [id$='-range'] { display:none; }
 .native-quality-proposal .studio-repetition > [id$='-context'] { grid-column:1; grid-row:2; }
-.native-quality-proposal .native-quality-proposal__reading { grid-column:1/-1; padding:.5rem .65rem; border-inline-start:.2rem solid #a38b60; background:#3e2d27; }
-.native-coordination .native-quality-tracks .studio-track-key[aria-expanded='true'] { color:var(--native-text); background:var(--native-signal); box-shadow:inset 0 .15rem .2rem #173c3155; }
+.native-quality-proposal .native-quality-proposal__reading { grid-column:1/-1; padding:.5rem .65rem; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--studio-chocolate); }
+.native-coordination .native-quality-tracks .studio-track-key[aria-expanded='true'] { color:var(--native-text); background:var(--native-signal); box-shadow:inset 0 .15rem .2rem var(--studio-pressed-shadow); }
 @media (min-width:48rem) {
  .native-quality-check > [data-assurance-control$='.included'] { grid-column:1; }
  .native-assurance .native-quality-check { grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:start; }

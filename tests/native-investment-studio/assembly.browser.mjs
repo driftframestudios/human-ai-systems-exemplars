@@ -96,6 +96,89 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: team settings show selected hourly rates with explicit unknowns`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.assemblyFixture;
+      const plan = JSON.parse(studio.exportText()); plan.people[0].rateCentsPerHour = null;
+      const result = studio.importText(JSON.stringify(plan), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    await people(page).locator('[data-assembly-team="delivery"]').click();
+    const preview = people(page).locator('[data-assembly-preview]');
+    await expect(preview.locator('.native-coordination__plate')).toHaveText('Known team rate · USD / hour');
+    await expect(preview.locator('[data-assembly-total]')).toHaveText('$300');
+    await expect(preview.locator('[data-assembly-preview-note]')).toHaveText('1 rate unknown.');
+    await expect(preview.locator('[data-assembly-preview-note]')).toBeVisible();
+    await people(page).locator('[data-assembly-member="product-two"]').uncheck();
+    await expect(preview.locator('[data-assembly-total]')).toHaveText('$200');
+    for (const id of ['engineering-one', 'engineering-two'])
+      await people(page).locator(`[data-assembly-member="${id}"]`).uncheck();
+    await expect(preview.locator('[data-assembly-total]')).toHaveText('—');
+    await people(page).locator('[data-assembly-member="product-one"]').uncheck();
+    await expect(preview.locator('[data-assembly-total]')).toHaveText('$0');
+    await expect(preview.locator('[data-assembly-preview-note]')).toHaveText('Choose people for this team.');
+  });
+
+  for (const changed of [false, true]) test(`${engine}: Add a person returns locally to the ${changed ? 'changed' : 'untouched'} team and retains unfinished entries`, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const configure = people(page).locator('[data-assembly-configure]');
+    await people(page).locator('[data-assembly-team="delivery"]').click();
+    const teamName = changed ? 'Delivery team' : 'Product and Engineering';
+    if (changed) await field(page, 'label').fill(teamName);
+    await configure.locator('[data-native-create="person"]').click();
+    await expect(configure).toHaveAttribute('data-form', 'person.create');
+    const back = configure.getByRole('button', { name: `Back to Settings · ${teamName}`, exact: true });
+    await expect(back).toBeVisible();
+    await field(page, 'label').fill('Service designer');
+    await field(page, 'ratePerHour').fill('125');
+    if (changed) for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await configure.scrollIntoViewIfNeeded(); await frames(page);
+      await page.screenshot({ path: resolve(captures, `${engine}-add-person-return-${width}.png`) });
+    }
+    await back.click();
+    await expect(configure).toHaveAttribute('data-form', 'team.update');
+    await expect(field(page, 'label')).toHaveValue(teamName);
+    await expect(field(page, 'label')).toBeFocused();
+    await expect(configure.getByRole('button', { name: 'Back to Teams', exact: true })).toBeVisible();
+    assert.equal(await bytes(page), initial, 'a breadcrumb changes view while preserving accepted state');
+    await root(page).locator('[data-amp-panel="saved"]').click();
+    const saved = root(page).locator('[data-native-saved-list] > li').filter({ hasText: 'Service designer' });
+    await saved.locator('[data-saved-open]').click();
+    await expect(field(page, 'label')).toHaveValue('Service designer');
+    await expect(field(page, 'ratePerHour')).toHaveValue('125');
+    await apply(page).click();
+    assert.ok(JSON.parse(await bytes(page)).people.some(person => person.label === 'Service designer'));
+  });
+
+  test(`${engine}: a person creation breadcrumb restores its originating Coordination handoff rack`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.assemblyFixture;
+      const result = studio.replace(createShowcasePlan(), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const initial = await bytes(page);
+    await openTeamPlanning(page);
+    const trigger = root(page).locator('.studio-delivery [data-studio-record-kind="connection"]').first();
+    await trigger.click();
+    const connection = root(page).locator('[data-connection-configure]');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-editor-kind', 'connection');
+    await connection.locator('[name="sharedObject"]').fill('Prepared service handoff');
+    await connection.locator('[data-native-create="person"]').click();
+    const configure = people(page).locator('[data-assembly-configure]');
+    await field(page, 'label').fill('Service coordinator');
+    await configure.getByRole('button', { name: /^Back to Settings/ }).click();
+    await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(adjacent(page)).toBeVisible();
+    await expect(adjacent(page)).toHaveAttribute('data-rack-editor-kind', 'connection');
+    await expect(connection.locator('[name="sharedObject"]')).toHaveValue('Prepared service handoff');
+    await expect(connection.locator('[name="receiverPersonId"]')).toBeFocused();
+    assert.equal(await bytes(page), initial, 'restoring the handoff rack retains both proposals and accepted state');
+  });
+
   test(`${engine}: removal notices name valid team and person dependencies without changing the accepted plan`, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {

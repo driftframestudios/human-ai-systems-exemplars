@@ -15,8 +15,9 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
-#864 carries the People team lanes and direct session arranger, extending #836's
-compact receiver and shared creation controls from #837. #863 completes the
+#879 refines People group identity, local hourly subtotals, compact readings and
+nested creation returns. It extends #864's team lanes and direct session arranger,
+#836's compact receiver and shared creation controls from #837. #863 completes the
 removal notice's reference descriptions; #865 consolidates circular steppers
 and repairs Quality control contrast and spacing.
 #848 carries that composition into Abilities, with local person/team naming in
@@ -149,13 +150,28 @@ People has one continuous rack composition: horizontal editorial team lanes,
 a people/session arranger with local settings and Role mix, then a distinct
 contribution/session working area. Team lanes represent parallel groups. Their
 full-width parent key toggles the local editor; Move left/right and Remove stay
-together at the lane bottom. The arranger carries the former roster's rates,
-funded and available time, team names, saved-edit markers, quality indicators
+together at the lane bottom, with Remove at the right. The parent key now has a
+cobalt resting face and bright selected face with contrasting ink, preserving
+the editorial lane beneath it. This supersedes the chocolate parent-key face.
+Team Settings pairs its short name with selected members' hourly subtotal in a
+cool-blue inset, replacing the whole-plan draft reading there. Unknown rates
+remain visible, and member changes update the local subtotal.
+The arranger carries the former roster's rates,
+available/funded-time pills, team names, saved-edit markers, quality indicators
 and per-person operations alongside session participation. Native checkbox pads
 accept participation through the existing work command. Team membership and
 member order retain their separate direct commands. Shared keyed movement
 connects each record's old and new position while reduced motion retains the
 final state.
+
+Equal session columns preserve the large participation pads while the person
+readings use fewer lines. Rates display whole dollars per hour; the funded-time
+pair names available and funded time explicitly. Tabular numerals keep those
+text readings aligned. Stored values and exact editing retain their precision.
+This supersedes repeated full-sentence resource readings, while the comparison
+and native table headers remain intact. The bounded public-source synthesis in
+[control research](rack-control-research.md#compact-readings-and-a-contextual-return)
+supplies the rationale; the receiving PR owns the browser observations.
 
 This supersedes the separate roster cards and passive participation reading.
 The four-option comparison favored team lanes plus an arranger and one selected
@@ -171,6 +187,20 @@ opens its local controls. The compact person draft owns Name or role, rate and
 funded time; Apply accepts those typed values, while Close retains the draft and
 returns focus to its record. Coordination borrows that same mounted form and
 compact treatment.
+
+Nested creation has a different return from collection-level creation. Add person
+opened from Team Settings retains that team as its owner and returns to its
+settings, including meaningful unfinished entries. The header uses the existing
+creation/draft return route for this and analogous tasks. This supersedes its
+generic Teams breadcrumb. The Add person module pairs name and preview above
+its compact quantity controls; circular increment buttons retain the preserved
+workbench's fixed shadows.
+
+Repeated Studio color literals now have named variables under the shared
+instrument owner. Their resolved paint stays intact outside the requested People
+state changes. Chocolate is primarily an accent and dial/knob-module surface;
+existing companion treatments await named swaps. This narrows the former broad
+chocolate-companion direction without changing the preserved workbench specimen.
 
 The removal notice formerly recognized fewer reference collections than the
 accepted command layer emitted. Valid handoff, ability and contribution references
@@ -463,7 +493,7 @@ the receiving release supplies the hosted observation.
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
-#864 owns the current People composition and retains #836's direct responsibility
+#879 refines the current People composition from #864 and retains #836's direct responsibility
 choices, with #837 supplying shared creation controls. #863 covers dependency
 notice completeness and recovery; #865 owns circular control consistency and
 Quality readability. #848/#856 carry compact Abilities support and naming;

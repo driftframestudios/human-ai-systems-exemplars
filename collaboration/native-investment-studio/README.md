@@ -43,11 +43,17 @@ new team. Existing response text remains in the model and exports.
 
 People keeps teams, people and contributions together in compact racks. Teams
 occupy one horizontal row of editorial lanes; a full-width team key identifies
-each parent group and toggles its compact settings. Movement and Remove sit
-together at the lane bottom. The people/session arranger places each person's
-rate, funded and available time, teams and quality indicators beside their
+each parent group and toggles its compact settings. Cobalt resting keys and the
+bright selected face distinguish teams from their members. Movement sits at the
+lane bottom with Remove at the right. Team Settings pairs its name with the
+selected members' hourly subtotal; unknown rates remain explicit. Add person
+keeps a compact name/preview row and a return to the team or task that opened it.
+The people/session arranger places each person's
+rate, available/funded-time pills, teams and quality indicators beside their
 participation pads. A checkbox changes session participation directly, with
-amp Undo available. Record-local controls arrange and remove people.
+amp Undo available. Equal session columns preserve comfortable pads and local
+scrolling. Whole-dollar rate readings keep this comparison concise while exact
+values remain in the plan and editor. Record-local controls arrange and remove people.
 A selected person opens compact name, rate and funded-time settings with an
 **All people** return; Apply accepts those typed values. Coordination borrows
 this same compact form.
@@ -104,6 +110,10 @@ validation and the accepted-state owner. Direct edits show Saved.
 Shared stepper geometry keeps monetary, duration and ordinary numeric buttons
 circular within their route-specific skins. Quality's local labels and actions
 pair readable ink with their dark or editorial field.
+Shared instrument CSS also owns repeated Studio palette values. Chocolate is
+primarily a dial/knob-module surface and accent; existing companion surfaces
+await named refinements. The [rack contracts](../../visual-fidelity-contracts/studio-rack/README.md)
+keep the current palette, selected states, geometry and return behavior together.
 
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.

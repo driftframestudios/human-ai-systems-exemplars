@@ -52,7 +52,7 @@ export function mountSubmitMirror(container, { before = null, attribute = 'data-
 
 // Every local receiver identifies its owner before the selected record. Draft
 // receivers mirror their canonical Apply; direct receivers expose saved state.
-export function mountRackHeader(container, { title = '', owner = '', onClose, id, closeAttribute = 'data-rack-editor-close', applyAttribute = 'data-rack-editor-apply' } = {}) {
+export function mountRackHeader(container, { title = '', owner = '', onClose, onReturn = onClose, id, closeAttribute = 'data-rack-editor-close', applyAttribute = 'data-rack-editor-apply' } = {}) {
   const document = container.ownerDocument;
   const header = document.createElement('header'); header.className = 'studio-rack-editor__heading studio-rack-header';
   const identity = document.createElement('div'); identity.className = 'studio-rack-header__identity';
@@ -64,7 +64,7 @@ export function mountRackHeader(container, { title = '', owner = '', onClose, id
   const close = document.createElement('button'); close.type = 'button'; close.textContent = 'Close'; close.setAttribute(closeAttribute, '');
   tools.append(saved, close); identity.append(parent, current); header.append(identity, tools); container.prepend(header);
   const apply = mountSubmitMirror(tools, { before: close, attribute: applyAttribute });
-  parent.addEventListener('click', onClose); close.addEventListener('click', onClose);
+  parent.addEventListener('click', onReturn); close.addEventListener('click', onClose);
   function update({ title: nextTitle = current.textContent, owner: nextOwner = parent.textContent,
     source = null, saved: savedText = '' } = {}) {
     current.textContent = nextTitle; parent.textContent = nextOwner; parent.hidden = !nextOwner;
@@ -74,7 +74,7 @@ export function mountRackHeader(container, { title = '', owner = '', onClose, id
   }
   update({ title, owner });
   return Object.freeze({ element: header, title: current, parent, close, tools, apply, update,
-    dispose() { apply.dispose(); parent.removeEventListener('click', onClose); close.removeEventListener('click', onClose); header.remove(); } });
+    dispose() { apply.dispose(); parent.removeEventListener('click', onReturn); close.removeEventListener('click', onClose); header.remove(); } });
 }
 
 // Session and team membership share ordering semantics while retaining their
@@ -118,13 +118,14 @@ export function captureRackEntry(source, scope) {
 
 // Placement borrows mounted controls. Drafts, validation and acceptance stay
 // with the existing editor, including when its controls return to their home.
-export function mountRackEditor(root, { editors, onClose, readLabel = record => record.label }) {
+export function mountRackEditor(root, { editors, onClose, readLabel = record => record.label, readReturn = () => null }) {
   const document = root.ownerDocument;
   const host = document.createElement('section');
   host.className = 'studio-rack-editor'; host.hidden = true;
   host.id = `studio-rack-editor-${++editorSequence}`;
   const body = document.createElement('div'); body.className = 'studio-rack-editor__body'; host.append(body);
-  const header = mountRackHeader(host, { id: `${host.id}-title`, onClose: () => onClose() });
+  const header = mountRackHeader(host, { id: `${host.id}-title`, onClose: () => onClose(),
+    onReturn: () => { const route = readReturn(selected); if (route) route.action(); else onClose(); } });
   const { title, close, apply } = header;
   host.setAttribute('aria-labelledby', title.id); root.append(host);
   const homes = new Map(Object.entries(editors).map(([kind, nodes]) => [kind, nodes.map(node => {
@@ -142,7 +143,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
     if (selected) {
       const label = readLabel(selected) ?? selected.label;
       header.update({ title: `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`,
-        owner: selected.ownerLabel ?? selected.originLabel ?? 'Delivery overview', source: body.querySelector('button[type="submit"]') });
+        owner: readReturn(selected)?.label ?? selected.ownerLabel ?? selected.originLabel ?? 'Delivery overview', source: body.querySelector('button[type="submit"]') });
     }
     for (const control of controls()) {
       const matches = selected?.kind === control.dataset.studioRecordKind && selected.id === control.dataset.studioRecordId;
@@ -188,6 +189,8 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   return Object.freeze({
     element: host,
     read: () => selected && { ...selected, open: !host.hidden },
+    captureOrigin: () => selected && !host.hidden
+      ? { record: { ...selected }, source: captureRackEntry(origin, originScope) } : null,
     isOpen: kind => !host.hidden && selected?.kind === kind,
     isOrigin: source => Boolean(source && originScope?.contains(source) && originKey === keyOf(source)
       && originPhase === source.closest('[data-delivery-phase]')?.dataset.deliveryPhase),

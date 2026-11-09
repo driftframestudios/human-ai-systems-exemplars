@@ -5,8 +5,8 @@ that open the corresponding detail. People, sessions, support and observations
 keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
-dev receiving contract revised 8 November 2026 for
-[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836).
+dev receiving contract revised 9 November 2026 for
+[#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
 `main` remains the approved reference until a human cues dev promotion.
 
@@ -139,17 +139,29 @@ selections; team membership supplies neither authority.
 
 The People arranger uses person row headers and working-session column headers.
 Native participation pads accept the selected relationship directly and retain
-the row's rate, funded/remaining time, team membership and review cues. A session
+the row's rate, funded/remaining time, team membership and review cues. Equal
+session columns keep the final column from expanding independently. Compact
+readings name the rate per hour and available/funded time; tabular numerals and
+whole-dollar rate display reduce repeated lines while preserving exact values
+in the plan. These pills are text readings, with a distinct treatment from the
+interactive pads. Local horizontal scrolling retains comfortable pad targets.
+A session
 keeps at least one participant; the affected pad explains that boundary locally.
 Selecting a person opens the compact settings receiver beside its role choices;
 All people returns to the matrix. Typed settings keep their existing Apply
 boundary while direct participation enters the shared Undo history.
 
 Team keys fill their editorial lane and show the parent's name and open state.
+Their resting face uses `--about-cobalt`; the selected face uses
+`--canvas-link-on-dark`, with readable foregrounds and retained depth/focus cues.
 Selecting the same key again closes its editor. Move and Remove controls form
-one bottom row. Settings pair the short name field with the draft investment
-reading at laptop widths; membership pads span the row below. These controls
-stack within an ordinary phone width.
+one bottom row, with Remove aligned right. Settings pair the short name field
+with the selected members' hourly subtotal at laptop widths; unknown rates stay
+explicit. The preview uses `--canvas-cool-blue` with `--native-text` and its left
+border. Membership pads span the row below. These controls stack within an
+ordinary phone width. This supersedes the former whole-plan draft reading and
+chocolate team key. Add person keeps a similarly compact name/preview row and
+returns through its originating task's retained draft route.
 
 Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
