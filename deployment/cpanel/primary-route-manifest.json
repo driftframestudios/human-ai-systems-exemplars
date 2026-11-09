@@ -458,6 +458,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/participation-pad.mjs",
+      "projected_path": "collaboration/native-investment-studio/participation-pad.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
       "media_type": "text/javascript"

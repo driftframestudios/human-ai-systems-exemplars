@@ -8,6 +8,8 @@ keep distinct meanings even when they share a compact rack treatment.
 dev receiving contract revised 9 November 2026 for
 [#890](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/890)
 and [#891](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/891),
+with the local participation preview and laptop fit refined by
+[#893](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/893),
 building on [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884) and
 retaining the People composition from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
@@ -143,8 +145,9 @@ selections; team membership supplies neither authority.
 
 The People arranger uses person row headers and working-session column headers.
 Native participation pads accept the selected relationship directly and retain
-the row's rate, funded/remaining time, team membership and review cues. Equal
-session columns keep the final column from expanding independently. Compact
+the row's rate, funded/remaining time, team membership and review cues. Compact,
+equal session columns keep the final column from expanding independently; the
+first column retains the person's identity and capacity readings. Compact
 readings name the rate per hour and available/funded time; tabular numerals and
 whole-dollar rate display reduce repeated lines while preserving exact values
 in the plan. These pills are text readings, with a distinct treatment from the
@@ -190,8 +193,19 @@ Session spread uses an analog three-way switch. Its **One plan**, **Half** and
 **All plans** positions remain direct native buttons with fixed labels and truthful
 pressed state. A shared dark recessed housing connects the paper and teal
 positions; the selected position sits depressed, with a fixed detent mark at each
-position. The current matching choice or **Custom spread** appears with
-actual plan count, assigned/funded time and sessions. A deliberate choice changes
+position. The current matching choice or **Custom spread** remains visible.
+A compact participation row directly beneath the switch mirrors the selected
+person's actual work columns, in the same order and with the same names, funding
+colors, paused treatment, symbols and time/value readings as the People arranger.
+Visible available columns let the visitor compare a preset's effect. Local
+horizontal scrolling retains readable pads as the plan grows and at phone widths.
+The compact row remains a native semantic table with work-column headers and a
+caption naming the selected person. Both tables use one pad renderer and one
+accepted participation owner. Its native checkboxes apply directly and retain
+amp Undo; a local change preserves unfinished name, rate and funded-time fields
+through the existing rebase route. The necessary sole-participant or empty-plan
+hint stays beside the control.
+A deliberate preset choice changes
 whole-session membership in visible plan order through one accepted operation
 and one Undo. A plan's sole participant stays included; choices below that
 required count are disabled with a nearby explanation. Adding another participant
@@ -293,12 +307,14 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | [Shared session rack](../../collaboration/native-investment-studio/shared-session-rack.mjs) | People/Handoffs tabs, direct relationship pads, last-person feedback and compact selected-row controls |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing, direct role/support choices and accepted record creation |
+| [Participation pad renderer](../../collaboration/native-investment-studio/participation-pad.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) | Matching People arranger and local spread pads; the renderer projects accepted values, while the controller owns changes, retained drafts and Undo |
 | [Capacity readings](../../collaboration/native-investment-studio/people-capacity.mjs), [role mixer](../../collaboration/native-investment-studio/person-role-mixer.mjs) | Canonical-ledger scope, deduplicated support, whole-session spread and connected role presets with exact overrides |
 | [Quality controller](../../collaboration/native-investment-studio/assurance-controller.mjs), [Quality CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css), [Quality browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Attached settings receiver, retained Close, canonical top Apply, compact support/assumption modules and phone containment; [#858](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/858) |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion, Apply delegation and return identity |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Temporal append targets, distinct plan creation, retained placements and Undo |
 | [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Tables, local racks, membership pads and shared control treatment |
 | [Abilities](../../tests/native-investment-studio/capability.browser.mjs), [People arrangement](../../tests/native-investment-studio/assembly.browser.mjs), [responsibility](../../tests/native-investment-studio/responsibility.browser.mjs), [rack](../../tests/native-investment-studio/rack-controls.browser.mjs) browser checks | Exercised support meaning, direct creation, assignment boundaries, ordering, retained work and local geometry |
+| [People fit journey](../../tests/native-investment-studio/people-fit.browser.mjs) | Populated table fits horizontally at a 1512 × 982 laptop viewport, preserving the 15rem person column; phone comparison scrolls within the rack and reaches its final session |
 
 The receiving PR names the checks actually run and their scope. A passing
 operation check establishes that journey; visual inspection and human review
@@ -328,6 +344,12 @@ Card actions and moves contribution session status actions from headings to
 Supporting effort footers. #891 supersedes the Session spread fader with an analog
 three-way switch and explained sole-participant limits. The
 accepted plan, ledger scopes and shared Undo retain their existing owners.
+
+#893 supersedes Session spread's long textual usage summary with a compact,
+interactive row matching the selected person's actual table columns. The shared
+renderer preserves pad meaning and appearance in both views; narrower session
+columns improve the default laptop comparison while the first column retains
+its identity and capacity information.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 record-local controls. Bounded role/contribution choices plus team/support membership accept directly.

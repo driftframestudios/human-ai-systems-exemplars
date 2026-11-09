@@ -32,9 +32,10 @@
    distinct from team membership. The same row owns its readings and ordering. */
 .native-coordination .studio-people-rack .native-team__roster { display:block; min-inline-size:0; max-inline-size:100%; overflow-x:auto; margin:.5rem 0; padding:.15rem; scrollbar-color:var(--studio-rack-highlight) var(--studio-recess); }
 .studio-people-arranger[data-empty-sessions='true'] { min-inline-size:100%; }
-.studio-people-arranger { inline-size:100%; min-inline-size:calc(var(--studio-people-columns,5) * 15rem); table-layout:fixed; border-collapse:separate; border-spacing:.3rem; background:var(--studio-recess); }
+.studio-people-arranger { inline-size:100%; min-inline-size:calc(15rem + (var(--studio-people-columns,5) - 1) * 14rem); table-layout:fixed; border-collapse:separate; border-spacing:.3rem; background:var(--studio-recess); }
 .native-coordination .studio-people-arranger :is(th,td) { padding:.35rem; background:#142e25; color:var(--native-paper); border:1px solid #476c59; vertical-align:middle; }
 .native-coordination .studio-people-arranger thead th { padding:.35rem; background:var(--studio-track-face); color:var(--native-paper); font-size:.8rem; }
+.native-coordination .studio-people-arranger thead th:first-child { inline-size:15rem; }
 .native-coordination .studio-people-arranger caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .native-coordination .studio-people-arranger thead button { display:grid; gap:.3rem; min-inline-size:7rem; inline-size:100%; min-block-size:3.8rem; padding:.45rem 1.2rem .45rem .45rem; border:1px solid var(--studio-rack-edge); border-radius:2px; background:var(--studio-track-face); color:var(--native-paper); box-shadow:inset 0 -3px var(--studio-track-shadow); text-align:start; font-size:.78rem; }
 .studio-people-arranger thead button small { font-size:.7rem; font-weight:400; }
@@ -50,13 +51,13 @@
 .studio-person-order { display:flex; flex-wrap:wrap; gap:.3rem; margin-block-start:.3rem; }
 .native-coordination .studio-person-order button { min-inline-size:0; min-block-size:2.25rem; padding:.3rem .4rem; box-shadow:none; font-size:.67rem; }
 .native-coordination .studio-person-order button:not(.native-control--remove) { border:1px solid var(--studio-editorial-edge); background:transparent; color:var(--native-text); }
-.native-coordination .studio-people-arranger .studio-shared__pad { display:grid; grid-template-columns:1.2rem minmax(0,1fr) auto; grid-template-rows:1.2rem minmax(2rem,auto); align-content:space-between; align-items:start; gap:.65rem .4rem; box-sizing:border-box; min-block-size:5rem; inline-size:100%; padding:.5rem; background:#1c3a2e; border:1px solid var(--studio-rack-edge); color:var(--native-paper); }
-.native-coordination .studio-people-arranger .studio-shared__pad[data-selected='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 -3px #317465; }
-.native-coordination .studio-people-arranger .studio-shared__pad[data-selected='true'][data-funding='additional'] { background:#eed38d; color:#332f16; box-shadow:inset 0 -3px #99783a; }
-.native-coordination .studio-people-arranger .studio-shared__pad[data-status='paused'] { border-style:dashed; }
-.studio-people-arranger .studio-shared__pad .studio-participation-pad__state { grid-column:2/-1; font:500 .7rem/1.2 system-ui,sans-serif; }
-.native-coordination .studio-people-arranger .studio-participation-pad__time { grid-column:1/3; grid-row:2; margin:0; align-self:end; display:flex; align-items:center; gap:.25rem; font:500 .75rem/1.3 system-ui,sans-serif; text-align:start; font-variant-numeric:tabular-nums; }
-.native-coordination .studio-people-arranger .studio-participation-pad__amount { grid-column:3; grid-row:2; margin:0; align-self:end; justify-self:end; font:750 1rem/1.3 ui-monospace,monospace; text-align:end; font-variant-numeric:tabular-nums; }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad { display:grid; grid-template-columns:1.2rem minmax(0,1fr) auto; grid-template-rows:1.2rem minmax(2rem,auto); align-content:space-between; align-items:start; gap:.65rem .4rem; box-sizing:border-box; min-block-size:5rem; inline-size:100%; padding:.5rem; background:#1c3a2e; border:1px solid var(--studio-rack-edge); color:var(--native-paper); }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad[data-selected='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 -3px #317465; }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad[data-selected='true'][data-funding='additional'] { background:#eed38d; color:#332f16; box-shadow:inset 0 -3px #99783a; }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad[data-status='paused'] { border-style:dashed; }
+:is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad .studio-participation-pad__state { grid-column:2/-1; font:500 .7rem/1.2 system-ui,sans-serif; }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-participation-pad__time { grid-column:1/3; grid-row:2; margin:0; align-self:end; display:flex; align-items:center; gap:.25rem; font:500 .75rem/1.3 system-ui,sans-serif; text-align:start; font-variant-numeric:tabular-nums; }
+.native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-participation-pad__amount { grid-column:3; grid-row:2; margin:0; align-self:end; justify-self:end; font:750 1rem/1.3 ui-monospace,monospace; text-align:end; font-variant-numeric:tabular-nums; }
 .studio-pause-marker { display:inline-flex; align-items:center; justify-content:center; inline-size:1.15em; block-size:1.15em; border:1px solid currentColor; border-radius:50%; font:700 .8em/1 system-ui,sans-serif; flex:none; }
 .native-coordination .studio-people-arranger .studio-roster-add td { padding:0; border:0; background:transparent; }
 .native-coordination .studio-roster-add .studio-rack-create-zone { inline-size:calc(50% - .3rem); min-block-size:3rem; margin:.15rem; }
@@ -260,8 +261,8 @@
  .native-coordination .native-assembly__teams .native-assembly__members { grid-template-columns:minmax(0,1fr); }
 }
 @media (forced-colors:active) {
- .native-coordination .studio-people-arranger :is(th,td), .native-coordination .studio-people-arranger .studio-shared__pad, .native-coordination [data-assembly-configure]:is([data-form='team.update'],[data-form='team.create'],[data-form='person.create']) [data-assembly-preview] { background:Canvas; color:CanvasText; border-color:CanvasText; }
- .native-coordination .studio-people-arranger .studio-shared__pad[data-selected='true'] { outline:2px solid Highlight; background:Canvas; color:CanvasText; box-shadow:none; }
+ .native-coordination .studio-people-arranger :is(th,td), .native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad, .native-coordination [data-assembly-configure]:is([data-form='team.update'],[data-form='team.create'],[data-form='person.create']) [data-assembly-preview] { background:Canvas; color:CanvasText; border-color:CanvasText; }
+ .native-coordination :is(.studio-people-arranger,.studio-person-spread__table) .studio-shared__pad[data-selected='true'] { outline:2px solid Highlight; background:Canvas; color:CanvasText; box-shadow:none; }
 }
 
 .native-coordination [data-assembly-configure]:is([data-form='team.update'],[data-form='team.create'],[data-form='person.create']) .native-assembly__feedback { min-block-size:0; margin:0; }
@@ -322,13 +323,13 @@
 
 /* A session's paused state crosses both matrix projections, including their
    footer. Restrained hatching changes the column paint rather than text opacity. */
-.native-coordination :is(.studio-people-arranger,.studio-contribution-tracks) [data-work-status='paused'] { background-image:repeating-linear-gradient(135deg,transparent 0 8px,color-mix(in srgb,var(--studio-rack-paper) 9%,transparent) 8px 10px); border-inline-color:var(--studio-rack-muted); }
-.native-coordination :is(.studio-people-arranger,.studio-contribution-tracks) [data-work-status='paused'] :is(.studio-shared__pad,.studio-contribution-tracks__pad) { border-style:dashed; }
+.native-coordination :is(.studio-people-arranger,.studio-contribution-tracks,.studio-person-spread__table) [data-work-status='paused'] { background-image:repeating-linear-gradient(135deg,transparent 0 8px,color-mix(in srgb,var(--studio-rack-paper) 9%,transparent) 8px 10px); border-inline-color:var(--studio-rack-muted); }
+.native-coordination :is(.studio-people-arranger,.studio-contribution-tracks,.studio-person-spread__table) [data-work-status='paused'] :is(.studio-shared__pad,.studio-contribution-tracks__pad) { border-style:dashed; }
 .native-coordination .studio-contribution-tracks__totals .studio-contribution-tracks__status { display:block; inline-size:fit-content; min-inline-size:0; min-block-size:2rem; margin:.2rem auto 0; padding:.15rem .25rem; color:var(--studio-rack-paper); background:transparent; border:0; box-shadow:none; font:500 .72rem/1.3 system-ui,sans-serif; text-decoration:underline; text-underline-offset:.2em; }
 .native-coordination .studio-contribution-tracks__totals .studio-contribution-tracks__status:hover { color:var(--native-signal); background:transparent; }
 @media (forced-colors:active) {
  .native-coordination .studio-capacity-readings :is(dt,dd > span,small), .native-coordination .studio-contribution-tracks__totals .studio-contribution-tracks__status { color:CanvasText; }
- .native-coordination :is(.studio-people-arranger,.studio-contribution-tracks) [data-work-status='paused'] { background-image:none; border-inline:1px dashed CanvasText; }
+ .native-coordination :is(.studio-people-arranger,.studio-contribution-tracks,.studio-person-spread__table) [data-work-status='paused'] { background-image:none; border-inline:1px dashed CanvasText; }
 }
 
 /* Session spread: three native choices share one recessed switch housing.
@@ -343,9 +344,7 @@
 .native-coordination .studio-person-spread__presets button[aria-pressed='true'] { border-color:var(--native-signal); background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 4px 4px var(--studio-pressed-shadow),inset 0 -1px var(--studio-rack-edge); }
 .native-coordination .studio-person-spread__presets button[aria-pressed='true']::after { block-size:3px; opacity:1; }
 .native-coordination .studio-person-spread__presets button:disabled { opacity:.7; border-style:dashed; box-shadow:none; }
-.studio-person-spread__details { display:grid; align-content:center; gap:.5rem; min-inline-size:0; }
-.studio-person-spread__reading { font:700 .8rem/1.5 ui-monospace,monospace; }
-.studio-person-spread__hint { font:.75rem/1.4 system-ui,sans-serif; }
+.studio-person-spread__hint { align-self:center; margin:0; font:.75rem/1.4 system-ui,sans-serif; }
 @media (max-width:48rem) {
  .native-coordination .studio-person-spread { grid-template-columns:minmax(0,1fr); }
 }
@@ -358,3 +357,12 @@
  .native-coordination .studio-person-spread__presets button { background:ButtonFace; color:ButtonText; border-color:ButtonText; box-shadow:none; }
  .native-coordination .studio-person-spread__presets button[aria-pressed='true'] { border:2px solid Highlight; }
 }
+
+/* The local participation row shares the main arranger's pad grammar and data
+   owner. Its own scroll boundary keeps extra plans reachable on smaller racks. */
+.studio-person-spread__preview { grid-column:1/-1; min-inline-size:0; max-inline-size:100%; overflow-x:auto; padding:2px; scrollbar-color:var(--studio-rack-highlight) var(--studio-recess); }
+.studio-person-spread__preview:focus-visible { outline:2px solid var(--native-focus); outline-offset:1px; }
+.native-coordination .studio-person-spread__table { inline-size:100%; min-inline-size:calc(var(--studio-spread-columns,1) * 10rem); table-layout:fixed; border-collapse:separate; border-spacing:.2rem; background:var(--studio-recess); }
+.native-coordination .studio-person-spread__table caption { padding:.25rem .2rem .45rem; color:var(--studio-rack-paper); text-align:start; font:600 .75rem/1.4 system-ui,sans-serif; }
+.native-coordination .studio-person-spread__table :is(th,td) { padding:.2rem; border:1px solid var(--studio-rack-edge); background:var(--studio-track-face); color:var(--studio-rack-paper); vertical-align:middle; }
+.native-coordination .studio-person-spread__table th { padding:.4rem; text-align:start; font:650 .75rem/1.35 system-ui,sans-serif; }
