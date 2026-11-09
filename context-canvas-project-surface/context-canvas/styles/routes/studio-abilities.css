@@ -48,6 +48,15 @@
 .native-capability-rack .native-capability__choices li { min-inline-size:0; margin:0; padding:0; list-style:none; }
 .native-coordination .native-capability-rack .native-capability__choices label { display:flex; align-items:center; gap:.5rem; min-block-size:2.75rem; block-size:100%; padding:.45rem; border:1px solid #668b73; border-radius:.15rem; background:var(--native-paper); color:var(--native-text); font-size:.8rem; cursor:pointer; }
 .native-coordination .native-capability-rack .native-capability__choices label:has(:checked) { background:var(--native-signal); border-color:#164d3d; box-shadow:inset 0 2px 3px #173c3155; }
+.native-capability-rack .native-capability__identity { display:grid; grid-template-rows:1fr auto; }
+.native-coordination .native-capability-rack .native-capability__rename-key { justify-self:end; min-inline-size:0; min-block-size:1.75rem; margin:0; padding:.2rem .35rem; border:0; background:transparent; color:var(--native-paper); box-shadow:none; font-size:.75rem; text-decoration:underline; text-underline-offset:.18em; }
+.native-coordination .native-capability-rack .native-capability__rename-key:hover, .native-coordination .native-capability-rack .native-capability__rename-key[aria-expanded='true'] { color:var(--native-signal); }
+.native-capability-rack .native-capability__rename { display:grid; gap:.35rem; margin-block:.4rem; padding:.55rem; border-inline-start:.2rem solid #a38b60; background:#3e2d27; color:var(--native-paper); }
+.native-capability-rack .native-capability__rename p { margin:0; font-size:.75rem; }
+.native-coordination .native-capability-rack .native-capability__rename input { inline-size:100%; min-inline-size:0; text-align:start; }
+.native-coordination .native-capability-rack .native-capability__rename .native-coordination__actions { gap:.4rem; margin:0; }
+.native-coordination .native-capability-rack .native-capability__rename button { min-inline-size:0; min-block-size:2.5rem; padding:.35rem .5rem; font-size:.8rem; }
+.native-coordination .native-capability-rack [data-capability-action='cancel-name'] { background:transparent; color:var(--native-paper); border-color:#a38b60; box-shadow:none; }
 /* Native choice geometry remains independent of text-field sizing. Checkboxes
    retain the shared physical-switch skin; radio buttons retain native paint. */
 .native-coordination .native-capability-rack .native-capability__choices input { flex:0 0 auto; margin:0; padding:0; }

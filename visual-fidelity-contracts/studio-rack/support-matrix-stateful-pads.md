@@ -91,6 +91,16 @@ geometry remains independent of text-field sizing. Selecting another section
 keeps its earlier raw entries; Close returns to the selected catalogue key with
 that proposal retained.
 
+Each existing person and team choice offers a compact, underlined Rename action
+outside its selection label. One short name field opens below that choice group,
+with Save name and a shadow-free Cancel. Enter saves; Escape returns focus to
+Rename. Empty names receive local feedback. Save updates the canonical name
+throughout the plan while stable IDs preserve its relationships; the current
+support proposal retains its exact entries and separate Apply boundary. Global
+amp Undo restores the shared name and keeps that proposal available for review.
+The name field follows the same dark rack and chocolate companion treatment;
+native membership switches and decision-owner radio buttons keep their own jobs.
+
 Membership toggles keep available cards mounted in place. Move up/down changes
 ordered IDs explicitly, with the shared keyed transition and focus on the moved
 person. People team lanes, roster order and contribution supporting-work order
