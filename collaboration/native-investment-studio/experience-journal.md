@@ -21,7 +21,9 @@ effort from the contribution matrix's distinct linked work. This supersedes #881
 paired disclosure presentation while retaining its contribution-local creation
 and canonical draft owners. #890 refines the matrix readings, stable pad alignment
 and footer session actions. #891 replaces the Session spread fader with an analog
-three-way switch and explains sole-participant limits at the control. #882 owns the
+three-way switch and explains sole-participant limits at the control. #893 adds
+the selected person's participation row beneath that switch and compacts the
+laptop session columns while preserving the first column. #882 owns the
 follow-up global audit of circular increment shadows. #879 establishes People
 group identity, local hourly subtotals, compact readings and nested creation
 returns. These extend #864's team lanes and direct session arranger,
@@ -172,7 +174,9 @@ member order retain their separate direct commands. Shared keyed movement
 connects each record's old and new position while reduced motion retains the
 final state.
 
-Equal session columns preserve large participation pads within more compact rows.
+Compact, equal session columns preserve large participation pads; the first
+column retains the person's identity, capacity readings and local actions.
+Additional plans and phone widths use local horizontal scrolling.
 Their checkbox stays upper left; planned time sits lower left and the stronger
 known-value reading lower right. Stable positions and tabular figures support
 comparison while exact editing retains stored precision. Rates display whole
@@ -260,17 +264,21 @@ recorded role values; a deliberate choice invokes a recipe.
 Session spread gives the same desk an immediate relationship control. #891
 supersedes the fader with an analog three-way switch: **One plan**, **Half** and
 **All plans** remain direct native button choices. The matching accepted choice
-stays pressed; a
-different combination reads **Custom spread**. Actual plan count, assigned time,
-funded time and session count remain visible. Each choice selects complete work
-rows in visible plan order through one reversible participation command.
+stays pressed; a different combination reads **Custom spread**. Beneath the
+switch, a compact participation row mirrors the selected person's actual session
+columns, names, funding colors, symbols, time and value. #893 uses one shared pad
+renderer for both tables. Its native checkboxes update participation immediately
+through the accepted command and shared Undo; the same draft-rebase route retains
+unfinished person fields. This visual comparison supersedes the long
+assigned/funded/session-count reading. Each preset selects
+complete work rows in visible plan order through one reversible participation
+command.
 
 A plan's sole participant stays assigned. Choices below the required plan count
 are disabled with a nearby reason, so their label accurately describes the result
 they can create. Adding another participant enables those reductions. Recorded
 role and decision authority keep their explicit choices. Fractional per-person
-session time remains #798's
-separate model decision.
+session time remains #798's separate model decision.
 
 The selected contribution places Work beside Receiver and decision, stacking
 them at phone widths. Category, human receiver, decision owner, supporting
@@ -503,6 +511,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
 | #881 paired Person/Role disclosure modules | One selected-person mixing desk combines rate/funded time, three connected role reels, exact overrides and whole-session spread; one header and Close serve the visible desk. |
 | #884 Session spread fader with additional preset shortcuts | #891 exposes One plan, Half and All plans as an analog three-way switch, with actual usage and explained unavailable reductions. |
+| Session spread's long text reading | #893 shows the selected person's named, interactive participation row directly beneath the switch, matching the main arranger and shared Undo. |
 | Flat capacity summaries and centered participation readings | #890 separates label/value/context and fixes checkbox, time and value to stable pad positions; compact rows retain large selection areas. |
 | Contribution Pause/Resume in column headings | Supporting effort footers hold quiet session actions; paused columns carry hatching and circled pause markers while keeping ledger values. |
 | Contribution Add person opens the upper Team creation area | The canonical creation form occupies a half-rack inside the initiating contribution and returns to its retained human field. |
@@ -572,7 +581,15 @@ mixer, direct contribution changes, preserved note data, and phone/desktop
 composition. #890's focused browser observations distinguish stable checkbox/time/
 value alignment, footer-only session actions, retained planned values and exact
 Pause/Resume Undo. #891 observes the three visible spread choices, explained
-sole-participant limits, retained person drafts and one-choice Undo. Focused source checks distinguish atomic whole-session spread,
+sole-participant limits, retained person drafts and one-choice Undo. #893's fitting
+observations compare the main and local participation rows after a direct change
+and Undo, with typed person fields retained. Its laptop observation checks the
+default table's fit while keeping the first column intact. The
+[People fit journey](../../tests/native-investment-studio/people-fit.browser.mjs)
+establishes the populated table's horizontal fit at 1512 × 982 in Chromium,
+Firefox and WebKit, with a readable 15rem person column and equal session columns.
+Its phone observation retains local scrolling and reaches the last session while
+the page stays within the viewport. Focused source checks distinguish atomic whole-session spread,
 preserved Function/Seniority, known-value coverage and deduplicated support totals.
 The related #885 repair keeps grid layout on an ordinary wrapper inside native
 Person and creation fieldsets. This preserves disabled-state semantics while
@@ -587,7 +604,8 @@ Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
 #884 carries the unified person mixing desk and capacity readings; #890 refines
-their presentation and footer actions, and #891 owns explicit spread choices.
+their presentation and footer actions, #891 owns explicit spread choices, and
+#893 owns the local participation row and compact laptop comparison.
 #881 retains
 contribution-local creation and the separate canonical form owners. #882 holds
 the global circular-stepper shadow audit. #879 refines the current

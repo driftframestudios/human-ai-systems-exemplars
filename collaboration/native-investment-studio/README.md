@@ -11,7 +11,8 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 `main` retains the approved showcase. `dev` receives the compact rack integration:
 People team lanes and a direct session arranger (#864), a unified person mixing
 desk with connected role reels and capacity readings (#884), aligned participation
-pads and concise readings (#890), explicit Session spread choices (#891), contribution-local
+pads and concise readings (#890), explicit Session spread choices (#891), a local
+participation preview and compact laptop comparison (#893), contribution-local
 creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
@@ -57,8 +58,10 @@ at the upper left, planned time at the lower left and stronger known-value readi
 at the lower right. Compact rows retain generous selection areas. **Card actions**
 collects reordering and removal; the person's name opens their settings. Top
 readings separate label, value and short context, while column footers retain
-explicit zero totals. Equal columns and local horizontal scrolling preserve the
-comparison on phones. Whole dollars, tabular figures and unknown-rate labels keep
+explicit zero totals. Session columns share a compact width while the first
+column retains the person's identity and capacity readings. Local horizontal
+scrolling preserves the comparison on phones and when more plans are added.
+Whole dollars, tabular figures and unknown-rate labels keep
 the readings concise. Paused columns carry hatching and a circled pause marker;
 their planned time and value remain in the ledger.
 
@@ -75,8 +78,13 @@ the separate chromatic pressed specimen remains in the Visual Fidelity Contracts
 Each preset accepts one role edit with amp Undo; Function and Seniority
 remain the visitor's own selections. **Session spread** offers an analog three-way
 switch with **One plan**, **Half** and **All plans** as direct native pressed-state
-choices. Actual plan count, assigned time, funded time and sessions stay
-visible. A choice fills complete plans in visible order and has one Undo step.
+choices. A compact participation row beneath the switch mirrors the selected
+person's session columns: names, order, funding colors, symbols and participation
+match the People arranger. Each pad retains its time and known-value reading.
+Its native checkbox updates participation immediately in both views and enters
+amp Undo. The shared pad renderer and accepted participation owner keep the
+preview synchronized while retaining unfinished name, rate and funded-time edits.
+A choice fills complete plans in visible order and has one Undo step.
 Choices below the number of plans that need this person remain disabled with a
 nearby explanation; adding another participant enables those reductions. Custom
 participation remains labeled **Custom spread**. Recorded role and decision
@@ -280,7 +288,10 @@ drafts and the borrowed person form. The
 observes the person mixing desk, connected role choices, contribution links and
 retained note data at phone and desktop widths. Focused capacity checks distinguish
 whole-session membership, one-choice Undo, sole-participant limits, unknown rates
-and deduplicated readings. The Abilities journey observes
+and deduplicated readings. The [People fit journey](../../tests/native-investment-studio/people-fit.browser.mjs)
+checks the populated table at a 1512 × 982 laptop viewport and local horizontal
+scrolling at an ordinary phone width, preserving the first column's readable size.
+The Abilities journey observes
 readable choices, hidden-section behavior, retained proposals and accepted
 recovery. Investment checks independent deck identities, connected selections,
 saved round trips and grouped dial recovery. These routes establish local source
@@ -320,6 +331,7 @@ actual checks and their scope. Performance refinement stays with
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
 | People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
+| Shared People participation pads and local spread preview | [participation-pad.mjs](participation-pad.mjs) renders the accepted relationship; [team-controller.mjs](team-controller.mjs) owns changes and recovery |
 | Connected role reels, exact facets and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs), [person-role-mixer.mjs](person-role-mixer.mjs) |
 | Planned capacity readings and whole-session spread | [people-capacity.mjs](people-capacity.mjs), [team-controller.mjs](team-controller.mjs) |
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |

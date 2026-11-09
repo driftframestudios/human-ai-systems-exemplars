@@ -133,7 +133,17 @@ for (const engine of names) {
     await expect(settings(page)).toHaveAttribute('open', '');
     await expect(input(page, 'ratePerHour')).toHaveValue('00123');
     await expect(input(page, 'ratePerHour')).toBeEditable();
-    await expect(spread.locator('.studio-person-spread__reading')).toHaveText('1 of 3 plans · 3 h assigned · 4 h funded · 6 sessions');
+    const localRow = spread.locator('.studio-person-spread__table');
+    await expect(localRow.locator('thead th')).toHaveText(['Weekly working session', 'Prepare the review', 'Practice recovery']);
+    const readPads = scope => scope.evaluate(node => [...node.querySelectorAll('[data-people-participant="product-one"]')].map(check => {
+      const pad = check.closest('label');
+      return { work: check.dataset.peopleWork, checked: check.checked, funding: pad.dataset.funding, status: pad.dataset.status,
+        color: getComputedStyle(pad).backgroundColor, state: pad.querySelector('.studio-participation-pad__state').textContent,
+        time: pad.querySelector('.studio-participation-pad__time').textContent, amount: pad.querySelector('.studio-participation-pad__amount').textContent };
+    }));
+    const assertMirror = async () => assert.deepEqual(await readPads(localRow), await readPads(team(page).locator('[data-team-roster]')), 'local participation mirrors the full person row');
+    await assertMirror();
+    assert.deepEqual((await readPads(localRow)).map(row => [row.work, row.checked]), [['review', true], ['prepare', false], ['recover', false]]);
     await expect(team(page).locator('[data-person-status]')).not.toContainText('supported assembly command');
     await expect(panel(page).locator('[data-assembly-status]')).toHaveText('');
     await expect(team(page).locator('.studio-capacity-rollup dd > span').first()).toHaveText('16 h 30 min');
@@ -150,6 +160,18 @@ for (const engine of names) {
       }
       await spread.screenshot({ path: resolve(captures, `${engine}-spread-${width}.png`) });
     }
+    const localCheck = localRow.locator('[data-people-work="recover"]');
+    await localCheck.check();
+    await expect(localCheck).toBeFocused();
+    await expect(localRow.locator('.studio-pause-marker')).toBeVisible();
+    await expect(spread.locator('.studio-person-spread__current')).toHaveText('Custom spread');
+    await expect(input(page, 'ratePerHour')).toHaveValue('00123');
+    await expect(input(page, 'ratePerHour')).toBeEditable();
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), beforeSpread.undo + 2);
+    await assertMirror();
+    await panel(page).locator('[data-studio-undo]').click();
+    await expect(localCheck).not.toBeChecked();
+    await assertMirror();
     await panel(page).locator('[data-studio-undo]').click();
     assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), beforeSpread.text);
     await expect(team(page).locator('.studio-capacity-rollup dd > span').first()).toHaveText('18 h');
@@ -174,7 +196,7 @@ for (const engine of names) {
     await expect(spread.locator('[data-person-spread-preset="half"]')).toBeDisabled();
     await expect(spread.locator('[data-person-spread-preset="all"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(spread.locator('.studio-person-spread__hint')).toHaveText('3 plans need this person. Add another participant before reducing further.');
-    await expect(spread.locator('.studio-person-spread__reading')).toContainText('3 of 3 plans');
+    await expect(spread.locator('.studio-person-spread__table input:checked')).toHaveCount(3);
     await spread.locator('[data-person-spread-preset="all"]').click();
     assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), 0);
     await expect(team(page).locator('[data-person-status]')).toHaveText('Session spread already matches.');
