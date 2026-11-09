@@ -7,6 +7,8 @@ import { createStudio } from '../../collaboration/native-investment-studio/state
 import { recordReferences } from '../../collaboration/native-investment-studio/commands.mjs';
 import { getCapabilityDefinition } from '../../collaboration/native-investment-studio/capabilities.mjs';
 import { describeRemovalReference } from '../../collaboration/native-investment-studio/removal-references.mjs';
+import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
+import { capabilityForm, makeCapabilityTarget } from '../../collaboration/native-investment-studio/capability-draft.mjs';
 
 function referencePlan() {
   const plan = createShowcasePlan(), definition = getCapabilityDefinition('ability', 'inspect-history', '1.0.0');
@@ -65,8 +67,23 @@ test('the emitted reference families retain readable labels and their establishe
   assert.equal(quality.link.href, '#native-studio-assurance');
 });
 
-test('unsupported or stale references remain contract errors', () => {
+test('Undo preserves the identity in an open removal notice after its dependency disappears', () => {
+  const studio = createStudio(createShowcasePlan());
+  assert.equal(studio.replace(referencePlan(), studio.read()).ok, true);
+  const editor = createDraftCoordinator(studio).capability;
+  const begun = editor.begin(makeCapabilityTarget(capabilityForm('ability', 'remove', 'inspect-history'), 'audit-history'), studio.read());
+  const blocked = editor.apply(begun.view.draft.token);
+  assert.equal(blocked.ok, false); assert.equal(blocked.error.code, 'dependencies');
+  assert.equal(studio.undo(studio.read()).ok, true);
+  const view = editor.read();
+  assert.equal(view.status, 'stale');
+  const reference = view.error.references.find(row => row.collection === 'capabilityEvidence');
+  assert.deepEqual(describeRemovalReference(view.projection.state, reference), {
+    label: 'Evidence: history-observation (earlier plan)',
+  });
+});
+
+test('new reference families require an explicit display owner', () => {
   const state = preparePlan(referencePlan()).state;
   assert.throws(() => describeRemovalReference(state, { collection: 'other', id: 'missing', field: 'teamId' }), /Unsupported removal reference/);
-  assert.throws(() => describeRemovalReference(state, { collection: 'connections', id: 'missing', field: 'senderTeamId' }), /requires an accepted connections record/);
 });

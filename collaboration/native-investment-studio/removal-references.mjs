@@ -6,6 +6,9 @@ import { describeAssuranceReference } from './assurance-models.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 
 const categories = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
+const referenceNames = Object.freeze({ people: 'Person', teams: 'Team', work: 'Work', connections: 'Connection',
+  contributions: 'Contribution', abilities: 'Ability', practices: 'Practice', capabilityEvidence: 'Evidence',
+  arrangements: 'Arrangement', scoreSettings: 'Workflow record', assuranceSettings: 'Quality record', changeSettings: 'Change framework' });
 function record(state, collection, id) {
   const row = state[collection]?.find(row => row.id === id);
   if (!row) throw new TypeError(`Removal reference requires an accepted ${collection} record: ${id}`);
@@ -27,12 +30,16 @@ const recordLabels = Object.freeze({
 });
 const linked = (label, chapter, text, dataset) => ({ label, link: { href: `#native-studio-${chapter}`, text, dataset } });
 
-// The command owner emits references against a prepared accepted state. Each
-// family resolves its real record/catalogue name; extending that union requires
-// an explicit display owner rather than a generic label that hides the omission.
+// Undo can remove a referenced record while a failed removal draft stays open.
+// Keep its stable identity readable; a new reference family still needs an owner.
 export function describeRemovalReference(state, reference) {
   const { collection, id } = reference;
-  if (Object.hasOwn(recordLabels, collection)) return { label: recordLabels[collection](state, record(state, collection, id)) };
+  if (!Object.hasOwn(referenceNames, collection)) throw new TypeError(`Unsupported removal reference: ${collection}/${id}/${reference.field}`);
+  const previous = { label: `${referenceNames[collection]}: ${id} (earlier plan)` };
+  if (Object.hasOwn(recordLabels, collection)) {
+    const row = state[collection].find(row => row.id === id);
+    return row ? { label: recordLabels[collection](state, row) } : previous;
+  }
   if (collection === 'arrangements') {
     const arrangement = describeArrangementReference(state, reference);
     if (arrangement) return linked(arrangement.label, 'coordination', 'Review the arrangement', { nativeOpenArrangement: arrangement.id });
@@ -45,7 +52,7 @@ export function describeRemovalReference(state, reference) {
     const mapping = state.changeSettings.frameworkMaps.find(row => row.frameworkId === id);
     if (mapping) return linked(getChangeFramework(id, mapping.version).name, 'change', 'Review linked work in Change', { nativeOpenChange: '' });
   }
-  throw new TypeError(`Unsupported removal reference: ${collection}/${id}/${reference.field}`);
+  return previous;
 }
 
 export function renderRemovalReferences(list, state, references = []) {
