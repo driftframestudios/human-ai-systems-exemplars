@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.4.3`, ID
+**Standing:** approved reference and receiving composition, version `0.4.4`, ID
 `vfc:investment-master-reels`; 9 November 2026, receiving
 [#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895).
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
@@ -153,11 +153,20 @@ reel keeps its usual native choices and focus behavior. Its housing uses
 `--about-night-panel` for the core, the local `--investment-domain-wheel`
 (`#118c4f`) for the outer ring and
 `--about-ink-strong` for rotor spokes, with `--about-cool-blue` highlights.
-The green outer ring supersedes the violet ring; the navy center retains
-the preceding iteration that replaced the initial chocolate and peach treatment.
+The human accepted this green outer ring and navy center as the receiving
+combination. [PR #899](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/899)
+records its runtime delivery to `dev`. The green outer ring supersedes the violet
+ring; the navy center retains the preceding iteration that replaced the initial
+chocolate and peach treatment.
 Its label and selected reading use warm paper against the dark rack, and its
 fieldset is transparent. All choices retain the shared paper resting state and
 teal pressed state regardless of wheel color.
+
+CSS consolidation and rendering refinement preserve this combination, the
+stationary choices, wheel geometry and current motion modes. The local outer-ring
+token carries the green accent; shared navy tokens continue to own the core and
+rotor. [Issue #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
+coordinates that later work against visible visitor interactions.
 
 To the right, an editorial companion explains what the domain helps a visitor
 compare. A loaded deck presents an equal-angle rose with a semantic definition
