@@ -21,10 +21,10 @@
 #native-studio-investment .investment-study--masters { grid-template-columns:290px minmax(0,1fr); align-items:start; }
 #native-studio-investment .investment-study__body { min-width:0; display:grid; gap:.8rem; }
 #native-studio-investment .investment-study__orientation { display:grid; grid-template-columns:minmax(240px,.85fr) minmax(280px,1.15fr); align-items:center; gap:1rem; color:var(--native-text); }
-#native-studio-investment .investment-study__domain { inline-size:100%; max-inline-size:24rem; justify-self:center; padding:0; border:0; background:transparent; color:var(--studio-warm-paper); }
+#native-studio-investment .investment-study__domain { --investment-domain-wheel:#6b3399; inline-size:100%; max-inline-size:24rem; justify-self:center; padding:0; border:0; background:transparent; color:var(--studio-warm-paper); }
 #native-studio-investment .investment-study__domain :is(legend,.native-reel__reading) { color:var(--studio-warm-paper); }
 #native-studio-investment .investment-study__domain legend { background:transparent; }
-#native-studio-investment .investment-study__domain .native-reel__wheel { background:radial-gradient(circle,var(--about-night-panel) 0 25%,var(--about-cool-blue) 25% 28%,var(--about-muted) 28% 65%,var(--about-cool-blue) 65%); }
+#native-studio-investment .investment-study__domain .native-reel__wheel { background:radial-gradient(circle,var(--about-night-panel) 0 25%,var(--about-cool-blue) 25% 28%,var(--investment-domain-wheel) 28% 65%,var(--about-cool-blue) 65%); }
 #native-studio-investment .investment-study__domain .native-reel__rotor { background:radial-gradient(circle,var(--about-cool-blue) 0 8%,var(--about-ink-strong) 8% 16%,transparent 16% 60%,var(--about-cool-blue) 60% 65%,transparent 65%),repeating-conic-gradient(var(--about-cool-blue) 0 13deg,var(--about-ink-strong) 13deg 45deg); }
 #native-studio-investment .investment-domain { padding:.9rem; min-width:0; color:var(--native-text); background:var(--studio-editorial); border:1px solid var(--native-rule); border-left:.25rem solid var(--native-signal); }
 #native-studio-investment .investment-domain>h3 { font-size:1.1rem; }
