@@ -352,6 +352,16 @@ for (const engine of names) {
     await field(page, 'new.review.label').fill('History review');
     await ids(page, 'new.review.personIds').locator('input[value="product-one"]').check(); await field(page, 'new.review.hoursPerSession').fill('1');
     await field(page, 'new.review.minutesPerSession').fill('30'); await field(page, 'new.review.funding').selectOption('additional');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height:1000 });
+      const steps = await panel(page).locator('.native-capability__steps > button:visible').evaluateAll(buttons => buttons.map(button => {
+        const box = button.getBoundingClientRect(); return [box.width, box.height, getComputedStyle(button).borderRadius];
+      }));
+      assert.ok(steps.length > 0);
+      for (const geometry of steps) assert.deepEqual(geometry, [44, 44, '50%'], 'support quantities use the shared ordinary circular steps');
+      await reviewGroup.locator('.native-capability__new-work').screenshot({ path:resolve(captures, `${engine}-support-steps-${width}.png`) });
+    }
+    await page.setViewportSize({ width:1440, height:1000 });
     await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-paired-support.png`) });
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('$16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
     const topApply = panel(page).locator('[data-editor-apply]');

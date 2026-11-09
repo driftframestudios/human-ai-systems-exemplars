@@ -171,6 +171,7 @@
 .native-quality-workbench .native-coordination__error:not(:empty) { padding:.3rem .45rem; background:var(--studio-peach); font-size:.78rem; }
 .native-quality-workbench .native-coordination__actions { gap:.4rem; margin:0; }
 .native-coordination .native-quality-workbench .native-coordination__actions button { min-inline-size:0; min-block-size:2.5rem; font-size:.78rem; }
+.native-coordination .native-quality-workbench .native-coordination__actions .native-control--navigate { color:inherit; }
 .native-quality-workbench .native-quality-comparison { color:var(--native-text); background:var(--studio-editorial); }
 .native-quality-comparison > .native-assurance__consequence { margin:0; padding:.65rem; }
 .native-quality-workbench .native-assurance__effect-grid { gap:.6rem; }

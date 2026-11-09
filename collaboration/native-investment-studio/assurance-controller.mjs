@@ -190,7 +190,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   elements.events.append(node('h4', 'Prepare for recovery'), actionRow(button('Add a recovery event', 'add-event')));
   const eventList = node('div'); elements.events.append(eventList);
   elements.learning.append(node('h4', 'Turn a learning question into planned work'));
-  const prompts = node('div'), promptLabel = node('label', 'Question to explore'), promptChoice = node('select'), promptReading = node('p');
+  const prompts = node('div', undefined, 'native-assurance__field'), promptLabel = node('label', 'Question to explore'), promptChoice = node('select'), promptReading = node('p');
   promptChoice.id = `${instance}-learning-question`; promptLabel.htmlFor = promptChoice.id;
   const planLearning = button('Plan this learning', 'learning');
   prompts.append(promptLabel, promptChoice, promptReading, actionRow(planLearning));

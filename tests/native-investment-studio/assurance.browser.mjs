@@ -56,6 +56,33 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: quality recovery actions, learning fields and numeric steps retain their shared control treatment`, { timeout:45000 }, async t => {
+    const page = await open(t, engine), receiver = panel(page).locator('.native-quality-workbench__receiver');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height:1000 });
+      await panel(page).getByRole('button', { name:'Recovery events and learning work', exact:true }).click();
+      const create = action(page, 'add-event');
+      await expect(create).toHaveCSS('color', 'rgb(248, 241, 217)');
+      await create.hover(); await expect(create).toHaveCSS('color', 'rgb(248, 241, 217)');
+      const question = receiver.getByLabel('Question to explore', { exact:true });
+      const gap = await question.evaluate(select => select.getBoundingClientRect().top - document.querySelector(`label[for="${select.id}"]`).getBoundingClientRect().bottom);
+      assert.ok(gap >= 5, 'the learning field retains visible separation from its label');
+      await receiver.scrollIntoViewIfNeeded();
+      await page.screenshot({ path:resolve(captures, `${engine}-${width}-recovery-controls.png`) });
+      await panel(page).getByRole('button', { name:'Quality illustration', exact:true }).click();
+      const steps = await receiver.locator('.native-coordination__stepper').evaluateAll(groups => groups.filter(group => group.getClientRects().length && !group.closest('[hidden]')).map(group => {
+        const input = group.querySelector('input').getBoundingClientRect();
+        return [...group.querySelectorAll('button')].map(button => {
+          const box = button.getBoundingClientRect(), css = getComputedStyle(button);
+          return { width:box.width, height:box.height, below:box.top >= input.bottom, radius:css.borderRadius };
+        });
+      }));
+      assert.ok(steps.length > 0);
+      for (const pair of steps) for (const step of pair) assert.deepEqual(step, { width:44, height:44, below:true, radius:'50%' }, 'ordinary quantities retain the larger circular step family');
+      await receiver.locator('[data-quality-close]').click();
+    }
+  });
+
   test(`${engine}: compact quality receivers retain edits through Close and share the canonical top Apply`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     const receiver = panel(page).locator('.native-quality-workbench__receiver');

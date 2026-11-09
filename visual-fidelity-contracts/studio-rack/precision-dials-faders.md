@@ -6,7 +6,8 @@ each route changes the same editor proposal. Session time, hourly rates and the
 Change/Quality fader banks are current receivers.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-reviewed 8 November 2026 for the compact Person receiver in
+reviewed 8 November 2026 for shared circular steps in
+[#865](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/865), following the compact Person receiver in
 [#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836). It inherits the shared control and motion treatment in
 [Studio Rack Composition](README.md).
 The separately approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
@@ -38,6 +39,18 @@ form a compact centered pair beneath the matching field. Fader channels align
 their labels, tracks and readouts; descriptive text has its own reading area.
 The thumb stays visually distinct from the active fill. A selected channel uses
 more than color alone.
+
+Shared instrument CSS owns each step button's circular geometry: equal fixed
+width and height, centered glyph, zero padding and a size that survives flex
+compression. Ordinary quantities use 2.75rem steps (44px at the base text size). The preserved duration and
+Investment money modules use 30px steps. Each chapter retains its existing
+field width, pair placement, visible gap and color treatment; the pair sits below
+its input. Duration retains its 68px field and two 30px columns with an 8px gap;
+Investment money places the pair at the exact field's ends. Change and Abilities
+use a 7rem input-and-step measure so the circles align beneath the field ends.
+Generic action-button
+padding applies to actions, while these precision controls retain their shared
+geometry. This ownership supersedes competing circular sizing in chapter rules.
 
 Change and Quality intentionally retain different fader skins. The shared
 contract is named quantity, readable endpoints, exact value and visible response;
@@ -75,11 +88,13 @@ values, and Undo operates on accepted history.
 | [Time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Shared Hours/Minutes control and exact field agreement |
 | [About session markup](../../context-canvas-project-surface/context-canvas/index.html) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Static duration controls, field identities and session readout projection |
 | [Change](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controllers](../../collaboration/native-investment-studio/assurance-controller.mjs) | Fader meaning and result projection |
-| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Quantity-module enclosures, duration hierarchy and responsive control grouping |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Circular step geometry across numeric, rate, duration and Investment money controls; quantity-module enclosures, duration hierarchy and responsive grouping |
 | [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Compact canonical Person form, 64px coarse and 56px fine rate dials, exact fields and steps; same owner when Coordination borrows the form |
-| [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Retained dial artwork, base steppers and chapter-specific faders |
+| [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Retained dial artwork, stepper placement and chapter-specific faders |
+| [Investment CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Money enclosure, exact-field and below-field pair placement; shared step geometry stays separate from general action padding |
 | [Team browser checks](../../tests/native-investment-studio/team-controller.browser.mjs) and [session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Exact value agreement, gesture/cancellation, retained drafts and Apply/Undo |
 | [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Framework-specific values and visible consequences |
+| [Investment browser checks](../../tests/native-investment-studio/investment.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Square circular steps, below-input placement and contextual action legibility at laptop and phone widths |
 
 [VCV parameter commands](https://vcvrack.com/manual/KeyCommands) pair tactile
 adjustment with exact entry. The Studio adapts that principle through its own

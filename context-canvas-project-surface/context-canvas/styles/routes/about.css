@@ -2170,7 +2170,7 @@ p#on-dark-iron-ore {
 .native-coordination__control { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
 .native-coordination label { font-weight: 650; }
 .native-coordination__stepper { font: 600 1.2rem/1.4 ui-monospace, monospace; --native-input-measure: calc(5ch + 1.25rem); display: inline-grid; grid-template-columns: repeat(2, minmax(0, 2.75rem)); inline-size: max-content; max-inline-size: 100%; justify-self: start; align-items: center; gap: .35rem; }
-.native-coordination__stepper button { border-radius: 50%; grid-row: 2; inline-size: min(2.75rem, 100%); min-inline-size: 44px; block-size: 2.75rem; padding: 0; font-size: 1.3rem; }
+.native-coordination__stepper button { grid-row: 2; font-size: 1.3rem; }
 .native-coordination__stepper > button:first-of-type { justify-self: end; }
 .native-coordination__stepper > button:last-of-type { justify-self: start; }
 .native-coordination input {
@@ -2369,7 +2369,6 @@ p#on-dark-iron-ore {
 :is([data-native-session-editor], [data-rack-editor-kind="session"]) select { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; min-block-size: 2.75rem; padding: .55rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }
 :is([data-native-session-editor], [data-rack-editor-kind="session"]) .native-coordination__configuration form { padding-inline: clamp(.25rem, 2vw, 1.15rem); }
 :is([data-native-session-editor], [data-rack-editor-kind="session"]) :is(button, summary) { padding-inline: clamp(.25rem, 2vw, .85rem); }
-:is([data-native-session-editor], [data-rack-editor-kind="session"]) .native-coordination__stepper button { padding: 0; }
 .native-session__settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
 .native-session__settings-grid > div { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
 .native-session__settings-grid input[name='label'] { font: inherit; text-align: start; padding-inline: .5rem; }
@@ -2482,7 +2481,6 @@ p#on-dark-iron-ore {
 .native-capability__field--numeric { justify-items: start; }
 .native-capability__field--numeric input { inline-size: calc(5ch + 1.6rem); text-align: end; font-variant-numeric: tabular-nums; }
 .native-capability__steps { flex-wrap: nowrap; gap: .5rem; }
-.native-capability__steps button { min-inline-size: 2.75rem; }
 .native-capability__choices { display: grid; gap: .6rem; padding: 0; list-style: none; }
 .native-capability__choices label { display: flex; align-items: start; gap: .65rem; min-block-size: 2.75rem; padding: .55rem; border: .0625rem solid var(--native-rule); background: var(--native-paper); cursor: pointer; }
 .native-capability-settings [data-capability-action='apply'] { background: var(--native-signal); }
@@ -2566,7 +2564,6 @@ p#on-dark-iron-ore {
 .native-change__fader::-moz-range-thumb { width: 2.1rem; height: .8rem; border: .125rem solid #102020; border-radius: .15rem; background: linear-gradient(to bottom, #f7f0d7 0 43%, #233f3e 43% 57%, #b7d8d0 57%); box-shadow: .12rem .12rem 0 #071517; }
 .native-change input.native-change__numeric { inline-size: min(calc(5ch + 1.8rem), 100%); padding-inline: .55rem; }
 .native-change__steps { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
-.native-change__steps button { min-inline-size: 2.75rem; }
 .native-change__work { display: grid; gap: 1rem; padding: 1rem; background: var(--about-soft-apricot); border: .125rem solid var(--native-rule); }
 .native-change [data-change-action='apply'] { background: var(--native-signal); }
 .native-change__manual > summary { padding: .8rem; cursor: pointer; }
@@ -2847,7 +2844,6 @@ p#on-dark-iron-ore {
 .native-assurance__quantity[data-assurance-control='independentRate'] .native-coordination__stepper { --native-input-measure: calc(10ch + 1.25rem); }
 .native-assurance__quantity[data-assurance-control$='.observedPlanRevision'] .native-coordination__stepper { --native-input-measure: calc(16ch + 1.25rem); }
 .native-assurance__quantity .native-coordination__stepper input { inline-size: min(var(--native-input-measure), 100%); }
-.native-assurance__quantity .native-coordination__stepper button { min-inline-size: min(44px, 100%); }
 .native-assurance__quantity > label { max-inline-size: 22ch; }
 .native-assurance__check-field { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
 .native-assurance__check-field > label { grid-column: 2; grid-row: 1; }

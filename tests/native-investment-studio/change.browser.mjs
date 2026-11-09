@@ -67,6 +67,14 @@ for (const engine of names) {
     const trigger = panel(page).locator('.native-change__track-label[data-change-component="urgency"]').first();
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1100 });
+      const steps = await panel(page).locator('.native-change__steps > button:visible').evaluateAll(buttons => buttons.map(button => {
+        const box = button.getBoundingClientRect(), input = button.parentElement.previousElementSibling.getBoundingClientRect();
+        const endAligned = Math.abs(button.previousElementSibling ? box.right - input.right : box.left - input.left) < 1;
+        return [box.width, box.height, getComputedStyle(button).borderRadius, box.top >= input.bottom, endAligned];
+      }));
+      assert.ok(steps.length > 0);
+      for (const geometry of steps) assert.deepEqual(geometry, [44, 44, '50%', true, true], 'exact emphasis keeps circular steps beneath its field ends');
+      await panel(page).locator('.native-change__precise-channels').screenshot({ path:resolve(captures, `${engine}-exact-emphasis-${width}.png`) });
       await trigger.click();
       await expect(inspectorView(page, 'support')).toHaveAttribute('aria-pressed', 'true');
       await choice(page, 'map.kotter.urgency.status', 'look').check();
