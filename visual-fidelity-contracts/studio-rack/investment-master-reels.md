@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.4.0`, ID
+**Standing:** approved reference and receiving composition, version `0.4.1`, ID
 `vfc:investment-master-reels`; 9 November 2026, receiving
 [#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895).
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
@@ -149,8 +149,11 @@ outline with `1px` offset. The outer key reserves
 The Domain reel moves among Internal, Customer, Commercial, Operations and
 Planning. It loads the corresponding comparison type and preserves that deck's
 settings. Loading a cassette also updates the Domain indication. The shared
-reel keeps its usual native choices and focus behavior; chocolate and peach
-color its housing and rotor. Its label and selected reading use warm paper against the dark rack, and its
+reel keeps its usual native choices and focus behavior. Its navy housing uses
+`--about-night-panel` for the core, `--about-muted` for the outer ring and
+`--about-ink-strong` for rotor spokes, with `--about-cool-blue` highlights.
+This navy palette supersedes the initial chocolate and peach Domain treatment.
+Its label and selected reading use warm paper against the dark rack, and its
 fieldset is transparent. All choices retain the shared paper resting state and
 teal pressed state regardless of wheel color.
 
@@ -192,8 +195,8 @@ policy. Reduced-motion and forced-color visitors keep the exact readings.
 ## Chocolate instruments and editorial companions
 
 The receiving Showcase uses chocolate principally for monetary/dial modules and
-small instrument accents. The Domain wheel may use that palette without adding
-an enclosing chocolate block. The Domain explanation uses editorial paper and
+small instrument accents. The floating Domain wheel uses the navy palette above.
+The Domain explanation uses editorial paper and
 dark text; `.investment-comparison__companion` uses the standard green rack face.
 The connected-reel wrapper is transparent, with no additional border or padding.
 The Extra investment lane uses `var(--studio-raised-face)`, while Funded time

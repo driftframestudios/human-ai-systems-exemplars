@@ -24,8 +24,8 @@
 #native-studio-investment .investment-study__domain { inline-size:100%; max-inline-size:24rem; justify-self:center; padding:0; border:0; background:transparent; color:var(--studio-warm-paper); }
 #native-studio-investment .investment-study__domain :is(legend,.native-reel__reading) { color:var(--studio-warm-paper); }
 #native-studio-investment .investment-study__domain legend { background:transparent; }
-#native-studio-investment .investment-study__domain .native-reel__wheel { background:radial-gradient(circle,var(--studio-chocolate-deep) 0 25%,var(--native-paper) 25% 28%,var(--studio-chocolate-edge) 28% 65%,var(--studio-peach-paper) 65%); }
-#native-studio-investment .investment-study__domain .native-reel__rotor { background:radial-gradient(circle,var(--native-paper) 0 8%,var(--studio-chocolate) 8% 16%,transparent 16% 60%,var(--native-paper) 60% 65%,transparent 65%),repeating-conic-gradient(var(--studio-peach-paper) 0 13deg,var(--studio-chocolate) 13deg 45deg); }
+#native-studio-investment .investment-study__domain .native-reel__wheel { background:radial-gradient(circle,var(--about-night-panel) 0 25%,var(--about-cool-blue) 25% 28%,var(--about-muted) 28% 65%,var(--about-cool-blue) 65%); }
+#native-studio-investment .investment-study__domain .native-reel__rotor { background:radial-gradient(circle,var(--about-cool-blue) 0 8%,var(--about-ink-strong) 8% 16%,transparent 16% 60%,var(--about-cool-blue) 60% 65%,transparent 65%),repeating-conic-gradient(var(--about-cool-blue) 0 13deg,var(--about-ink-strong) 13deg 45deg); }
 #native-studio-investment .investment-domain { padding:.9rem; min-width:0; color:var(--native-text); background:var(--studio-editorial); border:1px solid var(--native-rule); border-left:.25rem solid var(--native-signal); }
 #native-studio-investment .investment-domain>h3 { font-size:1.1rem; }
 #native-studio-investment .investment-domain>p { font-size:.8rem; line-height:1.5; margin-bottom:.5rem; }
