@@ -169,7 +169,7 @@ commitments and findings.
 | Add a person, team or contribution in People | Empty-slot plus accepts a useful record, closed until selected; pointer hover or keyboard focus reveals it, and touch keeps it visible |
 | Add a supporting person, team or session in Abilities | Creation accepts the record; Apply accepts its assignment to the current proposal |
 | Rename a referenced person or team in Abilities | Rename opens one local field; Save accepts the shared name and retains the support proposal |
-| Arrange People team lanes or roster cards | Movement controls sit on the record and accept its new order with shared motion and Undo |
+| Arrange People team lanes or person rows | Movement controls sit on the record and accept its new order with shared motion and Undo |
 | Change People team membership, member order, role values or contribution choices | Native selectors, checkbox pads and movement controls accept directly and retain local focus |
 | Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
@@ -267,7 +267,7 @@ actual checks and their scope. Performance refinement stays with
 | Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
-| People lanes, roster and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
+| People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
 | Visible role mix and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs) |
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
 | Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs), [Abilities styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) |

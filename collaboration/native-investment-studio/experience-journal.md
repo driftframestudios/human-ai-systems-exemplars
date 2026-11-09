@@ -390,7 +390,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | Per-file root teardown inspects only resources already assigned | #827 joins pending setup through one shared lifecycle owner, then releases every acquired browser and server once. |
 | #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
 | Coordination team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
-| People arrangement begins with a separate Person to arrange selector | Each roster card carries its own Move earlier/later and Remove controls. |
+| People arrangement begins with a separate Person to arrange selector | Each person row carries its own Move earlier/later and Remove controls. |
 | Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
 | People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
 | Role mix opens from a separate disclosure | The current person's heading, eight value pads and selected native facet remain visible in the People rack. |
@@ -452,11 +452,11 @@ For People, the [assembly browser route](../../tests/native-investment-studio/as
 observes accepted membership/order, keyed movement, shared Undo, removal
 dependencies, retained drafts and the borrowed person receiver. The
 [person browser route](../../tests/native-investment-studio/team-controller.browser.mjs)
-observes direct session membership, local person settings, rates and the
-arranger's phone/desktop containment. The
+observes local person settings, rates and quantity-control behavior. The
 [responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
-observes the visible role rail, direct contribution changes, preserved note data,
-and phone/desktop composition. These checks establish the named local behavior;
+observes direct session membership, parked drafts and Undo, the visible role rail,
+direct contribution changes, preserved note data, and phone/desktop composition.
+These checks establish the named local behavior;
 the receiving release supplies the hosted observation.
 
 Use the README to run the current proof and the Visual Fidelity Contracts for

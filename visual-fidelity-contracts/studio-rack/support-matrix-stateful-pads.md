@@ -147,8 +147,9 @@ boundary while direct participation enters the shared Undo history.
 
 Team keys fill their editorial lane and show the parent's name and open state.
 Selecting the same key again closes its editor. Move and Remove controls form
-one bottom row. Settings pair the short name/membership module with its draft
-investment reading at laptop widths, stacking within an ordinary phone width.
+one bottom row. Settings pair the short name field with the draft investment
+reading at laptop widths; membership pads span the row below. These controls
+stack within an ordinary phone width.
 
 Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
