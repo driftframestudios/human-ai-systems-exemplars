@@ -382,8 +382,8 @@ The Investment reels use `reel-control.mjs` and shared instrument styling,
 matching Team planning, Change and Quality. A small financial adapter supplies
 choice identity and consequences; the shared control owns stationary perimeter
 buttons, central Next, arrow stepping, selected output, rotor and disposal.
-The violet-and-navy Domain wheel floats in the main body beside a concise companion.
-The outer ring uses `#6b3399`, superseding the slate-navy ring. The existing
+The green-and-navy Domain wheel floats in the main body beside a concise companion.
+The outer ring uses `#118c4f`, superseding the violet `#6b3399` ring. The existing
 dark-blue core, navy rotor and pale-blue highlights retain the preceding iteration;
 these replace the initial chocolate Domain housing. Chocolate remains available
 for money/dial modules.
