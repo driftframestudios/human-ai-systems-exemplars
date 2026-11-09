@@ -494,8 +494,9 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     // raw fields onto that projection without accepting its assignments.
     const resumed = editor.review(held.token, result.projection);
     onAccepted(result.projection); if (!owns(epoch)) return;
-    opened(resumed, epoch, false); showSection('responsibility');
-    const trigger = [...controls.get(held.key).input.querySelectorAll('[data-capability-action="rename"]')]
+    opened(resumed, epoch, false); if (!owns(epoch)) return;
+    showSection('responsibility');
+    const trigger = [...(controls.get(held.key)?.input.querySelectorAll('[data-capability-action="rename"]') ?? [])]
       .find(control => control.dataset.capabilityRenameId === held.id);
     trigger?.focus({ preventScroll: true });
     announce(resumed.ok ? `${label} saved. Support selections remain in this proposal.` : resumed.error.message);

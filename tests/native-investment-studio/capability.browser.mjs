@@ -74,6 +74,29 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: a rename callback can dispose its receiver without resuming stale UI work`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(async () => {
+      const { mountCapabilityPanel } = await import('/collaboration/native-investment-studio/capability-controller.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const fixture = window.capabilityFixture; fixture.controller.dispose();
+      fixture.editing = createDraftCoordinator(fixture.studio);
+      const receiver = document.querySelector('[data-native-capabilities]'); receiver.hidden = false;
+      fixture.controller = mountCapabilityPanel(receiver, { studio: fixture.studio, editing: fixture.editing,
+        onEditing: () => { if (fixture.disposeOnRename) fixture.controller.dispose(); } });
+      fixture.controller.create('ability', 'trace-evidence');
+    });
+    await field(page, 'context').fill('Keep this evidence proposal after receiver disposal.');
+    await section(page, 'responsibility').click();
+    await panel(page).locator('[data-capability-action="rename"][data-capability-rename-field="responsiblePersonIds"][data-capability-rename-id="leo"]').click();
+    await panel(page).locator('[data-capability-rename-name]').fill('Evidence researcher');
+    await page.evaluate(() => { window.capabilityFixture.disposeOnRename = true; });
+    await action(page, 'save-name').click();
+    await expect(panel(page).locator('[data-capability-fields]')).toHaveAttribute('disabled', '');
+    assert.equal(JSON.parse(await bytes(page)).people.find(person => person.id === 'leo').label, 'Evidence researcher');
+    assert.equal(await page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw.context), 'Keep this evidence proposal after receiver disposal.');
+    await expect(panel(page).locator('.native-capability-rack')).toHaveCount(0);
+  });
   test(`${engine}: local people and team names update shared records while support remains a proposal`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, true), initial = JSON.parse(await bytes(page));
     const rename = (key, id) => panel(page).locator(`[data-capability-action="rename"][data-capability-rename-field="${key}"][data-capability-rename-id="${id}"]`);
