@@ -1,6 +1,7 @@
 import { listCapabilities, getCapabilityDefinition } from './capabilities.mjs';
 import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from './capability-draft.mjs';
 import { money } from './display.mjs';
+import { LIMITS } from './config.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { revealStudioDestination } from './motion.mjs';
@@ -40,6 +41,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   let selection = null, target = null, builtTarget = null, builtProjection = null;
   let controls = new Map(), workGroups = new Map(), sequence = 0, observationGroup = null, peopleGroup = null, prerequisiteGroup = null;
   let sections = new Map(), sectionKeys = new Map(), selectedSection = 'context';
+  let rename = null;
   const owns = epoch => !disposed && generation === epoch;
   function listen(node, event, handler) { node.addEventListener(event, handler); cleanup.push(() => node.removeEventListener(event, handler)); }
   function node(tag, content, className) {
@@ -187,6 +189,13 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
         check.type = radios ? 'radio' : 'checkbox'; check.name = `${instance}-${key}`; check.value = value; check.dataset.capabilityField = key;
         check.dataset.capabilityChoice = value; check.setAttribute('aria-describedby', input.id + '-error');
         choice.append(check, node('span', text)); item.append(choice); input.append(item);
+        if (['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId'].includes(key)
+          && projection.state[metadata.source].some(record => record.id === value)) {
+          const edit = button('Rename', 'rename'); edit.className = 'native-capability__rename-key';
+          Object.assign(edit.dataset, { capabilityRenameField: key, capabilityRenameId: value });
+          edit.setAttribute('aria-label', `Rename ${text}`); edit.setAttribute('aria-expanded', 'false');
+          item.classList.add('native-capability__identity'); item.append(edit);
+        }
       }
       if (!input.children.length) input.append(node('li', 'Add a working session to choose support.'));
     } else if (input.tagName === 'SELECT') {
@@ -295,6 +304,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     renderCard();
     const draft = view.draft?.capabilityId === target ? view.draft : null, descriptor = draft ? describeCapabilityTarget(target) : null;
     if (builtTarget !== (draft?.capabilityId ?? null) || builtProjection !== projection) {
+      closeRename();
       builtTarget = draft?.capabilityId ?? null; builtProjection = projection; buildFields(descriptor, draft?.raw);
     }
     root.dataset.capabilityState = draft ? view.status : 'idle';
@@ -390,6 +400,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   }
   function close({ park = true } = {}) {
     if (disposed) return; ++generation; acknowledged = false; composing = false;
+    closeRename();
     if (park && editing.read().active?.kind === 'capability') editing.park();
     elements.configure.open = false;
   }
@@ -437,6 +448,59 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     (added?.querySelector(`input[value="${result.id}"]`) ?? added)?.focus({ preventScroll: true });
     announce(`${control.dataset.capabilityRecordKind === 'person' ? 'Person' : control.dataset.capabilityRecordKind === 'team' ? 'Team' : 'Session'} added. Apply to keep this support selection.`);
   }
+  function closeRename(focus = false) {
+    if (!rename) return;
+    const { element, trigger } = rename; rename = null;
+    element.remove(); trigger.setAttribute('aria-expanded', 'false'); trigger.removeAttribute('aria-controls');
+    if (focus && trigger.isConnected) trigger.focus({ preventScroll: true });
+  }
+  function beginRename(trigger) {
+    const view = editor.read(), key = trigger.dataset.capabilityRenameField, id = trigger.dataset.capabilityRenameId;
+    if (!view.draft || view.status !== 'editing') return;
+    if (rename?.trigger === trigger) { closeRename(true); return; }
+    closeRename();
+    const control = controls.get(key), source = control?.metadata.source;
+    const record = view.projection.state[source]?.find(row => row.id === id); if (!record) return;
+    const element = node('div', undefined, 'native-capability__rename'), input = node('input');
+    element.id = `${instance}-rename`; input.id = `${instance}-rename-name`; input.type = 'text';
+    input.maxLength = LIMITS.label; input.value = record.label; input.autocomplete = 'off'; input.dataset.capabilityRenameName = '';
+    const label = node('label', source === 'teams' ? 'Team name' : 'Person name'); label.htmlFor = input.id;
+    const error = node('p', '', 'native-coordination__error'); error.id = `${instance}-rename-error`; error.setAttribute('role', 'status');
+    const note = node('p', 'Updates this name throughout the plan.'); note.id = `${instance}-rename-note`;
+    input.setAttribute('aria-describedby', `${note.id} ${error.id}`);
+    const actions = node('div', undefined, 'native-coordination__actions');
+    const save = button('Save name', 'save-name'), cancel = button('Cancel', 'cancel-name'); cancel.className = 'native-control--cancel';
+    actions.append(save, cancel); element.append(label, input, note, error, actions); control.input.after(element);
+    trigger.setAttribute('aria-expanded', 'true'); trigger.setAttribute('aria-controls', element.id);
+    rename = { element, input, error, trigger, key, id, source, token: view.draft.token, base: view.projection };
+    input.focus({ preventScroll: true }); input.select();
+  }
+  function saveName() {
+    if (!rename || disposed || !isActive() || composing) return;
+    const held = rename, view = editor.read();
+    if (view.status !== 'editing' || view.draft?.token !== held.token || studio.read() !== held.base) {
+      held.error.textContent = 'Review the current plan before renaming.'; return;
+    }
+    const label = held.input.value.trim();
+    if (!label) { held.error.textContent = 'Enter a name.'; held.input.setAttribute('aria-invalid', 'true'); held.input.focus(); return; }
+    const record = held.base.state[held.source].find(row => row.id === held.id), epoch = ++generation;
+    const result = held.source === 'people'
+      ? studio.updatePerson(held.id, { ...record, label }, held.base)
+      : studio.applyCommand({ type: 'team.update', teamId: held.id, team: { ...record, label } }, held.base);
+    if (!owns(epoch)) return;
+    if (!result.ok) { held.error.textContent = result.error.message; held.input.setAttribute('aria-invalid', 'true'); return; }
+    closeRename();
+    // A rename accepts one canonical record. Rebase the held support proposal's
+    // raw fields onto that projection without accepting its assignments.
+    const resumed = editor.review(held.token, result.projection);
+    onAccepted(result.projection); if (!owns(epoch)) return;
+    opened(resumed, epoch, false); if (!owns(epoch)) return;
+    showSection('responsibility');
+    const trigger = [...(controls.get(held.key)?.input.querySelectorAll('[data-capability-action="rename"]') ?? [])]
+      .find(control => control.dataset.capabilityRenameId === held.id);
+    trigger?.focus({ preventScroll: true });
+    announce(resumed.ok ? `${label} saved. Support selections remain in this proposal.` : resumed.error.message);
+  }
   function showSupport(kind, id) {
     const row = studio.read().state[COLLECTION[kind]]?.find(row => row.id === id); if (!row) return;
     const result = open(makeCapabilityTarget(capabilityForm(kind, 'update', row.definitionId, row.definitionVersion), id), false);
@@ -476,6 +540,9 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const action = control.dataset.capabilityAction;
     if (action === 'apply') return;
     if (action === 'add-record') { addRecord(control); return; }
+    if (action === 'rename') { beginRename(control); return; }
+    if (action === 'save-name') { saveName(); return; }
+    if (action === 'cancel-name') { closeRename(true); return; }
     if (action === 'close') { closeLocal(); return; }
     if (action === 'select') { selectedSection = 'context'; selectCard(control); showSection('context'); elements.title.tabIndex = -1; elements.title.focus({ preventScroll: true }); revealStudioDestination(rack); return; }
     if (action === 'inspect-section') { showSection(control.dataset.capabilitySectionKey); return; }
@@ -514,6 +581,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     } else changed(editor.setText(view.draft.token, key, control.radios ? event.target.value : control.input.value), epoch);
   }
   listen(elements.form, 'input', input); listen(elements.form, 'change', input);
+  listen(elements.form, 'keydown', event => {
+    if (!rename?.element.contains(event.target) || event.isComposing) return;
+    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeRename(true); }
+    if (event.key === 'Enter' && event.target === rename?.input) { event.preventDefault(); event.stopPropagation(); saveName(); }
+  });
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(elements.form, 'compositionstart', () => { composing = true; });
   // Some engines finish composition before delivering the final input event.

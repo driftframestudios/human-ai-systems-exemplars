@@ -74,6 +74,88 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: a rename callback can dispose its receiver without resuming stale UI work`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(async () => {
+      const { mountCapabilityPanel } = await import('/collaboration/native-investment-studio/capability-controller.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const fixture = window.capabilityFixture; fixture.controller.dispose();
+      fixture.editing = createDraftCoordinator(fixture.studio);
+      const receiver = document.querySelector('[data-native-capabilities]'); receiver.hidden = false;
+      fixture.controller = mountCapabilityPanel(receiver, { studio: fixture.studio, editing: fixture.editing,
+        onEditing: () => { if (fixture.disposeOnRename) fixture.controller.dispose(); } });
+      fixture.controller.create('ability', 'trace-evidence');
+    });
+    await field(page, 'context').fill('Keep this evidence proposal after receiver disposal.');
+    await section(page, 'responsibility').click();
+    await panel(page).locator('[data-capability-action="rename"][data-capability-rename-field="responsiblePersonIds"][data-capability-rename-id="leo"]').click();
+    await panel(page).locator('[data-capability-rename-name]').fill('Evidence researcher');
+    await page.evaluate(() => { window.capabilityFixture.disposeOnRename = true; });
+    await action(page, 'save-name').click();
+    await expect(panel(page).locator('[data-capability-fields]')).toHaveAttribute('disabled', '');
+    assert.equal(JSON.parse(await bytes(page)).people.find(person => person.id === 'leo').label, 'Evidence researcher');
+    assert.equal(await page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw.context), 'Keep this evidence proposal after receiver disposal.');
+    await expect(panel(page).locator('.native-capability-rack')).toHaveCount(0);
+  });
+  test(`${engine}: local people and team names update shared records while support remains a proposal`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true), initial = JSON.parse(await bytes(page));
+    const rename = (key, id) => panel(page).locator(`[data-capability-action="rename"][data-capability-rename-field="${key}"][data-capability-rename-id="${id}"]`);
+    const name = panel(page).locator('[data-capability-rename-name]');
+    const raw = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw);
+    await choice(page, 'trace-evidence').click();
+    await field(page, 'context').fill('  Keep this unfinished evidence proposal  ');
+    await section(page, 'responsibility').click();
+    await choose(page, 'teamId', 'product'); await choose(page, 'decisionOwnerPersonId', 'leo');
+    await ids(page, 'responsiblePersonIds').locator('input[value="leo"]').check();
+    const retained = await raw();
+    await rename('responsiblePersonIds', 'leo').click(); await expect(name).toBeFocused();
+    await name.fill('  '); await name.press('Enter');
+    await expect(name).toHaveAttribute('aria-invalid', 'true');
+    await expect(panel(page).locator('.native-capability__rename')).toContainText('Enter a name.');
+    assert.deepEqual(JSON.parse(await bytes(page)), initial, 'blank names accept neither a shared record nor support');
+    await name.fill('Cancelled name'); await name.press('Escape');
+    await expect(name).toHaveCount(0); await expect(rename('responsiblePersonIds', 'leo')).toBeFocused();
+    assert.deepEqual(await raw(), retained);
+    await rename('responsiblePersonIds', 'leo').click(); await name.fill('Evidence researcher');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await panel(page).locator('.native-capability__rename').evaluate(element => {
+        const box = element.getBoundingClientRect(); return { left: box.left, right: box.right, page: document.documentElement.scrollWidth };
+      });
+      assert.ok(geometry.left >= 0 && geometry.right <= width && geometry.page <= width, JSON.stringify(geometry));
+      await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-rename-${width}.png`) });
+    }
+    await name.press('Enter'); await expect(rename('responsiblePersonIds', 'leo')).toBeFocused();
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Evidence researcher', exact: true })).toBeChecked();
+    let accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.people, initial.people.map(person => person.id === 'leo' ? { ...person, label: 'Evidence researcher' } : person));
+    assert.deepEqual(accepted.teams, initial.teams); assert.deepEqual(accepted.work, initial.work); assert.deepEqual(accepted.abilities, initial.abilities);
+    assert.deepEqual(await raw(), retained, 'renaming retains exact support text and assignment IDs');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await raw(), retained, 'global Undo parks and preserves the support proposal');
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Researcher', exact: true })).toBeChecked();
+    await action(page, 'review').click();
+    await rename('decisionOwnerPersonId', 'leo').click(); await name.fill('Evidence researcher'); await action(page, 'save-name').click();
+    await rename('teamId', 'product').click(); await name.fill('Research and product'); await action(page, 'save-name').click();
+    await expect(rename('teamId', 'product')).toBeFocused();
+    accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.teams, initial.teams.map(team => team.id === 'product' ? { ...team, label: 'Research and product' } : team));
+    assert.deepEqual(accepted.abilities, initial.abilities); assert.deepEqual(await raw(), retained);
+    const history = await page.evaluate(() => window.capabilityFixture.studio.readHistory());
+    await rename('teamId', 'product').click(); await action(page, 'save-name').click();
+    assert.deepEqual(await page.evaluate(() => window.capabilityFixture.studio.readHistory()), history, 'an unchanged name creates no undo step');
+    await tab(page, 'people').click();
+    await expect(root(page).locator('[data-roster-person="leo"]')).toContainText('Evidence researcher');
+    await expect(root(page).locator('[data-people-team="product"]')).toContainText('Research and product');
+    await tab(page, 'work').click(); await choice(page, 'trace-evidence').click();
+    assert.deepEqual(await raw(), retained, 'the proposal returns after visiting the canonical People view');
+    await supportCell(page, 'expectation', 'responsibility').click();
+    const acceptedSupport = await raw();
+    await rename('decisionOwnerPersonId', 'maya').click(); await name.fill('Product coordinator'); await action(page, 'save-name').click();
+    await expect(supportCell(page, 'expectation', 'responsibility')).toContainText('Product coordinator decides');
+    assert.deepEqual(await raw(), acceptedSupport, 'an accepted practice retains its own support draft during a shared rename');
+    assert.deepEqual(JSON.parse(await bytes(page)).practices, initial.practices, 'the support-table reading changes through shared IDs');
+  });
   test(`${engine}: Trace evidence keeps readable choices in one compact support rack`, async t => {
     const page = await open(t, engine, true), accepted = await bytes(page);
     const trace = choice(page, 'trace-evidence'), rack = panel(page).locator('.native-capability-rack');
