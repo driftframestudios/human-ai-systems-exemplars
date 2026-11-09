@@ -47,12 +47,34 @@ keep their intentionally different fader treatments.
 
 Change's Raise, Reduce, Eliminate and Create keys borrow Quality's compact rail
 face: paper at rest, signal color and inset depth for the open action. Each native
-button names its component receiver with `aria-controls`; `aria-expanded` follows
-the actual inspector and clears when it closes. One action keeps the active face
+button names its shared receiver with `aria-controls`; `aria-expanded` follows
+the actual receiver and clears when it closes. One action keeps the active face
 even when a small framework maps more than one action to the same component.
 Stable keyed buttons retain focus through selection and projection updates.
 These keys inspect the current proposal; selection leaves accepted plan history
 unchanged. The four-key row becomes two columns at ordinary phone widths.
+
+The selected Change component opens one dark, attached receiver beneath its
+initiating board or matrix. This compact receiver supersedes the nested component
+and support disclosures. The shared rack header names Change components as the
+return owner, the current component or supporting session, Apply and Close. The
+shared rack arrival effect follows the Studio motion preference. Its
+Support / Methods / Session rail displays one mounted view at a time; Session
+appears while a work proposal exists. Switching views retains pending entries.
+Pressing the initiating key again, Close or the owner return closes locally and
+returns focus to that key, including its replacement after a projection refresh.
+The component's pressed face follows the receiver's visibility.
+
+Support places status, sessions and abilities in small recessed modules. Methods
+uses stable selection pads and one chocolate explanation panel, with an optional
+example. A supporting session uses the approved shared duration module beside
+people and funding on wide surfaces; ordinary phone widths retain a readable
+single-column arrangement. Local framing may compress spacing, while duration
+dial faces, pointers, Hours/Minutes colors and stepper layout stay shared-owned.
+Native checkboxes and radios retain their intrinsic control sizes. The receiver's
+Apply delegates to the same canonical bottom action and retains top-action focus;
+settings and proposed work still enter accepted history together. Closing merely
+changes the visible receiver and leaves those draft entries available.
 
 ## Creation, assignment and recovery
 
