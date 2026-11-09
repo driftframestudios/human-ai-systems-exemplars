@@ -89,6 +89,8 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/investment-workbench.mjs',
 
   'collaboration/native-investment-studio/person-draft.mjs',
+  'collaboration/native-investment-studio/person-role-mixer.mjs',
+  'collaboration/native-investment-studio/people-capacity.mjs',
   'collaboration/native-investment-studio/presets.mjs',
   'collaboration/native-investment-studio/purpose-controller.mjs',
   'collaboration/native-investment-studio/purpose-draft.mjs',

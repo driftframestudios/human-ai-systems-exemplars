@@ -89,7 +89,7 @@ const settingsSummary = page => panel(page).locator('[data-native-configure] > s
 // Shared-session rows expose compact controls; the delivery card opens the
 // canonical session owner whose raw draft and lifecycle are exercised here.
 const sessionEntry = page => panel(page).locator('[data-delivery-session="review"]:visible').first();
-const closeSession = page => panel(page).locator('.studio-rack-editor [data-rack-editor-close]').click();
+const closeSession = page => panel(page).locator('[data-rack-editor-kind="session"] [data-rack-editor-close]').click();
 const input = (page, name = 'minutesPerSession') => panel(page).locator(`input[name="${name}"]`);
 const total = page => panel(page).locator('[data-native-total]');
 const preview = page => panel(page).locator('[data-native-preview-total]');
@@ -309,6 +309,10 @@ for (const engine of names) {
     const tab = chapter => panel(page).locator(`[data-native-chapter="${chapter}"]`);
     const people = panel(page).locator('[data-native-team-editor]');
     const role = people.locator('[data-responsibility-configure="role"]');
+    const openPerson = async () => {
+      const key = people.locator('[data-person-id="product-one"]');
+      if (await key.getAttribute('aria-expanded') !== 'true') await key.click();
+    };
     const arrangements = panel(page).locator('[data-connection-templates]');
     const connections = arrangements.locator('.studio-delivery [data-studio-record-kind="connection"]');
     const connection = panel(page).locator('[data-connection-configure]');
@@ -327,7 +331,7 @@ for (const engine of names) {
 
     await expect(total(page)).toHaveText('$1,200.00');
     await tab('people').click();
-    await people.locator('[data-person-id="product-one"]').click();
+    await openPerson();
     await people.locator('[data-person-configure] [name="ratePerHour"]').fill('105');
     await people.locator('[data-person-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,215.00');
@@ -336,10 +340,10 @@ for (const engine of names) {
     await input(page).fill('45'); await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,822.50');
     await tab('people').click();
-    await people.locator('[data-person-id="product-one"]').click();
-    await role.locator('[data-role-field="functionId"]').click();
+    await openPerson();
+    await role.locator('[data-role-facet="functionId"]').click();
     await role.locator('[name="functionId"]').selectOption('engineering');
-    await expect(role.locator('.studio-rack-header__saved')).toHaveText('Saved');
+    await expect(role.locator('[data-role-facet="functionId"]')).toContainText('Engineering');
     await expect(total(page)).toHaveText('$1,822.50');
 
     await tab('coordination').click();

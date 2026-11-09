@@ -4,6 +4,9 @@ import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { ROLE_CATALOGUES, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { deriveRolePreset, mountPersonRoleMixer } from './person-role-mixer.mjs';
+import { summarizeWorkCapacity } from './people-capacity.mjs';
+import { duration, wholeMoney } from './display.mjs';
 import { ROLE_FORMS, CONTRIBUTION_FORMS, makeRoleTarget, describeRoleTarget,
   makeContributionTarget, describeContributionTarget } from './command-draft.mjs';
 
@@ -89,8 +92,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   let selectedPerson = null, mode = 'role', generation = 0, disposed = false, retired = null;
   let membershipProjection = null, membershipIds = null, memberControls = new Map();
   let contributionButtons = new Map(), membersTarget = null, memberOrder = [];
-  let selectedRoleField = 'functionId', acceptedRole = null;
-  const rolePads = new Map();
+  let selectedRoleField = 'functionId', acceptedRole = null, roleMixer = null;
 
   function listen(element, type, handler) { element.addEventListener(type, handler); cleanup.push(() => element.removeEventListener(type, handler)); }
   function owns(epoch) { return !disposed && epoch === generation; }
@@ -120,6 +122,10 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     return Object.fromEntries(ROLE_FIELDS.map(field => [field, field === 'change'
       ? person?.role.change ? `${person.role.change.frameworkId}:${person.role.change.componentId}` : ''
       : person?.role[field] ?? '']));
+  }
+  function shownRoleRaw() {
+    const group = groups.role, draft = editing.role.read().draft;
+    return keyFor('role', draft) === group.target ? draft.raw : roleRaw(people.get(describe(group.target)?.id ?? selectedPerson));
   }
   function contributionRaw(row) {
     return { ...Object.fromEntries(CONTRIBUTION_FIELDS.map(field => [field, row?.[field] ?? ''])), workIds: row?.workIds ?? [] };
@@ -156,12 +162,22 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       contribution.inputs[field].replaceChildren(option('', 'Unassigned'), ...next.state.people.map(person => option(person.id, named(person))));
     }
     contributionButtons = new Map();
+    const supported = summarizeWorkCapacity(next, next.state.contributions.flatMap(row => row.workIds));
+    const reading = document.createElement('p'); reading.className = 'studio-contribution-reading';
+    reading.textContent = `${duration(supported.personMinutes)} of supporting work · ${wholeMoney(supported.knownCents)}${supported.completeMoney ? '' : ' known'}`;
     const table = document.createElement('table'); table.className = 'studio-contribution-tracks';
     const caption = document.createElement('caption'); caption.textContent = 'Supporting sessions'; table.append(caption);
     const head = document.createElement('thead'), headings = document.createElement('tr');
-    for (const text of ['Contribution', ...next.state.work.map(work => work.label), '']) {
-      const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = text; headings.append(cell);
+    const contributionHeading = document.createElement('th'); contributionHeading.scope = 'col'; contributionHeading.textContent = 'Contribution';
+    headings.append(contributionHeading);
+    for (const work of next.state.work) {
+      const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = work.label;
+      const toggle = button(work.status === 'paused' ? '▶ Resume' : 'Ⅱ Pause', 'work-status', work.id);
+      toggle.className = 'studio-contribution-tracks__status native-control--cancel';
+      toggle.setAttribute('aria-label', `${work.status === 'paused' ? 'Resume' : 'Pause'} ${work.label} throughout the plan`);
+      toggle.setAttribute('aria-pressed', String(work.status === 'paused')); cell.append(toggle); headings.append(cell);
     }
+    const actionHeading = document.createElement('th'); actionHeading.scope = 'col'; actionHeading.textContent = 'Edit'; headings.append(actionHeading);
     head.append(headings); table.append(head);
     const body = document.createElement('tbody');
     for (const row of next.state.contributions) {
@@ -170,11 +186,15 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       open.dataset.contributionId = row.id; open.classList.add('native-responsibility__selector', 'studio-track-key');
       open.setAttribute('aria-controls', contribution.configure.id); open.setAttribute('aria-expanded', 'false');
       const receiver = document.createElement('small'); receiver.textContent = `For ${named(people.get(row.receiverPersonId))}`;
-      open.append(receiver); title.append(open); item.append(title); contributionButtons.set(row.id, open);
+      const decider = document.createElement('small'); decider.textContent = row.decisionOwnerPersonId
+        ? `◇ ${named(people.get(row.decisionOwnerPersonId))} decides` : '◇ Decision owner unassigned';
+      open.append(receiver, decider); title.append(open); item.append(title); contributionButtons.set(row.id, open);
       for (const work of next.state.work) {
         const cell = document.createElement('td'), included = row.workIds.includes(work.id);
-        const pad = button(included ? '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
-        pad.dataset.included = String(included); pad.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? 'linked' : 'available'}. Edit contribution.`);
+        const paused = included && work.status === 'paused';
+        const pad = button(included ? paused ? 'Ⅱ' : '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
+        pad.dataset.included = String(included); pad.dataset.paused = String(paused);
+        pad.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? paused ? 'linked, paused' : 'linked' : 'available'}. Edit contribution.`);
         pad.setAttribute('aria-controls', contribution.configure.id); cell.append(pad); item.append(cell);
       }
       const removal = document.createElement('td'), remove = button('Remove', 'remove', row.id);
@@ -183,7 +203,21 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     }
     const addition = document.createElement('tr'), slot = document.createElement('td');
     addition.className = 'studio-contribution-add'; slot.colSpan = next.state.work.length + 2; slot.append(add); addition.append(slot); body.append(addition);
-    table.append(body); list.replaceChildren(table); empty.hidden = contributions.size > 0;
+    table.append(body);
+    const foot = document.createElement('tfoot'), totals = document.createElement('tr'); totals.className = 'studio-contribution-tracks__totals';
+    const totalLabel = document.createElement('th'); totalLabel.scope = 'row'; totalLabel.textContent = 'Supporting effort'; totals.append(totalLabel);
+    for (const work of next.state.work) {
+      const linked = next.state.contributions.filter(row => row.workIds.includes(work.id)).length;
+      const scope = summarizeWorkCapacity(next, linked ? [work.id] : []), cell = document.createElement('td');
+      const count = document.createElement('small'); count.textContent = `${linked} linked`;
+      const effort = document.createElement('strong'); effort.textContent = duration(scope.personMinutes);
+      const cost = document.createElement('small'); cost.textContent = `${wholeMoney(scope.knownCents)}${scope.completeMoney ? '' : ' known'}`;
+      cell.append(count, effort, cost); totals.append(cell);
+    }
+    totals.append(document.createElement('td')); foot.append(totals); table.append(foot);
+    const legend = document.createElement('p'); legend.className = 'studio-contribution-legend';
+    legend.textContent = '● Linked · Ⅱ Paused · ◇ Decides · · Available. Paused work retains planned effort and cost.';
+    list.replaceChildren(reading, table, legend); empty.hidden = contributions.size > 0;
   }
   function renderMembers(ids) {
     if (membersTarget !== contribution.target) { membersTarget = contribution.target; memberOrder = []; membershipIds = null; }
@@ -226,9 +260,6 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function selectRoleField(field) {
     if (!ROLE_FIELDS.includes(field)) return;
     selectedRoleField = field;
-    for (const [key, pad] of rolePads) {
-      pad.dataset.selected = String(key === field);
-    }
   }
 
   function renderGroup(group) {
@@ -263,6 +294,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       group.inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
       group.errors[field].textContent = error?.message ?? '';
     }
+    if (group.kind === 'role') roleMixer?.update(raw, { disabled: group.fieldset.disabled });
     if (group.kind === 'contribution') {
       contribution.settings.hidden = removing; contribution.confirm.hidden = !removing;
       contribution.confirm.textContent = removing ? `Remove ${CATEGORY_LABELS.get(row?.categoryId) ?? 'this contribution'}?` : '';
@@ -317,7 +349,10 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function focusForm(kind) {
     const view = editing[kind].read(), group = groups[kind], descriptor = describe(keyFor(kind, view.draft));
     if (view.status === 'stale') (view.creationConflict ? contribution.fresh : group.recovery.querySelector('button')).focus();
-    else if (view.status === 'editing') (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.kind === 'role' ? selectedRoleField : group.fields[0]]).focus();
+    else if (view.status === 'editing') {
+      if (kind === 'role' && roleMixer) roleMixer.focus(selectedRoleField);
+      else (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.fields[0]]).focus();
+    }
   }
   function reveal(kind) {
     for (const group of Object.values(groups)) {
@@ -428,7 +463,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (!owns(epoch)) return;
     if (!result.ok) { changed(kind, result, epoch, focus ? () => {
       const field = group.fields.find(name => result.error.path === `draft.${name}`);
-      if (field) group.inputs[field].focus();
+      if (field) { if (kind === 'role' && roleMixer) roleMixer.focus(field); else group.inputs[field].focus(); }
     } : null); return; }
     if (action === 'cancel') {
       group.target = descriptor.mode === 'create' ? null : group.target;
@@ -489,6 +524,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (disposed || group.inputs[field] !== event.target) return;
     group.inputAcceptance = null;
     const value = event.target.value;
+    if (kind === 'role' && shownRoleRaw()[field] === value) return;
     if (kind === 'role' && !ensureRoleOwner({ focusRecovery: true })) return;
     const draft = editing[kind].read().draft;
     if (!draft || !group.acknowledged) return;
@@ -499,10 +535,53 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       group.inputAcceptance = { token: draft.token, intent };
     }
   }
+  function applyRoleSelection({ field, dimension, value }) {
+    if (disposed || !canOpen()) return;
+    const derive = raw => dimension ? deriveRolePreset(raw, dimension, value)
+      : ROLE_FIELDS.includes(field) ? { ...raw, [field]: value } : null;
+    const shown = shownRoleRaw(), proposed = derive(shown);
+    // A selected pad or reel keeps the person lease and its live money preview.
+    if (!proposed || ROLE_FIELDS.every(name => proposed[name] === shown[name])) return;
+    if (!ensureRoleOwner({ focusRecovery: true })) return;
+    const draft = editing.role.read().draft;
+    if (!draft) return;
+    const next = derive(draft.raw);
+    if (!next) return;
+    const epoch = ++generation;
+    let result;
+    // Build one role draft, then accept once so connected choices have one Undo.
+    for (const name of ROLE_FIELDS) {
+      if (next[name] === draft.raw[name]) continue;
+      result = operate('role', 'setText', draft.token, name, next[name]);
+      if (!owns(epoch) || editing.role.read().draft?.token !== draft.token) return;
+      if (!result.ok) { changed('role', result, epoch); return result; }
+    }
+    if (!result) { render(); return; }
+    const intent = editing.read().intent;
+    changed('role', result, epoch);
+    if (owns(epoch) && editing.role.read().draft?.token === draft.token && editing.read().intent === intent)
+      return settle('role', 'apply', { focus: false });
+  }
   function click(event) {
     const control = event.target.closest('[data-responsibility-action]');
     if (!control || !root.contains(control) || control.disabled || disposed) return;
     const action = control.dataset.responsibilityAction, id = control.dataset.responsibilityId;
+    if (action === 'work-status') {
+      if (!canOpen()) return;
+      const current = studio.read(), work = current.state.work.find(row => row.id === id);
+      if (!work) return;
+      const epoch = ++generation, parked = editing.park();
+      if (!owns(epoch)) return;
+      if (!parked.ok) { announce(parked.error.message); return; }
+      const result = studio.applyCommand({ type: 'work.status.set', workId: id, status: work.status === 'paused' ? 'planned' : 'paused' }, current);
+      if (!owns(epoch)) return;
+      if (!result.ok) { render(); announce(result.error.message); return; }
+      const intent = editing.read().intent; onAccepted(result.projection);
+      if (!owns(epoch) || editing.read().intent !== intent) return;
+      render(); announce(`${work.label} ${work.status === 'paused' ? 'resumed' : 'paused'}. Undo is available.`);
+      list.querySelector(`[data-responsibility-action="work-status"][data-responsibility-id="${id}"]`)?.focus({ preventScroll: true });
+      return;
+    }
     if (action === 'create') { addRecord(); return; }
     if (action === 'open' || action === 'remove') {
       const target = makeContributionTarget(action === 'open' ? 'contribution.update' : 'contribution.remove', id);
@@ -533,6 +612,8 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     delete root.dataset.responsibilityReady; INSTANCES.delete(root);
   }
   const receiver = Object.freeze({ read: () => editing[mode].read(), render, refresh: render, selectPerson, open, create, close,
+    applyPreset: (dimension, value) => applyRoleSelection({ dimension, value }),
+    setSpreadVisual: ratio => roleMixer?.vary(ratio),
     isOpen: () => !disposed && Object.values(groups).some(group => group.acknowledged),
     resume() {
       if (disposed) return;
@@ -579,18 +660,10 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const id = event.target.dataset.responsibilityWork;
       if (memberControls.get(id) === event.target) membership(id, null, event.target.checked);
     });
-    const rail = document.createElement('div'); rail.className = 'studio-role-pads'; rail.setAttribute('role', 'group'); rail.setAttribute('aria-label', 'Role details');
-    const fieldsHome = groups.role.configure.querySelector('.native-responsibility__grid');
-    const roleFieldHomes = ROLE_FIELDS.map(field => {
-      const container = groups.role.inputs[field].closest('.native-responsibility__field');
-      container.classList.add('studio-role-pad'); container.dataset.roleField = field;
-      rolePads.set(field, container); rail.append(container);
-      return container;
-    });
-    // Each native select owns its pad's value; focusing it leaves the adjacent draft intact.
+    roleMixer = mountPersonRoleMixer(document, { inputs: groups.role.inputs, onChange: applyRoleSelection });
     groups.role.configure.open = true;
-    groups.role.fieldset.prepend(rail);
-    cleanup.push(() => { fieldsHome.append(...roleFieldHomes); rail.remove(); });
+    groups.role.fieldset.prepend(roleMixer.element);
+    cleanup.push(() => roleMixer.dispose());
     selectRoleField(selectedRoleField);
     render();
     if (disposed) return receiver;

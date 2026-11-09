@@ -75,8 +75,61 @@ const expectedRole = Object.freeze({ functionId: 'engineering', seniorityId: 'pr
   change: { frameworkId: 'npt', componentId: 'collective-action' } });
 const categories = ['scenario-generation', 'source-retrieval', 'dependency-mapping', 'draft-artifacts', 'cross-source-synthesis', 'transparent-calculation'];
 async function role(page, id = 'product-one') {
-  await people(page).locator(`[data-person-id="${id}"]`).click();
+  const key = people(page).locator(`[data-person-id="${id}"]`);
+  if (await key.getAttribute('aria-expanded') !== 'true') await key.click();
+  await settings(page, 'role').locator('[data-role-facet="functionId"]').click();
   await field(page, 'role', 'functionId').focus();
+}
+async function chooseRole(page, name, value) {
+  if (name === 'change') {
+    const [framework] = value.split(':');
+    await settings(page, 'role').locator(`[data-role-reel="framework"] [data-reel-choice="${framework}"]`).click();
+    await settings(page, 'role').locator(`[data-role-field="change"][data-role-choice="${value}"]`).click();
+  } else {
+    await settings(page, 'role').locator(`[data-role-facet="${name}"]`).click();
+    if (name === 'functionId') await field(page, 'role', name).selectOption(value);
+    else await settings(page, 'role').locator(`.studio-role-mixer__facet-options [data-role-field="${name}"][data-role-choice="${value}"]`).click();
+  }
+}
+async function readableReelControls(page, { choices = false } = {}) {
+  const readings = [];
+  const selector = choices ? '[data-role-reel] .native-reel__choice' : '[data-role-reel] > .native-control--cancel';
+  for (const button of await settings(page, 'role').locator(selector).all()) {
+    for (const hovered of [false, true]) {
+      if (hovered) await button.hover(); else await page.mouse.move(0, 0);
+      const reading = await button.evaluate(element => {
+        const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
+        const context = canvas.getContext('2d', { willReadFrequently: true });
+        const rgb = value => {
+          context.clearRect(0, 0, 1, 1); context.fillStyle = value; context.fillRect(0, 0, 1, 1);
+          const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+          return [red, green, blue, alpha / 255];
+        };
+        const luminance = channels => channels.slice(0, 3).map(channel => channel / 255)
+          .map(channel => channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4)
+          .reduce((sum, channel, index) => sum + channel * [.2126, .7152, .0722][index], 0);
+        const foreground = getComputedStyle(element).color;
+        let current = element, background;
+        do { background = getComputedStyle(current).backgroundColor; current = current.parentElement; }
+        while (current && (rgb(background)[3] ?? 1) < 1);
+        const values = [luminance(rgb(foreground)), luminance(rgb(background))].sort((a, b) => b - a);
+        return { label: element.textContent, foreground, background, contrast: (values[0] + .05) / (values[1] + .05),
+          pressed: element.getAttribute('aria-pressed'), shadow: getComputedStyle(element).boxShadow };
+      });
+      assert.ok(reading.contrast >= 4.5, `Reel control remains legible ${hovered ? 'on hover' : 'at rest'}: ${JSON.stringify(reading)}`);
+      readings.push({ ...reading, hovered });
+    }
+  }
+  if (choices) {
+    for (const pressed of ['false', 'true']) {
+      const states = readings.filter(reading => reading.pressed === pressed);
+      assert.equal(new Set(states.map(({ foreground, background }) => `${foreground}/${background}`)).size, 1,
+        `All wheel variants retain the same ${pressed === 'true' ? 'pressed' : 'resting'} choice pair, including hover`);
+      assert.ok(states.every(reading => reading.shadow.includes('inset') === (pressed === 'true')),
+        'Raised and pressed depth identify choice state independently of wheel color');
+    }
+    assert.equal(new Set(readings.map(reading => reading.background)).size, 2, 'Resting and selected choices remain visibly distinct');
+  }
 }
 async function draftField(page, kind, name, value) {
   await field(page, kind, name).evaluate((control, value) => {
@@ -102,31 +155,57 @@ async function contribution(page, category = 'source-retrieval', { draft = false
 }
 
 for (const engine of names) {
-  test(`${engine}: person settings and role pads stay local through focus, acceptance and independent Close`, async t => {
+  test(`${engine}: one person mixing desk retains typed funding through connected reels, exact overrides and shared Close`, async t => {
     const page = await open(t, engine);
     const person = people(page).locator('[data-person-configure]');
-    await people(page).locator('[data-person-id="product-one"]').click();
+    await role(page);
     await person.locator('[name="label"]').fill('Product lead draft');
     await person.locator('[name="ratePerHour"]').fill('123');
-    await field(page, 'role', 'seniorityId').focus();
+    const before = await page.evaluate(() => window.responsibilityFixture.studio.readHistory().undoCount);
+    await settings(page, 'role').locator('[data-role-reel="framework"] [data-reel-choice="npt"]').click();
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.studio.readHistory().undoCount), before + 1, 'a connected recipe accepts one role change');
+    const acceptedPreview = await person.locator('[data-person-total]').textContent();
+    assert.match(acceptedPreview, /^\$/, 'a role choice retains a meaningful typed funding preview');
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.read().active?.kind), 'person');
+    await settings(page, 'role').locator('[data-role-reel="framework"] [data-reel-choice="npt"]').click();
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.read().active?.kind), 'person', 'reselecting the current recipe leaves the person edit active');
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.studio.readHistory().undoCount), before + 1);
+    await expect(person.locator('[data-person-total]')).toHaveText(acceptedPreview);
     await expect(person).toHaveAttribute('open', '');
     await expect(settings(page, 'role')).toHaveAttribute('open', '');
     await expect(person.locator('[name="label"]')).toHaveValue('Product lead draft');
-    await field(page, 'role', 'seniorityId').selectOption('principal-plus');
-    await expect(person).toHaveAttribute('open', '');
+    await chooseRole(page, 'seniorityId', 'principal-plus');
+    await chooseRole(page, 'decisionId', 'advises');
     await expect(person.locator('[name="ratePerHour"]')).toBeEnabled();
     await expect(person.locator('[name="ratePerHour"]')).toHaveValue('123');
     assert.equal((await state(page)).people[0].label, 'product-one', 'role acceptance retains the separate typed-name proposal');
+    assert.deepEqual((await state(page)).people[0].role.change, { frameworkId: 'npt', componentId: 'collective-action' }, 'an exact decision choice preserves the chosen model');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
-      await expect(settings(page, 'role').locator('.studio-role-pad select')).toHaveCount(8);
+      await expect(settings(page, 'role').locator('[data-role-reel]')).toHaveCount(3);
+      await expect(settings(page, 'role').locator('[data-role-facet]')).toHaveCount(7);
+      await expect(people(page).locator('[data-person-desk-close]')).toBeVisible();
+      await expect(settings(page, 'role').locator('summary')).toBeHidden();
+      await expect(person.locator('summary')).toBeHidden();
       const geometry = await people(page).locator('.studio-person-receiver').evaluate(element => {
         const outer = element.getBoundingClientRect();
         return [...element.querySelectorAll('input,select,button')].filter(control => control.getClientRects().length)
           .map(control => { const box = control.getBoundingClientRect(); return { name: control.name || control.textContent,
             outside: box.left < outer.left - 1 || box.right > outer.right + 1 }; }).filter(control => control.outside);
       });
-      assert.deepEqual(geometry, [], 'the paired local modules contain every visible control');
+      assert.deepEqual(geometry, [], 'the shared desk contains every visible control');
+      const overflowingChoices = await settings(page, 'role').locator('.native-reel__choice').evaluateAll(controls => controls
+        .filter(control => control.scrollWidth > control.clientWidth + 1).map(control => control.textContent));
+      assert.deepEqual(overflowingChoices, [], 'role reel labels remain inside their choice targets');
+      const splitWords = await settings(page, 'role').locator('.native-reel__choice').evaluateAll(controls => {
+        const context = document.createElement('canvas').getContext('2d');
+        return controls.filter(control => {
+          const style = getComputedStyle(control); context.font = style.font;
+          const space = control.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+          return control.textContent.split(/\s+/u).some(word => context.measureText(word).width > space + 1);
+        }).map(control => control.textContent);
+      });
+      assert.deepEqual(splitWords, [], 'ordinary desktop and phone reel targets preserve whole label words');
       const shadows = await person.locator('.native-coordination__stepper button:enabled').evaluateAll(controls => controls.map(control => getComputedStyle(control).boxShadow));
       assert.ok(shadows.length > 0 && shadows.every(shadow => shadow !== 'none'), 'circular increments retain their tactile shadows');
       await people(page).locator('.studio-person-receiver').screenshot({ path: resolve(captures, `${engine}-person-role-local-${width}.png`) });
@@ -136,22 +215,12 @@ for (const engine of names) {
     assert.equal(changed.label, 'Product lead draft');
     assert.equal(changed.rateCentsPerHour, 12300);
     assert.equal(changed.role.seniorityId, 'principal-plus', 'Person Apply keeps the accepted role');
-    await settings(page, 'role').locator('[data-rack-editor-close]').click();
-    await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
-    await expect(person).toHaveAttribute('open', '');
-    await settings(page, 'role').locator('summary').click();
-    await expect(settings(page, 'role')).toHaveAttribute('open', '');
-    await settings(page, 'role').locator('.studio-rack-header__owner').click();
-    await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
-    await expect(people(page).locator('[data-person-id="product-one"]')).toBeFocused();
-    await expect(person).toHaveAttribute('open', '');
-    await settings(page, 'role').locator('summary').click();
-    await person.locator('[data-person-rack-close]').click();
+    await people(page).locator('[data-person-desk-close]').click();
+    await expect(settings(page, 'role')).toBeHidden();
     await expect(person).not.toHaveAttribute('open', '');
-    await expect(settings(page, 'role')).toHaveAttribute('open', '');
-    await field(page, 'role', 'functionId').selectOption('engineering');
-    assert.equal((await state(page)).people[0].role.functionId, 'engineering');
-    await people(page).locator('[data-person-id="product-one"]').click();
+    await expect(people(page).locator('[data-person-id="product-one"]')).toBeFocused();
+    await role(page);
+    await expect(settings(page, 'role').locator('[data-role-reel="framework"]')).toHaveAttribute('data-reel-value', 'npt');
     await person.locator('[name="ratePerHour"]').fill('125');
     await page.evaluate(() => {
       const { studio, controller } = window.responsibilityFixture;
@@ -164,14 +233,15 @@ for (const engine of names) {
   });
   test(`${engine}: visible role choices resume after Undo and Close and yield to a same-target successor`, async t => {
     const page = await open(t, engine);
+    await role(page);
     await field(page, 'role', 'functionId').selectOption('engineering');
     await root(page).locator('[data-studio-undo]').click();
     await field(page, 'role', 'functionId').selectOption('data-ml');
     assert.equal((await state(page)).people[0].role.functionId, 'data-ml', 'Undo leaves the visible facet ready for another choice');
     await draftField(page, 'role', 'functionId', 'engineering');
-    await settings(page, 'role').locator('[data-rack-editor-close]').click();
+    await people(page).locator('[data-person-desk-close]').click();
     await expect(settings(page, 'role')).not.toHaveAttribute('open', '');
-    await settings(page, 'role').locator('summary').click();
+    await role(page);
     await expect(field(page, 'role', 'functionId')).toBeEnabled();
     await field(page, 'role', 'functionId').focus();
     await expect(field(page, 'role', 'functionId')).toHaveValue('engineering');
@@ -210,6 +280,38 @@ for (const engine of names) {
     });
     assert.deepEqual(interrupted, ['receiver', 'coordinator', 'intent'].map(mode => ({ mode, raw: 'design-research', accepted: null, changes: 0 })),
       'interrupted input and change preserve the successor proposal and canonical lease');
+  });
+  test(`${engine}: populated role reels hydrate exact values through recipe and facet Undo`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.responsibilityFixture;
+      studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read()); controller.refresh();
+    });
+    const original = await state(page), person = original.people[0];
+    await role(page, person.id);
+    await readableReelControls(page);
+    const history = await page.evaluate(() => window.responsibilityFixture.studio.readHistory().undoCount);
+    await settings(page, 'role').locator('[data-role-reel="framework"] [data-reel-choice="npt"]').click();
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.studio.readHistory().undoCount), history + 1);
+    await expect(settings(page, 'role').locator('[data-role-reel="framework"]')).toHaveAttribute('data-reel-value', 'npt');
+    await expect(settings(page, 'role').locator('[data-role-reel="enablerId"]')).toHaveAttribute('data-reel-value', 'protected-focus-time');
+    await expect(settings(page, 'role').locator('[data-role-reel="decisionId"]')).toHaveAttribute('data-reel-value', 'operates');
+    await readableReelControls(page);
+    await readableReelControls(page, { choices: true });
+    await chooseRole(page, 'postureId', 'domain-reviewer');
+    await root(page).locator('[data-studio-undo]').click();
+    await expect(settings(page, 'role').locator('[data-role-choice="individual-contributor"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(settings(page, 'role').locator('[data-role-reel="framework"]')).toHaveAttribute('data-reel-value', 'npt');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await state(page), original);
+    await expect(settings(page, 'role').locator('[data-role-reel="framework"]')).toHaveAttribute('data-reel-value', person.role.change?.frameworkId ?? '');
+    await expect(settings(page, 'role').locator('[data-role-reel="enablerId"]')).toHaveAttribute('data-reel-value', person.role.enablerId ?? '');
+    await expect(settings(page, 'role').locator('[data-role-reel="decisionId"]')).toHaveAttribute('data-reel-value', person.role.decisionId ?? '');
+    await settings(page, 'role').locator('[data-role-reel="decisionId"] > .native-control--cancel').click();
+    await readableReelControls(page);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await state(page), original);
   });
   test(`${engine}: contribution acceptance and Close preserve same-instance successor focus`, async t => {
     const page = await open(t, engine);
@@ -318,7 +420,7 @@ for (const engine of names) {
     for (const id of first.personIds.slice(1)) await people(page).locator(`[data-people-work="${first.id}"][data-people-participant="${id}"]`).uncheck();
     const sole = people(page).locator(`[data-people-work="${first.id}"][data-people-participant="${first.personIds[0]}"]`);
     await expect(sole).toBeDisabled();
-    await expect(sole.locator('..')).toContainText('Add another person first');
+    await expect(sole.locator('..')).toHaveAttribute('title', 'Add another person to this session before removing this participant.');
   });
 
   test(`${engine}: People readings wrap fractional-hour funding within the person cell`, async t => {
@@ -376,21 +478,20 @@ for (const engine of names) {
       await expect(arranger.locator('.studio-people-arranger__value').first()).toHaveText('$120/hr');
       await expect(arranger.locator('.studio-people-arranger__value').nth(1)).toHaveText('2 h available / 4 h funded');
 
-      if (!await field(page, 'role', 'functionId').isVisible()) await settings(page, 'role').locator('summary').click();
-      await expect(settings(page, 'role').locator('.studio-role-pads')).toBeVisible();
+      await role(page, 'maya');
+      await expect(settings(page, 'role').locator('.studio-role-mixer')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeVisible();
       await expect(field(page, 'role', 'functionId')).toBeEnabled();
       await expect(people(page).locator('.studio-person-order .native-control--remove').first()).toHaveCSS('background-color', 'rgb(243, 216, 223)');
       await expect(people(page).locator('.studio-people-rates')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
       await people(page).screenshot({ path: resolve(captures, `${engine}-people-racks-${width}.png`) });
-      await people(page).locator('[data-person-id="maya"]').click();
       const person = people(page).locator('[data-person-configure]');
       const steps = await person.locator('.studio-rate .native-coordination__stepper button').evaluateAll(buttons => buttons.map(button => { const box = button.getBoundingClientRect(); return { width: box.width, height: box.height }; }));
       assert.ok(steps.every(step => step.width === 44 && step.height === 44), 'rate increment controls retain circular 44px geometry');
       const personBox = await person.boundingBox();
-      assert.ok(personBox.height < 700, `person controls fit a phone-height reading at ${width}: ${personBox.height}`);
+      assert.ok(personBox.height < 850, `funding and session-spread controls remain one compact phone reading at ${width}: ${personBox.height}`);
       await person.screenshot({ path: resolve(captures, `${engine}-person-rack-${width}.png`) });
-      await person.locator('[data-person-rack-close]').click();
+      await people(page).locator('[data-person-desk-close]').click();
       await people(page).locator('.native-responsibility__selector').first().click();
       const work = await settings(page, 'contribution').locator('.studio-contribution-work').boundingBox();
       const humans = await settings(page, 'contribution').locator('.studio-contribution-people').boundingBox();
@@ -432,16 +533,15 @@ for (const engine of names) {
   test(`${engine}: role choices and all six contribution categories retain literal investment and exchange meaning`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
+    await role(page);
     await expect(field(page, 'role', 'functionId')).toBeVisible();
     await field(page, 'role', 'functionId').selectOption('design-research');
     assert.equal((await state(page)).people[0].role.functionId, 'design-research', 'the visible facet accepts its first change without opening a disclosure');
     await root(page).locator('[data-studio-undo]').click();
     await role(page);
     await expect(settings(page, 'role').locator('summary')).toHaveText('Role mix · product-one · Add role details');
-    for (const [name, value] of Object.entries(expectedRole)) {
-      await settings(page, 'role').locator(`[data-role-field="${name}"]`).click();
-      await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
-    }
+    await chooseRole(page, 'change', 'npt:collective-action');
+    for (const [name, value] of Object.entries(expectedRole)) if (name !== 'change') await chooseRole(page, name, value);
     await expect(settings(page, 'role')).toHaveAttribute('open', '');
     await expect(settings(page, 'role').locator('.studio-rack-header__saved')).toHaveText('Saved');
     assert.deepEqual((await state(page)).people[0].role, expectedRole);
@@ -499,6 +599,16 @@ for (const engine of names) {
     assert.deepEqual(contribution.workIds, ['review']);
     assert.equal(contribution.reviewBoundary, 'Check source dates.');
     assert.equal(contribution.decisionBoundary, 'Product lead decides.');
+    await expect(people(page).locator('.studio-contribution-reading')).toHaveText('12 h of supporting work · $1,200');
+    await expect(people(page).locator('.studio-contribution-tracks__totals')).toContainText('12 h');
+    const beforePause = await state(page);
+    await people(page).getByRole('button', { name: 'Pause Weekly working session throughout the plan', exact: true }).click();
+    assert.equal((await state(page)).work[0].status, 'paused');
+    await expect(support).toHaveText('Ⅱ');
+    await expect(people(page).locator('.studio-contribution-reading')).toHaveText('12 h of supporting work · $1,200');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await state(page), beforePause);
+    await expect(support).toHaveText('●');
   });
 
   test(`${engine}: saved role and contribution forms retain exact targets through renamed, retired and conflicting records`, { timeout: 60000 }, async t => {
@@ -522,7 +632,7 @@ for (const engine of names) {
     }, id);
     await root(page).locator('[data-amp-panel="saved"]').click();
     await root(page).locator('[data-saved-open="role:role.update:product-one"]').click();
-    await expect(settings(page, 'role').locator('fieldset')).toHaveAttribute('disabled', '');
+    await expect(settings(page, 'role').locator('form > fieldset')).toHaveAttribute('disabled', '');
     await expect(field(page, 'role', 'functionId')).toHaveValue('data-ml');
     await expect(settings(page, 'role').locator('summary')).toContainText('Research lead · retired');
     await action(page, 'role', 'review').click();

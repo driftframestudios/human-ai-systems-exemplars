@@ -3,11 +3,13 @@
 Let visitors explore authored configurations by choosing a visible reel position
 and seeing the resulting work immediately. The fixed housing, rotating center
 and pressed choice make the setting easy to locate. Team arrangements, Change
-viewpoints/frameworks, Quality preparation/recovery and Investment comparisons
-are current receivers.
+viewpoints/frameworks, Quality preparation/recovery, People role presets and
+Investment comparisons are current receivers.
 
 **Standing:** review candidate `0.2.0`; ID `vfc:zoetrope-preset-selection`;
-reviewed 8 November 2026. This pattern inherits
+dev receiving contract revised 9 November 2026 for
+[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884).
+This pattern inherits
 [Studio Rack Composition](README.md) and uses its Instrument Rack treatment.
 
 ## Fit and smallest useful dose
@@ -36,10 +38,19 @@ through one reversible replacement transaction. Focus-only movement and
 decorative rotation preserve accepted state. Other receivers retain their own
 Apply and Undo boundaries.
 
-Teal and cobalt reel variants, authored option counts and paired configurations
-may vary. The choice labels remain stationary while the center rotates. Selected
+Teal, cobalt and rose reel variants, authored option counts and connected
+configurations may vary. Wheel color changes the housing and rotor; every variant
+uses `--canvas-paper` for resting choices and `--native-signal` teal for the
+pressed choice, with the same `--native-text` foreground,
+pressed depth and visible focus. Hover preserves the same readable pair. Clear
+remains a legible ghost control in both assigned and unassigned states. The
+choice labels remain stationary while the center rotates. Selected
 buttons keep their target geometry when pressed. A compact output repeats the
 selected meaning; it does not add a competing instruction panel.
+
+The [Chromatic Pressed Reel Specimen](zoetrope-pressed-palette-specimen.md)
+preserves the alternative saturated cobalt/rose selected faces for a future
+receiver. This live contract uses the same canvas-paper/teal pair throughout.
 
 Investment adopts this shared Showcase presentation. Its planning workbench's
 illustrative reel remains preserved as a reference, while the live chapter uses
@@ -54,6 +65,30 @@ connected presets through the canonical owner. A metric can select the related
 control group; a preset can update several assumptions together. The visible
 choice, selected output and result remain synchronized. Silent synchronization
 after Undo or import changes presentation without creating another edit.
+
+## Connected People role mix
+
+One selected-person desk holds three compact shared reels: Change model (six
+choices, teal), Ability enabler (five, cobalt) and Decision boundary (four, rose).
+Each has stationary labels and one short selected context. A deliberate selection
+builds one deterministic role recipe and accepts it through the existing role
+owner. The related reels settle to that same accepted configuration; shared Undo
+restores the whole recipe in one step. Initial hydration preserves the person's
+recorded values, including unassigned fields.
+
+Recipes retain Function and Seniority. The selected framework exposes its actual
+component pads, and the facet bank retains exact Function, Seniority, Working
+posture, Ability enabler, Decision boundary, Quality role and AI handoff choices. These controls override individual
+fields without requiring a second recipe. The large Function vocabulary keeps
+its native selector. The recipe is a reversible example for exploring a role;
+people retain authority over actual responsibilities.
+
+Session spread may vary the decorative rotor movement while keeping every
+selected label and recorded role field unchanged. Assigned time supplies a
+capacity reading, not an authority inference. This separation lets participation
+and role controls respond visually while retaining their different meanings.
+The compact composition stacks at phone widths and retains labels and touch
+areas at laptop widths.
 
 ## Keyboard, motion and alternate presentation
 
@@ -82,6 +117,7 @@ to fit an arbitrary circle.
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Housing, rotor, pressed treatment, motion and forced-color variant |
 | [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) and [template transactions](../../collaboration/native-investment-studio/connection-templates.mjs) | Direct arrangement replacement, field settlement, included-work reading and local Undo |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Viewpoint/framework and preparation/recovery consequences |
+| [Person role mixer](../../collaboration/native-investment-studio/person-role-mixer.mjs), [responsibility controller](../../collaboration/native-investment-studio/responsibility-controller.mjs) | Data-driven connected role recipes, component/facet overrides, one accepted edit and silent hydration |
 | [Investment control adapter](../../collaboration/native-investment-studio/investment-controls.mjs) and [workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Shared reel presentation, independent financial choices and connected comparison consequences |
 | [Shell browser checks](../../tests/native-investment-studio/shell.browser.mjs) | Shared reel semantics and motion preferences |
 | [Connection template](../../tests/native-investment-studio/connection-template.browser.mjs), [Change](../../tests/native-investment-studio/change.browser.mjs), [Assurance](../../tests/native-investment-studio/assurance.browser.mjs) | Populated choice results, preserved draft ownership and chapter-specific recovery |

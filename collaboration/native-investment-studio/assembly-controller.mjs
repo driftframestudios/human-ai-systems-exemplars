@@ -33,6 +33,10 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     'recovery', 'current', 'fresh-id', 'status'].map(name => [name, find(name)]));
   const inputs = Object.fromEntries(TEXT_FIELDS.map(field => [field, elements.form.elements.namedItem(field)]));
   const errors = Object.fromEntries([...TEXT_FIELDS, 'personIds'].map(field => [field, find(`error="${field}"`)]));
+  // Keep native disabled semantics on the fieldset and grid layout on a regular
+  // element; changing validation rows can collapse Chromium's fieldset grid.
+  const fields = document.createElement('div'); fields.className = 'studio-assembly-fields';
+  fields.append(...elements.fieldset.childNodes); elements.fieldset.append(fields);
   const teamRack = elements.teams.closest('.native-assembly__teams');
   const oldAdd = root.querySelector('[data-assembly-action="team-create"]');
   const addTeam = createRackAddControl(document, { label: 'Add team', dataset: { assemblyAction: 'team-create' } });
@@ -455,6 +459,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   function dispose() {
     if (disposed) return;
     rateControls.dispose(); localHeader.dispose();
+    fields.replaceWith(...fields.childNodes);
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;

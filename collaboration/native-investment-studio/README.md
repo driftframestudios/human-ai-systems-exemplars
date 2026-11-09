@@ -9,8 +9,9 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
-People team lanes and a direct session arranger (#864), local Person/Role editing
-and contribution creation (#881), Abilities support racks with local shared-name editing (#856),
+People team lanes and a direct session arranger (#864), a unified person mixing
+desk with connected role reels and capacity readings (#884), contribution-local
+creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818). Shared creation, local navigation and accepted recovery
 retain their existing owners.
@@ -49,21 +50,37 @@ bright selected face distinguish teams from their members. Movement sits at the
 lane bottom with Remove at the right. Team Settings pairs its name with the
 selected members' hourly subtotal; unknown rates remain explicit. Add person
 keeps a compact name/preview row and a return to the team or task that opened it.
-The people/session arranger places each person's
-rate, available/funded-time pills, teams and quality indicators beside their
-participation pads. A checkbox changes session participation directly, with
-amp Undo available. Equal session columns preserve comfortable pads and local
-scrolling. Whole-dollar rate readings keep this comparison concise while exact
-values remain in the plan and editor. Record-local controls arrange and remove people.
-A selected person opens compact name, rate and funded-time settings with an
-**All people** return; Apply accepts those typed values. Coordination borrows
-this same compact form.
-Person settings and Role mix share a compact working area and keep independent
-visibility. Each role pad contains its label and native selector, so its current
-value is also its editing control. A role choice accepts directly with amp Undo;
-the person's typed name, rate and funded time retain their Apply boundary. Close
-and the local return dismiss the module they name while retaining unfinished work.
+The people/session arranger keeps each person's rate, funded time, team and
+quality indicators beside direct participation pads. Selected cells show that
+person's planned time and known work value. The top reading and session-column
+footers retain explicit zero totals; available cells stay visibly available. Whole-dollar readings remain concise; unknown rates stay explicit and exact
+values remain in the plan. Equal columns and a named local scroll region preserve
+comfortable pads. The legend explains selected participation and paused work.
+Paused sessions retain their planned time and value in the canonical ledger.
 
+Selecting a person opens one mixing desk with one **All people** return and Close.
+Rate dials sit left of funded Hours/Minutes, with a cool-blue information preview.
+Apply accepts typed name, rate and funded-time changes. The desk reuses
+the canonical person form that Coordination borrows; separate internal form
+owners preserve existing validation and draft recovery.
+
+Three compact reels—**Change model**, **Ability enabler** and **Decision boundary**—
+select connected role presets. Component pads and a small facet bank allow exact
+overrides. All reel options share canvas-paper resting and teal selected faces;
+the separate chromatic pressed specimen remains in the Visual Fidelity Contracts.
+Each preset accepts one role edit with amp Undo; Function and Seniority
+remain the visitor's own selections. The **Session spread** fader changes this
+person's participation in whole session plans and shows actual planned and funded
+time. It fills choices in visible plan order while keeping a session's sole
+participant assigned. A completed gesture has one Undo step. Its reel movement is
+decorative; hours confer no decision authority. Per-person fractional time remains
+separate future work in #798.
+
+The contribution matrix gives a second scope: its rollup counts distinct linked
+work once, even when several contributions share a session. Column footers show
+the corresponding support and planned-time reading; a symbol legend distinguishes
+links, paused work and responsibility. Pause/Resume changes that session's shared
+status while preserving its planned ledger values.
 A contribution opens Work beside Receiver and decision, with those sections
 stacked at phone widths. Category, human receiver, decision owner and supporting
 session choices accept directly, as do People team membership and member order.
@@ -83,7 +100,7 @@ Abilities retains **What people can do** and **How the team works**, comparing
 responsibility, preparation, review and observation. Selecting a cell opens one
 dark rack with a readable item heading, local return, Apply and Close. Its People
 view places team and participants beside decision owner and status. Supporting
-work uses compact paired groups; observation material uses chocolate companions.
+work uses compact paired groups; observation material uses cool-blue reading companions.
 Native pads retain their written selected state and fit ordinary mobile widths.
 Adding a person or team from that rack immediately reveals and selects the new
 record, while retaining the current ability or practice proposal. This works
@@ -158,9 +175,11 @@ meaning and leave the accepted work price intact. **Compare a change** and
    its pads and return through **Delivery overview**. In Shared sessions, choose
    **People** to assign participants or **Handoffs** to link the work. The last
    participant stays selected until another person is included.
-5. In People, arrange team lanes or person cards, then choose a person. Apply
-   accepts their name, rate and funded time; Role mix choices save directly.
-   Choose a contribution to connect its work, receiver and decision owner.
+5. In People, arrange team lanes or choose a person. Turn a role reel, refine a
+   component or facet, and move Session spread to compare whole-session
+   participation. These choices save directly with amp Undo. Apply accepts typed
+   name, rate and funded time. Choose a contribution to connect its work, receiver
+   and decision owner.
    Empty slots add records with editing closed, and amp Undo restores accepted
    changes. An Abilities support cell opens its own local proposal controls;
    **Rename** there changes a shared person or team name without leaving the task.
@@ -248,8 +267,9 @@ The [assembly journey](../../tests/native-investment-studio/assembly.browser.mjs
 observes direct membership and ordering, Undo, removal dependencies, retained
 drafts and the borrowed person form. The
 [responsibility journey](../../tests/native-investment-studio/responsibility.browser.mjs)
-observes the visible role rail, contribution choices, retained note data and the
-People composition at phone and desktop widths. The Abilities journey observes
+observes the person mixing desk, connected role choices, contribution links and
+retained note data at phone and desktop widths. Focused capacity checks distinguish
+whole-session membership, one-gesture Undo, unknown rates and deduplicated readings. The Abilities journey observes
 readable choices, hidden-section behavior, retained proposals and accepted
 recovery. Investment checks independent deck identities, connected selections,
 saved round trips and grouped dial recovery. These routes establish local source
@@ -289,7 +309,8 @@ actual checks and their scope. Performance refinement stays with
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
 | People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
-| Visible role mix and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs) |
+| Connected role reels, exact facets and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs), [person-role-mixer.mjs](person-role-mixer.mjs) |
+| Planned capacity readings and whole-session spread | [people-capacity.mjs](people-capacity.mjs), [team-controller.mjs](team-controller.mjs) |
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
 | Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs), [Abilities styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) |
 | Shared creation target, accepted additions and names | [rack-creation-controls.mjs](rack-creation-controls.mjs), [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs) |

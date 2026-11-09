@@ -6,7 +6,7 @@ keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
 dev receiving contract revised 9 November 2026 for
-[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining the People composition from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
@@ -104,7 +104,7 @@ session remains available when another settings key is selected. Returning to
 Plan session restores that proposal. Apply returns to its supporting purpose.
 
 The quality illustration pairs Reference horizon with Effort and rates, then
-Recovery participants with a chocolate Estimated effort companion. Native radio
+Recovery participants with a cool-blue Estimated effort companion. Native radio
 and checkbox geometry remains independent of numeric inputs. Shared money dials,
 duration faces, readout, circular steppers and motion retain their own contracts.
 Closing or switching the local receiver releases an active dial gesture; hidden
@@ -133,11 +133,10 @@ People's Add person, Add team and Add contribution accept useful records with
 editing closed. Named ghost creation slots occupy the end of their collections;
 hover/focus reveals the plus and touch keeps it visible. A new contribution starts
 as Draft artifacts with receiver and decision owner unassigned. Selecting the
-record opens its local editor. Person settings and Role mix form a compact pair
-with independent visibility. Each named role pad contains its native selector,
-combining the current value and its editing control. Bounded role/contribution
-choices and team/support membership accept directly; typed person settings keep
-Apply and their retained draft. Receiver and decision owner remain independent
+record opens its local editor. One person mixing desk combines rate/funded-time
+controls with connected role reels, component pads, exact facet choices and
+Session spread. Bounded role/contribution choices and team/support membership
+accept directly; typed person settings keep Apply and their retained draft. Receiver and decision owner remain independent
 selections; team membership supplies neither authority.
 
 The People arranger uses person row headers and working-session column headers.
@@ -150,12 +149,31 @@ in the plan. These pills are text readings, with a distinct treatment from the
 interactive pads. Local horizontal scrolling retains comfortable pad targets.
 A session
 keeps at least one participant; the affected pad explains that boundary locally.
-Selecting a person opens the compact settings receiver beside its role choices;
-All people returns to the matrix. Each module's Close/return matches its actual
-visibility and retains the neighboring working area. Typed settings keep their
-existing Apply boundary while role choices and direct participation enter the
-shared Undo history. Entering a role selector preserves the person's unfinished
-name, rate and funded-time fields.
+Selecting a person opens one mixing desk; All people and Close return to the
+matrix. Its selected header replaces the earlier paired disclosure headers.
+Typed settings retain Apply, while connected role recipes and direct participation
+enter shared Undo history. Role choices preserve unfinished name, rate and
+funded-time fields.
+
+The People matrix's top readout totals planned person-time and known work value.
+Selected cells show the corresponding person's full session-plan time and known
+value; available cells retain their available state. Column footers retain zero
+for empty totals. Rates that need values stay explicit. A concise symbol legend
+distinguishes funded work, extra work and paused status, with text supplementing
+color. Paused sessions retain their planned time and money in these readings.
+
+The contribution matrix answers a different question: which work supports these
+contributions? Its rollup uses the union of linked work IDs so repeated support
+counts once. Session footers expose support and planned time; linked, paused and
+available symbols plus receiver/decision markers have a nearby legend. A local
+Pause/Resume updates the shared session status and keeps its planned ledger value.
+These readings expose scope; they represent neither elapsed schedule nor savings.
+
+Session spread changes the selected person's whole-session membership in visible
+plan order. The resulting pads and actual assigned/funded-time readout update
+together. A sole participant stays included; the nearby hint explains the retained
+selection. One gesture is one accepted operation and one Undo. Fractional shares
+remain future model work in #798.
 
 Team keys fill their editorial lane and show the parent's name and open state.
 Their resting face uses `--about-cobalt`; the selected face uses
@@ -191,7 +209,7 @@ and Apply boundaries.
 
 The Abilities People receiver pairs team and participation with decision owner
 and lifecycle. These groups sit beside each other at laptop widths and stack
-at phone widths. Outcome pairs the editable use context with a chocolate
+at phone widths. Outcome pairs the editable use context with a cool-blue
 observation prompt. Supporting work pairs existing session choices with a small
 new-session module when selected. The same shared ghost creation control supplies
 a named, persistent entry beside those bounded choices. Native switch and radio
@@ -253,6 +271,7 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | [Shared session rack](../../collaboration/native-investment-studio/shared-session-rack.mjs) | People/Handoffs tabs, direct relationship pads, last-person feedback and compact selected-row controls |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing, direct role/support choices and accepted record creation |
+| [Capacity readings](../../collaboration/native-investment-studio/people-capacity.mjs), [role mixer](../../collaboration/native-investment-studio/person-role-mixer.mjs) | Canonical-ledger scope, deduplicated support, whole-session spread and connected role presets with exact overrides |
 | [Quality controller](../../collaboration/native-investment-studio/assurance-controller.mjs), [Quality CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css), [Quality browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Attached settings receiver, retained Close, canonical top Apply, compact support/assumption modules and phone containment; [#858](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/858) |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion, Apply delegation and return identity |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Temporal append targets, distinct plan creation, retained placements and Undo |
@@ -276,10 +295,10 @@ tables, underlying capability definitions and proposal acceptance boundary remai
 the same. Its visibility and native-control geometry rules supersede inherited
 text-field sizing that obscured the People receiver.
 
-#881 supersedes the earlier always-open role rail and its detached selected-facet
-control. Native selectors now live inside the pads, with independent Person/Role
-visibility. Contribution-specific person creation uses its own rack and retained
-parent route.
+#884 supersedes #881's paired Person/Role disclosures with one mixing desk and
+connected presets plus exact overrides. Capacity readings now accompany the
+People and contribution matrices with distinct scopes. #881's contribution-local
+person creation retains its own rack and parent route.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 record-local controls. Bounded role/contribution choices plus team/support membership accept directly.

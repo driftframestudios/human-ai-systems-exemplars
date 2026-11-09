@@ -15,8 +15,11 @@ lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
-#881 keeps Person settings and Role mix independently usable in one compact
-working area and localizes contribution-specific person creation. #882 owns the
+#884 combines selected-person settings, connected role reels and whole-session
+spread in one visible mixing desk. Capacity readings distinguish person/session
+effort from the contribution matrix's distinct linked work. This supersedes #881's
+paired disclosure presentation while retaining its contribution-local creation
+and canonical draft owners. #882 owns the
 follow-up global audit of circular increment shadows. #879 establishes People
 group identity, local hourly subtotals, compact readings and nested creation
 returns. These extend #864's team lanes and direct session arranger,
@@ -150,7 +153,7 @@ The evidence and alternatives are reconciled in the control research.
 ### People, Abilities and the other chapters
 
 People has one continuous rack composition: horizontal editorial team lanes,
-a people/session arranger with local settings and Role mix, then a distinct
+a people/session arranger with one selected-person mixing desk, then a distinct
 contribution/session working area. Team lanes represent parallel groups. Their
 full-width parent key toggles the local editor; Move left/right and Remove stay
 together at the lane bottom, with Remove at the right. The parent key now has a
@@ -169,8 +172,13 @@ final state.
 
 Equal session columns preserve the large participation pads while the person
 readings use fewer lines. Rates display whole dollars per hour; the funded-time
-pair names available and funded time explicitly. Tabular numerals keep those
-text readings aligned. Stored values and exact editing retain their precision.
+pair names available and funded time explicitly. The top reading totals assigned
+person-time and known work value; each selected cell shows that person's time and
+value for its session plan. Column footers retain zero for empty totals. A legend
+pairs funded, extra and paused symbols with their meanings. Paused work retains
+planned effort and money, matching the canonical ledger. Unknown rates remain
+visible. Tabular numerals keep the readings aligned, while exact editing retains
+stored precision. More collects each person's order and removal tools.
 This supersedes repeated full-sentence resource readings, while the comparison
 and native table headers remain intact. The bounded public-source synthesis in
 [control research](rack-control-research.md#compact-readings-and-a-contextual-return)
@@ -201,9 +209,12 @@ workbench's fixed shadows.
 
 Repeated Studio color literals now have named variables under the shared
 instrument owner. Their resolved paint stays intact outside the requested People
-state changes. Chocolate is primarily an accent and dial/knob-module surface;
-existing companion treatments await named swaps. This narrows the former broad
-chocolate-companion direction without changing the preserved workbench specimen.
+state changes. Chocolate now belongs primarily to Investment modules, dial/knob
+enclosures and small accents. Cool-blue, dark-text information previews replace
+the former chocolate previews in People and the equivalent Abilities/Quality
+reading companions. This supersedes both the broad companion direction and the
+earlier request to retain the Person preview as a chocolate strip. The preserved
+workbench specimen retains its reference paint.
 
 The removal notice formerly recognized fewer reference collections than the
 accepted command layer emitted. Valid handoff, ability and contribution references
@@ -214,22 +225,50 @@ typed stable identity. The existing removal and recovery rules retain their
 authority. Focused unit and browser regressions distinguish this presentation
 omission from accepted-state integrity and exercise that retained-notice lifecycle.
 
-Person settings and Role mix occupy one compact working area with independent
-visibility. Each role pad holds its label and native selector, combining the
-current value with its control. A bounded role change accepts directly; typed
-person name, rate and funded time retain their existing Apply boundary. Close
-and the owner return dismiss the module they name and retain unfinished work.
-This supersedes the always-open role rail, detached selected-facet field and
-the ownership switch that closed Person settings on role focus. The synthesis
-keeps useful simultaneous context from paired modules while preserving each
-command's existing acceptance meaning; exclusive tabs and one combined Apply
-were less fitting for these established interactions.
+The selected person now opens one visible mixing desk. One header names the
+person, returns to People in working sessions and closes that desk. Its Apply
+mirrors the canonical person submitter. The monetary strip places rate on the
+left and funded Hours/Minutes on the right. Its cool-blue preview pairs the
+amount with dark text and the existing left-edge accent.
+Internal sibling forms retain person and role validation, recovery and borrowed
+Coordination use; their prior summaries and independent headers leave the visitor
+surface. This explicitly supersedes #881's paired Person/Role disclosure contract.
+
+Four options informed this synthesis: one long combined form, exclusive Person /
+Role views, a permanently expanded full choice bank, and one desk with a compact
+preset/override mix. The selected fourth option retains simultaneous financial
+and role context, reuses existing direct acceptance and presents detailed choices
+only for the selected facet. Teal Change model, cobalt Ability enabler and rose
+Decision boundary reels offer six, five and four authored choices. All reel
+variants share canvas-paper resting choices and teal pressed choices with dark
+text and the same depth/focus cues; housing color retains its distinct meaning.
+The welcomed cobalt/rose pressed faces remain separately preserved in the
+[Chromatic Pressed Reel Specimen](../../visual-fidelity-contracts/studio-rack/zoetrope-pressed-palette-specimen.md),
+superseding their use as live wheel-specific selection overrides. A recipe
+updates related role fields in one accepted role command; Function and Seniority
+remain independently chosen. Actual framework component pads and seven facet
+selectors provide exact overrides. Hydrating an existing person preserves their
+recorded role values; a deliberate choice invokes a recipe.
+
+Session spread gives the same desk an immediate relationship control. Its fader
+and One plan / Half / All plans presets select complete work rows in visible plan
+order. A sole participant stays assigned so each session remains usable. The
+readout shows selected sessions, actual assigned time and funded time. One
+completed gesture maps to one reversible participation command. Decorative reel
+movement responds to this spread while recorded role and decision authority keep
+their explicit choices. Fractional per-person session time remains #798's separate
+model decision. This scope makes the visual variation useful today without
+presenting a percentage as a stored allocation.
 
 The selected contribution places Work beside Receiver and decision, stacking
 them at phone widths. Category, human receiver, decision owner, supporting
 sessions and support order accept directly. The two human choices preserve
 their separate responsibilities. Accepted links light the matrix's session
-cells. Earlier stored review and decision-boundary notes remain in the plan and
+cells. The contribution rollup selects the union of linked work IDs, so a shared
+session contributes its planned time and known value once. Column footers show
+support and time, and a concise legend names links, paused work and responsibility.
+Pause/Resume changes the shared session status; its planned ledger amounts remain
+visible. Earlier stored review and decision-boundary notes remain in the plan and
 exports while the compact controls edit their current fields.
 
 Add a person requested by a contribution stays inside that contribution's rack.
@@ -258,7 +297,7 @@ One selected dark module follows the selected catalogue, with a readable item he
 owner return, Apply and Close. Its compact pads select Outcome, People,
 Before this, Prepare, Review or Example result. The People receiver pairs
 team/participants with decision owner/status; support groups occupy neighboring
-halves, and observation material uses chocolate companions. Phone widths stack
+halves, and observation material uses cool-blue companions. Phone widths stack
 the halves while keeping choices legible. Chapter-owned CSS defines both text
 and background for pale catalogue keys and the dark header, preserves native
 choice sizes, and respects hidden sections before applying responsive grids.
@@ -445,7 +484,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | People arrangement begins with a separate Person to arrange selector | Each person row carries its own Move earlier/later and Remove controls. |
 | Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
 | People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
-| Always-open Role mix with one detached facet selector | Independent Person/Role modules keep current values and native selection together inside each role pad; local Close and return match visible state. |
+| #881 paired Person/Role disclosure modules | One selected-person mixing desk combines rate/funded time, three connected role reels, exact overrides and whole-session spread; one header and Close serve the visible desk. |
 | Contribution Add person opens the upper Team creation area | The canonical creation form occupies a half-rack inside the initiating contribution and returns to its retained human field. |
 | Role and contribution selections wait for Apply | Role values, contribution category, human responsibility and supporting sessions accept directly; typed person settings retain Apply. |
 | Person settings use a large chapter-local form | One compact canonical form serves both People and the borrowed Coordination receiver. |
@@ -508,16 +547,25 @@ dependencies, retained drafts and the borrowed person receiver. The
 [person browser route](../../tests/native-investment-studio/team-controller.browser.mjs)
 observes local person settings, rates and quantity-control behavior. The
 [responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
-observes direct session membership, parked drafts and Undo, the role pads,
-direct contribution changes, preserved note data, and phone/desktop composition.
+observes direct session membership, parked drafts and Undo, the connected role
+mixer, direct contribution changes, preserved note data, and phone/desktop
+composition. Focused source checks distinguish atomic whole-session spread,
+preserved Function/Seniority, known-value coverage and deduplicated support totals.
+The related #885 repair keeps grid layout on an ordinary wrapper inside native
+Person and creation fieldsets. This preserves disabled-state semantics while
+preventing Chromium from collapsing inputs when validation changes. The browser
+check measures visible controls within their local group and keeps feedback below
+them; an amount preview can still reflow naturally above that group.
+
 These checks establish the named local behavior;
 the receiving release supplies the hosted observation.
 
 Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
-#881 carries independent Person/Role editing and contribution-local creation;
-#882 holds the global circular-stepper shadow audit. #879 refines the current
+#884 carries the unified person mixing desk and capacity readings; #881 retains
+contribution-local creation and the separate canonical form owners. #882 holds
+the global circular-stepper shadow audit. #879 refines the current
 People composition from #864 and retains #836's direct responsibility choices,
 with #837 supplying shared creation controls. #863 covers dependency
 notice completeness and recovery; #865 owns circular control consistency and

@@ -139,7 +139,7 @@
 }
 
 /* Local controls share one proposal owner. Pale modules preserve readable native
-   choices; chocolate readings keep financial interpretation beside its inputs. */
+   choices; cool-blue readings keep financial interpretation beside its inputs. */
 .native-quality-workbench__receiver { display:grid; gap:.65rem; min-inline-size:0; scroll-margin-block-start:5rem; }
 .native-coordination .native-quality-workbench .studio-rack-header { margin:0; padding:.3rem .15rem .6rem; border-block-end:1px solid var(--studio-rack-edge); background:transparent; color:var(--native-paper); }
 .native-coordination .native-quality-workbench .studio-rack-header h4 { margin:0; color:inherit; font-size:1rem; }
@@ -150,7 +150,7 @@
 .native-quality-workbench :is(p,li) { font-size:.8rem; line-height:1.45; }
 .native-quality-workbench p { margin:.35rem 0; }
 .native-quality-workbench .native-quality-module { display:grid; align-content:start; gap:.5rem; min-inline-size:0; padding:.65rem; border:1px solid #91a18b; border-radius:.2rem; background:var(--studio-editorial); color:var(--native-text); }
-.native-quality-workbench .native-quality-module--reading { border-color:var(--studio-gold-edge); border-inline-start-width:.2rem; background:var(--studio-chocolate); color:var(--native-paper); }
+.native-quality-workbench .native-quality-module--reading { border-color:var(--studio-gold-edge); border-inline-start-width:.2rem; background:var(--canvas-cool-blue); color:var(--native-text); }
 .native-quality-workbench .native-quality-module--reading p { margin:0; }
 .native-quality-workbench .native-assurance__assumptions { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
 .native-quality-workbench .native-assurance__field { gap:.35rem; padding:0; border:0; background:transparent; }
@@ -196,7 +196,7 @@
 .native-quality-proposal .studio-repetition > .native-coordination__stepper { grid-column:2; grid-row:1/3; }
 .native-quality-proposal .studio-repetition > [id$='-range'] { display:none; }
 .native-quality-proposal .studio-repetition > [id$='-context'] { grid-column:1; grid-row:2; }
-.native-quality-proposal .native-quality-proposal__reading { grid-column:1/-1; padding:.5rem .65rem; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--studio-chocolate); }
+.native-quality-proposal .native-quality-proposal__reading { grid-column:1/-1; padding:.5rem .65rem; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--canvas-cool-blue); color:var(--native-text); }
 .native-coordination .native-quality-tracks .studio-track-key[aria-expanded='true'] { color:var(--native-text); background:var(--native-signal); box-shadow:inset 0 .15rem .2rem var(--studio-pressed-shadow); }
 @media (min-width:48rem) {
  .native-quality-check > [data-assurance-control$='.included'] { grid-column:1; }

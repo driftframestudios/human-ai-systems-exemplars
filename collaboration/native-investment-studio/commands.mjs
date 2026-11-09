@@ -184,6 +184,22 @@ export function prepareAssembly(base, candidate) {
   let collection;
   let rows;
   switch (command.type) {
+    case 'person.participation.replace': {
+      position(state.people, command.personId, 'command.personId');
+      const known = new Set(state.work.map(row => row.id));
+      if (command.workIds.some(id => !known.has(id))) throw new PlanError('reference', 'command.workIds', 'Choose sessions in this plan.');
+      const selected = new Set(command.workIds);
+      let changed = false;
+      const work = state.work.map(row => {
+        const included = row.personIds.includes(command.personId);
+        if (included === selected.has(row.id)) return row;
+        const personIds = included ? row.personIds.filter(id => id !== command.personId) : [...row.personIds, command.personId];
+        if (!personIds.length) throw new PlanError('minimum-participants', 'command.workIds', 'Keep a participant in each session.');
+        changed = true;
+        return { ...row, personIds };
+      });
+      return { projection: changed ? preparePlan({ ...state, revision: state.revision + 1, work }) : base };
+    }
     case 'score.arrangement.replace': {
       const settings = command.scoreSettings, proposals = new Map(settings.proposals.map(row => [row.id, row]));
       const gates = new Map(settings.gates.map(row => [row.id, row]));
