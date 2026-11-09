@@ -11,8 +11,10 @@ named scope, and the collaboration receipt that records the observation.
 
 This boundary protects against accidental credential-shaped material. The
 [Context Canvas public-reference materializer](context-canvas-public-reference-materialization.md)
-owns public-possible Notion route formation, and the main public-boundary
-receipt owns locator-free source history. A private Notion coordinate is a
+owns public-possible Notion route formation. The main public-boundary receipt
+provides an advisory observation of current tracked text within its declared
+size and file-type limits. Source history and hosted Issues, pull requests,
+and comments retain separate inspection scopes. A private Notion coordinate is a
 publication-boundary concern rather than automatically a credential. A
 repository-root reporter-facing security policy, `security.txt`, and hosted
 service controls remain a separate publication concern and need a named
