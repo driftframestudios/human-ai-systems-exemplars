@@ -159,6 +159,14 @@ history, independently of cassette selection. Top Apply beside Close delegates
 to the same canonical bottom action, with matching label, disabled state,
 validation and return focus. The existing bottom row remains available.
 
+Person/team creation restores the exact selected ability or practice, including
+an untouched new proposal. A changed proposal returns through its parked-draft
+review route; a pristine proposal reopens its target against the accepted state.
+The new shared record becomes visible, selected and focused in the same module.
+This #868 correction supersedes the earlier silent creation path when parking
+discarded an unchanged proposal. Creation and assignment retain separate Undo
+and Apply boundaries.
+
 The Abilities People receiver pairs team and participation with decision owner
 and lifecycle. These groups sit beside each other at laptop widths and stack
 at phone widths. Outcome pairs the editable use context with a chocolate

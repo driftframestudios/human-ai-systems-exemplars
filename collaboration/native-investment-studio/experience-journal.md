@@ -20,7 +20,7 @@ compact receiver and shared creation controls from #837. #863 completes the
 removal notice's reference descriptions; #865 consolidates circular steppers
 and repairs Quality control contrast and spacing.
 #848 carries that composition into Abilities, with local person/team naming in
-#856. #849 makes Change action selection visible; #857/#858 extend the compact
+#856 and retained pristine creation in #868. #849 makes Change action selection visible; #857/#858 extend the compact
 local receiver into Change and Quality. #818 receives the full financial-deck
 workbench in Investment, with shared Showcase reels in #854. Each feature uses
 its own focused reviewed delivery.
@@ -414,6 +414,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
 | Pale Abilities receiver and inherited table/control styling | A dark readable header, paired compact support groups, explicit foreground/background pairs and native-size choices. |
 | Renaming a referenced identity requires leaving Abilities | One local name field accepts the shared label and preserves the current support proposal. |
+| Creating an identity from an untouched Abilities proposal leaves its rack unchanged | Creation restores the exact selected target, reveals the new record and retains assignment for Apply. |
 | Tall nested Change and separate Quality detail forms | Attached compact receivers use shared local headers, retained fields and the canonical top/bottom Apply operation. |
 | Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
 | Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |

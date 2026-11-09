@@ -72,6 +72,10 @@ dark rack with a readable item heading, local return, Apply and Close. Its Peopl
 view places team and participants beside decision owner and status. Supporting
 work uses compact paired groups; observation material uses chocolate companions.
 Native pads retain their written selected state and fit ordinary mobile widths.
+Adding a person or team from that rack immediately reveals and selects the new
+record, while retaining the current ability or practice proposal. This works
+before typing as well as after editing; Apply accepts its assignment and amp
+Undo retains the separate creation step.
 Add people, teams or sessions in that module, then Apply to accept the support
 relationship. Close retains unfinished work. In the People view, **Rename**
 opens a small field beside a person or team. Save updates that shared name while
