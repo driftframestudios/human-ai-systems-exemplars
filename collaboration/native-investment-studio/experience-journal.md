@@ -16,9 +16,11 @@ commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
 #836 carries the compact People receiver with shared creation controls from #837.
-#848 carries that composition into Abilities; #849 makes Change action selection
-visible; #818 receives the full financial-deck workbench in the live Investment
-chapter. Each feature uses its own focused reviewed delivery.
+#848 carries that composition into Abilities, with local person/team naming in
+#856. #849 makes Change action selection visible; #857/#858 extend the compact
+local receiver into Change and Quality. #818 receives the full financial-deck
+workbench in Investment, with shared Showcase reels in #854. Each feature uses
+its own focused reviewed delivery.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair
 keeps focused verification usable across that integration. #844 updates the
@@ -195,6 +197,17 @@ these named local targets the same ghost treatment as other rack additions.
 Creation accepts immediately; Apply accepts the support relationship. Close
 retains the draft. Existing proposals, shared work identity and pricing remain.
 
+An Abilities person or team can be renamed beside its current identity. A small
+Rename action opens one labeled field with Save and ghost Cancel. The canonical
+person/team update changes only the shared label; stable IDs retain the support
+relationships. The capability draft resumes with its entered fields intact.
+Enter saves, Escape cancels, and an empty name stays in the field for correction.
+The scope cue makes the plan-wide naming effect clear. This supersedes a chapter
+detour or a full borrowed editor for this one-field operation. Broader rate,
+availability and membership work remains with the existing People receivers.
+The local comparison and public design precedents are reconciled in the control
+research; their relevance is a design inference tested in this Studio.
+
 Change keeps its framework/viewpoint reels, piano-like keys and distinct faders.
 Raise, Reduce, Eliminate and Create retain stable native buttons and paper
 resting faces. The selected action uses the Quality rail's inset signal face
@@ -203,7 +216,16 @@ closing it or inspecting through another route clears the action state. When a
 small framework maps several actions to one component, only the chosen action
 is selected. These inspection controls leave accepted plan history intact.
 Quality & recovery keeps its contrasting controller pads, quality/recovery reels
-and dark attention display. Both retain connected support and concise explanations.
+and dark attention display. The detail behind each chapter's primary instruments
+now uses an attached dark receiver with the shared owner/current header, Apply
+and Close. Mounted fields remain available through local view changes; the
+canonical draft and submitter retain validation and acceptance. Supporting work
+pairs preserved duration controls with compact identity, participant and funding
+choices. Quality's check/support and financial settings use compact editorial
+modules inside their dark working area. This supersedes the tall pale nested
+Change receiver and separate oversized Quality settings forms while retaining
+their useful method, recovery and rehearsal material.
+Both retain connected support and concise explanations.
 Selected signals describe plan choices; authored examples remain distinct from
 observed evidence. Quantity, emphasis and motion changes have visible effects.
 
@@ -251,6 +273,7 @@ an unchanged art and interaction reference.
 | Accepted plan | One immutable projection supplies accepted amounts, relationships, comparisons and downloads. |
 | Ordinary editor proposal | Typed person settings and other proposal forms keep raw values in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
 | Direct rack operation | Arrangement selection, Coordination team membership/name/order, People collection/member order and membership, role values, contribution choices/support, period creation, existing-plan occurrence append and record additions use canonical accepted commands. |
+| Shared name from Abilities | Save accepts the person/team label through its existing command; the surrounding support draft retains its own Apply boundary. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
 | Financial comparison | A stable deck ID owns its type and assumptions. Saved files carry those settings, and shared Undo recovers accepted edits. Connected reels change the loaded deck; explicit work funding retains its canonical command. |
 | Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
@@ -368,6 +391,8 @@ participant time shares remain with #798; production Reset remains with #808.
 | Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
 | Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
 | Pale Abilities receiver and inherited table/control styling | A dark readable header, paired compact support groups, explicit foreground/background pairs and native-size choices. |
+| Renaming a referenced identity requires leaving Abilities | One local name field accepts the shared label and preserves the current support proposal. |
+| Tall nested Change and separate Quality detail forms | Attached compact receivers use shared local headers, retained fields and the canonical top/bottom Apply operation. |
 | Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
 | Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
 | Live Investment repeats the specimen's illustrative reel artwork | The shared Showcase zoetrope control carries financial choices; the planning specimen retains its original illustration. |

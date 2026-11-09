@@ -44,6 +44,10 @@ Abilities retains both support tables and one selected dark rack for
 responsibility, preparation, review or observation. Compact paired controls use
 paper resting pads, signal selection and chocolate companions. Useful record
 additions accept immediately; support assignments keep their own Apply boundary.
+Local Rename accepts a referenced person/team name while retaining the support
+proposal. Change and Quality keep their distinctive primary instrumentation
+and use compact attached detail receivers with the shared owner/current header,
+Apply and Close. Related views retain mounted fields and their unfinished work.
 Change's four action keys use the same resting/selected grammar, with state tied
 to the open component receiver.
 

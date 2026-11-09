@@ -9,9 +9,10 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
-People (#836), readable Abilities support racks (#848), selected Change actions
-(#849), and independent financial comparison decks (#818). Shared creation,
-local navigation and accepted recovery retain their existing owners.
+People (#836), Abilities support racks with local shared-name editing (#856),
+compact Change and Quality receivers (#857/#858), and independent financial
+comparison decks (#818). Shared creation, local navigation and accepted recovery
+retain their existing owners.
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -68,9 +69,20 @@ view places team and participants beside decision owner and status. Supporting
 work uses compact paired groups; observation material uses chocolate companions.
 Native pads retain their written selected state and fit ordinary mobile widths.
 Add people, teams or sessions in that module, then Apply to accept the support
-relationship. Close retains unfinished work. Change's Raise, Reduce, Eliminate
-and Create rail follows the same paper-resting/signal-selected grammar: the
-selected face identifies the action whose component inspector is open.
+relationship. Close retains unfinished work. In the People view, **Rename**
+opens a small field beside a person or team. Save updates that shared name while
+retaining the support proposal; Cancel leaves the name intact. Amp Undo recovers
+an accepted rename.
+
+Change and Quality retain their distinct reels, faders, tracks and pad artwork.
+Their selected details use compact attached racks with an owner return, current
+item, Apply and Close. Related local views retain their fields when switching.
+Supporting-session controls share the preserved duration module and place the
+remaining choices beside it where space permits. Change's Raise, Reduce,
+Eliminate and Create rail identifies the action with an open receiver through
+its paper-resting/signal-selected face. Quality keeps its reference display and
+check pads as the visual entry point; selected settings and recovery controls
+use the compact working area.
 
 The preserved
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,
@@ -122,7 +134,8 @@ meaning and leave the accepted work price intact. **Compare a change** and
    accepts their name, rate and funded time; Role mix choices save directly.
    Choose a contribution to connect its work, receiver and decision owner.
    Empty slots add records with editing closed, and amp Undo restores accepted
-   changes. An Abilities support cell opens its own local proposal controls.
+   changes. An Abilities support cell opens its own local proposal controls;
+   **Rename** there changes a shared person or team name without leaving the task.
 6. Turn a Change or Quality reel. Open an action pad to inspect the work it
    selects; the pressed face follows the open receiver.
 7. In Investment, load a financial deck and try its reels and money dials. Add
@@ -148,6 +161,7 @@ commitments and findings.
 | Add a different scope | Explicit New plan or Add sprint/quarter |
 | Add a person, team or contribution in People | Empty-slot plus accepts a useful record, closed until selected; pointer hover or keyboard focus reveals it, and touch keeps it visible |
 | Add a supporting person, team or session in Abilities | Creation accepts the record; Apply accepts its assignment to the current proposal |
+| Rename a referenced person or team in Abilities | Rename opens one local field; Save accepts the shared name and retains the support proposal |
 | Arrange People team lanes or roster cards | Movement controls sit on the record and accept its new order with shared motion and Undo |
 | Change People team membership, member order, role values or contribution choices | Native selectors, checkbox pads and movement controls accept directly and retain local focus |
 | Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
