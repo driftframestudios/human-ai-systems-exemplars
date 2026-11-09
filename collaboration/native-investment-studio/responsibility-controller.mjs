@@ -69,11 +69,11 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     dependencies: find('[data-responsibility-dependencies]') });
   const cleanup = [];
   const ratesRack = root.querySelector('.studio-people-rates');
-  if (ratesRack) ratesRack.append(groups.role.configure);
+  if (ratesRack) (ratesRack.querySelector('.studio-person-receiver') ?? ratesRack).append(groups.role.configure);
   for (const group of Object.values(groups)) {
     group.configure.dataset.directAcceptance = 'true';
     group.header = mountRackHeader(group.configure, { title: group.kind === 'role' ? 'Role mix' : 'Contribution settings',
-      owner: group.kind === 'role' ? 'People' : 'Contributions', onClose: () => {
+      owner: group.kind === 'role' ? 'People in working sessions' : 'Contributions and sessions', onClose: () => {
         const target = group.kind === 'role' ? rolePads.get(selectedRoleField) : contributionButtons.get(describe(group.target)?.id) ?? add;
         close(); const epoch = generation, intent = editing.read().intent;
         onEditing(); if (owns(epoch) && editing.read().intent === intent && target?.isConnected) target.focus({ preventScroll: true });

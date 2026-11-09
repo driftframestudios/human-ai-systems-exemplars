@@ -38,6 +38,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   const addTeam = createRackAddControl(document, { label: 'Add team', dataset: { assemblyAction: 'team-create' } });
   oldAdd?.replaceWith(addTeam);
   if (teamRack) teamRack.append(elements.configure, elements.status);
+  if (!elements.configure.id) elements.configure.id = `${root.id || 'people'}-team-settings`;
   const localHeader = mountRackHeader(elements.configure, { title: 'Team settings', owner: 'Teams',
     closeAttribute: 'data-team-rack-close', applyAttribute: 'data-editor-apply',
     onClose: event => { event.stopPropagation(); closeLocal(); } });
@@ -100,6 +101,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const remove = button('Remove team', 'team-remove', team.id);
       remove.className = 'native-control--remove';
       remove.setAttribute('aria-label', `Remove team: ${team.label}`);
+      actions.classList.add('studio-team-lane__actions');
       actions.append(up, down, remove); item.append(choose, members);
       appendAssuranceBadges(document, item, support.get(team.id) ?? [], { kind: 'team', id: team.id, label: team.label });
       item.append(actions); fragment.append(item);
@@ -160,7 +162,9 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const draft = view.draft;
     root.dataset.assemblyState = view.status;
     for (const [id, control] of teamControls) {
-      control.setAttribute('aria-pressed', String(descriptor?.collection === 'teams' && descriptor.id === id));
+      const expanded = descriptor?.collection === 'teams' && descriptor.id === id && elements.configure.open;
+      control.setAttribute('aria-pressed', String(expanded)); control.setAttribute('aria-expanded', String(expanded));
+      control.setAttribute('aria-controls', elements.configure.id);
     }
     elements.configure.hidden = draft === null;
     elements.fieldset.disabled = view.status !== 'editing';
@@ -233,7 +237,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     selectedTarget = result.view?.draft?.assemblyId ?? selectedTarget;
     render();
     if (editor.read().draft) { acknowledgedOpen = true; elements.configure.open = true; }
-    rateControls.refresh();
+    render(); rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     onEditing();
     if (currentOperation(epoch) && focus) focusEditor();
@@ -392,7 +396,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function closeLocal() {
     if (disposed) return;
-      close(); const epoch = generation; onEditing();
+      close(); const epoch = generation; render(); onEditing();
       if (currentOperation(epoch) && onClose() !== true && currentOperation(epoch)) teamControls.get(describeAssemblyTarget(selectedTarget)?.id)?.focus();
   }
 
@@ -402,7 +406,11 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const action = control.dataset.assemblyAction, id = control.dataset.assemblyId;
     if (action === 'close') { closeLocal(); return; }
     if (action === 'person-create' || action === 'team-create') { addRecord(action === 'person-create' ? 'person' : 'team'); return; }
-    if (action === 'team-open') { open(makeAssemblyTarget('team.update', id)); return; }
+    if (action === 'team-open') {
+      const target = makeAssemblyTarget('team.update', id);
+      if (selectedTarget === target && elements.configure.open) closeLocal(); else open(target);
+      return;
+    }
     if (action === 'team-remove' || action === 'person-remove') { open(makeAssemblyTarget(action === 'team-remove' ? 'team.remove' : 'person.remove', id)); return; }
     if (action === 'person-up' || action === 'person-down') { move('people', id, action === 'person-up' ? -1 : 1); return; }
     if (action === 'team-up' || action === 'team-down') { move('teams', id, action === 'team-up' ? -1 : 1); return; }
