@@ -83,6 +83,17 @@
 .native-coordination :is(button[type='submit'], .studio-apply-control) { background: var(--native-signal); color: var(--native-text); }
 .native-coordination input[type='text']:not([inputmode]):not(:disabled), .native-coordination textarea:not(:disabled) { background: var(--native-zine-field); color: var(--native-text); border-color: var(--native-rule); }
 .native-coordination :is(.native-score__steps,.native-coordination__stepper) { column-gap: .35rem; justify-content: center; }
+/* Circle geometry is shared; each receiving module owns its field placement,
+   gap and skin. Compact duration and money retain the preserved 30px specimen. */
+.native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) { --studio-step-size:2.75rem; }
+.native-coordination :is(.native-time-controls .native-coordination__stepper,.study-money__steps) { --studio-step-size:30px; }
+.native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) > button {
+ display:inline-grid; place-items:center; box-sizing:border-box;
+ inline-size:var(--studio-step-size); block-size:var(--studio-step-size);
+ min-inline-size:var(--studio-step-size); min-block-size:var(--studio-step-size);
+ max-inline-size:var(--studio-step-size); max-block-size:var(--studio-step-size);
+ flex:0 0 var(--studio-step-size); aspect-ratio:1; border-radius:50%; padding:0; line-height:1;
+}
 @media (min-width: 64rem) {
  .native-coordination__amp { grid-template-columns: minmax(0, 1fr) auto; }
  .native-coordination__amp .native-coordination__identity h3 { white-space: nowrap; }
@@ -280,7 +291,7 @@
 .native-coordination .native-time__adjustment .native-coordination__stepper { margin-block-start:1.6rem; margin-inline-start:0; }
 .native-coordination .native-time-controls .native-coordination__stepper { grid-template-columns:30px 30px; gap:.35rem .5rem; inline-size:68px; }
 .native-coordination .native-time-controls .native-coordination__stepper input { grid-column:1/-1; grid-row:1; inline-size:68px; min-block-size:2rem; font:700 .9rem/1.4 ui-monospace,monospace; text-align:center; padding:.2rem; border:1px solid #668b73; }
-.native-coordination .native-time-controls .native-coordination__stepper button { min-block-size:30px; min-inline-size:30px; inline-size:30px; block-size:30px; border-radius:50%; padding:0; background:#f7f0d6; color:#172724; text-align:center; border:1px solid #172724; box-shadow:0 3px 0 #0d1916; font-size:1rem; }
+.native-coordination .native-time-controls .native-coordination__stepper button { background:#f7f0d6; color:#172724; text-align:center; border:1px solid #172724; box-shadow:0 3px 0 #0d1916; font-size:1rem; }
 @media (max-width:650px) { .native-coordination .native-time__adjustment { justify-content:center; } }
 @media (forced-colors: active) {
     .native-rate-controls .native-knob { inline-size: 7rem; block-size: 2.75rem; }

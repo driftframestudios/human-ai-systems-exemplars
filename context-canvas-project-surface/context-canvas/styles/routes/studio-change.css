@@ -95,9 +95,8 @@
 .native-change .native-change__fader-track { block-size: 8rem; }
 .native-change .native-change__live-reading { padding: .5rem .7rem; }
 .native-change__live-reading p { margin: 0; font-size: .8rem; }
-.native-change .native-change__numeric { padding: .35rem; min-block-size: 2.25rem; }
-.native-change .native-change__steps { gap: .35rem; }
-.native-coordination .native-change .native-change__steps button { min-inline-size: 2.75rem; min-block-size: 2.75rem; inline-size: 2.75rem; block-size: 2.75rem; padding: 0; border-radius: 50%; }
+.native-change .native-change__field > .native-change__numeric { inline-size:7rem; max-inline-size:100%; padding:.35rem; min-block-size:2.25rem; }
+.native-change .native-change__steps { inline-size:7rem; max-inline-size:100%; justify-content:space-between; gap:.5rem; }
 .native-change__attention [data-change-action='reset'] { font-size: .8rem; }
 .native-change__precise-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: .6rem; }
 .native-change__precise-channels > p { grid-column: 1 / -1; }

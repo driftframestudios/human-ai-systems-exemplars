@@ -900,7 +900,20 @@ for (const engine of names) test(`${engine}: financial decks preserve independen
         const css = getComputedStyle(element); return css.color === css.backgroundColor;
       }).map(element => element.textContent));
       assert.deepEqual(unreadable, []);
+      const precisionSteps = await editor.locator('.study-money__precision').evaluateAll(groups => groups.filter(group => group.getClientRects().length && !group.closest('[hidden]')).map(group => {
+        const input = group.querySelector('input').getBoundingClientRect();
+        return [...group.querySelectorAll('.study-money__steps > button')].map((button, index) => {
+          const box = button.getBoundingClientRect(), css = getComputedStyle(button);
+          return { width:box.width, height:box.height, below:box.top >= input.bottom, endAligned:Math.abs(index ? box.right - input.right : box.left - input.left) < 1, padding:css.padding, radius:css.borderRadius };
+        });
+      }));
+      assert.ok(precisionSteps.length > 0, `${type} exposes exact monetary controls`);
+      for (const pair of precisionSteps) {
+        assert.equal(pair.length, 2);
+        for (const step of pair) assert.deepEqual(step, { width:30, height:30, below:true, endAligned:true, padding:'0px', radius:'50%' }, `${type} keeps circular monetary steps at ${width}px`);
+      }
       await page.screenshot({ path: resolve(captures, `${engine}-${width}-financial-${type}.png`) });
+      if (type === 'plan' || type === 'capital') await editor.locator('.study-money:visible').first().screenshot({ path:resolve(captures, `${engine}-${width}-${type}-money-controls.png`) });
     }
   }
   assert.notEqual(await bytes(page), initial, 'comparison settings persist with the saved plan');
