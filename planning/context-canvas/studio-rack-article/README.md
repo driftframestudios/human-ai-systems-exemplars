@@ -20,7 +20,9 @@ and source extract, rather than an Article draft.
   9 November extract at `dev@6c0e090e121f1d708d019bb3926868de9dc2a390` and
   `main@4597faf76507cf71baa7febf5d43f2c220d567bb`.
 - [Visual and interaction plan](visual-plan.md) connects reader questions,
-  data meaning, art direction, possible forms and fitting observations.
+  data meaning, art direction, possible forms and fitting observations. The
+  expanded exploration connects an episode scatterplot, a reviewed Issue-to-PR
+  map and box plots of recorded change, with shared work and promotion visible.
 - [Native Studio README](../../../collaboration/native-investment-studio/README.md)
   owns current orientation; its
   [experience journal](../../../collaboration/native-investment-studio/experience-journal.md)

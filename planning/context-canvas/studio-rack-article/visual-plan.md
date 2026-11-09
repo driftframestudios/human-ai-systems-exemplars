@@ -40,11 +40,85 @@ chat figures are not final art-direction proofs or an Article draft.
 | Repository and re-entry map: how does a later collaborator find and use the work? | Expand selected folders and choose a file to reveal its authority, JavaScript collaborators, planning/journal relationships and next reading route. | Implementation Debrief/Repeatability. A selected ownership map is distinct from a complete filesystem inventory or an execution trace. |
 | Paired before/after: what did the design correction change? | Compare preserved dial-lighting, cassette, contextual-return or participation states. Attach the decision and affected behavior. | Solution Intervention, revisited in Implementation Intervention. Comparable states and source revisions accompany each capture. |
 | Two-phase episode navigation: what can this team adapt? | Revisit one source-supported episode through Solution and Implementation, then open its source and continuation. | The complete reading. Editorial selection and conceptual relations remain explicit. |
+| Episode scatterplot: how many recorded questions and commits does an episode connect? | Each selected episode has distinct addressed Issues on the horizontal axis and distinct commit SHAs from its selected PRs on the vertical axis. Select an episode to recover its scope and source records. | Both Intervention beats. This is a curated relationship view; PR commit membership includes the packaging and promotion of earlier work. |
+| Issue-to-PR map: which change addresses which question? | Follow reviewed, typed relationships between Issues and PRs within an episode. Distinguish addressing work, context, successor work and explicitly separate scope. | Implementation Intervention/Repeatability. A reference becomes a counted addressing relation only after reading its source. Partial delivery retains that standing. |
+| Work distributions: how does the recorded change vary? | Switch between commits per merged PR and files changed per merged PR; inspect the full population and a declared detail selection with the showcase promotion separately identified. | Implementation Outcomes. Boxes summarize delivery records; individual observations and source identity preserve the route into a concrete episode. |
 
 The first chat exploration includes a material treemap, PR movement view,
 creation-period rose and interactive repository/re-entry map. Later selection
 can retain, combine or retire a view according to the reader question. A range
 of exploratory forms does not require every chart to appear in the Article.
+
+## Expanded exploration: episodes, relationships and distributions
+
+The human-confirmed route is **episode scatterplot → selected Issue-to-PR map →
+optional distribution view**. The overview opens a question about method; the map
+shows the recorded relationship; a distribution supplies context for variation.
+Each view remains useful on its own in chat. A future Article can coordinate
+selection across the three after the human drafting cue.
+
+The [episode extract](data/episodes.2026-11-09.json) preserves a bounded, editorially
+selected set of source-reviewed relationships and the complete commit membership
+of its selected PRs. It supplements the earlier frozen extract. The earlier
+unclassified body-reference edges keep their original standing.
+
+### Episode counting and relationship meaning
+
+- Count distinct Issues with a reviewed addressing relationship to the episode's
+  selected PRs. Keep context, successors, deferred work and reference-only edges
+  available in the map while excluding them from this addressing count.
+- Count the union of commit SHAs returned for the selected PRs. Name this measure
+  **PR commit objects**, with an explicit alternative for **nonmerge PR commit
+  objects**. The showcase promotion contains 127 member objects: 71 nonmerge and
+  56 merge records. The compact-rack receiving PR #815 contains three member
+  objects: two nonmerge and one merge record. A squash merge's receiving commit and an earlier branch
+  commit have different identities and jobs; receiving-branch commit counts need
+  their own explicit selection.
+- Preserve shared Issues and commit membership across episodes. Per-episode
+  values can overlap; a collection total deduplicates the union again. A PR that
+  advances part of an Issue retains its partial-delivery explanation.
+- An episode is an editorial grouping, not an independent statistical sample.
+  Keep actual coordinates when episodes coincide. A native selector and grouped
+  point inspection recover every episode without inventing quantitative spacing.
+- Keep the showcase promotion identifiable in both the full view and any focused
+  detail view. The latter declares its excluded point and retains the promotion's
+  exact value and public source beside the selection.
+
+The relation map uses written relationship names with visual distinctions. Its
+public links open the corresponding Issue or PR; new-tab behavior is indicated.
+The selected episode supplies a complete text route through the relationships,
+including the reason a contextual reference stays outside a count. Missing or
+unreviewed linkage remains unresolved rather than becoming a zero-work finding.
+
+### Distribution contract
+
+The first box plots use the earlier snapshot's **107 merged milestone-23 PRs**.
+Each PR supplies one observation for either commits or files changed; a measure
+switch updates the title, unit, values and interpretation together. The full
+population retains the 127-commit, 184-file showcase promotion #707. A clearly
+labelled detail selection can show the other 106 PRs while preserving that event
+as a separate source-bearing observation.
+
+Use linearly interpolated quartiles at `(n - 1) × p`. A box spans the first to
+third quartile, with a median line. Tukey whiskers end at the most extreme observed
+values within 1.5 interquartile ranges of the box; outside observations stay
+inspectable. Show the admitted population and `n`. A point beyond a whisker invites
+source reading; its position alone supplies no error or performance judgment.
+
+Counts and changed-file breadth describe recorded delivery. Their different
+units remain separate from working hours, contribution shares or a combined
+effort score. Sparse or zero-width boxes retain exact values and individual
+observation access. Potential later measures include scoped paths or textual
+changes per commit, and consistently extracted decision or review events per
+episode. Elapsed Issue lifetime receives a calendar-time label and a separate
+standing for ongoing work.
+
+Before reusing these views in the Article, reconcile selected Issue/PR relations,
+paginate commit membership to completion, check shared-SHA arithmetic, and inspect
+coincident-point access and the full/detail population changes. Then apply the
+already selected lined-paper, margin-rule and triangular page treatment to the
+receiving composition. The chat views supply exploratory evidence for this visual
+plan; Article prose and publication continue on their existing human cues.
 
 ## Data, labels and companions
 
