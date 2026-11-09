@@ -4,6 +4,7 @@ import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalD
 import { money } from './display.mjs';
 import { nextCreatedLabel } from './creation-label.mjs';
 import { mountRateControls } from './rate-controls.mjs';
+import { mountRackHeader, focusSubmitControl, captureRackEntry } from './rack-controls.mjs';
 import { projectAssuranceConsequences, summarizeAssuranceWork } from './assurance-consequences.mjs';
 import { createReel, revealReelResult, animateRackChange } from './reel-control.mjs';
 import { QUALITY_REELS, QUALITY_FADERS, QUALITY_PHASES, createQualityExploration, qualityArrangement, qualityRehearsalExample, qualityConstraints } from './assurance-showcase.mjs';
@@ -33,6 +34,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const concepts = listQualityConcepts(), definitions = listRehearsalDefinitions();
   let selectedConcept = concepts[0].id, selectedScenario = definitions[0].id;
   let renderedSigma = null, selectedPrompt = null, activePane = null, layoutSignature = '';
+  let proposalVisible = false, receiverEntry = null;
+  const localInstruments = [];
   let constraints = qualityConstraints(createQualityExploration());
   let exploration = createQualityExploration();
   const explorationBySettings = new Map();
@@ -111,18 +114,24 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
     return items;
   }
+  function module(title, className = '') {
+    const region = node('section', undefined, `native-quality-module ${className}`.trim());
+    region.append(node('h5', title)); return region;
+  }
   const qualityGrid = node('div', undefined, 'native-assurance__assumptions');
-  const qualityAssumptions = node('details'); qualityAssumptions.dataset.assuranceAssumptions = '';
-  qualityAssumptions.append(node('summary', 'Adjust the quality illustration'), qualityGrid);
-  elements.quality.append(qualityAssumptions);
-  field(qualityGrid, 'sourcePresetId');
-  const horizon = node('div', undefined, 'native-assurance__horizon'); qualityGrid.append(horizon);
-  field(horizon, 'horizonUnit'); field(horizon, 'horizonQuantity');
-  const quantities = node('div', undefined, 'native-assurance__quantities'); qualityGrid.append(quantities);
+  const qualityAssumptions = node('section'); qualityAssumptions.dataset.assuranceAssumptions = '';
+  qualityAssumptions.append(qualityGrid); elements.quality.append(qualityAssumptions);
+  const referenceModule = module('Reference horizon'); qualityGrid.append(referenceModule);
+  field(referenceModule, 'sourcePresetId');
+  const horizon = node('div', undefined, 'native-assurance__horizon'); referenceModule.append(horizon);
+  field(horizon, 'horizonUnit'); field(horizon, 'horizonQuantity'); field(referenceModule, 'qualityIncluded');
+  const effortModule = module('Effort and rates'); qualityGrid.append(effortModule);
+  const quantities = node('div', undefined, 'native-assurance__quantities'); effortModule.append(quantities);
   for (const key of ['namedUnknowns', 'allocationPercent', 'independentRate', 'qualityAdditionalPercent', 'recoveryAdditionalPercent']) field(quantities, key);
-  field(qualityGrid, 'qualityIncluded'); field(qualityGrid, 'recoveryRatePersonIds');
-  const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the illustrative source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); qualityAssumptions.append(sourceReading);
-  const estimates = node('div', undefined, 'native-assurance__estimates'); estimates.dataset.assuranceEstimates = ''; elements.quality.append(estimates);
+  const recoveryModule = module('Recovery participants'); qualityGrid.append(recoveryModule);
+  field(recoveryModule, 'recoveryRatePersonIds');
+  const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); referenceModule.append(sourceReading);
+  const estimates = module('Estimated effort', 'native-quality-module--reading'); estimates.dataset.assuranceEstimates = ''; qualityGrid.append(estimates);
   const instrument = node('section', undefined, 'native-quality-rack'); instrument.setAttribute('aria-label', 'Arrange quality and recovery');
   const reels = node('div', undefined, 'native-quality-rack__reels');
   const beforeReel = createReel(document, { label: 'Before release', choices: QUALITY_REELS.before, value: exploration.before,
@@ -148,10 +157,11 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   conceptDisclosure.append(node('summary', 'Quality check settings'));
   const conceptInspector = node('div'); conceptInspector.dataset.assuranceConceptInspector = ''; conceptDisclosure.append(conceptInspector); elements.concepts.append(conceptDisclosure);
   const consequence = node('section', undefined, 'native-assurance__consequence'); consequence.dataset.assuranceConsequence = ''; elements.concepts.append(consequence);
-  conceptDisclosure.append(consequence);
+  const consequenceDetails = node('details', undefined, 'native-quality-comparison');
+  consequenceDetails.append(node('summary', 'Compare support and investment'), consequence); conceptDisclosure.append(consequenceDetails);
   for (const concept of concepts) {
     const details = node('section', undefined, 'native-assurance__card'); details.dataset.assuranceConcept = concept.id;
-    const summary = node('h5', concept.label), body = node('div');
+    const summary = node('h5', concept.label), body = node('div', undefined, 'native-quality-check');
     field(body, `concept.${concept.id}.included`); field(body, `concept.${concept.id}.workIds`);
     const links = actionRow(); body.append(links, actionRow(button('Plan supporting work', 'propose', { assuranceTarget: `concept/${concept.id}`, assuranceLabel: concept.label })));
     details.append(summary, body); conceptInspector.append(details); cards.set(`concept/${concept.id}`, { details, summary, links, label: concept.label });
@@ -162,7 +172,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const sigmaScale = node('div', undefined, 'native-assurance__sigma-scale'); sigmaScale.setAttribute('aria-hidden', 'true');
   for (let value = 1; value <= 6; value += 1) sigmaScale.append(node('span', `${value}σ`));
   sigmaControl.append(sigmaLabel, sigmaValue, sigmaInput, sigmaScale); faders.append(sigmaControl);
-  const sigmaSelect = field(qualityGrid, 'sigmaHalfSteps', 'Choose sigma attention');
+  const sigmaSelect = field(referenceModule, 'sigmaHalfSteps', 'Choose sigma attention');
   sigmaSelect.input.setAttribute('aria-label', 'Choose sigma attention');
   const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p');
   const scope = node('section', undefined, 'native-assurance__scope'), scopeHead = node('div', undefined, 'native-assurance__scope-head');
@@ -204,10 +214,30 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     settingsRail.append(control); paneButtons.set(id, control);
     if (pane.tagName === 'DETAILS') { pane.open = true; pane.querySelector(':scope > summary').hidden = true; }
   }
-  workbench.append(settingsRail, ...panes.values()); elements.concepts.insertBefore(workbench, tracks);
+  const receiver = node('div', undefined, 'native-quality-workbench__receiver'); receiver.id = `${instance}-receiver`;
+  const receiverHeader = mountRackHeader(receiver, { title: 'Quality settings', owner: 'Quality work tracks',
+    closeAttribute: 'data-quality-close', applyAttribute: 'data-quality-apply',
+    onClose: event => {
+      event.stopPropagation(); const previous = activePane; proposalVisible = false; showPane(null); render();
+      const entry = receiverEntry?.();
+      const source = entry?.getClientRects().length ? entry : paneButtons.get(previous) ?? paneButtons.get('checks');
+      source.focus({ preventScroll: true });
+    } });
+  receiver.append(...panes.values(), elements.work); workbench.append(settingsRail, receiver); tracks.after(workbench);
+  function syncWorkbench() {
+    const view = editor.read(), hasWork = view.draft?.raw['proposal.mode'] && view.draft.raw['proposal.mode'] !== 'none';
+    elements.work.hidden = !hasWork || !proposalVisible;
+    receiver.hidden = !activePane && elements.work.hidden;
+    const title = activePane === 'checks' ? concepts.find(row => row.id === selectedConcept).label
+      : activePane ? paneButtons.get(activePane).textContent : 'Supporting session';
+    receiverHeader.update({ title, source: actions.get('apply') });
+  }
   function showPane(id) {
-    activePane = id;
+    for (const control of localInstruments) control.release();
+    activePane = id; if (id) proposalVisible = false;
     for (const [key, pane] of panes) { pane.hidden = key !== id; paneButtons.get(key).setAttribute('aria-expanded', String(key === id)); }
+    syncWorkbench();
+    for (const control of localInstruments) control.refresh();
   }
   showPane(null);
   const rehearsalGroups = new Map(), scenarioCards = new Map();
@@ -219,23 +249,27 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const records = node('div'); card.append(records); rehearsalGroups.set(definition.id, records); scenarioCards.set(definition.id, card); elements.rehearsal.append(card);
   }
   elements.work.append(node('h4', 'Propose the work people will do'));
-  const workNote = node('p'), workFields = node('div', undefined, 'native-support-proposal'); elements.work.append(workNote, workFields);
+  const workNote = node('p'), workFields = node('div', undefined, 'native-support-proposal native-quality-proposal'); elements.work.append(workNote, workFields);
+  const sessionModule = module('Session and team', 'native-quality-proposal__identity');
   const modeFields = node('div', undefined, 'native-support-proposal__metadata');
   field(modeFields, 'proposal.mode'); const existingWork = field(modeFields, 'proposal.existingWorkId');
   const identityFields = node('div', undefined, 'native-support-proposal__metadata');
   for (const key of ['label', 'teamId']) field(identityFields, `proposal.${key}`);
-  workFields.append(modeFields, identityFields); field(workFields, 'proposal.personIds');
+  sessionModule.append(modeFields, identityFields); workFields.append(sessionModule);
+  const participantModule = module('Participants'); field(participantModule, 'proposal.personIds');
   const time = createTimeControls(document, { idPrefix: `${instance}-proposal`, fieldPrefix: 'proposal.',
     decorateField(input, key) { input.dataset.assuranceField = key; },
     decorateStep(button, key, direction) { Object.assign(button.dataset, { assuranceAction: 'step', assuranceField: key, assuranceStep: String(direction) }); } });
   for (const [key, control] of time.controls) controls.set(key, { ...control, metadata: assuranceField(key) });
-  workFields.append(time.element); field(workFields, 'proposal.funding');
-  const workPreview = node('p'); workPreview.dataset.assuranceWorkPreview = ''; workFields.append(workPreview, actionRow(button('Set this session proposal aside', 'clear-work')));
+  const peopleAndFunding = node('div', undefined, 'native-quality-proposal__people');
+  const fundingModule = module('Funding'); field(fundingModule, 'proposal.funding'); peopleAndFunding.append(participantModule, fundingModule);
+  workFields.append(time.element, peopleAndFunding);
+  const workPreview = node('p', undefined, 'native-quality-proposal__reading'); workPreview.dataset.assuranceWorkPreview = ''; workFields.append(workPreview, actionRow(button('Set this session proposal aside', 'clear-work')));
   const durationDials = mountDurationDials({ ...time, read() {
     const view = editor.read(), active = editing.read().active;
     return { token: view.draft?.token, hours: view.draft?.raw['proposal.hoursPerSession'], minutes: view.draft?.raw['proposal.minutesPerSession'], composing,
       errors: { hours: view.draft?.errors.some(error => error.path === 'draft.proposal.hoursPerSession'), minutes: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession') },
-      enabled: !disposed && !composing && isActive() && view.status === 'editing' && view.draft?.raw['proposal.mode'] !== 'none'
+      enabled: !disposed && !composing && isActive() && proposalVisible && activePane === null && view.status === 'editing' && view.draft?.raw['proposal.mode'] !== 'none'
         && active?.kind === 'assurance' && active.token === view.draft.token };
   }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   const rateControls = mountRateControls({ host: controls.get('independentRate').group, precision: controls.get('independentRate').input, label: 'Independent quality hourly rate',
@@ -243,9 +277,10 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       const view = editor.read(), active = editing.read().active, raw = view.draft?.raw.independentRate;
       const valid = raw?.trim() && !view.draft?.errors.some(error => error.path === 'draft.independentRate');
       return { token: view.draft?.token, raw, cents: valid ? Math.round(Number(raw) * 100) : null,
-        enabled: !disposed && !composing && isActive() && view.status === 'editing'
+        enabled: !disposed && !composing && isActive() && activePane === 'illustration' && view.status === 'editing'
           && active?.kind === 'assurance' && active.token === view.draft?.token };
     }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'independentRate', value), epoch); } });
+  localInstruments.push(durationDials, rateControls);
 
   function configure(patch, channel = null, sigma = null) {
     const view = editor.read(); if (disposed || !isActive() || view.status !== 'editing' || !view.draft) return;
@@ -288,7 +323,9 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     for (const concept of concepts) {
       const row = node('tr'), title = node('th'); title.scope = 'row';
       const inspect = button(concept.label, 'inspect-concept', { assuranceConceptId: concept.id });
-      inspect.classList.add('native-control--navigate', 'studio-track-key'); title.append(inspect);
+      inspect.classList.add('native-control--navigate', 'studio-track-key');
+      inspect.dataset.studioEntryKey = `quality:${concept.id}`; inspect.setAttribute('aria-controls', receiver.id); inspect.setAttribute('aria-expanded', String(activePane === 'checks' && concept.id === selectedConcept));
+      inspect.setAttribute('aria-pressed', String(activePane === 'checks' && concept.id === selectedConcept)); title.append(inspect);
       const included = raw[`concept.${concept.id}.included`] === 'yes', stateCell = node('td');
       const locked = included && Boolean(constraints.required[concept.id]);
       const pad = button(locked ? '◆ Included' : included ? 'Included' : 'Available', 'toggle-concept', { assuranceConceptId: concept.id });
@@ -319,14 +356,16 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       return;
     }
     const details = node('details', undefined, 'native-assurance__card'); details.dataset[`assurance${kind[0].toUpperCase() + kind.slice(1)}`] = id;
-    const summary = node('summary'), body = node('div'), prefix = `${kind}.${id}.`;
+    const summary = node('summary'), body = node('div', undefined, 'native-quality-record'), prefix = `${kind}.${id}.`;
     const keys = kind === 'event' ? ['label', 'included', 'lifecycle', 'eventCount', 'aggregateMinutesPerEvent', 'receiverPersonId', 'reviewBoundary', 'workIds']
       : kind === 'learning' ? ['context', 'decisionOwnerPersonId', 'reviewBoundary', 'workIds']
         : ['context', 'assumptions', 'response', 'reviewerPersonId', 'workIds', 'connectionIds', 'personIds'];
+    const recordFields = node('div', undefined, 'native-quality-record__fields');
     const narrative = node('div', undefined, 'native-quality-story');
     const edits = node('details', undefined, 'native-quality-story__edit'); edits.append(node('summary', 'Edit this example'));
     if (kind === 'rehearsal') body.append(narrative, edits);
-    for (const name of keys) field(kind === 'rehearsal' && ['context', 'assumptions', 'response'].includes(name) ? edits : body, prefix + name);
+    body.append(recordFields);
+    for (const name of keys) field(kind === 'rehearsal' && ['context', 'assumptions', 'response'].includes(name) ? edits : recordFields, prefix + name);
     const links = actionRow(); body.append(links, actionRow(button(kind === 'rehearsal' ? 'Plan response work' : 'Plan supporting work', 'propose', { assuranceTarget: key })));
     const comparison = node('section', undefined, 'native-assurance__consequence'); comparison.dataset.assuranceScenarioComparison = id;
     if (kind === 'rehearsal') body.append(comparison);
@@ -468,7 +507,6 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       if (control.metadata.kind === 'ids' || control.radio) for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = control.radio ? checkbox.value === value : value.includes(checkbox.value);
       else if (control.metadata.checkbox) control.input.checked = value === 'yes'; else if (control.input.value !== value) control.input.value = value;
       const error = errors.find(error => error.path === `draft.${key}`); control.error.textContent = error?.message ?? ''; control.input.setAttribute('aria-invalid', String(Boolean(error)));
-      if (error && qualityGrid.contains(control.input)) { showPane('illustration'); qualityAssumptions.open = true; }
     }
     renderTimeReadout(time, raw, { errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
     durationDials.refresh();
@@ -530,7 +568,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     selectedPrompt = prompt?.promptId ?? null; prompts.hidden = !prompt;
     if (prompt) { promptChoice.value = prompt.promptId; promptReading.textContent = prompt.prompt; planLearning.dataset.assurancePrompt = prompt.promptId; }
     const estimateText = (name, estimate) => `${name}: ${estimate.status === 'known' ? `${hourText(estimate.hours)} · ${money(estimate.amountCents)}` : estimate.problems.join(' ')}`;
-    estimates.replaceChildren(node('p', estimateText('Quality illustration', reading.quality.estimate)), node('p', estimateText('Recovery illustration', reading.recovery.estimate)));
+    estimates.replaceChildren(node('h5', 'Estimated effort'), node('p', estimateText('Quality illustration', reading.quality.estimate)), node('p', estimateText('Recovery illustration', reading.recovery.estimate)));
     const preset = reading.sourcePreset; sourceReading.hidden = !preset;
     if (preset) {
       const total = sourcePresetEstimate(preset.id); sourceBody.replaceChildren(node('p', `${preset.name}. ${preset.horizon.quantity} ${preset.horizon.unit}; ${preset.complexity} complexity. Source scenario investment: ${total.status === 'known' ? money(Math.round(total.central * 100)) : total.problems.join(' ')}.`));
@@ -546,7 +584,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       elements.preview.textContent = `${result.plannedCommitmentCents === null ? 'Known proposed investment' : 'Proposed investment'}: ${money(result.knownCommitmentCents)}. ${accepted.plannedCommitmentCents === null ? 'Known accepted investment' : 'Accepted investment'}: ${money(accepted.knownCommitmentCents)}. Change: ${money(preview.summary.money.knownDeltaCents)}.${result.plannedCommitmentCents === null || accepted.plannedCommitmentCents === null ? ' Add missing hourly rates in People to complete these amounts.' : ''} Apply accepts the settings and proposed plan changes together.${preview.summary.updatedConnectionIds.length ? ` Proposed connection changes: ${preview.summary.updatedConnectionIds.map(id => { const row = preview.projection.state.connections.find(row => row.id === id); return `${row.sharedObject}: ${row.status}`; }).join('; ')}.` : ''}`;
       const row = preview.summary.work[0]; workPreview.textContent = row ? `${row.after.minutesPerOccurrence} minutes per person × ${row.after.participantCount} people × ${row.after.occurrences} occurrences = ${row.after.personMinutes} aggregate person-minutes. ${row.after.funding === 'additional' ? 'Extra investment' : 'Within funded time'}.` : '';
     } else { elements.preview.textContent = composing ? 'Finish entering the value.' : 'Review the entries before applying this proposal.'; workPreview.textContent = ''; }
-    renderConsequences(view, preview);
+    renderConsequences(view, preview); syncWorkbench();
     return view;
   }
   function opened(result, epoch, focus) { if (!owns(epoch)) return result; composing = false; render(); if (!owns(epoch)) return result; announce(result.ok ? '' : result.error.message); onEditing(); if (owns(epoch) && focus) (editor.read().status === 'stale' ? actions.get('review') : sigmaInput).focus(); return result; }
@@ -595,10 +633,17 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   function settle(method) {
     rateControls.release();
     const view = editor.read(); if (disposed || !view.draft) return; if (composing && method === 'apply') { announce('Finish entering the text, then apply.'); return; }
-    const epoch = ++generation, result = editor[method](view.draft.token); if (!owns(epoch)) return; if (!result.ok) { changed(result, epoch); return; }
-    if (method === 'cancel') { exploration = restoreExploration(studio.read()); opened(editor.begin('assurance', studio.read()), epoch, false); announce('Changes cancelled.'); return; }
+    const epoch = ++generation, result = editor[method](view.draft.token); if (!owns(epoch)) return;
+    if (!result.ok) {
+      if (method === 'apply' && editor.read().draft?.errors.some(error => qualityGrid.contains(controls.get(error.path.replace(/^draft\./, ''))?.input))) showPane('illustration');
+      changed(result, epoch); return;
+    }
+    if (method === 'cancel') { proposalVisible = false; exploration = restoreExploration(studio.read()); opened(editor.begin('assurance', studio.read()), epoch, false); announce('Changes cancelled.'); return; }
     const accepted = result.projection ?? studio.read(); explorationBySettings.set(explorationKey(accepted), { ...exploration }); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return;
-    opened(editor.begin('assurance', accepted), epoch, false); if (owns(epoch)) { announce('Quality, recovery and proposed work applied.'); actions.get('apply').focus(); }
+    opened(editor.begin('assurance', accepted), epoch, false); if (owns(epoch)) {
+      const targetKind = view.draft.raw['proposal.target'].split('/')[0];
+      if (proposalVisible) showPane(targetKind === 'concept' ? 'checks' : targetKind === 'rehearsal' ? 'rehearsal' : 'recovery');
+      announce('Quality, recovery and proposed work applied.'); focusSubmitControl(actions.get('apply')); }
   }
   function loadWork(id) {
     const work = studio.read().state.work.find(row => row.id === id); if (!work) return;
@@ -613,8 +658,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const view = editor.read(); if (!view.draft) return;
     if (action === 'review' || action === 'current') { const epoch = ++generation; opened(editor[action === 'review' ? 'review' : 'useCurrent'](view.draft.token, studio.read()), epoch, true); return; }
     if (view.status !== 'editing') return;
-    if (action === 'pane') { showPane(activePane === control.dataset.qualityPane ? null : control.dataset.qualityPane); return; }
-    if (action === 'inspect-concept') { selectSupport({ kind: 'concept', id: control.dataset.assuranceConceptId }); return; }
+    if (action === 'pane') { receiverEntry = captureRackEntry(control, root); showPane(activePane === control.dataset.qualityPane ? null : control.dataset.qualityPane); render(); return; }
+    if (action === 'inspect-concept') { receiverEntry = captureRackEntry(control, root); selectSupport({ kind: 'concept', id: control.dataset.assuranceConceptId }); return; }
     if (action === 'toggle-concept') { const id = control.dataset.assuranceConceptId, key = `concept.${id}.included`; if (view.draft.raw[key] === 'yes' && constraints.required[id]) return; edit([[key, view.draft.raw[key] === 'yes' ? 'no' : 'yes']]); return; }
     if (action === 'link-work') { const key = `concept.${control.dataset.assuranceConceptId}.workIds`, id = control.dataset.assuranceWork, ids = view.draft.raw[key]; edit([[key, ids.includes(id) ? ids.filter(value => value !== id) : [...ids, id]]]); return; }
     if (action === 'preparation') { selectSupport({ kind: 'concept', id: 'reconciliation-replay' }); return; }
@@ -622,7 +667,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       selectedScenario = control.dataset.assuranceDefinition; showPane('rehearsal'); render(); const card = scenarioCards.get(selectedScenario);
       if (card && !disposed) { const heading = card.querySelector('h5'); heading.tabIndex = -1; heading.focus(); } return;
     }
-    if (action === 'proposal-settings') { controls.get('proposal.label').input.focus(); return; }
+    if (action === 'proposal-settings') { proposalVisible = true; showPane(null); controls.get('proposal.label').input.focus(); return; }
     if (action === 'step') { const epoch = ++generation; changed(editor.step(view.draft.token, control.dataset.assuranceField, Number(control.dataset.assuranceStep)), epoch); return; }
     if (action === 'work') { onSourceWork(control.dataset.assuranceWork, { targetId: 'assurance' }); return; }
     if (action === 'add-event') { addRecord('event', { label: nextCreatedLabel(view.draft.raw.eventIds.map(id => ({ label: view.draft.raw[`event.${id}.label`] })), 'recovery event'), included: 'yes', lifecycle: 'active', eventCount: '1', aggregateMinutesPerEvent: '60', receiverPersonId: view.projection.state.people.find(row => /operations/i.test(row.label))?.id ?? '', reviewBoundary: 'Resume the saved request and confirm the next handoff.', workIds: [] }); return; }
@@ -639,9 +684,10 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       edit([['connectionUpdateIds', [...new Set([...view.draft.raw.connectionUpdateIds, ...ids])]], ...ids.map(id => [`connection.${id}.status`, 'paused'])]);
       announce(ids.length ? 'Selected connections will pause when you apply this proposal. Their supporting work remains in the plan.' : 'Choose the connections involved before proposing a pause.'); return;
     }
-    if (action === 'clear-work') { edit([['proposal.mode', 'none']]); return; }
+    if (action === 'clear-work') { proposalVisible = false; edit([['proposal.mode', 'none']]); return; }
     if (action === 'propose') {
-      if (view.draft.raw['proposal.mode'] !== 'none') { announce('Apply or set aside the current session proposal before choosing another purpose.'); return; }
+      receiverEntry = captureRackEntry(control, root); proposalVisible = true; showPane(null);
+      if (view.draft.raw['proposal.mode'] !== 'none') { syncWorkbench(); controls.get('proposal.label').input.focus(); announce('Continue the current session proposal, or set it aside to choose another purpose.'); return; }
       const target = control.dataset.assuranceTarget, [kind, id] = target.split('/');
       const label = control.dataset.assuranceLabel ?? (kind === 'event' ? view.draft.raw[`event.${id}.label`] : kind === 'learning' ? getLearningPromptDefinition(view.draft.raw[`learning.${id}.promptId`])?.label : 'Rehearsal response');
       edit([['proposal.target', target], ['proposal.label', label], ['proposal.mode', 'new']]); controls.get('proposal.label').input.focus();
@@ -651,8 +697,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const selection = event.target.dataset.assuranceSelection;
     if (selection) {
       if (event.type !== 'change' || disposed || !isActive() || editor.read().status !== 'editing' || !event.target.checked) return;
-      if (selection === 'concept' && conceptChoices.has(event.target.value)) { selectedConcept = event.target.value; showPane('checks'); }
-      if (selection === 'scenario' && scenarioChoices.has(event.target.value)) { selectedScenario = event.target.value; showPane('rehearsal'); }
+      if (selection === 'concept' && conceptChoices.has(event.target.value)) { receiverEntry = captureRackEntry(event.target, root); selectedConcept = event.target.value; showPane('checks'); }
+      if (selection === 'scenario' && scenarioChoices.has(event.target.value)) { receiverEntry = captureRackEntry(event.target, root); selectedScenario = event.target.value; showPane('rehearsal'); }
       render(); return;
     }
     const key = event.target.dataset.assuranceField, control = controls.get(key), view = editor.read();
@@ -676,6 +722,6 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
   function close({ park = true } = {}) { if (disposed) return; durationDials.release(); rateControls.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
-  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); beforeReel.dispose(); afterReel.dispose(); instrument.before(elements.statistics); instrument.remove(); rehearsalDisclosure.before(elements.rehearsal); rehearsalDisclosure.remove(); followThrough.before(elements.events, elements.learning); followThrough.remove(); elements.concepts.before(elements.quality); elements.concepts.after(elements.events, elements.learning, elements.rehearsal); for (const element of [elements.quality, elements.events, elements.learning, elements.rehearsal]) element.hidden = false; workbench.remove(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
+  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); beforeReel.dispose(); afterReel.dispose(); instrument.before(elements.statistics); instrument.remove(); rehearsalDisclosure.before(elements.rehearsal); rehearsalDisclosure.remove(); followThrough.before(elements.events, elements.learning); followThrough.remove(); elements.concepts.before(elements.quality); elements.concepts.after(elements.events, elements.learning, elements.rehearsal); for (const element of [elements.quality, elements.events, elements.learning, elements.rehearsal]) element.hidden = false; elements.rehearsal.after(elements.work); elements.work.hidden = false; receiverHeader.dispose(); workbench.remove(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
   render(); const controller = Object.freeze({ open, selectSupport, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
 }

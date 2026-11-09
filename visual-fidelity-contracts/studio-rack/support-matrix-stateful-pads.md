@@ -76,6 +76,48 @@ Apply delegates to the same canonical bottom action and retains top-action focus
 settings and proposed work still enter accepted history together. Closing merely
 changes the visible receiver and leaves those draft entries available.
 
+## Quality local settings
+
+Quality's shared reels, faders, CRT reference, phase pads and work tracks retain
+their current composition. A dark settings rack attaches directly below the
+tracks. Its four-key rail selects one receiver for a quality check, rehearsal,
+recovery/learning, or the quality illustration. The selected track key has a
+pressed face and expanded caret that identify this local receiver.
+
+The receiver uses the shared owner/title, Close and top Apply header. Close hides
+its controls and retains the proposal; the visible entry regains focus even when
+a projection replaced its track key. A source inside the closed receiver returns
+to the settings rail. Reopening a receiver restores its raw values. Validation
+opens the illustration on Apply when needed; other edits preserve a closed view.
+The top Apply delegates to the canonical form submitter and retains focus at the
+local header. Bottom Apply and Cancel remain available. Accepted changes and
+amp Undo retain the same history owner.
+
+Check inclusion and supporting-session pads share one compact editorial module.
+The detailed support/investment comparison remains available in a closed reading
+below it. Planning supporting work loads the session controls into this same
+receiver: Session and team, the preserved duration module and Working sessions,
+Participants, and Funding. One receiver stays visible at a time; an unfinished
+session remains available when another settings key is selected. Returning to
+Plan session restores that proposal. Apply returns to its supporting purpose.
+
+The quality illustration pairs Reference horizon with Effort and rates, then
+Recovery participants with a chocolate Estimated effort companion. Native radio
+and checkbox geometry remains independent of numeric inputs. Shared money dials,
+duration faces, readout, circular steppers and motion retain their own contracts.
+Closing or switching the local receiver releases an active dial gesture; hidden
+duration and rate controls stop accepting adjustments until their module returns.
+Recovery and learning keep their authored records and native disclosures;
+compact field groups preserve their narrative and supporting-work boundaries.
+Ordinary phone widths stack the paired modules while the named work-track scroll
+region keeps its table reachable.
+
+This dev receiver supersedes the detached full-width supporting-session form,
+the repeated disclosure around already-selected illustration settings, and the
+always-expanded check consequence reading. It preserves the quality proposal
+and financial model. The initial rack, authored pressure behavior, and accepted
+plan accounting remain current.
+
 ## Creation, assignment and recovery
 
 Named creation regions state the object and scope they add. A plus inside an
@@ -167,6 +209,7 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | [Shared session rack](../../collaboration/native-investment-studio/shared-session-rack.mjs) | People/Handoffs tabs, direct relationship pads, last-person feedback and compact selected-row controls |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing, direct role/support choices and accepted record creation |
+| [Quality controller](../../collaboration/native-investment-studio/assurance-controller.mjs), [Quality CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css), [Quality browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Attached settings receiver, retained Close, canonical top Apply, compact support/assumption modules and phone containment; [#858](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/858) |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion, Apply delegation and return identity |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs), [score checks](../../tests/native-investment-studio/score.browser.mjs) | Temporal append targets, distinct plan creation, retained placements and Undo |
 | [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Tables, local racks, membership pads and shared control treatment |

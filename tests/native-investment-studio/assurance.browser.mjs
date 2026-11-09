@@ -56,6 +56,71 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: compact quality receivers retain edits through Close and share the canonical top Apply`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const receiver = panel(page).locator('.native-quality-workbench__receiver');
+    await expect(receiver).toBeHidden(); await expect(panel(page).locator('[data-assurance-work=""]')).toBeHidden();
+    const inspect = panel(page).locator('.native-quality-tracks [data-assurance-action="inspect-concept"][data-assurance-concept-id="independent-review"]');
+    await inspect.click(); await expect(inspect).toHaveAttribute('aria-expanded', 'true');
+    await check(page, 'concept.independent-review.workIds', 'research').check();
+    const close = receiver.locator('[data-quality-close]'), topApply = receiver.locator('[data-quality-apply]');
+    async function closeHeldDial(dial, valueField) {
+      await dial.scrollIntoViewIfNeeded();
+      await dial.evaluate(node => node.addEventListener('pointerdown', event => { window.assuranceFixture.heldPointer = event.pointerId; }, { once:true }));
+      const box = await dial.boundingBox();
+      await page.mouse.move(box.x + box.width * .9, box.y + box.height / 2); await page.mouse.down();
+      const value = await valueField.inputValue();
+      await close.evaluate(node => node.click());
+      await expect(dial).toBeDisabled();
+      assert.equal(await dial.evaluate(node => node.hasPointerCapture(window.assuranceFixture.heldPointer)), false);
+      await dial.evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', { pointerId:window.assuranceFixture.heldPointer, clientX:0, clientY:0, bubbles:true })));
+      await page.mouse.up(); await expect(valueField).toHaveValue(value);
+    }
+    await close.click(); await expect(receiver).toBeHidden(); await expect(inspect).toBeFocused();
+    await panel(page).locator('[data-quality-fader="urgency"]').fill('3');
+    await expect(receiver).toBeHidden();
+    await inspect.click(); await expect(check(page, 'concept.independent-review.workIds', 'research')).toBeChecked();
+    assert.equal(await bytes(page), initial);
+    await topApply.click(); await expect(topApply).toBeFocused();
+    assert.ok(await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.concepts
+      .find(row => row.conceptId === 'independent-review').workIds.includes('research')));
+    const accepted = await bytes(page);
+    await panel(page).locator('[data-assurance-concept="independent-review"] [data-assurance-action="propose"]').click();
+    await field(page, 'proposal.label').fill('Review the pilot evidence');
+    await field(page, 'proposal.teamId').selectOption('engineering');
+    await check(page, 'proposal.personIds', 'sam').check();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const modules = await panel(page).locator('.native-quality-proposal > :not([hidden])').evaluateAll(nodes => nodes.map(node => {
+        const box = node.getBoundingClientRect(); return { left:box.left, right:box.right, width:box.width };
+      }));
+      assert.ok(modules.every(box => box.left >= 0 && box.right <= width + 1), JSON.stringify(modules));
+      const switchBox = await check(page, 'proposal.personIds', 'sam').boundingBox();
+      assert.ok(switchBox.width < 50 && switchBox.height < 30, 'native participant switches keep compact geometry');
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await panel(page).locator('.native-quality-workbench').screenshot({ path:resolve(captures, `${engine}-support-rack-${width}.png`) });
+    }
+    await closeHeldDial(panel(page).locator('[data-native-minutes-knob]'), field(page, 'proposal.minutesPerSession'));
+    await expect(receiver).toBeHidden();
+    await expect(panel(page).getByRole('button', { name: 'Quality check settings', exact: true })).toBeFocused();
+    await panel(page).locator('.native-quality-tracks [data-assurance-action="propose"][data-assurance-target="concept/independent-review"]').click();
+    await expect(field(page, 'proposal.label')).toHaveValue('Review the pilot evidence');
+    await expect(field(page, 'proposal.label')).toBeFocused();
+    await action(page, 'cancel').click(); assert.equal(await bytes(page), accepted);
+    await expect(panel(page).locator('[data-assurance-work=""]')).toBeHidden();
+    await panel(page).getByRole('button', { name: 'Quality illustration', exact: true }).click();
+    await closeHeldDial(panel(page).locator('[data-rate-step="10"]'), field(page, 'independentRate'));
+    await panel(page).getByRole('button', { name: 'Quality illustration', exact: true }).click();
+    await field(page, 'horizonQuantity').fill('1001');
+    await expect(field(page, 'horizonQuantity')).toHaveAttribute('aria-invalid', 'true');
+    await close.click(); await panel(page).locator('[data-quality-fader="urgency"]').fill('2');
+    await expect(receiver).toBeHidden();
+    await action(page, 'apply').click(); await expect(field(page, 'horizonQuantity')).toBeVisible();
+    assert.equal(await bytes(page), accepted);
+    await action(page, 'cancel').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click();
+    await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
+  });
   test(`${engine}: quality reels and faders populate a distinct recoverable arrangement and keep both reels visible on mobile`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await expect(panel(page).locator('.native-quality-rack')).toHaveAttribute('data-quality-pressure', 'calm');
@@ -216,7 +281,6 @@ for (const engine of names) {
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
     await tab(page, 'assurance').click(); if (await action(page, 'current').isVisible()) await action(page, 'current').click();
     await panel(page).getByRole('button', { name: 'Quality illustration', exact: true }).click();
-    await panel(page).locator('[data-assurance-assumptions] > summary').click();
     await field(page, 'allocationPercent').fill('32'); await action(page, 'cancel').click(); await expect(field(page, 'allocationPercent')).toHaveValue('18'); assert.equal(await bytes(page), initial);
   });
 
@@ -269,10 +333,10 @@ for (const engine of names) {
     await expect(sigma).toHaveValue('1'); await expect(rack).toHaveAttribute('data-quality-pressure', 'high');
     await expect(response.locator('[data-assurance-observation]')).toHaveText('The saved request resumed during the reviewed walkthrough.');
     await panel(page).getByRole('button', { name: 'Quality illustration', exact: true }).click();
-    await panel(page).locator('[data-assurance-assumptions] > summary').click();
     await field(page, 'independentRate').fill('100.25');
     await panel(page).locator('[data-rate-step="10"]').focus(); await page.keyboard.press('ArrowRight');
     await expect(field(page, 'independentRate')).toHaveValue('110.25');
+    await expect(panel(page).locator('.native-quality-module--reading h5')).toHaveCSS('color', 'rgb(248, 241, 217)');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1100 });
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
