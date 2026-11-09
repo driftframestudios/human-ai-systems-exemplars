@@ -222,7 +222,7 @@ async function assertAmount(page, value) {
 async function assertContained(page) {
   const observed = await panel(page).evaluate(root => {
     const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, className: node.className, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
-    const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks';
+    const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks, .native-cost-scroll';
     const rendered = node => {
       // Chapter and rack journeys own content inside their local scroll regions.
       // This oracle measures those outer receivers and the visible form reading.
@@ -400,9 +400,12 @@ for (const engine of names) {
     await panel(page).locator('[data-native-chapter="investment"]').click();
     await expect(trace.locator('summary')).toHaveText('Whole-plan cost breakdown');
     await trace.locator('summary').click();
-    const people = trace.locator('[data-native-trace-list] > li');
+    const people = trace.locator('[data-native-trace-list] > tr');
     assert.equal(await people.count(), 4, 'the trace retains all four independently priced participants');
-    for (const person of await people.all()) await expect(person).toContainText('360 min · $600.00');
+    for (const person of await people.all()) {
+      await expect(person.locator('td').nth(3).locator('strong')).toHaveText('$600.00');
+      await expect(person.locator('td').nth(3).locator('small')).toHaveText('6 h');
+    }
     await expect(trace.locator('[data-native-trace-summary]')).toContainText('$2,400.00');
     await trace.locator('summary').click();
     await panel(page).locator('[data-native-chapter="coordination"]').click();
@@ -645,10 +648,73 @@ for (const engine of names) {
       'one remounted controller produces exactly one accepted revision after the fixture import');
   });
 
+  test(`${engine}: whole-plan cost table preserves funding meaning and a readable compact comparison`, { timeout: 30000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async ({ controllerPath, statePath, selector }) => {
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const { createStudio } = await import(statePath);
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const plan = createExamplePlan();
+      for (const person of plan.people) person.fundedMinutes = 180;
+      plan.people[0].rateCentsPerHour = null;
+      plan.work[0].funding = 'allocated'; plan.work[0].status = 'paused';
+      const root = document.querySelector(selector); mountCoordinationPanel(root).dispose();
+      mountCoordinationPanel(root, { studio: createStudio(plan) });
+    }, { controllerPath, statePath, selector });
+    await panel(page).locator('[data-native-chapter="investment"]').click();
+    const trace = panel(page).locator('[data-native-trace]');
+    await trace.locator('summary').click();
+    const table = trace.locator('table');
+    await expect(table.locator('caption')).toHaveText('Investment by person · USD');
+    assert.deepEqual(await table.locator('thead th[scope="col"]').allTextContents(),
+      ['Person', 'Hourly rate', 'Staffing', 'Included work', 'Extra work', 'Total']);
+    assert.equal(await table.locator('tbody th[scope="row"]').count(), 4);
+    await expect(table.locator('tbody tr').first()).toContainText('Rate needed');
+    assert.deepEqual(await table.locator('tbody tr').nth(1).locator('td strong').allTextContents(),
+      ['$100.00', '$300.00', '$300.00', '$0.00', '$300.00'],
+      'included work remains inside staffing; paused work retains its planned value');
+    await expect(table.locator('tfoot th')).toHaveText('Known total');
+    assert.deepEqual(await table.locator('tfoot td strong').allTextContents(), ['$900.00', '$900.00', '$0.00', '$900.00']);
+    await expect(trace.locator('[data-native-trace-summary] dd').last()).toHaveText('$900.00');
+    const contrast = await trace.evaluate(node => {
+      const rgb = color => color.match(/[\d.]+/gu).slice(0, 3).map(Number);
+      const luminance = color => rgb(color).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4)
+        .reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
+      const background = luminance(getComputedStyle(node.querySelector('.native-coordination__trace-body')).backgroundColor);
+      return [...node.querySelectorAll('.native-cost-summary :is(dt,dd), .native-cost-table tbody :is(th,strong,small)')].map(element => {
+        const foreground = luminance(getComputedStyle(element).color);
+        return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
+      });
+    });
+    assert.ok(contrast.every(ratio => ratio >= 4.5), 'summary and table readings remain legible on their paper face');
+    await trace.screenshot({ path: resolve(captures, `cost-table-${engine}-desktop.png`), style: 'header.nav__top--sticky { visibility:hidden; }' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    const containment = await trace.evaluate(element => ({
+      right: element.getBoundingClientRect().right, width: innerWidth,
+      page: document.documentElement.scrollWidth,
+    }));
+    assert.ok(containment.right <= containment.width && containment.page <= containment.width + 1,
+      'the cost breakdown and page remain within the phone viewport');
+    const scroll = trace.locator('.native-cost-scroll');
+    const geometry = await scroll.evaluate(element => {
+      element.scrollLeft = element.scrollWidth;
+      const frame = element.getBoundingClientRect(), last = element.querySelector('tfoot td:last-child').getBoundingClientRect();
+      return { scrolls: element.scrollWidth > element.clientWidth, lastVisible: last.right <= frame.right + 1 && last.left >= frame.left };
+    });
+    assert.ok(geometry.scrolls && geometry.lastVisible, 'the phone table scrolls locally to its total column');
+    await scroll.focus(); await expect(scroll).toBeFocused();
+    await trace.screenshot({ path: resolve(captures, `cost-table-${engine}-phone.png`), style: 'header.nav__top--sticky { visibility:hidden; }' });
+  });
+
   test(`${engine}: scriptless About preserves the showcase investment and complete Studio route`, { timeout: 30000 }, async t => {
     const page = await open(t, engine, { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     await expect(panel(page)).toBeVisible();
     await assertAmount(page, '$3,980.00');
+    await expect(panel(page).locator('[data-native-allocated]')).toHaveText('$1,590.00');
+    const cost = panel(page).locator('[data-native-trace]');
+    await cost.locator('summary').click();
+    await expect(cost.locator('tfoot td').nth(2).locator('strong')).toHaveText('$1,590.00');
+    await expect(cost.locator('tbody tr')).toHaveCount(6);
     for (const node of await panel(page).locator('button,input').all()) assert.equal(await node.isVisible(), false, `Inactive editing controls stay outside the static reading: ${await node.evaluate(element => element.outerHTML)}`);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toBeVisible();
     assert.equal(await page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 0);

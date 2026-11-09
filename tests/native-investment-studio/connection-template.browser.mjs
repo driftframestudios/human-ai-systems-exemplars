@@ -62,6 +62,59 @@ const history = page => page.evaluate(() => window.templateFixture.studio.readHi
 const arrangement = page => page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0]);
 
 for (const engine of names) {
+  test(`${engine}: arrangement diagrams keep connected arrows, distinct returns and room for labels`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const deck = panel(page).locator('.studio-arrangement-deck');
+    for (const id of ['pod', 'guild', 'project-team', 'shared-service', 'stream-aligned', 'matrix', 'tiger-team']) {
+      await choose(page, id);
+      const diagram = deck.locator('.native-arrangement__diagram');
+      await expect(diagram).toBeVisible();
+      const readings = await diagram.evaluate(svg => {
+        const edges = [...svg.querySelectorAll('.native-arrangement__edge')];
+        return edges.map(edge => {
+          const arrow = edge.querySelector('.studio-diagram__arrow'), paint = getComputedStyle(arrow);
+          return { direction: edge.dataset.direction, path: arrow.getAttribute('d'), color: paint.fill,
+            stroke: paint.stroke, polygons: edge.querySelectorAll('polygon').length };
+        });
+      });
+      assert.ok(readings.every(edge => edge.polygons === 0 && (edge.path.match(/M /gu) ?? []).length === 1 && edge.path.endsWith(' Z')),
+        `${id}: every painted head and shaft shares one connected contour`);
+      assert.ok(readings.every(edge => edge.color !== 'none' && edge.stroke === 'none'));
+      assert.notEqual(readings.find(edge => edge.direction === 'forward').color,
+        readings.find(edge => edge.direction === 'return').color, `${id}: return paths have a distinct paint role`);
+    }
+    await choose(page, 'matrix');
+    const layout = await deck.evaluate(element => {
+      const reel = element.querySelector('.native-reel').getBoundingClientRect();
+      const viewport = element.querySelector('.native-arrangement__viewport').getBoundingClientRect();
+      const label = element.querySelector('.native-arrangement__boundary text').getBBox();
+      const nodes = [...element.querySelectorAll('.native-arrangement__team rect')].map(node => node.getBBox());
+      return { bottomGap: Math.abs(reel.bottom - viewport.bottom), labelBottom: label.y + label.height, topNode: Math.min(...nodes.map(node => node.y)) };
+    });
+    assert.ok(layout.bottomGap <= 2, `diagram fills the reel height: ${JSON.stringify(layout)}`);
+    assert.ok(layout.topNode - layout.labelBottom >= 16, 'the Matrix heading has a clear vertical reserve above team nodes');
+    await deck.screenshot({ path: resolve(captures, `${engine}-matrix-diagram-wide.png`) });
+    const team = deck.locator('[data-arrangement-team]').first(), teamId = await team.getAttribute('data-arrangement-team');
+    await team.click();
+    await expect(panel(page).locator(`[data-team-rack-record]`)).toBeVisible();
+    assert.equal(await panel(page).locator('[data-team-rack-record] [data-team-rack-name]').count(), 1);
+    assert.ok(teamId, 'selectable diagram nodes retain canonical team identities');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await deck.scrollIntoViewIfNeeded();
+    const phone = await deck.evaluate(element => {
+      const viewport = element.querySelector('.native-arrangement__viewport');
+      const label = element.querySelector('.native-arrangement__team text:not(.native-arrangement__role)');
+      viewport.scrollLeft = viewport.scrollWidth;
+      return { viewport: viewport.clientWidth, content: viewport.scrollWidth, scroll: viewport.scrollLeft,
+        page: document.documentElement.scrollWidth, window: innerWidth,
+        labelPixels: parseFloat(getComputedStyle(label).fontSize) * label.getScreenCTM().a };
+    });
+    assert.ok(phone.page <= phone.window + 1, `phone page stays contained: ${JSON.stringify(phone)}`);
+    assert.ok(phone.scroll >= phone.content - phone.viewport - 1, 'phone scrolling reaches the final team');
+    assert.ok(phone.labelPixels >= 11.9, `team labels keep a readable local scale: ${JSON.stringify(phone)}`);
+    await deck.screenshot({ path: resolve(captures, `${engine}-matrix-diagram-phone.png`) });
+  });
+
   test(`${engine}: team membership changes directly inside the delivery board and shared Undo restores it`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {

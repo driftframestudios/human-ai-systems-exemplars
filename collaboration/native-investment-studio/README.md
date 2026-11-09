@@ -15,7 +15,7 @@ pads and concise readings (#890), explicit Session spread choices (#891), a loca
 participation preview and compact laptop comparison (#893), contribution-local
 creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
-comparison decks (#818). Shared creation, local navigation and accepted recovery
+comparison decks (#818), with Domain portraits and compact cost comparison (#895). Shared creation, local navigation and accepted recovery
 retain their existing owners.
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
@@ -152,23 +152,32 @@ Shared stepper geometry keeps monetary, duration and ordinary numeric buttons
 circular within their route-specific skins. Quality's local labels and actions
 pair readable ink with their dark or editorial field.
 Shared instrument CSS also owns repeated Studio palette values. Chocolate is
-primarily a dial/knob-module surface and accent; existing companion surfaces
-await named refinements. The [rack contracts](../../visual-fidelity-contracts/studio-rack/README.md)
+primarily a dial/knob-module surface and accent; green and paper companions
+keep information distinct from those controls. The [rack contracts](../../visual-fidelity-contracts/studio-rack/README.md)
 keep the current palette, selected states, geometry and return behavior together.
 
 Investment loads five independent VHS-C decks: **Plan investment**, **Customer
 rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.
-Choose a deck, turn its connected reels, or adjust money and assumptions to see
-the comparison change. New decks keep independent settings, and the amp's Undo
-recovers accepted edits and removals. The chunky shelf, internal grip texture,
-fixed-light money dials and chocolate companion panels carry the preserved
-workbench artwork into the live Studio.
+The vertical shelf stays at the left on tablet and larger views; mobile uses a
+horizontal strip above the Domain reel. The floating chocolate Domain wheel
+loads a type beside a concise explanation and a rose chart of that deck's
+current values. Each chart compares one unit, with signed amounts and unavailable
+results readable beside it. A missing type shows its flow and a direct Add action.
+New decks keep independent settings; the amp's Undo recovers edits and removals.
 
-Investment's reels use the same Showcase zoetrope control as Team planning,
-Change and Quality: stationary option buttons, a rotating center, central Next
-and a readable selected output. Their financial presets retain their connected
-effects. The planning workbench's reel illustration remains a reference; the
-live chapter uses the shared Showcase presentation and motion preferences.
+The shared Showcase zoetrope control owns stationary paper/teal choices, a
+rotating center, central Next and selected output. Smaller non-Capital reels sit
+beside a relevant assumption fader. **Capital choices keeps its existing three
+reel sizes**, with a rose Capital reading wheel. Loading a deck gives its portrait
+and reel centers a short arrival, respecting Studio and system motion preferences.
+The cassette face uses coherent depth, internal grip texture and the same selected
+outline as Coordination. Green/paper information panels contrast with chocolate
+money modules; the preserved planning workbench retains its original artwork.
+
+The whole-plan cost breakdown is a compact comparison table with separate
+staffing, included work, extra work and total columns. Its exact ledger supplies
+the subtotals; a small screen scrolls the table locally. Coordination and missing
+Investment domains share connected arrow geometry with distinct return paths.
 
 Plan investment reads accepted people, work and funding. Its explicit funding
 controls update that shared plan. Other comparison assumptions retain their own
@@ -329,6 +338,7 @@ actual checks and their scope. Performance refinement stays with
 | Plan cassette presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
 | Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
+| Domain portraits and connected diagram geometry | [investment-portrait.mjs](investment-portrait.mjs), [diagram-geometry.mjs](diagram-geometry.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
 | People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
 | Shared People participation pads and local spread preview | [participation-pad.mjs](participation-pad.mjs) renders the accepted relationship; [team-controller.mjs](team-controller.mjs) owns changes and recovery |

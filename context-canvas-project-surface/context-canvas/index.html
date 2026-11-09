@@ -171,7 +171,7 @@
           <dl class="native-coordination__funding">
             <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
             <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
-            <div><dt>Included in staffing</dt><dd data-native-allocated>$1,480.00</dd></div>
+            <div><dt>Included in staffing</dt><dd data-native-allocated>$1,590.00</dd></div>
           </dl>
           <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
@@ -813,15 +813,27 @@
                 <details class="native-coordination__trace" data-native-trace>
                   <summary>Whole-plan cost breakdown</summary>
                   <div class="native-coordination__trace-body">
-                    <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
-                    <ul class="native-coordination__ledger" data-native-trace-list>
-                      <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
-                      <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
-                      <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
-                      <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
-                      <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
-                      <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
-                    </ul>
+                    <dl class="native-cost-summary" data-native-trace-summary>
+                      <div><dt>Staffing</dt><dd>$2,840.00</dd></div>
+                      <div><dt>Extra work</dt><dd>$1,140.00</dd></div>
+                      <div><dt>Plan total</dt><dd>$3,980.00</dd></div>
+                    </dl>
+                    <p class="native-cost-note" id="native-cost-note">Total = staffing + extra work. Included work is part of staffing.</p>
+                    <div class="native-cost-scroll" role="region" aria-label="Whole-plan investment by person" tabindex="0">
+                      <table class="native-cost-table" aria-describedby="native-cost-note">
+                        <caption>Investment by person · USD</caption>
+                        <thead><tr><th scope="col">Person</th><th scope="col">Hourly rate</th><th scope="col">Staffing</th><th scope="col">Included work</th><th scope="col">Extra work</th><th scope="col">Total</th></tr></thead>
+                        <tbody data-native-trace-list>
+                          <tr><th scope="row">Product lead</th><td><strong>$120.00</strong></td><td><strong>$480.00</strong><small>4 h</small></td><td><strong>$300.00</strong><small>2 h 30 min</small></td><td><strong>$240.00</strong><small>2 h</small></td><td><strong>$720.00</strong></td></tr>
+                          <tr><th scope="row">Researcher</th><td><strong>$100.00</strong></td><td><strong>$400.00</strong><small>4 h</small></td><td><strong>$250.00</strong><small>2 h 30 min</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$400.00</strong></td></tr>
+                          <tr><th scope="row">Engineering lead</th><td><strong>$140.00</strong></td><td><strong>$840.00</strong><small>6 h</small></td><td><strong>$560.00</strong><small>4 h</small></td><td><strong>$280.00</strong><small>2 h</small></td><td><strong>$1,120.00</strong></td></tr>
+                          <tr><th scope="row">Engineer</th><td><strong>$120.00</strong></td><td><strong>$720.00</strong><small>6 h</small></td><td><strong>$480.00</strong><small>4 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$720.00</strong></td></tr>
+                          <tr><th scope="row">Quality reviewer</th><td><strong>$110.00</strong></td><td><strong>$220.00</strong><small>2 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$440.00</strong><small>4 h</small></td><td><strong>$660.00</strong></td></tr>
+                          <tr><th scope="row">Operations specialist</th><td><strong>$90.00</strong></td><td><strong>$180.00</strong><small>2 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$180.00</strong><small>2 h</small></td><td><strong>$360.00</strong></td></tr>
+                        </tbody>
+                        <tfoot><tr data-native-trace-totals><th scope="row">Plan total</th><td>—</td><td><strong>$2,840.00</strong><small>24 h</small></td><td><strong>$1,590.00</strong><small>13 h</small></td><td><strong>$1,140.00</strong><small>10 h</small></td><td><strong>$3,980.00</strong></td></tr></tfoot>
+                      </table>
+                    </div>
                   </div>
                 </details>
               </section>

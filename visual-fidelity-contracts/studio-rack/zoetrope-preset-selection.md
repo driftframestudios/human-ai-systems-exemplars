@@ -66,6 +66,35 @@ control group; a preset can update several assumptions together. The visible
 choice, selected output and result remain synchronized. Silent synchronization
 after Undo or import changes presentation without creating another edit.
 
+## Arrangement diagram beside the reel
+
+The selected arrangement appears as named teams and directed work on the dark
+rack screen. Its viewport fills the available height beside the reel enclosure;
+at phone width the composition stacks and the diagram keeps a readable local
+canvas with horizontal scrolling. Nodes, labels and cables share one SVG coordinate system and uniform
+scaling. Boundary headings retain clear space above the nearest node.
+
+Every visible arrow joins its shaft and head in one closed path. The head follows
+the curve's final direction. A separate transparent centerline supplies the
+existing generous pointer target. Forward routes use the shared mint signal;
+return, response and review routes use the existing amber work color. Direction
+also remains available through the arrowhead and named route. Paused routes keep
+a dashed outline, and adapted endpoints retain their distinct treatment.
+Selectable nodes keep their canonical team identity and open the existing local
+editor; decorative geometry carries no separate record state.
+
+The shared [arrow geometry](../../collaboration/native-investment-studio/diagram-geometry.mjs)
+accepts start/end points and optional cubic controls. Coordination supplies its
+layout and semantic return roles; Investment can reuse the same painted arrow
+with its own named relationships. A bounded sampled outline maintains visible
+shaft width around bends at the showcase's diagram scale. SVG's
+[path commands](https://www.w3.org/TR/SVG2/paths.html) support one closed shape,
+and uniform [aspect-ratio fitting](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio)
+keeps the diagram's proportions when the viewport grows. Browser observations
+check all arrangement choices, Matrix label clearance, local selection and phone
+reachability. These checks establish the exercised composition, while human
+review continues to judge its aesthetic fit.
+
 ## Connected People role mix
 
 One selected-person desk holds three compact shared reels: Change model (six

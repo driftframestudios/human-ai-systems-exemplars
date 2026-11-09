@@ -1003,3 +1003,46 @@ for (const engine of names) test(`${engine}: Investment uses the shared Showcase
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(approach.locator('[aria-pressed="true"]')).toHaveCSS('outline-style', 'solid');
 });
+
+for (const engine of names) test(`${engine}: domain portraits follow deck assumptions, removal and recreation with reachable responsive geometry`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page), domain = view.locator('.investment-study__domain');
+  const choose = name => domain.getByRole('button', { name: `Domain: ${name}`, exact: true }).click();
+  await expect(view.locator('.investment-domain__portrait')).toContainText('Budget allocation');
+  const initial = await bytes(page);
+  await choose('Operations');
+  await expect(view.locator('.investment-domain__portrait')).toContainText('hours / week');
+  const portrait = await view.locator('.investment-domain__values').textContent();
+  const fader = view.getByRole('slider', { name: 'Adoption', exact: true });
+  await fader.focus(); await page.keyboard.press('ArrowRight');
+  await expect(view.locator('.investment-domain__values')).not.toHaveText(portrait);
+  await expect(fader).toBeFocused();
+  await choose('Planning');
+  await expect(view.locator('.native-reel').filter({ has: page.locator('legend', { hasText: 'Capital reading' }) })).toHaveAttribute('data-reel-variant', 'rose');
+  await view.getByRole('button', { name: 'Remove deck', exact: true }).click();
+  await expect(view.locator('.investment-domain__diagram')).toBeVisible();
+  await expect(view.locator('.investment-study__loaded-master')).toBeHidden();
+  await view.getByRole('button', { name: 'Add capital choices', exact: false }).click();
+  await expect(view.locator('.investment-domain__portrait')).toBeVisible();
+  await expect(view.locator('.investment-study__loaded-master')).toBeVisible();
+  assert.notEqual(await bytes(page), initial);
+  for (const width of [1512, 900, 390]) {
+    await page.setViewportSize({ width, height: 982 });
+    await choose('Internal');
+    const geometry = await view.evaluate(element => {
+      const channel = element.querySelector('.investment-study__channel').getBoundingClientRect();
+      const body = element.querySelector('.investment-study__body').getBoundingClientRect();
+      const controls = [...element.querySelectorAll('.investment-study__domain button')];
+      return { channel: { left: channel.left, right: channel.right, bottom: channel.bottom }, body: { left: body.left, top: body.top }, page: document.documentElement.scrollWidth, viewport: innerWidth,
+        reachable: controls.every(control => { const box = control.getBoundingClientRect(); return box.width >= 24 && box.height >= 24; }) };
+    });
+    assert.ok(geometry.page <= geometry.viewport + 1);
+    assert.ok(geometry.reachable);
+    if (width > 650) assert.ok(geometry.channel.right <= geometry.body.left, 'decks retain their vertical left channel');
+    else assert.ok(geometry.channel.bottom <= geometry.body.top, 'phone decks precede the domain reel');
+    await view.locator('.investment-study__orientation').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-domain.png`) });
+  }
+  await expect(view.locator('.investment-domain__sectors')).toHaveCSS('animation-name', 'none');
+});

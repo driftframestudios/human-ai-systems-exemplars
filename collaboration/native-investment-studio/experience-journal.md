@@ -33,7 +33,8 @@ and repairs Quality control contrast and spacing.
 #848 carries that composition into Abilities, with local person/team naming in
 #856 and retained pristine creation in #868. #849 makes Change action selection visible; #857/#858 extend the compact
 local receiver into Change and Quality. #818 receives the full financial-deck
-workbench in Investment, with shared Showcase reels in #854. Each feature uses
+workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
+compact cost comparison and shared diagram geometry in #895. Each feature uses
 its own focused reviewed delivery.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair
@@ -377,23 +378,53 @@ Comparison amounts and financial metrics are derived from the selected deck's
 settings. The explicit Plan investment funding action uses the existing shared
 work command; comparison assumptions retain their separate analytical meaning.
 
-The final Investment reels use `reel-control.mjs` and shared instrument styling,
+The Investment reels use `reel-control.mjs` and shared instrument styling,
 matching Team planning, Change and Quality. A small financial adapter supplies
 choice identity and consequences; the shared control owns stationary perimeter
 buttons, central Next, arrow stepping, selected output, rotor and disposal.
-Teal primary and cobalt secondary reels keep dimensions distinct. Paired or
-three-reel groups stack when their labels need more room. This supersedes the
-specimen's illustrative reel renderer in the live chapter, while preserving the
-reference itself and all connected financial behavior. Full, Lower, Off and
-system motion preferences come from the existing Studio owner.
+The chocolate Domain wheel floats in the main body beside a concise companion.
+The shelf remains vertical at the left on tablet and larger widths, then becomes
+a horizontal strip above Domain on mobile. This receiving arrangement supersedes
+the earlier shelf-contained Domain control; the planning specimen stays intact.
 
-The VHS-C shelf keeps the reference's chunky depth, large left reel, internal
-grip texture and moving inner face. Chocolate companion modules and static
-monetary readout positions preserve its scale. Monetary dials use large/small
-steps appropriate to the amount, alongside exact fields and circular steps.
-This supersedes the three fixed navigation decks from #813. Compare a change
-and Keep a plan remain compact utility routes to the canonical baseline,
-recovery, file and report owners.
+A loaded deck supplies an equal-angle rose chart with one unit per series. Radius
+follows the square root of magnitude so area communicates amount. The adjacent
+reading retains exact signed values and unavailable states. A missing deck shows
+a short connected diagram and a local Add action. Operational time derives from
+the existing released-time assumptions and the remaining opportunity at full
+adoption; it introduces no assumed baseline workflow duration. These are views
+of existing deck projections and keep their ownership and Undo path.
+
+Non-Capital inner reels become smaller and share their row with a relevant
+assumption fader: reserve, discount, retention or adoption. Capital choices keeps
+its three existing reel sizes; Capital reading receives the tertiary rose skin.
+A new deck or domain gives the rose a short grow-and-settle arrival and the inner
+rotors a brief spin. Full, Lower, Off and system reduction retain the shared owner.
+Ordinary assumption changes update the current chart and controls in place.
+
+The VHS-C shelf retains the chunky depth, large left reel, internal grip texture
+and moving inner face. A single restrained Y/Z projection and shorter extrusion
+supersede the receiving face's compound X/Y/Z skew and oversized black shadow.
+The selected outline matches Coordination. Information companions and funding
+lanes use existing green/editorial colors; chocolate stays on money/dial modules
+and instrument accents. Monetary controls preserve their large/small steps,
+exact fields, circular buttons and stable readout placement.
+
+The whole-plan breakdown uses one semantic comparison table in place of person
+cards. Named column headers, right-aligned values, secondary effort, ledger
+subtotals and local phone scrolling support scanning. The initial paused follow-up
+contributes included work, so the static amp and table both show $1,590 included
+within staffing; total investment remains $3,980.
+
+Coordination and Investment reuse one filled arrow path for its shaft and head.
+The bounded curve helper owns joins; view-specific routes retain their data and
+selection behavior. Return colors distinguish feedback. Coordination reserves
+space above Matrix nodes and stretches its diagram enclosure to the reel bottom.
+This follows the SVG path coordinate model and coherent CSS transform rendering;
+public source links and exact receiving geometry live in the corresponding VFCs.
+
+Compare a change and Keep a plan remain compact utility routes to the canonical
+baseline, recovery, file and report owners.
 
 Schema 0.10 carries versioned investment settings in the accepted plan. Earlier
 plans migrate to the five populated defaults. Numeric comparison assumptions
@@ -539,6 +570,9 @@ participant time shares remain with #798; production Reset remains with #808.
 | Tall nested Change and separate Quality detail forms | Attached compact receivers use shared local headers, retained fields and the canonical top/bottom Apply operation. |
 | Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
 | Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
+| Shelf-contained Domain, large paired reels and chocolate information panels | #895 floats Domain beside a per-deck rose or Add diagram, compacts non-Capital controls, and uses green/paper companions; Capital sizing and the frozen specimen remain intact. |
+| Person cards in Whole-plan cost breakdown | One semantic ledger table provides comparable amounts, secondary time and explicit subtotals. |
+| Separate arrowhead geometry and compressed Matrix heading | A shared filled path keeps shaft/head connected; reserved label space and full-height diagram framing preserve selectable components. |
 | Live Investment repeats the specimen's illustrative reel artwork | The shared Showcase zoetrope control carries financial choices; the planning specimen retains its original illustration. |
 | Rates disclosure and long contribution note editors | Direct rate controls, role facets and a contribution/session matrix; stored note data is retained. |
 | Separate roster cards and passive People participation reading | Team parent lanes and one person-by-session arranger retain readings, operations and direct membership. |
@@ -557,7 +591,11 @@ approaches, remains recoverable in Git. It does not change the preserved specime
 ## Evidence and next receiver
 
 Each receiving PR owns its normalized source/browser observations and independent
-review. Checks should distinguish a consequential state or interaction fault:
+review. #895 joins focused portrait projections with deck identity/Undo, reel hit
+targets, responsive shelf position, semantic cost-table and connected diagram
+observations. Initial-state images also inspect the populated showcase and full
+motion. These checks cover the changed compositions; broader performance and
+real planning validation retain their separate scope. Checks should distinguish a consequential state or interaction fault:
 creation and Undo, selected scope, direct membership, parked drafts, support-cell
 routing, ordinary mobile containment and readable focus. Arithmetic inventories
 and repeated all-page screenshots are unnecessary for these changes.

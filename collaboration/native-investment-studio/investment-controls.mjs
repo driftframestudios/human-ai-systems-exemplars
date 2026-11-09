@@ -145,9 +145,9 @@ export function createMoneyControl({ id, label, read, write, min = 0, max = 1000
 
 // The shared Showcase reel owns artwork, stepping, motion and disposal. This
 // receiver preserves the financial controller's read/write and focus vocabulary.
-export function createChoiceReel({ id, label, options, read, write, secondary = false }) {
+export function createChoiceReel({ id, label, options, read, write, secondary = false, variant }) {
   const reel = createReel(document, { label, choices: options, value: read(),
-    variant: secondary ? 'cobalt' : 'teal', secondary,
+    variant: variant || (secondary ? 'cobalt' : 'teal'), secondary,
     onSelect(value) { if (value !== read()) write(value); reel.select(read()); } });
   for (const control of reel.element.querySelectorAll('[data-reel-choice]')) {
     control.dataset.focusKey = `${id}-${control.dataset.reelChoice}`;
