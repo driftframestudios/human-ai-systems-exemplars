@@ -13,6 +13,8 @@ import { summarizeWorkCapacity, readPersonSessionSpread, planPersonSessionSpread
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
+const SPREAD_PRESETS = Object.freeze([['one', 'One plan'], ['half', 'Half'], ['all', 'All plans']]);
+const spreadCount = (preset, total) => preset === 'one' ? Math.min(1, total) : preset === 'half' ? Math.ceil(total / 2) : total;
 const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
@@ -56,18 +58,19 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   localHeader.update({ source: elements.apply });
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
-  const spread = document.createElement('section'); spread.className = 'studio-person-spread';
-  const spreadLabel = document.createElement('label'); spreadLabel.textContent = 'Session spread';
-  const spreadRange = document.createElement('input'); spreadRange.type = 'range'; spreadRange.min = '0'; spreadRange.step = '1';
-  spreadRange.dataset.personSpread = ''; spreadRange.setAttribute('aria-label', 'Session spread');
-  spreadLabel.append(spreadRange);
+  const spread = document.createElement('section'); spread.className = 'studio-person-spread'; spread.setAttribute('aria-label', 'Session spread');
+  const spreadSelector = document.createElement('div'); spreadSelector.className = 'studio-person-spread__selector';
+  const spreadLabel = document.createElement('span'); spreadLabel.className = 'studio-person-spread__label'; spreadLabel.textContent = 'Session spread';
+  const spreadCurrent = document.createElement('strong'); spreadCurrent.className = 'studio-person-spread__current';
   const spreadOutput = document.createElement('output'); spreadOutput.className = 'studio-person-spread__reading';
-  const spreadPresets = document.createElement('div'); spreadPresets.className = 'studio-person-spread__presets';
-  for (const [value, label] of [['one', 'One plan'], ['half', 'Half'], ['all', 'All plans']]) {
+  const spreadPresets = document.createElement('div'); spreadPresets.className = 'studio-person-spread__presets'; spreadPresets.setAttribute('role', 'group'); spreadPresets.setAttribute('aria-label', 'Choose session spread');
+  for (const [value, label] of SPREAD_PRESETS) {
     const button = document.createElement('button'); button.type = 'button'; button.dataset.personSpreadPreset = value; button.textContent = label; spreadPresets.append(button);
   }
   const spreadHint = document.createElement('small'); spreadHint.className = 'studio-person-spread__hint';
-  spread.append(spreadLabel, spreadOutput, spreadPresets, spreadHint);
+  spreadSelector.append(spreadLabel, spreadCurrent, spreadPresets);
+  const spreadDetails = document.createElement('div'); spreadDetails.className = 'studio-person-spread__details';
+  spreadDetails.append(spreadOutput, spreadHint); spread.append(spreadSelector, spreadDetails);
   elements.apply.closest('.native-coordination__actions').before(spread);
   // A regular grid owns layout; the fieldset keeps native disabled semantics.
   // Chromium can collapse nested grids when a fieldset's validation rows change.
@@ -82,7 +85,6 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   let disposed = false;
   let composing = false;
   let generation = 0, retiredToken = null;
-  let spreadGesture = null;
 
   function listen(target, event, handler) {
     target.addEventListener(event, handler);
@@ -138,11 +140,21 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
     const totals = summarizeWorkCapacity(next);
-    const rollup = document.createElement('p'); rollup.className = 'studio-capacity-rollup';
-    rollup.textContent = `${duration(totals.personMinutes)} assigned across people · ${wholeMoney(totals.knownCents)} known work value${totals.completeMoney ? '' : ' · Some rates needed'}`;
+    const rollup = document.createElement('dl'); rollup.className = 'studio-capacity-rollup studio-capacity-readings';
+    for (const [label, value, description] of [
+      ['Assigned time', duration(totals.personMinutes), 'Across people and sessions'],
+      ['Known work value', wholeMoney(totals.knownCents), totals.completeMoney ? 'Funded time and extra investment' : 'Some hourly rates are still needed'],
+    ]) {
+      const reading = document.createElement('div'), title = document.createElement('dt'), amount = document.createElement('dd'), number = document.createElement('span'), context = document.createElement('small');
+      title.textContent = label; number.textContent = value; context.textContent = description;
+      amount.append(number, context); reading.append(title, amount); rollup.append(reading);
+    }
     const legend = document.createElement('p'); legend.className = 'studio-capacity-legend';
     for (const [kind, symbol, text] of [['allocated', '●', 'Funded time'], ['additional', '◆', 'Extra investment'], ['paused', 'Ⅱ', 'Paused · still planned']]) {
-      const key = document.createElement('span'); key.dataset.capacityMeaning = kind; key.textContent = `${symbol} ${text}`; legend.append(key);
+      const key = document.createElement('span'), marker = document.createElement('span');
+      key.dataset.capacityMeaning = kind; marker.textContent = symbol; marker.setAttribute('aria-hidden', 'true');
+      if (kind === 'paused') marker.className = 'studio-pause-marker';
+      key.append(marker, document.createTextNode(` ${text}`)); legend.append(key);
     }
     const ledger = new Map(next.result.ledger.map(row => [row.workId, new Map(row.lines.map(line => [line.personId, line]))]));
     const table = document.createElement('table'); table.className = 'studio-people-arranger'; table.dataset.emptySessions = String(next.state.work.length === 0);
@@ -151,7 +163,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const head = document.createElement('thead'), headings = document.createElement('tr');
     const label = document.createElement('th'); label.scope = 'col'; label.textContent = 'People and funded time'; headings.append(label);
     for (const work of next.state.work) {
-      const cell = document.createElement('th'); cell.scope = 'col';
+      const cell = document.createElement('th'); cell.scope = 'col'; cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
       const open = document.createElement('button'); open.type = 'button';
       open.className = 'studio-track-key studio-session-tracks__pad native-control--navigate';
       open.dataset.nativeWorkOpen = work.id; open.dataset.studioSessionId = work.id;
@@ -195,12 +207,13 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
         order.append(control);
       }
       const more = document.createElement('details'); more.className = 'studio-person-more';
-      const moreLabel = document.createElement('summary'); moreLabel.textContent = 'More'; moreLabel.setAttribute('aria-label', `More controls for ${person.label}`);
+      const moreLabel = document.createElement('summary'); moreLabel.textContent = 'Card actions'; moreLabel.setAttribute('aria-label', `Card actions for ${person.label}`);
       more.append(moreLabel, order); item.append(more);
       appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });
       row.append(item);
       for (const work of next.state.work) {
         const cell = document.createElement('td'), pad = document.createElement('label'), check = document.createElement('input');
+        cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
         check.type = 'checkbox'; check.checked = work.personIds.includes(person.id);
         check.dataset.peopleParticipant = person.id; check.dataset.peopleWork = work.id;
         check.setAttribute('aria-label', `${person.label} in ${work.label}`);
@@ -208,12 +221,20 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
         check.disabled = last;
         pad.className = 'studio-shared__pad'; pad.dataset.selected = String(check.checked);
         pad.dataset.funding = work.funding; pad.dataset.status = work.status;
-        const text = document.createElement('small'), value = document.createElement('small');
+        const state = document.createElement('span'), text = document.createElement('small'), value = document.createElement('strong');
+        state.className = 'studio-participation-pad__state'; state.textContent = check.checked ? 'Assigned' : 'Available';
+        text.className = 'studio-participation-pad__time'; value.className = 'studio-participation-pad__amount';
         const line = ledger.get(work.id).get(person.id);
-        text.textContent = line ? `${work.status === 'paused' ? 'Ⅱ' : work.funding === 'allocated' ? '●' : '◆'} ${duration(line.minutes)}` : 'Available';
+        if (line) {
+          const marker = document.createElement('span'); marker.textContent = work.status === 'paused' ? 'Ⅱ' : work.funding === 'allocated' ? '●' : '◆';
+          marker.setAttribute('aria-hidden', 'true');
+          if (work.status === 'paused') marker.className = 'studio-pause-marker';
+          text.append(marker, document.createTextNode(` ${duration(line.minutes)}`));
+        }
+        if (work.status === 'paused') check.setAttribute('aria-label', `${person.label} in ${work.label}, paused session`);
         value.textContent = line ? line.cents === null ? 'Rate needed' : wholeMoney(line.cents) : '';
         if (last) pad.title = 'Add another person to this session before removing this participant.';
-        pad.append(check, text, value); cell.append(pad); row.append(cell);
+        pad.append(check, state, text, value); cell.append(pad); row.append(cell);
       }
       body.append(row);
     }
@@ -225,6 +246,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const work of next.state.work) {
       const total = summarizeWorkCapacity(next, [work.id]);
       const cell = document.createElement('td'), hours = document.createElement('strong'), price = document.createElement('small');
+      cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
       hours.textContent = duration(total.personMinutes); price.textContent = `${wholeMoney(total.knownCents)}${total.completeMoney ? '' : ' known'}`;
       cell.append(hours, price); totalRow.append(cell);
     }
@@ -257,12 +279,23 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const currentSpread = readPersonSessionSpread(view.projection, selectedId);
     spread.hidden = currentSpread === null;
     if (currentSpread) {
-      spreadRange.max = String(currentSpread.totalPlans); spreadRange.value = String(currentSpread.selectedPlans);
-      spreadRange.disabled = !canOpen() || view.status === 'stale' || currentSpread.totalPlans === 0;
-      spreadOutput.textContent = `${duration(currentSpread.personMinutes)} assigned · ${duration(currentSpread.fundedMinutes)} funded · ${currentSpread.sessionCount} sessions`;
-      spreadRange.setAttribute('aria-valuetext', spreadOutput.textContent);
-      spreadHint.textContent = currentSpread.pinnedPlans ? 'Sessions with no other participant stay assigned.' : 'Includes complete session plans.';
-      for (const button of spreadPresets.children) button.disabled = spreadRange.disabled;
+      const selectedWork = new Set(view.projection.state.work.filter(row => row.personIds.includes(selectedId)).map(row => row.id));
+      const matches = SPREAD_PRESETS.filter(([id]) => {
+        const count = spreadCount(id, currentSpread.totalPlans);
+        return count === currentSpread.selectedPlans && planPersonSessionSpread(view.projection, selectedId, count).command.workIds.every(id => selectedWork.has(id));
+      });
+      const current = matches.find(([id]) => id === 'all') ?? matches[0];
+      spreadCurrent.textContent = currentSpread.totalPlans === 0 ? 'No plans yet' : current?.[1] ?? 'Custom spread';
+      spreadOutput.textContent = `${currentSpread.selectedPlans} of ${currentSpread.totalPlans} plans · ${duration(currentSpread.personMinutes)} assigned · ${duration(currentSpread.fundedMinutes)} funded · ${currentSpread.sessionCount} sessions`;
+      spreadHint.textContent = currentSpread.pinnedPlans
+        ? `${currentSpread.pinnedPlans} ${currentSpread.pinnedPlans === 1 ? 'plan needs' : 'plans need'} this person. Add another participant before reducing further.`
+        : currentSpread.totalPlans ? 'Includes whole plans in their displayed order.' : 'Add a plan to choose participation.';
+      for (const button of spreadPresets.children) {
+        const pinned = spreadCount(button.dataset.personSpreadPreset, currentSpread.totalPlans) < currentSpread.pinnedPlans;
+        button.disabled = !canOpen() || view.status === 'stale' || currentSpread.totalPlans === 0 || pinned;
+        button.setAttribute('aria-pressed', String(currentSpread.totalPlans > 0 && button.dataset.personSpreadPreset === current?.[0]));
+        button.title = pinned ? 'Add another participant to these plans before reducing this spread.' : '';
+      }
     }
     summaryPreview.textContent = currentPerson
       ? ` · ${currentPerson.rateCentsPerHour === null ? 'Add an hourly rate' : `${money(currentPerson.rateCentsPerHour)}/hour`} · ${duration(currentPerson.fundedMinutes)} funded${view.draft?.changed ? ' · Unsaved edits' : ''}`
@@ -416,8 +449,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (!button || (!root.contains(button) && !elements.configure.contains(button)) || button.disabled) return;
     if (button.dataset.personSpreadPreset) {
       const total = studio.read().state.work.length;
-      const count = button.dataset.personSpreadPreset === 'one' ? 1 : button.dataset.personSpreadPreset === 'half' ? Math.ceil(total / 2) : total;
-      setSessionSpread(count); return;
+      setSessionSpread(spreadCount(button.dataset.personSpreadPreset, total)); return;
     }
     if (button.hasAttribute('data-people-create-session')) {
       if (!canOpen()) return;
@@ -531,10 +563,6 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const [field, input] of Object.entries(inputs)) input.maxLength = field === 'label' ? LIMITS.label : 32;
     if (!elements.configure.id) elements.configure.id = `${root.id || 'people'}-person-settings`;
     listen(elements.roster, 'change', changeParticipation);
-    listen(spreadRange, 'pointerdown', () => { spreadGesture = Symbol('person-session-spread'); });
-    listen(spreadRange, 'keydown', event => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) spreadGesture ??= Symbol('person-session-spread'); });
-    listen(spreadRange, 'input', () => setSessionSpread(Number(spreadRange.value), { gesture: spreadGesture }));
-    for (const event of ['pointerup', 'pointercancel', 'keyup', 'blur']) listen(spreadRange, event, () => { spreadGesture = null; });
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
     listen(elements.form, 'focusin', event => { if (inputs[event.target.name] === event.target) ensurePersonOwner(); });

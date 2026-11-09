@@ -6,7 +6,9 @@ keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
 dev receiving contract revised 9 November 2026 for
-[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
+[#890](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/890)
+and [#891](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/891),
+building on [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884) and
 retaining the People composition from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
@@ -147,33 +149,53 @@ readings name the rate per hour and available/funded time; tabular numerals and
 whole-dollar rate display reduce repeated lines while preserving exact values
 in the plan. These pills are text readings, with a distinct treatment from the
 interactive pads. Local horizontal scrolling retains comfortable pad targets.
-A session
-keeps at least one participant; the affected pad explains that boundary locally.
+**Card actions** names the row's order and removal controls. The person's name
+opens their settings. A session keeps at least one participant; the affected pad
+explains that boundary locally.
 Selecting a person opens one mixing desk; All people and Close return to the
 matrix. Its selected header replaces the earlier paired disclosure headers.
 Typed settings retain Apply, while connected role recipes and direct participation
 enter shared Undo history. Role choices preserve unfinished name, rate and
 funded-time fields.
 
-The People matrix's top readout totals planned person-time and known work value.
-Selected cells show the corresponding person's full session-plan time and known
-value; available cells retain their available state. Column footers retain zero
-for empty totals. Rates that need values stay explicit. A concise symbol legend
-distinguishes funded work, extra work and paused status, with text supplementing
-color. Paused sessions retain their planned time and money in these readings.
+The People matrix's top readings separate a concise label, prominent value and
+short context in native `dl` groups. Each `dt` names a reading; its `dd` contains
+the value and context. Selected cells show the corresponding person's full
+session-plan time and known value. Their native checkbox stays upper left, time
+lower left and stronger monetary reading lower right. Tabular figures and fixed
+positions support comparison. Compact rows preserve generous pad targets;
+available cells retain their participation meaning. Column footers retain zero
+for empty totals, and rates that need values stay explicit.
+
+Paused status marks the whole header/body/footer column with hatching. A compact
+circled pause marker supplements the participating pad's state; the adjacent
+legend uses the same marker and names its meaning. Text and accessible control
+names retain the state independently of color and pattern. Paused sessions retain
+their planned time and money in these readings.
 
 The contribution matrix answers a different question: which work supports these
 contributions? Its rollup uses the union of linked work IDs so repeated support
-counts once. Session footers expose support and planned time; linked, paused and
-available symbols plus receiver/decision markers have a nearby legend. A local
-Pause/Resume updates the shared session status and keeps its planned ledger value.
-These readings expose scope; they represent neither elapsed schedule nor savings.
+counts once. **Supporting time** and **Known work value** use the same label/value/
+context hierarchy. Session footers expose support and planned time; linked,
+paused and available symbols plus receiver/decision markers have a nearby legend.
+Quiet **Pause session** / **Resume session** actions live in Supporting effort
+footer cells. They are native buttons styled as low-emphasis text actions; their
+changing labels name the next operation, so they use ordinary button semantics.
+Each action updates the session throughout the plan, retains local focus and
+supports amp Undo. The whole column adopts the paused treatment while keeping its
+planned ledger value. These readings describe planned work; elapsed schedule and
+financial savings retain their separate meanings.
 
-Session spread changes the selected person's whole-session membership in visible
-plan order. The resulting pads and actual assigned/funded-time readout update
-together. A sole participant stays included; the nearby hint explains the retained
-selection. One gesture is one accepted operation and one Undo. Fractional shares
-remain future model work in #798.
+Session spread uses an analog three-way switch. Its **One plan**, **Half** and
+**All plans** positions remain direct native buttons with fixed labels and truthful
+pressed state. A shared dark recessed housing connects the paper and teal
+positions; the selected position sits depressed, with a fixed detent mark at each
+position. The current matching choice or **Custom spread** appears with
+actual plan count, assigned/funded time and sessions. A deliberate choice changes
+whole-session membership in visible plan order through one accepted operation
+and one Undo. A plan's sole participant stays included; choices below that
+required count are disabled with a nearby explanation. Adding another participant
+enables those reductions. Fractional shares remain future model work in #798.
 
 Team keys fill their editorial lane and show the parent's name and open state.
 Their resting face uses `--about-cobalt`; the selected face uses
@@ -299,6 +321,13 @@ text-field sizing that obscured the People receiver.
 connected presets plus exact overrides. Capacity readings now accompany the
 People and contribution matrices with distinct scopes. #881's contribution-local
 person creation retains its own rack and parent route.
+
+#890 supersedes flat summary strips and centered pad readings with a label/value/
+context hierarchy and stable checkbox/time/value positions. It names row tools
+Card actions and moves contribution session status actions from headings to
+Supporting effort footers. #891 supersedes the Session spread fader with an analog
+three-way switch and explained sole-participant limits. The
+accepted plan, ledger scopes and shared Undo retain their existing owners.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 record-local controls. Bounded role/contribution choices plus team/support membership accept directly.

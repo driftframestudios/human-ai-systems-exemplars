@@ -163,19 +163,28 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     }
     contributionButtons = new Map();
     const supported = summarizeWorkCapacity(next, next.state.contributions.flatMap(row => row.workIds));
-    const reading = document.createElement('p'); reading.className = 'studio-contribution-reading';
-    reading.textContent = `${duration(supported.personMinutes)} of supporting work · ${wholeMoney(supported.knownCents)}${supported.completeMoney ? '' : ' known'}`;
+    const reading = document.createElement('dl'); reading.className = 'studio-capacity-readings studio-contribution-reading';
+    for (const [key, label, value, context] of [
+      ['time', 'Supporting time', duration(supported.personMinutes), 'Across participating people'],
+      ['value', 'Known work value', wholeMoney(supported.knownCents), supported.completeMoney ? 'Shared sessions counted once' : 'Some hourly rates are unknown'],
+    ]) {
+      const group = document.createElement('div'), title = document.createElement('dt'), amount = document.createElement('dd');
+      const valueText = document.createElement('span'), detail = document.createElement('small');
+      title.textContent = label; valueText.textContent = value; valueText.dataset.contributionTotal = key; detail.textContent = context;
+      amount.append(valueText, detail); group.append(title, amount); reading.append(group);
+    }
     const table = document.createElement('table'); table.className = 'studio-contribution-tracks';
     const caption = document.createElement('caption'); caption.textContent = 'Supporting sessions'; table.append(caption);
     const head = document.createElement('thead'), headings = document.createElement('tr');
     const contributionHeading = document.createElement('th'); contributionHeading.scope = 'col'; contributionHeading.textContent = 'Contribution';
     headings.append(contributionHeading);
+    const sessionCell = (tag, work) => {
+      const cell = document.createElement(tag);
+      cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
+      return cell;
+    };
     for (const work of next.state.work) {
-      const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = work.label;
-      const toggle = button(work.status === 'paused' ? '▶ Resume' : 'Ⅱ Pause', 'work-status', work.id);
-      toggle.className = 'studio-contribution-tracks__status native-control--cancel';
-      toggle.setAttribute('aria-label', `${work.status === 'paused' ? 'Resume' : 'Pause'} ${work.label} throughout the plan`);
-      toggle.setAttribute('aria-pressed', String(work.status === 'paused')); cell.append(toggle); headings.append(cell);
+      const cell = sessionCell('th', work); cell.scope = 'col'; cell.textContent = work.label; headings.append(cell);
     }
     const actionHeading = document.createElement('th'); actionHeading.scope = 'col'; actionHeading.textContent = 'Edit'; headings.append(actionHeading);
     head.append(headings); table.append(head);
@@ -190,9 +199,13 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
         ? `◇ ${named(people.get(row.decisionOwnerPersonId))} decides` : '◇ Decision owner unassigned';
       open.append(receiver, decider); title.append(open); item.append(title); contributionButtons.set(row.id, open);
       for (const work of next.state.work) {
-        const cell = document.createElement('td'), included = row.workIds.includes(work.id);
+        const cell = sessionCell('td', work), included = row.workIds.includes(work.id);
         const paused = included && work.status === 'paused';
-        const pad = button(included ? paused ? 'Ⅱ' : '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
+        const pad = button(included ? paused ? '' : '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
+        if (paused) {
+          const marker = document.createElement('span'); marker.className = 'studio-pause-marker';
+          marker.textContent = 'Ⅱ'; marker.setAttribute('aria-hidden', 'true'); pad.append(marker);
+        }
         pad.dataset.included = String(included); pad.dataset.paused = String(paused);
         pad.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? paused ? 'linked, paused' : 'linked' : 'available'}. Edit contribution.`);
         pad.setAttribute('aria-controls', contribution.configure.id); cell.append(pad); item.append(cell);
@@ -208,15 +221,20 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     const totalLabel = document.createElement('th'); totalLabel.scope = 'row'; totalLabel.textContent = 'Supporting effort'; totals.append(totalLabel);
     for (const work of next.state.work) {
       const linked = next.state.contributions.filter(row => row.workIds.includes(work.id)).length;
-      const scope = summarizeWorkCapacity(next, linked ? [work.id] : []), cell = document.createElement('td');
+      const scope = summarizeWorkCapacity(next, linked ? [work.id] : []), cell = sessionCell('td', work);
       const count = document.createElement('small'); count.textContent = `${linked} linked`;
       const effort = document.createElement('strong'); effort.textContent = duration(scope.personMinutes);
       const cost = document.createElement('small'); cost.textContent = `${wholeMoney(scope.knownCents)}${scope.completeMoney ? '' : ' known'}`;
-      cell.append(count, effort, cost); totals.append(cell);
+      const verb = work.status === 'paused' ? 'Resume' : 'Pause';
+      const toggle = button(`${verb} session`, 'work-status', work.id);
+      toggle.className = 'studio-contribution-tracks__status native-control--cancel';
+      toggle.setAttribute('aria-label', `${verb} session: ${work.label} throughout the plan`);
+      cell.append(count, effort, cost, toggle); totals.append(cell);
     }
     totals.append(document.createElement('td')); foot.append(totals); table.append(foot);
     const legend = document.createElement('p'); legend.className = 'studio-contribution-legend';
-    legend.textContent = '● Linked · Ⅱ Paused · ◇ Decides · · Available. Paused work retains planned effort and cost.';
+    const pauseKey = document.createElement('span'); pauseKey.className = 'studio-pause-marker'; pauseKey.textContent = 'Ⅱ'; pauseKey.setAttribute('aria-hidden', 'true');
+    legend.append('● Linked · ', pauseKey, ' Paused · ◇ Decides · · Available. Paused work retains planned effort and cost.');
     list.replaceChildren(reading, table, legend); empty.hidden = contributions.size > 0;
   }
   function renderMembers(ids) {

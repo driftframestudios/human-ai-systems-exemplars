@@ -15,8 +15,11 @@ selected record keeps a local return to that comparison.
 The current refinement gives the selected person one mixing desk: rate and funded
 time, connected role reels, exact role overrides and whole-session spread.
 Contribution-specific creation remains beside the contribution that requested
-it. Capacity readings give each matrix an explicit scope while retaining its
-large checkbox pads.
+it. #890 gives capacity readings a clear label/value/context hierarchy and fixes
+the checkbox, time and value to stable positions inside compact participation
+pads. #891 makes Session spread's three choices explicit and explains unavailable
+reductions beside them. Large checkbox targets and the current rack artwork stay
+intact.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -32,7 +35,7 @@ comparison anchor until a human authorizes promotion.
 | [WAI Breadcrumb Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/), accessibility practice | A hierarchy identifies a current location and its parents. | Show the owning rack before the selected record. In-page return controls remain native buttons; their action changes local scope rather than following a fabricated page URL. The pattern supplies hierarchy semantics, while the Studio owns this local adaptation. |
 | [GOV.UK Back link](https://design-system.service.gov.uk/components/back-link/), official design-system guidance | A return should restore prior state; an explicit destination helps when the route is complex. | An owner control returns to the originating board, phase or shared-session view with focus restored. One owner path supplies the route; Close offers the same local dismissal. The page-level placement prescription belongs to GOV.UK journeys, not an embedded rack. |
 | [WAI Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), accessibility practice | A small set of related views can share one surface with selected state, associated panels and keyboard navigation. | Shared sessions uses People and Handoffs views. Both operate on the same accepted work; selection changes what the matrix relates. Immediate local rendering supports arrow-key selection. |
-| [WAI Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/), accessibility practice | Buttons carry an action, accessible name, keyboard activation and truthful state. | Native creation targets name the added object. Track keys identify the selected/open record. Checkbox cells change participation or support links; empty cells in that matrix retain the same relationship meaning. |
+| [WAI Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/), accessibility practice | Buttons carry an action, accessible name, keyboard activation and truthful state. Fixed-label toggles expose pressed state; an action whose label changes can remain an ordinary button. | Session spread's fixed-label presets show the matching accepted choice. Pause session / Resume session are native action buttons in the footer. Native checkbox cells retain participation semantics, including available relationships. |
 | [GOV.UK Button](https://design-system.service.gov.uk/components/button/), official design-system guidance | Clear action labels and limited primary emphasis make the next operation easier to identify. | Raised Apply accepts a prepared form. Direct team and membership edits show Saved. Quiet rose Remove and amp Undo keep recovery visible. This guidance informs hierarchy, not the Studio palette. |
 | [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
 | [Atlassian inline edit](https://atlassian.design/patterns/inline-edit/), official design-system guidance | Reading and editing can occupy the same page, with aligned read and edit views. | A name beside an Abilities identity gets a small Rename action and one local field. The Studio uses native controls and its canonical record owner; the component implementation stays with Atlassian. |
@@ -40,7 +43,8 @@ comparison anchor until a human authorizes promotion.
 | [GOV.UK Select](https://design-system.service.gov.uk/components/select/), official design-system guidance | Labeled selectors can show preselected settings; the guidance also identifies difficulties with selects in public-service forms and favors fewer visible choices where practical. | A small exact-choice bank exposes the selected role facet; the larger Function vocabulary keeps its labeled native selector. Existing shared reels supply bounded presets. Native keyboard behavior and readable accepted values remain available in each route. |
 | [Ableton Arrangement View](https://www.ableton.com/en/live-manual/12/arrangement-view/), product practice | Arrangement tracks combine comparable content with local controls and explicit reorder operations. | People rows retain identity, resource readings and local editing beside session participation. Team lanes retain their parallel group meaning; this Studio adaptation represents enterprise work. |
 | [WAI tables with two headers](https://www.w3.org/WAI/tutorials/tables/two-headers/), accessibility practice | Row and column headers identify the meaning of their intersecting cells. | The People arranger uses native scoped headers and named checkbox pads for each person/session relationship. Its local scroll region retains those relationships on phone widths. |
-| [GOV.UK Table](https://design-system.service.gov.uk/components/table/), official design-system guidance | Captions and scoped headers support comparison; reducing displayed data and deliberate column widths help scanning. Numeric columns use right alignment. | Keep the native person/session relationship and equal session widths. Compact resource pills retain their units. The matrix cells represent participation, so their pads stay centered rather than adopting numeric-column alignment. |
+| [GOV.UK Table](https://design-system.service.gov.uk/components/table/), official design-system guidance | Captions and scoped headers support comparison; reducing displayed data and deliberate column widths help scanning. Numeric columns use right alignment. | Keep native person/session headers and equal session widths. Within each participation pad, the checkbox stays upper left, time lower left and the stronger monetary reading lower right. Numeric alignment supports comparison while native checkbox semantics retain the relationship operation. |
+| [Richard Rutter, Web Typography: Numerals and tables](https://book.webtypography.net/Web-Typography_Numerals-and-tables.pdf), author-published typography guidance | Tabular lining figures support numeric comparison; consistent alignment and purposeful spacing distinguish related readings. | Use stable numeric positions and tabular figures. Separate summary labels, values and context. This is a local adaptation: the Studio retains its tactile selection pads and rack housings rather than treating an interactive matrix as a plain data table. |
 | [Carbon Data table](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines), official product guidance | Consistent sizing and sufficient room for content support readable density. | Use equal session measures and shorten repeated readings before shrinking targets. The Studio keeps its multi-line person identity and tactile pad scale rather than adopting Carbon's exact row heights. |
 | Human observations of the running Studio and preserved workbench, local evidence | Detached editors, repeated creation controls and unclear saving made scope difficult to follow. Compact modules and direct pads were preferred. | Preserve the art, duration module and separate delivery/shared-session working areas. This establishes a collaboration direction; focused browser checks establish the resulting behavior, rather than population-level usability. |
 
@@ -173,24 +177,37 @@ native validation and Coordination's borrowed person form. The display no longer
 needs two summaries or two independent headers. A role recipe accepts directly;
 typed name, rate and funded time keep their established proposal boundary.
 
-Session spread supplies a low-friction way to vary the participation pads. Three
-routes were considered: fractional time percentages, a funded-time optimizer, and
-whole-session selection. The third fits the current binary participant model and
-requires the smallest meaningful change. A fader and One plan / Half / All plans
-presets select whole work rows in visible order, keeping a sole participant
-assigned. Actual assigned and funded time stay visible. A completed gesture owns
-one Undo step. Its optional decorative reel response changes motion only; hours
-and rates establish neither a person's role nor decision authority. Fractional
-time remains #798's separate model undertaking.
+Session spread supplies a low-friction way to vary participation. Whole-session
+selection fits the accepted binary participant model; fractional percentages and
+funded-time optimization retain their separate model questions. #891 replaces
+the fader with an analog three-way switch. Its **One plan**, **Half** and **All
+plans** positions use fixed-label native buttons. Their pressed state reflects the
+matching accepted combination; another combination reads **Custom spread**. Each
+choice fills complete work rows in visible order with one Undo step.
 
-The People matrix totals assigned person-time and known work value, with selected
-cells and column footers exposing their contribution. Explicit zero totals keep
-empty readings stable, and unknown rates stay named. The contribution matrix
-instead selects the union of linked work IDs: shared support contributes once to
-its rollup. Legends distinguish funding, paused status and support/responsibility
-symbols. Pause/Resume changes the shared session status while retaining planned
-ledger amounts. These are planned effort/value readings; elapsed schedule and
-financial savings retain their separate meanings.
+Actual plan count, assigned time, funded time and sessions stay visible. A plan's
+sole participant remains assigned. When that requirement exceeds a preset's
+count, the control is disabled with a nearby explanation and a route to add
+another participant. This replaces a control label that could imply a reduction
+the model would retain. Recorded role and decision authority keep their explicit
+choices. Fractional time remains
+#798's separate undertaking.
+
+The People matrix totals assigned person-time and known work value. Description
+lists separate the label, value and short scope note; fixed pad positions let
+the checkbox, time and monetary reading keep their distinct jobs. The stronger
+amount sits at the lower right, with time at the lower left. **Card actions**
+names the row's reordering/removal tools, while its name remains the settings entry.
+This hierarchy is a local synthesis informed by Rutter's numerical typography and
+the official table guidance above.
+
+Explicit zero totals keep empty readings stable, and unknown rates stay named.
+The contribution matrix selects the union of linked work IDs, so shared support
+contributes once. Its Supporting effort footers contain quiet Pause session /
+Resume session actions. The status applies to the session throughout the plan:
+column-wide hatching and a circled pause marker reinforce the legend and accessible
+names. Planned ledger amounts remain unchanged. These readings describe planned
+effort and value; elapsed schedule and financial savings retain their own meanings.
 
 Contribution-specific creation continues inside its originating half-rack. The
 canonical creation form remains a sibling of the contribution form; its retained

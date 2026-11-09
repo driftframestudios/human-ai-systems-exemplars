@@ -108,7 +108,7 @@ async function assertContained(page) {
 }
 
 for (const engine of names) {
-  test(`${engine}: session spread updates capacity in one gesture while the person draft stays open`, { timeout: 45000 }, async t => {
+  test(`${engine}: session spread choices update capacity once while the person draft stays open`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
       const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
@@ -123,22 +123,61 @@ for (const engine of names) {
     });
     await choose(page);
     await input(page, 'ratePerHour').fill('00123');
-    const spread = settings(page).locator('[data-person-spread]');
-    await expect(spread).toHaveValue('3');
-    await spread.focus();
-    await page.keyboard.down('ArrowLeft'); await page.keyboard.down('ArrowLeft'); await page.keyboard.up('ArrowLeft');
-    await expect(spread).toHaveValue('1');
+    await team(page).locator('[data-role-reel="framework"] [data-reel-choice="npt"]').click();
+    const beforeSpread = await page.evaluate(() => ({ text: window.teamFixture.studio.exportText(), undo: window.teamFixture.studio.readHistory().undoCount }));
+    const spread = settings(page).locator('.studio-person-spread');
+    await expect(spread.locator('[data-person-spread-preset="all"]')).toHaveAttribute('aria-pressed', 'true');
+    await spread.locator('[data-person-spread-preset="one"]').click();
+    await expect(spread.locator('[data-person-spread-preset="one"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(spread.locator('.studio-person-spread__current')).toHaveText('One plan');
     await expect(settings(page)).toHaveAttribute('open', '');
     await expect(input(page, 'ratePerHour')).toHaveValue('00123');
     await expect(input(page, 'ratePerHour')).toBeEditable();
-    await expect(team(page).locator('.studio-person-spread__reading')).toHaveText('3 h assigned · 4 h funded · 6 sessions');
-    await expect(team(page).locator('.studio-capacity-rollup')).toContainText('16 h 30 min assigned across people');
+    await expect(spread.locator('.studio-person-spread__reading')).toHaveText('1 of 3 plans · 3 h assigned · 4 h funded · 6 sessions');
+    await expect(team(page).locator('[data-person-status]')).not.toContainText('supported assembly command');
+    await expect(panel(page).locator('[data-assembly-status]')).toHaveText('');
+    await expect(team(page).locator('.studio-capacity-rollup dd > span').first()).toHaveText('16 h 30 min');
     await expect(team(page).locator('.studio-capacity-legend')).toContainText('Paused · still planned');
-    assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), 1);
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), beforeSpread.undo + 1);
     assert.deepEqual(await page.evaluate(() => window.teamFixture.studio.read().state.work.map(row => row.personIds.includes('product-one'))), [true, false, false]);
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const bounds = await spread.boundingBox();
+      assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= width, 'spread remains inside the phone or laptop viewport');
+      for (const button of await spread.locator('button').all()) {
+        const box = await button.boundingBox();
+        assert.ok(box.width >= 44 && box.height >= 44, 'every spread choice retains a direct touch target');
+      }
+      await spread.screenshot({ path: resolve(captures, `${engine}-spread-${width}.png`) });
+    }
     await panel(page).locator('[data-studio-undo]').click();
-    assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), await page.evaluate(() => window.teamFixture.original));
-    await expect(team(page).locator('.studio-capacity-rollup')).toContainText('18 h assigned across people');
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), beforeSpread.text);
+    await expect(team(page).locator('.studio-capacity-rollup dd > span').first()).toHaveText('18 h');
+    await expect(spread.locator('[data-person-spread-preset="all"]')).toHaveAttribute('aria-pressed', 'true');
+
+  });
+
+  test(`${engine}: session spread names the sole-participant constraint instead of offering a silent reduction`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const root = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(root).dispose();
+      const plan = createExamplePlan(); plan.work[0].personIds = ['product-one'];
+      plan.work.push({ ...plan.work[0], id: 'prepare', label: 'Prepare the review' }, { ...plan.work[0], id: 'recover', label: 'Practice recovery' });
+      const studio = createStudio(plan); window.teamFixture = { studio, controller: mountCoordinationPanel(root, { studio }) };
+    });
+    await choose(page);
+    const spread = settings(page).locator('.studio-person-spread');
+    await expect(spread.locator('[data-person-spread-preset="one"]')).toBeDisabled();
+    await expect(spread.locator('[data-person-spread-preset="half"]')).toBeDisabled();
+    await expect(spread.locator('[data-person-spread-preset="all"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(spread.locator('.studio-person-spread__hint')).toHaveText('3 plans need this person. Add another participant before reducing further.');
+    await expect(spread.locator('.studio-person-spread__reading')).toContainText('3 of 3 plans');
+    await spread.locator('[data-person-spread-preset="all"]').click();
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), 0);
+    await expect(team(page).locator('[data-person-status]')).toHaveText('Session spread already matches.');
   });
 
   test(`${engine}: relative rate dials preserve cents and unknowns until Apply and Undo`, { timeout: 45000 }, async t => {
@@ -669,6 +708,50 @@ for (const engine of names) {
     ]);
     assert.deepEqual(observed[8], { operation: 'same-token-onBegin', selected: 'product-one', sameToken: true, raw: '105',
       status: 'The current raw edit stays.', focus: 'fundedHours', cents: 120000 });
+  });
+
+  test(`${engine}: People readings and membership pads retain compact hierarchy and stable selection geometry`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await choose(page);
+    await team(page).locator('[data-person-desk-close]').click();
+    const roster = team(page).locator('[data-team-roster]');
+    await expect(roster.locator('.studio-capacity-readings dt')).toHaveText(['Assigned time', 'Known work value']);
+    await expect(roster.locator('.studio-person-more summary').first()).toHaveText('Card actions');
+    const check = roster.locator('[data-people-participant="product-two"][data-people-work="review"]');
+    const pad = check.locator('..');
+    const geometry = () => pad.evaluate(el => {
+      const box = el.getBoundingClientRect(), row = el.closest('tr').getBoundingClientRect();
+      const time = el.querySelector('.studio-participation-pad__time'), amount = el.querySelector('.studio-participation-pad__amount');
+      const clock = time.getBoundingClientRect(), money = amount.getBoundingClientRect(), input = el.querySelector('input').getBoundingClientRect();
+      return { width: box.width, height: box.height, rowHeight: row.height, timeBottom: clock.bottom, timeLeft: clock.left,
+        moneyBottom: money.bottom, moneyRight: money.right, inputTop: input.top, inputLeft: input.left, padRight: box.right,
+        timeSize: parseFloat(getComputedStyle(time).fontSize), moneySize: parseFloat(getComputedStyle(amount).fontSize) };
+    });
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await check.uncheck(); const available = await geometry();
+      await check.check(); const assigned = await geometry();
+      for (const key of ['width', 'height', 'rowHeight']) assert.equal(assigned[key], available[key], `${key} stays stable when participation changes`);
+      assert.ok(assigned.rowHeight < 180, 'the collapsed row retains a compact reading');
+      assert.ok(Math.abs(assigned.timeBottom - assigned.moneyBottom) < 2, 'time and value share a lower baseline');
+      assert.ok(assigned.inputTop < assigned.timeBottom - 20 && Math.abs(assigned.inputLeft - assigned.timeLeft) < 2, 'checkbox stays above the lower-left time');
+      assert.ok(assigned.padRight - assigned.moneyRight < 12, 'money aligns to the right');
+      assert.ok(assigned.moneySize > assigned.timeSize, 'money has stronger typographic emphasis');
+      await expect(pad.locator('.studio-participation-pad__amount')).toHaveText('$300');
+      await assertContained(page);
+      await roster.screenshot({ path: resolve(captures, `${engine}-participation-pads-${width}.png`) });
+    }
+    await page.evaluate(() => {
+      const { studio, controller } = window.teamFixture;
+      const projection = studio.read(), work = projection.state.work[0];
+      studio.applyCommand({ type: 'work.update', work: { ...work, status: 'paused' } }, projection);
+      controller.refresh();
+    });
+    const column = roster.locator('[data-work-id="review"]');
+    assert.ok(await column.count() >= 3);
+    for (const cell of await column.all()) await expect(cell).toHaveAttribute('data-work-status', 'paused');
+    await expect(pad.locator('.studio-pause-marker')).toBeVisible();
+    await expect(check).toBeEnabled();
   });
 
 }
