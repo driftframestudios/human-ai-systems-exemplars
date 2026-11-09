@@ -8,7 +8,7 @@ is the implementation reference.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:studio-rack-composition`;
 dev receiving contract revised 9 November 2026 for
-[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining the People composition refinements from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879).
 `main` retains the approved Showcase reference. Promotion from `dev` and a
@@ -40,20 +40,31 @@ full-width cobalt parent keys, a bright selected face and bottom-aligned
 movement/removal tools. Remove sits at the right end of that rail. Team Settings
 pairs its name with the selected members' hourly subtotal in a cool-blue inset.
 Nested person creation retains a named return to the preceding task.
-Its recessed people/session arranger keeps compact rate and available/funded-time
-readings and record operations beside
-direct participation pads. Compact Person settings and Role mix keep independent
-visibility in one paired working area. Each role pad contains its label and
-native selector, so the current value is directly editable. Their Close/return
-controls name the module they dismiss. Contributions retain their session matrix
-and open a compact Work / Receiver and decision pair. A requested Add person form
-stays in that contribution as a half-rack with a return to its exact parent task.
-Role choices, contribution choices and team/support membership accept directly
-through shared history; person quantities and text retain Apply.
+Its recessed people/session arranger combines direct participation with rate,
+funded time and planned-value readings. Top and column totals keep explicit zero;
+selected cells name the person's time and known value. The legend identifies
+funded, extra and paused work. Paused work retains planned effort and money.
+
+One selected-person mixing desk replaces separate Person/Role disclosures. Rate
+sits left of funded Hours/Minutes; a cool-blue preview keeps the amount distinct. One
+header, return and Close serve the desk, with Apply for typed person values.
+Teal Change model, cobalt Ability enabler and rose Decision boundary reels select
+connected presets in one accepted role edit. Component pads and the selected
+facet's exact choices refine those settings. Function and Seniority retain their
+independent values. Session spread changes whole-session participation with one
+Undo per gesture and reports actual assigned/funded time. Its decorative reel
+response leaves role authority with explicit role choices.
+
+Contributions retain a distinct session matrix, counting the union of linked
+work once in its planned-time/value rollup. It opens Work / Receiver and decision
+as compact neighbors. A requested Add person form stays in that contribution as
+a half-rack with a return to its exact parent task. Role choices, contribution
+choices and team/support membership accept directly through shared history;
+person quantities and text retain Apply.
 
 Abilities retains both support tables and one selected dark rack for
 responsibility, preparation, review or observation. Compact paired controls use
-paper resting pads, signal selection and chocolate companions. Useful record
+paper resting pads, signal selection and cool-blue reading companions. Useful record
 additions accept immediately; support assignments keep their own Apply boundary.
 Local Rename accepts a referenced person/team name while retaining the support
 proposal. Change and Quality keep their distinctive primary instrumentation
@@ -143,9 +154,11 @@ two-dimensional tables, parallel team lanes and cassette shelves use named local
 scroll regions. People uses the established paper, peach and green palette on
 pure-black recessed modules. Its shared Person settings skin also follows the
 canonical form into Coordination.
-Chocolate is primarily an accent and a dial/knob-module background. Existing
-chocolate companions remain until a named refinement changes their surface;
-new general-purpose panels use the established rack or editorial palette.
+Chocolate belongs primarily to Investment rack modules and dial/knob enclosures,
+with small accents elsewhere. Information previews and comparable reading strips
+use `--canvas-cool-blue` with `--native-text`, retaining their existing left-edge
+accent. This supersedes the earlier chocolate-preview treatment. Other rack and
+editorial surfaces retain their established palette.
 Repeated Studio colors have named variables in the shared instrument owner.
 Chapter skins select those roles while preserving their own density and emphasis.
 People's equal session columns retain comfortable participation targets. Resource
@@ -169,6 +182,10 @@ contracts are:
 - [Chapter Workbench Study](chapter-workbench-study.md): relationships among the
   independent illustrative chapter layouts and state.
 
+The [Chromatic Pressed Reel Specimen](zoetrope-pressed-palette-specimen.md)
+preserves the appreciated cobalt/rose selected faces separately. Live reel
+options use the uniform canvas-paper/teal contract across all wheel colors.
+
 ## Source and extension ownership
 
 The About HTML loads `about.css`, shared `studio-instrument.css`, then chapter
@@ -181,13 +198,14 @@ receivers need the same behavior; retain chapter-specific geometry and art.
 | --- | --- |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Shared palette, keys, creation zones, editors, Apply and recovery treatment |
 | [Session CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-session.css) | Duration/Working sessions placement, participant layout, Funding and Status pads |
-| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Parallel team lanes, recessed people/session arranger, visible role facets, contribution halves and compact canonical Person settings; loaded after Arrangement CSS |
+| [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Parallel team lanes, capacity arranger, one person mixing desk, role reels/facets and contribution halves; loaded after Arrangement CSS |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | Editorial delivery board, local team controls and darker participation rack |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) CSS | Chapter-specific compositions |
 | [Controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Live receivers, retained drafts, shared Apply delegation and return focus |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Period scope, session append/new-plan distinction and relationship inspection |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs) | Canonical session fields, repetition and placement |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [responsibility](../../collaboration/native-investment-studio/responsibility-controller.mjs) controllers | Per-record arrangement, Person drafts, direct role/contribution choices and their retained recovery owners |
+| [Person role mixer](../../collaboration/native-investment-studio/person-role-mixer.mjs), [capacity](../../collaboration/native-investment-studio/people-capacity.mjs) | Connected role recipes, exact overrides, ledger-derived readings and whole-session spread proposals |
 | [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Direct arrangement acceptance, phase scope and participation reading |
 
 ## Evidence, supersession and re-entry
@@ -206,7 +224,7 @@ Meaningful supersessions are explicit:
 | Earlier direction | Current receiving contract |
 | --- | --- |
 | Person-to-arrange selector and Arrange team disclosure | Visible movement/removal actions belong to each person or team card, with keyed movement and retained focus |
-| Always-open Role mix with a detached selected-facet field | Paired Person/Role modules have independent visibility; each role pad contains its native selector and current value |
+| #881 paired Person/Role disclosure modules | One visible mixing desk combines financial controls, connected role presets, exact overrides and session spread; canonical internal owners retain their acceptance boundaries |
 | People membership and responsibility choices require a second Apply | Bounded choices accept directly; person text/quantities and retained proposals keep canonical validation and recovery |
 | Chocolate team parent keys and whole-plan Team Settings preview | Cobalt resting keys, bright selected keys and a cool-blue team hourly subtotal identify the local group and its cost |
 | Nested Add person always returns to Teams | The local return names the preceding team or supporting-work task and uses its retained draft route |
@@ -219,8 +237,9 @@ Meaningful supersessions are explicit:
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)
-records the broader current rationale. #881 carries local Person/Role editing
-and contribution-specific creation; #879 refines People colors, readings and
+records the broader current rationale. #884 carries the unified person mixing
+desk and capacity readings; #881 retains contribution-specific creation and
+canonical form ownership; #879 refines People colors, readings and
 creation returns; #836 carries the compact People receiver;
 #848 extends the compact support pattern through Abilities, #849 settles Change
 action state and #818 receives the financial workbench on dev. The primary route

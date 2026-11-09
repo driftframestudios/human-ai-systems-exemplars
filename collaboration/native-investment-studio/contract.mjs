@@ -106,6 +106,7 @@ const COMMAND_FIELDS = Object.freeze({
   'team.update': ['type', 'teamId', 'team'],
   'team.members.replace': ['type', 'teamId', 'personIds'],
   'work.participants.replace': ['type', 'workId', 'personIds'],
+  'person.participation.replace': ['type', 'personId', 'workIds'],
   'work.funding.set': ['type', 'workId', 'funding'],
   'work.status.set': ['type', 'workId', 'status'],
   'collection.reorder': ['type', 'collection', 'ids'],
@@ -428,6 +429,7 @@ export function prepareAssemblyCommand(candidate) {
     case 'team.update': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), team: prepareTeam(raw.team, `${path}.team`) };
     case 'team.members.replace': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`) };
     case 'work.participants.replace': return { type, workId: text(raw.workId, `${path}.workId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1) };
+    case 'person.participation.replace': return { type, personId: text(raw.personId, `${path}.personId`, true), workIds: identifiers(raw.workIds, LIMITS.work, `${path}.workIds`) };
     case 'work.funding.set': return { type, workId: text(raw.workId, `${path}.workId`, true), funding: choice(raw.funding, FUNDING, `${path}.funding`) };
     case 'work.status.set': return { type, workId: text(raw.workId, `${path}.workId`, true), status: choice(raw.status, WORK_STATUS, `${path}.status`) };
     case 'collection.reorder': {

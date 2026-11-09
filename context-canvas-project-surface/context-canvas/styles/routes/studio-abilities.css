@@ -41,7 +41,7 @@
 .native-capability-rack .native-coordination__error { margin:.15rem 0; padding:.3rem .45rem; background:var(--studio-peach); font-size:.78rem; }
 .native-coordination .native-capability-rack :is(input:not([type='checkbox'],[type='radio']),select,textarea) { min-block-size:2.5rem; padding:.4rem .5rem; border:1px solid #91a18b; background:var(--native-paper); color:var(--native-text); font-size:.85rem; }
 .native-capability-rack textarea { resize:vertical; }
-.native-capability-rack .native-capability__outcome > .native-capability__section { align-content:start; gap:.4rem; padding:.65rem; border:0; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--studio-chocolate); color:var(--native-paper); }
+.native-capability-rack .native-capability__outcome > .native-capability__section { align-content:start; gap:.4rem; padding:.65rem; border:0; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--canvas-cool-blue); color:var(--native-text); }
 .native-capability-rack .native-capability__outcome > .native-capability__section p { font-size:.85rem; }
 .native-capability-rack .native-capability__choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); align-items:stretch; gap:.35rem; margin:0; padding:0; }
 .native-capability-rack [data-capability-people] .native-capability__choices { grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr)); }
@@ -70,7 +70,7 @@
 .native-coordination .native-capability-rack .native-capability__steps { inline-size:7rem; max-inline-size:100%; justify-content:space-between; gap:.4rem; margin:0; }
 .native-coordination .native-capability-rack .native-capability__steps button { color:var(--native-text); background:var(--native-paper); }
 .native-capability-rack .native-capability__field--numeric input { inline-size:7rem; max-inline-size:100%; text-align:center; font-family:ui-monospace,monospace; }
-.native-capability-example-reading { display:grid; gap:.4rem; padding:.65rem; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--studio-chocolate); color:var(--native-paper); }
+.native-capability-example-reading { display:grid; gap:.4rem; padding:.65rem; border-inline-start:.2rem solid var(--studio-gold-edge); background:var(--canvas-cool-blue); color:var(--native-text); }
 .native-capability-example-reading p { margin:0; font-size:.85rem; }
 .native-capability-rack [data-capability-preview] { margin:0; padding:.5rem .6rem; color:var(--native-text); font-size:.78rem; }
 .native-coordination .native-capability-rack form > .native-coordination__actions { gap:.45rem; margin:0; }

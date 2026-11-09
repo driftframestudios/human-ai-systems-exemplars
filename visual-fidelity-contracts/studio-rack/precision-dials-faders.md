@@ -3,11 +3,12 @@
 Make time, money and emphasis tangible while keeping exact values easy to read
 and enter. A dial or fader sits beside its named quantity, unit and native field;
 each route changes the same editor proposal. Session time, hourly rates and the
-Change/Quality fader banks are current receivers.
+Change/Quality fader banks are current receivers. People adds a discrete Session
+spread fader whose unit is whole session plans.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
 dev receiving contract revised 9 November 2026 for local People controls in
-[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining compact creation controls from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
 retaining shared circular steps from
@@ -35,6 +36,7 @@ field form a complete dose. Brief labels replace repeated operating paragraphs.
 | Hourly rate | One named enclosure for relative $10/$5 dials, the exact amount and centered $1 steps |
 | Framework component emphasis | Aligned fader channels with names, values and distinct active fill |
 | Quality assumptions | Named faders beside the reference visualization and authored result |
+| Session spread | Discrete whole-plan membership beside actual assigned/funded-time readings; One plan, Half and All plans provide direct presets |
 
 The dial's housing and light stay fixed while its pointer turns. The pointer
 stays in the outer half of the face toward the indicated endpoint, keeping its outward
@@ -62,6 +64,10 @@ when a contribution borrows the creation module. Forced colors uses the shared
 explicit border treatment. [#882](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882)
 owns the follow-up audit of these shadows across all Studio quantity controls;
 this People iteration establishes only its affected receivers.
+In the People mixing desk, the rate module sits left of funded Hours and Minutes,
+with a cool-blue amount preview and dark text. Phone widths stack these compact
+modules in reading order. One desk header owns Apply/Close while canonical person
+fields retain their existing proposal and borrowed Coordination behavior.
 Chocolate belongs primarily on
 dial/knob enclosures and specific accents; the shared palette variables retain
 each chapter's effective color while allowing a named surface to evolve.
@@ -213,7 +219,20 @@ using the canonical draft owner. The duplicate numeric count stays synchronized
 and hidden in rack mode. Main retains its accepted reference until promotion is
 human-cued. The planning specimen itself remains unchanged.
 
-### Participant time shares
+### Whole-session spread and future time shares
+
+People's Session spread operates on accepted membership in complete work rows.
+It fills the visible plan order, retaining rows where this person is the sole
+participant. Its readout reports selected sessions, actual assigned time and
+funded time; the target is a count of plans, not a percentage of the person's
+funded capacity. A range gesture groups its accepted changes into one Undo step.
+One plan, Half and All plans are discrete shortcuts to the same operation.
+Empty-work and stale-edit states keep the control's availability truthful.
+
+The existing planned-work ledger supplies effort and known value, including
+paused work. Decorative role-reel motion may answer spread changes; recorded
+Function, Seniority and decision authority remain explicit selections. This is
+the bounded #884 interaction; it does not introduce fractional participant time.
 
 The future [participant fader contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
 is separate from #771's shared movement controls. **Time in this session** would

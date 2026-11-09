@@ -9,6 +9,7 @@ import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
+import { summarizeWorkCapacity, readPersonSessionSpread, planPersonSessionSpread } from './people-capacity.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -16,7 +17,7 @@ const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
 export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive = () => true, canOpen = isActive,
-  onAccepted = () => {}, onEditing = () => {}, onBegin = () => {}, onClose = () => false }) {
+  onAccepted = () => {}, onEditing = () => {}, onBegin = () => {}, onClose = () => false, onSpread = () => {} }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = selector => {
@@ -55,6 +56,23 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   localHeader.update({ source: elements.apply });
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
+  const spread = document.createElement('section'); spread.className = 'studio-person-spread';
+  const spreadLabel = document.createElement('label'); spreadLabel.textContent = 'Session spread';
+  const spreadRange = document.createElement('input'); spreadRange.type = 'range'; spreadRange.min = '0'; spreadRange.step = '1';
+  spreadRange.dataset.personSpread = ''; spreadRange.setAttribute('aria-label', 'Session spread');
+  spreadLabel.append(spreadRange);
+  const spreadOutput = document.createElement('output'); spreadOutput.className = 'studio-person-spread__reading';
+  const spreadPresets = document.createElement('div'); spreadPresets.className = 'studio-person-spread__presets';
+  for (const [value, label] of [['one', 'One plan'], ['half', 'Half'], ['all', 'All plans']]) {
+    const button = document.createElement('button'); button.type = 'button'; button.dataset.personSpreadPreset = value; button.textContent = label; spreadPresets.append(button);
+  }
+  const spreadHint = document.createElement('small'); spreadHint.className = 'studio-person-spread__hint';
+  spread.append(spreadLabel, spreadOutput, spreadPresets, spreadHint);
+  elements.apply.closest('.native-coordination__actions').before(spread);
+  // A regular grid owns layout; the fieldset keeps native disabled semantics.
+  // Chromium can collapse nested grids when a fieldset's validation rows change.
+  const personFields = document.createElement('div'); personFields.className = 'studio-person-fields';
+  personFields.append(...elements.fieldset.childNodes); elements.fieldset.append(personFields);
   const editing = sharedEditing ?? createDraftCoordinator(studio);
   const editor = editing.person;
   const cleanup = [];
@@ -64,6 +82,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   let disposed = false;
   let composing = false;
   let generation = 0, retiredToken = null;
+  let spreadGesture = null;
 
   function listen(target, event, handler) {
     target.addEventListener(event, handler);
@@ -118,6 +137,14 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     }
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
+    const totals = summarizeWorkCapacity(next);
+    const rollup = document.createElement('p'); rollup.className = 'studio-capacity-rollup';
+    rollup.textContent = `${duration(totals.personMinutes)} assigned across people · ${wholeMoney(totals.knownCents)} known work value${totals.completeMoney ? '' : ' · Some rates needed'}`;
+    const legend = document.createElement('p'); legend.className = 'studio-capacity-legend';
+    for (const [kind, symbol, text] of [['allocated', '●', 'Funded time'], ['additional', '◆', 'Extra investment'], ['paused', 'Ⅱ', 'Paused · still planned']]) {
+      const key = document.createElement('span'); key.dataset.capacityMeaning = kind; key.textContent = `${symbol} ${text}`; legend.append(key);
+    }
+    const ledger = new Map(next.result.ledger.map(row => [row.workId, new Map(row.lines.map(line => [line.personId, line]))]));
     const table = document.createElement('table'); table.className = 'studio-people-arranger'; table.dataset.emptySessions = String(next.state.work.length === 0);
     table.style.setProperty('--studio-people-columns', String(next.state.work.length + 1));
     const caption = document.createElement('caption'); caption.textContent = 'People in working sessions';
@@ -167,7 +194,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
         if (action === 'person-remove') control.className = 'native-control--remove';
         order.append(control);
       }
-      item.append(order);
+      const more = document.createElement('details'); more.className = 'studio-person-more';
+      const moreLabel = document.createElement('summary'); moreLabel.textContent = 'More'; moreLabel.setAttribute('aria-label', `More controls for ${person.label}`);
+      more.append(moreLabel, order); item.append(more);
       appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });
       row.append(item);
       for (const work of next.state.work) {
@@ -179,19 +208,30 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
         check.disabled = last;
         pad.className = 'studio-shared__pad'; pad.dataset.selected = String(check.checked);
         pad.dataset.funding = work.funding; pad.dataset.status = work.status;
-        const text = document.createElement('small');
-        text.textContent = last ? 'Add another person first' : check.checked
-          ? `${duration(work.minutesPerOccurrence * work.occurrences)}${work.status === 'paused' ? ' · Paused' : ''}` : 'Available';
-        pad.append(check, text); cell.append(pad); row.append(cell);
+        const text = document.createElement('small'), value = document.createElement('small');
+        const line = ledger.get(work.id).get(person.id);
+        text.textContent = line ? `${work.status === 'paused' ? 'Ⅱ' : work.funding === 'allocated' ? '●' : '◆'} ${duration(line.minutes)}` : 'Available';
+        value.textContent = line ? line.cents === null ? 'Rate needed' : wholeMoney(line.cents) : '';
+        if (last) pad.title = 'Add another person to this session before removing this participant.';
+        pad.append(check, text, value); cell.append(pad); row.append(cell);
       }
       body.append(row);
     }
     const addition = document.createElement('tr'), slot = document.createElement('td');
     addition.className = 'studio-roster-add'; slot.colSpan = next.state.work.length + 1; const addSession = createRackAddControl(document, { label: 'Add session', text: 'Session', className: 'studio-rack-create-zone--persistent', dataset: { peopleCreateSession: '' } });
     slot.append(addPerson, addSession); addition.append(slot); body.append(addition);
+    const foot = document.createElement('tfoot'), totalRow = document.createElement('tr'), totalLabel = document.createElement('th');
+    totalLabel.scope = 'row'; totalLabel.textContent = 'Assigned time · known work value'; totalRow.append(totalLabel);
+    for (const work of next.state.work) {
+      const total = summarizeWorkCapacity(next, [work.id]);
+      const cell = document.createElement('td'), hours = document.createElement('strong'), price = document.createElement('small');
+      hours.textContent = duration(total.personMinutes); price.textContent = `${wholeMoney(total.knownCents)}${total.completeMoney ? '' : ' known'}`;
+      cell.append(hours, price); totalRow.append(cell);
+    }
+    foot.append(totalRow); table.append(foot);
     const empty = document.createElement('p'); empty.className = 'studio-people-arranger__empty';
     empty.textContent = 'Add a session to choose who works together.'; empty.hidden = next.state.work.length > 0;
-    elements.roster.replaceChildren(empty, table);
+    elements.roster.replaceChildren(rollup, legend, empty, table);
     elements.empty.hidden = next.state.people.length > 0;
     projection = next;
   }
@@ -214,6 +254,16 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     elements.fieldset.disabled = !canOpen() || !['editing', 'parked', 'idle'].includes(view.status);
     elements.recovery.hidden = view.status !== 'stale';
     const currentPerson = people.get(selectedId);
+    const currentSpread = readPersonSessionSpread(view.projection, selectedId);
+    spread.hidden = currentSpread === null;
+    if (currentSpread) {
+      spreadRange.max = String(currentSpread.totalPlans); spreadRange.value = String(currentSpread.selectedPlans);
+      spreadRange.disabled = !canOpen() || view.status === 'stale' || currentSpread.totalPlans === 0;
+      spreadOutput.textContent = `${duration(currentSpread.personMinutes)} assigned · ${duration(currentSpread.fundedMinutes)} funded · ${currentSpread.sessionCount} sessions`;
+      spreadRange.setAttribute('aria-valuetext', spreadOutput.textContent);
+      spreadHint.textContent = currentSpread.pinnedPlans ? 'Sessions with no other participant stay assigned.' : 'Includes complete session plans.';
+      for (const button of spreadPresets.children) button.disabled = spreadRange.disabled;
+    }
     summaryPreview.textContent = currentPerson
       ? ` · ${currentPerson.rateCentsPerHour === null ? 'Add an hourly rate' : `${money(currentPerson.rateCentsPerHour)}/hour`} · ${duration(currentPerson.fundedMinutes)} funded${view.draft?.changed ? ' · Unsaved edits' : ''}`
       : ' · Choose a person';
@@ -231,7 +281,14 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       errors[field].textContent = error ? `${LABELS[field]}: ${error.message}` : '';
     }
     rateControls.refresh();
-    const proposed = view.status === 'editing' && view.draft && !composing ? operate('preview', view.draft.token) : null;
+    let proposed = view.status === 'editing' && view.draft && !composing ? operate('preview', view.draft.token) : null;
+    // A sibling role control may own the editing lease. A fresh parked person
+    // still has a canonical preview, without taking that lease from its sibling.
+    if (view.status === 'parked' && view.draft && currentPerson && !composing) {
+      const parsed = preparePersonDraftValues(view.draft.raw);
+      if (!parsed.errors.length) proposed = studio.previewPerson(selectedId,
+        { ...currentPerson, ...parsed.admitted, label: view.draft.raw.label.trim() }, view.projection);
+    }
     if (!owns(epoch)) return editor.read();
     const current = editor.read();
     if (proposed && current.status !== 'editing' && (current.projection !== view.projection || current.draft?.token !== view.draft?.token || current.status !== view.status)) return render();
@@ -334,9 +391,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
 
   function edit(event) {
     if (disposed) return;
-    const epoch = ++generation;
     const field = event.target.name;
     if (!Object.hasOwn(inputs, field) || inputs[field] !== event.target) return;
+    const epoch = ++generation;
     const view = editor.read();
     if (!view.draft) return;
     const result = operate('setText', view.draft.token, field, event.target.value);
@@ -357,6 +414,11 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (disposed) return;
     const button = event.target.closest('button');
     if (!button || (!root.contains(button) && !elements.configure.contains(button)) || button.disabled) return;
+    if (button.dataset.personSpreadPreset) {
+      const total = studio.read().state.work.length;
+      const count = button.dataset.personSpreadPreset === 'one' ? 1 : button.dataset.personSpreadPreset === 'half' ? Math.ceil(total / 2) : total;
+      setSessionSpread(count); return;
+    }
     if (button.hasAttribute('data-people-create-session')) {
       if (!canOpen()) return;
       rateControls.release(); const epoch = ++generation;
@@ -422,6 +484,28 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     elements.roster.querySelector(`[data-people-work="${workId}"][data-people-participant="${personId}"]`)?.focus({ preventScroll: true });
   }
 
+  function setSessionSpread(count, { gesture = null } = {}) {
+    if (disposed || !canOpen() || !elements.configure.open || selectedId === null || editor.read().status === 'stale') return;
+    const previous = studio.read(), proposal = planPersonSessionSpread(previous, selectedId, count);
+    if (!proposal) return;
+    rateControls.release(); let epoch = ++generation;
+    const parked = editing.park(); if (!owns(epoch)) return;
+    if (!parked.ok) { announce(parked.error.message); return parked; }
+    const result = studio.applyCommand(proposal.command, previous, gesture);
+    if (!owns(epoch)) return result;
+    if (result.ok) {
+      reconcileRoleChange(previous, result.projection); epoch = generation;
+      const mark = boundary(); onAccepted(result.projection);
+      if (!retains(epoch, mark)) return result;
+      const current = readPersonSessionSpread(result.projection, selectedId);
+      onSpread({ ...current, projection: result.projection });
+      if (!retains(epoch, mark)) return result;
+    }
+    render(); announce(result.ok ? result.projection === previous ? 'Session spread already matches.'
+      : 'Session spread saved. Undo is available in the amp controls.' : result.error.message);
+    return result;
+  }
+
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1;
@@ -429,7 +513,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
     rateControls.dispose();
-    localHeader.dispose(); summaryPreview.remove();
+    localHeader.dispose(); summaryPreview.remove(); spread.remove();
+    personFields.replaceWith(...personFields.childNodes);
     for (const release of cleanup) release();
     cleanup.length = 0;
     if (!sharedEditing) editing.dispose();
@@ -439,13 +524,17 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     INSTANCES.delete(root);
   }
 
-  const receiver = Object.freeze({ read: () => editor.read(), refresh: render, reconcileRoleChange,
+  const receiver = Object.freeze({ read: () => editor.read(), refresh: render, reconcileRoleChange, setSessionSpread,
     close: () => { if (!disposed) { rateControls.release(); generation += 1; composing = false; elements.configure.open = false; } },
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const [field, input] of Object.entries(inputs)) input.maxLength = field === 'label' ? LIMITS.label : 32;
     if (!elements.configure.id) elements.configure.id = `${root.id || 'people'}-person-settings`;
     listen(elements.roster, 'change', changeParticipation);
+    listen(spreadRange, 'pointerdown', () => { spreadGesture = Symbol('person-session-spread'); });
+    listen(spreadRange, 'keydown', event => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) spreadGesture ??= Symbol('person-session-spread'); });
+    listen(spreadRange, 'input', () => setSessionSpread(Number(spreadRange.value), { gesture: spreadGesture }));
+    for (const event of ['pointerup', 'pointercancel', 'keyup', 'blur']) listen(spreadRange, event, () => { spreadGesture = null; });
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
     listen(elements.form, 'focusin', event => { if (inputs[event.target.name] === event.target) ensurePersonOwner(); });

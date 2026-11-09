@@ -12,7 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, makeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget, makeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
-import { syncSessionControls, mountRackEditor, mountEditorPlacement, captureRackEntry } from './rack-controls.mjs';
+import { syncSessionControls, mountRackEditor, mountRackHeader, mountEditorPlacement, captureRackEntry } from './rack-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
@@ -80,6 +80,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let rackEditor = null;
   let openingRackKind = null;
   let localCreation = null, creationPlacement = null;
+  let personDesk = null;
   const ampTools = root.querySelector('[data-native-amp-tools]');
   const ampUndo = document.createElement('button');
   ampUndo.type = 'button'; ampUndo.className = 'native-amp-control';
@@ -156,6 +157,31 @@ export function mountCoordinationPanel(root, options = {}) {
     rackEditor.hide({ focus: true, source });
     syncSessionReceiver();
     return true;
+  }
+  function closePersonDesk() {
+    const id = editing.read().selected.person;
+    editing.park();
+    teamPanel?.close();
+    responsibilityPanel?.close({ kind: 'role', park: false });
+    render();
+    root.querySelector(`[data-team-roster] [data-person-id="${id}"]`)?.focus({ preventScroll: true });
+  }
+  function syncPersonDesk() {
+    if (!personDesk) return;
+    const person = root.querySelector('[data-person-configure]');
+    const role = root.querySelector('[data-responsibility-configure="role"]');
+    const local = person.parentElement === personDesk.host;
+    const open = local && !person.hidden && person.open;
+    personDesk.host.dataset.deskOpen = String(open);
+    personDesk.header.element.hidden = !open;
+    // The canonical sibling forms retain their draft owners. The local desk
+    // supplies one visible return/Close instead of two disclosure summaries.
+    role.open = open;
+    role.hidden = !open;
+    const id = editing.read().selected.person;
+    const row = studio.read().state.people.find(item => item.id === id);
+    personDesk.header.update({ title: row?.label ?? 'Person mix',
+      source: open ? person.querySelector('[data-person-action="apply"]') : null });
   }
   function borrowCurrentSession() {
     if (!mounted || activeChapter !== 'coordination' || openingRackKind || rackEditor?.isOpen('session')) return;
@@ -843,6 +869,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!current()) return editor.read();
     responsibilityPanel?.refresh();
     if (!current()) return editor.read();
+    syncPersonDesk();
     connectionPanel?.refresh();
     if (!current()) return editor.read();
     connectionView?.refresh(studio.read());
@@ -961,7 +988,12 @@ export function mountCoordinationPanel(root, options = {}) {
         if (saved.kind === 'assembly') opened = assemblyPanel?.open(saved.targetId);
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
         else if (saved.kind === 'session') opened = workPanel?.open(saved.targetId);
-        else if (saved.kind === 'role' || saved.kind === 'contribution') opened = responsibilityPanel?.open(saved.targetId);
+        else if (saved.kind === 'role') {
+          const personId = describeRoleTarget(saved.targetId)?.id;
+          if (personId) teamPanel?.select(personId, false);
+          opened = responsibilityPanel?.open(saved.targetId);
+        }
+        else if (saved.kind === 'contribution') opened = responsibilityPanel?.open(saved.targetId);
         else if (saved.kind === 'connection') opened = connectionPanel?.open(saved.targetId);
         else if (saved.kind === 'capability') opened = capabilityPanel?.open(saved.targetId);
         else if (saved.kind === 'change') opened = changePanel?.open(saved.targetId);
@@ -985,6 +1017,8 @@ export function mountCoordinationPanel(root, options = {}) {
     chapterShell?.dispose();
     motion?.dispose();
     creationPlacement?.dispose();
+    personDesk?.header.dispose();
+    personDesk?.host.classList.remove('studio-person-desk');
     localCreation?.container.remove();
     rackEditor?.dispose();
     connectionView?.dispose();
@@ -1082,7 +1116,12 @@ export function mountCoordinationPanel(root, options = {}) {
       },
       canOpen: () => peopleOwnerAvailable('person'),
       isActive: () => peopleOwnerAvailable('person') && peopleEditor === 'person', onAccepted: () => render(),
-      onClose: closeRackEditor, onEditing: () => render() });
+      onClose: () => {
+        if (closeRackEditor()) return true;
+        if (activeChapter === 'people') { closePersonDesk(); return true; }
+        return false;
+      }, onSpread: ({ selectedPlans, totalPlans }) => responsibilityPanel?.setSpreadVisual(totalPlans ? selectedPlans / totalPlans : 0),
+      onEditing: () => render() });
     const assemblyRoot = root.querySelector('[data-native-assembly]');
     if (assemblyRoot) assemblyPanel = mountAssemblyPanel(assemblyRoot, { studio, editing,
       onBegin: () => {
@@ -1161,6 +1200,13 @@ export function mountCoordinationPanel(root, options = {}) {
       }, onEditing: () => render(),
     });
     const contributionOwner = root.querySelector('[data-responsibility-configure="contribution"]');
+    const personHost = root.querySelector('.studio-person-receiver');
+    if (personHost) {
+      personHost.classList.add('studio-person-desk');
+      const header = mountRackHeader(personHost, { title: 'Person mix', owner: 'People in working sessions',
+        closeAttribute: 'data-person-desk-close', applyAttribute: 'data-person-desk-apply', onClose: closePersonDesk });
+      personDesk = { host: personHost, header };
+    }
     if (contributionOwner) {
       const container = document.createElement('div');
       container.dataset.contributionCreation = ''; container.className = 'studio-contribution-creation'; container.hidden = true;

@@ -103,11 +103,44 @@ async function assertContained(page) {
     assert.ok(entry.left >= -.5 && entry.right <= observation.width + .5,
       `Team Assembly fits its viewport: ${JSON.stringify({ width: observation.width, entry })}`);
     assert.ok(entry.scroll <= entry.client + 1,
-      `Team Assembly retains complete local content: ${JSON.stringify(entry)}`);
+      `Team Assembly retains complete local content: ${JSON.stringify({ width: observation.width, ...entry })}`);
   }
 }
 
 for (const engine of names) {
+  test(`${engine}: session spread updates capacity in one gesture while the person draft stays open`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const root = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(root).dispose();
+      const plan = createExamplePlan(); plan.people[0].fundedMinutes = 240;
+      plan.work.push({ ...plan.work[0], id: 'prepare', label: 'Prepare the review', minutesPerOccurrence: 60, occurrences: 1 },
+        { ...plan.work[0], id: 'recover', label: 'Practice recovery', minutesPerOccurrence: 30, occurrences: 1, status: 'paused' });
+      const studio = createStudio(plan);
+      window.teamFixture = { studio, controller: mountCoordinationPanel(root, { studio }), original: studio.exportText() };
+    });
+    await choose(page);
+    await input(page, 'ratePerHour').fill('00123');
+    const spread = settings(page).locator('[data-person-spread]');
+    await expect(spread).toHaveValue('3');
+    await spread.focus();
+    await page.keyboard.down('ArrowLeft'); await page.keyboard.down('ArrowLeft'); await page.keyboard.up('ArrowLeft');
+    await expect(spread).toHaveValue('1');
+    await expect(settings(page)).toHaveAttribute('open', '');
+    await expect(input(page, 'ratePerHour')).toHaveValue('00123');
+    await expect(input(page, 'ratePerHour')).toBeEditable();
+    await expect(team(page).locator('.studio-person-spread__reading')).toHaveText('3 h assigned · 4 h funded · 6 sessions');
+    await expect(team(page).locator('.studio-capacity-rollup')).toContainText('16 h 30 min assigned across people');
+    await expect(team(page).locator('.studio-capacity-legend')).toContainText('Paused · still planned');
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.readHistory().undoCount), 1);
+    assert.deepEqual(await page.evaluate(() => window.teamFixture.studio.read().state.work.map(row => row.personIds.includes('product-one'))), [true, false, false]);
+    await panel(page).locator('[data-studio-undo]').click();
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), await page.evaluate(() => window.teamFixture.original));
+    await expect(team(page).locator('.studio-capacity-rollup')).toContainText('18 h assigned across people');
+  });
+
   test(`${engine}: relative rate dials preserve cents and unknowns until Apply and Undo`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     const initial = await page.evaluate(() => window.teamFixture.studio.exportText());
@@ -268,7 +301,7 @@ for (const engine of names) {
     await action(page, 'cancel').click();
     await expect(accepted(page)).toHaveText('$1,304.00');
     await expect(settings(page)).not.toHaveAttribute('open', '');
-    await expect(settings(page).locator('summary')).toBeFocused();
+    await expect(team(page).locator('[data-person-id="product-one"]')).toBeFocused();
     await choose(page);
     await expect(input(page, 'ratePerHour')).toHaveValue('101.00');
     await input(page, 'ratePerHour').fill('');
@@ -281,7 +314,7 @@ for (const engine of names) {
     await action(page, 'apply').click();
     await expect(accepted(page)).toHaveText('$900.00');
     await expect(panel(page).locator('[data-native-standing]')).toHaveText('Total · USD');
-    await expect(team(page).locator('[data-team-roster] [data-roster-person]').first()).toContainText('$0.00/hour');
+    await expect(team(page).locator('[data-team-roster] [data-roster-person]').first()).toContainText('$0/hr');
     await expect(page.locator('iframe[data-about-content-fit="studio-chapters"]')).toHaveCount(0);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toHaveCount(1);
   });
@@ -347,7 +380,7 @@ for (const engine of names) {
     await expect(input(page, 'fundedHours')).toBeDisabled();
     await action(page, 'discard').click();
     await expect(settings(page)).not.toHaveAttribute('open', '');
-    await expect(settings(page).locator('summary')).toBeFocused();
+    await expect(team(page).locator('[data-person-id="product-two"]')).toBeFocused();
     await expect(team(page).locator('[data-person-saved="product-two"]')).toBeHidden();
     await expect(accepted(page)).toHaveText('$1,215.00');
 
@@ -481,13 +514,14 @@ for (const engine of names) {
         for (const bottoms of rows) assert.ok(Math.max(...bottoms) - Math.min(...bottoms) < .1,
           `person and session cells retain one lower edge within each arranger row: ${JSON.stringify(bottoms)}`);
       }
-      // The panel owns this feedback geometry; document scrolling can continue
-      // independently while a browser moves focus to the edited control.
+      // The preview above may reflow. Feedback below preserves the numeric
+      // group's layout while document scrolling follows the edited control.
       const positions = () => settings(page).evaluate(root => {
-        const top = root.getBoundingClientRect().top;
-        return [...root.querySelectorAll('input')].map(node => ({
-          name: node.name, top: node.getBoundingClientRect().top - top,
-        }));
+        const group = root.querySelector('.native-coordination__controls'), top = group.getBoundingClientRect().top;
+        return [...group.querySelectorAll('input[name], input[data-rate-step]')].map(node => {
+          const rect = node.getBoundingClientRect();
+          return { name: node.name, top: rect.top - top, width: rect.width, height: rect.height };
+        });
       });
       const before = await positions();
       await input(page, 'fundedHours').fill('-1');
@@ -496,9 +530,13 @@ for (const engine of names) {
       await expect(preview(page)).toHaveText('—');
       const after = await positions();
       for (let index = 0; index < before.length; index += 1) {
-        assert.ok(Math.abs(after[index].top - before[index].top) < .1,
-          `feedback keeps ${before[index].name} in place at ${width}px: ${JSON.stringify({ before: before[index], after: after[index] })}`);
+        assert.ok(after[index].height > 0 && after[index].width > 0, 'feedback retains visible numeric controls');
+        for (const key of ['top', 'width', 'height']) assert.ok(Math.abs(after[index][key] - before[index][key]) < .1,
+          `feedback preserves ${before[index].name} ${key} at ${width}px: ${JSON.stringify({ before: before[index], after: after[index] })}`);
       }
+      const groupBox = await settings(page).locator('.native-coordination__controls').boundingBox();
+      const feedbackBox = await settings(page).locator('.native-coordination__feedback').boundingBox();
+      assert.ok(feedbackBox.y >= groupBox.y + groupBox.height - 1, 'feedback follows the numeric controls');
       await assertContained(page);
       const controls = await settings(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
         const field = group.querySelector('input');

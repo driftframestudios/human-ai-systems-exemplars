@@ -448,6 +448,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/person-role-mixer.mjs",
+      "projected_path": "collaboration/native-investment-studio/person-role-mixer.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/people-capacity.mjs",
+      "projected_path": "collaboration/native-investment-studio/people-capacity.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
       "media_type": "text/javascript"

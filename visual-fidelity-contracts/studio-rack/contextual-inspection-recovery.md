@@ -6,7 +6,7 @@ its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 dev receiving contract revised 9 November 2026 for
-[#881](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/881),
+[#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining contextual creation returns from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
 retaining the removal and focus recovery from
@@ -23,7 +23,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | New handoff accepts a relationship between available work records with editing closed. Selecting it opens From work, To work, optional Team connection, decisions, delays and removal. Apply accepts later field changes. |
-| People | Add person, team and contribution accept useful starting records with editing closed. Full-width team keys toggle compact local settings; movement/removal tools stay at each lane bottom. The people/session arranger keeps resource readings beside direct participation, with All people/current-person navigation into canonical settings. The role rail and contribution Work / Receiver and decision pair retain their owners inside the corresponding rack. |
+| People | Add person, team and contribution accept useful starting records with editing closed. Full-width team keys toggle compact local settings; movement/removal tools stay at each lane bottom. The people/session arranger keeps resource readings beside direct participation, with All people/current-person navigation into canonical settings. One selected-person mixing desk and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
 | Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
 | Change | A component or action key opens one dark receiver with Support/Methods views. Its shared header names the selected component and owns local return, Apply and Close; session planning attaches to that working area. |
 | Quality & recovery | Check/support, assumptions, recovery and rehearsal details use compact local modules behind the primary instruments. The attached receiver shares the canonical Apply operation and retains unfinished entries when closed. |
@@ -41,12 +41,20 @@ creation origins name their own preceding task. This supersedes the unconditiona
 Teams return on nested creation; one draft-route owner supplies both the label
 and return behavior.
 
-Person settings and Role mix are paired modules with independent visibility.
-Entering a role pad keeps the person's open settings in place. Each pad contains
-its native label and selector; its current value is the editing affordance.
-Close and owner return act on the named module while preserving the neighboring
-module and unfinished entries. Shared edit ownership remains an implementation
-boundary, rather than a reason to hide another visible working area.
+A selected person opens one visible mixing desk. Its single owner/current header
+and Close dismiss the desk and retain unfinished typed entries. The shared Apply
+mirrors the canonical person form. Rate sits left of funded Hours/Minutes; role
+reels, framework component pads and an exact facet bank share the same working
+area. Choosing a role recipe accepts one role edit and preserves the person's
+typed name, rate and funded-time proposal. Session spread accepts whole-session
+participation separately through shared history.
+
+Canonical person and role forms remain sibling owners internally. The person
+form can still be borrowed by Coordination, and native validation, submit and
+parking retain their established scope. Visitor-facing summaries and independent
+Person/Role headers are superseded by the one desk header. Closing the desk
+restores the selected person's matrix entry; contribution creation keeps its
+separate local return below.
 
 Add a person from a contribution borrows the canonical creation form into that
 contribution's rack. The half-rack slot sits beside the retained contribution at
@@ -156,7 +164,7 @@ explicit movement changes their order and retains focus on the same person.
 
 ## Layout and motion
 
-The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an idle Apply action. People role facets remain visible with the current person heading; the active field enters editing without another disclosure. Its contribution receiver pairs Work with Receiver and decision, stacking those halves at phone widths. The compact Person settings skin follows the same mounted form into Coordination. Team naming visibly distinguishes editing from saved state. Desktop uses the
+The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an idle Apply action. People uses one person heading and compact role reels/component pads; the chosen facet exposes its exact options within the same desk. Its contribution receiver pairs Work with Receiver and decision, stacking those halves at phone widths. The compact Person settings skin follows the same mounted form into Coordination. Team naming visibly distinguishes editing from saved state. Desktop uses the
 available rack width; ordinary mobile widths reflow controls while tables and
 cassette shelves scroll locally. A short downward unfurl marks loaded detail.
 Reduced motion settles the same state directly. Attached People and available
@@ -209,10 +217,11 @@ with attached rack receivers. Accepted record commands, raw proposal ownership
 and shared Undo remain the same boundaries; their presentation and local return
 now follow the established compact rack pattern.
 
-#881 supersedes the always-open role rail and detached selected-facet field.
-Each facet now has its native selector inside the pad, and Person/Role visibility
-remains independent. Contribution-specific creation stays inside its initiating
-rack instead of visiting the upper Team creation area.
+#884 supersedes #881's paired Person/Role disclosure presentation with one
+selected-person mixing desk. One visible header and Close own its presentation;
+canonical sibling forms preserve their established acceptance and recovery.
+#881's contribution-specific creation remains inside its initiating rack with
+its exact parent route.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 visible record-local controls. Bounded

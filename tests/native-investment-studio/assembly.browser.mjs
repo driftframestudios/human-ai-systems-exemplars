@@ -41,6 +41,12 @@ const adjacent = page => root(page).locator('[data-rack-editor-kind]');
 const record = (page, kind, id) => root(page).locator(`[data-connection-templates] .studio-delivery [data-studio-record-kind="${kind}"][data-studio-record-id="${id}"]`).first();
 const teamRecord = page => root(page).locator('[data-team-rack-record]');
 const closeBorrowed = page => adjacent(page).locator('[data-rack-editor-close]').click();
+async function removePerson(page, id) {
+  const row = people(page).locator(`[data-roster-person="${id}"]`);
+  const more = row.locator('.studio-person-more');
+  if (await more.getAttribute('open') === null) await more.locator('summary').click();
+  await row.locator('[data-assembly-action="person-remove"]').click();
+}
 async function openTeamPlanning(page) {
   await tab(page, 'coordination').click();
   await expect(root(page).locator('[data-connection-templates]')).toBeVisible();
@@ -371,7 +377,7 @@ for (const engine of names) {
     ]);
     await expect(apply(page)).toBeDisabled(); assert.equal(await bytes(page), accepted);
     await cancel(page).click();
-    await people(page).locator('[data-assembly-action="person-remove"][data-assembly-id="maya"]').click();
+    await removePerson(page, 'maya');
     await expect(dependencies).toContainText('Contribution: Cross-source synthesis');
     await expect(dependencies).toContainText('Evidence: Inspect history · Pilot walkthrough');
     await expect(dependencies).not.toContainText('undefined'); await expect(apply(page)).toBeDisabled();
@@ -433,7 +439,7 @@ for (const engine of names) {
     await people(page).locator(`[data-person-id="${addedId}"]`).click();
     await expect(people(page).locator('.studio-people-rates [data-person-configure]')).toBeVisible();
     await expect(personEditor.locator('[name="label"]')).toHaveValue('New person 1');
-    const personApply = personEditor.locator('[data-editor-apply]');
+    const personApply = people(page).locator('[data-person-desk-apply]');
     await expect(personApply).toHaveCount(1); await expect(personApply).toBeDisabled();
     await personEditor.locator('[name="label"]').fill('Service designer');
     await expect(personApply).toBeEnabled(); await personApply.click();
@@ -448,11 +454,11 @@ for (const engine of names) {
       }), true, 'the canonical editor stays in its People rack at phone and desktop widths');
       await page.screenshot({ path: resolve(captures, `${engine}-direct-person-${width}.png`) });
     }
-    await personEditor.locator('[data-person-action="close"]').click();
+    await people(page).locator('[data-person-desk-close]').click();
     await expect(people(page).locator(`[data-person-id="${addedId}"]`)).toBeFocused();
     await people(page).locator(`[data-person-id="${addedId}"]`).click();
     await expect(personApply).toHaveCount(1); await expect(personApply).toBeDisabled();
-    await personEditor.locator('[data-person-action="close"]').click();
+    await people(page).locator('[data-person-desk-close]').click();
     await action(page, 'team-create').click();
     await expect(action(page, 'team-create')).toBeFocused();
     await expect(people(page).locator('[data-assembly-configure]')).not.toHaveAttribute('open', '');
@@ -729,7 +735,7 @@ for (const engine of names) {
     assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].id), design.id);
     await expect(people(page).locator(`[data-assembly-team="${design.id}"]`)).toBeFocused();
     const retained = await bytes(page);
-    await people(page).locator('[data-assembly-action="person-remove"][data-assembly-id="product-one"]').click();
+    await removePerson(page, 'product-one');
     await expect(people(page).locator('[data-assembly-dependencies]')).toContainText('Team: Design');
     await expect(people(page).locator('[data-assembly-dependencies]')).toContainText('Work:');
     await expect(apply(page)).toBeDisabled();
@@ -738,7 +744,7 @@ for (const engine of names) {
     await expect(people(page).locator('[data-roster-person="product-one"] [data-assembly-action="person-remove"]')).toBeFocused();
     await people(page).locator(`[data-assembly-team="${design.id}"]`).click();
     await people(page).locator(`[data-assembly-member="${adaId}"]`).uncheck();
-    await people(page).locator(`[data-assembly-action="person-remove"][data-assembly-id="${adaId}"]`).click(); await apply(page).click();
+    await removePerson(page, adaId); await apply(page).click();
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'investment').click();
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
@@ -756,7 +762,7 @@ for (const engine of names) {
     await people(page).locator('[data-assembly-configure] > summary').click();
     await expect(form(page).locator('fieldset')).toBeEnabled();
     await expect(field(page, 'label')).toHaveValue('Operations');
-    await people(page).locator('[data-person-configure] > summary').click();
+    await people(page).locator('[data-person-id="product-one"]').click();
     await expect(people(page).locator('[data-person-configure] input[name="ratePerHour"]')).toHaveValue('125');
     await expect(people(page).locator('[data-person-configure] fieldset')).toBeEnabled();
     await people(page).locator('[data-assembly-configure] > summary').click();
@@ -818,11 +824,21 @@ for (const engine of names) {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     await field(page, 'ratePerHour').scrollIntoViewIfNeeded(); await frames(page);
-    const before = await field(page, 'fundedHours').evaluate(input => input.getBoundingClientRect().top + scrollY);
+    const controlGeometry = () => field(page, 'fundedHours').evaluate(input => {
+      const rect = input.getBoundingClientRect(), group = input.closest('[data-assembly-person-fields]').getBoundingClientRect();
+      return { top: rect.top - group.top, height: rect.height, width: rect.width };
+    });
+    const before = await controlGeometry();
     await field(page, 'ratePerHour').fill('-1'); await frames(page);
-    const after = await field(page, 'fundedHours').evaluate(input => input.getBoundingClientRect().top + scrollY);
-    assert.ok(Math.abs(after - before) < 1, 'feedback leaves input rows in place');
+    const after = await controlGeometry();
+    assert.ok(after.height > 0 && after.width > 0, 'validation retains visible numeric controls');
+    // The preview above may reflow; validation below preserves the control rows.
+    for (const key of ['top', 'height', 'width'])
+      assert.ok(Math.abs(after[key] - before[key]) < 1, `validation preserves control ${key}`);
     await expect(people(page).locator('[data-assembly-error="ratePerHour"]')).not.toHaveText('');
+    const controlsBox = await people(page).locator('[data-assembly-person-fields]').boundingBox();
+    const feedbackBox = await people(page).locator('[data-assembly-feedback]').boundingBox();
+    assert.ok(feedbackBox.y >= controlsBox.y + controlsBox.height - 1, 'feedback follows the numeric controls');
     await field(page, 'ratePerHour').fill('120');
     const increment = people(page).locator('[data-assembly-action="step"][data-assembly-field="fundedHours"][data-step="1"]');
     await increment.focus(); await page.keyboard.press('Enter');

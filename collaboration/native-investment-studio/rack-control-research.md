@@ -12,10 +12,11 @@ leaving the support task. Change and Quality use compact attached receivers for
 the detail behind their primary instruments. People combines parallel team
 lanes with an arranger that relates people directly to working sessions; its
 selected record keeps a local return to that comparison.
-The current refinement keeps person settings and role choices independently
-usable inside one compact working area. Contribution-specific creation opens
-beside the contribution that requested it. Team hourly subtotals and short
-resource readings retain their local scope and the matrix's large checkbox pads.
+The current refinement gives the selected person one mixing desk: rate and funded
+time, connected role reels, exact role overrides and whole-session spread.
+Contribution-specific creation remains beside the contribution that requested
+it. Capacity readings give each matrix an explicit scope while retaining its
+large checkbox pads.
 
 Read alongside [usable controls](usability-research.md) and
 [removal and recovery](removal-recovery-research.md). This synthesis preserves
@@ -36,7 +37,7 @@ comparison anchor until a human authorizes promotion.
 | [Carbon Button guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines), official product guidance | Repeated local tasks can use lower-emphasis controls. | Local selection and movement keep restrained borders and shadows; Cancel stays ghost. The design system's exact page quotas do not transfer to a multi-panel rack. |
 | [Atlassian inline edit](https://atlassian.design/patterns/inline-edit/), official design-system guidance | Reading and editing can occupy the same page, with aligned read and edit views. | A name beside an Abilities identity gets a small Rename action and one local field. The Studio uses native controls and its canonical record owner; the component implementation stays with Atlassian. |
 | [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/), accessibility practice | Enter/Space activation and expanded state identify the visibility of related content. | Local name and detail controls report their actual receiver state. A native input provides text editing; visible Save and Cancel define acceptance and recovery. |
-| [GOV.UK Select](https://design-system.service.gov.uk/components/select/), official design-system guidance | Labeled selectors can show preselected settings; the guidance also identifies difficulties with selects in public-service forms and favors fewer visible choices where practical. | Each role pad keeps its current value in its labeled native selector. This is a compact settings matrix with established role vocabularies; the Studio retains native keyboard behavior rather than introducing a custom popup widget. |
+| [GOV.UK Select](https://design-system.service.gov.uk/components/select/), official design-system guidance | Labeled selectors can show preselected settings; the guidance also identifies difficulties with selects in public-service forms and favors fewer visible choices where practical. | A small exact-choice bank exposes the selected role facet; the larger Function vocabulary keeps its labeled native selector. Existing shared reels supply bounded presets. Native keyboard behavior and readable accepted values remain available in each route. |
 | [Ableton Arrangement View](https://www.ableton.com/en/live-manual/12/arrangement-view/), product practice | Arrangement tracks combine comparable content with local controls and explicit reorder operations. | People rows retain identity, resource readings and local editing beside session participation. Team lanes retain their parallel group meaning; this Studio adaptation represents enterprise work. |
 | [WAI tables with two headers](https://www.w3.org/WAI/tutorials/tables/two-headers/), accessibility practice | Row and column headers identify the meaning of their intersecting cells. | The People arranger uses native scoped headers and named checkbox pads for each person/session relationship. Its local scroll region retains those relationships on phone widths. |
 | [GOV.UK Table](https://design-system.service.gov.uk/components/table/), official design-system guidance | Captions and scoped headers support comparison; reducing displayed data and deliberate column widths help scanning. Numeric columns use right alignment. | Keep the native person/session relationship and equal session widths. Compact resource pills retain their units. The matrix cells represent participation, so their pads stay centered rather than adopting numeric-column alignment. |
@@ -144,41 +145,66 @@ observations of this showcase. It does not establish population-level usability.
 Focused browser checks must establish equal columns, readable states, retained
 pad targets and return to the actual preceding team or supporting-work task.
 
-### Person settings and role choices in one working area
+### One selected-person mixing desk
 
-The reported interaction crossed two boundaries: entering a role selector closed
-the person's settings, and closing Role mix reopened its visible panel. Its
-breadcrumb therefore described a return the visitor could not complete. #881
-separates module visibility from the canonical draft coordinator's current edit
-owner.
+#881 repaired the visibility conflict between Person settings and Role mix and
+localized contribution-specific creation. #884 builds on those ownership repairs
+while replacing the paired disclosure presentation. The visitor now wants to
+compare and vary a person's role, funded time and participation together.
 
 | Candidate | Useful portion | Consequence for this task |
 | --- | --- | --- |
-| One combined form and Apply | One acceptance point for all person information | Changes established direct role acceptance and makes a small role choice wait on unrelated typed quantities. |
-| Exclusive Person / Role tabs | Small vertical footprint | Hides the comparison the visitor explicitly wants to retain and turns each switch into another navigation step. |
-| Facet pads with one detached selector | Shows current role values in a compact grid | Separates a value from its editing control and retains the selection step implicated in the reported confusion. |
-| Paired modules with a native selector in every role pad | Keeps identity, quantities and role values visible together | Selected synthesis: independent visibility and local Close/return, with each operation retaining its existing acceptance owner. |
+| One long combined form and Apply | One visible work area | Makes each small role choice wait on unrelated typed quantities and expands the acceptance boundary. |
+| Exclusive Person / Role views | Compact vertical footprint | Hides the role/quantity relationship the visitor wants to explore. |
+| Reels plus every exact choice always visible | Highly visual, immediate choice access | Repeats large vocabularies and consumes the compact scale established by the specimen. |
+| One desk with a monetary strip, connected reels and a selected facet bank | Keeps money, role and participation context together | Selected synthesis: reuse canonical owners, show the exact choices for the selected facet, and retain one local header/return. |
 
-The paired composition keeps the person module's readable surface, monetary
-dials and chocolate preview accent. Role pads combine label, accepted value and
-selection in one place. The person name, rate and funded time retain their typed
-proposal; a role change accepts directly with Undo. Module titles identify the
-person and current operation. These are the meaningful distinctions; another
-summary, score or long instruction would repeat existing information.
+The selected composition places rate at the left and funded Hours/Minutes at the
+right, with a cool-blue amount preview. Three shared Showcase reels select
+Change model, Ability enabler and Decision boundary. An authored deterministic
+recipe updates related role fields in one reversible edit. Function and Seniority
+remain independent. Framework component pads and the facet bank retain precise
+overrides; the larger Function vocabulary keeps its native selector. Hydration
+shows existing role values, and a deliberate control action chooses a recipe.
 
-Contribution-specific creation follows the same locality. A visitor who needs a
-new receiver or decision owner opens Add a person directly in that contribution's
-working area. The existing creation editor is borrowed into a half-rack slot as
-a sibling of the contribution form. Its exact draft route supplies the parent
-label and return; canonical accepted commands remain the data owner. This keeps
-one person form and one navigation path while preserving valid separate forms.
+The one visible header mirrors the canonical person's Apply and owns Close. Person
+and role forms remain sibling implementation owners, preserving typed drafts,
+native validation and Coordination's borrowed person form. The display no longer
+needs two summaries or two independent headers. A role recipe accepts directly;
+typed name, rate and funded time keep their established proposal boundary.
 
-The disclosure precedent supports truthful visibility and state. The native
-settings precedent informs the pad control. The pairing and borrowed placement
-are a Studio design synthesis, whose fitting evidence is an unsaved person edit
-surviving role selection, meaningful local dismissal, and creation returning to
-the initiating contribution. Desktop and ordinary phone views establish the
-composition's reachability; the receiving PR records observations actually run.
+Session spread supplies a low-friction way to vary the participation pads. Three
+routes were considered: fractional time percentages, a funded-time optimizer, and
+whole-session selection. The third fits the current binary participant model and
+requires the smallest meaningful change. A fader and One plan / Half / All plans
+presets select whole work rows in visible order, keeping a sole participant
+assigned. Actual assigned and funded time stay visible. A completed gesture owns
+one Undo step. Its optional decorative reel response changes motion only; hours
+and rates establish neither a person's role nor decision authority. Fractional
+time remains #798's separate model undertaking.
+
+The People matrix totals assigned person-time and known work value, with selected
+cells and column footers exposing their contribution. Explicit zero totals keep
+empty readings stable, and unknown rates stay named. The contribution matrix
+instead selects the union of linked work IDs: shared support contributes once to
+its rollup. Legends distinguish funding, paused status and support/responsibility
+symbols. Pause/Resume changes the shared session status while retaining planned
+ledger amounts. These are planned effort/value readings; elapsed schedule and
+financial savings retain their separate meanings.
+
+Contribution-specific creation continues inside its originating half-rack. The
+canonical creation form remains a sibling of the contribution form; its retained
+route names the exact receiver or decision field. This useful #881 behavior stays
+current while the selected-person desk supersedes that issue's paired disclosures.
+
+Official button, select and table guidance supports truthful state, native input
+and recoverable row/column meaning. The linked reels, recipe mapping and compact
+mixing-desk arrangement are local design choices grounded in the human's supplied
+specimen and direction. Fitting evidence exercises one recipe/Undo, preservation
+of Function/Seniority and unfinished person fields, whole-session spread/Undo,
+shared-support deduplication, and local Close/return. Phone and desktop inspection
+establish readable controls and composition; the receiving PR records actual
+observations. Faster comprehension remains a question for human use.
 
 ## Source and observation
 
