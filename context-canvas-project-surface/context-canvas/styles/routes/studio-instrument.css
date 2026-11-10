@@ -174,8 +174,9 @@
 .native-coordination :is(button[type='submit'], .studio-apply-control) { background: var(--native-signal); color: var(--native-text); }
 .native-coordination input[type='text']:not([inputmode]):not(:disabled), .native-coordination textarea:not(:disabled) { background: var(--native-zine-field); color: var(--native-text); border-color: var(--native-rule); }
 .native-coordination :is(.native-score__steps,.native-coordination__stepper) { column-gap: .35rem; justify-content: center; }
-/* Circle geometry is shared; each receiving module owns its field placement,
-   gap and skin. Compact duration and money retain the preserved 30px specimen. */
+/* Circular precision controls share geometry and fixed-light raised/pressed
+   faces. Receiving modules own field placement, gap and skin; compact duration
+   and money retain the preserved 30px specimen. */
 .native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) { --studio-step-size:2.75rem; }
 .native-coordination :is(.native-time-controls .native-coordination__stepper,.study-money__steps) { --studio-step-size:30px; }
 .native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) > button {
@@ -184,6 +185,14 @@
  min-inline-size:var(--studio-step-size); min-block-size:var(--studio-step-size);
  max-inline-size:var(--studio-step-size); max-block-size:var(--studio-step-size);
  flex:0 0 var(--studio-step-size); aspect-ratio:1; border-radius:50%; padding:0; line-height:1;
+ box-shadow:0 3px 0 var(--studio-step-shadow);
+}
+.native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) > button:active:not(:disabled,[aria-disabled='true']) {
+ box-shadow:inset 0 2px 3px var(--studio-pressed-shadow); transform:none;
+}
+@media (forced-colors:active) {
+ .native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) > button,
+ .native-coordination :is(.native-coordination__stepper,.native-score__steps,.native-change__steps,.native-capability__steps,.study-money__steps) > button:active:not(:disabled,[aria-disabled='true']) { box-shadow:none; }
 }
 @media (min-width: 64rem) {
  .native-coordination__amp { grid-template-columns: minmax(0, 1fr) auto; }
@@ -347,7 +356,7 @@
 .native-coordination .native-time__adjustment .native-coordination__stepper { margin-block-start:1.6rem; margin-inline-start:0; }
 .native-coordination .native-time-controls .native-coordination__stepper { --native-input-measure:calc(5ch + 1.25rem); grid-template-columns:30px 30px; gap:.35rem .5rem; inline-size:68px; }
 .native-coordination .native-time-controls .native-coordination__stepper input { grid-column:1/-1; grid-row:1; inline-size:68px; min-block-size:2rem; font:700 .9rem/1.4 ui-monospace,monospace; text-align:center; padding:.2rem; border:1px solid var(--studio-rack-edge); }
-.native-coordination .native-time-controls .native-coordination__stepper button { background:var(--studio-rack-paper); color:var(--studio-dark-ink); text-align:center; border:1px solid var(--studio-dark-ink); box-shadow:0 3px 0 #0d1916; font-size:1rem; }
+.native-coordination .native-time-controls .native-coordination__stepper button { background:var(--studio-rack-paper); color:var(--studio-dark-ink); text-align:center; border:1px solid var(--studio-dark-ink); font-size:1rem; }
 .native-time-controls .studio-repetition { flex:0 1 11rem; padding:.75rem; border-inline-start:.125rem solid var(--native-rule); }
 .native-time-controls .native-time__feedback { flex:1 1 100%; }
 .native-time-controls .native-time__feedback:not(:has(> :not([hidden]):not(:empty))) { display:none; }

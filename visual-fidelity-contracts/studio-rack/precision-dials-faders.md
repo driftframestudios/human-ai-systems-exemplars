@@ -3,11 +3,12 @@
 Make time, money and emphasis tangible while keeping exact values easy to read
 and enter. A dial or fader sits beside its named quantity, unit and native field;
 each route changes the same editor proposal. Session time, hourly rates and the
-Change/Quality fader banks are current receivers. People adds a discrete Session
-spread fader whose unit is whole session plans.
+Change/Quality fader banks are current receivers. People uses an analog three-way
+Session spread switch for whole session plans.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-dev receiving contract revised 10 November 2026 for selected-framework exact controls in
+dev receiving contract revised 10 November 2026 for shared circular-control shadows in
+[#882](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882), retaining selected-framework exact controls in
 [#941](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/941),
 retaining local People controls in
 [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
@@ -59,13 +60,16 @@ use a 7rem input-and-step measure so the circles align beneath the field ends.
 Generic action-button
 padding applies to actions, while these precision controls retain their shared
 geometry. This ownership supersedes competing circular sizing in chapter rules.
-The compact Person settings and Add person modules keep the preserved workbench's
-fixed lower-right step-button shadow and centered circular face. The raised
-resting face and pressed response remain visible beside exact entry, including
-when a contribution borrows the creation module. Forced colors uses the shared
-explicit border treatment. [#882](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/882)
-owns the follow-up audit of these shadows across all Studio quantity controls;
-this People iteration establishes only its affected receivers.
+The same shared owner gives all five step families the preserved workbench's
+fixed downward `0 3px 0 var(--studio-step-shadow)` resting shadow. Pressing an
+enabled control replaces that raised edge with
+`inset 0 2px 3px var(--studio-pressed-shadow)` inside a stationary circular face.
+Disabled controls retain their native disabled state and quieter opacity;
+keyboard focus retains its separate outline. Forced colors uses explicit borders
+with both shadows suppressed. These static cues also work with reduced motion.
+This ownership supersedes the separate People and duration shadow repairs:
+borrowed editors receive the same treatment from their existing step container.
+The preserved planning workbench remains an independent reference specimen.
 In the People mixing desk, the rate module sits left of funded Hours and Minutes,
 with a cool-blue amount preview and dark text. Phone widths stack these compact
 modules in reading order. One desk header owns Apply/Close while canonical person
@@ -121,7 +125,7 @@ values, and Undo operates on accepted history.
 | [Time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Shared Hours/Minutes control and exact field agreement |
 | [About session markup](../../context-canvas-project-surface/context-canvas/index.html) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Static duration controls, field identities and session readout projection |
 | [Change](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controllers](../../collaboration/native-investment-studio/assurance-controller.mjs) | Fader meaning and result projection |
-| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Circular step geometry across numeric, rate, duration and Investment money controls; quantity-module enclosures, duration hierarchy and responsive grouping |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Circular geometry, resting/pressed shadows and forced-color shadow suppression for the five step families; quantity-module enclosures, duration hierarchy and responsive grouping |
 | [People CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css) | Compact canonical Person form, 64px coarse and 56px fine rate dials, exact fields and steps; same owner when Coordination borrows the form |
 | [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Retained dial artwork, stepper placement and chapter-specific faders |
 | [Investment CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Money enclosure, exact-field and below-field pair placement; shared step geometry stays separate from general action padding |

@@ -111,8 +111,6 @@
 .native-coordination [data-person-configure] .native-rate__dial--fine { inline-size:3.5rem; }
 .native-coordination [data-person-configure] .native-rate__label { font-size:.65rem; white-space:nowrap; }
 .native-coordination [data-person-configure] .native-coordination__stepper { --native-input-measure:calc(7ch + 1rem); gap:.3rem; inline-size:min(var(--native-input-measure),100%); }
-.native-coordination [data-person-configure] .native-coordination__stepper button { box-shadow:0 3px 0 var(--studio-step-shadow); }
-.native-coordination [data-person-configure] .native-coordination__stepper button:active:not(:disabled) { box-shadow:inset 0 2px 3px var(--studio-pressed-shadow); }
 .native-coordination [data-person-configure] .native-coordination__stepper input { font-size:1rem; min-block-size:2.5rem; }
 .native-coordination [data-person-configure] .native-coordination__hint { margin:0; font-size:.72rem; line-height:1.4; }
 .native-coordination [data-person-configure] .native-coordination__preview { background:var(--canvas-cool-blue); color:var(--native-text); display:flex; flex-wrap:wrap; align-items:baseline; gap:.3rem .65rem; margin:.5rem 0; padding:.45rem .6rem; border-inline-start-width:.2rem; }
@@ -290,8 +288,7 @@
 .native-coordination [data-assembly-configure][data-form='person.create'] .native-rate__label { font-size:.65rem; white-space:nowrap; }
 .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper { --studio-step-size:30px; --native-input-measure:68px; grid-template-columns:30px 30px; inline-size:68px; gap:.35rem .5rem; }
 .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper input { inline-size:68px; min-block-size:2rem; font:700 .9rem/1.2 ui-monospace,monospace; padding:.2rem; }
-.native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button { color:var(--native-text); background:var(--native-paper); border:1px solid var(--native-text); box-shadow:0 3px 0 var(--studio-step-shadow); font-size:1rem; }
-.native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button:active:not(:disabled) { box-shadow:inset 0 2px 3px var(--studio-pressed-shadow); }
+.native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button { color:var(--native-text); background:var(--native-paper); border:1px solid var(--native-text); font-size:1rem; }
 .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__hint { margin:0; font-size:.72rem; line-height:1.35; }
 .native-coordination [data-assembly-configure][data-form='person.create'] .native-assembly__feedback:not(:has(> :not(:empty))) { display:none; }
 @media (max-width:48rem) {
@@ -301,7 +298,7 @@
 @media (forced-colors:active) {
  .native-coordination .studio-people-arranger__value,
  .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__control { background:Canvas; color:CanvasText; border-color:CanvasText; }
- .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button { background:ButtonFace; color:ButtonText; border-color:ButtonText; box-shadow:none; }
+ .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button { background:ButtonFace; color:ButtonText; border-color:ButtonText; }
 }
 
 /* Person creation replaces the Receiver half-rack beside retained Work.
@@ -320,7 +317,6 @@
 @media (forced-colors:active) {
  .native-coordination .studio-role-pad { background:Canvas; color:CanvasText; border-color:CanvasText; }
  .native-coordination .studio-role-pad:focus-within { outline:2px solid Highlight; box-shadow:none; }
- .native-coordination [data-person-configure] .native-coordination__stepper button { box-shadow:none; }
 }
 
 /* A session's paused state crosses both matrix projections, including their

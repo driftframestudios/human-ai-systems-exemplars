@@ -224,8 +224,11 @@ large radio pads with short hints beside Participants at wider widths.
 Local headers identify the owning rack and current item, with an owner return
 and Close. Prepared forms offer Apply beside Close and at the bottom, sharing
 validation and the accepted-state owner. Direct edits show Saved.
-Shared stepper geometry keeps monetary, duration and ordinary numeric buttons
-circular within their route-specific skins. Quality's local labels and actions
+Shared instrument CSS keeps monetary, duration and ordinary numeric buttons
+circular, raised at rest and inset while pressed, including borrowed editors.
+Chapter owners retain field placement, gaps and color; compact controls keep
+their 30px size and ordinary quantities their 44px size. Forced colors retains
+explicit borders and focus outlines. Quality's local labels and actions
 pair readable ink with their dark or editorial field.
 Shared instrument CSS also owns repeated Studio palette values. Chocolate is
 primarily a dial/knob-module surface and accent; green and paper companions

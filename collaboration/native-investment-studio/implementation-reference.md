@@ -2167,6 +2167,15 @@ historical; #260 retains About delivery measurement and #705 broader economic
 translation. Promotion to `main`
 remains a separate human-cued event.
 
+Circular increment controls have one geometry and shadow owner in
+`studio-instrument.css` (#882): `.native-coordination__stepper`,
+`.native-score__steps`, `.native-change__steps`, `.native-capability__steps`
+and `.study-money__steps`. That owner follows About's ordinary action rules and
+precedes the chapter sheets. Chapters extend size through `--studio-step-size`
+and retain pair placement, gap and skin; resting, pressed and forced-color
+shadow treatment stays shared. This replaces receiver-specific People and
+duration shadow declarations while keeping borrowed forms on the same route.
+
 Accepted score operations settle their local selection and inspector before
 publishing one `onAccepted` notification. Draft and cancellation notifications
 retain `onEditing`. Projection, edit intent, lease and generation checks preserve

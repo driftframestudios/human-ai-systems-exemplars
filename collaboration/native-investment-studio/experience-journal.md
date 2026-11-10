@@ -26,8 +26,12 @@ participation and replaces the receiver half-rack during person creation. #890 r
 and footer session actions. #891 replaces the Session spread fader with an analog
 three-way switch and explains sole-participant limits at the control. #893 adds
 the selected person's participation row beneath that switch and compacts the
-laptop session columns while preserving the first column. #882 owns the
-follow-up global audit of circular increment shadows. #879 establishes People
+laptop session columns while preserving the first column. #882 gives circular
+increment controls one shared raised/pressed shadow owner across the chapters
+and their borrowed editors. **Supersession:** this replaces the separate People
+shadow repairs and duration's resting-only shadow rule; existing sizes, gaps,
+skins and fixed dial lighting retain their owners. The planning workbench stays
+the preserved reference. #879 establishes People
 group identity, local hourly subtotals, compact readings and nested creation
 returns. These extend #864's team lanes and direct session arranger,
 #836's compact receiver and shared creation controls from #837. #863 completes the
