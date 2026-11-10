@@ -20,7 +20,7 @@ arrowheads joined to the actual curved shaft (#940). Shared creation, local navi
 retain their existing owners.
 PR #934 aligns supported headings with the Futura stack while buttons keep their
 system UI family. The amp uses **Set vision** and retains its cobalt chapter-key
-shadows. Its funding breakdown sits beneath the total, Plan reference and History
+shadows. Its funding breakdown sits on the left, with the total on the right. Plan reference and History
 controls stay grouped, and Animation speed has a visible label. Chapter keys sit
 at the amp's bottom edge next to the chapter content. Plan horizon owns its local
 spacing. The next interaction and orientation

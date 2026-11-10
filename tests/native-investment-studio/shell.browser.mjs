@@ -114,12 +114,13 @@ for (const engine of names) {
         return {
           navigationLast: node.lastElementChild === tabs,
           tabsBelow: tabs.getBoundingClientRect().top >= tools.getBoundingClientRect().bottom,
-          moneyGrouped: amount.parentElement.contains(funding),
+          fundingLeft: Math.abs(funding.getBoundingClientRect().left - node.querySelector('.native-coordination__identity').getBoundingClientRect().left) < 2,
+          separateReadings: !amount.parentElement.contains(funding),
           undoCue: getComputedStyle(undo, '::before').content,
           targets: buttons.map(button => { const b = button.getBoundingClientRect(); return { left: b.left, right: b.right, height: b.height }; }),
         };
       });
-      assert.equal(layout.navigationLast, true); assert.equal(layout.tabsBelow, true); assert.equal(layout.moneyGrouped, true);
+      assert.equal(layout.navigationLast, true); assert.equal(layout.tabsBelow, true); assert.equal(layout.fundingLeft, true); assert.equal(layout.separateReadings, true);
       assert.ok(['none', 'normal'].includes(layout.undoCue), 'Undo is an action without a disclosure caret');
       assert.ok(layout.targets.every(b => b.left >= 0 && b.right <= width && b.height >= 40), JSON.stringify(layout));
       if (width === 390 || width === 1440) {
