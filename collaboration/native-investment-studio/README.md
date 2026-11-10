@@ -15,7 +15,8 @@ pads and concise readings (#890), explicit Session spread choices (#891), a loca
 participation preview and compact laptop comparison (#893), contribution-local
 creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
-comparison decks (#818), with Domain portraits and compact cost comparison (#895). Shared creation, local navigation and accepted recovery
+comparison decks (#818), with Domain portraits and compact cost comparison (#895). Shared relationship diagrams use receiving-end
+arrowheads joined to the actual curved shaft (#940). Shared creation, local navigation and accepted recovery
 retain their existing owners.
 PR #934 aligns supported headings with the Futura stack while buttons keep their
 system UI family. The amp uses **Set vision** and retains its cobalt chapter-key

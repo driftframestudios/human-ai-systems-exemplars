@@ -7,7 +7,9 @@ viewpoints/frameworks, Quality preparation/recovery, People role presets and
 Investment comparisons are current receivers.
 
 **Standing:** review candidate `0.2.0`; ID `vfc:zoetrope-preset-selection`;
-dev receiving contract revised 9 November 2026 for
+dev receiving contract revised 10 November 2026 for the shared diagram joins in
+[#940](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/940),
+retaining the connected role reels from
 [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884).
 This pattern inherits
 [Studio Rack Composition](README.md) and uses its Instrument Rack treatment.
@@ -74,8 +76,10 @@ at phone width the composition stacks and the diagram keeps a readable local
 canvas with horizontal scrolling. Nodes, labels and cables share one SVG coordinate system and uniform
 scaling. Boundary headings retain clear space above the nearest node.
 
-Every visible arrow joins its shaft and head in one closed path. The head follows
-the curve's final direction. A separate transparent centerline supplies the
+Every visible arrow joins its shaft and head at the same point on the sampled
+curve, in one closed path. The head points from that join toward the receiving
+endpoint. Its neck approaches from behind the head, keeping tight Matrix bends
+and curved returns continuous. A separate transparent centerline supplies the
 existing generous pointer target. Forward routes use the shared mint signal;
 return, response and review routes use the existing amber work color. Direction
 also remains available through the arrowhead and named route. Paused routes keep
@@ -87,7 +91,9 @@ The shared [arrow geometry](../../collaboration/native-investment-studio/diagram
 accepts start/end points and optional cubic controls. Coordination supplies its
 layout and semantic return roles; Investment can reuse the same painted arrow
 with its own named relationships. A bounded sampled outline maintains visible
-shaft width around bends at the showcase's diagram scale. SVG's
+shaft width around bends at the showcase's diagram scale. The shared curve-cutoff
+join supersedes placing the head base on a separate terminal-tangent line;
+caller endpoints, colors, hit targets and node layout retain their owners. SVG's
 [path commands](https://www.w3.org/TR/SVG2/paths.html) support one closed shape,
 and uniform [aspect-ratio fitting](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio)
 keeps the diagram's proportions when the viewport grows. Browser observations
