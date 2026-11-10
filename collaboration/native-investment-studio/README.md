@@ -19,8 +19,11 @@ comparison decks (#818), with Domain portraits and compact cost comparison (#895
 arrowheads joined to the actual curved shaft (#940). Shared creation, local navigation and accepted recovery
 retain their existing owners.
 PR #934 aligns supported headings with the Futura stack while buttons keep their
-system UI family. The amp uses **Set vision** and retains its cobalt chapter-key
-shadows. Its funding breakdown sits on the left, with the total on the right. Plan reference and History
+system UI family. The amp retains its cobalt chapter-key shadows. **Set vision**
+connects people, the desired outcome and current planned work in a ruled-paper
+reading beside a compact evidence/decision table (#945). Authored example
+starting context stays distinct from the six saved purpose fields; local edits
+and Undo retain their owners. Its funding breakdown sits on the left, with the total on the right. Plan reference and History
 controls stay grouped, and Animation speed has a visible label. Chapter keys sit
 at the amp's bottom edge next to the chapter content. Plan horizon owns its local
 spacing. The next interaction and orientation

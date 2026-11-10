@@ -78,7 +78,12 @@ to the left while retaining the total at the right. **Supersession:** this balan
 replaces #938’s right-side grouping of the breakdown with the total. Chapter navigation follows
 those tools and their reading panels. **Supersession:** this replaces the mixed
 control row and chapter keys preceding the amp tools; draft and history owners
-remain unchanged. The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
+remain unchanged. #945 gives Set vision a ruled-paper account of people, outcome,
+example starting context and active planned work beside a compact review table.
+**Supersession:** this reading replaces the equal-weight purpose grid while
+preserving all six saved fields, raw-edit recovery and Undo. Per-session overrides
+determine active work; custom plans receive a current-workflow invitation.
+The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
 local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
 vision/AI examples. Existing #874, #875 and #882 keep their manual, retention and
 precision-control boundaries. This planning route supersedes a chapter-wide

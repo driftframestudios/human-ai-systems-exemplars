@@ -5,6 +5,9 @@ import { createStudio } from '../../collaboration/native-investment-studio/state
 import { createPurposeDraftAdapter } from '../../collaboration/native-investment-studio/purpose-draft.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+import { projectVisionReading } from '../../collaboration/native-investment-studio/purpose-controller.mjs';
+import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
+import { replaceWorkSession } from '../../collaboration/native-investment-studio/work-sessions.mjs';
 
 const EMPTY = Object.freeze({ changedAbility: null, affectedPopulation: null, observationSignal: null,
   accountableOwner: null, reviewBoundary: null, openConditions: null });
@@ -16,6 +19,42 @@ function setup(plan = createExamplePlan()) {
   return { studio, editor, token: opened.view.draft.token };
 }
 function rejected(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); }
+
+test('vision reading keeps example context separate from saved purpose and current planned work', () => {
+  const plan = createShowcasePlan(), original = structuredClone(plan);
+  const reading = projectVisionReading(plan);
+  assert.equal(reading.people, plan.purpose.affectedPopulation);
+  assert.equal(reading.outcome, plan.purpose.changedAbility);
+  assert.match(reading.startingSituation, /missed handoff/);
+  assert.deepEqual(reading.review.map(row => [row.field, row.value]), [
+    ['observationSignal', plan.purpose.observationSignal], ['accountableOwner', plan.purpose.accountableOwner],
+    ['reviewBoundary', plan.purpose.reviewBoundary], ['openConditions', plan.purpose.openConditions],
+  ]);
+  assert.deepEqual(plan, original, 'reading leaves canonical fields and work intact');
+  plan.planId = 'visitor-plan'; plan.purpose.changedAbility = null;
+  plan.work[0].status = 'paused'; plan.work[1].lifecycle = 'retired';
+  plan.work[2].label = 'Test the receiving workflow';
+  const revised = projectVisionReading(plan);
+  assert.equal(revised.startingSituation, null, 'an unknown plan receives no invented starting situation');
+  assert.equal(revised.outcome, 'Describe what those people should be able to do.');
+  assert.equal(revised.approach, 'Test the receiving workflow · Operations rehearsal');
+  assert.equal(plan.purpose.changedAbility, null, 'an intentionally empty outcome stays empty');
+  plan.planId = 'constructor';
+  assert.equal(projectVisionReading(createStudio(plan).read().state).startingSituation, null,
+    'admitted plan names receive authored context only through an own registry entry');
+});
+
+test('vision approach follows effective session status across overrides', () => {
+  const plan = createShowcasePlan();
+  plan.work[0].status = 'paused';
+  plan.work[0] = replaceWorkSession(plan.work[0], 0, { ...plan.work[0], status: 'planned' });
+  for (let index = 0; index < plan.work[1].occurrences; index += 1)
+    plan.work[1] = replaceWorkSession(plan.work[1], index, { ...plan.work[1], status: 'paused' });
+  plan.work[2].lifecycle = 'retired'; plan.work[3].status = 'paused';
+  const accepted = createStudio(plan).read().state;
+  assert.equal(projectVisionReading(accepted).approach, plan.work[0].label,
+    'a planned session survives paused defaults; all-paused and retired work stay outside the planned approach');
+});
 
 test('purpose drafts retain raw notes and replace all six canonical fields together', () => {
   const { studio, editor, token } = setup();

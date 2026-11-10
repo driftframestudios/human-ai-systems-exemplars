@@ -433,6 +433,45 @@ for (const engine of names) {
     await performAction(page, 'undo'); assert.equal(await bytes(page), accepted);
   });
 
+  test(`${engine}: Set vision presents the example, accepted purpose and review in a fitted reading`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    assert.equal(await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio } = window.investmentFixture; return studio.replace(createShowcasePlan(), studio.read()).ok;
+    }), true);
+    const initial = await bytes(page);
+    const saved = JSON.parse(initial).purpose;
+    await amp(page, 'purpose').click();
+    const reading = purpose(page).locator('[data-purpose-reading]');
+    await expect(reading).toContainText(saved.changedAbility);
+    await expect(reading).toContainText('Example starting situation');
+    await expect(reading).toContainText('Research synthesis');
+    const review = reading.getByRole('table', { name: 'Evidence and decisions' });
+    for (const key of ['observationSignal', 'accountableOwner', 'reviewBoundary', 'openConditions']) {
+      await expect(review.locator(`[data-purpose-value="${key}"]`)).toHaveText(saved[key]);
+    }
+    assert.equal(await root(page).locator('[data-amp-purpose-preview]').count(), 0);
+    for (const width of [1512, 390]) {
+      await page.setViewportSize({ width, height: 982 });
+      const geometry = await reading.evaluate(element => {
+        const box = element.getBoundingClientRect(), vision = element.querySelector('.native-purpose__vision').getBoundingClientRect(), table = element.querySelector('table').getBoundingClientRect();
+        return { left:box.left, right:box.right, scroll:element.scrollWidth, width:element.clientWidth, visionRight:vision.right, visionBottom:vision.bottom, tableLeft:table.left, tableTop:table.top };
+      });
+      assert.ok(geometry.left >= 0 && geometry.right <= width + 1 && geometry.scroll <= geometry.width + 1, JSON.stringify(geometry));
+      assert.ok(width > 800 ? geometry.tableLeft >= geometry.visionRight : geometry.tableTop >= geometry.visionBottom, JSON.stringify(geometry));
+      await reading.screenshot({ path:resolve(captures, `${engine}-vision-reading-${width}.png`) });
+    }
+    assert.equal(await bytes(page), initial, 'opening and reading the vision leaves the plan intact');
+    await editPurpose(page);
+    await field(page, 'observationSignal').fill('Watch the receiving team recover a missed request.');
+    await purpose(page).getByRole('button', { name: 'Apply purpose', exact: true }).click();
+    await amp(page, 'purpose').click(); await amp(page, 'purpose').click();
+    await expect(review.locator('[data-purpose-value="observationSignal"]')).toHaveText('Watch the receiving team recover a missed request.');
+    await expect(review.locator('[data-purpose-value="reviewBoundary"]')).toHaveText(saved.reviewBoundary);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), initial);
+  });
+
   test(`${engine}: Purpose edits apply, cancel and recover saved text through the shared owner`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     const initial = await bytes(page);
