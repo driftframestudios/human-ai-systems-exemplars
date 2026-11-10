@@ -10,13 +10,15 @@ export const INVESTMENT_DOMAINS = Object.freeze({
   service: { label: 'Operations', title: 'Give people useful time back', detail: 'Connect adoption to working time, service cost and the capacity to support people.', flow: ['People adopting', 'Changed workflow', 'Time & capacity'] },
   capital: { label: 'Planning', title: 'Choose where capital can help', detail: 'Compare keeping the current approach, running a pilot and extending the rollout.', flow: ['Upfront investment', 'Quarterly benefit', 'Return & payback'] },
 });
-const number = value => new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(value);
-const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+const NUMBER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+const WHOLE_DOLLARS = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const number = value => NUMBER.format(value);
+const money = value => WHOLE_DOLLARS.format(value);
 const entry = (label, value) => ({ label, value: Number.isFinite(value) ? value : null });
 const known = value => value?.status === 'known' ? value.value : null;
 
-export function investmentPortrait(record, pricing) {
-  const s = record.settings, a = analyseInvestment(record, pricing);
+export function investmentPortrait(record, pricing, analysis = analyseInvestment(record, pricing)) {
+  const s = record.settings, a = analysis;
   let title, unit, values, format = money;
   switch (record.type) {
     case 'plan':

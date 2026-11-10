@@ -4,9 +4,11 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.4.4`, ID
+**Standing:** approved reference and receiving composition, version `0.4.5`, ID
 `vfc:investment-master-reels`; 9 November 2026, receiving
-[#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895).
+[#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895)
+art and [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
+read/control ownership.
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
 The approved specimen is commit
 [`93bc69a`](https://github.com/driftframestudios/human-ai-systems-exemplars/commit/93bc69acaae6c1f604568449b6e4ace5151c3217).
@@ -69,10 +71,10 @@ contract; current runtime changes belong to the receiving owners.
 | [Deck catalogue](../../collaboration/native-investment-studio/investment-catalog.mjs) | Closed deck vocabulary, linked presets and fresh defaults |
 | [Financial calculation adapter](../../collaboration/native-investment-studio/investment-financials.mjs) | Projection through the existing financial formula owner |
 | [Saved deck contract](../../collaboration/native-investment-studio/investment-state.mjs) | Stable identity, bounded assumptions and integer-hundredth serialization |
-| [Accepted-plan projection](../../collaboration/native-investment-studio/investment-projection.mjs) | Canonical people, ledger prices and authored periods |
+| [Accepted-plan projection](../../collaboration/native-investment-studio/investment-projection.mjs) | Immutable accepted reading context, deck lookup and shared analyses; detached command settings |
 | [Domain portrait](../../collaboration/native-investment-studio/investment-portrait.mjs) | Pure per-deck interpretation, unit-aware rose geometry, exact-value companion and empty-domain diagram |
 | [Shared diagram geometry](../../collaboration/native-investment-studio/diagram-geometry.mjs) | Coherent filled arrows reused with the Coordination diagrams |
-| [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Shelf, independent editors, connected reels, allocation pads and cash-flow tracks |
+| [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Retained shelf/library controls, independent editor lifetimes, connected reels, allocation pads and cash-flow tracks |
 | [Financial controls](../../collaboration/native-investment-studio/investment-controls.mjs) | Stable monetary dials, exact fields, circular steppers and a thin shared-reel adapter |
 | [Shared Showcase reel](../../collaboration/native-investment-studio/reel-control.mjs) and [instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Stationary perimeter choices, fixed housing, rotating center, stepping, selected reading, motion and disposal |
 | [Receiving stylesheet](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Scoped specimen geometry and integration with the About rack |
@@ -91,6 +93,15 @@ edits. A dial's consecutive samples share one owned gesture token, yielding one
 recovery step; the next gesture, another accepted command, baseline capture or
 history traversal establishes a new boundary. Copy removal releases its control
 listeners, and Undo reconstructs its original identity and assumptions.
+
+The mounted receiver reuses a reading only for the exact immutable accepted
+projection. Shelf amounts, portraits and loaded comparisons share that context;
+command candidates own fresh settings. Shelf and library controls stay attached
+through ordinary accepted updates, preserving focus and scroll position. A
+retained editor reads current settings for its stable ID and type. Removal or a
+type change retires that editor and its callbacks; a restored copy receives a
+fresh control owner. These lifetime rules supersede rebuilding shelf/library
+controls on each render while preserving their existing art and interaction.
 
 Reels select explicit named values through native buttons. Presets update their
 related assumptions together; manual amount or fader edits move the preset
@@ -404,7 +415,12 @@ creation, independent deck copies, connected choices, exact portrait values,
 allocation/shortfall and unchanged canonical work price. A few source examples
 check signed/zero/unavailable distinctions, area scaling and unit selection.
 Focused browser observations cover the changing portrait, shelf placement,
-selected/focus legibility, monetary controls, Undo and motion policy. The
+selected/focus legibility, monetary controls, Undo and motion policy. Read-context
+checks distinguish reuse from command mutation, including replace and Undo with
+equal revision numbers. Mounted checks observe retained control identity and
+reject held events from retired editors while the current editor remains usable.
+These checks establish ownership and behavior; latency claims require a separate
+matched measurement. The
 [whole-plan cost table](support-matrix-stateful-pads.md#whole-plan-cost-breakdown)
 retains precise person/funding comparison below the visual experience.
 

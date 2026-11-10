@@ -3,7 +3,7 @@ import { listPresets } from './presets.mjs';
 import { money } from './display.mjs';
 import { createDownloadOwner } from './browser-download.mjs';
 import { createInvestmentWorkbench } from './investment-workbench.mjs';
-import { projectInvestment } from './investment-projection.mjs';
+import { createInvestmentReader, investmentCommandModel } from './investment-projection.mjs';
 import { encodeInvestment } from './investment-state.mjs';
 
 const DECKS = Object.freeze([
@@ -22,6 +22,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onOpenSe
     .map(button => [button.dataset.investmentAction, button]));
   const presets = new Map(listPresets().map(preset => [preset.id, preset]));
   const cleanup = [];
+  const readInvestment = createInvestmentReader();
   let projection = null, baseline = null, renderedPreview = null;
   let disposed = false, fileSelection = 0;
   const downloads = createDownloadOwner(root);
@@ -189,12 +190,12 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onOpenSe
     if (result.ok) { selectDeck('exchange'); root.querySelector('#native-plan-preview-title').focus({ preventScroll: true }); }
   });
   const workbench = createInvestmentWorkbench({
-    getModel: () => projectInvestment(studio.read()),
+    getContext: () => readInvestment(studio.read()),
     change(mutator, message, gesture = null) {
       if (disposed) return;
       const parked = editing.park();
       if (!parked.ok) { announce(parked.error.message); return; }
-      const expected = studio.read(), model = projectInvestment(expected);
+      const expected = studio.read(), model = investmentCommandModel(readInvestment(expected));
       mutator(model);
       const result = studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(model.investment.decks) }, expected, gesture);
       refreshAll();

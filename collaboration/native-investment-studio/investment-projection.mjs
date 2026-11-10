@@ -1,5 +1,42 @@
 import { decodeInvestment } from './investment-state.mjs';
 import { summarizeWorkSessions, resolveWorkSession } from './work-sessions.mjs';
+import { analyseInvestment } from './investment-financials.mjs';
+
+function freezeReading(value) {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.values(value).forEach(freezeReading);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+// One mounted receiver retains one accepted reading. Undo/import can repeat a
+// revision number; only the exact immutable projection authorizes reuse.
+export function createInvestmentReader() {
+  let context;
+  return projection => {
+    if (context?.projection === projection) return context;
+    const model = freezeReading(projectInvestment(projection));
+    const decks = new Map(model.investment.decks.map(record => [record.id, record]));
+    const analyses = new Map();
+    context = Object.freeze({ projection, model,
+      record: id => decks.get(id),
+      analysis(id) {
+        const record = decks.get(id);
+        if (!record) return undefined;
+        if (!analyses.has(id)) analyses.set(id, freezeReading(analyseInvestment(record, model.pricing)));
+        return analyses.get(id);
+      },
+    });
+    return context;
+  };
+}
+
+// Commands own mutable settings; price/people/period readings stay shared and
+// immutable. Copy only the admitted deck settings consumed by replacement.
+export function investmentCommandModel(context) {
+  return { ...context.model, investment: { decks: decodeInvestment(context.projection.state.investmentSettings) } };
+}
 
 // The financial view receives accepted work and price lines from their owner.
 // Its assumption records are owned copies, ready for one validated replacement.
