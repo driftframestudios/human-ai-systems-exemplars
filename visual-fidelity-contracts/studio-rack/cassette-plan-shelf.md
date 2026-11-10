@@ -24,18 +24,37 @@ and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/sty
 Issue #820 refines its receiving interaction: the unchanged-size shelf attaches
 directly to the full height of the period rack. #837 expands the desktop shelf
 scroll area from 40rem to 80rem while keeping cassette dimensions intact. At
-650px and below it remains a horizontal strip with no vertical height cap. A cassette loads its canonical
-work identity and filters the board/tracks while closing detail. The selected
-sprint/quarter remains visible; All plans removes the plan filter and Whole plan
-removes the period filter. Existing board/track clips open editing locally.
+650px and below it remains a horizontal strip with no vertical height cap.
 
-New plan retains direct accepted creation with a unique **New session N** name
-and detail closed. Selecting a clip opens editing. Remove plan clears its supporting links in one canonical change. The concise
-confirmation names the plan; Undo restores its complete prior arrangement. Accepted recovery belongs to the stable native amp Undo control;
-the cassette shelf contains no Undo button. This supersedes #813's local shelf
-Undo and edit-on-cassette-selection behavior. Artwork, focus target, stationary
-shelf, narrow horizontal orientation and hover motion retain the exact specimen.
+One cassette represents one repeatable activity plan. The initial view loads the
+first available cassette, Pilot decision review in the showcase, with detail
+closed. An empty library starts unselected. Loading a canonical work identity
+filters the board, tracks and relationship markers. All plans is the explicit
+return to the complete arrangement. The selected sprint/quarter remains visible: All plans clears the cassette filter;
+Plan overview clears the period filter. Existing clips open local editing.
+Loaded **Add session** targets append occurrences while retaining that cassette.
+In All plans, explicit **New plan** targets create separate records and retain the
+overview. Shelf **New plan** creates and loads a uniquely named record with detail
+closed. These scope-specific meanings supersede the earlier rule that every lane
+addition creates a record through #906.
 
+**Remove plan** belongs to the transport's right edge with a compact confirmation
+that names the loaded plan. One canonical change clears its supporting links;
+the stable native amp **Undo** restores the complete arrangement. The shelf
+retains its selection role. This supersedes #813's local Undo and
+edit-on-cassette-selection behavior.
+
+An empty library gives the rack a single-column starter composition: a cobalt
+shared reel beside a diagram preview, with **Plan**, **Design**, **Test**, **Build**
+and **Deploy** choices. Paper resting and teal selected buttons follow the shared
+reel contract. Turning selects a preview; **Load these plans** explicitly accepts its
+set as one Undo entry while retaining people, teams, horizon and other chapter
+state. **Create a plan** retains canonical creation and the guided prerequisite
+route. A missing person/team leaves the current state intact with a concise local
+message; its borrowed creation receiver remains usable inside the rack.
+
+Artwork, focus targets, stationary shelf, narrow horizontal orientation and hover
+motion retain the exact specimen.
 
 ## The preserved object
 

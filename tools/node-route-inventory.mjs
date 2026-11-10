@@ -72,6 +72,8 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/config.mjs',
   'collaboration/native-investment-studio/cadence.mjs',
   'collaboration/native-investment-studio/cadence-view.mjs',
+  'collaboration/native-investment-studio/coordination-starters.mjs',
+  'collaboration/native-investment-studio/plan-library-empty.mjs',
   'collaboration/native-investment-studio/contract.mjs',
   'collaboration/native-investment-studio/navigation-policy.mjs',
   'collaboration/native-investment-studio/controller.mjs',

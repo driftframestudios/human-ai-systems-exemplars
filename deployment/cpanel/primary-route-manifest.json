@@ -2608,6 +2608,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/coordination-starters.mjs",
+      "projected_path": "collaboration/native-investment-studio/coordination-starters.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/plan-library-empty.mjs",
+      "projected_path": "collaboration/native-investment-studio/plan-library-empty.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/score-models.mjs",
       "projected_path": "collaboration/native-investment-studio/score-models.mjs",
       "media_type": "text/javascript"

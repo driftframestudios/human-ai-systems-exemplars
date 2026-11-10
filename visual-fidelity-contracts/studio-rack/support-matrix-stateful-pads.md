@@ -128,10 +128,10 @@ plan accounting remain current.
 ## Creation, assignment and recovery
 
 Named creation regions state the object and scope they add. A plus inside an
-existing plan's temporal track appends a working session to that plan and retains
-its earlier placements. The horizon's period lanes and New plan row create
-distinct records and retain the All plans view. Shelf New plan deliberately loads
-its new cassette. Shared sessions creation uses accepted-person context; its
+existing plan's temporal track, or Add session in its loaded period lane, appends
+an occurrence and retains that cassette and its earlier placements. In All plans,
+explicit lane New plan and the New plan row create distinct records and retain
+the overview. Shelf New plan deliberately loads its new cassette. Shared sessions creation uses accepted-person context; its
 existing person/session cells change participation directly. This differs from the temporal meaning of a session track’s empty cell. Shared sessions maintains its own selected view and local return.
 
 People's Add person, Add team and Add contribution accept useful records with

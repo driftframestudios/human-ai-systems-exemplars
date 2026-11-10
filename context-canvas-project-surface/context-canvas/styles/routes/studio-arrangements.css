@@ -286,3 +286,37 @@
 @media (forced-colors: active) {
   .native-coordination .studio-diagram__edge:is([data-direction], [data-adapted], :hover) { color: LinkText; }
 }
+
+/* Empty plan library: the shared cobalt reel previews a small recipe beside
+   its own diagram. Existing arrangement and loaded-rack geometry stays owned. */
+.native-score__plan-actions { margin-inline-start:auto; min-inline-size:0; }
+.native-score__removal { display:flex; flex-wrap:wrap; align-items:center; gap:.65rem; }
+.native-score__removal[hidden] { display:none; }
+.native-score__removal > p { flex-basis:100%; margin:0; font-size:.85rem; }
+.studio-plan-workspace[data-empty='true'] { grid-template-columns:minmax(0,1fr); }
+.studio-plan-starters { min-inline-size:0; padding:1rem; border:1px solid var(--studio-rack-edge); border-radius:.4rem; background:var(--studio-rack-shell); color:var(--native-paper); }
+.studio-plan-starters[hidden] { display:none; }
+.native-coordination .studio-plan-starters__heading > h4 { margin:0; color:var(--native-paper); }
+.studio-plan-starters__heading > p { margin:.35rem 0 1rem; }
+.studio-plan-starters__body { display:grid; grid-template-columns:minmax(15rem,21rem) minmax(0,1fr); gap:1rem; align-items:stretch; }
+.studio-plan-starters__result { display:flex; flex-direction:column; min-inline-size:0; }
+.native-coordination .studio-plan-starters__result > h5 { margin:.2rem 0; color:var(--native-paper); font-size:1rem; }
+.studio-plan-starters__result > p { margin:.35rem 0 .75rem; }
+.studio-plan-starters__viewport { display:grid; flex:1; align-items:center; min-inline-size:0; overflow-x:auto; padding:.5rem; border:1px solid var(--studio-rack-edge); border-radius:.3rem; background:var(--studio-screen); color:var(--native-paper); }
+.studio-plan-starters__viewport svg { display:block; inline-size:100%; min-inline-size:30rem; block-size:auto; }
+.studio-plan-starters__node rect { fill:var(--about-cool-blue); stroke:var(--native-rule); stroke-width:2; }
+.studio-plan-starters__node text { fill:var(--native-text); font:650 14px system-ui,sans-serif; }
+.studio-plan-starters__node .studio-plan-starters__duration { font:12px ui-monospace,monospace; }
+.studio-plan-starters__return { fill:var(--native-paper); font:12px ui-monospace,monospace; }
+.native-coordination .studio-plan-starters__actions { justify-content:flex-start; gap:.65rem; margin:.8rem 0 0; }
+.native-coordination .studio-plan-starters__error { color:var(--studio-rose); }
+@media(max-width:60rem) {
+ .studio-plan-starters__body { grid-template-columns:minmax(0,1fr); }
+ .studio-plan-starters__body > .native-reel { inline-size:min(100%,24rem); justify-self:center; }
+}
+@media(forced-colors:active) {
+ .studio-plan-starters, .studio-plan-starters__viewport { background:Canvas; color:CanvasText; border-color:CanvasText; }
+ .native-coordination .studio-plan-starters :is(h4,h5,.studio-plan-starters__error), .studio-plan-starters__return { color:CanvasText; fill:CanvasText; }
+ .studio-plan-starters__node rect { fill:Canvas; stroke:CanvasText; }
+ .studio-plan-starters__node text { fill:CanvasText; }
+}

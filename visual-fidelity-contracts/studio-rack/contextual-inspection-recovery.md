@@ -18,7 +18,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
-| Plan overview | A cassette loads scope with detail closed. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
+| Plan overview | The first available cassette loads initially with detail closed; an empty library starts unselected. All plans returns from cassette scope. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
@@ -108,10 +108,11 @@ The shared top Apply mirrors its canonical submitter's label, disabled state
 and validation. It invokes that submitter's existing operation and preserves
 canonical validation and return-focus behavior. An editor that stays open can
 retain header focus; a completed score edit closes its inspector and returns to
-the originating marker. The bottom action row remains available. A canonical
-Remove confirmation stays with its own bottom control.
+the originating marker. The bottom action row remains available. Removal stays
+with its owning control; the loaded plan has a compact confirmation at the
+transport's right edge.
 
-Removing a plan/session record retains a short confirmation with its name and
+Removing a plan record retains a short confirmation with its name and
 Undo guidance. Acceptance clears that record from supporting-work selections,
 period placements and stage membership. Its incident handoffs, dependencies and
 anchored delays leave together. A decision with its own stage remains available;
@@ -129,10 +130,10 @@ their review destinations. The shared reference renderer owns these descriptions
 the command owner retains deletion authority. Inspecting or cancelling a blocked
 removal leaves accepted state and Undo unchanged.
 
-Adding through an existing plan's track appends one accepted occurrence with
-all earlier placements retained. Period-lane and track New plan creation add
-distinct records while keeping All plans visible. Shelf New plan deliberately
-loads the new cassette. Amp Undo reverses the accepted operation; ordinary
+Adding through a loaded plan's lane or track appends one accepted occurrence,
+retaining the cassette and earlier placements. In All plans, explicit lane and
+track New plan targets create distinct records while retaining that overview.
+Shelf New plan deliberately loads the new cassette. Amp Undo reverses the accepted operation; ordinary
 session draft additions and placement changes still accept through Apply.
 
 Abilities also separates record creation from support assignment. Adding a person,

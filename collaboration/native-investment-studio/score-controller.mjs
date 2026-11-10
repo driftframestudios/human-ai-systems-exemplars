@@ -6,6 +6,7 @@ import { scoreField, startingScoreRaw } from './score-draft.mjs';
 import { money } from './display.mjs';
 import { resolveScoreDestination } from './navigation-policy.mjs';
 import { mountSubmitMirror } from './rack-controls.mjs';
+import { prepareStarterPlan } from './coordination-starters.mjs';
 
 const INSTANCES = new WeakMap();
 const LABELS = Object.freeze({ stage: 'stage', handoff: 'handoff', gate: 'decision', delay: 'delay', person: 'person',
@@ -22,9 +23,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   onViewChanged = () => {}, onLoadPlan = () => true, onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
-  let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null, loadedPlanId = null;
+  let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
+  let loadedPlanId = studio.read().state.work[0]?.id ?? null;
   let selected = { kind: 'horizon', id: '' }, fieldSignature = '', lastProjection = null;
   let inspectionEntryKey = null, inspectorOpen = false;
+  let removal = null;
   let arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
   const created = new Map();
   const node = (tag, text, className) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; };
@@ -66,6 +69,15 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const el = button(label, 'example'); el.dataset.presetId = id; examples.append(el);
   }
   toolbar.append(horizon, examples);
+  const planActions = node('div', undefined, 'native-score__plan-actions');
+  const removePlan = button('Remove plan', 'remove-plan', 'native-control--remove');
+  const removalPrompt = node('div', undefined, 'native-score__removal'); removalPrompt.hidden = true;
+  const removalLabel = node('p'); removalLabel.id = instance + '-remove-label';
+  removalPrompt.setAttribute('role', 'group'); removalPrompt.setAttribute('aria-labelledby', removalLabel.id);
+  const confirmRemoval = button('Remove plan', 'confirm-plan-removal', 'native-control--remove');
+  const cancelRemoval = button('Cancel', 'cancel-plan-removal', 'native-control--cancel');
+  removalPrompt.append(removalLabel, confirmRemoval, cancelRemoval);
+  planActions.append(removePlan, removalPrompt); toolbar.append(planActions);
   const pending = node('div', undefined, 'native-score__pending'); pending.hidden = true;
   const pendingText = node('p'), pendingActions = node('div', undefined, 'native-coordination__actions');
   pendingActions.append(button('Apply horizon', 'apply'), button('Cancel changes', 'cancel')); pending.append(pendingText, pendingActions);
@@ -102,6 +114,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     onPeriod: id => { periodId = id; render(); }, onAddSession: createSession, onAddOccurrence: addOccurrence,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot, flowPanel,
+    onLoadStarter: loadStarter,
   });
   view.getSessionSlot().append(inspector);
   function syncInspectorControls() {
@@ -115,13 +128,55 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
 
   function loadPlan(id, source) {
     if (disposed || !isActive() || id !== null && !studio.read().state.work.some(item => item.id === id)) return;
+    const epoch = ++generation;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    if (onLoadPlan(id, source) === false || disposed || !isActive()) return;
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(id, source) === false || !retains(epoch, prior) || !isActive()) return;
     loadedPlanId = id;
     selected = { kind: 'horizon', id: '' };
     inspectorOpen = false; flowPanel.open = false;
     render();
+  }
+  function removeLoadedPlan() {
+    if (!removal || studio.read() !== removal.projection || removal.id !== loadedPlanId) return;
+    const epoch = ++generation, request = removal;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return;
+    const result = studio.applyCommand({ type: 'work.remove', workId: request.id }, request.projection);
+    if (!result.ok) { announce(result.error.message); return; }
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return;
+    const index = request.projection.state.work.findIndex(row => row.id === request.id);
+    loadedPlanId = result.projection.state.work[Math.min(index, result.projection.state.work.length - 1)]?.id ?? null;
+    removal = null; selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    if (!publishAccepted(epoch, accepted)) return;
+    announce('Plan and its sessions removed. Undo restores them and their connections.');
+    const destination = loadedPlanId ? removePlan : projectionRoot.querySelector('button');
+    destination?.focus({ preventScroll: true });
+  }
+  function loadStarter(id) {
+    const unavailable = () => ({ ok: false, error: { message: 'Return to the empty Plans shelf to load an example.' } });
+    if (disposed || !isActive()) return unavailable();
+    const epoch = ++generation, parked = editing.park();
+    if (!parked.ok) return parked;
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(null) === false || !retains(epoch, prior) || !isActive()) return unavailable();
+    const prepared = prepareStarterPlan(prior.projection.state, id);
+    if (!prepared.ok) return prepared;
+    const result = studio.replace(prepared.plan, prior.projection);
+    if (!result.ok) return result;
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return result;
+    loadedPlanId = null; periodId = null; removal = null;
+    selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    if (publishAccepted(epoch, accepted)) {
+      announce('Example plans loaded. Choose a tape to add or edit its sessions. Undo restores the empty shelf.');
+      projectionRoot.querySelector('[data-studio-plan-id]')?.focus({ preventScroll: true });
+    }
+    return result;
   }
   function acceptCadence(update, message) {
     const unavailable = () => ({ ok: false, error: { message: 'Return to this plan and try the change again.' } });
@@ -354,6 +409,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (periodId && !displayedCadence?.periods.some(row => row.id === periodId)) periodId = null;
     for (const input of basisChoices.querySelectorAll('input')) input.checked = input.value === displayedCadence?.basis;
     if (loadedPlanId && !state.work.some(item => item.id === loadedPlanId)) loadedPlanId = null;
+    if (removal && (removal.id !== loadedPlanId || removal.projection !== studio.read())) removal = null;
+    const loadedPlan = state.work.find(item => item.id === loadedPlanId);
+    removePlan.disabled = !loadedPlan; removePlan.hidden = Boolean(removal);
+    removePlan.title = loadedPlan ? `Remove ${loadedPlan.label}` : 'Choose a tape to remove its plan';
+    removalPrompt.hidden = !removal;
+    removalLabel.textContent = removal ? `Remove ${loadedPlan.label} and its sessions?` : '';
     let proposed = null; if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
     const reading = proposed?.ok ? proposed.projection : current.projection;
@@ -561,6 +622,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     else if (action === 'add-delay') addDelay();
     else if (action === 'move-delayed') moveDelayedSessions();
     else if (action === 'remove') removeSelected();
+    else if (action === 'remove-plan' && loadedPlanId) {
+      removal = { id: loadedPlanId, projection: studio.read() }; render(); cancelRemoval.focus({ preventScroll: true });
+    }
+    else if (action === 'confirm-plan-removal') removeLoadedPlan();
+    else if (action === 'cancel-plan-removal') { removal = null; render(); removePlan.focus({ preventScroll: true }); }
     else if (action === 'person-settings') navigate({ kind: 'person', id: selected.id });
     else if (action === 'chapter') navigate({ kind: 'chapter', id: control.dataset.scoreChapter });
     else if (action === 'example') {

@@ -55,8 +55,10 @@ superseding its accepted-then-editing double notification. Cadence reuses the
 mounted rack for an identical projection and rendered view state; local caption
 transitions explicitly invalidate that reuse. The mounted Add session regression
 distinguishes two root refreshes from one while retaining earlier placements,
-focus and Undo. Current interaction latency remains unmeasured. Continue with
-#902, then #903; CSS can proceed independently.
+focus and Undo. Current interaction latency remains unmeasured. The current #906
+pass addresses cassette meaning, scoped creation and empty-library recovery.
+Performance refinements, including #902 and #903, remain queued for a later cue;
+promotion to main retains its separate human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
 primary route. #641 and #673 retain their frozen measurements; the earlier
@@ -75,8 +77,12 @@ Its blocky angled artwork and size stay intact while the surrounding controls ar
 more compact. The desktop scroll area now accommodates 80rem of cassettes,
 superseding its four-cassette-height limit. At phone width the shelf becomes a horizontal strip. A cassette
 selects its plan and filters the board/tracks; it closes the detail receiver.
-All plans returns from this filter. Period selection remains independent, with a
-visible selected sprint/quarter and Plan overview return inside the rack.
+The initial view loads the first available cassette, Pilot decision review in the
+showcase, with detail closed. An empty library begins unselected. All plans is the
+explicit return from the cassette filter. This #906 convenience default supersedes
+the initially unfiltered overview; subsequent All plans selection remains the
+visitor's choice. Period selection stays independent, with a visible selected
+sprint/quarter and Plan overview return inside the rack.
 
 The composition reads in this order: period board, optional compact working area,
 session tracks, then small People and Stages routes. An existing clip opens the
@@ -91,27 +97,39 @@ named module with large stateful pads beside Participants. Each radio sits at
 the top left of its pad, beside the label and a short explanation. Phone layouts stack
 these modules while preserving the Hours/Minutes pair.
 
-Existing-plan track cells expose a plus that appends an accepted working session
-in the chosen period or subdivision. Count and complete placements enter one
-canonical command, so earlier sessions keep their identity and location. Empty
-periods remain available even when a cassette is loaded. Each week/month has
-a creation area across the available cell width. Accessible names identify the
-plan and destination; fine-pointer hover and keyboard focus reveal a ghosted
-plus while touch keeps it visible.
+One cassette represents a repeatable activity plan; its sessions are occurrences.
+In a loaded cassette, both the period lane's Add session and a track-cell plus
+append one accepted occurrence in that destination. Count and complete placements
+enter one canonical command, retaining the loaded cassette and earlier placements.
+Empty periods remain available. Stages, handoffs, decisions and delays follow the
+loaded plan's relationships so the scoped board describes that plan.
 
-Empty period-lane space and the sequencer's New plan row create distinct work
-records with editing closed. Ordinary creation names follow **New {item} N**,
-using the first available name in that collection. Selecting the new record
-opens its canonical editor. The shared `rack-creation-controls.mjs` factory supplies a native button, an
-explicit accessible name, and a decorative plus. Each receiving controller keeps
-its own record, occurrence or contribution operation. Fine-pointer hover and keyboard focus expose the
-lane's plus; touch keeps it visible. Those additions
-retain All plans so every earlier clip stays visible. Shelf New plan deliberately
-loads the newly created cassette. This resolves the reported apparent replacement
-on repeated additions: accepted identities and placements were retained, while
-automatic cassette filtering hid previous clips. Add sprint/quarter retains its
-separate accepted horizon operation. A selected period can retain its Sprint or
-Quarter name while a short caption replaces its derived stage summary. Clearing
+In All plans, the lane explicitly offers New plan; it and the sequencer's New plan
+row create separate work records while retaining the complete arrangement. Shelf
+New plan deliberately creates and loads a cassette. Ordinary creation uses the
+first available **New {item} N** name with editing closed; selecting the record
+opens its canonical editor. The shared `rack-creation-controls.mjs` factory retains
+native targets and accessible names. Week/month creation areas span their track
+cells; pointer hover and keyboard focus reveal the plus, while touch keeps it
+visible.
+
+**Supersession (#906):** the earlier unqualified rule that every period-lane
+addition creates separate work now yields to the visible scope: loaded Add session
+repeats that plan; All plans New plan creates another. This preserves both identity
+and the visitor's selected cassette. The transport now holds Remove plan and its
+compact named confirmation. Canonical removal clears dependent links in one edit,
+and the stable amp Undo restores the arrangement.
+
+The empty library replaces the empty board with a cobalt shared reel and a diagram
+preview. Plan, Design, Test, Build and Deploy select populated activity sets;
+turning the reel only previews. Load accepts the chosen set as one Undo entry,
+retaining existing people, teams, horizon and other chapter state. Create a plan
+keeps the canonical creation path available. Missing people or teams route through
+that guided path; the starter route leaves the retained plan intact and explains
+what to create. The local session receiver remains available for that route.
+
+Add sprint/quarter retains its separate accepted horizon operation. A selected
+period can retain its Sprint or Quarter name while a short caption replaces its derived stage summary. Clearing
 the caption restores that summary. Captions travel with the plan and Undo.
 A small underlined Edit now sits beside the displayed caption, superseding the
 large Edit label disclosure. The fixed Sprint/Quarter identity remains visible
@@ -582,7 +600,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | One add target at the start of a period cell | Named week/month creation areas use the full cell width and append without moving earlier sessions. |
 | Adding a record immediately opens its editor | #831 creates a uniquely named stub in place; selecting its representation opens editing. |
 | Every period caption is derived from stages | A short optional caption overrides the summary while retaining the Sprint/Quarter heading; clearing restores derivation. |
-| Every period addition loads the newest cassette | Lane/track New plan additions keep All plans visible; shelf New plan deliberately loads the new cassette. |
+| Every period-lane addition creates separate work | #906 makes loaded Add session repeat the selected plan; All plans New plan creates separate work and retains that overview. Shelf New plan loads its new cassette. |
 | Apply appears only below the form | Shared top Apply beside Close delegates to the canonical bottom action, including validation and focus. |
 | New handoff opens a creation form | A default relationship appears in place; selecting it opens endpoints and follow-on operations. |
 | Shared-session cells reopen the complete duration form above the matrix | #832 gives them local People/Handoffs relationship views and a compact row receiver. |

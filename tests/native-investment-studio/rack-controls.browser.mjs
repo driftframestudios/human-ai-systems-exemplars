@@ -58,6 +58,7 @@ async function open(t, engine, width, full = false, touch = false) {
     const studio = createStudio(createShowcasePlan());
     window.rackFixture = { studio, controller: mountCoordinationPanel(element, { studio }), editing: createDraftCoordinator(studio) };
   });
+  await horizon(page).getByRole('button', { name: 'All plans', exact: true }).click();
   return page;
 }
 async function receiverReading(page, selectedId, expanded) {
@@ -816,7 +817,7 @@ for (const engine of names) for (const width of [390, 1440]) {
       history:window.rackFixture.studio.readHistory().undoCount }));
     const before = await read(), original = await bytes(page);
     const lane = horizon(page).locator('[data-cadence-period="period-2"]');
-    const add = lane.getByRole('button', { name:'Add a session in Sprint 2', exact:true });
+    const add = lane.getByRole('button', { name:'Add a new plan in Sprint 2', exact:true });
     await add.click();
     const first = await read(), session = first.state.work.find(row => !before.state.work.some(old => old.id === row.id));
     assert.equal(session.label, 'New session 1'); assert.equal(first.history, before.history + 1);

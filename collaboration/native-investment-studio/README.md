@@ -25,15 +25,26 @@ illustrative state is separate from the Showcase's canonical plan.
 Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
 compact horizontal strip.
-A cassette loads a plan with detail closed. Existing clips open local editing;
-a plus in that plan's track adds another session while retaining earlier placements.
-Period-lane creation and the New plan row create separate records and keep All
-plans visible. New records use unique names such as **New session 1** and stay
-closed until selected. Week/month creation areas fill each track cell; pointer
-hover and keyboard focus reveal the plus, while touch keeps it visible. A shared
+Each cassette is one repeatable activity plan; its sessions are occurrences of
+that activity. The initial view loads the first available cassette—**Pilot decision
+review** in the showcase—with detail closed. An empty library starts unselected.
+Loading a cassette filters the board, tracks and relationship markers. **Add session** in a loaded lane or track appends an occurrence
+and retains the loaded cassette and earlier placements. In **All plans**, lane
+**New plan** and the sequencer's New plan row create separate records while keeping
+the whole arrangement visible. Shelf **New plan** creates and loads a cassette.
+New records have unique names and stay closed until selected. The selected period
+and **Plan overview** return remain visible. The transport's compact **Remove plan**
+confirmation names the cassette; amp Undo restores the complete accepted edit.
+
+An empty library offers a cobalt reel with **Plan**, **Design**, **Test**, **Build**
+and **Deploy** sets beside a preview diagram. Turning the reel changes the preview;
+**Load these plans** accepts the chosen set with one Undo step, retaining existing people,
+teams and the horizon. **Create a plan** keeps the canonical creation route available,
+including its guided people/team setup when those prerequisites are missing.
+Week/month creation areas fill each track cell; pointer hover and keyboard focus
+reveal the plus, while touch keeps it visible. The shared
 `rack-creation-controls.mjs` factory owns these native targets across period,
-participation and contribution racks; each controller retains its creation meaning. The
-selected period and Plan overview return remain visible.
+participation and contribution racks; each controller retains its creation meaning.
 Team planning follows with its arrangement reel and delivery board. Each lane
 can add a team or handoff in place through two full-width ghost actions at its
 bottom. Both labels remain visible for pointer, keyboard and touch visitors. Team name, membership and order update directly
@@ -188,14 +199,18 @@ meaning and leave the accepted work price intact. **Compare a change** and
 
 ## Try the experience
 
-1. Load a cassette, then open a sprint or quarter. **All plans** removes the plan
-   filter; **Plan overview** returns from the selected period.
+1. Start with the preloaded **Pilot decision review**, or load another cassette,
+   then open a sprint or quarter. **All plans** explicitly returns to the complete
+   arrangement; **Plan overview** returns from the selected period.
 2. Select a session clip to adjust its duration, people or placement. Apply accepts
    the proposal; Cancel restores accepted values. Close retains unfinished work.
-3. Use a track's plus to add a session to that plan. A period-lane creation target
-   or the New plan row adds separate work; shelf New plan also loads that cassette.
-   These additions accept directly with editing closed; the stable amp **Undo**
-   recovers them. The small **Edit** beside a period caption opens its local field;
+3. Use **Add session** in a loaded lane or track to repeat that plan. Use
+   **New plan** in All plans to add separate work; shelf New plan also loads it.
+   These additions accept directly with editing closed. **Remove plan** in the
+   transport asks for a compact confirmation; the stable amp **Undo** recovers it.
+   When the shelf is empty, turn the starter reel, inspect its diagram and load a
+   set, or choose **Create a plan**. The small **Edit** beside a period caption
+   opens its local field;
    Save label updates that caption while keeping the Sprint/Quarter heading.
    A refused save keeps your text for retry. The live example includes a paused
    follow-up.
@@ -219,7 +234,7 @@ meaning and leave the accepted work price intact. **Compare a change** and
    together in a saved file.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
-Known people may participate across teams. Removing a session clears its supporting
+Known people may participate across teams. Removing a plan clears its supporting
 links and dependent timing relationships; amp Undo restores the whole change.
 Rates and example arrangements help a visitor explore relationships; people doing real work retain authority over
 commitments and findings.
@@ -231,8 +246,8 @@ commitments and findings.
 | Load a plan or investment grouping | Preserved cassette/deck face with a selected outline |
 | Adjust a financial comparison | Connected reels and quantity controls update the loaded deck; one continuous dial gesture produces one Undo step |
 | Inspect existing work | Named pad or track key; selected/open state follows the live receiver |
-| Add another session to a plan | Plus target in its track cell; keeps earlier placements and the current scope |
-| Create separate work in a period | Lane creation or New plan row; the board keeps all records visible |
+| Add another session to a plan | Add session in its loaded lane or track cell; keeps the cassette, earlier placements and period scope |
+| Create separate work in a period | Explicit New plan in All plans; the board keeps all records visible |
 | Add a different scope | Explicit New plan or Add sprint/quarter |
 | Add a person, team or contribution in People | Empty-slot plus accepts a useful record, closed until selected; pointer hover or keyboard focus reveals it, and touch keeps it visible |
 | Add a supporting person, team or session in Abilities | Creation accepts the record; Apply accepts its assignment to the current proposal |
@@ -243,7 +258,7 @@ commitments and findings.
 | Edit a person's name, rate or funded time | Compact canonical form retains the typed draft until Apply; Coordination uses the same form |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
-| Remove a named object | Muted rose control; session removal clears its links in one recoverable edit |
+| Remove a named object | Muted rose control; the loaded plan has a compact transport confirmation and one recoverable edit |
 | Undo accepted changes | Stable native amp control; cassette shelves retain their selection role |
 
 The [control research](rack-control-research.md) explains this hierarchy and its
@@ -335,8 +350,9 @@ The #901 implementation settles accepted score edits locally before one root
 notification. Cadence retains its rack DOM when the exact projection, scope and
 selection are unchanged; caption editing has its own redraw boundary. Creation,
 focus, scope and Undo remain covered by the focused score/browser checks.
-Continue JavaScript work with #902, then #903; CSS consolidation can proceed
-independently. Reduced refresh work is observed directly; visitor latency still
+The current #906 pass clarifies cassette creation, repetition and empty-library
+recovery. Performance refinements, including #902 and #903, remain queued for a
+later cue. Reduced refresh work is observed directly; visitor latency still
 needs a matched measurement before a speed claim. Earlier stress
 studies remain historical evidence; the accepted visual contracts and existing
 accounting behavior remain preservation boundaries. Work receives review on
@@ -354,6 +370,7 @@ accounting behavior remain preservation boundaries. Work receives review on
 | Shared participation and support links | [shared-session-rack.mjs](shared-session-rack.mjs) |
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
+| Empty plan library and starter sets | [plan-library-empty.mjs](plan-library-empty.mjs), [coordination-starters.mjs](coordination-starters.mjs) |
 | Plan cassette presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
 | Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
 | Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
