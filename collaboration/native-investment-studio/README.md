@@ -371,12 +371,13 @@ and [experience journal](experience-journal.md#current-working-contract) explain
 those decisions and their supersessions.
 
 [#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900)
-retires the former elapsed-minute timeline and agenda styles. The current period
-board, sequencer, local editors and report data retain their source owners.
-Shared duration rules and exact duplicate declarations remain separate focused
-CSS reviews. The source-owner map below and
+retires the former elapsed-minute timeline and agenda styles and consolidates
+shared duration styling in one instrument block. The current period board,
+sequencer, chapter layouts and alternate-media rules retain their source owners.
+Exact duplicate declarations remain a separate focused CSS review. The source-owner
+map below and
 [cadence ownership route](implementation-reference.md#sprint-and-quarter-coordination)
-lead to the live composition; the reviewed PR carries the browser comparison.
+lead to the live composition; each receiving PR carries its fitting comparison.
 
 Reduced refresh and preparation work are observed directly; a visitor-latency
 claim requires a matched measurement. Earlier stress studies remain historical
@@ -396,7 +397,7 @@ await their separate human cues.
 | Team arrangement and direct team editing | [connection-template-controller.mjs](connection-template-controller.mjs), [delivery-board.mjs](delivery-board.mjs) |
 | Shared participation and support links | [shared-session-rack.mjs](shared-session-rack.mjs) |
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |
-| Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
+| Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [shared instrument styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Empty plan library and starter sets | [plan-library-empty.mjs](plan-library-empty.mjs), [coordination-starters.mjs](coordination-starters.mjs) |
 | Plan cassette presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
 | Investment shelf, editor lifetime and shared-plan actions | [investment-workbench.mjs](investment-workbench.mjs) |

@@ -180,6 +180,14 @@ illustrative state supplies values. One selected tape uses the same mounted
 controls while its people and placement change. The module has no independent
 production acceptance or pricing owner.
 
+The Showcase's [shared instrument stylesheet](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css)
+owns one canonical duration block for the Session editor and Change/Quality
+supporting-session controls. #900 consolidates the earlier base/specimen split,
+preserving live layout, numeric typography, feedback visibility and the approved
+geometry. Chapter styles retain outer placement, repetition and alternate-media
+rules; the study retains its self-contained reference styling. This source
+consolidation preserves the visual contract above.
+
 System reduced motion removes animation and transition. Forced colors hides the
 decorated dials in this study while exact fields and circular steps remain
 available. Its `.2s` deck unfurl is a receiving-context effect, separate from the
