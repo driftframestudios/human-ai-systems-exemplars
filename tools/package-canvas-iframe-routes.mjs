@@ -12,8 +12,10 @@ import {
 } from "./attribution-contract.mjs";
 import {
   assertRegularFileWithin,
+  iframeFaviconHref,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeFavicon,
   projectIframeExitLinks,
   scanPackageClosure,
   sha256,
@@ -602,7 +604,7 @@ export function deriveCanvasProjection(html, route) {
     assertCanvasPublicAttribution(projected, route, 0);
   }
   const exitProjection = projectIframeExitLinks(projected);
-  projected = exitProjection.html;
+  projected = projectIframeFavicon(exitProjection.html);
   rewriteReceipts.push({
     kind: "iframe_exit_behavior",
     exit_links: exitProjection.exit_links,
@@ -774,7 +776,11 @@ export async function createCanvasPackagePlan(options = {}) {
       projection.html,
       packageReadings,
       `Canvas route ${route.id}`,
-      { scanMarkupContextsOnly: true, scanStyleContextsOnly: true },
+      {
+        allowedOutsideResources: new Set([iframeFaviconHref]),
+        scanMarkupContextsOnly: true,
+        scanStyleContextsOnly: true,
+      },
     );
     routeReadings.push({
       route,
@@ -854,6 +860,7 @@ export async function createCanvasPackagePlan(options = {}) {
         ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: outputFiles.size + 1,
+      favicon_href: iframeFaviconHref,
       live_cloudflare_mutation: false,
       closure_observation: "static_resource_graph",
       browser_request_observation_required: true,

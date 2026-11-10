@@ -14,9 +14,11 @@ import { fileURLToPath } from "node:url";
 import {
   assertRegularFile,
   assertRegularFileWithin,
+  iframeFaviconHref,
   listRegularFiles,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeFavicon,
   projectIframeExitLinks,
   scanHtmlClosure,
   scanPackageClosure,
@@ -989,7 +991,7 @@ export async function createPackagePlan(options = {}) {
           runtime_adapter: false,
         }
       : projectIframeExitLinks(navigationProjection.html);
-    const projectionText = exitProjection.html;
+    const projectionText = projectIframeFavicon(exitProjection.html);
     const projectionBytes = projectionText === sourceText
       ? sourceBytes
       : Buffer.from(projectionText, "utf8");
@@ -1047,7 +1049,12 @@ export async function createPackagePlan(options = {}) {
         sha256: sha256(packageBytes),
       });
     }
-    const closure = scanPackageClosure(projectionText, packageReadings, `Route ${route.id}`);
+    const closure = scanPackageClosure(
+      projectionText,
+      packageReadings,
+      `Route ${route.id}`,
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
+    );
 
     routeReadings.push({
       route,
@@ -1154,6 +1161,7 @@ export async function createPackagePlan(options = {}) {
         ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: generatedFileCount,
+      favicon_href: iframeFaviconHref,
       compatibility_aliases_generated: false,
       live_cloudflare_mutation: false,
       closure_observation: "static_resource_graph",
