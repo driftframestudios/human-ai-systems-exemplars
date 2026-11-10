@@ -34,8 +34,8 @@ board and sequencer with discovery, bounded AI work, user testing and recovery.
 Named handoffs connect source/context boundaries, receiving teams and observed
 task outcomes. Choosing an example replaces the complete plan in place through
 the existing accepted-state owner; amp Undo restores the visitor's prior plan.
-The example controls retain the ordinary hard-shadow action treatment outside
-the rack, leaving cassette selection and period drill-down unchanged.
+The example controls use canvas-paper faces with the ordinary hard-shadow action
+treatment outside the rack, leaving cassette selection and period drill-down unchanged.
 
 | Reading | Columns and pads | Selection meaning |
 | --- | --- | --- |

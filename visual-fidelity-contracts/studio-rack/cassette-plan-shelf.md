@@ -73,8 +73,8 @@ message; its borrowed creation receiver remains usable inside the rack.
 Artwork, focus targets, stationary shelf, narrow horizontal orientation and hover
 motion retain the exact specimen.
 
-**AI Enablement** and **AI Experience** join the two horizon examples as standard
-hard-shadow actions outside the rack. Each loads an authored four-sprint arrangement
+**AI Enablement** and **AI Experience** join the two horizon examples as subtle
+canvas-paper actions with the existing hard shadow outside the rack. Each loads an authored four-sprint arrangement
 with five editable tapes, connected handoffs and a human scope decision. Their
 canonical preset factory owns the people, purpose and working sessions; one amp
 Undo restores the prior arrangement. These complete examples and the empty-library

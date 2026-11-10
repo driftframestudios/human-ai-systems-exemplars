@@ -86,7 +86,10 @@ determine active work; custom plans receive a current-workflow invitation.
 The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
 local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
 vision. #944 adds the AI Enablement and AI Experience examples through ordinary
-plan records and the existing accepted replacement/Undo owner. Existing #874,
+plan records and the existing accepted replacement/Undo owner. The example buttons
+use canvas-paper faces while retaining their raised action treatment.
+**Supersession:** this quieter face replaces the teal acceptance color on those
+example choices; Apply controls retain their existing signal color. Existing #874,
 #875 and #882 keep their manual, retention and
 precision-control boundaries. This planning route supersedes a chapter-wide
 redesign; each receiver earns a focused PR.
