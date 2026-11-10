@@ -380,7 +380,7 @@ for (const engine of names) {
   test(`${engine}: one coordination transaction preserves unfinished input and independently priced accepted amounts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await assertAmount(page, '$1,200.00');
-    await expect(settingsSummary(page)).toHaveText('Session settings · Weekly working session');
+    await expect(settingsSummary(page)).toHaveText('Plan defaults · Weekly working session');
     await begin(page);
     await expect(input(page, 'hoursPerSession')).toHaveValue('0');
     await expect(input(page)).toHaveValue('30');
@@ -396,7 +396,7 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
 
     const trace = panel(page).locator('[data-native-trace]');
-    await expect(panel(page).locator('[data-native-effort]')).toHaveText('4 people × 1 h per session × 6 working sessions = 24 h of participant effort.');
+    await expect(panel(page).locator('[data-native-effort]')).toHaveText('6 working sessions · 24 h of participant effort.');
     await panel(page).locator('[data-native-chapter="investment"]').click();
     await expect(trace.locator('summary')).toHaveText('Whole-plan cost breakdown');
     await trace.locator('summary').click();

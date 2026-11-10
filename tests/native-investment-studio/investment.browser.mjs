@@ -623,7 +623,7 @@ for (const engine of names) {
     }, { controllerPath, editingPath });
     await chapter(page, 'investment').click();
     assert.deepEqual(await investment(page).locator('[data-investment-preset] option').evaluateAll(options => options.map(option => option.value)),
-      ['service-request-pilot', 'service-request-rollout', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
+      ['service-request-pilot', 'service-request-rollout', 'ai-enablement', 'ai-experience', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
     await expect(total(page)).toHaveText('$1,275.00');
     assert.equal(await bytes(page), accepted);
     assert.equal(await page.evaluate(() => window.investmentFixture.studio.read() === window.investmentFixture.retained), true);

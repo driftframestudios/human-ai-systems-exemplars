@@ -491,13 +491,18 @@ for (const engine of names) {
     await expect(key).toHaveAttribute('aria-expanded', 'false');
     await key.click();
     await expect(receiver.locator('[name="ratePerHour"]')).toHaveValue('unfinished');
-    const membership = people(page).locator(`[data-people-work="${work.id}"][data-people-participant="${person.id}"]`);
+    const membership = people(page).locator(`.studio-people-arranger [data-people-work="${work.id}"][data-people-participant="${person.id}"]`);
+    const mirroredMembership = receiver.locator(`.studio-person-spread__table [data-people-work="${work.id}"][data-people-participant="${person.id}"]`);
     await membership.check();
     assert.deepEqual((await state(page)).work.find(row => row.id === work.id).personIds, [...work.personIds, person.id]);
+    await expect(mirroredMembership).toBeChecked();
     await expect(membership).toBeFocused();
-    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.read().parked.find(row => row.kind === 'person').raw.ratePerHour), 'unfinished');
+    await expect(receiver.locator('[name="ratePerHour"]')).toHaveValue('unfinished');
+    assert.equal(await page.evaluate(() => window.responsibilityFixture.editing.person.read().draft.raw.ratePerHour), 'unfinished');
     await root(page).locator('[data-studio-undo]').click();
     assert.deepEqual(await state(page), original);
+    await expect(membership).not.toBeChecked();
+    await expect(mirroredMembership).not.toBeChecked();
     await people(page).getByRole('button', { name: 'Add session', exact: true }).click();
     const added = (await state(page)).work.at(-1);
     assert.equal((await state(page)).work.length, original.work.length + 1);
@@ -595,7 +600,10 @@ for (const engine of names) {
       assert.equal(await caret(), closedCaret, 'the caret returns with the closed team receiver');
       const arranger = people(page).locator('.studio-people-arranger');
       const cells = await arranger.locator('tbody tr').first().locator(':scope > :is(th,td)').evaluateAll(elements => elements.map(element => element.getBoundingClientRect().width));
-      assert.ok(Math.max(...cells) - Math.min(...cells) < 1, 'person and working-session columns share one comfortable width');
+      assert.equal(cells.length, 5, 'the fixture shows one person column and four working-session columns');
+      const rem = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+      assert.ok(Math.abs(cells[0] - 15 * rem) <= 1, 'the person column preserves its readable 15rem width');
+      assert.ok(Math.max(...cells.slice(1)) - Math.min(...cells.slice(1)) < 1, 'working-session columns share the remaining width equally');
       await expect(arranger.locator('.studio-people-arranger__value').first()).toHaveText('$120/hr');
       await expect(arranger.locator('.studio-people-arranger__value').nth(1)).toHaveText('2 h available / 4 h funded');
 
