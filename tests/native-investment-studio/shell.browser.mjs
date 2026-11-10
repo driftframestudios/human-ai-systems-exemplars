@@ -98,6 +98,42 @@ async function selected(page, name) {
 }
 
 for (const engine of names) {
+  test(`${engine}: amp groups keep history, motion and chapter navigation readable`, { timeout: 60000 }, async t => {
+    for (const width of [390, 831, 832, 1440]) {
+      const page = await open(t, engine, { complete: true, viewport: { width, height: 1000 } });
+      const amp = root(page).locator('.native-coordination__amp');
+      await expect(amp.getByRole('group', { name: 'Animation speed', exact: true })).toBeVisible();
+      await expect(amp.locator('[data-native-amp-history] [data-studio-undo]')).toHaveCount(1);
+      const layout = await amp.evaluate(node => {
+        const tabs = node.querySelector('[data-native-chapter-list]');
+        const tools = node.querySelector('[data-native-amp-tools]');
+        const funding = node.querySelector('.native-coordination__funding');
+        const amount = node.querySelector('[data-native-total]');
+        const undo = node.querySelector('[data-studio-undo]');
+        const buttons = [...node.querySelectorAll('[data-native-amp-tools] button, .native-motion__choices label')];
+        return {
+          navigationLast: node.lastElementChild === tabs,
+          tabsBelow: tabs.getBoundingClientRect().top >= tools.getBoundingClientRect().bottom,
+          moneyGrouped: amount.parentElement.contains(funding),
+          undoCue: getComputedStyle(undo, '::before').content,
+          targets: buttons.map(button => { const b = button.getBoundingClientRect(); return { left: b.left, right: b.right, height: b.height }; }),
+        };
+      });
+      assert.equal(layout.navigationLast, true); assert.equal(layout.tabsBelow, true); assert.equal(layout.moneyGrouped, true);
+      assert.ok(['none', 'normal'].includes(layout.undoCue), 'Undo is an action without a disclosure caret');
+      assert.ok(layout.targets.every(b => b.left >= 0 && b.right <= width && b.height >= 40), JSON.stringify(layout));
+      if (width === 390 || width === 1440) {
+        await amp.screenshot({ path: resolve(captures, `${engine}-amp-groups-${width}.png`) });
+        const vision = amp.locator('[data-amp-panel="purpose"]');
+        await vision.click(); await expect(amp.locator('[data-purpose-reading]')).toBeVisible();
+        await expect(vision).toHaveAttribute('aria-expanded', 'true');
+        await amp.screenshot({ path: resolve(captures, `${engine}-amp-vision-${width}.png`) });
+        await vision.click(); await expect(amp.locator('[data-purpose-reading]')).toBeHidden();
+        await amp.locator('[data-native-motion-choice="off"]').check();
+        await expect(root(page)).toHaveAttribute('data-native-motion', 'off');
+      }
+    }
+  });
   test(`${engine}: amp motion controls and shared reels preserve semantic selection across presentation modes`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, { reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
     const motion = mode => root(page).locator(`[data-native-motion-choice="${mode}"]`);
