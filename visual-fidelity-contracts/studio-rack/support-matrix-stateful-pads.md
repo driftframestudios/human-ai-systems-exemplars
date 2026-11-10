@@ -1,11 +1,15 @@
 # Support Matrix & Stateful Pads
 
 Compare the work behind a plan through named rows, meaningful columns and pads
-that open the corresponding detail. People, sessions, support and observations
-keep distinct meanings even when they share a compact rack treatment.
+that change a named relationship or open its corresponding detail. People,
+sessions, support and observations keep distinct meanings even when they share a
+compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
-dev receiving contract revised 9 November 2026 for
+dev receiving contract revised 10 November 2026 for direct contribution/session
+checkboxes in
+[#947](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/947),
+retaining the matrix readings from
 [#890](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/890)
 and [#891](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/891),
 with the local participation preview and laptop fit refined by
@@ -21,7 +25,7 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 | Surface | Comparison and interaction |
 | --- | --- |
 | Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one dark support rack at the relevant section. Its pale editorial overview sits below the local header; native choice pads fill compact paired modules. |
-| People | Teams are parallel editorial lanes in one horizontal scroll row, with full-width parent keys and bottom movement/removal controls. A recessed people-by-session arranger combines participation with each person's rates, available time, saved edits and local settings. The contribution/session matrix opens Work and Receiver and decision controls while preserving stored responsibility values. |
+| People | Teams are parallel editorial lanes in one horizontal scroll row, with full-width parent keys and bottom movement/removal controls. A recessed people-by-session arranger combines participation with each person's rates, available time, saved edits and local settings. Contribution/session checkboxes change exact support relationships directly; contribution row headings toggle local Work and Receiver and decision controls. |
 | Delivery overview | Teams, work and handoffs share delivery-phase lanes. Lane creation keeps a new team or handoff in its local phase while Shared sessions remains an independent working area. |
 | Shared sessions | People and Handoffs tabs select the relationship shown by a checkbox matrix. Rows are accepted sessions; columns are people or handoffs. A row opens compact host-team and participant-order controls. Handoff headings open the canonical editor inside this module. |
 | Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
@@ -41,7 +45,7 @@ named scope; moving a pad preserves its identity and relationship meaning.
 | Included in a proposal | Native checkbox or named toggle expresses inclusion. The proposal's Apply boundary remains clear. |
 | Included in accepted work | The accepted projection supplies the state. Team planning and People team membership changes update it directly. |
 | Person participating | The named person/session checkbox accepts participation directly. The final included person stays visibly selected and disabled, with a concise instruction to add another person first. |
-| Linked support | Shared sessions · Handoffs and the selected People contribution use native checkboxes to accept session support directly. Abilities retains its support proposal boundary. |
+| Linked support | Shared sessions · Handoffs and the People contribution/session matrix use native checkboxes to accept exact support relationships directly. Abilities retains its support proposal boundary. |
 | Support to choose | Concise empty-state wording opens the corresponding local controls. |
 | Outside a card's definition | Not specified preserves the authored definition's scope. |
 | Recorded observation | Reviewer, context and revision distinguish the observation from an authored example. |
@@ -178,8 +182,18 @@ names retain the state independently of color and pattern. Paused sessions retai
 their planned time and money in these readings.
 
 The contribution matrix answers a different question: which work supports these
-contributions? Its rollup uses the union of linked work IDs so repeated support
-counts once. **Supporting time** and **Known work value** use the same label/value/
+contributions? Each native checkbox names its contribution and session and accepts
+that pair's link or unlink directly, retaining focus with amp Undo available.
+The native checkbox keeps the shared tactile switch skin and its full housing;
+the thumb stays enclosed at both resting and selected ends. Its selected position
+anchors to the housing's inner end so the same treatment also fits narrower
+switches. The pad footprint, linked face and paused treatment remain stable.
+These relation controls keep the working view in place; a row heading toggles
+the contribution's local editor, with its caret following the visible receiver
+and the shared smooth reveal on opening. Pending raw entries stay recoverable through their existing
+draft owner when a matrix choice changes the accepted base. Its rollup uses the
+union of linked work IDs so repeated support counts once. **Supporting time** and
+**Known work value** use the same label/value/
 context hierarchy. Session footers expose support and planned time; linked,
 paused and available symbols plus receiver/decision markers have a nearby legend.
 Quiet **Pause session** / **Resume session** actions live in Supporting effort
@@ -358,6 +372,12 @@ operation check establishes that journey; visual inspection and human review
 supply the composition and interpretation observations.
 
 ## Supersession and next boundary
+
+#947 replaces contribution/session pads that navigated to the same contribution
+with direct native checkbox relationships. Row headings own local inspection;
+Abilities support cells retain their distinct section-navigation meaning.
+Accepted links, shared Undo, draft recovery and the existing pad aesthetic retain
+their owners.
 
 #864 supersedes the separate People roster and passive session-participation
 reading with one direct arranger. Its stronger team parents and compact local

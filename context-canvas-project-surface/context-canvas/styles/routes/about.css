@@ -3090,7 +3090,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
     background: linear-gradient(#fffdf4, #e8dfc1); box-shadow: .08rem .08rem 0 #34493c;
 }
 .native-coordination input[type='checkbox']:checked { background: #007b70; border-color: #154c42; }
-.native-coordination input[type='checkbox']:checked::before { inset-inline-start: 1.12rem; }
+.native-coordination input[type='checkbox']:checked::before { inset-inline-start: auto; inset-inline-end: .12rem; }
 .native-coordination input[type='checkbox']:disabled { opacity: .55; cursor: default; }
 .native-coordination button.native-control--create {
     display: inline-flex; align-items: center; justify-content: center; gap: .5rem;

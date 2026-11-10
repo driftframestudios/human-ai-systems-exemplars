@@ -5,7 +5,10 @@ record and unfinished entries intact. One canonical editor owns each proposal;
 its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-dev receiving contract revised 10 November 2026 for local Abilities toggles in
+dev receiving contract revised 10 November 2026 for contribution inspection and
+direct support choices in
+[#947](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/947),
+retaining local Abilities toggles in
 [#937](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/937),
 retaining explicit edit targets from
 [#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915),
@@ -27,7 +30,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | New handoff accepts a relationship between available work records with editing closed. Selecting it opens From work, To work, optional Team connection, decisions, delays and removal. Apply accepts later field changes. |
-| People | Add person, team and contribution accept useful starting records with editing closed. Full-width team keys toggle compact local settings; movement/removal tools stay at each lane bottom. The people/session arranger keeps resource readings beside direct participation, with All people/current-person navigation into canonical settings. One selected-person mixing desk and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
+| People | Add person, team and contribution accept useful starting records with editing closed. Full-width team keys toggle compact local settings; movement/removal tools stay at each lane bottom. The people/session arranger keeps resource readings beside direct participation, with All people/current-person navigation into canonical settings. One selected-person mixing desk retains its canonical owners. Contribution row headings toggle the local Work / Receiver and decision pair; matrix checkboxes accept the exact contribution/session link directly. |
 | Abilities | Both support tables remain available. A catalogue key opens Outcome; a support cell opens its relevant section. Repeating the same record/section selection closes that editor, while a different section switches locally. The selected overview remains visible. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
 | Change | A component or action key opens one dark receiver with Support/Methods views. Its shared header names the selected component and owns local return, Apply and Close; session planning attaches to that working area. |
 | Quality & recovery | Check/support, assumptions, recovery and rehearsal details use compact local modules behind the primary instruments. The attached receiver shares the canonical Apply operation and retains unfinished entries when closed. |
@@ -104,6 +107,12 @@ and supporting sessions—enter shared history directly and keep the initiating
 control focused. Role pads keep their own visible state when acquiring an edit
 owner. The person's unfinished name, rate and funded time remain recoverable;
 role acceptance and person Apply retain their separate commands.
+Contribution matrix checkboxes retain their local view while changing support.
+When that acceptance advances a pending responsibility draft's base, its raw
+entries remain available through the existing parking and Review owner. Row
+headings alone toggle contribution inspection; their caret follows the visible
+editor. Opening uses the shared smooth reveal, and closing retains entries and
+returns focus locally without another scroll.
 Team planning name, membership and reorder changes also accept immediately.
 Session, person and handoff proposals, People team names and retained responsibility
 drafts keep their Apply, Cancel and Close routes. Invalid person entries stay
@@ -229,6 +238,11 @@ those operations and dimensions; human walkthrough establishes whether the
 composition and return cues feel clear.
 
 ## Supersession and next boundary
+
+#947 replaces contribution/session cells that opened one contribution editor
+with native checkboxes for the exact support relationship. Row headings retain
+local inspection and gain the shared opening reveal. Closing clears the caret;
+accepted support, retained drafts and amp Undo keep their existing owners.
 
 #937 replaces repeated Abilities selections that scrolled to an already-open
 editor with a record-and-section toggle. A catalogue key identifies Outcome;

@@ -126,16 +126,22 @@ participation remains labeled **Custom spread**. Recorded role and decision
 authority keep their explicit choices. Per-person fractional time remains separate
 future work in #798.
 
-The contribution matrix gives a second scope: its rollup counts distinct linked
-work once, even when several contributions share a session. Its **Supporting time**
-and **Known work value** readings name that scope. Supporting effort footers pair
+The contribution matrix gives a second scope: each native checkbox pad links or
+unlinks its exact contribution and session immediately, with amp Undo and local
+focus. Its rollup counts distinct linked work once, even when several
+contributions share a session. Its **Supporting time** and **Known work value**
+readings name that scope. Supporting effort footers pair
 their totals with quiet **Pause session** / **Resume session** actions. Each action
 changes the session throughout the plan, updates the whole column's paused
 treatment and retains its planned ledger values. The legend names linked support,
 the circled pause marker and responsibility.
-A contribution opens Work beside Receiver and decision, with those sections
-stacked at phone widths. Category, human receiver, decision owner and supporting
-session choices accept directly, as do People team membership and member order.
+A contribution's row heading toggles Work beside Receiver and decision, with
+those sections stacked at phone widths. Opening uses the shared smooth reveal;
+closing clears the caret and retains unfinished entries. Matrix choices keep
+the working view in place. An accepted support change preserves pending raw
+entries through the existing draft parking and Review route. Category, human
+receiver, decision owner and supporting session choices accept directly, as do
+People team membership and member order.
 Receiver and decision owner remain independent choices. Add a person from a
 contribution opens the canonical creation form inside that contribution's rack,
 beside its retained work at wide widths and stacked at phone widths. Its local
@@ -250,8 +256,8 @@ meaning and leave the accepted work price intact. **Compare a change** and
 5. In People, arrange team lanes or choose a person. Turn a role reel, refine a
    component or facet, and choose a Session spread preset to compare whole-session
    participation. These choices save directly with amp Undo. Apply accepts typed
-   name, rate and funded time. Choose a contribution to connect its work, receiver
-   and decision owner.
+   name, rate and funded time. Toggle contribution/session pads to connect work;
+   choose a contribution's row heading to edit its receiver and decision owner.
    Empty slots add records with editing closed, and amp Undo restores accepted
    changes. An Abilities support cell toggles its own local proposal controls;
    **Rename** there changes a shared person or team name without leaving the task.
