@@ -41,9 +41,31 @@ test('a directed diagram arrow joins its shaft and head in one closed contour', 
   assert.match(straight, /86 2\.5 L 86 7 L 100 0 L 86 -7 L 86 -2\.5 L /u);
   assert.equal((straight.match(/M /gu) ?? []).length, 1);
   assert.ok(straight.endsWith(' Z'));
-  const curved = diagramArrowPath({ start: [0, 0], control1: [0, 40], control2: [60, 100], end: [100, 100] });
-  assert.match(curved, /86 102\.5 L 86 107 L 100 100 L 86 93 L 86 97\.5 L /u,
-    'the final control point supplies the head direction, even when the endpoint is diagonally displaced');
+  const diagonal = diagramArrowPath({ start: [100, 100], end: [40, 20] });
+  assert.match(diagonal, /50\.4 29\.7 L 54 27 L 40 20 L 42\.8 35\.4 L 46\.4 32\.7 L /u,
+    'a reverse diagonal keeps the head aimed at its receiver');
+});
+
+test('tight Matrix bends and curved returns approach their head without folding forward across its base', () => {
+  const cases = [
+    { start: [650, 128], control1: [561, 128], control2: [631, 333], end: [590, 333] },
+    { start: [590, 357], control1: [679, 357], control2: [609, 152], end: [650, 152] },
+    { start: [447, 99], control1: [447, 161], control2: [87, 161], end: [87, 99] },
+  ];
+  for (const geometry of cases) {
+    const points = diagramArrowPath(geometry).slice(2, -2).split(' L ').map(pair => pair.split(' ').map(Number));
+    const neck = (points.length - 3) / 2;
+    const midpoint = (a, b) => a.map((value, axis) => (value + b[axis]) / 2);
+    const base = midpoint(points[neck], points[neck + 2]);
+    const previous = midpoint(points[neck - 2], points[neck + 4]);
+    const direction = geometry.end.map((value, axis) => value - base[axis]);
+    assert.deepEqual(points[neck + 1], geometry.end, 'the tip remains the exact receiving endpoint');
+    const shaftBase = midpoint(points[neck - 1], points[neck + 3]);
+    assert.ok(Math.hypot(...shaftBase.map((value, axis) => value - base[axis])) <= .001,
+      'shaft and head share their actual neck within the path’s three-decimal rounding');
+    assert.ok(previous.reduce((total, value, axis) => total + (value - base[axis]) * direction[axis], 0) < 0,
+      'the shaft approaches from behind the head, leaving its triangle uncut');
+  }
 });
 
 test('one accepted model preserves exact directed endpoints, human/work references and source-owned standing', () => {

@@ -47,7 +47,10 @@ Quality control **Review demand** and explains its required-check threshold.
 check-selection effect. Financial faders gain deck-owned accessible effect
 descriptions while values, proposals, projections and Undo retain their owners. #818 receives the full financial-deck
 workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
-compact cost comparison and shared diagram geometry in #895. Each feature uses
+compact cost comparison and shared diagram geometry in #895. #940 joins each
+arrowhead at its sampled curve cutoff, pointing toward the receiving endpoint.
+**Supersession:** this replaces the separate tangent-line head base that folded
+tight Matrix bends; node layout, palette and pointer targets retain their owners. Each feature uses
 its own focused reviewed delivery.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair

@@ -23,16 +23,24 @@ export function diagramArrowPath({ start, end, control1 = interpolate(start, end
   // Keep the shaft behind the head, including on short straight connections.
   let remaining = Math.min(headLength, samples.slice(1).reduce((length, sample, index) =>
     length + Math.hypot(...sample.location.map((value, axis) => value - samples[index].location[axis])), 0) / 2);
-  const actualHeadLength = remaining;
+  let base = end;
   while (samples.length > 1 && remaining > 0) {
     const endSample = samples.pop(), previous = samples.at(-1);
-    remaining -= Math.hypot(...endSample.location.map((value, axis) => value - previous.location[axis]));
+    const length = Math.hypot(...endSample.location.map((value, axis) => value - previous.location[axis]));
+    if (remaining <= length) {
+      base = interpolate(endSample.location, previous.location, remaining / length);
+      break;
+    }
+    remaining -= length;
   }
-  const base = end.map((value, axis) => value - endDirection[axis] * actualHeadLength);
-  samples.push({ location: base, direction: endDirection });
+  // The actual curve cutoff is the shared neck. Moving it to the terminal
+  // tangent folds tight bends back through the head; the cutoff-to-tip direction
+  // keeps both sides joined and still points at the receiving endpoint.
+  const headDirection = unit(base, end, endDirection);
+  samples.push({ location: base, direction: headDirection });
   const left = samples.map(sample => offset(sample.location, sample.direction, shaftWidth / 2));
   const right = samples.map(sample => offset(sample.location, sample.direction, -shaftWidth / 2)).reverse();
-  const outline = [...left, offset(base, endDirection, headWidth / 2), end,
-    offset(base, endDirection, -headWidth / 2), ...right];
+  const outline = [...left, offset(base, headDirection, headWidth / 2), end,
+    offset(base, headDirection, -headWidth / 2), ...right];
   return `M ${outline.map(point).join(' L ')} Z`;
 }

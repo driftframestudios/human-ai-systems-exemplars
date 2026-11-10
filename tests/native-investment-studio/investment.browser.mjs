@@ -1026,6 +1026,10 @@ for (const engine of names) test(`${engine}: domain portraits follow deck assump
   await view.getByRole('button', { name: 'Remove deck', exact: true }).click();
   await expect(view.locator('.investment-domain__diagram')).toBeVisible();
   await expect(view.locator('.investment-study__loaded-master')).toBeHidden();
+  for (const width of [1512, 390]) {
+    await page.setViewportSize({ width, height: 982 });
+    await view.locator('.investment-domain__diagram').screenshot({ path: resolve(captures, `${engine}-empty-domain-${width}.png`) });
+  }
   await view.getByRole('button', { name: 'Add capital choices', exact: false }).click();
   await expect(view.locator('.investment-domain__portrait')).toBeVisible();
   await expect(view.locator('.investment-study__loaded-master')).toBeVisible();

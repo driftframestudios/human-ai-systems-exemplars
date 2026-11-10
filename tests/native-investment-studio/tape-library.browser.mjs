@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
@@ -12,8 +12,10 @@ const engines = { chromium, firefox, webkit };
 const names = process.env.NATIVE_STUDIO_BROWSER ? [process.env.NATIVE_STUDIO_BROWSER] : Object.keys(engines);
 for (const name of names) assert.ok(Object.hasOwn(engines, name));
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
+const captures = resolve(import.meta.dirname, '../../.visual-runs/native-tape-library');
 let server, fixture;
 registerBrowserFixture(async own => {
+  await mkdir(captures, { recursive: true });
   fixture = createNativeAboutFixture(await readFile(resolve(import.meta.dirname, '../..' + route), 'utf8'));
   server = await own(startStaticServer());
   for (const name of names) browsers.set(name, await own(engines[name].launch()));
@@ -119,6 +121,7 @@ for (const engine of names) test(`${engine}: removing tapes preserves recovery a
       return { page: document.documentElement.scrollWidth, left: box.left, right: box.right };
     });
     assert.ok(bounds.page <= width + 1 && bounds.left >= 0 && bounds.right <= width + 1, JSON.stringify(bounds));
+    await starters.screenshot({ path: resolve(captures, `${engine}-empty-library-${width}.png`) });
   }
   await starters.getByRole('button', { name: 'Design', exact: true }).click();
   await expect(starters).toHaveAttribute('data-starter', 'design');
