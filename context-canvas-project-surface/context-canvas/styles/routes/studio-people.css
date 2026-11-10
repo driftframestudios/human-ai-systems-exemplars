@@ -304,18 +304,18 @@
  .native-coordination [data-assembly-configure][data-form='person.create'] .native-coordination__stepper button { background:ButtonFace; color:ButtonText; border-color:ButtonText; box-shadow:none; }
 }
 
-/* A contribution borrows the canonical creation form beside its retained work.
+/* Person creation replaces the Receiver half-rack beside retained Work.
    Sibling forms keep browser validation and draft ownership independent. */
-.native-coordination [data-responsibility-configure='contribution'][data-local-creation][open] { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:.65rem; }
-.native-coordination [data-responsibility-configure='contribution'][data-local-creation] > :is(summary,header,.native-coordination__recovery,[role='status']) { grid-column:1/-1; }
+.native-coordination [data-responsibility-configure='contribution'][data-local-creation] > .studio-contribution-body { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:.65rem; }
 .native-coordination [data-responsibility-configure='contribution'][data-local-creation] [data-responsibility-fields] { grid-template-columns:minmax(0,1fr); }
+.native-coordination [data-responsibility-configure='contribution'][data-local-creation] .studio-contribution-people { display:none; }
 .studio-contribution-creation { min-inline-size:0; padding:.5rem; container-type:inline-size; }
 .studio-contribution-creation[hidden] { display:none; }
 .studio-contribution-creation [data-assembly-configure][open] > summary { display:none; }
 .native-coordination .studio-contribution-creation [data-assembly-configure][data-form='person.create'] [data-assembly-person-fields] { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .native-coordination .studio-contribution-creation .studio-rate { grid-column:1/-1; }
 @media (max-width:48rem) {
- .native-coordination [data-responsibility-configure='contribution'][data-local-creation][open] { grid-template-columns:minmax(0,1fr); }
+ .native-coordination [data-responsibility-configure='contribution'][data-local-creation] > .studio-contribution-body { grid-template-columns:minmax(0,1fr); }
 }
 @media (forced-colors:active) {
  .native-coordination .studio-role-pad { background:Canvas; color:CanvasText; border-color:CanvasText; }

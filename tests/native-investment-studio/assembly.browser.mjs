@@ -124,6 +124,7 @@ for (const engine of names) {
     const creation = slot.locator('[data-assembly-configure]');
     await expect(contribution).toHaveAttribute('open', '');
     await expect(creation).toBeVisible();
+    await expect(contribution.locator('.studio-contribution-people')).toBeHidden();
     await expect(creation).toHaveAttribute('data-form', 'person.create');
     assert.equal(await slot.evaluate(node => Boolean(node.closest('form'))), false, 'local creation retains its own form boundary');
     await expect(root(page).locator('[data-assembly-configure]')).toHaveCount(1);
@@ -137,7 +138,8 @@ for (const engine of names) {
       await creation.scrollIntoViewIfNeeded(); await frames(page);
       const geometry = await creation.evaluate(node => {
         const box = node.getBoundingClientRect();
-        return { left: box.left, right: box.right, width: innerWidth,
+        const work = node.closest('[data-responsibility-configure]').querySelector('.studio-contribution-work').getBoundingClientRect();
+        return { left: box.left, right: box.right, top: box.top, width: innerWidth, work: { left: work.left, right: work.right, top: work.top, bottom: work.bottom },
           nestedForms: Boolean(node.querySelector('form form')),
           fields: [...node.querySelectorAll('input,select,button')].filter(control => control.getClientRects().length)
             .map(control => { const rect = control.getBoundingClientRect(); return { left: rect.left, right: rect.right }; }) };
@@ -145,10 +147,14 @@ for (const engine of names) {
       assert.equal(geometry.nestedForms, false);
       assert.ok(geometry.left >= 0 && geometry.right <= width + 1
         && geometry.fields.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
-      await creation.screenshot({ path: resolve(captures, `${engine}-contribution-add-person-${width}.png`) });
+      if (width === 1440) assert.ok(geometry.left > geometry.work.right && Math.abs(geometry.top - geometry.work.top) < 32,
+        `creation replaces Receiver beside Work in the same half-rack: ${JSON.stringify(geometry)}`);
+      else assert.ok(geometry.top >= geometry.work.bottom, 'phone creation follows retained Work');
+      await contribution.screenshot({ path: resolve(captures, `${engine}-contribution-add-person-${width}.png`) });
     }
     await creation.locator('[data-assembly-apply]').click();
     await expect(slot).toBeHidden();
+    await expect(contribution.locator('.studio-contribution-people')).toBeVisible();
     await expect(contribution).toHaveAttribute('open', '');
     const afterPerson = JSON.parse(await bytes(page)), added = afterPerson.people.find(person => person.label === name);
     assert.ok(added, 'person creation adds the requested record');
