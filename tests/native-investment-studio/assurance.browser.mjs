@@ -363,7 +363,9 @@ for (const engine of names) {
     await field(page, 'independentRate').fill('100.25');
     await panel(page).locator('[data-rate-step="10"]').focus(); await page.keyboard.press('ArrowRight');
     await expect(field(page, 'independentRate')).toHaveValue('110.25');
-    await expect(panel(page).locator('.native-quality-module--reading h5')).toHaveCSS('color', 'rgb(248, 241, 217)');
+    const reading = panel(page).locator('.native-quality-module--reading');
+    await expect(reading).toHaveCSS('background-color', 'rgb(233, 240, 255)');
+    await expect(reading.locator('h5')).toHaveCSS('color', 'rgb(33, 50, 82)');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1100 });
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
