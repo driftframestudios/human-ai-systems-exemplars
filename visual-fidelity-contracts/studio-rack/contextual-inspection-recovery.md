@@ -112,6 +112,18 @@ explains the local distinction between selection, creation and acceptance.
 
 ## Acceptance and recovery
 
+Saved edits identifies unfinished page-local entries. Its open tray states the
+reload/close boundary and points to Investment → Keep a plan. That file area
+states that Download current plan captures accepted records, while unfinished
+entries and Undo history stay in the page. Its file-input description gives the
+return sequence: open the download, preview it, then Use this plan. Preview and
+rejected input preserve the accepted plan; Undo recovers an accepted replacement.
+These concise cues use the existing tray/card type and colors. Accepted state,
+drafts, history and baseline retain their page-memory owners; a fresh page begins
+with the showcase (#875). A populated download/reload/restore browser journey
+establishes the file behavior. Human walkthrough remains the observation for
+whether visitors understand the retention boundary.
+
 Creation and later editing are separate accepted-state decisions. A new person,
 team, handoff or session enters shared history once with editing closed and a
 clear New {item} N label. Creation inside a prepared form keeps that parent

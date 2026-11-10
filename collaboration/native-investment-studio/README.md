@@ -298,7 +298,17 @@ meaning and leave the accepted work price intact. **Compare a change** and
 7. In Investment, load a financial deck and try its reels and money dials. Add
    another deck to explore an independent variation, or save a baseline through
    **Compare a change**. **Keep a plan** carries accepted work and deck settings
-   together in a saved file.
+   together through **Download current plan**. On a later visit, open that file,
+   review the preview and choose **Use this plan**. Undo restores the plan that
+   preceded the import.
+
+The accepted plan, unfinished **Saved edits**, baseline and Undo history stay in
+page memory until reload or close. Downloads contain the accepted plan only;
+Apply unfinished entries first to include them. A fresh visit starts with the
+showcase. File preview leaves the current plan intact until **Use this plan**,
+and a rejected file preserves it. The populated browser journey exercises edit,
+download, reload, preview, restoration and Undo; a visitor walkthrough separately
+establishes whether these cues make the lifetime clear.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
 Known people may participate across teams. Removing a plan clears its supporting

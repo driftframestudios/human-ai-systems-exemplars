@@ -213,6 +213,7 @@
           </details>
           <details class="native-coordination__saved" id="native-amp-saved" data-native-saved hidden>
             <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
+            <p>Unfinished edits last until you reload or close this page. Apply them before downloading in Investment → Keep a plan.</p>
             <ul data-native-saved-list></ul>
           </details>
           <details class="native-manual" id="native-amp-manual">
@@ -856,13 +857,15 @@
               </div>
               <div id="native-investment-deck-exchange" data-investment-deck-panel="exchange">
                 <section class="native-investment__card" aria-labelledby="native-exchange-title">
-                  <h4 id="native-exchange-title">Start from a plan</h4>
+                  <h4 id="native-exchange-title">Keep a plan</h4>
+                  <p id="native-plan-retention">Changes and Saved edits last until you reload or close this page. Download keeps the accepted plan; unfinished edits and Undo history stay here.</p>
                   <label for="native-preset">Starting plan</label>
                   <select id="native-preset" data-investment-preset></select>
                   <button type="button" data-investment-action="preset">Preview starting plan</button>
                   <label for="native-plan-file">Open a saved plan</label>
-                  <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json">
-                  <button type="button" data-investment-action="download">Download current plan</button>
+                  <p id="native-plan-restore">Open your downloaded file to preview it, then choose Use this plan.</p>
+                  <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json" aria-describedby="native-plan-restore">
+                  <button type="button" data-investment-action="download" aria-describedby="native-plan-retention">Download current plan</button>
                 </section>
                 <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
                   <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
