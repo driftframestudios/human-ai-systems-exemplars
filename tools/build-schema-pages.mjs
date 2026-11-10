@@ -29,6 +29,10 @@ import {
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const sourceRoot = resolve(repositoryRoot, "schemas");
 const outputRoot = resolve(repositoryRoot, ".schema-pages");
+const faviconSourcePath = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/favicon.ico",
+);
 const skillsOutputRoot = resolve(outputRoot, "skills");
 const collaborationGuidePath = resolve(outputRoot, "collaboration/index.html");
 const skillSelectionPath = resolve(
@@ -1267,6 +1271,7 @@ function validateSkillPage(source, skill, sourceRevision, possibleNames, deploym
 await rm(outputRoot, { recursive: true, force: true });
 await mkdir(outputRoot, { recursive: true });
 await cp(sourceRoot, outputRoot, { recursive: true });
+await copyFile(faviconSourcePath, resolve(outputRoot, "favicon.ico"));
 await writeFile(resolve(outputRoot, ".nojekyll"), "");
 
 for (const carrierPath of publicCarrierPaths) {
