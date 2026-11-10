@@ -21,7 +21,8 @@ effort from the contribution matrix's distinct linked work. This supersedes #881
 paired disclosure presentation while retaining its contribution-local creation
 and canonical draft owners. #947 separates contribution/session support checkboxes
 from row-heading inspection: links accept directly with Undo, while headings
-toggle the local editor and its reveal. #890 refines the matrix readings, stable pad alignment
+toggle the local editor and its reveal. #936 retains open person cards through
+participation and replaces the receiver half-rack during person creation. #890 refines the matrix readings, stable pad alignment
 and footer session actions. #891 replaces the Session spread fader with an analog
 three-way switch and explains sole-participant limits at the control. #893 adds
 the selected person's participation row beneath that switch and compacts the
@@ -457,7 +458,11 @@ switch, a compact participation row mirrors the selected person's actual session
 columns, names, funding colors, symbols, time and value. #893 uses one shared pad
 renderer for both tables. Its native checkboxes update participation immediately
 through the accepted command and shared Undo; the same draft-rebase route retains
-unfinished person fields. This visual comparison supersedes the long
+unfinished person fields. Open Card actions disclosures survive the roster
+rebuild by person ID, so selection, deselection and Undo retain the clicked row's
+position (#936). This replaces the incidental collapse that shortened preceding
+rows; it changes local presentation state while keeping accepted commands intact.
+This visual comparison supersedes the long
 assigned/funded/session-count reading. Each preset selects
 complete work rows in visible plan order through one reversible participation
 command.
@@ -492,8 +497,10 @@ decision-boundary notes remain in the plan and
 exports while the compact controls edit their current fields.
 
 Add a person requested by a contribution stays inside that contribution's rack.
-The canonical creation form occupies a half-rack slot at wide widths and stacks
-on a phone. Saving the new person returns to the initiating human field with
+The canonical creation form replaces Receiver and decision beside retained Work
+at wide widths and stacks on a phone. **Supersession (#936):** this replaces the
+extra creator below a still-visible receiver. An explicit body grid keeps the
+sibling forms side by side across browser details implementations. Saving the new person returns to the initiating human field with
 that person selected; the contribution proposal keeps its explicit Apply step.
 An intervening accepted change retains the parent's explicit Review step and
 unfinished entries. Closing the parent parks the child draft and restores its
@@ -855,7 +862,8 @@ Shared sessions workflow; #833 owns atomic session removal and recovery.
 #884 carries the unified person mixing desk and capacity readings; #890 refines
 their presentation and footer actions, #891 owns explicit spread choices, and
 #893 owns the local participation row and compact laptop comparison.
-#881 retains contribution-local creation and the separate canonical form owners;
+#936 refines contribution-local creation and stable participation rows;
+#881 retains the separate canonical form owners;
 #947 owns direct contribution/session checkboxes and local heading toggles. #882 holds
 the global circular-stepper shadow audit. #879 refines the current
 People composition from #864 and retains #836's direct responsibility choices,

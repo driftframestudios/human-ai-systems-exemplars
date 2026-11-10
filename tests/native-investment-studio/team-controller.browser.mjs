@@ -108,6 +108,68 @@ async function assertContained(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: participation retains open People cards, local viewport and unfinished person values`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const root = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(root).dispose();
+      const studio = createStudio(createShowcasePlan({ pausedExample: true, peopleExamples: true }));
+      window.teamFixture = { studio, controller: mountCoordinationPanel(root, { studio }), original: studio.exportText() };
+    });
+    await choose(page, 'maya');
+    await input(page, 'ratePerHour').fill('00123');
+    const roster = team(page).locator('[data-team-roster]');
+    const card = roster.locator('[data-roster-person="maya"] .studio-person-more');
+    const check = roster.locator('[data-people-participant="leo"][data-people-work="pairing"]');
+    const pad = check.locator('..');
+    const observe = () => check.evaluate(node => ({
+      top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left,
+      pageTop: scrollY, localLeft: node.closest('[data-team-roster]').scrollLeft,
+    }));
+    const settleFrame = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const assertLocal = async before => {
+      await settleFrame();
+      const after = await observe();
+      for (const key of ['top', 'left', 'pageTop', 'localLeft'])
+        assert.ok(Math.abs(after[key] - before[key]) <= 1, `Participation keeps ${key} stable: ${JSON.stringify({ before, after })}`);
+      await expect(check).toBeFocused();
+      await expect(card).toHaveAttribute('open', '');
+      await expect(input(page, 'ratePerHour')).toHaveValue('00123');
+    };
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      if (!await card.evaluate(node => node.open)) await card.locator('summary').click();
+      await pad.evaluate(node => node.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' }));
+      await settleFrame();
+      // Record the visitor's pointer boundary after the browser has made the pad reachable.
+      await check.evaluate(node => {
+        node.closest('label').addEventListener('pointerdown', () => {
+          window.teamFixture.pointerBefore = { top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left,
+            pageTop: scrollY, localLeft: node.closest('[data-team-roster]').scrollLeft };
+        }, { once: true });
+      });
+      await pad.click();
+      const before = await page.evaluate(() => window.teamFixture.pointerBefore);
+      await expect(check).toBeChecked();
+      await assertLocal(before);
+      assert.deepEqual(await page.evaluate(() => window.teamFixture.studio.read().state.work.find(row => row.id === 'pairing').personIds), ['ari', 'jules', 'leo']);
+      await check.press('Space');
+      await expect(check).not.toBeChecked();
+      await assertLocal(before);
+      assert.deepEqual(await page.evaluate(() => window.teamFixture.studio.read().state.work.find(row => row.id === 'pairing').personIds), ['ari', 'jules']);
+      await panel(page).locator('[data-studio-undo]').click();
+      await expect(check).toBeChecked();
+      await expect(card).toHaveAttribute('open', '');
+      await expect(input(page, 'ratePerHour')).toHaveValue('00123');
+      await panel(page).locator('[data-studio-undo]').click();
+      assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), await page.evaluate(() => window.teamFixture.original));
+      await expect(card).toHaveAttribute('open', '');
+      await pad.evaluate(node => node.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' }));
+      await page.screenshot({ path: resolve(captures, `${engine}-participation-local-${width}.png`) });
+    }
+  });
   test(`${engine}: session spread choices update capacity once while the person draft stays open`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {

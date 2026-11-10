@@ -1265,7 +1265,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (contributionOwner) {
       const container = document.createElement('div');
       container.dataset.contributionCreation = ''; container.className = 'studio-contribution-creation'; container.hidden = true;
-      contributionOwner.append(container); cleanup.push(() => container.remove());
+      contributionOwner.querySelector('.studio-contribution-body').append(container); cleanup.push(() => container.remove());
       creationPlacement = mountEditorPlacement([requireElement('[data-assembly-configure]'), requireElement('[data-assembly-status]')]);
     }
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,

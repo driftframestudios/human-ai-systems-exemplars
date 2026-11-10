@@ -91,7 +91,8 @@ The people/session arranger keeps each person's rate, funded time, team and
 quality indicators beside direct participation pads. Each pad keeps its checkbox
 at the upper left, planned time at the lower left and stronger known-value reading
 at the lower right. Compact rows retain generous selection areas. **Card actions**
-collects reordering and removal; the person's name opens their settings. Top
+collects reordering and removal; open cards stay open through participation edits
+and Undo, preserving the clicked row's position (#936). The person's name opens their settings. Top
 readings separate label, value and short context, while column footers retain
 explicit zero totals. Session columns share a compact width while the first
 column retains the person's identity and capacity readings. Local horizontal
@@ -143,8 +144,9 @@ entries through the existing draft parking and Review route. Category, human
 receiver, decision owner and supporting session choices accept directly, as do
 People team membership and member order.
 Receiver and decision owner remain independent choices. Add a person from a
-contribution opens the canonical creation form inside that contribution's rack,
-beside its retained work at wide widths and stacked at phone widths. Its local
+contribution replaces Receiver and decision with the canonical creation form
+in the same half-rack, beside retained Work at wide widths and stacked at phone
+widths (#936). The two forms retain separate ownership. Its local
 return names the exact contribution. Saving the new person returns to its
 receiver or decision field with that person selected; Apply accepts the retained
 contribution proposal. Empty slots add a useful person, team or contribution immediately with editing closed; selecting the

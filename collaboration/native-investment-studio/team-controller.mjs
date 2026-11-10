@@ -134,6 +134,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
 
   function renderRoster(next) {
     if (next === projection) return;
+    // Accepted participation refreshes the readings while each open person card
+    // keeps its local disclosure and the rows below it keep their position.
+    const openCards = new Set([...elements.roster.querySelectorAll('[data-roster-person] .studio-person-more[open]')]
+      .map(card => card.closest('[data-roster-person]').dataset.rosterPerson));
     people = new Map(next.state.people.map(person => [person.id, person]));
     const memberships = new Map(next.state.people.map(person => [person.id, []]));
     for (const team of next.state.teams) {
@@ -208,7 +212,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
         if (action === 'person-remove') control.className = 'native-control--remove';
         order.append(control);
       }
-      const more = document.createElement('details'); more.className = 'studio-person-more';
+      const more = document.createElement('details'); more.className = 'studio-person-more'; more.open = openCards.has(person.id);
       const moreLabel = document.createElement('summary'); moreLabel.textContent = 'Card actions'; moreLabel.setAttribute('aria-label', `Card actions for ${person.label}`);
       more.append(moreLabel, order); item.append(more);
       appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });

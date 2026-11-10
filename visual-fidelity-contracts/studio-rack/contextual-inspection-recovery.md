@@ -5,8 +5,10 @@ record and unfinished entries intact. One canonical editor owns each proposal;
 its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-dev receiving contract revised 10 November 2026 for contribution inspection and
-direct support choices in
+dev receiving contract revised 10 November 2026 for local People participation
+and creation in
+[#936](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/936),
+retaining contribution inspection and direct support choices in
 [#947](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/947),
 retaining local Abilities toggles in
 [#937](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/937),
@@ -64,8 +66,10 @@ restores the selected person's matrix entry; contribution creation keeps its
 separate local return below.
 
 Add a person from a contribution borrows the canonical creation form into that
-contribution's rack. The half-rack slot sits beside the retained contribution at
-wide widths and stacks at phone widths. These remain sibling forms. The header
+contribution's rack, replacing Receiver and decision beside retained Work at
+wide widths and stacking at phone widths. An explicit body grid owns the two
+halves; the enclosing disclosure retains its header and recovery. These remain
+sibling forms. The header
 names the exact parent contribution and its return retains the receiver or
 decision-owner intent. Closing the parent also parks the child draft and restores
 its canonical form. A new person can return selected in the initiating field;
@@ -107,6 +111,10 @@ and supporting sessions—enter shared history directly and keep the initiating
 control focused. Role pads keep their own visible state when acquiring an edit
 owner. The person's unfinished name, rate and funded time remain recoverable;
 role acceptance and person Apply retain their separate commands.
+People participation retains open Card actions disclosures by person ID when
+the roster refreshes. Selection and deselection preserve the clicked row's
+usable viewport position, local horizontal scroll and keyboard focus; amp Undo
+retains those disclosure choices while recovering accepted participation.
 Contribution matrix checkboxes retain their local view while changing support.
 When that acceptance advances a pending responsibility draft's base, its raw
 entries remain available through the existing parking and Review owner. Row
@@ -259,8 +267,10 @@ now follow the established compact rack pattern.
 #884 supersedes #881's paired Person/Role disclosure presentation with one
 selected-person mixing desk. One visible header and Close own its presentation;
 canonical sibling forms preserve their established acceptance and recovery.
-#881's contribution-specific creation remains inside its initiating rack with
-its exact parent route.
+#936 replaces the extra contribution creator below the receiver with creation
+in that receiver's half-rack. Its explicit body grid preserves sibling forms,
+while #881's exact parent route and draft recovery remain in force. #936 also
+preserves open person-card actions through accepted participation changes.
 
 #836 replaces the Person-to-arrange selector and Arrange team disclosure with
 visible record-local controls. Bounded
