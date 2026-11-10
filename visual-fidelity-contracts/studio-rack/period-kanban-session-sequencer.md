@@ -8,7 +8,8 @@ participation.
 
 **Standing:** review candidate `0.1.1`; ID
 `vfc:period-kanban-session-sequencer`; dev receiving contract revised
-9 November 2026 for [#906](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/906).
+9 November 2026 for [#913](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/913)
+and [#914](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/914).
 It inherits [Studio Rack Composition](README.md). Main retains its approved
 Showcase reference until the human cues promotion.
 
@@ -30,7 +31,7 @@ changes the accepted horizon and enters amp Undo history.
 
 | Reading | Columns and pads | Selection meaning |
 | --- | --- | --- |
-| Period board | Sprint/quarter lanes; grouped work clips or individual sessions at detail scope | Work and its occurrence context |
+| Period board | Sprint/quarter lanes; work clips grouped by funding and status, individual sessions at detail scope | A group opens its period; a single-session card opens that exact session |
 | Session tracks | Periods or weeks/months; each plan's occurrence pads | A particular working session, with a separate plus target for another |
 | Delivery overview | Planning, Design, Implementation, Testing, Deployment, Maintenance | An authored phase grouping of people, work and handoffs |
 | Shared sessions | People or handoff columns against shared work rows | Direct participation/support links, separate from temporal placement |
@@ -40,6 +41,13 @@ changes the accepted horizon and enters amp Undo history.
 Period position expresses an authored arrangement; duration and participant
 effort keep their own units. Funding, paused state and relationship markers
 have text or accessible wording alongside their color and shape.
+Each period can show funded, extra-investment and paused groups together using
+the established colors and paused treatment. Concise group counts describe the
+sessions available inside; opening a group changes view state only. Individual
+cards retain their own name, index and edit target. The unplaced tray shows
+individual sessions because it has no period to open.
+Group controls keep navigation semantics; editor-expanded and selected treatments
+belong to the exact session or explicit plan-default trigger.
 
 ## Add, place and inspect
 
@@ -146,7 +154,11 @@ owner. Ordinary field proposals retain Apply; Coordination team name, membership
 and order accept directly.
 
 The horizon adds a default handoff between available work records with details
-closed. Selecting it opens From work, To work and an optional Team connection.
+closed. In a loaded tape, new stages include that plan and new handoffs use a
+valid connection involving it. The attached companion and record rail keep its
+stages, handoffs and related decisions/delays reachable in every period; their markers retain actual
+placement. A one-plan library explains the need for another plan before connecting
+work. Selecting a handoff opens From work, To work and an optional Team connection.
 An accepted stage/handoff can carry decisions or delays. Existing
 relationship removal sits in the bottom-right action position. The handoff
 omits a cost preview that does not help choose its endpoints.
@@ -196,6 +208,10 @@ evaluates whether the resulting composition is clear.
 ## Supersession and next boundary
 
 This current contract replaces the accumulated implementation chronology.
+#913 supersedes the overview's implicit tape-default edit target: funding/status
+groups open period detail, while individual and unplaced cards edit one session.
+#914 supersedes global-only relationship creation in a loaded tape. Both preserve
+the established art direction and independent period/tape scopes.
 #909 restores All plans as the initial view and keeps its return beside
 Previous/Next cassette browsing, superseding #906's first-tape default. Period
 scope remains independent and navigation retains accepted data and Undo.

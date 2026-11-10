@@ -457,6 +457,84 @@ for (const engine of names) {
     await expect(inspector(page)).toBeVisible();
   });
 
+  test(`${engine}: loaded tape relationships stay reachable from an empty period through editing, scope changes and Undo`, async t => {
+    const page = await open(t, engine), original = await bytes(page);
+    await cadence(page).locator('[data-studio-plan-id="rehearsal"]').click();
+    await period(page, 'period-1').getByRole('button', { name:'Sprint 1 Open sprint detail', exact:true }).click();
+    await cadence(page).locator('[data-cadence-key="rack-add-stage"]').click();
+    const stage = JSON.parse(await bytes(page)).scoreSettings.stages.at(-1);
+    assert.deepEqual(stage.workIds, ['rehearsal'], 'creation keeps the loaded tape as the supporting work');
+    await showFlow(page);
+    const stageCard = flow(page).locator(`[data-cadence-key="stage:${stage.id}"]`);
+    await expect(stageCard).toBeVisible();
+    await stageCard.click();
+    await input(page, `stage.${stage.id}.label`).fill('Prepare the receiving team');
+    await inspector(page).locator('[data-editor-apply]').click();
+    await expect(stageCard).toBeVisible();
+    await expect(stageCard).toContainText('Prepare the receiving team');
+    const stageAccepted = await bytes(page);
+    for (const kind of ['decision', 'delay']) {
+      await showFlow(page);
+      const action = kind === 'decision' ? 'Add a decision for' : 'Add a delay to';
+      await flow(page).getByRole('button', { name:`${action} Prepare the receiving team`, exact:true }).click();
+      const created = await bytes(page), state = JSON.parse(created);
+      const record = kind === 'decision' ? state.scoreSettings.gates.at(-1) : state.scoreSettings.cadence.delays.at(-1);
+      const entry = flow(page).locator(`[data-cadence-key="${kind}:${record.id}:editorial"]`);
+      await expect(cadence(page).getByRole('navigation', { name:'Plan scope' }).getByRole('heading', { name:'Sprint 1', exact:true })).toHaveAttribute('aria-current', 'page');
+      await expect(entry).toBeVisible();
+      await expect(cadence(page).locator(`.studio-rack-records [data-cadence-key="${kind}:${record.id}:rack-unplaced"]`)).toBeVisible();
+      await entry.click();
+      await input(page, `${kind === 'decision' ? 'gate' : 'delays'}.${record.id}.label`).fill(`Receiving team ${kind}`);
+      await inspector(page).locator('[data-editor-apply]').click();
+      await expect(entry).toContainText(`Receiving team ${kind}`);
+      await undo(page); assert.equal(await bytes(page), created, `Undo restores the ${kind} before its edit`);
+      await undo(page); assert.equal(await bytes(page), stageAccepted, `Undo removes only the new ${kind}`);
+    }
+    await cadence(page).locator('[data-cadence-key="rack-add-handoff"]').click();
+    const handoff = JSON.parse(await bytes(page)).scoreSettings.cadence.handoffs.at(-1);
+    assert.deepEqual([handoff.from, handoff.to], [{ kind:'work', id:'pairing' }, { kind:'work', id:'rehearsal' }],
+      'the handoff uses a connected edge instead of unrelated global work or a cyclic reverse edge');
+    const handoffCreated = await bytes(page);
+    await showFlow(page);
+    const handoffCard = flow(page).locator(`[data-cadence-key="handoff:${handoff.id}"]`);
+    await expect(handoffCard).toBeVisible();
+    await handoffCard.click();
+    await input(page, `handoffs.${handoff.id}.connectionId`).selectOption('scope');
+    await inspector(page).locator('[data-editor-apply]').click();
+    await expect(handoffCard).toBeVisible();
+    assert.equal(JSON.parse(await bytes(page)).scoreSettings.cadence.handoffs.at(-1).connectionId, 'scope');
+    await cadence(page).getByRole('button', { name:'Plan overview', exact:true }).click();
+    await cadence(page).getByRole('button', { name:'All plans', exact:true }).click();
+    await showFlow(page);
+    await expect(stageCard).toBeVisible(); await expect(handoffCard).toBeVisible();
+    await cadence(page).locator('[data-studio-plan-id="rehearsal"]').click();
+    await showFlow(page);
+    await expect(stageCard).toBeVisible(); await expect(handoffCard).toBeVisible();
+    await undo(page); assert.equal(await bytes(page), handoffCreated, 'Undo restores the handoff before its edit');
+    await undo(page); assert.equal(await bytes(page), stageAccepted, 'Undo removes only the newly added handoff');
+    await undo(page);
+    assert.equal(JSON.parse(await bytes(page)).scoreSettings.stages.at(-1).label, 'New stage 1');
+    await undo(page); assert.equal(await bytes(page), original, 'all scoped additions recover the original plan');
+  });
+
+  test(`${engine}: a single-tape library explains the distinct-plan handoff requirement`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const { createCadence } = await import('/collaboration/native-investment-studio/cadence.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const plan = createExamplePlan(); plan.scoreSettings.cadence = createCadence();
+      const element = document.querySelector('[data-native-coordination]'); window.scoreFixture.controller.dispose();
+      const studio = createStudio(plan); window.scoreFixture = { studio, controller:mountCoordinationPanel(element, { studio }) };
+    });
+    await cadence(page).locator('[data-studio-plan-id="review"]').click();
+    const accepted = await bytes(page);
+    await cadence(page).locator('[data-cadence-key="rack-add-handoff"]').click();
+    await expect(score(page).locator('[data-score-status]')).toHaveText('Add another plan before connecting work.');
+    assert.equal(await bytes(page), accepted, 'the explanation preserves the current plan');
+  });
+
   test(`${engine}: a quarter example replaces the view in place and Undo restores the pilot`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
     await score(page).getByRole('button', { name: 'Add sprint', exact: true }).click();
