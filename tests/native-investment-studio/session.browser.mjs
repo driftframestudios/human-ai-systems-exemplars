@@ -850,12 +850,76 @@ for (const engine of names) {
 }
 
 for (const engine of names) {
+  test(`${engine}: rejected session targets preserve the mounted draft, focus and Undo before editor callbacks`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountWorkPanel } = await import('/collaboration/native-investment-studio/work-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const { workSessionTarget } = await import('/collaboration/native-investment-studio/navigation-policy.mjs');
+      window.sessionFixture.controller.dispose();
+      const element = document.querySelector('[data-native-session-editor]');
+      document.body.append(element);
+      const studio = createStudio(), editing = createDraftCoordinator(studio), initial = studio.read();
+      const callbacks = { begin: 0, editing: 0, accepted: 0 };
+      const receiver = mountWorkPanel(element, { studio, editing,
+        onBegin() { callbacks.begin++; }, onEditing() { callbacks.editing++; }, onAccepted() { callbacks.accepted++; } });
+      receiver.select(workSessionTarget(initial.state.work[0], 0));
+      const input = element.querySelector('[name="label"]');
+      input.value = 'Keep this local draft'; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus();
+      const staleInRange = workSessionTarget(initial.state.work[0], 1);
+      const removal = studio.applyCommand({ type: 'work.session.remove', workId: 'review', occurrenceIndex: 0 }, studio.read());
+      if (!removal.ok) throw Error(removal.error.code);
+      const accepted = studio.read(), history = studio.readHistory(), draft = receiver.read().draft;
+      const parent = element.parentNode, form = element.querySelector('form');
+      const baseline = { focused: document.activeElement === input, undoCount: history.undoCount,
+        savedText: input.value, survivingCount: accepted.state.work[0].occurrences };
+      callbacks.begin = 0; callbacks.editing = 0; callbacks.accepted = 0;
+      const valid = { kind: 'work', scope: 'session', id: 'review', sourceWork: accepted.state.work[0] };
+      const cases = [
+        ['implicit defaults', { kind: 'work', id: 'review' }],
+        ['missing index', valid],
+        ['malformed index', { ...valid, occurrenceIndex: '0' }],
+        ['negative index', { ...valid, occurrenceIndex: -1 }],
+        ['fractional index', { ...valid, occurrenceIndex: 0.5 }],
+        ['out-of-range index', { ...valid, occurrenceIndex: 5 }],
+        ['missing source record', { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: 0 }],
+        ['stale in-range index', staleInRange],
+        ['removed work', { ...valid, id: 'removed', occurrenceIndex: 0 }],
+      ];
+      const results = cases.map(([label, target]) => {
+        const result = receiver.select(target), current = receiver.read().draft;
+        return { label, accepted: Boolean(result?.ok),
+          draftRetained: current?.token === draft.token && current?.sessionId === draft.sessionId
+            && current?.raw.label === draft.raw.label,
+          focused: document.activeElement === input,
+          mounted: element.parentNode === parent && element.querySelector('form') === form,
+          inputRetained: input.value === 'Keep this local draft',
+          stateRetained: studio.read() === accepted,
+          historyRetained: JSON.stringify(studio.readHistory()) === JSON.stringify(history),
+          callbacks: { ...callbacks } };
+      });
+      const restored = studio.undo(studio.read());
+      const undoRestoresPriorWork = restored.ok && studio.exportText() === initial.serialized;
+      receiver.dispose(); editing.dispose();
+      return { baseline, results, undoRestoresPriorWork };
+    });
+    assert.deepEqual(observed.baseline, { focused: true, undoCount: 1, savedText: 'Keep this local draft', survivingCount: 5 });
+    assert.equal(observed.results.length, 9);
+    for (const { label, ...result } of observed.results) assert.deepEqual(result, {
+      accepted: false, draftRetained: true, focused: true, mounted: true, inputRetained: true,
+      stateRetained: true, historyRetained: true, callbacks: { begin: 0, editing: 0, accepted: 0 },
+    }, label);
+    assert.equal(observed.undoRestoresPriorWork, true);
+  });
+
   test(`${engine}: session receiver retirement preserves saved text and respects a successor editor's focus`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const observations = await page.evaluate(async () => {
       const { mountWorkPanel } = await import('/collaboration/native-investment-studio/work-controller.mjs');
       const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
       const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const { workDefaultsTarget } = await import('/collaboration/native-investment-studio/navigation-policy.mjs');
       window.sessionFixture.controller.dispose();
       const element = document.querySelector('[data-native-session-editor]');
       const studio = createStudio(), accepted = studio.read();
@@ -890,7 +954,7 @@ for (const engine of names) {
           switched = nextEditing.person.begin('product-one', nextStudio.read()).ok;
           successorControl.focus();
         } });
-      next.select('review');
+      next.select(workDefaultsTarget('review'));
       const minutes = element.querySelector('[name="minutesPerSession"]');
       minutes.value = '45'; minutes.dispatchEvent(new Event('input', { bubbles: true }));
       element.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));

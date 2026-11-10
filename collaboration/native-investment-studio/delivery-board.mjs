@@ -1,6 +1,7 @@
 import { summarizeWorkSessions } from './work-sessions.mjs';
 import { workDuration } from './display.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const PHASES = Object.freeze([
   ['planning', 'Planning', 'Agree the work and who needs it.'],
@@ -168,7 +169,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     if (phase.sessions.length) {
       const group = collection('Shared work', 'studio-delivery__group studio-delivery__sessions');
       for (const { work, stageLabels } of phase.sessions) {
-        const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(work.id, event.currentTarget));
+        const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
         control.dataset.deliverySession = work.id;
         if (acceptedSessionIds.has(work.id)) control.dataset.studioSessionId = work.id;
         control.dataset.funding = summarizeWorkSessions(work).funding;

@@ -73,11 +73,27 @@ reachable from its attached companion and record rail even when a selected perio
 is empty, including their decisions and delays. Period markers still derive from
 the work's real placement. Aggregate navigation controls retain projection identity
 without acquiring the selected/expanded semantics of a session-editor trigger.
-The follow-up source audit enriches #679/#900/#902/#903 and adds #915 for explicit
-target scopes and #916 for Investment deck configuration/renderer ownership.
-The sequence is visitor repair, target contract, coherent render context,
-invocation-local indexes, then deck packaging. CSS remains a separate bounded
-route. Immutable catalogs and compatible formatters may share definitions; mutable
+#915 now makes that distinction explicit at each work-editor ingress. Track names
+and supporting-work links declare defaults; numbered cards and pads declare one
+session. Admission checks the immutable source work record and ordinal before
+parking, borrowing, focus or return ancestry changes. This supersedes the optional
+index fallback that could broaden an incomplete session request into defaults.
+Object identity supplies the local lifetime boundary: serialized revision numbers
+can repeat after Undo, while a replaced work record has a different identity.
+The targets stay in the mounted view; canonical plan import/export and saved draft
+identities retain their existing owners. A hash or per-record serialization layer
+would serve a different persistence or transport requirement.
+
+Score previews bind existing session targets to accepted work records because the
+score proposal changes placement and relationships, rather than existing session
+identity. Preview-only work acquires an editor after acceptance. Returning to a
+saved draft uses its canonical recovery owner and presents the numbered session
+that owner restored, including a selection made within the rack.
+
+The follow-up source audit enriches #679/#900/#902/#903 and adds #916 for Investment
+deck configuration/renderer ownership. With visitor repairs and the target
+contract settled, the next sequence is coherent render context, invocation-local
+indexes, then deck packaging. CSS remains a separate bounded route. Immutable catalogs and compatible formatters may share definitions; mutable
 command candidates, dial gestures and mounted controls keep instance ownership.
 Closed registries fit exclusive variants; guards and ordered functions retain
 admission and dependent-effect meaning. A general traversal hierarchy remains a

@@ -1,3 +1,4 @@
+import { workDefaultsTarget, workSessionTarget, resolveWorkEditorTarget } from './navigation-policy.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { mountDurationDials, renderTimeReadout } from './time-controls.mjs';
 import { renderRemovalReferences } from './removal-references.mjs';
@@ -86,7 +87,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const occurrenceControls = mountSessionOccurrenceControls(document, {
     onPlacement: writePlacement,
     onSelect(index) {
-      const result = select(selectedId, false, index);
+      const result = select(workSessionTarget(works.get(selectedId), index), false);
       if (result?.ok && describeSessionTarget(editor.read().draft?.sessionId)?.occurrenceIndex === index) focusOccurrence(index);
     },
     onRemove: index => changeSessionCount(index),
@@ -488,9 +489,11 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!owns(epoch)) return;
     return opened(operate('begin', target, projection), epoch, focus);
   }
-  function select(id, focus = true, occurrenceIndex) {
-    if (disposed || !works.has(id)) return;
-    return open(makeSessionTarget(Number.isSafeInteger(occurrenceIndex) ? 'work.session.update' : 'work.update', id, occurrenceIndex), focus);
+  function select(target, focus = true) {
+    if (disposed) return;
+    const destination = resolveWorkEditorTarget(target, studio.read().state);
+    if (!destination) return;
+    return open(destination.targetId, focus);
   }
   function create({ periodId, subdivision = 1 } = {}) {
     if (disposed) return;
@@ -780,7 +783,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     ]) requireElement(`[data-native-range="${field}"]`).textContent = `0–${INTEGER.format(maximum)} ${unit}`;
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
-    listen(elements.select, 'change', () => select(elements.select.value));
+    listen(elements.select, 'change', () => select(workDefaultsTarget(elements.select.value)));
     listen(elements.form, 'input', edit);
     listen(placementElements.rows, 'change', editPlacement);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
@@ -795,7 +798,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       if (elements.configure.open) {
         if (isActive() && !acknowledgedOpen) {
           if (selectedTarget) open(selectedTarget, false);
-          else if (selectedId !== null) select(selectedId, false);
+          else if (selectedId !== null) select(workDefaultsTarget(selectedId), false);
         }
       } else if (acknowledgedOpen) { close(); onEditing(); }
     });
@@ -803,7 +806,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (disposed) return receiver;
     elements.toolbar.hidden = false; elements.add.disabled = false;
     root.dataset.sessionReady = 'true'; INSTANCES.set(root, receiver);
-    if (selectedId !== null && isActive()) select(selectedId, false);
+    if (selectedId !== null && isActive()) select(workDefaultsTarget(selectedId), false);
     return receiver;
   } catch (error) { dispose(); throw error; }
 }
