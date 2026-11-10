@@ -12,6 +12,7 @@ import {
   artifactLicense,
 } from "../../tools/attribution-contract.mjs";
 import {
+  iframeFaviconHref,
   sha256,
   verifyPackagePlan,
   writePackagePlan,
@@ -68,6 +69,7 @@ test("the Canvas family plan follows the authored 16-route manifest", async () =
     byte_identical_routes: 0,
     navigation_adapted_routes: 1,
     generated_files: 41,
+    favicon_href: iframeFaviconHref,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
     browser_request_observation_required: true,
@@ -83,6 +85,14 @@ test("the Canvas family plan follows the authored 16-route manifest", async () =
     assert.ok(projection, `${route.id} has an index projection`);
     const html = projection.toString("utf8");
     const receipt = first.receipt.routes.find(({ id }) => id === route.id);
+    assert.equal(
+      occurrenceCount(
+        html,
+        `<link rel="icon" href="${iframeFaviconHref}" sizes="any">`,
+      ),
+      1,
+      `${route.id} declares the iframe origin favicon once`,
+    );
     assert.deepEqual(receipt.navigation.unresolved_local_links, []);
     assert.equal(
       receipt.navigation.exit_links,
@@ -238,6 +248,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   }
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
   assert.equal(aggregate.receipt.package_contract.primary_routes, 39);
+  assert.equal(aggregate.receipt.package_contract.favicon_href, iframeFaviconHref);
   assert.equal(aggregate.receipt.package_contract.generated_files, 69);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,
