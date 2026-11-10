@@ -372,10 +372,10 @@ those decisions and their supersessions.
 
 [#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900)
 retires the former elapsed-minute timeline and agenda styles and consolidates
-shared duration styling in one instrument block. The current period board,
-sequencer, chapter layouts and alternate-media rules retain their source owners.
-Exact duplicate declarations remain a separate focused CSS review. The source-owner
-map below and
+shared duration styling in one instrument block. Its final source cleanup removes
+redundant motion, visibility and sizing declarations while preserving the winning
+rules. The period board, sequencer, chapter layouts and alternate-media rules
+retain their source owners. The source-owner map below and
 [cadence ownership route](implementation-reference.md#sprint-and-quarter-coordination)
 lead to the live composition; each receiving PR carries its fitting comparison.
 

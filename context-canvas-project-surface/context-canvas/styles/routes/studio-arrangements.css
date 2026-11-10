@@ -49,7 +49,7 @@
 .native-coordination :is(.native-connections, .native-connection-template__form, .studio-connections-tracks) { min-inline-size: 0; max-inline-size: 100%; }
 .native-coordination .native-connection-template__form, .native-coordination .native-patch-bay { grid-template-columns: minmax(0, 1fr); }
 .studio-arrangement-native-choice { display: none; }
-.native-coordination .native-arrangement__status { font-size: .8rem; margin-block: .3rem .6rem; }
+.native-coordination .native-arrangement__status { margin-block: .3rem .6rem; }
 .studio-arrangement-deck [data-template-structure] { display: flex; min-inline-size: 0; }
 .studio-arrangement-deck .native-arrangement { display: flex; flex-direction: column; flex: 1; min-inline-size: 0; margin: 0; }
 .native-coordination .native-arrangement__viewport { display: grid; align-items: center; flex: 1; margin-block: .5rem 0; background: var(--studio-screen); color: var(--native-paper); }

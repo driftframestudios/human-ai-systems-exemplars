@@ -3188,14 +3188,12 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
   .native-score__transport .native-score__chapter-links { margin-inline-start: 0; }
 }
 /* The presentation owner enables full effects explicitly. Static states remain
-   the default, including before JavaScript mounts and during OS reduced motion. */
+   the default before JavaScript mounts; studio-instrument.css owns the shared
+   OS reduced-motion suppression. */
 .native-coordination:not(:is([data-native-motion='full'], [data-native-motion='lower'])) *, .native-coordination:not(:is([data-native-motion='full'], [data-native-motion='lower'])) *::before, .native-coordination:not(:is([data-native-motion='full'], [data-native-motion='lower'])) *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 @keyframes native-scope-settle { 0% { filter: drop-shadow(0 0 7px #70ead0); } 100% { filter: drop-shadow(0 0 3px #70ead066); } }
 .native-coordination[data-native-motion='full'] .native-assurance__sigma-curve { animation: native-scope-settle 460ms ease-out 1; }
 .native-coordination[data-native-motion='full'] .native-change__key { transition: background-color 140ms ease-out, box-shadow 140ms ease-out, transform 140ms ease-out; }
-@media (prefers-reduced-motion: reduce) {
-    .native-coordination *, .native-coordination *::before, .native-coordination *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-}
 @media (forced-colors: active) {
     .native-coordination input[type='checkbox'] { appearance: auto; inline-size: 1.2rem; min-inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; box-shadow: none; }
     .native-coordination input[type='checkbox']::before { display: none; }

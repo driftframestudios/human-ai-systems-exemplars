@@ -36,7 +36,7 @@
 .native-quality-board .native-assurance__rail label:has(:checked) { background: var(--native-signal); border-block-start: .2rem solid var(--studio-line); box-shadow: inset 0 .12rem .18rem color-mix(in srgb, var(--native-paper) 20%, transparent); }
 .native-quality-board [data-quality-phase='rehearse'] .native-assurance__rail label:has(:checked) { background: var(--about-sea); }
 .native-quality-tracks { overflow: auto; max-inline-size: 100%; padding: .5rem; background: var(--studio-screen); border: .2rem solid var(--studio-line); border-radius: .25rem; }
-.native-quality-tracks table { inline-size: 100%; min-inline-size: 32rem; border-collapse: separate; border-spacing: .25rem; margin: 0; color: var(--studio-screen-text); background: var(--studio-screen); }
+.native-quality-tracks table { inline-size: 100%; border-collapse: separate; border-spacing: .25rem; margin: 0; color: var(--studio-screen-text); background: var(--studio-screen); }
 .native-quality-tracks caption { padding: .35rem; color: var(--studio-screen-text); text-align: start; font: .75rem/1.4 ui-monospace, monospace; }
 .native-quality-tracks :is(th, td) { padding: .15rem; text-align: start; vertical-align: middle; border: 0; background: transparent; }
 .native-quality-tracks thead th { color: var(--studio-screen-text); background: var(--studio-screen); font: 650 .7rem/1.4 ui-monospace, monospace; }
@@ -98,7 +98,6 @@
 .native-coordination .native-quality-workbench__rail button { min-inline-size: 0; padding: .5rem; background: var(--native-paper); color:var(--native-text); font-size: .75rem; border: 1px solid var(--studio-line); box-shadow: inset 0 -.18rem var(--studio-line); }
 .native-coordination .native-quality-workbench__rail button[aria-expanded='true'] { background: var(--native-signal); box-shadow: inset 0 .15rem var(--studio-line); }
 .native-quality-workbench .native-quality-drilldown { margin-block: .6rem 0; border: 0; padding: 0; background: transparent; box-shadow: none; }
-.native-quality-workbench [hidden] { display: none; }
 .native-quality-workbench .native-assurance__card { margin-block:.5rem; padding:.65rem; gap:.6rem; background:var(--studio-peach); color:var(--native-text); }
 .native-quality-workbench .native-assurance__choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .35rem; }
 .native-quality-workbench .native-assurance__choices > li { margin: 0; min-inline-size: 0; }
@@ -134,7 +133,6 @@
 .native-quality-workbench .native-assurance__quantities { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:.6rem; }
 .native-quality-workbench [data-assurance-control='independentRate'] { grid-column: span 2; }
 @media (max-width: 40rem) {
- .native-quality-workbench .native-assurance__quantities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
  .native-quality-workbench .native-assurance__quantity input { max-inline-size: 100%; }
 }
 
@@ -214,4 +212,5 @@
  .native-coordination .native-quality-tracks .studio-track-key[aria-expanded='true'] { outline:.2rem solid Highlight; background:ButtonFace; color:ButtonText; }
  .native-quality-workbench .native-assurance__choices input[type='checkbox'] { appearance:auto; }
 }
+/* Keep the hidden-state guard after responsive pane display rules. */
 .native-quality-workbench [hidden] { display:none; }

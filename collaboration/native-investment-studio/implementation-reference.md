@@ -2159,11 +2159,12 @@ indexes, and #916 groups deck controls and readings in a closed view registry.
 This supersedes the earlier queued #902/#903 continuation. #900 retires the former
 timeline/agenda CSS and consolidates shared duration styling in
 `studio-instrument.css`; chapter layouts and alternate-media rules retain their
-owners. Exact duplicate declarations retain separate focused review. Current
-source and behavior observations establish ownership and reduced repeated work.
-Matched browser observations establish any
-visitor-latency claim. Earlier measurements remain historical; #260 retains About
-delivery measurement and #705 broader economic translation. Promotion to `main`
+owners. Its final cleanup removes redundant and superseded motion, visibility and
+sizing declarations while retaining the winning rules. Current source and behavior
+observations establish ownership and reduced repeated work. Matched browser
+observations establish any visitor-latency claim. Earlier measurements remain
+historical; #260 retains About delivery measurement and #705 broader economic
+translation. Promotion to `main`
 remains a separate human-cued event.
 
 Accepted score operations settle their local selection and inspector before
