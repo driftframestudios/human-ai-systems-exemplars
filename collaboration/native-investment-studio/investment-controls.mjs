@@ -1,6 +1,9 @@
 // Financial rack controls: the receiving chapter owns amounts, choices and Undo.
 import { createReel } from './reel-control.mjs';
-const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(value);
+// These controls receive dollar amounts; the accepted ledger's cents formatter
+// retains its separate contract in display.mjs.
+const MONEY = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+const money = value => MONEY.format(value);
 const TURN_STEP = 30;
 let sequence = 0;
 

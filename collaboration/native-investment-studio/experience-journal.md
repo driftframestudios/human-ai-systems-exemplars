@@ -91,15 +91,31 @@ saved draft uses its canonical recovery owner and presents the numbered session
 that owner restored, including a selection made within the rack.
 
 The follow-up source audit enriches #679/#900/#902/#903 and adds #916 for Investment
-deck configuration/renderer ownership. With visitor repairs and the target
-contract settled, the next sequence is coherent render context, invocation-local
-indexes, then deck packaging. CSS remains a separate bounded route. Immutable catalogs and compatible formatters may share definitions; mutable
-command candidates, dial gestures and mounted controls keep instance ownership.
+deck configuration/renderer ownership. #902 now gives each mounted Investment
+receiver one immutable reading context keyed by the exact accepted projection.
+Its deck index and lazy financial readings serve the shelf, portrait and loaded
+editor together. This supersedes repeated mutable projection preparation during
+rendering: commands decode fresh settings while reusing immutable price, people
+and period readings. Replace and Undo create a fresh context even when revision
+numbers repeat. The existing saved-plan format remains the exchange boundary.
+
+Shelf buttons, library choices and compatible editors retain their nodes across
+accepted updates. Event callbacks resolve current records; removed or type-changed
+editors retire their callbacks and release controls. This keeps a held event from
+acting on another owner. Prepared formatters retain separate whole-dollar,
+exact-field and ledger-cent meanings. Focused ownership and browser observations
+establish reuse and retained interaction behavior; matched phone/laptop captures
+preserve the approved art. Visitor latency remains unmeasured.
+
+The next refinement receivers are #903 for invocation-local indexes and #916 for
+deck packaging. CSS remains a separate bounded route. Immutable catalogs and
+compatible formatters may share definitions; mutable command candidates, dial
+gestures and mounted controls keep instance ownership.
 Closed registries fit exclusive variants; guards and ordered functions retain
 admission and dependent-effect meaning. A general traversal hierarchy remains a
 candidate only when repeated heterogeneous operations demonstrate its value.
-These source mechanisms establish refinement opportunities, with latency still
-unmeasured. Performance refinements remain queued for a later cue;
+These source mechanisms establish the remaining refinement opportunities.
+Further performance work awaits its next cue;
 promotion to main retains its separate human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's

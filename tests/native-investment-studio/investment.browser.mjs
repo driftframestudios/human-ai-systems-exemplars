@@ -298,8 +298,11 @@ for (const engine of names) {
     const page = await open(t, engine, false, true);
     const score = root(page).locator('[data-native-score]');
     const reviewSession = async () => {
-      await score.locator('[data-cadence-key="track-work:review"]').click();
+      const track = score.locator('[data-cadence-key="track-work:review"]');
+      if (await track.getAttribute('aria-expanded') !== 'true') await track.click();
+      await expect(track).toHaveAttribute('aria-expanded', 'true');
       await expect(root(page).locator('[data-rack-editor-kind]')).toBeVisible();
+      await expect(work(page, 'label')).toHaveValue('Pilot decision review');
       await expect(work(page, 'minutesPerSession')).toBeEditable();
     };
     const readiness = async () => {
@@ -546,7 +549,7 @@ for (const engine of names) {
     await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.10.0.');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.11.0.');
     assert.equal(await bytes(page), initial);
     await performAction(page, 'apply');
     await expect(total(page)).toHaveText('$1,275.00');
@@ -1045,4 +1048,163 @@ for (const engine of names) test(`${engine}: domain portraits follow deck assump
     await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-domain.png`) });
   }
   await expect(view.locator('.investment-domain__sectors')).toHaveCSS('animation-name', 'none');
+});
+
+// Isolate the financial owner while retaining the real About styles and browser
+// controls. The counted provider observes render preparation, not paint timing.
+async function mountContextWorkbench(page) {
+  await chapter(page, 'investment').click();
+  await page.evaluate(async () => {
+    const { createInvestmentWorkbench } = await import('/collaboration/native-investment-studio/investment-workbench.mjs');
+    const { createInvestmentReader, investmentCommandModel } = await import('/collaboration/native-investment-studio/investment-projection.mjs');
+    const { encodeInvestment } = await import('/collaboration/native-investment-studio/investment-state.mjs');
+    const { studio, controller, editing } = window.investmentFixture;
+    controller.dispose(); editing.dispose();
+    const host = document.querySelector('[data-native-chapter-panel="investment"]');
+    host.hidden = false; host.replaceChildren();
+    const read = createInvestmentReader();
+    let reads = 0, mutations = 0;
+    const workbench = createInvestmentWorkbench({
+      getContext() { reads += 1; return read(studio.read()); },
+      change(mutator, _message, gesture) {
+        mutations += 1;
+        const expected = studio.read(), model = investmentCommandModel(read(expected));
+        mutator(model);
+        const result = studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(model.investment.decks) }, expected, gesture);
+        if (!result.ok) throw new Error(result.error.message);
+        workbench.render(host);
+      },
+      setFunding() {},
+    });
+    workbench.render(host);
+    window.contextWorkbench = { host, studio, workbench, read, encodeInvestment, investmentCommandModel,
+      resetReads() { reads = 0; }, reads: () => reads, mutations: () => mutations };
+  });
+}
+
+for (const engine of names) test(`${engine}: Investment prepares one context and retains shelf, library and focused money controls`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await mountContextWorkbench(page);
+  const observed = await page.evaluate(() => {
+    const { host, studio, workbench, read, encodeInvestment, investmentCommandModel, resetReads, reads } = window.contextWorkbench;
+    const retained = [...host.querySelectorAll('.investment-master, .investment-study__library button, .study-money input')];
+    const dial = host.querySelector('[data-focus-key="investment-investment-plan-1-budget-coarse"]');
+    dial.focus();
+    resetReads(); workbench.render(host);
+    const repeatedReads = reads(), unchangedFocus = document.activeElement === dial;
+    const original = read(studio.read()), originalBytes = JSON.stringify(original.model);
+    const expected = studio.read(), model = investmentCommandModel(original);
+    model.investment.decks.find(record => record.id === 'investment-plan-1').settings.budget = 24000;
+    const result = studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(model.investment.decks) }, expected);
+    resetReads(); workbench.render(host);
+    const resultValue = { accepted: result.ok, repeatedReads, changedReads: reads(), unchangedFocus,
+      focusedAfterChange: document.activeElement === dial,
+      retained: retained.length > 10 && retained.every(element => element.isConnected && host.contains(element)),
+      readout: host.querySelector('.study-money__readout').value,
+      oldReadingIntact: JSON.stringify(original.model) === originalBytes,
+      acceptedBudget: studio.read().state.investmentSettings.decks.find(record => record.id === 'investment-plan-1').settings.budget };
+    workbench.dispose();
+    return resultValue;
+  });
+  assert.deepEqual(observed, { accepted: true, repeatedReads: 1, changedReads: 1, unchangedFocus: true,
+    focusedAfterChange: true, retained: true, readout: '$24,000.00', oldReadingIntact: true, acceptedBudget: 2400000 });
+});
+
+for (const engine of names) test(`${engine}: held Investment controls cannot edit removed or type-replaced deck owners`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await mountContextWorkbench(page);
+  const observed = await page.evaluate(async () => {
+    const { financialSettings } = await import('/collaboration/native-investment-studio/investment-catalog.mjs');
+    const { host, studio, workbench, read, encodeInvestment, investmentCommandModel, mutations } = window.contextWorkbench;
+    const holdControls = () => {
+      const editor = host.querySelector('.investment-comparison');
+      return { fader: editor.querySelector('.investment-comparison__fader input'), remove: editor.querySelector('.remove'),
+        reel: editor.querySelector('.native-reel__choice:not([aria-pressed="true"])') };
+    };
+    const attempt = controls => {
+      controls.fader.value = controls.fader.max;
+      controls.fader.dispatchEvent(new Event('input', { bubbles: true }));
+      controls.remove.click(); controls.reel.click();
+    };
+    const changeDecks = mutate => {
+      const expected = studio.read(), model = investmentCommandModel(read(expected));
+      mutate(model.investment.decks);
+      const result = studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(model.investment.decks) }, expected);
+      if (!result.ok) throw new Error(result.error.message);
+    };
+    const oldPlan = holdControls();
+    changeDecks(decks => {
+      const index = decks.findIndex(record => record.id === 'investment-plan-1');
+      decks[index] = { ...decks[index], type: 'capital', settings: financialSettings('capital') };
+    });
+    const replaced = studio.exportText(), beforeReplacementAttempts = mutations();
+    attempt(oldPlan); // A stale browser event can arrive before the next render.
+    workbench.render(host); attempt(oldPlan);
+    const replacementProtected = studio.exportText() === replaced && mutations() === beforeReplacementAttempts;
+    const capital = host.querySelector('[data-investment-editor="investment-plan-1"]');
+    const oldCapital = holdControls();
+    changeDecks(decks => decks.splice(decks.findIndex(record => record.id === 'investment-plan-1'), 1));
+    const removed = studio.exportText(), beforeRemovalAttempts = mutations();
+    attempt(oldCapital); workbench.render(host); attempt(oldCapital);
+    const removalProtected = studio.exportText() === removed && mutations() === beforeRemovalAttempts;
+    host.querySelector('[data-investment-record="investment-service-1"]').click();
+    const active = host.querySelector('#investment-investment-service-1-people');
+    active.value = '100'; active.dispatchEvent(new Event('input', { bubbles: true }));
+    const currentUsable = studio.read().state.investmentSettings.decks.find(record => record.id === 'investment-service-1').settings.people === 10000;
+    const result = { replacementProtected, removalProtected, replacedEditorRetired: !capital.isConnected, currentUsable };
+    workbench.dispose();
+    return result;
+  });
+  assert.deepEqual(observed, { replacementProtected: true, removalProtected: true, replacedEditorRetired: true, currentUsable: true });
+});
+
+for (const engine of names) test(`${engine}: brief money taps and outside drags survive blur and deck reopening`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page), editor = view.locator('[data-investment-editor]');
+  const original = await page.evaluate(() => window.investmentFixture.studio.read().state.investmentSettings.decks.find(deck => deck.id === 'investment-plan-1'));
+  await view.getByRole('button', { name: 'New investment deck', exact: false }).click();
+  await view.locator('.investment-study__library-choices').getByRole('button', { name: 'Plan investment', exact: false }).click();
+  const copyId = await editor.getAttribute('data-investment-editor');
+  const coarse = editor.getByRole('slider', { name: 'Budget to compare, 1000-dollar steps', exact: true });
+  const fine = editor.getByRole('slider', { name: 'Budget to compare, 100-dollar steps', exact: true });
+  const moneyModule = editor.locator('.study-money').filter({ hasText: 'Budget to compare' });
+  const reopen = async () => {
+    await moneyModule.locator('input[type="number"]').focus();
+    await view.locator('[data-investment-record="investment-plan-1"]').click();
+    await view.locator(`[data-investment-record="${copyId}"]`).click();
+  };
+  const assertSaved = async (budget, text) => {
+    const saved = await page.evaluate(id => {
+      const decks = window.investmentFixture.studio.read().state.investmentSettings.decks;
+      const record = decks.find(deck => deck.id === id);
+      return { budget: record.settings.budget, approach: record.settings.approach, original: decks.find(deck => deck.id === 'investment-plan-1') };
+    }, copyId);
+    assert.deepEqual(saved, { budget, approach: 'custom', original });
+    await expect(moneyModule.locator('output')).toHaveText(text);
+    await expect(editor.getByRole('button', { name: 'Investment approach: Custom', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  };
+  await coarse.scrollIntoViewIfNeeded();
+  const tapBox = await coarse.boundingBox();
+  await page.mouse.move(tapBox.x + tapBox.width * .8, tapBox.y + tapBox.height / 2);
+  await page.mouse.down(); await page.mouse.up();
+  await reopen();
+  await assertSaved(1100000, '$11,000.00');
+
+  await fine.scrollIntoViewIfNeeded();
+  const box = await fine.boundingBox(), x = box.x + box.width / 2, y = box.y + box.height / 2;
+  await page.mouse.move(x, y - box.height * .35); await page.mouse.down();
+  try {
+    // Move beyond the hit target, then turn while native pointer capture owns
+    // the same gesture. One hundred degrees crosses three 30-degree detents.
+    const radius = Math.max(box.width, box.height);
+    await page.mouse.move(x, y - radius);
+    for (const degrees of [25, 50, 75, 100]) {
+      const angle = degrees * Math.PI / 180;
+      await page.mouse.move(x + Math.sin(angle) * radius, y - Math.cos(angle) * radius);
+    }
+  } finally { await page.mouse.up(); }
+  await expect(fine.locator('..')).not.toHaveAttribute('data-dragging', 'true');
+  await reopen();
+  await assertSaved(1130000, '$11,300.00');
 });

@@ -1,13 +1,15 @@
 // Shared session pricing stays distinct from the independent financial comparison tapes.
 import { INVESTMENT_TYPES, PLAN_APPROACHES, FINANCIAL_PRESETS, financialSettings } from './investment-catalog.mjs';
-import { analyseInvestment } from './investment-financials.mjs';
 import { INVESTMENT_DECK_LIMIT, INVESTMENT_FIELDS } from './investment-state.mjs';
 import { createMoneyControl, createChoiceReel } from './investment-controls.mjs';
 import { INVESTMENT_DOMAINS, investmentPortrait, renderInvestmentPortrait, renderInvestmentDiagram } from './investment-portrait.mjs';
 import { revealReelResult } from './reel-control.mjs';
 
-const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-const number = value => new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(value);
+// Financial readings use dollar units; accepted ledger cents keep display.mjs.
+const DOLLARS = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const NUMBER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+const money = value => DOLLARS.format(value);
+const number = value => NUMBER.format(value);
 const signedMoney = value => `${value < 0 ? '−' : '+'}${money(Math.abs(value))}`;
 const percent = value => `${number(value * 100)}%`;
 const metric = (value, format = money, fallback = '—') => value?.status === 'known' ? format(value.value) : fallback;
@@ -54,30 +56,29 @@ function bars(entries) {
   return chart;
 }
 
-export function createInvestmentWorkbench({ getModel, change, openSession, setFunding }) {
-  let selected = 'pairing', activeId = 'investment-plan-1', domain = 'plan', adding = false;
-  let outer, shelf, library, panel, loaded, domainControl, domainReading, portraitKey;
-  const editors = new Map();
-  const records = () => getModel().investment.decks;
-  const recordFor = id => records().find(record => record.id === id);
+export function createInvestmentWorkbench({ getContext, change, openSession, setFunding }) {
+  let selected = 'pairing', activeId = 'investment-plan-1', domain = 'plan', adding = false, disposed = false;
+  let outer, shelf, library, libraryToggle, libraryChoices, panel, loaded, domainControl, domainReading, portraitKey;
+  const editors = new Map(), tapes = new Map();
   function focus(container, key) { [...container.querySelectorAll('[data-focus-key]')].find(element => element.dataset.focusKey === key)?.focus({ preventScroll: true }); }
   function addRecord(type) {
-    if (records().length >= INVESTMENT_DECK_LIMIT) return;
+    if (disposed || getContext().model.investment.decks.length >= INVESTMENT_DECK_LIMIT) return;
     loaded?.release();
     change(model => { const state = model.investment, sequence = 1 + Math.max(0, ...state.decks.filter(record => record.type === type).map(record => record.sequence)); activeId = `investment-${crypto.randomUUID()}`; domain = type; state.decks.push({ id: activeId, type, sequence, settings: financialSettings(type) }); adding = false; }, 'Investment deck added.');
     focus(outer, `master-${activeId}`);
   }
   function render(container) {
-    const model = getModel(), state = model.investment, pricing = model.pricing;
-    if (!recordFor(activeId)) activeId = state.decks.find(record => record.type === domain)?.id;
-    if (recordFor(activeId)) domain = recordFor(activeId).type;
+    if (disposed) return;
+    const context = getContext(), { model } = context, state = model.investment, pricing = model.pricing;
+    if (!context.record(activeId)) activeId = state.decks.find(record => record.type === domain)?.id;
+    if (context.record(activeId)) domain = context.record(activeId).type;
     if (!outer) {
       outer = node('div', undefined, 'investment-study investment-study--masters');
       const channel = node('aside', undefined, 'investment-study__channel'); channel.append(node('h2', 'Investment decks'));
       shelf = node('nav', undefined, 'investment-study__masters'); shelf.setAttribute('aria-label', 'Investment comparison decks');
       library = node('section', undefined, 'investment-study__library'); library.setAttribute('aria-label', 'Add an investment comparison');
       panel = node('section', undefined, 'investment-study__loaded-master'); panel.id = 'investment-master-panel';
-      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', variant: 'navy', options: Object.entries(INVESTMENT_DOMAINS).map(([id, value]) => ({ id, label: value.label })), read: () => domain, write: value => { loaded?.release(); domain = value; activeId = records().find(record => record.type === value)?.id; render(container); } });
+      domainControl = createChoiceReel({ id: 'investment-domain', label: 'Domain', variant: 'navy', options: Object.entries(INVESTMENT_DOMAINS).map(([id, value]) => ({ id, label: value.label })), read: () => domain, write: value => { if (disposed) return; loaded?.release(); domain = value; activeId = getContext().model.investment.decks.find(record => record.type === value)?.id; render(container); } });
       domainControl.element.classList.add('investment-study__domain');
       const body = node('div', undefined, 'investment-study__body'), domainRow = node('section', undefined, 'investment-study__orientation');
       domainRow.setAttribute('aria-label', 'Investment domain');
@@ -90,30 +91,52 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     const scroll = { left: shelf.scrollLeft, top: shelf.scrollTop };
     domainControl.update(domain);
     const present = new Set(state.decks.map(record => record.id));
-    for (const [id, editor] of editors) if (!present.has(id)) { editor.dispose(); editors.delete(id); }
-    shelf.replaceChildren();
-    for (const record of state.decks) {
-      const definition = typeFor(record), [amount, detail] = masterReading(record, analyseInvestment(record, pricing), pricing);
-      const tape = button('', () => { loaded?.release(); activeId = record.id; domain = record.type; render(container); focus(container, `master-${record.id}`); }, 'investment-master', `master-${record.id}`);
-      tape.dataset.investmentType = record.type; tape.dataset.investmentRecord = record.id;
-      tape.setAttribute('aria-pressed', String(activeId === record.id)); tape.setAttribute('aria-controls', panel.id);
-      const face = node('span', undefined, 'investment-master__face');
-      const reels = node('span', undefined, 'investment-master__reels'); reels.setAttribute('aria-hidden', 'true');
-      face.append(node('span', definition.strip, 'investment-master__strip'), node('strong', titleFor(record), 'investment-master__title'), reels, node('span', amount, 'investment-master__amount'), node('small', detail)); tape.append(face); shelf.append(tape);
+    for (const [id, editor] of editors) if (context.record(id)?.type !== editor.type) {
+      editor.dispose(); editors.delete(id); if (loaded === editor) loaded = null;
     }
-    library.replaceChildren();
-    const add = button(adding ? 'Close library' : '＋ New investment deck', () => { adding = !adding; render(container); focus(container, 'master-add'); }, adding ? 'ghost' : 'add', 'master-add');
-    add.disabled = state.decks.length >= INVESTMENT_DECK_LIMIT; add.setAttribute('aria-expanded', String(adding)); add.setAttribute('aria-controls', 'investment-tape-library'); library.append(add);
-    const choices = node('div', undefined, 'investment-study__library-choices'); choices.id = 'investment-tape-library'; choices.hidden = !adding;
-    for (const definition of INVESTMENT_TYPES) {
-      const choice = button('', () => addRecord(definition.id), 'investment-study__library-choice', `add-master-${definition.id}`);
-      choice.append(node('strong', `＋ ${definition.title}`), node('small', definition.detail)); choices.append(choice);
+    for (const [id, tape] of tapes) if (!present.has(id)) { tape.remove(); tapes.delete(id); }
+    state.decks.forEach((record, index) => {
+      let tape = tapes.get(record.id);
+      if (!tape) {
+        const id = record.id;
+        tape = button('', () => {
+          if (disposed || tapes.get(id) !== tape) return;
+          const current = getContext().record(id); if (!current) return;
+          loaded?.release(); activeId = id; domain = current.type; render(container); focus(container, `master-${id}`);
+        }, 'investment-master', `master-${id}`);
+        tape.dataset.investmentRecord = id; tape.setAttribute('aria-controls', panel.id);
+        const face = node('span', undefined, 'investment-master__face');
+        const reels = node('span', undefined, 'investment-master__reels'); reels.setAttribute('aria-hidden', 'true');
+        face.append(node('span', '', 'investment-master__strip'), node('strong', '', 'investment-master__title'), reels, node('span', '', 'investment-master__amount'), node('small', ''));
+        tape.append(face); tapes.set(id, tape);
+      }
+      const definition = typeFor(record), [amount, detail] = masterReading(record, context.analysis(record.id), pricing);
+      tape.dataset.investmentType = record.type;
+      tape.setAttribute('aria-pressed', String(activeId === record.id));
+      tape.querySelector('.investment-master__strip').textContent = definition.strip;
+      tape.querySelector('.investment-master__title').textContent = titleFor(record);
+      tape.querySelector('.investment-master__amount').textContent = amount;
+      tape.querySelector('small').textContent = detail;
+      // Keep unaffected nodes attached: detach/reinsert can drop native focus.
+      if (shelf.children[index] !== tape) shelf.insertBefore(tape, shelf.children[index] ?? null);
+    });
+    if (!libraryToggle) {
+      libraryToggle = button('', () => { if (disposed) return; adding = !adding; render(container); focus(container, 'master-add'); }, '', 'master-add');
+      libraryToggle.setAttribute('aria-controls', 'investment-tape-library');
+      libraryChoices = node('div', undefined, 'investment-study__library-choices'); libraryChoices.id = 'investment-tape-library';
+      for (const definition of INVESTMENT_TYPES) {
+        const choice = button('', () => addRecord(definition.id), 'investment-study__library-choice', `add-master-${definition.id}`);
+        choice.append(node('strong', `＋ ${definition.title}`), node('small', definition.detail)); libraryChoices.append(choice);
+      }
+      library.append(libraryToggle, libraryChoices);
     }
-    library.append(choices);
-    const record = recordFor(activeId), description = INVESTMENT_DOMAINS[domain];
+    libraryToggle.textContent = adding ? 'Close library' : '＋ New investment deck'; libraryToggle.className = adding ? 'ghost' : 'add';
+    libraryToggle.disabled = state.decks.length >= INVESTMENT_DECK_LIMIT;
+    libraryToggle.setAttribute('aria-expanded', String(adding)); libraryChoices.hidden = !adding;
+    const record = context.record(activeId), description = INVESTMENT_DOMAINS[domain];
     const title = node('h3', description.title), detail = node('p', description.detail);
     domainReading.replaceChildren(title, detail);
-    if (record) domainReading.append(renderInvestmentPortrait(document, investmentPortrait(record, pricing)));
+    if (record) domainReading.append(renderInvestmentPortrait(document, investmentPortrait(record, pricing, context.analysis(record.id))));
     else {
       domainReading.append(renderInvestmentDiagram(document, description));
       const definition = INVESTMENT_TYPES.find(type => type.id === domain);
@@ -130,24 +153,31 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     }
     panel.hidden = false;
     panel.setAttribute('aria-label', titleFor(record));
-    if (editors.has(record.id) && editors.get(record.id).type !== record.type) {
-      editors.get(record.id).dispose(); editors.delete(record.id); if (loaded?.id === record.id) loaded = null;
-    }
     if (loaded?.id !== record.id) {
       loaded?.release(); loaded = editors.get(record.id) || createEditor(record);
       editors.set(record.id, loaded); panel.replaceChildren(loaded.root); revealReelResult(loaded.root);
     }
-    loaded.update(record, pricing);
+    loaded.update(record, context);
     shelf.scrollLeft = scroll.left; shelf.scrollTop = scroll.top;
     if (focusedKey && !document.activeElement?.closest('.investment-comparison')) focus(outer, focusedKey);
   }
 
   function createEditor(initial) {
     const id = initial.id, type = initial.type, controls = [], updates = [], groups = new Map();
-    let approachReading, lensReading, currentReading;
-    const read = () => recordFor(id)?.settings || initial.settings;
-    const write = (field, value, key) => change(model => {
-      const record = model.investment.decks.find(item => item.id === id); if (!record) return;
+    let approachReading, lensReading, currentReading, retired = false;
+    const read = () => {
+      const current = getContext().record(id);
+      return current?.type === type ? current.settings : initial.settings;
+    };
+    const isCurrent = () => !disposed && !retired && loaded?.id === id && getContext().record(id)?.type === type;
+    function edit(mutator, message = '', gesture = null) {
+      if (!isCurrent()) return;
+      return change(model => {
+        const record = model.investment.decks.find(item => item.id === id);
+        if (record?.type === type) mutator(record, model);
+      }, message, gesture);
+    }
+    const write = (field, value, key) => edit(record => {
       record.settings[field] = value;
       if (type === 'plan' && ['budget', 'reserve', 'opportunity'].includes(field)) record.settings.approach = 'custom';
       if (FINANCIAL_PRESETS[type]?.some(preset => Object.hasOwn(preset.values, field))) record.settings.lifecycle = 'custom';
@@ -156,8 +186,9 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     const head = node('header', undefined, 'investment-comparison__head'), title = node('h3', titleFor(initial)), titles = node('div');
     titles.append(node('small', typeFor(initial).strip), title);
     const remove = button('Remove deck', () => {
+      if (!isCurrent()) return;
       controls.forEach(control => control.release?.());
-      change(model => { model.investment.decks = model.investment.decks.filter(record => record.id !== id); }, 'Investment deck removed. Undo restores it.');
+      edit((_record, model) => { model.investment.decks = model.investment.decks.filter(record => record.id !== id); }, 'Investment deck removed. Undo restores it.');
       focus(outer, activeId ? `master-${activeId}` : 'master-empty-add');
     }, 'remove', `remove-master-${id}`);
     head.append(titles, remove);
@@ -182,14 +213,14 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       const control = createChoiceReel({ id: `investment-${id}-${field}`, label, variant: type === 'capital' && field === 'metric' ? 'rose' : undefined, secondary: reels.children.length > 0, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
     }
     function lifecycle() {
-      reel('lifecycle', 'Lifecycle', [...FINANCIAL_PRESETS[type].map(item => [item.id, item.label]), ['custom', 'Custom']], value => change(model => {
-        const record = model.investment.decks.find(item => item.id === id); Object.assign(record.settings, FINANCIAL_PRESETS[type].find(item => item.id === value)?.values, { lifecycle: value });
+      reel('lifecycle', 'Lifecycle', [...FINANCIAL_PRESETS[type].map(item => [item.id, item.label]), ['custom', 'Custom']], value => edit(record => {
+        Object.assign(record.settings, FINANCIAL_PRESETS[type].find(item => item.id === value)?.values, { lifecycle: value });
       }, value === 'custom' ? 'Current settings retained.' : 'Lifecycle settings loaded.'));
     }
     if (type === 'plan') {
       reels.classList.add('investment-comparison__reels--connected');
-      reel('approach', 'Investment approach', [...PLAN_APPROACHES.map(item => [item.id, item.label]), ['custom', 'Custom']], value => change(model => {
-        const state = model.investment.decks.find(item => item.id === id).settings, preset = PLAN_APPROACHES.find(item => item.id === value);
+      reel('approach', 'Investment approach', [...PLAN_APPROACHES.map(item => [item.id, item.label]), ['custom', 'Custom']], value => edit(record => {
+        const state = record.settings, preset = PLAN_APPROACHES.find(item => item.id === value);
         if (preset) Object.assign(state, { reserve: preset.reserve, opportunity: preset.opportunity }); state.approach = value;
       }, value === 'custom' ? 'Current allocation retained.' : 'Budget allocation updated.'));
       reel('domain', 'Investment lens', [['all', 'Whole plan'], ['funded', 'Funded time'], ['extra', 'Extra investment']]); moneyControl('budget', 'Budget to compare', 'all', 'aggregate');
@@ -203,7 +234,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       range('teams', 'Customer teams', number, 'implementation'); moneyControl('setup', 'Setup per customer team', 'implementation', 'unit', 'stacked'); range('training', 'Training per team', value => `${value} hours`, 'implementation');
       note.textContent = 'Training uses $120/hour. Customer implementation stays separate from recurring price and contribution.';
     } else if (type === 'commercial') {
-      lifecycle(); reel('metric', 'Commercial reading', [['grr', 'GRR'], ['nrr', 'NRR'], ['cac', 'CAC'], ['payback', 'Payback']], value => change(model => { const state = model.investment.decks.find(item => item.id === id).settings; state.metric = value; state.domain = ['grr', 'nrr'].includes(value) ? 'retention' : 'acquisition'; }, 'Commercial reading selected.'));
+      lifecycle(); reel('metric', 'Commercial reading', [['grr', 'GRR'], ['nrr', 'NRR'], ['cac', 'CAC'], ['payback', 'Payback']], value => edit(record => { const state = record.settings; state.metric = value; state.domain = ['grr', 'nrr'].includes(value) ? 'retention' : 'acquisition'; }, 'Commercial reading selected.'));
       moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'all', true); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
       moneyControl('acquisitionSpend', 'Acquisition spend', 'acquisition', 'aggregate'); range('newCustomers', 'New customers', number, 'acquisition'); moneyControl('newRevenue', 'New revenue / quarter', 'acquisition', 'aggregate'); range('contributionMargin', 'New revenue contribution margin', value => `${value}%`, 'acquisition');
       note.textContent = 'GRR and NRR track the opening cohort. New and reactivated revenue join the closing total separately.';
@@ -219,8 +250,8 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       note.textContent = 'Quarter-end net cash flows. Rollout uses 2.5× upfront, 1.8× benefit and one quarter to start.';
     }
     if (type !== 'plan') { currentReading = node('output', '', 'investment-comparison__reel-context'); reels.children[0].append(currentReading); }
-    return { id, type, root, dispose() { controls.forEach(control => control.dispose?.()); root.remove(); }, release() { controls.forEach(control => control.release?.()); }, update(record, pricing) {
-      title.textContent = titleFor(record); const state = record.settings, analysis = analyseInvestment(record, pricing);
+    return { id, type, root, dispose() { retired = true; controls.forEach(control => control.dispose?.()); root.remove(); }, release() { controls.forEach(control => control.release?.()); }, update(record, context) {
+      title.textContent = titleFor(record); const state = record.settings, pricing = context.model.pricing, analysis = context.analysis(id);
       if (currentReading) currentReading.value = reelReading(record, analysis, pricing);
       for (const update of updates) update(state);
       for (const [name, element] of groups) element.hidden = name !== 'all' && name !== state.domain;
@@ -234,7 +265,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
           const pad = node('div', undefined, 'investment-comparison__allocation-pad'); pad.dataset.allocation = kind; pad.dataset.shortfall = String(kind === 'remaining' && analysis.remaining < 0); pad.style.setProperty('--allocation-share', `${state.budget ? Math.min(100, amount / state.budget * 100) : 0}%`); pad.append(node('span', label), node('strong', `${pricing.complete ? '' : 'Known '}${money(amount)}`)); allocation.append(pad);
         }
         companion.append(node('h4', 'Budget allocation'), allocation);
-        renderPlan(plan, record);
+        renderPlan(plan, record, context, analysis, edit, isCurrent);
       } else if (type === 'rollout') {
         const m = analysis.metrics, net = m.netPrice.value, contribution = m.unitContribution.value;
         screen.append(metricTiles([['Net price / quarter', metric(m.netPrice), 'Per customer team'], ['Contribution / quarter', metric(m.unitContribution), 'Per customer team'], ['Customer implementation', money(analysis.implementation), `${state.teams} teams`]]));
@@ -261,9 +292,9 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     } };
   }
 
-  function renderPlan(container, record) {
-    const model = getModel(), base = model.pricing, state = record.settings;
-    const pricing = { ...base, sessions: analyseInvestment(record, base).visibleSessions };
+  function renderPlan(container, record, context, analysis, edit, isCurrent) {
+    const { model } = context, base = model.pricing, state = record.settings;
+    const pricing = { ...base, sessions: analysis.visibleSessions };
     if (!pricing.sessions.some(item => item.tape.id === selected)) selected = pricing.sessions[0]?.tape.id;
     const current = pricing.sessions.find(item => item.tape.id === selected);
     const root = node('div', undefined, 'investment-study');
@@ -271,7 +302,10 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     for (const [label, value] of [[pricing.complete ? 'Accepted investment' : 'Known investment', money(pricing.total)], ['People’s time', `${number(pricing.effort)} h`], ['Since saved comparison', state.baseline === null ? '—' : `${pricing.total >= state.baseline ? '+' : '−'}${money(Math.abs(pricing.total - state.baseline))}`]]) {
       const reading = node('div'); reading.append(node('span', label), node('strong', value)); meter.append(reading);
     }
-    const save = button(state.baseline === null ? 'Save comparison' : 'Update comparison', () => change(model => { model.investment.decks.find(item => item.id === record.id).settings.baseline = model.pricing.total; }, 'Comparison saved.'), 'ghost', 'investment-save');
+    const owns = event => isCurrent() && container.contains(event.currentTarget);
+    const save = button(state.baseline === null ? 'Save comparison' : 'Update comparison', event => {
+      if (owns(event)) edit((current, model) => { current.settings.baseline = model.pricing.total; }, 'Comparison saved.');
+    }, 'ghost', 'investment-save');
     meter.append(save); root.append(meter);
 
     const board = node('div', undefined, 'investment-study__board');
@@ -283,7 +317,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
         .map(item => ({ ...item, ...item.fundingParts?.[funding] }));
       const heading = node('div', undefined, 'bar'); heading.append(node('h3', title), node('strong', `${entries.every(item => item.complete) ? '' : 'Known '}${money(entries.reduce((sum, item) => sum + item.cost, 0))}`, 'number')); lane.append(heading, node('p', hint, 'hint'));
       for (const item of entries) {
-        const pad = button('', () => { selected = item.tape.id; render(outer.parentElement); container.querySelector(`[data-focus-key="investment-${selected}"]`)?.focus({ preventScroll: true }); }, 'investment-study__pad', `investment-${item.tape.id}`);
+        const pad = button('', event => { if (!owns(event)) return; selected = item.tape.id; render(outer.parentElement); container.querySelector(`[data-focus-key="investment-${selected}"]`)?.focus({ preventScroll: true }); }, 'investment-study__pad', `investment-${item.tape.id}`);
         pad.setAttribute('aria-pressed', String(selected === item.tape.id));
         pad.append(node('strong', item.tape.name), node('span', `${item.complete ? '' : 'Known '}${money(item.cost)} · ${number(item.effort)} person-hours`));
         const strip = node('span', undefined, 'investment-study__strip'); strip.style.setProperty('--share', `${pricing.total ? item.cost / pricing.total * 100 : 0}%`); strip.setAttribute('aria-hidden', 'true'); pad.append(strip); lane.append(pad);
@@ -295,12 +329,13 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     if (current) {
       const deck = node('section', undefined, 'investment-study__deck'); deck.setAttribute('aria-label', 'Selected session investment');
       const heading = node('div', undefined, 'bar'); heading.append(node('h3', current.tape.name));
-      if (openSession) heading.append(button('Session controls ↗', event => openSession(current.tape.id, event.currentTarget), 'ghost', 'investment-session')); deck.append(heading);
+      if (openSession) heading.append(button('Session controls ↗', event => { if (owns(event)) openSession(current.tape.id, event.currentTarget); }, 'ghost', 'investment-session')); deck.append(heading);
       const modules = node('div', undefined, 'investment-study__modules');
       const funding = node('fieldset'); funding.append(node('legend', 'How this work is funded'));
       if (current.funding === 'mixed') funding.append(node('p', 'Sessions use both funding types.', 'hint'));
       for (const [value, label] of [['funded', 'Within funded time'], ['extra', 'Extra investment']]) {
         const pad = button(label, event => {
+          if (!owns(event)) return;
           const heldFocus = document.activeElement === event.currentTarget;
           setFunding(current.tape.id, value);
           if (heldFocus && !container.querySelector(`[data-focus-key="funding-${value}"]`)) focus(outer, `investment-${record.id}-domain-${state.domain}`);
@@ -332,5 +367,5 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     sequence.append(periods); if (model.periods.length) root.append(sequence);
     container.replaceChildren(root);
   }
-  return { render, release() { loaded?.release(); }, dispose() { for (const editor of editors.values()) editor.dispose(); editors.clear(); domainControl?.dispose(); outer?.remove(); } };
+  return { render, release() { loaded?.release(); }, dispose() { disposed = true; for (const editor of editors.values()) editor.dispose(); editors.clear(); tapes.clear(); domainControl?.dispose(); outer?.remove(); } };
 }

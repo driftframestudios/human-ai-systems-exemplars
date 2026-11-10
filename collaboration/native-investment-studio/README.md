@@ -376,14 +376,20 @@ makes individual editing and plan defaults explicit at receiving boundaries;
 aggregate cards retain period navigation. `navigation-policy.mjs` admits the
 current record and explicit scope before handing the canonical target to the
 draft owner. Mounted checks cover retained entries on rejection, defaults versus
-numbered edits, proposed arrangements, nested returns and Undo. Next, #902
-separates reusable readings from detached mutable command settings; #903 prepares
-invocation-local membership and override indexes.
+numbered edits, proposed arrangements, nested returns and Undo.
+The #902 Investment reader reuses one immutable context for the exact accepted
+projection. Shelf amounts, portraits and loaded controls share its deck lookup
+and financial readings. Commands receive fresh mutable settings; retained shelf,
+library and editor controls keep focus while their callbacks read current state.
+Removed or type-changed editors release their controls and reject held events.
+Ownership checks cover reuse, detached commands and replace/Undo lifetimes;
+browser checks cover retained controls and the existing dial/deck journeys.
+Next, #903 prepares invocation-local membership and override indexes.
 [#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
 follows with focused deck configuration and renderer ownership. Each proposal
 uses the smallest fitting registry, factory or shared immutable definition;
-mutable controls and drafts keep their own owners. These refinements remain
-queued for a later cue. Reduced refresh work is observed directly; visitor latency
+mutable controls and drafts keep their own owners. The remaining refinements
+await their next cue. Reduced refresh and preparation work are observed directly; visitor latency
 still needs a matched measurement before a speed claim. Earlier stress
 studies remain historical evidence; the accepted visual contracts and existing
 accounting behavior remain preservation boundaries. Work receives review on
