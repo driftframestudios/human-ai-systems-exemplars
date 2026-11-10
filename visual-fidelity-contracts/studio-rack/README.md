@@ -97,6 +97,14 @@ contrast helps the visitor. Chapter-specific rhythm, density and palette remain
 available; Quality's track matrix is the preferred precedent for new selection
 racks, while Change and Quality retain their different fader treatments.
 
+Futura leads the supported chapter and module heading stacks; system UI remains
+the explicit Studio button family, with the existing monospace quantity and pad
+variants. Heading or ordered-list inheritance must keep that control boundary.
+The amp retains its cobalt chapter-key shadows and names the purpose control
+**Set vision**. Its reading appears when opened. Plan horizon owns its padded
+fieldset and internally seated legend; other fieldsets retain their compact
+component geometry. PR #934 records this typographic and spacing refinement.
+
 The [Tiffany Ledger Field](../tiffany-ledger-field.md) owns the About composition.
 [ASCII Zine Field](../ascii-zine-field.md) supplies restrained print character;
 [Cobalt Operating Field](../cobalt-operating-field.md) supplies related guidance

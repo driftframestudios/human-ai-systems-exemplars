@@ -17,7 +17,7 @@ const SHOWCASE_CAPABILITY_CONTEXT = Object.freeze({
   'edit-records-in-bulk': 'Preview a routing change across selected service requests and restore their earlier assignments if needed.',
   'coordinate-handoff': 'Agree who receives each service request, what response they owe, and how to recover a missed handoff.',
   'inspect-history': 'Help pilot reviewers find an earlier service-request decision and recover why it changed.',
-  expectation: 'Agree the pilot scope and expected response at each decision review.',
+  expectation: 'Agree on pilot scope and expected response at each decision review.',
   focalization: 'Identify the question the product lead must resolve before choosing the pilot scope.',
   experimentation: 'Rehearse a routine request and a missed handoff before committing to a wider rollout.',
   opportunity: 'Compare extra pilot review time with the engineering and operations work it would displace.',
@@ -103,7 +103,7 @@ export function createShowcasePlan({ pausedExample = false, peopleExamples = fal
   }));
   plan.practices = [
     { id: 'shared-expectations', definitionId: 'expectation', definitionVersion: '1.0.0',
-      context: 'Agree the pilot scope and expected response at each decision review.', teamId: 'engineering',
+      context: 'Agree on pilot scope and expected response at each decision review.', teamId: 'engineering',
       responsiblePersonIds: ['maya', 'ari', 'noor'], decisionOwnerPersonId: 'maya', lifecycle: 'active', prerequisites: [],
       supportBindings: [{ requirementId: 'coordination', workIds: ['review'] }, { requirementId: 'review', workIds: ['review'] }] },
     { id: 'readiness-evidence', definitionId: 'assurance', definitionVersion: '1.0.0',
@@ -208,7 +208,7 @@ export function createQuarterShowcasePlan(options = {}) {
     ['rollout-support', 'engineering', 'operations', 'sam', 'Rollout sequence and support responsibilities',
       'Rehearse the receiving work with each participating team', ['rollout-planning', 'receiving-walkthrough']],
     ['adoption-findings', 'operations', 'product', 'maya', 'Adoption findings and outstanding operating questions',
-      'Agree the operating owner and next improvement', ['receiving-walkthrough', 'adoption-review', 'operating-handoff']],
+      'Agree on operating owner and next improvement', ['receiving-walkthrough', 'adoption-review', 'operating-handoff']],
   ].map(([id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds]) => ({
     id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds, status: 'active',
   }));

@@ -127,7 +127,7 @@ for (const engine of names) test(`${engine}: removing tapes preserves recovery a
   await expect(starters).toHaveAttribute('data-starter', 'plan');
   await starters.getByRole('button', { name: 'Load these plans', exact: true }).click();
   const loaded = JSON.parse(await bytes(page));
-  assert.deepEqual(loaded.work.map(work => work.label), ['Frame the outcome', 'Agree priorities', 'Review scope']);
+  assert.deepEqual(loaded.work.map(work => work.label), ['Frame the outcome', 'Agree on priorities', 'Review scope']);
   assert.equal(loaded.scoreSettings.cadence.placements.length, 4);
   assert.deepEqual(loaded.people, empty.people); assert.deepEqual(loaded.teams, empty.teams);
   await expect(starters).toBeHidden(); await expect(shelf(page).locator('[data-studio-plan-id]')).toHaveCount(3);
