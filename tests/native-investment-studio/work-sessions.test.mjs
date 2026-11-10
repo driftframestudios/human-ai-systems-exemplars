@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan, prepareImport, preparePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { createCadence } from '../../collaboration/native-investment-studio/cadence.mjs';
-import { copyWorkSession, expandWorkSessions, resolveWorkSession, summarizeWorkSessions } from '../../collaboration/native-investment-studio/work-sessions.mjs';
+import { copyWorkSession, createWorkSessionResolver, expandWorkSessions, resolveWorkSession, summarizeWorkSessions } from '../../collaboration/native-investment-studio/work-sessions.mjs';
 
 function fixture() {
   const plan = createExamplePlan();
@@ -28,6 +28,24 @@ function update(studio, index, fields = {}, placement) {
     session: { ...copyWorkSession(resolveWorkSession(studio.read().state.work[0], index)), ...fields },
     ...(placement === undefined ? {} : { placement }) });
 }
+
+test('repeated session reads index overrides once and return detached settings for each valid ordinal', () => {
+  const work = fixture().work[0];
+  let visits = 0;
+  work.sessionOverrides = [{ ...copyWorkSession(work), get occurrenceIndex() { visits++; return 1; },
+    label: 'Private review', personIds: ['product-two'], funding: 'allocated', status: 'paused' }];
+  const resolve = createWorkSessionResolver(work);
+  const reading = resolve(1);
+  assert.deepEqual(reading, { label: 'Private review', teamId: 'delivery', personIds: ['product-two'],
+    minutesPerOccurrence: 30, funding: 'allocated', status: 'paused', occurrenceIndex: 1,
+    workId: 'review', lifecycle: 'active', active: false });
+  reading.personIds.push('engineering-one'); reading.label = 'Changed reading';
+  assert.equal(resolve(1).label, 'Private review');
+  assert.deepEqual(resolve(1).personIds, ['product-two']);
+  assert.deepEqual(resolve(2).personIds, ['product-one', 'engineering-one']);
+  for (const invalid of [-1, 3, 1.5, '1']) assert.equal(resolve(invalid), null);
+  assert.equal(visits, 1, 'repeated reads reuse this invocation’s override lookup');
+});
 
 test('a session edit changes its settings and placement while sibling sessions and tape defaults remain exact', () => {
   const studio = createStudio(fixture()), before = studio.read(), initial = expandWorkSessions(before.state.work[0]);
