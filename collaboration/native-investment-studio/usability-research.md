@@ -271,9 +271,9 @@ follows adding plans and sessions, retaining the local editor, turning dials,
 switching views and Undo. Accepted-edit refresh (#901), explicit editor scope
 (#915), Investment context reuse (#902), occurrence indexing (#903) and deck
 view ownership (#916) are implemented on `dev`. #900 retires former timeline and
-agenda presentation and consolidates shared duration styling while preserving
-chapter layouts and alternate-media owners. Exact duplicate declarations retain
-separate focused review. This supersedes the earlier queued runtime continuation.
+agenda presentation, consolidates shared duration styling and removes redundant
+declarations while preserving chapter layouts and alternate-media owners. This
+supersedes the earlier queued runtime and duplicate-CSS continuation.
 The earlier relationship study remains historical evidence. A current visitor-path
 observation supplies the basis for a latency claim or further runtime refinement;
 ordinary visitor-created growth supplies the initial workload.

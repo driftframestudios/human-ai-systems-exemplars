@@ -48,7 +48,8 @@ visual comparison points.
 
 The 9 November review of `dev` at `fdb445d` reframed #679 around responsive
 creation, manipulation, navigation and recovery. Its JavaScript refinements
-(#901, #915, #902, #903 and #916) are implemented; #900 retains the CSS work.
+(#901, #915, #902, #903 and #916) are implemented; #900 completes the planned CSS
+source cleanup.
 **Supersession:** these current source owners replace the earlier queued runtime
 sequence. Their decisions and evidence boundaries follow.
 
@@ -166,14 +167,20 @@ Its duration tranche consolidates the shared module in `studio-instrument.css`.
 **Supersession:** one canonical block replaces the earlier base/specimen split,
 carrying forward the live layout, numeric typography and empty-feedback behavior.
 The approved dial geometry and lighting remain intact. Chapter-specific placement,
-repetition layouts and alternate-media rules retain their existing owners. The
+repetition layouts and alternate-media rules retain their existing owners.
+The final duplicate pass removes the repeated About OS-motion guard, early Quality
+hidden rule, superseded table minimum and arrangement font size, and the repeated
+mobile quantity columns. The shared motion rule, final hidden guard, `48rem`
+table minimum and `.75rem` arrangement status remain authoritative; the generic
+About fallback and attribute-specific motion guards retain their distinct scopes.
+This completes the planned source cleanup and supersedes the queued duplicate
+audit. The
 [implementation ownership route](implementation-reference.md#sprint-and-quarter-coordination)
 and [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
-lead to the receiving composition; each focused PR records its comparison. Exact
-duplicate declarations remain a separate CSS tranche. A new runtime change starts
-with an observed visitor-path cost; refresh-call counts alone cannot identify DOM work when
-receivers already retain unchanged output. Promotion to main retains its separate
-human cue.
+lead to the receiving composition; each focused PR records its checks, comparison
+and independent review. A new runtime change starts with an observed visitor-path
+cost; refresh-call counts alone cannot identify DOM work when receivers already
+retain unchanged output. Promotion to main retains its separate human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
 primary route. #641 and #673 retain their frozen measurements; the earlier
