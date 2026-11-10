@@ -5,6 +5,7 @@ import { createMoneyControl, createChoiceReel } from './investment-controls.mjs'
 import { INVESTMENT_DOMAINS, investmentPortrait, renderInvestmentPortrait, renderInvestmentDiagram } from './investment-portrait.mjs';
 import { investmentChoices, writeInvestmentField } from './investment-deck-config.mjs';
 import { investmentDeckView, money, number } from './investment-deck-views.mjs';
+import { revealStudioShelfItem } from './motion.mjs';
 import { revealReelResult } from './reel-control.mjs';
 
 const node = (tag, text, className) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; };
@@ -17,7 +18,7 @@ const typeFor = record => INVESTMENT_TYPES.find(type => type.id === record.type)
 const titleFor = record => `${typeFor(record).title}${record.sequence > 1 ? ` ${record.sequence}` : ''}`;
 export function createInvestmentWorkbench({ getContext, change, openSession, setFunding }) {
   let selected = 'pairing', activeId = 'investment-plan-1', domain = 'plan', adding = false, disposed = false;
-  let outer, shelf, library, libraryToggle, libraryChoices, panel, loaded, domainControl, domainReading, portraitKey;
+  let revealedId, outer, shelf, library, libraryToggle, libraryChoices, panel, loaded, domainControl, domainReading, portraitKey;
   const editors = new Map(), tapes = new Map();
   function focus(container, key) { [...container.querySelectorAll('[data-focus-key]')].find(element => element.dataset.focusKey === key)?.focus({ preventScroll: true }); }
   function addRecord(type) {
@@ -118,6 +119,8 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
     }
     loaded.update(record, context);
     shelf.scrollLeft = scroll.left; shelf.scrollTop = scroll.top;
+    if (revealedId !== activeId) revealStudioShelfItem(shelf, tapes.get(activeId));
+    revealedId = activeId;
     if (focusedKey && !document.activeElement?.closest('.investment-comparison')) focus(outer, focusedKey);
   }
 

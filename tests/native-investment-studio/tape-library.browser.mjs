@@ -148,6 +148,11 @@ for (const engine of names) test(`${engine}: All plans and sequential browsing p
   const previous = rack.getByRole('button', { name: 'Previous plan', exact: true });
   const next = rack.getByRole('button', { name: 'Next plan', exact: true });
   const screen = rack.locator('.native-cadence__screen');
+  const aggregate = rack.locator('[data-studio-all-plans]');
+  await expect(aggregate).toHaveAttribute('aria-pressed', 'true');
+  await expect(aggregate).toContainText('600 min');
+  await expect(aggregate).toContainText('12 sessions');
+  assert.equal(await rack.locator('.studio-tape-key').first().getAttribute('data-studio-all-plans'), '');
   await expect(all).toHaveAttribute('aria-pressed', 'true');
   await expect(previous).toHaveAttribute('aria-disabled', 'true');
   await rack.locator('[data-cadence-key="period:period-1"]').click();
@@ -165,13 +170,15 @@ for (const engine of names) test(`${engine}: All plans and sequential browsing p
   await expect(screen).toHaveAttribute('data-loaded-plan', original.work.at(-2).id);
   await rack.locator(`[data-studio-plan-id="${original.work[0].id}"]`).click();
   await expect(previous).toHaveAttribute('aria-disabled', 'true');
-  await all.click();
+  await aggregate.click();
   await expect(screen).toHaveAttribute('data-loaded-plan', '');
   await expect(all).toHaveAttribute('aria-pressed', 'true');
   await expect(rack.getByRole('button', { name: 'Plan overview', exact: true })).toBeVisible();
   await all.click();
   assert.equal(await bytes(page), originalBytes, 'scope changes leave accepted work and placement untouched');
   await expect(root(page).locator('[data-studio-undo]')).toBeDisabled();
+  await mkdir('.visual-runs/939', { recursive: true });
+  await rack.locator('.studio-tape-library').screenshot({ path: `.visual-runs/939/${engine}-all-shelf.png` });
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const control of [all, previous, next]) {
@@ -179,6 +186,23 @@ for (const engine of names) test(`${engine}: All plans and sequential browsing p
       assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1 && box.height >= 32);
     }
   }
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await next.scrollIntoViewIfNeeded();
+  for (const work of original.work) {
+    const pageY = await page.evaluate(() => scrollY);
+    await next.click();
+    const selected = rack.locator(`[data-studio-plan-id="${work.id}"]`);
+    await expect.poll(() => selected.evaluate(item => {
+      const shelf = item.closest('.studio-tape-shelf'), a = item.getBoundingClientRect(), b = shelf.getBoundingClientRect();
+      return a.left >= b.left - 2 && a.right <= b.right + 2;
+    })).toBe(true);
+    await expect(next).toBeFocused();
+    assert.ok(Math.abs(await page.evaluate(() => scrollY) - pageY) < 2, 'pagination moves the shelf without moving the page');
+  }
+  await mkdir('.visual-runs/939', { recursive: true });
+  await rack.locator('.studio-tape-library').screenshot({ path: `.visual-runs/939/${engine}-phone-shelf.png` });
+  await rack.locator('.studio-plan-navigation').screenshot({ path: `.visual-runs/939/${engine}-phone-rail.png` });
+  assert.equal(await bytes(page), originalBytes);
 });
 
 for (const engine of names) test(`${engine}: individual tape sessions keep their own settings through placement, removal and view changes`, async t => {

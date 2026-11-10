@@ -15,6 +15,10 @@ export function createTapePicker(document, { variant = 'plan', label, entries, s
   for (const entry of entries) {
     const key = make('button', 'studio-tape-key');
     key.type = 'button';
+    if (entry.aggregate) {
+      key.classList.add('studio-tape-key--aggregate');
+      const stack = make('span', 'studio-tape-stack'); stack.setAttribute('aria-hidden', 'true'); key.append(stack);
+    }
     for (const [name, value] of Object.entries(entry.attributes ?? {})) key.setAttribute(name, value);
     key.setAttribute('aria-pressed', String(entry.id === selectedId));
     const face = make('span', 'studio-tape-face');

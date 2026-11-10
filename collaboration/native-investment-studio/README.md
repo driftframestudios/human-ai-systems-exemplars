@@ -34,8 +34,11 @@ Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
 compact horizontal strip.
 Each cassette is one repeatable activity plan; its sessions are occurrences of
-that activity. The initial view shows **All plans**, with detail closed. A persistent scope rail
-keeps All plans beside Previous/Next pennant controls and the loaded plan name.
+that activity. The initial view selects a stacked **All plans** cassette with total session
+minutes and count, with detail closed. A compact scope rail keeps All plans
+beside the loaded name and adjacent Previous/Next pennants. Sequential browsing
+reveals the selected cassette within its shelf; Domain selection in Investment
+uses the same local reveal while preserving page position and focus.
 Next enters the first cassette; browsing follows shelf order and stops at its
 ends. Scope changes retain the selected sprint/quarter and accepted edits. An
 empty library starts unselected.

@@ -5,7 +5,7 @@ import { createCadenceOccurrenceIndex } from './cadence-occurrences.mjs';
 import { LIMITS } from './config.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { createTapePicker } from './tape-picker.mjs';
-import { revealStudioDestination } from './motion.mjs';
+import { revealStudioDestination, revealStudioShelfItem } from './motion.mjs';
 import { createPlanLibraryEmpty } from './plan-library-empty.mjs';
 import { workDefaultsTarget, workSessionTarget } from './navigation-policy.mjs';
 
@@ -21,7 +21,7 @@ export function createCadenceView(root, {
 } = {}) {
   const document = root.ownerDocument;
   const captionPrefix = `cadence-caption-${++viewSequence}`;
-  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey, captionEdit = null, lastReading, rendered;
+  let disposed = false, previousPeriodId, previousLoadedPlanId, overviewReturn, periodOriginKey, captionEdit = null, lastReading, rendered;
   const actions = new Map();
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -196,11 +196,14 @@ export function createCadenceView(root, {
     const visible = activePeriod ? membership.forPeriod(activePeriod.id) : occurrences;
     const shelf = createTapePicker(document, {
       variant: 'plan', label: 'Plans', selectedId: loadedPlan?.id ?? null,
-      entries: state.work.map(item => ({
+      entries: [{ id: null, title: 'All plans', aggregate: true,
+        detail: `${state.work.reduce((sum, item) => sum + summarizeWorkSessions(item).durationMinutes, 0).toLocaleString('en-US')} min total · ${state.work.reduce((sum, item) => sum + item.occurrences, 0)} sessions`,
+        attributes: { 'data-cadence-key': 'cassette:all', 'data-studio-all-plans': '' },
+      }, ...state.work.map(item => ({
         id: item.id, title: item.label, eyebrow: teams.get(item.teamId)?.label ?? 'Choose a team',
         detail: `${item.sessionOverrides ? `${duration(summarizeWorkSessions(item).durationMinutes)} total` : duration(item.minutesPerOccurrence)} · ${item.occurrences} ${item.occurrences === 1 ? 'session' : 'sessions'}`,
         attributes: { 'data-cadence-key': `cassette:${item.id}`, 'data-studio-plan-id': item.id },
-      })),
+      }))],
       onSelect: (id, source) => {
         if (disposed) return;
         onLoadPlan(id, source);
@@ -265,7 +268,7 @@ export function createCadenceView(root, {
     currentPlan.append(node('strong', loadedPlan?.label ?? 'Whole arrangement'));
     if (loadedPlan) currentPlan.append(node('small', `${loadedIndex + 1} / ${state.work.length}`));
     for (const control of [allPlans, previous, next]) control.setAttribute('aria-describedby', currentPlan.id);
-    planNavigation.append(allPlans, previous, currentPlan, next); context.append(planNavigation);
+    planNavigation.append(allPlans, currentPlan, previous, next); context.append(planNavigation);
     const cost = node('dl', undefined, 'native-cadence__amount');
     const amountLabel = loadedPlan ? (result.plannedCommitmentCents === null ? 'Known whole arrangement' : 'Whole arrangement')
       : result.plannedCommitmentCents === null ? 'Known included work' : 'Included work';
@@ -631,6 +634,9 @@ export function createCadenceView(root, {
       arrival?.focus({ preventScroll: true });
       if (periodChanged) revealStudioDestination(activePeriod ? reading : arrival);
     }
+    if (previousLoadedPlanId !== (loadedPlan?.id ?? null))
+      revealStudioShelfItem(nextShelf, nextShelf.querySelector('[aria-pressed="true"]'));
+    previousLoadedPlanId = loadedPlan?.id ?? null;
     rendered = renderKey;
   }
   return Object.freeze({ refresh, getSessionSlot: () => disposed ? null : sessionSlot, dispose() {
