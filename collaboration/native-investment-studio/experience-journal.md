@@ -87,16 +87,25 @@ example starting context and active planned work beside a compact review table.
 **Supersession:** this reading replaces the equal-weight purpose grid while
 preserving all six saved fields, raw-edit recovery and Undo. Per-session overrides
 determine active work; custom plans receive a current-workflow invitation.
-The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
-local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
-vision. #944 adds the AI Enablement and AI Experience examples through ordinary
-plan records and the existing accepted replacement/Undo owner. The example buttons
-use canvas-paper faces while retaining their raised action treatment.
-**Supersession:** this quieter face replaces the teal acceptance color on those
-example choices; Apply controls retain their existing signal color. Existing #874,
-#875 and #882 keep their manual, retention and
-precision-control boundaries. This planning route supersedes a chapter-wide
-redesign; each receiver earns a focused PR.
+The completed [#935 route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935)
+brings local editing, amp/shelf orientation, diagram/reel clarity and concise
+vision together. #944 adds AI Enablement and AI Experience through ordinary plan
+records and the existing replacement/Undo owner. The example buttons use
+canvas-paper faces while retaining their raised action treatment.
+**Supersession:** this quieter face replaces their teal acceptance color; Apply
+controls retain the signal color.
+
+#874's Operating manual follows the actual acceptance owners: direct choices,
+prepared Apply proposals, local Close/Cancel, amp Undo and Investment comparison/
+file exchange. Its ruled-paper action table sits beside the authored introduction
+on wide screens and below it on phones. **Supersession:** this replaces the
+original instruction that every control previews until Apply. #875 establishes
+page-memory retention and accepted-only download recovery; host, media and
+embedded-route behavior retain separate boundaries. #882 completes the shared
+circular-control treatment. These focused deliveries are included in
+[promotion PR #966](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/966),
+which is the next review surface. Main promotion and tagged publication await
+human approval; this settled route supersedes the prior queued follow-ups.
 
 The 9 November review of `dev` at `fdb445d` reframed #679 around responsive
 creation, manipulation, navigation and recovery. Its JavaScript refinements
@@ -928,8 +937,8 @@ their presentation and footer actions, #891 owns explicit spread choices, and
 #893 owns the local participation row and compact laptop comparison.
 #936 refines contribution-local creation and stable participation rows;
 #881 retains the separate canonical form owners;
-#947 owns direct contribution/session checkboxes and local heading toggles. #882 holds
-the global circular-stepper shadow audit. #879 refines the current
+#947 owns direct contribution/session checkboxes and local heading toggles. #882 supplies
+the shared circular-stepper shadow treatment. #879 refines the current
 People composition from #864 and retains #836's direct responsibility choices,
 with #837 supplying shared creation controls. #863 covers dependency
 notice completeness and recovery; #865 owns circular control consistency and

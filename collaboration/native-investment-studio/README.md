@@ -6,6 +6,13 @@ The visitor-facing **Project Resourcing & Spend Studio** combines a populated
 plan with cassette shelves, period boards, session tracks, reels and tactile
 quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experience.
 
+The amp's **Operating manual** pairs a short introduction with an action table:
+direct choices accept immediately; editors with Apply accept their proposal;
+Close retains unfinished entries and Cancel restores that editor's accepted
+values. Amp Undo, Investment → Compare a change and Investment → Keep a plan provide
+the corresponding recovery routes. The plan and unfinished entries live in the loaded page;
+download carries the accepted plan into a later visit.
+
 ## Current state
 
 `main` retains the approved showcase. `dev` receives the compact rack integration:
@@ -26,9 +33,10 @@ starting context stays distinct from the six saved purpose fields; local edits
 and Undo retain their owners. Its funding breakdown sits on the left, with the total on the right. Plan reference and History
 controls stay grouped, and Animation speed has a visible label. Chapter keys sit
 at the amp's bottom edge next to the chapter content. Plan horizon owns its local
-spacing. The next interaction and orientation
-work follows [#935’s focused issue route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935).
-A human cue selects promotion to main. The preserved
+spacing. [#935’s completed interaction route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935)
+now hands to [promotion PR #966](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/966),
+including the manual, edit-lifetime guidance and shared circular-control treatment
+(#874, #875, #882). Human review and approval select promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
 illustrative state is separate from the Showcase's canonical plan.
