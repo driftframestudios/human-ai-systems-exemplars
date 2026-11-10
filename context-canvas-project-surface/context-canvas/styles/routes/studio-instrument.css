@@ -75,6 +75,8 @@
 .native-reel[data-reel-secondary='true'] .native-reel__rotor { transition-duration: calc(720ms * var(--studio-speed)); transition-delay: calc(90ms * var(--studio-speed)); }
 .native-coordination .native-reel__choice { position: absolute; z-index: 1; left: var(--reel-x); top: var(--reel-y); translate: -50% -50%; inline-size: 30%; min-inline-size: 0; min-block-size: 2.75rem; margin: 0; padding: .35rem .25rem; font: 650 clamp(.65rem, 1vw, .8rem)/1.25 system-ui, sans-serif; overflow-wrap: normal; color: var(--native-text); background: var(--canvas-paper); border: .1rem solid var(--studio-screen); box-shadow: .13rem .16rem 0 var(--native-key-shadow); }
 .native-coordination .native-reel__choice[aria-pressed='true'] { color: var(--native-text); background: var(--native-signal); border-style: double; box-shadow: inset .1rem .15rem .15rem color-mix(in srgb, var(--about-deep-teal) 50%, transparent); }
+/* Two centered keys can use more of the housing for their complete labels. */
+.native-coordination .native-reel[data-reel-choices='2'] .native-reel__choice { inline-size: 48%; }
 .native-coordination .native-reel__hub { position: absolute; z-index: 2; inset: 41%; min-inline-size: 0; min-block-size: 0; inline-size: 18%; block-size: 18%; padding: 0; border-radius: 50%; font: 1.5rem/1 system-ui; color: var(--native-paper); background: var(--studio-screen); border: .15rem solid var(--native-paper); box-shadow: none; }
 .native-reel__reading { display: block; min-block-size: 2.2em; margin-block-start: .4rem; text-align: center; font: 650 .8rem/1.4 ui-monospace, monospace; }
 .native-reel[data-reel-variant='cobalt'] { background: var(--about-cool-blue); color: var(--native-text); border-color: var(--native-rule); }

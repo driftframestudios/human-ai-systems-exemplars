@@ -50,6 +50,18 @@ choice labels remain stationary while the center rotates. Selected
 buttons keep their target geometry when pressed. A compact output repeats the
 selected meaning; it does not add a competing instruction panel.
 
+Label density determines the perimeter fit. Eight-choice reels retain the shared
+30%-width keys and separate them into five horizontal bands around the rotor;
+the top and bottom keys sit closer to the housing edge. Two-choice reels use
+48%-width centered keys so a single word such as Implementation fits intact.
+Other choice counts retain their elliptical positions and 30%-width keys.
+The housing, rotor, type size, selected treatment and motion stay shared-owned.
+Visible key bounds remain separate, and each complete label stays inside its
+key at ordinary phone, tablet, laptop and wide widths. The fit receipt for
+[#942](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/942)
+compares Change's eight-position lens and Investment's two-position Customer
+account, including keyboard stepping and selected-size stability.
+
 The [Chromatic Pressed Reel Specimen](zoetrope-pressed-palette-specimen.md)
 preserves the alternative saturated cobalt/rose selected faces for a future
 receiver. This live contract uses the same canvas-paper/teal pair throughout.

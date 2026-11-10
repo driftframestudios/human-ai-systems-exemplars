@@ -51,7 +51,11 @@ compact cost comparison and shared diagram geometry in #895. #940 joins each
 arrowhead at its sampled curve cutoff, pointing toward the receiving endpoint.
 **Supersession:** this replaces the separate tangent-line head base that folded
 tight Matrix bends; node layout, palette and pointer targets retain their owners. Each feature uses
-its own focused reviewed delivery.
+its own focused reviewed delivery. #942 fits Change's dense viewpoint keys and
+Investment's two-choice labels while retaining wheel artwork, palette and motion.
+**Supersession:** choice-count spacing replaces the overlapping eight-position
+ellipse and narrow two-position keys. Phone through wide layouts, complete
+labels, separate targets and keyboard selection retain focused browser coverage.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair
 keeps focused verification usable across that integration. #844 updates the

@@ -345,6 +345,13 @@ capacity demand. Capital discount describes its NPV effect. These descriptions
 keep the existing compact fader skin and native control geometry; values,
 connected reels and Undo continue through their established owners.
 
+Sparse comparison reels retain that compact wheel while giving their two
+centered keys 48% of its width. Customer account therefore fits Implementation
+inside its key, with the same geometry for resting, focused and selected states.
+This uses the shared choice-count fit from
+[Zoetrope Preset Selection](zoetrope-preset-selection.md); the green Domain
+housing, navy center, financial presets and comparison grid retain their owners.
+
 Investment owns the grid and short financial context below each reel. The
 shared component owns housing, pad geometry, rotor and selected colors. Broad
 Investment button and fieldset rules leave these shared roles intact.
