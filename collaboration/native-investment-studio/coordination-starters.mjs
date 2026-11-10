@@ -6,7 +6,7 @@ const starter = (id, label, outcome, sessions) => Object.freeze({ id, label, out
 
 export const COORDINATION_STARTERS = Object.freeze([
   starter('plan', 'Plan', 'Agree what the work should achieve.', [
-    session('Frame the outcome', 30), session('Agree priorities', 45, 2), session('Review scope', 30),
+    session('Frame the outcome', 30), session('Agree on priorities', 45, 2), session('Review scope', 30),
   ]),
   starter('design', 'Design', 'Turn what people need into a useful approach.', [
     session('Explore needs', 60, 2), session('Compare approaches', 45, 2), session('Review the design', 30),

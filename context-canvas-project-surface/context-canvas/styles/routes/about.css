@@ -1968,6 +1968,7 @@ p#on-dark-iron-ore {
     --native-signal: var(--about-tiffany);
     --native-rule: #66766e;
     --native-key-shadow: #45534b;
+    /*--native-chapter-key-shadow: #2855f3;*/
     --native-error: #853126;
     --native-focus: var(--about-cobalt);
     --native-chapter-shadow: #050909;
@@ -2079,7 +2080,7 @@ p#on-dark-iron-ore {
     max-inline-size: none;
     white-space: nowrap;
     text-align: start;
-    box-shadow: .24rem .24rem 0 var(--native-chapter-shadow);
+    box-shadow: .24rem .24rem 0 var(--about-cobalt);
     transition: background-color 160ms ease-out, box-shadow 120ms ease-out, transform 120ms ease-out;
 }
 .native-coordination__chapters button > span { min-inline-size: 0; }
@@ -2163,7 +2164,7 @@ p#on-dark-iron-ore {
 .native-coordination__preview { background: var(--native-paper); border-inline-start: .25rem solid var(--about-deep-teal); display: grid; gap: .35rem; margin-block: .5rem 1rem; padding: .75rem; }
 .native-coordination__preview output { font: 600 1.65rem/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .native-coordination__preview p:empty { display: none; }
-.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
+.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 1em; }
 .native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
 .native-coordination__control-title { font-weight: 650; }
 .native-coordination__feedback { display: grid; gap: .5rem; }
