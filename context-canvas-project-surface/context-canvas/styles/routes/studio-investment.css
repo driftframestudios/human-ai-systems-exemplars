@@ -103,7 +103,7 @@
 #native-studio-investment .investment-comparison__allocation-pad[data-allocation=opportunity] { --allocation-ink:#f1c49e; background:#43382d; border-color:var(--studio-chocolate-edge); }
 #native-studio-investment .investment-comparison__allocation-pad[data-allocation=remaining] { --allocation-ink:var(--studio-rack-muted); }
 #native-studio-investment .investment-comparison__allocation-pad[data-shortfall=true] { --allocation-ink:var(--studio-rose); background:#51303b; border-color:#b47d8e; }
-#native-studio-investment .investment-comparison__screen { display:flex; flex-wrap:wrap; align-items:center; gap:1.25rem; margin:.7rem; padding:1rem; border:2px solid var(--studio-rack-edge); border-radius:4px; background:var(--studio-deep-screen); box-shadow:inset 0 0 14px var(--studio-deep-shadow); }
+#native-studio-investment .investment-comparison__screen { display:flex; flex-wrap:wrap; flex-direction:row-reverse; align-items:center; gap:1.25rem; margin:.7rem; padding:1rem; border:2px solid var(--studio-rack-edge); border-radius:4px; background:var(--studio-deep-screen); box-shadow:inset 0 0 14px var(--studio-deep-shadow); }
 #native-studio-investment .investment-comparison__reading { display:grid; gap:.4rem; min-width:0; flex:1 1 180px; }
 #native-studio-investment .investment-comparison__reading>span { font-size:.8rem; }
 #native-studio-investment .investment-comparison__reading>strong { color:var(--studio-bright-signal); font:700 clamp(1.25rem,2vw,1.9rem) ui-monospace,monospace; overflow-wrap:anywhere; }

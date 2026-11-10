@@ -3,7 +3,7 @@
 .native-change__reels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.5rem, 2vw, 1.25rem); padding: 0; background: transparent; border: 0; box-shadow: none; }
 .native-change__reel-holder { min-inline-size: 0; }
 .native-change__reels .native-change__interpretation { grid-column: 1 / -1; padding: .85rem 0; border: 0; background: transparent; color: var(--about-ink); }
-.about-page .native-change__interpretation > h4 { margin: 0 0 .75rem; color: var(--about-ink-strong); font: 700 1.15rem/1.35 system-ui, sans-serif; }
+.about-page .native-change__interpretation > h4 { margin: 0 0 .75rem; color: var(--about-ink-strong); font: 700 1.15rem/1.35 Futura, system-ui, sans-serif; }
 .native-change__interpretation dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; font-size: .85rem; }
 .native-change__interpretation dl > div { border-block-start: .15rem solid var(--about-deep-teal); padding-block-start: .5rem; }
 .native-change__interpretation dt { color: var(--about-deep-teal); font: 700 .75rem/1.4 ui-monospace, monospace; }
@@ -11,7 +11,7 @@
 .native-change .native-change__workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: .85rem; padding: clamp(.45rem, 1.5vw, 1rem); background: var(--studio-editorial); border-color: var(--about-deep-teal); }
 .native-change__keys { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: .75rem; }
 .native-change__lane { display: grid; align-content: start; gap: .5rem; min-inline-size: 0; padding: .55rem; border: 1px solid var(--about-sea-glass); background: color-mix(in srgb, var(--about-sea-glass) 30%, var(--about-route)); }
-.about-page .native-change__lane > h4 { margin: 0 0 .25rem; color: var(--about-ink-strong); font: 700 .875rem/1.4 system-ui, sans-serif; }
+.about-page .native-change__lane > h4 { margin: 0 0 .25rem; color: var(--about-ink-strong); font: 700 .875rem/1.4 Futura, system-ui, sans-serif; }
 .native-change__lane[data-change-lane='focus'] { background: var(--about-info); border-block-start: .25rem solid var(--about-cobalt); }
 .native-change__lane[data-change-lane='available'] { border-style: dashed; background: var(--about-unbleached-paper); }
 .native-coordination .native-change .native-change__key { display: grid; gap: .3rem; padding: .65rem; min-block-size: 5.2rem; inline-size: 100%; min-inline-size: 0; text-align: start; background: var(--about-paper); }

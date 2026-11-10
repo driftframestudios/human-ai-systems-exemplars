@@ -211,7 +211,7 @@
 .studio-rack-editor[hidden] { display: none; }
 .studio-rack-editor__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .65rem .8rem; }
 .studio-rack-editor__tools { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
-.native-coordination .studio-rack-editor__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 system-ui, sans-serif; }
+.native-coordination .studio-rack-editor__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 Futura, system-ui, sans-serif; }
 .studio-rack-editor__origin { display: block; margin-block-start: .25rem; color: var(--studio-rack-muted); font: 500 .75rem/1.4 ui-monospace, monospace; }
 .studio-rack-editor__origin[hidden] { display: none; }
 .native-coordination [data-rack-editor-close] { min-inline-size: 0; flex-shrink: 0; border: 1px solid var(--native-rule); background: transparent; color: var(--native-paper); box-shadow: none; padding: .4rem .65rem; }
