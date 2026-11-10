@@ -37,7 +37,11 @@ and repairs Quality control contrast and spacing.
 #856 and retained pristine creation in #868. #937 gives catalogue and support
 keys local record/section toggles with retained drafts and exact-key return.
 #849 makes Change action selection visible; #857/#858 extend the compact
-local receiver into Change and Quality. #818 receives the full financial-deck
+local receiver into Change and Quality. #941 gives Change framework-named exact
+fields while keeping the shared attention channels separately inspectable.
+**Supersession:** changing frameworks preserves those channels and unfinished
+entries instead of reapplying the selected lens preset. Faders, exact fields,
+Apply and amp Undo retain their draft and command owners. #818 receives the full financial-deck
 workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
 compact cost comparison and shared diagram geometry in #895. Each feature uses
 its own focused reviewed delivery.

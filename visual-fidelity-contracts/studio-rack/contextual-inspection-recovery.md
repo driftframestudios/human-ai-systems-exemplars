@@ -223,6 +223,14 @@ visible receiver. Close retains the draft and returns locally; Apply delegates
 to the existing submitter. Primary reels, faders and reference displays retain
 their established shape and motion.
 
+The Change exact-settings disclosure follows the selected framework's component
+names. A separate **Shared attention values** disclosure retains the underlying
+cross-framework channels and explains their relationship to component emphasis.
+Framework changes keep accepted and unfinished values available on return;
+interpretive-lens choices retain their authored preset behavior. Both exact
+routes remain inside the existing Change draft, Apply and amp Undo ownership
+(#941).
+
 [Ableton's Clip View](https://www.ableton.com/en/live-manual/12/clip-view/)
 provides the selected-record/detail precedent. The Studio adapts it as a
 nonmodal working area with native form controls. A future blocking overlay

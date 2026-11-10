@@ -130,9 +130,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   const selectConfiguration = (kind, value) => {
     const view = editor.read();
     if (disposed || !isActive() || view.status !== 'editing') return;
-    const lensId = kind === 'lens' ? value.split('@')[0] : view.draft.raw.lens.split('@')[0];
-    const frameworkId = kind === 'framework' ? value.split('@')[0] : undefined;
-    editFields(changeShowcaseEntries(view.projection.state, view.draft.raw, lensId, frameworkId));
+    // A framework changes the interpretation of shared attention. A lens is an
+    // authored preset; only that explicit choice replaces the attention values.
+    editFields(kind === 'framework' ? [['framework', value]]
+      : changeShowcaseEntries(view.projection.state, view.draft.raw, value.split('@')[0]));
   };
   const lensReel = createReel(document, { label: 'Interpretive lens', choices: choices.lens.map(([id, label]) => ({ id, label })),
     value: choices.lens[0][0], onSelect: value => selectConfiguration('lens', value), variant: 'teal' });
@@ -142,11 +143,19 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   const selectorDetails = root.querySelector('.native-change__setup') ?? node('details', undefined, 'native-change__setup'), selectorSummary = node('summary', 'Choose exact settings');
   const selectors = elements.frameworks.parentElement;
   if (!selectorDetails.contains(selectors)) selectors.before(selectorDetails);
-  selectorDetails.replaceChildren(selectorSummary, selectors);
+  const exactBody = node('div', undefined, 'native-change__exact-body');
+  selectorDetails.replaceChildren(selectorSummary, exactBody); exactBody.append(selectors);
   const preciseChannels = node('div', undefined, 'native-change__precise-channels');
-  preciseChannels.append(node('p', 'Stored attention channels · exact values'));
-  for (const channel of listAttentionChannels()) field(preciseChannels, `attention.${channel.id}`);
-  selectorDetails.append(preciseChannels);
+  const preciseHeading = node('p'); preciseChannels.append(preciseHeading);
+  const sharedAttention = node('details', undefined, 'native-change__shared-attention');
+  const sharedChannels = node('div', undefined, 'native-change__precise-channels');
+  sharedChannels.append(node('p', 'Shared across frameworks. Each component shows its strongest linked value; editing it sets those values together.'));
+  for (const channel of listAttentionChannels()) {
+    const control = field(sharedChannels, `attention.${channel.id}`);
+    control.group.querySelector('label').textContent = channel.label;
+  }
+  sharedAttention.append(node('summary', 'Shared attention values'), sharedChannels);
+  exactBody.append(preciseChannels, sharedAttention);
   const attentionPanel = elements.mixer.closest('.native-change__attention');
   for (const paragraph of [...attentionPanel.children].filter(child => child.tagName === 'P')) paragraph.remove();
   elements.fields.prepend(attentionPanel);
@@ -261,7 +270,21 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     range.id = title.htmlFor; range.dataset.changeFader = key; range.setAttribute('aria-label', `${component.label} emphasis`);
     const track = node('div', undefined, 'native-change__fader-track'); track.append(range); group.append(track);
     const value = node('output'); value.htmlFor = range.id; group.append(value);
-    faders.set(key, { range, value, group }); group.title = component.explanation; elements.mixer.append(group);
+    const exact = node('div', undefined, 'native-change__field'), label = node('label', component.label);
+    const input = node('input', undefined, 'native-change__numeric'); input.type = 'text'; input.inputMode = 'numeric'; input.spellcheck = false;
+    input.id = `${range.id}-exact`; input.dataset.changeEmphasis = key; label.htmlFor = input.id;
+    input.setAttribute('aria-label', `${component.label} exact emphasis`);
+    const channelKeys = frameworkEmphasisEntries(framework.id, component.id, '').map(([key]) => key);
+    input.maxLength = CHANGE_FIELDS[channelKeys[0]].maxLength;
+    const error = node('p', '', 'native-coordination__error'); error.id = `${input.id}-error`; input.setAttribute('aria-describedby', error.id);
+    const steps = node('div', undefined, 'native-change__steps');
+    for (const direction of [-1, 1]) {
+      const step = button(direction < 0 ? '−' : '+', 'emphasis-step');
+      Object.assign(step.dataset, { changeEmphasis: key, changeStep: String(direction) });
+      step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${component.label.toLowerCase()} emphasis`); steps.append(step);
+    }
+    exact.append(label, input, steps, error); preciseChannels.append(exact);
+    faders.set(key, { range, value, group, exact, input, error, channelKeys }); group.title = component.explanation; elements.mixer.append(group);
   }
   const workNote = node('p'), workFields = node('div', undefined, 'native-support-proposal');
   const modeFields = node('div', undefined, 'native-support-proposal__metadata'), newWorkFields = node('div', undefined, 'native-support-proposal__details');
@@ -421,11 +444,17 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
     elements.interpretation.replaceChildren(node('h4', reading.lens.name), interpretation);
     const emphasized = projectChangeEmphasis(reading), emphasisById = new Map(emphasized.map(row => [row.componentId, row]));
+    preciseHeading.textContent = `${reading.framework.name} · component emphasis (0–25)`;
     for (const [key, fader] of faders) {
       const [frameworkId, componentId] = key.split('/'), active = frameworkId === reading.framework.id;
-      fader.group.hidden = !active;
+      fader.group.hidden = !active; fader.exact.hidden = !active;
       if (!active) continue;
       const amount = emphasisById.get(componentId).emphasis;
+      const error = view.draft?.errors.find(error => fader.channelKeys.some(key => error.path === `draft.${key}`));
+      const exactValue = error ? raw[error.path.slice('draft.'.length)]
+        : fader.channelKeys.map(key => raw?.[key]).find(value => value !== undefined && Number(value) === amount) ?? String(amount);
+      if (fader.input.value !== exactValue) fader.input.value = exactValue;
+      fader.error.textContent = error?.message ?? ''; fader.input.setAttribute('aria-invalid', String(Boolean(error)));
       fader.range.value = String(amount); fader.value.textContent = String(amount);
       fader.range.setAttribute('aria-valuetext', `${amount} of 25 emphasis`);
       fader.range.parentElement.style.setProperty('--native-fader-fill', `${amount * 4}%`);
@@ -543,6 +572,16 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const view = editor.read(); if (!view.draft) return;
     if (action === 'review' || action === 'current') { const epoch = ++generation; opened(editor[action === 'review' ? 'review' : 'useCurrent'](view.draft.token, studio.read()), epoch, true); return; }
     if (view.status !== 'editing') return;
+    if (action === 'emphasis-step') {
+      const fader = faders.get(control.dataset.changeEmphasis), epoch = ++generation;
+      // The existing attention step owner validates and clamps the representative
+      // value; the component then writes through the same mapping as its fader.
+      const representative = fader.channelKeys.find(key => view.draft.raw[key] === fader.input.value) ?? fader.channelKeys[0];
+      const result = editor.step(view.draft.token, representative, Number(control.dataset.changeStep));
+      if (!result.ok || !owns(epoch)) { changed(result, epoch); return; }
+      const [frameworkId, componentId] = control.dataset.changeEmphasis.split('/');
+      editFields(frameworkEmphasisEntries(frameworkId, componentId, result.view.draft.raw[representative])); return;
+    }
     if (action === 'step') { const epoch = ++generation; changed(editor.step(view.draft.token, control.dataset.changeField, Number(control.dataset.changeStep)), epoch); return; }
     if (action === 'reset') {
       const defaults = createChangeSettings(), entries = [['framework', `${defaults.activeFramework.frameworkId}@${defaults.activeFramework.version}`]];
@@ -569,9 +608,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
   });
   function input(event) {
-    if (event.target.dataset.changeFader) {
+    const emphasisKey = event.target.dataset.changeFader ?? event.target.dataset.changeEmphasis;
+    if (emphasisKey) {
       if (event.type !== 'input' || disposed || !isActive() || editor.read().status !== 'editing') return;
-      const [frameworkId, componentId] = event.target.dataset.changeFader.split('/');
+      const [frameworkId, componentId] = emphasisKey.split('/');
       editFields(frameworkEmphasisEntries(frameworkId, componentId, event.target.value)); return;
     }
     const key = event.target.dataset.changeField, control = controls.get(key), view = editor.read();

@@ -7,7 +7,9 @@ Change/Quality fader banks are current receivers. People adds a discrete Session
 spread fader whose unit is whole session plans.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:precision-dials-faders`;
-dev receiving contract revised 9 November 2026 for local People controls in
+dev receiving contract revised 10 November 2026 for selected-framework exact controls in
+[#941](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/941),
+retaining local People controls in
 [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining compact creation controls from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
@@ -34,7 +36,7 @@ field form a complete dose. Brief labels replace repeated operating paragraphs.
 | --- | --- |
 | Hours and Minutes | One enclosed duration module; larger combined readout above peach Hours and paper Minutes, with borderless inner groups |
 | Hourly rate | One named enclosure for relative $10/$5 dials, the exact amount and centered $1 steps |
-| Framework component emphasis | Aligned fader channels with names, values and distinct active fill |
+| Framework component emphasis | Aligned fader channels and matching component-named exact fields; values and distinct active fill share one draft owner |
 | Quality assumptions | Named faders beside the reference visualization and authored result |
 | Session spread | Discrete whole-plan membership beside actual assigned/funded-time readings; One plan, Half and All plans provide direct presets |
 
@@ -76,6 +78,17 @@ Change and Quality intentionally retain different fader skins. The shared
 contract is named quantity, readable endpoints, exact value and visible response;
 their channel geometry, palette and texture express their own chapter. Reusing a
 Quality selection matrix in another rack leaves this distinction intact.
+
+Change's **Choose exact settings** names the selected framework's components and
+uses the same emphasis mapping as its faders. Switching frameworks preserves
+shared attention, support choices and unfinished raw entries. Choosing an
+interpretive lens retains its authored preset behavior. **Shared attention
+values** remains a separate disclosure with channel names and exact entries:
+each component reads its strongest associated channel, and adjusting that
+component sets its associated channels together. The shared channels keep their
+stored identities across frameworks. Exact settings use a comfortable inset
+and wrap into compact columns at phone widths. Apply and amp Undo retain the
+existing Change acceptance boundary.
 
 Absolute time ranges and relative monetary increments retain different meanings.
 The rate adapter preserves cents while stepping whole dollars. An untouched
