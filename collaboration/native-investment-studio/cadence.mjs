@@ -1,3 +1,5 @@
+import { expandWorkSessions } from './work-sessions.mjs';
+import { createCadenceOccurrenceIndex } from './cadence-occurrences.mjs';
 export const CADENCE_VERSION = '1.0.0';
 export const CADENCE_PERIOD_LIMIT = 24;
 export const CADENCE_SUBDIVISIONS = Object.freeze({ sprint: 2, quarter: 3 });
@@ -87,38 +89,43 @@ export function projectCadence(plan) {
   const placementOrder = new Map(cadence.placements.map((row, index) => [`${row.workId}:${row.occurrenceIndex}`, index]));
   const stageById = new Map(plan.scoreSettings.stages.map(row => [row.id, row]));
   const occurrences = [], unplaced = [];
-  for (const work of plan.work) for (let occurrenceIndex = 0; occurrenceIndex < work.occurrences; occurrenceIndex++) {
+  for (const work of plan.work) for (const session of expandWorkSessions(work)) {
+    const { occurrenceIndex } = session;
     const placement = placed.get(`${work.id}:${occurrenceIndex}`);
-    const row = { workId: work.id, occurrenceIndex, label: work.label, teamId: work.teamId, personIds: [...work.personIds],
-      durationMinutes: work.minutesPerOccurrence, minutesPerOccurrence: work.minutesPerOccurrence, funding: work.funding,
-      active: work.status === 'planned' && work.lifecycle !== 'retired', status: work.status, lifecycle: work.lifecycle,
+    const row = { ...session, durationMinutes: session.minutesPerOccurrence,
       periodId: placement?.periodId ?? null, subdivision: placement?.subdivision ?? null };
     occurrences.push(row); if (row.periodId === null) unplaced.push(row);
   }
   occurrences.sort((a, b) => (placementOrder.get(`${a.workId}:${a.occurrenceIndex}`) ?? cadence.placements.length)
     - (placementOrder.get(`${b.workId}:${b.occurrenceIndex}`) ?? cadence.placements.length));
   const ordered = rows => rows.filter(row => row.periodId !== null).sort((a, b) => periodIndex.get(a.periodId) - periodIndex.get(b.periodId) || a.subdivision - b.subdivision);
-  const occurrenceByWork = new Map(plan.work.map(work => [work.id, occurrences.filter(row => row.workId === work.id)]));
-  const endpointWork = endpoint => endpoint.kind === 'work' ? [endpoint.id] : [...stageById.get(endpoint.id).workIds];
-  const endpointRows = endpoint => ordered(endpointWork(endpoint).flatMap(id => occurrenceByWork.get(id)));
-  const endpointComplete = endpoint => {
-    const rows = endpointWork(endpoint).flatMap(id => occurrenceByWork.get(id));
-    return rows.length > 0 && rows.every(row => row.periodId !== null);
+  const membership = createCadenceOccurrenceIndex(occurrences);
+  const endpoints = { work: new Map(), stage: new Map() };
+  const endpointReading = endpoint => {
+    const cache = endpoints[endpoint.kind];
+    if (!cache.has(endpoint.id)) {
+      const workIds = endpoint.kind === 'work' ? [endpoint.id] : [...stageById.get(endpoint.id).workIds];
+      const rows = workIds.flatMap(id => membership.forWork(id));
+      cache.set(endpoint.id, { workIds, rows: ordered(rows),
+        complete: rows.length > 0 && rows.every(row => row.periodId !== null) });
+    }
+    return cache.get(endpoint.id);
   };
   const stages = plan.scoreSettings.stages.map(stage => {
-    const endpoint = { kind: 'stage', id: stage.id }, rows = endpointRows(endpoint), complete = endpointComplete(endpoint);
+    const { rows, complete } = endpointReading({ kind: 'stage', id: stage.id });
     return { ...clone(stage), periodIds: [...new Set(rows.map(row => row.periodId))],
       status: complete ? 'placed' : rows.length ? 'partial' : 'unplaced',
       firstPeriodId: rows[0]?.periodId ?? null, lastPeriodId: complete ? rows.at(-1).periodId : null };
   });
   const connections = new Map(plan.connections.map(row => [row.id, row]));
   const handoffs = cadence.handoffs.map(edge => {
-    const from = endpointRows(edge.from).at(-1), to = endpointRows(edge.to)[0];
+    const source = endpointReading(edge.from), destination = endpointReading(edge.to);
+    const from = source.rows.at(-1), to = destination.rows[0];
     const paused = edge.connectionId !== null && connections.get(edge.connectionId).status === 'paused';
-    const sequence = !endpointComplete(edge.from) || !endpointComplete(edge.to) ? 'choose-period' : periodIndex.get(to.periodId) < periodIndex.get(from.periodId)
+    const sequence = !source.complete || !destination.complete ? 'choose-period' : periodIndex.get(to.periodId) < periodIndex.get(from.periodId)
       || to.periodId === from.periodId && to.subdivision < from.subdivision ? 'review-order' : 'in-order';
-    return { ...clone(edge), fromWorkIds: endpointWork(edge.from), toWorkIds: endpointWork(edge.to),
-      fromPeriodId: endpointComplete(edge.from) ? from.periodId : null, toPeriodId: endpointComplete(edge.to) ? to.periodId : null,
+    return { ...clone(edge), fromWorkIds: source.workIds, toWorkIds: destination.workIds,
+      fromPeriodId: source.complete ? from.periodId : null, toPeriodId: destination.complete ? to.periodId : null,
       periodIds: [...new Set([from?.periodId, to?.periodId].filter(Boolean))],
       subdivision: to?.subdivision ?? null, status: paused ? 'paused' : sequence };
   });
@@ -131,13 +138,23 @@ export function projectCadence(plan) {
     const handoff = anchor.kind === 'handoff' ? handoffById.get(anchor.id) : null;
     return { ...clone(gate), anchor: { kind: anchor.kind, id: anchor.id },
       periodId: stage?.lastPeriodId ?? handoff?.toPeriodId ?? null,
-      subdivision: stage ? endpointRows({ kind: 'stage', id: stage.id }).at(-1)?.subdivision ?? null : handoff?.subdivision ?? null };
+      subdivision: stage ? endpointReading({ kind: 'stage', id: stage.id }).rows.at(-1)?.subdivision ?? null : handoff?.subdivision ?? null };
   });
+  const effortByPeriod = new Map(), decisionsByPeriod = new Map();
+  for (const row of occurrences) {
+    if (!row.active || row.periodId === null) continue;
+    if (!effortByPeriod.has(row.periodId)) effortByPeriod.set(row.periodId, new Map());
+    const people = effortByPeriod.get(row.periodId);
+    for (const id of row.personIds) people.set(id, (people.get(id) ?? 0) + row.durationMinutes);
+  }
+  for (const row of decisions) {
+    if (!decisionsByPeriod.has(row.periodId)) decisionsByPeriod.set(row.periodId, []);
+    decisionsByPeriod.get(row.periodId).push(row);
+  }
   const availability = cadence.availability.map(row => ({ ...row,
-    plannedMinutes: occurrences.filter(item => item.active && item.periodId === row.periodId && item.personIds.includes(row.personId))
-      .reduce((sum, item) => sum + item.durationMinutes, 0) }));
+    plannedMinutes: effortByPeriod.get(row.periodId)?.get(row.personId) ?? 0 }));
   return freeze({ basis: cadence.basis, periods: cadence.periods.map(period => ({ ...period,
     subdivisions: Array.from({ length: CADENCE_SUBDIVISIONS[cadence.basis] }, (_, index) => ({ index: index + 1, label: `${cadence.basis === 'sprint' ? 'Week' : 'Month'} ${index + 1}` })),
-    occurrences: occurrences.filter(row => row.periodId === period.id), decisions: decisions.filter(row => row.periodId === period.id) })),
+    occurrences: membership.forPeriod(period.id), decisions: decisionsByPeriod.get(period.id) ?? [] })),
     occurrences, unplaced, stages, handoffs, decisions, delays: clone(cadence.delays), availability });
 }

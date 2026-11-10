@@ -37,7 +37,7 @@ test('the connection family carries three finite forms and one bounded ordered r
 
 test('one complete connection publishes its explicit receiver and references while preserving literal investment', () => {
   const studio = createStudio(plan()), before = studio.read(), editor = createConnectionDraftAdapter(studio), token = open(editor, studio);
-  assert.deepEqual(editor.read().draft.raw, { senderTeamId: '', receiverTeamId: '', receiverPersonId: '', sharedObject: '', responseExpectation: '', workIds: [], status: 'active' });
+  assert.deepEqual(editor.read().draft.raw, { senderTeamId: '', receiverTeamId: '', receiverPersonId: '', sharedObject: 'New handoff 1', responseExpectation: '', workIds: [], status: 'active' });
   rejected(editor.preview(token), 'reference'); fill(editor, token);
   const preview = ok(editor.preview(token)).projection;
   assert.deepEqual(preview.state.connections, [{ id: 'handoff', senderTeamId: 'delivery', receiverTeamId: 'receiving', receiverPersonId: 'product-one',

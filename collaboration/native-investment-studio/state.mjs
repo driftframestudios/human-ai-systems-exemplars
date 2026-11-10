@@ -2,6 +2,7 @@ import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepa
 import { HISTORY, PURPOSE_FIELDS } from './config.mjs';
 import { prepareAssembly } from './commands.mjs';
 import { replaceWorkPlacements } from './cadence.mjs';
+import { resizeWorkSessions } from './work-sessions.mjs';
 
 function historyLimit(options) {
   const prototype = options && typeof options === 'object' ? Object.getPrototypeOf(options) : undefined;
@@ -45,18 +46,20 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
   let undo = [];
   let redo = [];
   let baseline = null;
+  let lastGesture = null;
 
   function retained(stack, projection) {
     if (limit === 0) return [];
     return [...stack.slice(Math.max(0, stack.length - limit + 1)), projection];
   }
 
-  function publish(next, mode) {
+  function publish(next, mode, gesture) {
     if (acceptance.sequence === Number.MAX_SAFE_INTEGER) {
       throw new PlanError('acceptance-limit', 'studio.acceptance', 'Start a new Studio instance to continue accepting changes.');
     }
     const nextAcceptance = Object.freeze({ instance, token: Symbol('native-studio-acceptance'), sequence: acceptance.sequence + 1 });
-    const nextUndo = mode === 'undo' ? undo.slice(0, -1) : retained(undo, accepted);
+    const nextUndo = mode === 'undo' ? undo.slice(0, -1)
+      : mode === 'edit' && gesture && gesture === lastGesture ? undo : retained(undo, accepted);
     const nextRedo = mode === 'undo' ? retained(redo, accepted) : mode === 'redo' ? redo.slice(0, -1) : [];
     // Publication follows the final freshness check; these owned values invoke
     // no caller code between history, indexes, projection and chronology writes.
@@ -65,20 +68,23 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     workPositions = next.workPositions ?? workPositions;
     peoplePositions = next.peoplePositions ?? peoplePositions;
     accepted = next.projection;
+    lastGesture = mode === 'edit' ? gesture ?? null : null;
     acceptance = nextAcceptance;
   }
 
-  function attempt(expected, operation, mode = 'edit') {
+  function attempt(expected, operation, mode = 'edit', gesture = null) {
     try {
+      if (gesture !== null && typeof gesture !== 'symbol') throw new PlanError('gesture', 'edit', 'Use an owned gesture token.');
       if (expected !== accepted) throw new PlanError('stale-edit', 'edit', 'Read the current plan before applying this edit.');
       const next = operation();
       // Direct-JavaScript reflection can run a reentrant caller callback.
       if (expected !== accepted) throw new PlanError('stale-edit', 'edit', 'Read the newer accepted plan before applying this edit.');
       if (next.error) return Object.freeze({ ok: false, error: next.error, projection: accepted });
       if (mode === 'baseline') {
+        lastGesture = null;
         baseline = Object.freeze({ projection: accepted, acceptance, token: Symbol('native-studio-baseline') });
       } else if (mode !== 'preview' && next.projection !== accepted) {
-        publish(next, mode);
+        publish(next, mode, gesture);
       }
       return Object.freeze({ ok: true, projection: next.projection });
     } catch (error) {
@@ -127,12 +133,13 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     if (!id || !Object.hasOwn(id, 'value') || id.value !== workId) {
       throw new PlanError('target', 'edit.workId', 'Keep the replacement bound to its original work identity.');
     }
-    const row = { ...base.state.work[position], ...prepareWorkRecord(candidate, `plan.work[${position}]`) };
+    const row = resizeWorkSessions({ ...base.state.work[position], ...prepareWorkRecord(candidate, `plan.work[${position}]`) });
     if (row.id !== workId) throw new PlanError('target', 'edit.workId', 'Keep the admitted work bound to its original identity.');
     const current = base.state.work[position];
     if (row.id === current.id && row.label === current.label && row.teamId === current.teamId
         && row.minutesPerOccurrence === current.minutesPerOccurrence && row.occurrences === current.occurrences
         && row.lifecycle === current.lifecycle && row.funding === current.funding && row.status === current.status && JSON.stringify(row.timing) === JSON.stringify(current.timing)
+        && JSON.stringify(row.sessionOverrides ?? []) === JSON.stringify(current.sessionOverrides ?? [])
         && row.personIds.length === current.personIds.length && row.personIds.every((id, index) => id === current.personIds[index])) {
       return { projection: base };
     }
@@ -164,7 +171,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     exportText: () => accepted.serialized,
     replace: (candidate, expected) => attempt(expected, () => replacement(preparePlan(candidate))),
     importText: (text, expected) => attempt(expected, () => replacement(parsePlan(text))),
-    applyCommand: (command, expected) => attempt(expected, () => assembly(command)),
+    applyCommand: (command, expected, gesture = null) => attempt(expected, () => assembly(command), 'edit', gesture),
     previewCommand: (command, expected) => attempt(expected, () => assembly(command), 'preview'),
     updateWork: (workId, candidate, expected) => attempt(expected, () => prepareWork(workId, candidate)),
     previewWork: (workId, candidate, expected) => attempt(expected, () => prepareWork(workId, candidate), 'preview'),

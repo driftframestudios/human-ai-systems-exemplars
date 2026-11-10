@@ -5,7 +5,7 @@ select, load and revisit. The tilted cassette face carries its name, host,
 duration and session count; its stable button remains easy to point at and use
 with a keyboard. A narrow viewport turns the shelf into a horizontal strip.
 
-**Standing:** human-preserved visual reference, version `0.1.0`, ID
+**Standing:** human-preserved visual reference, version `0.1.3`, ID
 `vfc:cassette-plan-shelf`; recorded 8 November 2026. The exact art and animation
 baseline is `cedafc3f17c417cf5c90cacb5b1a696acf9cc3c1` in
 `planning/context-canvas/studio-rack-tape-study.html`. This records the approved
@@ -15,6 +15,72 @@ reference while that wording changes in
 [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
 The planning reference is authorized for main/dev preservation in #810.
 Showcase adoption continues on dev; its promotion to main retains human review.
+
+## Showcase receiving composition
+
+Issue #813 adopts this artwork on `dev` through
+[`tape-picker.mjs`](../../collaboration/native-investment-studio/tape-picker.mjs)
+and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css).
+Issue #820 refines its receiving interaction: the unchanged-size shelf attaches
+directly to the full height of the period rack. #837 expands the desktop shelf
+scroll area from 40rem to 80rem while keeping cassette dimensions intact. At
+650px and below it remains a horizontal strip with no vertical height cap.
+
+One cassette represents one repeatable activity plan. The initial view shows
+All plans with detail closed. Its first shelf entry depicts three stacked tapes
+and carries total session minutes and count; it represents aggregate scope. A
+persistent sharp-cornered outline All plans control retains a half-depth hard
+shadow. The loaded name precedes adjacent Previous/Next muted rounded pennants;
+on phones the controls share one line beneath the name.
+Paper and teal selected states, clear text and a visible focus outline retain the
+existing rack vocabulary. The pennant tip indicates direction while its text
+names the action. Previous/Next follow shelf order with explicit ends; Next from
+All plans opens the first cassette. Both shelf and rail use the same scope owner.
+Unavailable directions retain legible labels and expose their state; focus stays
+on the activated control. Sequential selection reveals the chosen tape within
+its local shelf, preserving page position and focus. The shared shelf reveal
+settles directly with reduced motion and yields to manual shelf input. This
+supersedes stationary offscreen selection in #909. An empty library starts unselected. Loading a canonical work identity
+filters the board, tracks and relationship markers. All plans is the persistent
+return to the complete arrangement. #909 supersedes #906's initial-first-tape
+default; scope navigation preserves accepted data and Undo. The selected sprint/quarter remains visible: All plans clears the cassette filter;
+Plan overview clears the period filter. Existing clips open local editing.
+Loaded **Add session** targets append occurrences while retaining that cassette.
+Each session initially uses the tape defaults; its numbered pad edits independent
+settings. Edited durations contribute to the shelf's total duration reading;
+unvaried tapes retain their per-session duration. Session state, funding and
+participants project consistently in All plans and loaded scope.
+In All plans, explicit **New plan** targets create separate records and retain the
+overview. Shelf **New plan** creates and loads a uniquely named record with detail
+closed. These scope-specific meanings supersede the earlier rule that every lane
+addition creates a record through #906.
+
+**Remove plan** belongs to the transport's right edge with a compact confirmation
+that names the loaded plan. One canonical change clears its supporting links;
+the stable native amp **Undo** restores the complete arrangement. The shelf
+retains its selection role. This supersedes #813's local Undo and
+edit-on-cassette-selection behavior.
+
+An empty library gives the rack a single-column starter composition: a cobalt
+shared reel beside a diagram preview, with **Plan**, **Design**, **Test**, **Build**
+and **Deploy** choices. Paper resting and teal selected buttons follow the shared
+reel contract. Turning selects a preview; **Load these plans** explicitly accepts its
+set as one Undo entry while retaining people, teams, horizon and other chapter
+state. **Create a plan** retains canonical creation and the guided prerequisite
+route. A missing person/team leaves the current state intact with a concise local
+message; its borrowed creation receiver remains usable inside the rack.
+
+Artwork, focus targets, stationary shelf, narrow horizontal orientation and hover
+motion retain the exact specimen.
+
+**AI Enablement** and **AI Experience** join the two horizon examples as subtle
+canvas-paper actions with the existing hard shadow outside the rack. Each loads an authored four-sprint arrangement
+with five editable tapes, connected handoffs and a human scope decision. Their
+canonical preset factory owns the people, purpose and working sessions; one amp
+Undo restores the prior arrangement. These complete examples and the empty-library
+sets have distinct receiving jobs: the latter retain the visitor's people and horizon.
+Both use the same cassette artwork and ordinary period/session navigation. On
+mobile, example actions wrap while the shelf retains its horizontal strip.
 
 ## The preserved object
 

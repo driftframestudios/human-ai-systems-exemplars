@@ -3,14 +3,16 @@
 Visitors should be able to assemble an investment plan, understand what each
 control does, and return from a correction with their work intact. This record
 turns five bounded research questions into decisions for the native Studio and
-keeps the remaining showcase work visible.
+preserves the showcase decisions at its source checkpoint.
 
 The source observation checkpoint is `cf16539`, the native patch-bay candidate.
 The observations below come from its controllers, About markup, and package
 README. They establish implementation mechanisms and available routes. Visitor
 research and a receiving-browser observation are separate evidence. **Current
 repair** names the receiving change's scope; its completion belongs to that
-change's review and verification return.
+change's review and verification return. This historical audit is superseded for
+current delivery status by the README, experience journal and live Issues. The
+performance continuation below names the current receiving route separately.
 
 Read the [package README](README.md) for the practical entry and local preview,
 the [experience journal](experience-journal.md) for state, role, styling, and
@@ -252,36 +254,29 @@ provides a useful first route.
 | Load, preview, and download a plan | **Implemented:** `exchange.mjs` previews admitted input and requires explicit replacement; downloads capture accepted state. | Preserve preview versus acceptance, current-plan retention on rejected input, and the explicit Use this plan action. **Carry forward:** broader scenario and export presentation follows the capability owner as native chapters grow. |
 | Read with JavaScript unavailable or on a narrow screen | **Implemented:** About owns semantic markup, ordinary vertical reading, and a static counterpart route. | **Current repair:** decoration and control composition preserve the existing reading. **Carry forward:** [#656](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/656) owns static content refresh as the native model expands. |
 
-## Finish the experience, then refine measured pressure
+## Checkpoint sequence and current performance continuation
 
-The current repair is complete when the affected task routes, controls, stable
-rows, summaries, and zine composition have a fitting source and browser return.
-That return should name the observed behavior and remaining scope. It should
-keep new implementation claims separate from this checkpoint audit.
+At this audit's checkpoint, the [design route, #637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637)
+sent amp composition and direct correction routes to #647, Quality and recovery
+to #652, and coordination timing, capacity and decisions to #653. The current
+Studio's six chapters and sprint/quarter cadence supersede that unfinished
+checkpoint. The README and journal carry their receiving compositions.
 
-The remaining showcase sequence continues through the approved
-[design route, #637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637):
+The lasting criteria are visible visitor consequences, retained work, named
+returns and useful next actions. Source and browser observations establish each
+receiving change; decorative progress alone establishes no achievement.
 
-- [#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647)
-  completes native amp controls and visual composition. The zine family supports
-  that work while the remaining capability chapters keep their own acceptance.
-- [#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652)
-  owns quality, recovery, learning, and an explicit professional-play loop.
-  Playful progress must describe an actual visitor action or outcome; decorative
-  stamps alone establish no achievement.
-- [#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653)
-  owns the native coordination score, capacity, and decision gates. Scheduling
-  requires declared timing and policy inputs beyond today's null timing field.
-- [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
-  receives relationship-rendering refinements after showcase completion.
-  General maximum-population performance work follows measured visitor pressure;
-  a reproducible current interaction blockage warrants an earlier focused repair.
-
-Direct correction routes from static removal-dependency labels remain explicit
-follow-up work in [#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
-Their receiver needs
-the same complete promise: creation, retained draft, named return, and a usable
-next action. A generic navigation link alone establishes only the navigation.
+The current [performance route, #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
+follows adding plans and sessions, retaining the local editor, turning dials,
+switching views and Undo. Accepted-edit refresh (#901), explicit editor scope
+(#915), Investment context reuse (#902), occurrence indexing (#903) and deck
+view ownership (#916) are implemented on `dev`. #900 retires former timeline and
+agenda presentation, consolidates shared duration styling and removes redundant
+declarations while preserving chapter layouts and alternate-media owners. This
+supersedes the earlier queued runtime and duplicate-CSS continuation.
+The earlier relationship study remains historical evidence. A current visitor-path
+observation supplies the basis for a latency claim or further runtime refinement;
+ordinary visitor-created growth supplies the initial workload.
 
 Research stops here because additional examples would repeat the chosen
 patterns. The next evidence comes from the implemented visitor tasks and the

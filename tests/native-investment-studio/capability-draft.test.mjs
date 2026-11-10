@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
-import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
+import { createShowcasePlan, createQuarterShowcasePlan, preparePreset } from '../../collaboration/native-investment-studio/presets.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
 import { capabilityForm, makeCapabilityTarget, createCapabilityDraftAdapter } from '../../collaboration/native-investment-studio/capability-draft.mjs';
 
@@ -29,7 +29,7 @@ function common(editing, token) {
 }
 function rejected(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); }
 
-test('the pilot supplies editable context and shared support, accepted together without new cost, while ordinary plans start empty', () => {
+test('the pilot supplies editable context and shared support while ordinary plans receive context without assignments', () => {
   const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio), before = studio.read();
   const token = create(editing, studio), raw = editing.capability.read().draft.raw;
   assert.equal(raw.context, 'Help pilot reviewers find an earlier service-request decision and recover why it changed.');
@@ -47,8 +47,43 @@ test('the pilot supplies editable context and shared support, accepted together 
   const ordinary = createStudio(fixture()), ordinaryEditing = createDraftCoordinator(ordinary);
   create(ordinaryEditing, ordinary);
   const empty = ordinaryEditing.capability.read().draft.raw;
-  assert.equal(empty.context, ''); assert.equal(empty.teamId, ''); assert.deepEqual(empty.responsiblePersonIds, []);
+  assert.equal(empty.context, 'Inspect earlier accepted records and distinguish them from the current proposal.');
+  assert.equal(empty.teamId, ''); assert.deepEqual(empty.responsiblePersonIds, []);
   assert.deepEqual(empty['support.preparation'], []); assert.deepEqual(empty['support.review'], []);
+});
+
+test('rollout and starter proposals use the capability explanation for both catalogues', () => {
+  for (const plan of [createQuarterShowcasePlan(), preparePreset('discovery-alignment', '1.0.0').projection.state]) {
+    const studio = createStudio(plan), editing = createDraftCoordinator(studio), before = studio.read();
+    for (const [kind, id, expected] of [
+      ['ability', 'trace-evidence', 'Follow a claim to its observation and describe the observation context.'],
+      ['practice', 'focalization', 'Name the decision, its owner, and the information that could change it.'],
+    ]) {
+      const result = editing.capability.create(capabilityForm(kind, 'create', id), studio.read());
+      assert.equal(result.ok, true, result.error?.message);
+      assert.equal(result.view.draft.raw.context, expected, `${plan.planId}: ${kind}`);
+      assert.equal(result.view.draft.raw.teamId, '', 'context supplies no assignment');
+      assert.strictEqual(studio.read(), before, 'opening a suggested context accepts no plan changes');
+      assert.equal(editing.capability.cancel(result.view.draft.token).ok, true);
+    }
+  }
+});
+
+test('cleared context survives parking and stale review, then remains blank when its accepted record reopens', () => {
+  const studio = createStudio(fixture()), editing = createDraftCoordinator(studio);
+  const token = create(editing, studio), target = editing.capability.read().draft.capabilityId;
+  text(editing, token, 'context', '');
+  assert.equal(editing.park().ok, true);
+  const resumed = editing.capability.begin(target, studio.read());
+  assert.equal(resumed.ok, true); assert.equal(resumed.view.draft.raw.context, '');
+  const changed = JSON.parse(studio.exportText()); changed.purpose.changedAbility = 'A revised plan outcome';
+  assert.equal(studio.importText(JSON.stringify(changed), studio.read()).ok, true);
+  const reviewed = editing.capability.review(editing.capability.read().draft.token, studio.read());
+  assert.equal(reviewed.ok, true); assert.equal(reviewed.view.draft.raw.context, '');
+  assert.equal(editing.capability.apply(reviewed.view.draft.token).ok, true);
+  const row = studio.read().state.abilities[0]; assert.equal(row.context, null);
+  const reopened = editing.capability.begin(makeCapabilityTarget(capabilityForm('ability', 'update', row.definitionId), row.id), studio.read());
+  assert.equal(reopened.ok, true); assert.equal(reopened.view.draft.raw.context, '');
 });
 
 test('pilot proposals use available existing support and retain genuine maintenance gaps', () => {

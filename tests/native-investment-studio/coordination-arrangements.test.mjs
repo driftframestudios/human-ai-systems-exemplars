@@ -30,11 +30,11 @@ const expectedPod = Object.freeze({ id: 'working-pod', templateId: 'pod', templa
     { slotId: 'feedback', connectionId: 'working-pod-connection-feedback' }] });
 
 test('0.7 migration retains an authored horizon and actual topology while leaving template identity unspecified', () => {
-  const old = createShowcasePlan(); old.schemaVersion = '0.7.0'; delete old.arrangements;
-  old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence;
+  const old = createShowcasePlan(); old.schemaVersion = '0.7.0'; delete old.arrangements; delete old.investmentSettings;
+  old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence; delete old.investmentSettings;
   old.teams[0].label = 'Pod';
   const original = JSON.stringify(old), receipt = prepareImport(original), current = receipt.projection;
-  assert.equal(receipt.sourceSchemaVersion, '0.7.0'); assert.equal(current.state.schemaVersion, '0.9.0');
+  assert.equal(receipt.sourceSchemaVersion, '0.7.0'); assert.equal(current.state.schemaVersion, '0.11.0');
   assert.deepEqual(current.state.scoreSettings, { ...old.scoreSettings, version: '1.1.0', cadence: null });
   assert.ok(old.scoreSettings.gates.length && old.scoreSettings.proposals.length && old.scoreSettings.waits.length);
   assert.deepEqual(current.state.people, old.people); assert.deepEqual(current.state.work, old.work);
@@ -211,4 +211,42 @@ test('delivery phase placement follows record identity while visitor labels and 
   assert.equal(review.work.label, 'Operations conversation');
   assert.deepEqual(review.stageLabels, ['A visitor-written stage']);
   assert.equal(phases.flatMap(phase => phase.teams).find(team => team.slotId === 'pod').team.label, 'New group name');
+});
+
+test('unbound delivery teams follow their work stages and handoffs follow the receiving team', () => {
+  const plan = structuredClone(pod().read().state);
+  const arrangement = structuredClone(projectCoordinationArrangements(plan).arrangements[0]);
+  const extraTeams = ['discovery', 'engineering', 'quality', 'support'].map(id => ({
+    slotId: `custom-team:${id}`, slotLabel: id, team: { id, label: id, personIds: [] },
+  }));
+  arrangement.teams.push(...extraTeams);
+  plan.work.push(...['discovery', 'engineering', 'quality'].map(id => ({ ...plan.work[0], id: `${id}-session`, teamId: id })));
+  plan.scoreSettings.stages = [
+    { id: 'understand', label: 'Understand', workIds: ['discovery-session'] },
+    { id: 'build', label: 'Build', workIds: ['engineering-session'] },
+    { id: 'review', label: 'Review', workIds: ['quality-session'] },
+  ];
+  arrangement.connections.push({ slotId: 'custom-handoff', connection: {
+    id: 'custom-handoff', senderTeamId: 'engineering', receiverTeamId: 'quality', workIds: [],
+  } });
+  const phases = projectDeliveryBoard({ arrangement, plan });
+  const placement = Object.fromEntries(phases.flatMap(phase => phase.teams
+    .filter(row => row.slotId.startsWith('custom-team:')).map(row => [row.team.id, phase.id])));
+  assert.deepEqual(placement, { discovery: 'planning', engineering: 'implementation', quality: 'testing', support: 'testing' });
+  assert.equal(phases.find(phase => phase.connections.some(row => row.slotId === 'custom-handoff')).id, 'testing');
+  assert.equal(phases.find(phase => phase.connections.some(row => row.slotId === 'handoff')).id, 'deployment',
+    'the template keeps its existing authored handoff phase');
+});
+
+test('receiver lane placement keeps newly added teams and handoffs in their creation phase', () => {
+  const plan = createShowcasePlan();
+  const team = { id:'new-team', label:'New team 1', personIds:[], lifecycle:'active' };
+  plan.teams.push(team);
+  const connection = { id:'new-handoff', senderTeamId:plan.teams[0].id, receiverTeamId:team.id, workIds:[], sharedObject:'New handoff 1' };
+  const arrangement = { teams:[{slotId:'custom-team:new-team', team}], connections:[{slotId:'custom-handoff:new-handoff',connection}] };
+  const placements = { team:new Map([[team.id,'maintenance']]), connection:new Map([[connection.id,'design']]) };
+  const phases = projectDeliveryBoard({arrangement,plan,placements});
+  assert.equal(phases.find(phase => phase.teams.some(row => row.team.id === team.id)).id,'maintenance');
+  assert.equal(phases.find(phase => phase.connections.some(row => row.connection.id === connection.id)).id,'design');
+  assert.equal(Object.hasOwn(team,'phaseId'),false,'placement stays with this receiver rather than adding an exported team field');
 });

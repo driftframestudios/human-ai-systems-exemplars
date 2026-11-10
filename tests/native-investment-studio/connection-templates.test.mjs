@@ -228,14 +228,15 @@ test('slot, reference and binding duplicates receive distinct diagnostics before
   ]) { const raw = existingRequest(); mutate(raw); unchanged(studio, () => prepareCoordinationTemplate(studio.read(), raw), code); }
 });
 
-test('receiver membership and supporting-work removal retain canonical relationship constraints', () => {
+test('session removal keeps team connections while receiver membership retains its relationship constraint', () => {
   const plan = createExamplePlan(); plan.teams.push({ id: 'receiving', label: 'Receiving', personIds: [], lifecycle: 'active' });
   const studio = createStudio(plan), raw = existingRequest();
   unchanged(studio, () => prepareCoordinationTemplate(studio.read(), raw), 'team-membership');
   raw.teams[1].addPersonIds = ['product-one']; apply(studio, prepareCoordinationTemplate(studio.read(), raw));
   const removed = studio.applyCommand({ type: 'work.remove', workId: 'review' }, studio.read());
-  assert.equal(removed.ok, false); assert.equal(removed.error.code, 'dependencies');
-  assert.deepEqual(removed.error.references.filter(row => row.collection === 'connections').map(row => row.id), ['sample-connection-handoff', 'sample-connection-feedback']);
+  assert.equal(removed.ok, true);
+  assert.deepEqual(removed.projection.state.connections.map(row => [row.id, row.workIds]),
+    [['sample-connection-handoff', []], ['sample-connection-feedback', []]]);
   const members = studio.applyCommand({ type: 'team.members.replace', teamId: 'receiving', personIds: [] }, studio.read());
   assert.equal(members.ok, false); assert.equal(members.error.code, 'team-membership');
 });

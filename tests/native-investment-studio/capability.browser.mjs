@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { before, after, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -12,17 +13,17 @@ for (const name of names) assert.ok(Object.hasOwn(engines, name));
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-capabilities');
 let server, fixture;
-before(async () => {
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   fixture = createNativeAboutFixture(source, { tail: '<div aria-hidden="true" style="height:1000px"></div>' });
-  server = await startStaticServer(); for (const name of names) browsers.set(name, await engines[name].launch());
+  server = await own(startStaticServer()); for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
-after(async () => { try { await Promise.all([...browsers.values()].map(browser => browser.close())); } finally { await server?.close(); } });
 const root = page => page.locator('[data-native-coordination]');
 const panel = page => root(page).locator('[data-native-capabilities]');
 const action = (page, name) => panel(page).locator(`[data-capability-action="${name}"]`);
 const field = (page, name) => panel(page).locator(`input[data-capability-field="${name}"], select[data-capability-field="${name}"], textarea[data-capability-field="${name}"]`);
+const choose = (page, name, value) => panel(page).locator(`input[type="radio"][data-capability-field="${name}"][value="${value}"]`).check();
 const ids = (page, name) => panel(page).locator(`ul[data-capability-field="${name}"]`);
 const section = (page, name) => panel(page).locator(`[data-capability-section-key="${name}"]`);
 const total = page => root(page).locator('[data-native-total]');
@@ -63,9 +64,9 @@ async function open(t, engine, showcase = false) {
 async function support(page) {
   await field(page, 'context').fill('Recover an accepted change in the pilot');
   await section(page, 'responsibility').click();
-  await field(page, 'teamId').selectOption('delivery');
+  await choose(page, 'teamId', 'delivery');
   for (const id of ['product-one', 'product-two']) await ids(page, 'responsiblePersonIds').locator(`input[value="${id}"]`).check();
-  await field(page, 'decisionOwnerPersonId').selectOption('product-one');
+  await choose(page, 'decisionOwnerPersonId', 'product-one');
   for (const id of ['preparation', 'review']) {
     await section(page, id).click();
     await panel(page).locator(`input[data-capability-field="support.${id}"][value="review"]`).check();
@@ -73,6 +74,268 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: new catalogue context is visible and a visitor-cleared value survives close and Apply`, async t => {
+    const page = await open(t, engine), initial = await bytes(page), title = choice(page, 'inspect-history');
+    await title.click();
+    await expect(field(page, 'context')).toHaveValue('Inspect earlier accepted records and distinguish them from the current proposal.');
+    assert.equal(await bytes(page), initial, 'the suggested context remains a proposal');
+    await field(page, 'context').fill(''); await action(page, 'close').click();
+    await title.click(); await expect(field(page, 'context')).toHaveValue('');
+    await action(page, 'apply').click();
+    assert.equal(JSON.parse(await bytes(page)).abilities[0].context, null);
+    await action(page, 'close').click(); await title.click();
+    await expect(field(page, 'context')).toHaveValue('');
+  });
+
+  for (const width of [390, 1440]) test(`${engine}: repeated Abilities title and support selections close locally and retain the draft at ${width}px`, async t => {
+    const page = await open(t, engine, true), initial = await bytes(page);
+    await page.setViewportSize({ width, height: 1000 });
+    const title = choice(page, 'assurance'), configure = panel(page).locator('[data-capability-configure]');
+    const preparation = supportCell(page, 'assurance', 'preparation'), review = supportCell(page, 'assurance', 'review');
+    const context = '  Preserve this recovery rehearsal proposal  ';
+    const retained = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw);
+    const overview = panel(page).locator('[data-capability-selected]');
+
+    await title.click(); await field(page, 'context').fill(context);
+    await title.focus(); await page.keyboard.press('Enter');
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(title).toBeFocused();
+    await expect(overview).toBeVisible();
+    await expect(overview.locator('[data-capability-title]')).toHaveText('Establish a fitting acceptance observation');
+    await expect(title).toHaveAttribute('aria-pressed', 'false'); await expect(title).toHaveAttribute('aria-expanded', 'false');
+    await expect(panel(page).locator('[data-capability-row][data-capability-id="readiness-evidence"]')).toHaveAttribute('data-selected', 'true');
+    assert.equal(await bytes(page), initial, 'closing the editor preserves the selected overview and accepts no edits');
+
+    await title.click(); await expect(field(page, 'context')).toHaveValue(context);
+    await preparation.click(); await expect(ids(page, 'support.preparation')).toBeFocused();
+    await expect(preparation).toHaveAttribute('aria-pressed', 'true');
+    await field(page, 'new.preparation.enabled').selectOption('yes');
+    await field(page, 'new.preparation.minutesPerSession').fill('later');
+    const unfinished = await retained();
+    await review.click(); await expect(ids(page, 'support.review')).toBeFocused();
+    await expect(review).toHaveAttribute('aria-pressed', 'true'); await expect(preparation).toHaveAttribute('aria-pressed', 'false');
+    await expect(panel(page).locator('[data-capability-requirement="review"]')).toBeVisible();
+    await expect(panel(page).locator('[data-capability-requirement="preparation"]')).toBeHidden();
+    assert.deepEqual(await retained(), unfinished, 'a different support section opens without discarding unfinished raw entries');
+    await review.screenshot({ path: resolve(captures, `${engine}-support-active-${width}.png`) });
+    await review.click(); await expect(configure).not.toHaveAttribute('open', ''); await expect(review).toBeFocused();
+    await expect(review).toHaveAttribute('aria-pressed', 'false');
+    await review.screenshot({ path: resolve(captures, `${engine}-support-resting-${width}.png`) });
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-toggle-closed-${width}.png`) });
+    await expect(overview).toBeVisible();
+
+    await preparation.click(); await expect(field(page, 'new.preparation.minutesPerSession')).toHaveValue('later');
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-toggle-open-${width}.png`) });
+    assert.deepEqual(await retained(), unfinished);
+    await preparation.click(); await expect(configure).not.toHaveAttribute('open', ''); await expect(preparation).toBeFocused();
+    await preparation.click(); await action(page, 'close').click();
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(preparation).toBeFocused();
+    assert.equal(await bytes(page), initial, 'both title and support return paths keep the accepted record unchanged');
+
+    await preparation.click(); await field(page, 'new.preparation.enabled').selectOption('no');
+    await panel(page).locator('[data-editor-apply]').click();
+    const accepted = JSON.parse(await bytes(page));
+    assert.equal(accepted.practices.find(row => row.id === 'readiness-evidence').context, context.trim());
+    assert.deepEqual(accepted.work, JSON.parse(initial).work, 'applying the text proposal retains existing supporting sessions');
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), initial);
+  });
+  test(`${engine}: support reselect distinguishes instances sharing one definition and returns to the exact cell`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(() => {
+      const { studio, controller } = window.capabilityFixture, candidate = JSON.parse(studio.exportText());
+      const original = candidate.practices.find(row => row.id === 'readiness-evidence');
+      candidate.practices.push({ ...original, id: 'second-readiness', context: 'A separate operational readiness review.' });
+      const result = studio.importText(JSON.stringify(candidate), studio.read()); if (!result.ok) throw Error(result.error.code);
+      controller.refresh();
+    });
+    const initial = await bytes(page);
+    const cell = id => panel(page).locator(`button[data-capability-action="support-cell"][data-capability-id="${id}"][data-capability-phase="preparation"]`);
+    await cell('readiness-evidence').click();
+    await cell('second-readiness').click();
+    await expect(panel(page).locator('[data-capability-configure]')).toHaveAttribute('open', '');
+    await expect(field(page, 'context')).toHaveValue('A separate operational readiness review.');
+    await expect(cell('second-readiness')).toHaveAttribute('aria-pressed', 'true');
+    await expect(cell('readiness-evidence')).toHaveAttribute('aria-pressed', 'false');
+    await cell('second-readiness').click();
+    await expect(panel(page).locator('[data-capability-configure]')).not.toHaveAttribute('open', '');
+    await expect(cell('second-readiness')).toBeFocused();
+    await cell('second-readiness').click(); await action(page, 'close').click();
+    await expect(cell('second-readiness')).toBeFocused();
+    const secondTitle = panel(page).locator('button[data-capability-action="select"][data-capability-id="second-readiness"]');
+    const draftForm = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.form);
+    for (const [trigger, receiver] of [
+      [cell('second-readiness'), panel(page).locator('[data-capability-requirement="preparation"]')],
+      [secondTitle, field(page, 'context')],
+    ]) {
+      await trigger.click(); await action(page, 'remove').click();
+      assert.equal(await draftForm(), 'practice.remove.assurance@1.0.0');
+      await expect(trigger).toHaveAttribute('aria-pressed', 'false');
+      await expect(secondTitle).toHaveAttribute('aria-expanded', 'false');
+      await trigger.click();
+      assert.equal(await draftForm(), 'practice.update.assurance@1.0.0', 'selecting the same source exits removal into its editing form');
+      await expect(receiver).toBeVisible();
+      await action(page, 'close').click(); await expect(trigger).toBeFocused();
+    }
+    assert.equal(await bytes(page), initial, 'inspection and switching out of removal preserve both accepted records');
+  });
+  for (const [label, definitionId, collection] of [
+    ['new ability', 'trace-evidence', 'abilities'], ['existing practice', 'expectation', 'practices'],
+  ]) for (const [key, kind, records] of [
+    ['teamId', 'team', 'teams'], ['responsiblePersonIds', 'person', 'people'], ['decisionOwnerPersonId', 'person', 'people'],
+  ]) test(`${engine}: untouched ${label} keeps its proposal when adding ${key}`, async t => {
+    const page = await open(t, engine, true), initial = await bytes(page);
+    await choice(page, definitionId).click(); await section(page, 'responsibility').click();
+    const before = await page.evaluate(() => {
+      const { studio, editing } = window.capabilityFixture, draft = editing.capability.read().draft;
+      return { target: draft.capabilityId, id: draft.targetId, raw: draft.raw, state: studio.read().state,
+        history: studio.readHistory().undoCount };
+    });
+    await panel(page).locator(`[data-capability-record-kind="${kind}"][data-capability-receiver-field="${key}"]`).click();
+    const created = await page.evaluate(records => window.capabilityFixture.studio.read().state[records].at(-1), records);
+    const selected = ids(page, key).getByRole(key === 'responsiblePersonIds' ? 'checkbox' : 'radio', { name: created.label, exact: true });
+    await expect(selected).toBeChecked(); await expect(selected).toBeFocused();
+    await expect(panel(page).locator('[data-capability-status]')).toContainText('Apply to keep this support selection.');
+    const afterCreation = await bytes(page), accepted = JSON.parse(afterCreation);
+    assert.equal(accepted[records].length, before.state[records].length + 1, 'one creation accepts exactly one record');
+    assert.deepEqual(accepted[collection], before.state[collection], 'the support relationship remains a proposal');
+    assert.equal(await page.evaluate(() => window.capabilityFixture.studio.readHistory().undoCount), before.history + 1);
+    const expectedRaw = { ...before.raw, [key]: key === 'responsiblePersonIds' ? [...before.raw[key], created.id] : created.id };
+    const current = () => page.evaluate(() => {
+      const view = window.capabilityFixture.editing.capability.read();
+      return { status: view.status, target: view.draft?.capabilityId, raw: view.draft?.raw };
+    });
+    assert.deepEqual(await current(), { status: 'editing', target: before.target, raw: expectedRaw });
+    await action(page, 'close').click(); await choice(page, definitionId).click(); await section(page, 'responsibility').click();
+    await expect(selected).toBeChecked();
+    assert.deepEqual(await current(), { status: 'editing', target: before.target, raw: expectedRaw });
+    await panel(page).locator('[data-editor-apply]').click();
+    const applied = JSON.parse(await bytes(page))[collection].find(row => row.id === before.id);
+    assert.deepEqual(applied[key], expectedRaw[key]);
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), afterCreation);
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), initial);
+  });
+
+  test(`${engine}: a rename callback can dispose its receiver without resuming stale UI work`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(async () => {
+      const { mountCapabilityPanel } = await import('/collaboration/native-investment-studio/capability-controller.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const fixture = window.capabilityFixture; fixture.controller.dispose();
+      fixture.editing = createDraftCoordinator(fixture.studio);
+      const receiver = document.querySelector('[data-native-capabilities]'); receiver.hidden = false;
+      fixture.controller = mountCapabilityPanel(receiver, { studio: fixture.studio, editing: fixture.editing,
+        onEditing: () => { if (fixture.disposeOnRename) fixture.controller.dispose(); } });
+      fixture.controller.create('ability', 'trace-evidence');
+    });
+    await field(page, 'context').fill('Keep this evidence proposal after receiver disposal.');
+    await section(page, 'responsibility').click();
+    await panel(page).locator('[data-capability-action="rename"][data-capability-rename-field="responsiblePersonIds"][data-capability-rename-id="leo"]').click();
+    await panel(page).locator('[data-capability-rename-name]').fill('Evidence researcher');
+    await page.evaluate(() => { window.capabilityFixture.disposeOnRename = true; });
+    await action(page, 'save-name').click();
+    await expect(panel(page).locator('[data-capability-fields]')).toHaveAttribute('disabled', '');
+    assert.equal(JSON.parse(await bytes(page)).people.find(person => person.id === 'leo').label, 'Evidence researcher');
+    assert.equal(await page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw.context), 'Keep this evidence proposal after receiver disposal.');
+    await expect(panel(page).locator('.native-capability-rack')).toHaveCount(0);
+  });
+  test(`${engine}: local people and team names update shared records while support remains a proposal`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true), initial = JSON.parse(await bytes(page));
+    const rename = (key, id) => panel(page).locator(`[data-capability-action="rename"][data-capability-rename-field="${key}"][data-capability-rename-id="${id}"]`);
+    const name = panel(page).locator('[data-capability-rename-name]');
+    const raw = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw);
+    await choice(page, 'trace-evidence').click();
+    await field(page, 'context').fill('  Keep this unfinished evidence proposal  ');
+    await section(page, 'responsibility').click();
+    await choose(page, 'teamId', 'product'); await choose(page, 'decisionOwnerPersonId', 'leo');
+    await ids(page, 'responsiblePersonIds').locator('input[value="leo"]').check();
+    const retained = await raw();
+    await rename('responsiblePersonIds', 'leo').click(); await expect(name).toBeFocused();
+    await name.fill('  '); await name.press('Enter');
+    await expect(name).toHaveAttribute('aria-invalid', 'true');
+    await expect(panel(page).locator('.native-capability__rename')).toContainText('Enter a name.');
+    assert.deepEqual(JSON.parse(await bytes(page)), initial, 'blank names accept neither a shared record nor support');
+    await name.fill('Cancelled name'); await name.press('Escape');
+    await expect(name).toHaveCount(0); await expect(rename('responsiblePersonIds', 'leo')).toBeFocused();
+    assert.deepEqual(await raw(), retained);
+    await rename('responsiblePersonIds', 'leo').click(); await name.fill('Evidence researcher');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await panel(page).locator('.native-capability__rename').evaluate(element => {
+        const box = element.getBoundingClientRect(); return { left: box.left, right: box.right, page: document.documentElement.scrollWidth };
+      });
+      assert.ok(geometry.left >= 0 && geometry.right <= width && geometry.page <= width, JSON.stringify(geometry));
+      await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-rename-${width}.png`) });
+    }
+    await name.press('Enter'); await expect(rename('responsiblePersonIds', 'leo')).toBeFocused();
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Evidence researcher', exact: true })).toBeChecked();
+    let accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.people, initial.people.map(person => person.id === 'leo' ? { ...person, label: 'Evidence researcher' } : person));
+    assert.deepEqual(accepted.teams, initial.teams); assert.deepEqual(accepted.work, initial.work); assert.deepEqual(accepted.abilities, initial.abilities);
+    assert.deepEqual(await raw(), retained, 'renaming retains exact support text and assignment IDs');
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual(await raw(), retained, 'global Undo parks and preserves the support proposal');
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Researcher', exact: true })).toBeChecked();
+    await action(page, 'review').click();
+    await rename('decisionOwnerPersonId', 'leo').click(); await name.fill('Evidence researcher'); await action(page, 'save-name').click();
+    await rename('teamId', 'product').click(); await name.fill('Research and product'); await action(page, 'save-name').click();
+    await expect(rename('teamId', 'product')).toBeFocused();
+    accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.teams, initial.teams.map(team => team.id === 'product' ? { ...team, label: 'Research and product' } : team));
+    assert.deepEqual(accepted.abilities, initial.abilities); assert.deepEqual(await raw(), retained);
+    const history = await page.evaluate(() => window.capabilityFixture.studio.readHistory());
+    await rename('teamId', 'product').click(); await action(page, 'save-name').click();
+    assert.deepEqual(await page.evaluate(() => window.capabilityFixture.studio.readHistory()), history, 'an unchanged name creates no undo step');
+    await tab(page, 'people').click();
+    await expect(root(page).locator('[data-roster-person="leo"]')).toContainText('Evidence researcher');
+    await expect(root(page).locator('[data-people-team="product"]')).toContainText('Research and product');
+    await tab(page, 'work').click(); await choice(page, 'trace-evidence').click();
+    assert.deepEqual(await raw(), retained, 'the proposal returns after visiting the canonical People view');
+    await supportCell(page, 'expectation', 'responsibility').click();
+    const acceptedSupport = await raw();
+    await rename('decisionOwnerPersonId', 'maya').click(); await name.fill('Product coordinator'); await action(page, 'save-name').click();
+    await expect(supportCell(page, 'expectation', 'responsibility')).toContainText('Product coordinator decides');
+    assert.deepEqual(await raw(), acceptedSupport, 'an accepted practice retains its own support draft during a shared rename');
+    assert.deepEqual(JSON.parse(await bytes(page)).practices, initial.practices, 'the support-table reading changes through shared IDs');
+  });
+  test(`${engine}: Trace evidence keeps readable choices in one compact support rack`, async t => {
+    const page = await open(t, engine, true), accepted = await bytes(page);
+    const trace = choice(page, 'trace-evidence'), rack = panel(page).locator('.native-capability-rack');
+    const contrast = locator => locator.evaluate(element => {
+      const rgb = value => value.match(/[\d.]+/gu).slice(0, 3).map(Number);
+      const light = value => rgb(value).map(channel => channel / 255).map(channel => channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4)
+        .reduce((sum, channel, i) => sum + channel * [.2126, .7152, .0722][i], 0);
+      let backdrop = element;
+      while (backdrop.parentElement && getComputedStyle(backdrop).backgroundColor === 'rgba(0, 0, 0, 0)') backdrop = backdrop.parentElement;
+      const pair = [light(getComputedStyle(element).color), light(getComputedStyle(backdrop).backgroundColor)].sort((a, b) => b - a);
+      return (pair[0] + .05) / (pair[1] + .05);
+    });
+    assert.ok(await contrast(trace) >= 4.5, 'the pale Trace evidence key has readable text');
+    await trace.click(); await section(page, 'responsibility').click();
+    const people = panel(page).locator('[data-capability-people]');
+    await expect(people).toBeVisible();
+    assert.ok(await contrast(action(page, 'close')) >= 4.5, 'Close remains readable on the rack header');
+    for (const width of [1440, 768, 767, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await people.evaluate(element => {
+        const box = element.getBoundingClientRect();
+        return { left: box.left, right: box.right, page: document.documentElement.scrollWidth,
+          halves: [...element.querySelectorAll('.native-capability__half-rack')].map(half => ({ x: half.offsetLeft, y: half.offsetTop })),
+          choices: [...element.querySelectorAll('input')].map(input => { const box = input.getBoundingClientRect(); return { width: box.width, height: box.height }; }) };
+      });
+      assert.ok(geometry.left >= 0 && geometry.right <= width && geometry.page <= width, JSON.stringify(geometry));
+      assert.ok(geometry.choices.length > 10 && geometry.choices.every(box => box.width <= 40 && box.height <= 24), 'native choices stay distinct from full-width text inputs');
+      assert.equal(geometry.halves.length, 2);
+      if (width >= 768) assert.equal(geometry.halves[0].y, geometry.halves[1].y, 'team and participation sit beside decision ownership');
+      else assert.ok(geometry.halves[1].y > geometry.halves[0].y, 'the same groups stack on a phone');
+      if ([1440, 390].includes(width)) await rack.screenshot({ path: resolve(captures, `${engine}-trace-people-${width}.png`) });
+    }
+    await choose(page, 'decisionOwnerPersonId', 'leo');
+    await action(page, 'close').click(); await expect(trace).toBeFocused();
+    await trace.click(); await section(page, 'responsibility').click();
+    await expect(ids(page, 'decisionOwnerPersonId').getByRole('radio', { name: 'Researcher', exact: true })).toBeChecked();
+    await section(page, 'context').click(); await expect(people).toBeHidden();
+    await page.setViewportSize({ width: 1440, height: 1000 }); await expect(people).toBeHidden();
+    assert.equal(await bytes(page), accepted, 'inspection and Close retain the support proposal without accepting it');
+  });
   test(`${engine}: support cells distinguish recorded observations, linked work and current gaps`, async t => {
     const page = await open(t, engine, true);
     await page.evaluate(() => {
@@ -124,26 +387,26 @@ for (const engine of names) {
     const page = await open(t, engine, true), accepted = await bytes(page);
     await supportCell(page, 'assurance', 'preparation').click();
     const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
-    await expect(prepare).toHaveAttribute('open', '');
+    await expect(prepare).toBeVisible();
     await expect(ids(page, 'support.preparation')).toBeFocused();
-    await field(page, 'context').fill('  Keep the recovery rehearsal context  ');
+    await section(page, 'context').click(); await field(page, 'context').fill('  Keep the recovery rehearsal context  '); await section(page, 'preparation').click();
     await field(page, 'new.preparation.enabled').selectOption('yes');
     await field(page, 'new.preparation.minutesPerSession').fill('later');
     await supportCell(page, 'assurance', 'review').click();
-    await expect(panel(page).locator('[data-capability-requirement="review"]')).toHaveAttribute('open', '');
+    await expect(panel(page).locator('[data-capability-requirement="review"]')).toBeVisible();
     await expect(field(page, 'context')).toHaveValue('  Keep the recovery rehearsal context  ');
     await supportCell(page, 'expectation', 'responsibility').click();
-    await expect(field(page, 'teamId')).toBeFocused();
+    await expect(ids(page, 'teamId')).toBeFocused();
     await expect(action(page, 'configure')).not.toHaveClass(/native-control--create/u);
     await supportCell(page, 'assurance', 'preparation').click();
     await expect(field(page, 'context')).toHaveValue('  Keep the recovery rehearsal context  ');
     await expect(field(page, 'new.preparation.minutesPerSession')).toHaveValue('later');
     await supportCell(page, 'inspect-history', 'preparation').click();
     await expect(action(page, 'configure')).toHaveClass(/native-control--create/u);
-    await field(page, 'context').fill('  Keep this history proposal  ');
+    await section(page, 'context').click(); await field(page, 'context').fill('  Keep this history proposal  '); await section(page, 'preparation').click();
     await supportCell(page, 'inspect-history', 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
-    await action(page, 'configure').click();
+    await expect(action(page, 'configure')).toBeHidden();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
     await supportCell(page, 'expectation', 'responsibility').click();
     await supportCell(page, 'inspect-history', 'observation').click();
@@ -187,10 +450,10 @@ for (const engine of names) {
     await choice(page, 'inspect-history').click();
     await expect(field(page, 'context')).toHaveValue('Help pilot reviewers find an earlier service-request decision and recover why it changed.');
     const people = panel(page).locator('[data-capability-people]');
-    await expect(people).not.toHaveAttribute('open', '');
-    await expect(people.locator('summary')).toHaveText('People and responsibility · Engineering · Product lead decides');
+    await expect(people).toBeHidden();
+    await expect(people.locator('h5')).toHaveText('People and responsibility · Engineering · Product lead decides');
     const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
-    await expect(prepare.locator('summary')).toContainText('Prototype pairing');
+    await expect(prepare.locator('h5')).toContainText('Prototype pairing');
     await section(page, 'preparation').click();
     const support = ids(page, 'support.preparation');
     const selected = support.locator('input[value="pairing"]'); await expect(selected).toBeChecked();
@@ -205,55 +468,47 @@ for (const engine of names) {
     await expect(support.locator('input[value="research"]')).toBeChecked();
     assert.equal(await bytes(page), initial); await expect(total(page)).toHaveText('$3,980.00');
     await panel(page).screenshot({ path: resolve(captures, `${engine}-compact-proposal.png`) });
-    await prepare.locator('[data-native-create="session"]').click();
-    const session = root(page).locator('[data-native-session-editor]');
-    await session.locator('[name="label"]').fill('History walkthrough');
-    await session.locator('[name="teamId"]').selectOption('engineering');
-    await session.locator('[data-session-person="ari"]').check();
-    await session.getByRole('radio', { name: 'Included in funded time', exact: true }).check();
-    await session.locator('[data-action="apply"]').click();
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
-    await action(page, 'review').click();
-    await expect(prepare).toHaveAttribute('open', ''); await expect(support).toBeFocused();
+    await prepare.locator('[data-capability-record-kind="session"][data-capability-receiver-field="support.preparation"]').click();
+    await expect(tab(page, 'work')).toHaveAttribute('aria-selected', 'true');
+    await expect(panel(page)).toHaveAttribute('data-capability-state', 'editing');
+    await expect(prepare).toBeVisible();
     await expect(support.locator('input[value="research"]')).toBeChecked();
-    await expect(prepare.getByRole('checkbox', { name: 'History walkthrough' })).not.toBeChecked();
-    await prepare.getByRole('checkbox', { name: 'History walkthrough' }).check();
+    await expect(prepare.getByRole('checkbox', { name: 'New session 1' })).toBeChecked();
+    await expect(prepare.getByRole('checkbox', { name: 'New session 1' })).toBeFocused();
     assert.equal((await page.evaluate(() => window.capabilityFixture.studio.read().state.abilities.length)), 0,
       'returning supplies the new session while keeping the capability proposal unaccepted');
   });
-  test(`${engine}: a card reverses, installs shared support and explicit review, then returns through Undo`, { timeout: 60000 }, async t => {
+  test(`${engine}: one selected support module installs shared work and returns through Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await expect(panel(page).locator('[data-capability-title]')).toHaveText('Actively negotiate expectations');
-    await expect(panel(page).locator('[data-capability-configure]')).toBeHidden();
-    await action(page, 'reverse').focus(); await page.keyboard.press('Enter');
-    await expect(action(page, 'reverse')).toBeFocused(); await expect(panel(page).locator('[data-capability-front]')).toBeHidden();
-    await expect(panel(page).locator('[data-capability-reverse]')).toBeVisible();
-    await action(page, 'beside').click(); await expect(panel(page).locator('[data-capability-front]')).toBeVisible();
-    await expect(panel(page).locator('[data-capability-reverse]')).toBeVisible(); assert.equal(await bytes(page), initial);
+    await expect(action(page, 'reverse')).toHaveCount(0); await expect(action(page, 'beside')).toHaveCount(0);
     await choice(page, 'inspect-history').click(); await support(page);
     const reviewGroup = panel(page).locator('[data-capability-requirement="review"]');
-    await reviewGroup.locator('summary').click();
-    await expect(reviewGroup).not.toHaveAttribute('open', '');
-    await expect(reviewGroup.locator('summary')).toHaveText('Review with the responsible people · Weekly working session');
-    await expect(panel(page).locator('[data-capability-preview]')).toContainText('Proposed investment: $16,000.00. Accepted investment: $16,000.00.');
-    await reviewGroup.locator('summary').click();
+    await expect(reviewGroup).toBeVisible();
+    await expect(panel(page).locator('[data-capability-people]')).toBeHidden();
+    await expect(field(page, 'context')).toBeHidden();
+    await expect(reviewGroup.locator('h5')).toHaveText('Review with the responsible people · Weekly working session');
     await field(page, 'new.review.enabled').selectOption('yes'); await field(page, 'new.review.teamId').selectOption('delivery');
     await field(page, 'new.review.label').fill('History review');
-    await reviewGroup.locator('summary').click();
-    await expect(reviewGroup).not.toHaveAttribute('open', '');
-    await expect(reviewGroup.locator('summary')).toHaveText('Review with the responsible people · Weekly working session, Add History review');
-    await reviewGroup.locator('summary').click();
     await ids(page, 'new.review.personIds').locator('input[value="product-one"]').check(); await field(page, 'new.review.hoursPerSession').fill('1');
-    await expect(field(page, 'new.review.hoursPerSession')).toHaveValue('1');
     await field(page, 'new.review.minutesPerSession').fill('30'); await field(page, 'new.review.funding').selectOption('additional');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height:1000 });
+      const steps = await panel(page).locator('.native-capability__steps > button:visible').evaluateAll(buttons => buttons.map(button => {
+        const box = button.getBoundingClientRect(); return [box.width, box.height, getComputedStyle(button).borderRadius];
+      }));
+      assert.ok(steps.length > 0);
+      for (const geometry of steps) assert.deepEqual(geometry, [44, 44, '50%'], 'support quantities use the shared ordinary circular steps');
+      await reviewGroup.locator('.native-capability__new-work').screenshot({ path:resolve(captures, `${engine}-support-steps-${width}.png`) });
+    }
+    await page.setViewportSize({ width:1440, height:1000 });
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-paired-support.png`) });
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('$16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
-    await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00'); await expect(action(page, 'apply')).toBeFocused();
+    const topApply = panel(page).locator('[data-editor-apply]');
+    await expect(topApply).toHaveCount(1); await expect(topApply).toBeEnabled();
+    await topApply.click(); await expect(total(page)).toHaveText('$16,150.00'); await expect(topApply).toBeFocused();
     await expect(field(page, 'context')).toHaveValue('Recover an accepted change in the pilot');
-    if (await panel(page).locator('[data-capability-reverse]').isHidden()) await action(page, 'reverse').click();
-    await expect(panel(page).locator('[data-capability-reverse]')).toContainText('$400.00 attributed within funded time');
-    await expect(panel(page).locator('[data-capability-reverse]')).toContainText('$150.00 attributed to extra investment');
-    await panel(page).locator('[data-capability-work="review"]').first().click();
+    await reviewGroup.locator('[data-capability-work="review"]').click();
     await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
     await root(page).locator('[data-native-return-action]').click();
     await expect(panel(page)).toBeVisible();
@@ -261,38 +516,39 @@ for (const engine of names) {
     await expect(field(page, 'context')).toHaveValue('Recover an accepted change in the pilot');
     await panel(page).screenshot({ path: resolve(captures, `${engine}-card.png`) });
     assert.deepEqual(await page.evaluate(() => { const p = window.capabilityFixture.studio.read(); return [p.state.abilities.length, p.state.work.length, p.state.abilities[0].supportBindings[1].workIds]; }), [1, 2, ['review', 'ability-1-support-2']]);
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(total(page)).toHaveText('$16,000.00'); assert.equal(await bytes(page), initial);
   });
 
-  test(`${engine}: adding a person returns to the saved card chooser, which stays usable at enlarged narrow sizes and releases on disposal`, { timeout: 60000 }, async t => {
+  test(`${engine}: adding a person stays in the support rack, which remains usable at enlarged narrow sizes and releases on disposal`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await choice(page, 'inspect-history').click(); await field(page, 'context').fill('  Return to this card  ');
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     const reviewGroup = panel(page).locator('[data-capability-requirement="review"]');
     await section(page, 'review').click();
     await field(page, 'new.review.enabled').selectOption('yes');
-    await panel(page).locator('[data-native-create="person"][data-native-return-field="new.review.personIds"]').click();
-    const assembly = root(page).locator('[data-native-assembly]');
-    await assembly.locator('[data-assembly-form] [name="label"]').fill('Quality reviewer');
-    await assembly.locator('[data-assembly-form] [name="ratePerHour"]').fill('100');
-    await assembly.locator('[data-assembly-apply]').click();
+    await panel(page).locator('[data-capability-record-kind="person"][data-capability-receiver-field="new.review.personIds"]').click();
+    await expect(tab(page, 'work')).toHaveAttribute('aria-selected', 'true');
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeFocused();
+    await action(page, 'close').click();
+    await expect(panel(page).locator('[data-capability-configure]')).not.toHaveAttribute('open', '');
+    await expect(choice(page, 'inspect-history')).toBeFocused();
+    await supportCell(page, 'inspect-history', 'review').click();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
     await page.evaluate(() => {
       const { studio, controller } = window.capabilityFixture;
       const source = JSON.parse(studio.exportText()); source.purpose.changedAbility = 'Changed plan';
       source.people[1].rateCentsPerHour = null;
       const result = studio.importText(JSON.stringify(source), studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
     });
-    const returnButton = root(page).locator('[data-native-return-action]');
-    await expect(returnButton).toHaveText('Return to card');
-    await returnButton.click(); await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
+    await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
     await expect(field(page, 'context')).toHaveValue('  Return to this card  '); await action(page, 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
-    await expect(reviewGroup).toHaveAttribute('open', '');
-    await expect(ids(page, 'new.review.personIds')).toBeFocused();
-    await ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Quality reviewer' }).check();
+    await expect(reviewGroup).toBeVisible();
+    await expect(ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'New person 1' })).toBeChecked();
     await field(page, 'new.review.enabled').selectOption('no');
-    await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,000.00. Known accepted investment: $8,000.00.');
+    await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,400.00. Known accepted investment: $8,400.00.');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Add missing hourly rates in People to complete the amounts.');
     await field(page, 'new.review.enabled').selectOption('yes');
     await field(page, 'new.review.minutesPerSession').fill('later');

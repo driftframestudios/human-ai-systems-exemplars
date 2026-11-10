@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+import { createCadence } from '../../collaboration/native-investment-studio/cadence.mjs';
+import { resolveWorkSession } from '../../collaboration/native-investment-studio/work-sessions.mjs';
 import { createSessionDraftAdapter, SESSION_FORMS, ASSEMBLY_FORMS, makeSessionTarget, describeSessionTarget,
   describeAssemblyTarget } from '../../collaboration/native-investment-studio/command-draft.mjs';
 
@@ -20,7 +22,7 @@ function fill(editor, token, fields = {}) {
 }
 
 test('session forms have closed target and field metadata, separate from assembly forms', () => {
-  assert.deepEqual(Object.keys(SESSION_FORMS), ['work.create', 'work.update', 'work.remove']);
+  assert.deepEqual(Object.keys(SESSION_FORMS), ['work.create', 'work.update', 'work.remove', 'work.session.update', 'work.session.remove']);
   assert.equal(Object.hasOwn(ASSEMBLY_FORMS, 'work.create'), false);
   const descriptor = describeSessionTarget('work.update:review');
   assert.equal(descriptor.id, 'review'); assert.equal(descriptor.collection, 'work');
@@ -32,13 +34,56 @@ test('session forms have closed target and field metadata, separate from assembl
   for (const target of ['team.create:review', 'work.pause:review', 'work.create:Bad', 'work.update:a:b', '', null]) assert.equal(describeSessionTarget(target), null);
   assert.equal(describeAssemblyTarget('work.create:review'), null);
   assert.throws(() => makeSessionTarget('team.create', 'review'), TypeError);
+  const selected = describeSessionTarget(makeSessionTarget('work.session.update', 'review', 1));
+  assert.equal(selected.id, 'review'); assert.equal(selected.occurrenceIndex, 1);
+  for (const target of ['work.session.update:review', 'work.session.update:review:-1', 'work.session.update:review:1:2']) {
+    assert.equal(describeSessionTarget(target), null);
+  }
+});
+
+test('a selected session draft edits and removes only its own settings and placement', () => {
+  const plan = createExamplePlan(); plan.work[0].occurrences = 3;
+  plan.scoreSettings.cadence = createCadence('sprint', 2);
+  plan.scoreSettings.cadence.placements = [0, 1, 2].map(occurrenceIndex => ({ workId: 'review', occurrenceIndex, periodId: 'period-1', subdivision: 1 }));
+  const studio = createStudio(plan), editor = createSessionDraftAdapter(studio), before = studio.read();
+  const target = makeSessionTarget('work.session.update', 'review', 1);
+  let opened = editor.begin(target, before); assert.equal(opened.ok, true, opened.error?.message);
+  let token = opened.view.draft.token;
+  assert.equal(opened.view.draft.occurrenceIndex, 1); assert.equal(opened.view.draft.raw.occurrences, '3');
+  assert.equal(opened.view.draft.changed, false); assert.strictEqual(editor.preview(token).projection, before);
+  editor.setText(token, 'label', 'Review the recovery path');
+  editor.setText(token, 'minutesPerSession', '45');
+  editor.setText(token, 'funding', 'allocated');
+  editor.setIds(token, 'personIds', ['product-one']);
+  const placements = JSON.parse(opened.view.draft.raw.cadencePlacements);
+  placements[1] = { occurrenceIndex: 1, periodId: 'period-2', subdivision: 2 };
+  editor.setText(token, 'cadencePlacements', JSON.stringify(placements));
+  assert.equal(editor.apply(token).ok, true);
+  const work = studio.read().state.work[0];
+  assert.equal(work.occurrences, 3); assert.equal(work.label, before.state.work[0].label);
+  assert.deepEqual(resolveWorkSession(work, 0), resolveWorkSession(before.state.work[0], 0));
+  assert.deepEqual(resolveWorkSession(work, 2), resolveWorkSession(before.state.work[0], 2));
+  const selected = resolveWorkSession(work, 1);
+  assert.equal(selected.label, 'Review the recovery path'); assert.equal(selected.minutesPerOccurrence, 45);
+  assert.equal(selected.funding, 'allocated'); assert.deepEqual(selected.personIds, ['product-one']);
+  assert.deepEqual(studio.read().state.scoreSettings.cadence.placements,
+    placements.map(item => ({ workId: 'review', ...item })));
+  opened = editor.begin(target, studio.read()); token = opened.view.draft.token;
+  assert.equal(opened.view.draft.raw.minutesPerSession, '45'); assert.equal(opened.view.draft.changed, false);
+  editor.cancel(token);
+  rejected(editor.begin(makeSessionTarget('work.session.update', 'review', 3), studio.read()), 'reference');
+  opened = editor.begin(makeSessionTarget('work.session.remove', 'review', 1), studio.read());
+  assert.equal(editor.apply(opened.view.draft.token).ok, true);
+  assert.equal(studio.read().state.work[0].occurrences, 2);
+  assert.deepEqual(studio.read().state.scoreSettings.cadence.placements.map(item => [item.occurrenceIndex, item.periodId]),
+    [[0, 'period-1'], [1, 'period-1']]);
 });
 
 test('session creation starts incomplete, previews $1250 and accepts one additional $50 session', () => {
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   const token = open(editor, studio, 'work.create', 'extra');
-  assert.deepEqual(editor.read().draft.raw, { label: '', teamId: '', cadencePlacements: '[]', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
-  rejected(editor.preview(token), 'label');
+  assert.deepEqual(editor.read().draft.raw, { label: 'New session 1', teamId: '', cadencePlacements: '[]', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
+  rejected(editor.preview(token), 'reference');
   fill(editor, token, { label: '  One session  ' });
   const preview = editor.preview(token); assert.equal(preview.ok, true);
   assert.equal(preview.projection.result.knownCommitmentCents, 125000);
@@ -146,12 +191,13 @@ test('participant order remains detached across caller, preview facade, cache an
   assert.deepEqual(studio.read().state.work[0].personIds, ['engineering-one', 'product-one']);
 });
 
-test('session removal preserves bounded practice references and releases only an unreferenced record', () => {
+test('session removal previews dissolved practice links, while Cancel preserves the accepted record', () => {
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   let token = open(editor, studio, 'work.remove');
-  const result = rejected(editor.preview(token), 'dependencies');
-  assert.deepEqual(result.error.references, [{ collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' }]);
-  rejected(editor.apply(token), 'dependencies'); assert.strictEqual(studio.read(), before);
+  const result = editor.preview(token);
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.projection.state.practices[0].supportBindings[0].workIds, []);
+  assert.strictEqual(studio.read(), before);
   assert.equal(editor.cancel(token).ok, true);
   token = open(editor, studio, 'work.create', 'extra'); fill(editor, token); editor.apply(token);
   token = open(editor, studio, 'work.remove', 'extra'); assert.equal(editor.read().draft.changed, true);

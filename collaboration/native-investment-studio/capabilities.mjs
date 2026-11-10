@@ -52,12 +52,12 @@ const abilityRows = [
     'A person can identify an earlier change and recover its relevant context.', [prepare, review], []],
 ];
 const practiceDetails = [
-  ['People doing and receiving the work', 'Agree scope, constraints, response and responsibility explicitly.', 'The participants can restate the agreement and resolve a changed expectation.', [coordinate, review], []],
-  ['People preparing a decision', 'Name the decision, its owner and the information that could change it.', 'The decision owner can identify the remaining question and next useful observation.', [prepare, coordinate], []],
-  ['People testing a possible approach', 'Bound a useful experiment and its observation before committing more work.', 'The team can explain what the experiment established and what remains open.', [prepare, review], [reference('practice', 'focalization')]],
-  ['People allocating time and funding', 'Compare a possible investment with the work it would displace.', 'The decision owner can identify the assumption, opportunity and funded tradeoff.', [prepare, review], [reference('practice', 'expectation')]],
-  ['People sending and receiving work', 'Agree what continues, who receives it and how interrupted work resumes.', 'The receiver can continue the work from the supplied record.', [coordinate, review], [reference('practice', 'expectation')]],
-  ['People producing and reviewing evidence', 'Choose an observation that can distinguish the intended behavior from a consequential fault.', 'The reviewer can explain the behavior observed, the boundary and the remaining uncertainty.', [prepare, review], []],
+  ['People doing and receiving the work', 'Agree on scope, constraints, response and responsibility.', 'Participants can restate the teams and users involved, who they work with, what knowledge they need, and what knowledge they are missing. A changed expectation is resolved holistically. Long email chains and single-purpose Slack channels are minimized.', [coordinate, review], []],
+  ['People preparing a decision', 'Name the decision, its owner, and the information that could change it.', 'The decision owner can identify the most dangerous assumptions and next useful step.', [prepare, coordinate], []],
+  ['People testing a possible approach', 'Package a useful experiment with its observation before committing to more work.', 'The team can explain what the experiment established and its connection to business value.', [prepare, review], [reference('practice', 'focalization')]],
+  ['People allocating time and funding', 'Compare a possible investment with the value it would move upstream or downstream.', 'The decision owner can identify the assumption, opportunity and funded tradeoff.', [prepare, review], [reference('practice', 'expectation')]],
+  ['People sending and receiving work', 'Agree what continues, who receives it and how interrupted work resumes.', 'The receiver can continue the work from what they have in front of them — knowing the full history is unnecessary.', [coordinate, review], [reference('practice', 'expectation')]],
+  ['People producing and reviewing evidence', 'Choose an observation that can distinguish the intended behavior from a deviation.', 'The reviewer can explain the behavior observed, who it affects, and the most dangerous assumptions.', [prepare, review], []],
 ];
 function definition(kind, id, action, actor, explanation, acceptanceJob, supportRequirements, prerequisiteDefinitions) {
   return freeze({ kind, id, version: CAPABILITY_VERSION, action, actor, explanation,

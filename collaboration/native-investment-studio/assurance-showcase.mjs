@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 // Authored exploration choices. Their output becomes an ordinary assurance draft.
 export const QUALITY_REELS = Object.freeze({
   before: Object.freeze([
@@ -14,7 +15,7 @@ export const QUALITY_REELS = Object.freeze({
 export const QUALITY_FADERS = Object.freeze([
   { id: 'quality', label: 'Quality', low: 'Focused', high: 'Thorough', value: 2 },
   { id: 'urgency', label: 'Urgency', low: 'Steady', high: 'Immediate', value: 1 },
-  { id: 'compliance', label: 'Compliance', low: 'Routine', high: 'Formal', value: 1 },
+  { id: 'compliance', label: 'Review demand', low: 'Routine', high: 'Formal', value: 1 },
   { id: 'training', label: 'Training', low: 'Little practice', high: 'Rehearsed', value: 2 },
   { id: 'fidelity', label: 'Fidelity', low: 'Sketch', high: 'Working detail', value: 2 },
 ]);
@@ -42,7 +43,7 @@ export function qualityConstraints(exploration, sigmaHalfSteps = 6) {
   if (exploration.quality === 0) requireConcept(['acceptance-criteria', 'risk-based-testing'], 'Raise Quality.');
   if (exploration.urgency >= 3) requireConcept(['independent-review', 'release-readiness', 'observability'], 'Lower Urgency to Balanced.');
   if (exploration.training <= 1) requireConcept(['accessibility', 'post-release-learning'], 'Raise Training to Balanced.');
-  if (exploration.compliance >= 3) requireConcept(['security-privacy', 'independent-review'], 'Lower Compliance to Balanced.');
+  if (exploration.compliance >= 3) requireConcept(['security-privacy', 'independent-review'], 'Review demand above Balanced keeps this check selected.');
   const pressure = sigmaHalfSteps >= 8 ? 'calm' : sigmaHalfSteps >= 5 ? 'caution' : 'high';
   const phases = Object.fromEntries([...beforeIds].map(id => [id, 'prepare']));
   for (const id of afterIds) phases[id] = 'operate';
@@ -71,10 +72,10 @@ export function qualityArrangement(exploration, sigmaHalfSteps = 6) {
     response: RESPONSES[definitionId] };
 }
 export function qualityRehearsalExample(definition, arrangement, plan) {
-  const work = plan.work.filter(row => row.status === 'planned' && row.lifecycle !== 'retired');
+  const work = plan.work.filter(row => summarizeWorkSessions(row).active);
   const preferred = definition.id === 'recovery-failure' ? /rehears|recover|operat/i : /review|decision|validat/i;
   const session = work.find(row => preferred.test(row.label)) ?? work.at(-1);
-  const personIds = session?.personIds ?? [];
+  const personIds = session ? summarizeWorkSessions(session).personIds : [];
   const reviewer = plan.people.find(row => /quality|review/i.test(row.label))?.id ?? personIds[0] ?? '';
   return {
     definitionId: definition.id, definitionVersion: definition.version,

@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { after, before, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -20,7 +21,7 @@ let server;
 let fixture;
 let fullAbout;
 
-before(async () => {
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   const objectSource = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
@@ -29,12 +30,8 @@ before(async () => {
   // navigation. Keep every native byte and the diagram's authored fallback.
   fullAbout = source.replace(objectSource, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   fixture = createNativeAboutFixture(source, { tail: '<div aria-hidden="true" style="height:1000px"></div>' });
-  server = await startStaticServer();
-  for (const name of names) browsers.set(name, await engines[name].launch());
-});
-after(async () => {
-  try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
-  finally { await server?.close(); }
+  server = await own(startStaticServer());
+  for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
 
 const root = page => page.locator('[data-native-coordination]');
@@ -46,10 +43,15 @@ const total = page => root(page).locator('[data-native-total]');
 const workAction = (page, name) => chapter(page, 'coordination').locator(`[data-action="${name}"]`);
 const personAction = (page, name) => chapter(page, 'people').locator(`[data-person-action="${name}"]`);
 const frame = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+async function openSession(page) {
+  if (!await work(page, 'minutesPerSession').isVisible())
+    await root(page).locator('.native-cadence__track-name[data-studio-session-id="review"]:visible, [data-delivery-session="review"]:visible').first().click();
+}
 
 async function open(t, engine, { fragment = '', complete = false, ...options } = {}) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...options });
   const page = await context.newPage();
+  page.setDefaultTimeout(5000);
   const telemetry = monitor(page);
   const requests = new Set();
   page.on('request', request => requests.add(request));
@@ -96,6 +98,43 @@ async function selected(page, name) {
 }
 
 for (const engine of names) {
+  test(`${engine}: amp groups keep history, motion and chapter navigation readable`, { timeout: 60000 }, async t => {
+    for (const width of [390, 831, 832, 1440]) {
+      const page = await open(t, engine, { complete: true, viewport: { width, height: 1000 } });
+      const amp = root(page).locator('.native-coordination__amp');
+      await expect(amp.getByRole('group', { name: 'Animation speed', exact: true })).toBeVisible();
+      await expect(amp.locator('[data-native-amp-history] [data-studio-undo]')).toHaveCount(1);
+      const layout = await amp.evaluate(node => {
+        const tabs = node.querySelector('[data-native-chapter-list]');
+        const tools = node.querySelector('[data-native-amp-tools]');
+        const funding = node.querySelector('.native-coordination__funding');
+        const amount = node.querySelector('[data-native-total]');
+        const undo = node.querySelector('[data-studio-undo]');
+        const buttons = [...node.querySelectorAll('[data-native-amp-tools] button, .native-motion__choices label')];
+        return {
+          navigationLast: node.lastElementChild === tabs,
+          tabsBelow: tabs.getBoundingClientRect().top >= tools.getBoundingClientRect().bottom,
+          fundingLeft: Math.abs(funding.getBoundingClientRect().left - node.querySelector('.native-coordination__identity').getBoundingClientRect().left) < 2,
+          separateReadings: !amount.parentElement.contains(funding),
+          undoCue: getComputedStyle(undo, '::before').content,
+          targets: buttons.map(button => { const b = button.getBoundingClientRect(); return { left: b.left, right: b.right, height: b.height }; }),
+        };
+      });
+      assert.equal(layout.navigationLast, true); assert.equal(layout.tabsBelow, true); assert.equal(layout.fundingLeft, true); assert.equal(layout.separateReadings, true);
+      assert.ok(['none', 'normal'].includes(layout.undoCue), 'Undo is an action without a disclosure caret');
+      assert.ok(layout.targets.every(b => b.left >= 0 && b.right <= width && b.height >= 40), JSON.stringify(layout));
+      if (width === 390 || width === 1440) {
+        await amp.screenshot({ path: resolve(captures, `${engine}-amp-groups-${width}.png`) });
+        const vision = amp.locator('[data-amp-panel="purpose"]');
+        await vision.click(); await expect(amp.locator('[data-purpose-reading]')).toBeVisible();
+        await expect(vision).toHaveAttribute('aria-expanded', 'true');
+        await amp.screenshot({ path: resolve(captures, `${engine}-amp-vision-${width}.png`) });
+        await vision.click(); await expect(amp.locator('[data-purpose-reading]')).toBeHidden();
+        await amp.locator('[data-native-motion-choice="off"]').check();
+        await expect(root(page)).toHaveAttribute('data-native-motion', 'off');
+      }
+    }
+  });
   test(`${engine}: amp motion controls and shared reels preserve semantic selection across presentation modes`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, { reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
     const motion = mode => root(page).locator(`[data-native-motion-choice="${mode}"]`);
@@ -156,7 +195,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await selected(page, 'coordination');
     await expect(root(page).getByRole('tablist', { name: 'Studio chapters' })).toHaveCount(1);
-    await expect(root(page).getByRole('tab', { name: 'People', exact: true })).toHaveCount(1);
+    await expect(root(page).getByRole('tablist', { name: 'Studio chapters' }).getByRole('tab', { name: 'People', exact: true })).toHaveCount(1);
     await expect(tab(page, 'people').locator('svg[aria-hidden="true"][focusable="false"]')).toHaveCount(1);
     assert.equal(new URL(page.url()).hash, '');
     await tab(page, 'people').click();
@@ -166,7 +205,7 @@ for (const engine of names) {
     await page.goForward();
     await selected(page, 'people');
     await tab(page, 'coordination').click();
-    await root(page).locator('[data-native-workspace="session"] > summary').click();
+    await openSession(page);
     await work(page, 'minutesPerSession').fill('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
     await tab(page, 'coordination').focus();
@@ -246,7 +285,7 @@ for (const engine of names) {
       history.replaceState({ chapterFixture: 'retained' }, '', location.href);
     });
     await tab(page, 'coordination').click();
-    await root(page).locator('[data-native-workspace="session"] > summary').click();
+    await openSession(page);
     await work(page, 'minutesPerSession').fill('40');
     await tab(page, 'people').click();
     await person(page, 'ratePerHour').focus();

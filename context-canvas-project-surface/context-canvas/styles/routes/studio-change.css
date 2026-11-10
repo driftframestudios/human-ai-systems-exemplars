@@ -3,7 +3,7 @@
 .native-change__reels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.5rem, 2vw, 1.25rem); padding: 0; background: transparent; border: 0; box-shadow: none; }
 .native-change__reel-holder { min-inline-size: 0; }
 .native-change__reels .native-change__interpretation { grid-column: 1 / -1; padding: .85rem 0; border: 0; background: transparent; color: var(--about-ink); }
-.about-page .native-change__interpretation > h4 { margin: 0 0 .75rem; color: var(--about-ink-strong); font: 700 1.15rem/1.35 system-ui, sans-serif; }
+.about-page .native-change__interpretation > h4 { margin: 0 0 .75rem; color: var(--about-ink-strong); font: 700 1.15rem/1.35 Futura, system-ui, sans-serif; }
 .native-change__interpretation dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; font-size: .85rem; }
 .native-change__interpretation dl > div { border-block-start: .15rem solid var(--about-deep-teal); padding-block-start: .5rem; }
 .native-change__interpretation dt { color: var(--about-deep-teal); font: 700 .75rem/1.4 ui-monospace, monospace; }
@@ -11,7 +11,7 @@
 .native-change .native-change__workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: .85rem; padding: clamp(.45rem, 1.5vw, 1rem); background: var(--studio-editorial); border-color: var(--about-deep-teal); }
 .native-change__keys { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: .75rem; }
 .native-change__lane { display: grid; align-content: start; gap: .5rem; min-inline-size: 0; padding: .55rem; border: 1px solid var(--about-sea-glass); background: color-mix(in srgb, var(--about-sea-glass) 30%, var(--about-route)); }
-.about-page .native-change__lane > h4 { margin: 0 0 .25rem; color: var(--about-ink-strong); font: 700 .875rem/1.4 system-ui, sans-serif; }
+.about-page .native-change__lane > h4 { margin: 0 0 .25rem; color: var(--about-ink-strong); font: 700 .875rem/1.4 Futura, system-ui, sans-serif; }
 .native-change__lane[data-change-lane='focus'] { background: var(--about-info); border-block-start: .25rem solid var(--about-cobalt); }
 .native-change__lane[data-change-lane='available'] { border-style: dashed; background: var(--about-unbleached-paper); }
 .native-coordination .native-change .native-change__key { display: grid; gap: .3rem; padding: .65rem; min-block-size: 5.2rem; inline-size: 100%; min-inline-size: 0; text-align: start; background: var(--about-paper); }
@@ -27,23 +27,65 @@
 .native-coordination .native-change button.native-change__support-pad { display: grid; place-items: center; inline-size: 100%; min-inline-size: 3.5rem; min-block-size: 2.75rem; padding: .35rem; border: 1px solid var(--about-sea-glass); background: var(--about-deep-forest-charcoal); color: var(--about-chalk); box-shadow: inset 0 -.18rem var(--about-deep-teal); font-size: .75rem; }
 .native-coordination .native-change button.native-change__support-pad[aria-pressed='true'] { color: var(--about-ink-strong); background: var(--about-tiffany); border-color: var(--about-mint-green); box-shadow: inset 0 -.18rem var(--about-deep-teal); }
 .native-coordination .native-change button.native-change__track-label { display: inline-flex; align-items: center; gap: .35rem; min-block-size: 2.75rem; padding: .3rem; text-align: start; color: var(--about-chalk); background: transparent; border: 1px solid transparent; box-shadow: none; font-size: .8rem; }
+.native-coordination .native-change td > button.native-change__track-label { min-inline-size: max-content; white-space: nowrap; }
 .native-change__track-label::after { content: ''; flex: none; inline-size: .4rem; block-size: .4rem; border-block-start: .12rem solid currentColor; border-inline-end: .12rem solid currentColor; transform: rotate(45deg); }
 .native-change__track-label[aria-expanded='true']::after { transform: rotate(135deg); }
 .native-coordination .native-change button.native-change__track-label:hover { border-color: var(--about-sea-glass); }
 .native-change .native-change__four-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .45rem; }
-.native-coordination .native-change button.native-change__discussion { display: grid; gap: .3rem; min-inline-size: 0; min-block-size: 3.5rem; padding: .6rem; text-align: start; border: 1px solid var(--about-deep-teal); background: transparent; box-shadow: none; }
-.native-change__discussion strong { color: var(--about-deep-teal); }
+.native-coordination .native-change button.native-change__discussion { display: grid; gap: .3rem; min-inline-size: 0; min-block-size: 3.5rem; padding: .6rem; text-align: start; border: 1px solid var(--studio-line); color: var(--native-ink); background: var(--native-paper); box-shadow: inset 0 -.18rem var(--studio-line); }
+.native-coordination .native-change button.native-change__discussion[aria-expanded='true'] { background: var(--native-signal); box-shadow: inset 0 .15rem var(--studio-line); }
+.native-change__discussion strong { color: inherit; }
 .native-change__discussion span { font-size: .75rem; }
-.native-change__inspectors > section { margin-block-start: .65rem; }
-.native-change .native-change__component { background: transparent; border: 0; box-shadow: none; padding: .5rem; }
-.native-change__component-introduction { font-size: .85rem; }
-.native-change__component-introduction p { margin-block: .25rem .6rem; }
-.native-change__method-keys { display: flex; flex-wrap: wrap; gap: .45rem; margin-block: .6rem; }
+/* Selected Change work borrows the shared rack header and retains mounted fields
+   behind a small local rail. Duration face and pointer art stay shared-owned. */
+.native-change__inspectors { min-inline-size: 0; margin-block: 0; padding: .65rem; color: var(--native-paper); background: #162d25; border: 1px solid var(--studio-rack-edge); border-radius: .3rem; }
+.native-change__inspectors .studio-rack-header { padding: .1rem 0 .65rem; border-block-end: 1px solid var(--studio-rack-edge); }
+.native-change__inspector-rail { display: flex; flex-wrap: wrap; gap: .4rem; margin-block: .65rem; }
+.native-coordination .native-change__inspector-rail button { flex: 1 1 5rem; min-inline-size: 0; min-block-size: 2.75rem; padding: .4rem .6rem; border: 1px solid var(--studio-rack-edge); background: var(--studio-track-face); color: var(--studio-rack-paper); box-shadow: inset 0 -.18rem var(--studio-deep-screen); font-size: .8rem; }
+.native-coordination .native-change__inspector-rail button[aria-pressed='true'] { background: var(--native-signal); color: var(--native-ink); box-shadow: inset 0 .15rem #346b5955; }
+.native-change .native-change__component { background: transparent; border: 0; box-shadow: none; padding: 0; }
+.native-change__component-preview { margin: 0 0 .65rem; padding: 0 0 .55rem; border-color: var(--studio-rack-edge); color: var(--studio-soft-mint); font-size: .78rem; }
+.native-change__component-body { padding: 0; gap: .65rem; }
+.native-change__component-introduction { grid-column: 1 / -1; gap: .35rem; font-size: .8rem; color: var(--studio-soft-mint); }
+.native-change__component-introduction p { margin: 0; }
+.native-change__support-editor { display: grid; gap: .65rem; }
+.native-change__inspectors .native-change__component-settings { gap: .65rem; }
+.native-change__inspectors .native-change__field { gap: .4rem; padding: .55rem; border: 1px solid #526b5a; background: #0a1913; color: var(--native-paper); }
+.native-change__inspectors .native-change__field > :is(label, legend) { color: var(--native-paper); font: 650 .8rem/1.4 system-ui, sans-serif; }
+.native-change__inspectors .native-change__field :is(input:not([type='checkbox']):not([type='radio']), select) { inline-size: 100%; min-inline-size: 0; min-block-size: 2.5rem; padding: .45rem; color: var(--native-ink); background: var(--native-paper); font-size: .85rem; }
+.native-change__inspectors :is(.native-change__choices, .native-change__exclusive) { margin: 0; gap: .4rem; }
+.native-change__inspectors .native-change__choices { grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr)); }
+.native-change__inspectors .native-change__choices > li { margin: 0; }
+.native-change__inspectors :is(.native-change__choices, .native-change__exclusive) label { align-items: start; gap: .5rem; block-size: 100%; padding: .5rem; color: var(--native-ink); background: var(--studio-editorial); font-size: .78rem; }
+.native-change__inspectors :is(.native-change__choices, .native-change__exclusive) label:has(:checked) { background: var(--native-signal); }
+.native-change__inspectors .native-coordination__error { color: #ffd1cf; }
+.native-change__inspectors .native-coordination__error:empty { display: none; }
+.native-change__inspectors .native-change__field > button { justify-self: start; min-block-size: 2.5rem; padding: .4rem .55rem; font-size: .78rem; }
+.native-change__inspectors .native-change__field > button.native-control--navigate { padding-inline-end: 1.6rem; }
+.native-change__inspectors .native-change__field input[type='text']:not(.native-change__numeric) { text-align: start; font-family: system-ui, sans-serif; }
+.native-change__method-keys { display: flex; flex-wrap: wrap; gap: .4rem; margin-block: 0 .65rem; }
 .native-coordination .native-change__method-keys button { min-block-size: 2.75rem; padding: .5rem .7rem; background: var(--about-paper); font-size: .8rem; }
 .native-coordination .native-change__method-keys button[aria-pressed='true'] { background: var(--about-tiffany); box-shadow: inset 0 .15rem var(--about-deep-teal); }
 .native-change .native-change__suggestions { display: block; }
-.native-change .native-change__suggestion { padding: .85rem; background: var(--about-paper); }
-.native-change__suggestion > p { font-size: .875rem; }
+.native-change .native-change__suggestion { gap: .6rem; padding: .7rem; background: #392a22; color: var(--studio-warm-label); border-color: #9f7f62; }
+.about-page .native-change__suggestion h5 { color: var(--studio-warm-label); }
+.native-change__suggestion > p { font-size: .85rem; }
+.native-coordination .native-change__method-example > summary, .native-change__method-example a { color: var(--studio-warm-label); }
+.native-change__suggestion-actions button { inline-size: auto; font-size: .8rem; }
+.native-change__inspectors .native-change__work { padding: 0; border: 0; background: transparent; color: var(--native-paper); gap: .65rem; }
+.native-change__work > p { margin: 0; font-size: .8rem; }
+.native-change__inspectors :is(.native-support-proposal, .native-support-proposal__metadata, .native-support-proposal__details) { gap: .65rem; }
+.native-change__proposal-session { display: grid; align-content: start; gap: .65rem; min-inline-size: 0; }
+.native-change__proposal-people { min-inline-size: 0; }
+.native-change__inspectors .native-time-controls { gap: .65rem; color: var(--native-ink); }
+.native-change__inspectors .studio-duration { flex-basis: 23rem; }
+.native-change__inspectors .studio-repetition { flex: 1 1 8rem; background: var(--native-paper); color: var(--native-ink); }
+.native-change__inspectors .native-time__feedback { color: var(--native-paper); }
+.native-change__inspectors [hidden] { display: none; }
+@container native-change (min-width: 48rem) {
+  .native-change__inspectors .native-support-proposal__details { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
+  .native-change__inspectors .native-support-proposal__details > .native-support-proposal__metadata { grid-column: 1 / -1; }
+}
 .native-change .native-change__attention { margin: 0; border-radius: .35rem; }
 .native-change .native-change__mixer { grid-template-columns: repeat(var(--change-faders, 8), minmax(0, 1fr)); gap: .45rem; margin-block: .75rem; }
 .native-change .native-change__channel { grid-template-rows: 3.5em 8rem 1.5rem; gap: .5rem; padding: .65rem .3rem; }
@@ -53,13 +95,15 @@
 .native-change .native-change__fader-track { block-size: 8rem; }
 .native-change .native-change__live-reading { padding: .5rem .7rem; }
 .native-change__live-reading p { margin: 0; font-size: .8rem; }
-.native-change .native-change__numeric { padding: .35rem; min-block-size: 2.25rem; }
-.native-change .native-change__steps { gap: .35rem; }
-.native-coordination .native-change .native-change__steps button { min-inline-size: 2.75rem; min-block-size: 2.75rem; inline-size: 2.75rem; block-size: 2.75rem; padding: 0; border-radius: 50%; }
+.native-change .native-change__field > .native-change__numeric { inline-size:7rem; max-inline-size:100%; padding:.35rem; min-block-size:2.25rem; }
+.native-change .native-change__steps { inline-size:7rem; max-inline-size:100%; justify-content:space-between; gap:.5rem; }
 .native-change__attention [data-change-action='reset'] { font-size: .8rem; }
-.native-change__support-editor > div { margin-block-start: .75rem; }
 .native-change__precise-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: .6rem; }
 .native-change__precise-channels > p { grid-column: 1 / -1; }
+.native-change__exact-body { display:grid; gap:1rem; padding:1rem; }
+.native-change__shared-attention > .native-change__precise-channels { padding:1rem; }
+.native-change__precise-channels > [hidden] { display:none; }
+.native-change__precise-channels .native-coordination__error:empty { display:none; }
 @container native-change (max-width: 48rem) {
   .native-change .native-change__mixer { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .native-change__interpretation dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -78,8 +122,15 @@
   .native-change__fader::-moz-range-thumb { width: .8rem; height: 2.1rem; }
 }
 @media (forced-colors: active) {
+  .native-change__inspectors, .native-change__inspectors .native-change__field, .native-change .native-change__suggestion { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .native-change__component-introduction, .native-change__component-preview, .native-change__inspectors .native-change__field > :is(label, legend), .about-page .native-change__suggestion h5, .native-coordination .native-change__method-example > summary, .native-change__method-example a { color: CanvasText; }
+  .native-coordination .native-change__inspector-rail button, .native-coordination .native-change__inspector-rail button[aria-pressed='true'] { background: ButtonFace; color: ButtonText; border-color: ButtonText; box-shadow: none; }
+  .native-coordination .native-change__inspector-rail button[aria-pressed='true'] { outline: .2rem solid Highlight; outline-offset: -.2rem; }
+
   .native-change__lane, .native-change__tracks { background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none; }
   .native-change .native-change__tracks :is(th, td, caption), .about-page .native-change__lane > h4 { color: CanvasText; }
   .native-coordination .native-change button:is(.native-change__support-pad, .native-change__track-label) { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .native-coordination .native-change button.native-change__support-pad[aria-pressed='true'] { border: .2rem solid Highlight; }
+  .native-coordination .native-change button.native-change__discussion { color: ButtonText; background: ButtonFace; border-color: ButtonText; box-shadow: none; }
+  .native-coordination .native-change button.native-change__discussion[aria-expanded='true'] { outline: .2rem solid Highlight; outline-offset: -.2rem; }
 }

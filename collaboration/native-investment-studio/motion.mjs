@@ -29,6 +29,41 @@ export function revealStudioDestination(element, { block = 'start' } = {}) {
   SCROLLS.set(window, stop); frame = window.requestAnimationFrame(tick);
 }
 
+// Reveal a selected item only within its shelf; page position and focus stay owned
+// by the interaction that selected it. Manual input cancels the local easing.
+const SHELF_SCROLLS = new WeakMap();
+export function revealStudioShelfItem(shelf, item) {
+  const window = shelf?.ownerDocument?.defaultView;
+  if (!window || !item?.isConnected || !shelf.contains(item)) return;
+  SHELF_SCROLLS.get(shelf)?.();
+  const frameBox = shelf.getBoundingClientRect(), itemBox = item.getBoundingClientRect();
+  const offset = (start, end, low, high) => start < low ? start - low : end > high ? end - high : 0;
+  const x = shelf.scrollLeft, y = shelf.scrollTop;
+  const dx = offset(itemBox.left, itemBox.right, frameBox.left + shelf.clientLeft, frameBox.left + shelf.clientLeft + shelf.clientWidth);
+  const dy = offset(itemBox.top, itemBox.bottom, frameBox.top + shelf.clientTop, frameBox.top + shelf.clientTop + shelf.clientHeight);
+  const left = Math.max(0, Math.min(shelf.scrollWidth - shelf.clientWidth, x + dx));
+  const top = Math.max(0, Math.min(shelf.scrollHeight - shelf.clientHeight, y + dy));
+  const mode = shelf.closest('[data-native-coordination]')?.dataset.nativeMotion;
+  if (left === x && top === y) return;
+  if (mode === 'off' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    shelf.scrollTo({ left, top, behavior: 'instant' }); return;
+  }
+  let frame = 0, began;
+  const events = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+  const stop = () => { window.cancelAnimationFrame(frame); events.forEach(type => shelf.removeEventListener(type, stop)); if (SHELF_SCROLLS.get(shelf) === stop) SHELF_SCROLLS.delete(shelf); };
+  const tick = now => {
+    if (!shelf.isConnected || !item.isConnected) { stop(); return; }
+    if (shelf.closest('[data-native-coordination]')?.dataset.nativeMotion === 'off' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { shelf.scrollTo({ left, top, behavior: 'instant' }); stop(); return; }
+    began ??= now;
+    const t = Math.min(1, (now - began) / (mode === 'lower' ? 700 : 350));
+    const ease = 1 - Math.pow(1 - t, 4);
+    shelf.scrollTo({ left: x + (left - x) * ease, top: y + (top - y) * ease, behavior: 'instant' });
+    if (t < 1) frame = window.requestAnimationFrame(tick); else stop();
+  };
+  events.forEach(type => shelf.addEventListener(type, stop, { passive: true }));
+  SHELF_SCROLLS.set(shelf, stop); frame = window.requestAnimationFrame(tick);
+}
+
 // Presentation belongs to this mounted Studio. Plan imports, edits and history
 // keep their separate ownership, and system reduction constrains full motion.
 export function mountStudioMotion(root) {
@@ -113,7 +148,8 @@ export function mountStudioMotion(root) {
   try {
     if (slot) {
       const name = `native-studio-motion-${++sequence}`;
-      group = document.createElement('div'); group.className = 'native-motion'; group.setAttribute('role', 'group'); group.setAttribute('aria-label', 'Animation settings');
+      group = document.createElement('div'); group.className = 'native-motion'; group.setAttribute('role', 'group'); group.setAttribute('aria-labelledby', `${name}-label`);
+      const heading = document.createElement('span'); heading.id = `${name}-label`; heading.className = 'native-motion__label'; heading.textContent = 'Animation speed';
       const choices = document.createElement('div'); choices.className = 'native-motion__choices';
       for (const [value, text] of [['off', 'Off'], ['lower', 'Half-speed'], ['full', 'Full-speed']]) {
         const label = document.createElement('label'), input = document.createElement('input'), words = document.createElement('span');
@@ -121,7 +157,7 @@ export function mountStudioMotion(root) {
         words.textContent = text; label.append(input, words); choices.append(label); controls.push(input);
         listen(input, 'change', () => { if (input.checked) set(value); });
       }
-      group.append(choices); slot.append(group);
+      group.append(heading, choices); slot.append(group);
     }
     listen(root, 'click', event => {
       const summary = event.target.closest('summary'), details = summary?.parentElement;

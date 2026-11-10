@@ -82,13 +82,13 @@ test('legacy import preserves parked purpose text for review or deliberate curre
   delete legacy.contributions; delete legacy.connections;
   delete legacy.abilities; delete legacy.capabilityEvidence;
   delete legacy.changeSettings;
-  delete legacy.assuranceSettings; delete legacy.scoreSettings; delete legacy.arrangements; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
+  delete legacy.assuranceSettings; delete legacy.scoreSettings; delete legacy.arrangements; delete legacy.investmentSettings; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
     teamId: row.teamId, workIds: row.supportBindings.flatMap(binding => binding.workIds) }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
-  assert.equal(studio.read().state.schemaVersion, '0.9.0');
+  assert.equal(studio.read().state.schemaVersion, '0.11.0');
   assert.equal(editing.purpose.read().status, 'stale');
   rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
   const reviewed = editing.purpose.review(saved, studio.read());
@@ -233,7 +233,7 @@ test('parked records own only frozen bounded raw fields and tiny acceptance mark
   editing.park();
   const record = editing.read().parked[0];
   assert.deepEqual(Object.keys(record).sort(), ['baseAcceptance', 'kind', 'raw', 'status', 'targetExists', 'targetId', 'token']);
-  assert.deepEqual(Object.keys(record.raw).sort(), ['fundedHours', 'fundedMinutes', 'ratePerHour']);
+  assert.deepEqual(Object.keys(record.raw).sort(), ['fundedHours', 'fundedMinutes', 'label', 'ratePerHour']);
   assert.deepEqual(Object.keys(record.baseAcceptance).sort(), ['instance', 'sequence', 'token']);
   assert.equal(typeof record.baseAcceptance.instance, 'symbol');
   assert.equal(typeof record.baseAcceptance.token, 'symbol');

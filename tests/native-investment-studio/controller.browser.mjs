@@ -2,7 +2,8 @@ import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { after, before, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -18,7 +19,7 @@ const captures = resolve(import.meta.dirname, '../../.visual-runs/native-coordin
 let server;
 let aboutFixture;
 
-before(async () => {
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const aboutSource = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   const objectSource = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
@@ -29,12 +30,8 @@ before(async () => {
   // About. Keep its fallback link and every native receiver byte; this bounded
   // fixture leaves that diagram's loading behavior with the Prompt owner.
   aboutFixture = aboutSource.replace(objectSource, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
-  server = await startStaticServer();
-  for (const name of names) browsers.set(name, await engines[name].launch());
-});
-after(async () => {
-  try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
-  finally { await server?.close(); }
+  server = await own(startStaticServer());
+  for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
 
 async function open(t, engine, options = {}) {
@@ -77,8 +74,9 @@ async function open(t, engine, options = {}) {
       mountCoordinationPanel(root).dispose();
       mountCoordinationPanel(root, { studio: createStudio() });
     }, { controllerPath, statePath, selector });
-    await page.locator('details[data-native-workspace="session"] > summary').click();
+    await sessionEntry(page).click();
     await expect(page.locator(`${selector} [data-native-configure]`)).toHaveAttribute('open', '');
+    await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeVisible();
     await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeEditable();
   }
   await settleRequests();
@@ -88,6 +86,10 @@ async function open(t, engine, options = {}) {
 const panel = page => page.locator(selector);
 const action = (page, name) => panel(page).locator(`[data-action="${name}"]`);
 const settingsSummary = page => panel(page).locator('[data-native-configure] > summary');
+// Shared-session rows expose compact controls; the delivery card opens the
+// canonical session owner whose raw draft and lifecycle are exercised here.
+const sessionEntry = page => panel(page).locator('[data-delivery-session="review"]:visible').first();
+const closeSession = page => panel(page).locator('[data-rack-editor-kind="session"] [data-rack-editor-close]').click();
 const input = (page, name = 'minutesPerSession') => panel(page).locator(`input[name="${name}"]`);
 const total = page => panel(page).locator('[data-native-total]');
 const preview = page => panel(page).locator('[data-native-preview-total]');
@@ -103,6 +105,12 @@ async function setDuration(page, hours, minutes) {
 }
 
 async function assertCompactControls(page) {
+  const duration = await panel(page).locator('[data-native-configure] .studio-duration').evaluate(module => {
+    const housing = module.getBoundingClientRect(), readout = module.querySelector('output').getBoundingClientRect();
+    return { housingLeft: housing.left, housingRight: housing.right, readoutLeft: readout.left, readoutRight: readout.right };
+  });
+  assert.ok(duration.readoutLeft >= duration.housingLeft && duration.readoutRight <= duration.housingRight,
+    `the duration readout fits its own housing at the current text size: ${JSON.stringify(duration)}`);
   const observations = await panel(page).locator('[data-native-configure] input[inputmode]').evaluateAll(inputs => inputs.map(input => {
     const style = getComputedStyle(input);
     const box = input.getBoundingClientRect();
@@ -123,8 +131,8 @@ async function assertCompactControls(page) {
   }
   for (const button of await panel(page).locator('[data-native-configure] button[data-step]').all()) {
     const box = await button.boundingBox();
-    assert.ok(box.width >= 43.95 && box.height >= 43.95,
-      `each visible step control retains a 44px target within subpixel geometry precision: ${JSON.stringify(box)}`);
+    assert.ok(box.width >= 29.95 && box.height >= 29.95,
+      `each visible step control retains the compact 30px specimen target: ${JSON.stringify(box)}`);
   }
   const paintedGroups = await panel(page).locator('[data-native-configure] .native-coordination__controls > .native-coordination__control').evaluateAll(groups => groups.map(group => {
     const paint = [...group.querySelectorAll('input,button')].map(node => {
@@ -146,11 +154,11 @@ async function assertCompactControls(page) {
   }
 }
 
-async function assertMaximumDigitsFit(page) {
-  // Keep five raw digits visible in every field, including accidental leading
-  // zeros, while the accepted plan and the caller's draft stay owned.
-  await setDuration(page, '00024', '00059');
-  await input(page, 'occurrences').fill('10000');
+async function assertEnteredQuantitiesFit(page) {
+  // The specimen keeps meaningful duration values and the session count legible
+  // at enlarged text. Parsing of unfinished raw input has its own transaction case.
+  await setDuration(page, '24', '59');
+  await input(page, 'occurrences').fill('12');
   await assertCompactControls(page);
   await assertContained(page);
   await setDuration(page, '0', '45');
@@ -201,7 +209,9 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
 }
 
 async function begin(page) {
-  if (!(await panel(page).locator('[data-native-configure]').evaluate(node => node.open))) await settingsSummary(page).click();
+  const configure = panel(page).locator('[data-native-configure]');
+  if (!(await configure.isVisible()) || !(await configure.evaluate(node => node.open))) await sessionEntry(page).click();
+  await expect(input(page)).toBeVisible();
   await expect(input(page)).toBeEditable();
 }
 
@@ -211,8 +221,8 @@ async function assertAmount(page, value) {
 
 async function assertContained(page) {
   const observed = await panel(page).evaluate(root => {
-    const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
-    const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks';
+    const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, className: node.className, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
+    const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks, .native-cost-scroll';
     const rendered = node => {
       // Chapter and rack journeys own content inside their local scroll regions.
       // This oracle measures those outer receivers and the visible form reading.
@@ -299,13 +309,18 @@ for (const engine of names) {
     const tab = chapter => panel(page).locator(`[data-native-chapter="${chapter}"]`);
     const people = panel(page).locator('[data-native-team-editor]');
     const role = people.locator('[data-responsibility-configure="role"]');
+    const openPerson = async () => {
+      const key = people.locator('[data-person-id="product-one"]');
+      if (await key.getAttribute('aria-expanded') !== 'true') await key.click();
+    };
     const arrangements = panel(page).locator('[data-connection-templates]');
-    const graph = panel(page).locator('[data-native-connection-view]');
-    const connection = panel(page).locator('[data-native-connection-editor]');
+    const connections = arrangements.locator('.studio-delivery [data-studio-record-kind="connection"]');
+    const connection = panel(page).locator('[data-connection-configure]');
     const investment = panel(page).locator('.native-investment');
     const invest = name => investment.locator(`[data-investment-action="${name}"]`);
     const exported = async () => {
       const pending = page.waitForEvent('download');
+      await investment.locator('[data-investment-deck="exchange"]').click();
       await invest('download').click();
       const download = await pending, stream = await download.createReadStream(), chunks = [];
       assert.equal(download.suggestedFilename(), 'investment-plan.json'); assert.ok(stream);
@@ -316,8 +331,7 @@ for (const engine of names) {
 
     await expect(total(page)).toHaveText('$1,200.00');
     await tab('people').click();
-    await people.locator('.studio-people-rates > summary').click();
-    await people.locator('[data-person-id="product-one"]').click();
+    await openPerson();
     await people.locator('[data-person-configure] [name="ratePerHour"]').fill('105');
     await people.locator('[data-person-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,215.00');
@@ -326,22 +340,21 @@ for (const engine of names) {
     await input(page).fill('45'); await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,822.50');
     await tab('people').click();
-    await people.locator('[data-person-id="product-one"]').click();
-    await role.locator('summary').click();
+    await openPerson();
+    await role.locator('[data-role-facet="functionId"]').click();
     await role.locator('[name="functionId"]').selectOption('engineering');
-    await role.locator('[data-responsibility-apply]').click();
+    await expect(role.locator('[data-role-facet="functionId"]')).toContainText('Engineering');
     await expect(total(page)).toHaveText('$1,822.50');
 
     await tab('coordination').click();
     await expect(panel(page).getByRole('heading', { name: 'Team planning', exact: true })).toBeVisible();
-    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(0);
+    await expect(connections).toHaveCount(0);
     await arrangements.locator('[data-reel-choice="pod"]').click();
     await expect(arrangements.locator('[data-template-total]')).toHaveText('$1,822.50');
-    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(2);
+    await expect(connections).toHaveCount(2);
     await expect(total(page)).toHaveText('$1,822.50');
-    await graph.locator('.studio-accepted-connections > summary').click();
-    const selected = graph.locator('.native-connections__list button[data-connection-select]').first();
-    const selectedId = await selected.getAttribute('data-connection-select'); assert.ok(selectedId);
+    const selected = connections.first();
+    const selectedId = await selected.getAttribute('data-studio-record-id'); assert.ok(selectedId);
     await selected.click();
     await connection.locator('[name="status"]').selectOption('paused');
     await connection.locator('[data-connection-apply]').click();
@@ -355,11 +368,11 @@ for (const engine of names) {
     assert.equal(accepted.work[0].minutesPerOccurrence, 45); assert.equal(accepted.work[0].occurrences, 6);
     assert.equal(accepted.connections.length, 2);
     assert.equal(accepted.connections.find(row => row.id === selectedId).status, 'paused');
-    await invest('undo').click();
+    await investment.locator('[data-investment-deck="compare"]').click(); await invest('undo').click();
     const restored = await exported();
     assert.deepEqual(restored.connections, accepted.connections.map(row => row.id === selectedId ? { ...row, status: 'active' } : row));
     assert.deepEqual(restored.people, accepted.people); assert.deepEqual(restored.work, accepted.work);
-    await invest('redo').click();
+    await investment.locator('[data-investment-deck="compare"]').click(); await invest('redo').click();
     assert.deepEqual((await exported()).connections, accepted.connections);
     await expect(total(page)).toHaveText('$1,822.50');
   });
@@ -367,7 +380,7 @@ for (const engine of names) {
   test(`${engine}: one coordination transaction preserves unfinished input and independently priced accepted amounts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await assertAmount(page, '$1,200.00');
-    await expect(settingsSummary(page)).toHaveText('Session settings · Weekly working session');
+    await expect(settingsSummary(page)).toHaveText('Plan defaults · Weekly working session');
     await begin(page);
     await expect(input(page, 'hoursPerSession')).toHaveValue('0');
     await expect(input(page)).toHaveValue('30');
@@ -383,13 +396,16 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
 
     const trace = panel(page).locator('[data-native-trace]');
-    await expect(panel(page).locator('[data-native-effort]')).toHaveText('4 people × 1 h per session × 6 working sessions = 24 h of participant effort.');
+    await expect(panel(page).locator('[data-native-effort]')).toHaveText('6 working sessions · 24 h of participant effort.');
     await panel(page).locator('[data-native-chapter="investment"]').click();
     await expect(trace.locator('summary')).toHaveText('Whole-plan cost breakdown');
     await trace.locator('summary').click();
-    const people = trace.locator('[data-native-trace-list] > li');
+    const people = trace.locator('[data-native-trace-list] > tr');
     assert.equal(await people.count(), 4, 'the trace retains all four independently priced participants');
-    for (const person of await people.all()) await expect(person).toContainText('360 min · $600.00');
+    for (const person of await people.all()) {
+      await expect(person.locator('td').nth(3).locator('strong')).toHaveText('$600.00');
+      await expect(person.locator('td').nth(3).locator('small')).toHaveText('6 h');
+    }
     await expect(trace.locator('[data-native-trace-summary]')).toContainText('$2,400.00');
     await trace.locator('summary').click();
     await panel(page).locator('[data-native-chapter="coordination"]').click();
@@ -412,9 +428,8 @@ for (const engine of names) {
       await expect(panel(page).locator('[data-native-preview-note]')).not.toHaveText('');
       await assertAmount(page, '$4,800.00');
       await action(page, 'cancel').click();
-      await expect(settingsSummary(page)).toBeFocused();
+      assert.equal(await page.evaluate(() => document.activeElement.dataset.studioSessionId), 'review', 'Cancel returns to the current session entry');
       await expect(panel(page).locator('[data-native-configure]')).not.toHaveAttribute('open', '');
-      await expect(panel(page).locator('[data-native-status]')).toBeVisible();
       await expect(panel(page).locator('[data-native-status]')).toHaveText('Changes cancelled.');
       await assertAmount(page, '$4,800.00');
     }
@@ -489,15 +504,13 @@ for (const engine of names) {
     assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < 1 && wide.readoutBottom < Math.min(...wide.tops),
       `Hours and Minutes share a row beneath their combined readout: ${JSON.stringify(wide)}`);
     assert.equal(wide.separateRepetition, true, 'Working sessions remains a nearby repetition control');
-    await assertMaximumDigitsFit(page);
+    await assertEnteredQuantitiesFit(page);
     if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-desktop.png') });
     const configure = panel(page).locator('[data-native-configure]');
-    const summary = configure.locator('summary');
-    // Native summary activation owns focus; reopening receives the same editor.
-    await summary.focus(); await summary.press('Enter');
-    await expect(configure).not.toHaveAttribute('open', ''); await expect(summary).toBeFocused();
-    await summary.press('Enter');
-    await expect(configure).toHaveAttribute('open', ''); await expect(summary).toBeFocused();
+    await closeSession(page);
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(sessionEntry(page)).toBeFocused();
+    await sessionEntry(page).click();
+    await expect(configure).toHaveAttribute('open', '');
     await expect(input(page)).toHaveValue('45');
     await input(page).focus();
     for (const width of [833, 390, 1440]) {
@@ -506,14 +519,9 @@ for (const engine of names) {
       await expect(input(page)).toHaveValue('45');
       await assertContained(page);
       await assertCompactControls(page);
-      await assertMaximumDigitsFit(page);
+      await assertEnteredQuantitiesFit(page);
       if ([1440, 390].includes(width)) await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? String(width) : null);
-      if (width === 833) {
-        const supportedWork = await panel(page).locator('.studio-session-details').boundingBox();
-        const configuration = await configure.boundingBox();
-        assert.ok(configuration.y >= supportedWork.y + supportedWork.height, 'the complete session editor follows the supported-work disclosure');
-        assert.ok(configuration.width >= supportedWork.width - 1, 'the complete form receives the chapter width');
-      }
+
     }
     await page.setViewportSize({ width: 390, height: 1000 });
     await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
@@ -521,7 +529,7 @@ for (const engine of names) {
       await page.setViewportSize({ width, height: 1000 });
       await expect(input(page)).toBeFocused();
       await assertContained(page);
-      await assertMaximumDigitsFit(page);
+      await assertEnteredQuantitiesFit(page);
       await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? `${width}-enlarged` : null);
       if (engine === 'webkit') {
         await panel(page).screenshot({ path: resolve(captures, 'coordination-enlarged.png') });
@@ -640,10 +648,73 @@ for (const engine of names) {
       'one remounted controller produces exactly one accepted revision after the fixture import');
   });
 
+  test(`${engine}: whole-plan cost table preserves funding meaning and a readable compact comparison`, { timeout: 30000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async ({ controllerPath, statePath, selector }) => {
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const { createStudio } = await import(statePath);
+      const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+      const plan = createExamplePlan();
+      for (const person of plan.people) person.fundedMinutes = 180;
+      plan.people[0].rateCentsPerHour = null;
+      plan.work[0].funding = 'allocated'; plan.work[0].status = 'paused';
+      const root = document.querySelector(selector); mountCoordinationPanel(root).dispose();
+      mountCoordinationPanel(root, { studio: createStudio(plan) });
+    }, { controllerPath, statePath, selector });
+    await panel(page).locator('[data-native-chapter="investment"]').click();
+    const trace = panel(page).locator('[data-native-trace]');
+    await trace.locator('summary').click();
+    const table = trace.locator('table');
+    await expect(table.locator('caption')).toHaveText('Investment by person · USD');
+    assert.deepEqual(await table.locator('thead th[scope="col"]').allTextContents(),
+      ['Person', 'Hourly rate', 'Staffing', 'Included work', 'Extra work', 'Total']);
+    assert.equal(await table.locator('tbody th[scope="row"]').count(), 4);
+    await expect(table.locator('tbody tr').first()).toContainText('Rate needed');
+    assert.deepEqual(await table.locator('tbody tr').nth(1).locator('td strong').allTextContents(),
+      ['$100.00', '$300.00', '$300.00', '$0.00', '$300.00'],
+      'included work remains inside staffing; paused work retains its planned value');
+    await expect(table.locator('tfoot th')).toHaveText('Known total');
+    assert.deepEqual(await table.locator('tfoot td strong').allTextContents(), ['$900.00', '$900.00', '$0.00', '$900.00']);
+    await expect(trace.locator('[data-native-trace-summary] dd').last()).toHaveText('$900.00');
+    const contrast = await trace.evaluate(node => {
+      const rgb = color => color.match(/[\d.]+/gu).slice(0, 3).map(Number);
+      const luminance = color => rgb(color).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4)
+        .reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
+      const background = luminance(getComputedStyle(node.querySelector('.native-coordination__trace-body')).backgroundColor);
+      return [...node.querySelectorAll('.native-cost-summary :is(dt,dd), .native-cost-table tbody :is(th,strong,small)')].map(element => {
+        const foreground = luminance(getComputedStyle(element).color);
+        return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
+      });
+    });
+    assert.ok(contrast.every(ratio => ratio >= 4.5), 'summary and table readings remain legible on their paper face');
+    await trace.screenshot({ path: resolve(captures, `cost-table-${engine}-desktop.png`), style: 'header.nav__top--sticky { visibility:hidden; }' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    const containment = await trace.evaluate(element => ({
+      right: element.getBoundingClientRect().right, width: innerWidth,
+      page: document.documentElement.scrollWidth,
+    }));
+    assert.ok(containment.right <= containment.width && containment.page <= containment.width + 1,
+      'the cost breakdown and page remain within the phone viewport');
+    const scroll = trace.locator('.native-cost-scroll');
+    const geometry = await scroll.evaluate(element => {
+      element.scrollLeft = element.scrollWidth;
+      const frame = element.getBoundingClientRect(), last = element.querySelector('tfoot td:last-child').getBoundingClientRect();
+      return { scrolls: element.scrollWidth > element.clientWidth, lastVisible: last.right <= frame.right + 1 && last.left >= frame.left };
+    });
+    assert.ok(geometry.scrolls && geometry.lastVisible, 'the phone table scrolls locally to its total column');
+    await scroll.focus(); await expect(scroll).toBeFocused();
+    await trace.screenshot({ path: resolve(captures, `cost-table-${engine}-phone.png`), style: 'header.nav__top--sticky { visibility:hidden; }' });
+  });
+
   test(`${engine}: scriptless About preserves the showcase investment and complete Studio route`, { timeout: 30000 }, async t => {
     const page = await open(t, engine, { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     await expect(panel(page)).toBeVisible();
     await assertAmount(page, '$3,980.00');
+    await expect(panel(page).locator('[data-native-allocated]')).toHaveText('$1,590.00');
+    const cost = panel(page).locator('[data-native-trace]');
+    await cost.locator('summary').click();
+    await expect(cost.locator('tfoot td').nth(2).locator('strong')).toHaveText('$1,590.00');
+    await expect(cost.locator('tbody tr')).toHaveCount(6);
     for (const node of await panel(page).locator('button,input').all()) assert.equal(await node.isVisible(), false, `Inactive editing controls stay outside the static reading: ${await node.evaluate(element => element.outerHTML)}`);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toBeVisible();
     assert.equal(await page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 0);

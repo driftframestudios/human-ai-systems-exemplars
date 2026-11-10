@@ -1,10 +1,12 @@
+import { nextCreatedLabel } from './creation-label.mjs';
 import { createCadenceView } from './cadence-view.mjs';
 import { createCadence, resizeCadence, regroupCadence, CADENCE_PERIOD_LIMIT } from './cadence.mjs';
 import { createShowcaseCadence } from './showcase-scenarios.mjs';
 import { scoreField, startingScoreRaw } from './score-draft.mjs';
 import { money } from './display.mjs';
 import { resolveScoreDestination } from './navigation-policy.mjs';
-import { revealStudioDestination } from './motion.mjs';
+import { mountSubmitMirror } from './rack-controls.mjs';
+import { prepareStarterPlan } from './coordination-starters.mjs';
 
 const INSTANCES = new WeakMap();
 const LABELS = Object.freeze({ stage: 'stage', handoff: 'handoff', gate: 'decision', delay: 'delay', person: 'person',
@@ -18,12 +20,14 @@ const cadenceFrom = raw => { try { return JSON.parse(raw.cadence ?? 'null'); } c
 // The score draft retains the transaction. This controller owns the visitor's
 // selected period and contextual inspector; zoom never enters accepted state.
 export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {},
-  onViewChanged = () => {}, onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
+  onViewChanged = () => {}, onLoadPlan = () => true, onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
   let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
+  let loadedPlanId = null;
   let selected = { kind: 'horizon', id: '' }, fieldSignature = '', lastProjection = null;
-  let inspectionEntryKey = null;
+  let inspectionEntryKey = null, inspectorOpen = false;
+  let removal = null;
   let arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
   const created = new Map();
   const node = (tag, text, className) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; };
@@ -43,6 +47,15 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     }
   }
   function announce(text) { if (!disposed) status.textContent = text; }
+  function publishAccepted(epoch, accepted) {
+    // Settle the local view before notifying the shared owner. Draft-only
+    // changes use onEditing; an accepted edit needs one root notification.
+    if (!retains(epoch, accepted)) return false;
+    render();
+    if (!retains(epoch, accepted)) return false;
+    onAccepted(accepted.projection);
+    return retains(epoch, accepted);
+  }
   const toolbar = node('div', undefined, 'native-score__transport');
   const horizon = node('fieldset', undefined, 'native-score__horizon-controls'); horizon.append(node('legend', 'Plan horizon'));
   const basisChoices = node('div', undefined, 'native-score__segments');
@@ -50,14 +63,22 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const labelEl = node('label'), input = node('input'); input.type = 'radio'; input.name = instance + '-basis'; input.value = value; input.dataset.cadenceBasis = '';
     labelEl.append(input, node('span', label)); basisChoices.append(labelEl);
   }
-  const countLabel = node('label', 'Periods'), count = node('input'); count.type = 'number'; count.min = '1'; count.max = String(CADENCE_PERIOD_LIMIT); count.id = instance + '-count'; countLabel.htmlFor = count.id; count.dataset.cadenceCount = '';
-  const addPeriod = button('Add sprint', 'add-period', 'native-control--create');
-  horizon.append(basisChoices, countLabel, count, addPeriod);
+  horizon.append(basisChoices);
   const examples = node('div', undefined, 'native-score__example-links'); examples.append(node('span', 'Try a different example'));
-  for (const [id, label] of [['service-request-pilot', 'Four-sprint pilot'], ['service-request-rollout', 'Two-quarter rollout']]) {
-    const el = button(label, 'example'); el.dataset.presetId = id; examples.append(el);
+  for (const [id, label] of [['service-request-pilot', 'Four-sprint pilot'], ['service-request-rollout', 'Two-quarter rollout'],
+    ['ai-enablement', 'AI Enablement'], ['ai-experience', 'AI Experience']]) {
+    const el = button(label, 'example', 'studio-apply-control'); el.dataset.presetId = id; examples.append(el);
   }
   toolbar.append(horizon, examples);
+  const planActions = node('div', undefined, 'native-score__plan-actions');
+  const removePlan = button('Remove plan', 'remove-plan', 'native-control--remove');
+  const removalPrompt = node('div', undefined, 'native-score__removal'); removalPrompt.hidden = true;
+  const removalLabel = node('p'); removalLabel.id = instance + '-remove-label';
+  removalPrompt.setAttribute('role', 'group'); removalPrompt.setAttribute('aria-labelledby', removalLabel.id);
+  const confirmRemoval = button('Remove plan', 'confirm-plan-removal', 'native-control--remove');
+  const cancelRemoval = button('Cancel', 'cancel-plan-removal', 'native-control--cancel');
+  removalPrompt.append(removalLabel, confirmRemoval, cancelRemoval);
+  planActions.append(removePlan, removalPrompt); toolbar.append(planActions);
   const pending = node('div', undefined, 'native-score__pending'); pending.hidden = true;
   const pendingText = node('p'), pendingActions = node('div', undefined, 'native-coordination__actions');
   pendingActions.append(button('Apply horizon', 'apply'), button('Cancel changes', 'cancel')); pending.append(pendingText, pendingActions);
@@ -65,11 +86,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const flowPanel = node('details', undefined, 'native-cadence native-cadence__details native-cadence__flow');
   flowPanel.dataset.cadenceDisclosure = 'flow';
   const flowSummary = node('summary', 'Stages & handoffs'), flowRoot = node('div');
-  const inspector = node('details', undefined, 'native-score__inspector'), summary = node('summary', 'Relationship settings');
+  const inspector = node('section', undefined, 'native-score__inspector studio-rack-editor');
+  const inspectorHeading = node('header', undefined, 'studio-rack-editor__heading');
   inspector.id = instance + '-inspector';
   const form = node('form'); form.noValidate = true; form.dataset.scoreForm = '';
   const title = node('h4', 'Inspect the arrangement'), detail = node('p', '', 'native-score__record-note');
-  title.tabIndex = -1;
+  title.tabIndex = -1; title.id = instance + '-inspector-title'; inspector.setAttribute('aria-labelledby', title.id);
   const recovery = node('div', undefined, 'native-coordination__recovery'); recovery.hidden = true;
   recovery.append(node('p', 'Your entries are saved. Review them against the current plan.'), button('Review saved edits', 'review'), button('Use current values', 'current'));
   const fields = node('fieldset', undefined, 'native-score__fields'); fields.dataset.scoreFields = ''; fields.setAttribute('aria-label', 'Arrangement settings');
@@ -79,27 +101,118 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const actions = node('div', undefined, 'native-coordination__actions'), apply = button('Apply changes', 'apply'), cancel = button('Cancel changes', 'cancel');
   apply.type = 'submit'; actions.append(apply, cancel);
   const status = node('p', '', 'native-coordination__status'); status.setAttribute('role', 'status'); status.dataset.scoreStatus = '';
-  form.append(title, detail, recovery, fields, contextActions, preview, error, actions);
-  inspector.append(summary, form); flowPanel.append(flowSummary, flowRoot, inspector);
+  form.append(detail, recovery, fields, contextActions, preview, error, actions);
+  form.className = 'studio-rack-editor__body';
+  const inspectorTools = node('div', undefined, 'studio-rack-editor__tools');
+  const topApply = mountSubmitMirror(inspectorTools); topApply.setSource(apply);
+  inspectorTools.append(button('Close', 'close', 'native-control--cancel'));
+  inspectorHeading.append(title, inspectorTools);
+  inspector.append(inspectorHeading, form); flowPanel.append(flowSummary, flowRoot);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   root.append(toolbar, pending, projectionRoot, status);
   const view = createCadenceView(projectionRoot, {
-    onSelect: (target, source) => select(target, true, source), onNavigate: (target, source) => navigate(target, source),
-    onPeriod: id => { periodId = id; render(); }, onAddSession: createSession,
+    onSelect: (target, source) => select(target, true, source), onLoadPlan: loadPlan, onAddPeriod: addPeriod, onRenamePeriod: renamePeriod, onNavigate: (target, source) => navigate(target, source),
+    onPeriod: id => { periodId = id; render(); }, onAddSession: createSession, onAddOccurrence: addOccurrence,
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot, flowPanel,
-    onTryReview: () => tryLaterReview(),
+    onLoadStarter: loadStarter,
   });
+  view.getSessionSlot().append(inspector);
   function syncInspectorControls() {
     for (const control of projectionRoot.querySelectorAll('[data-cadence-action="select"]:not([data-studio-session-id])')) {
       control.setAttribute('aria-controls', inspector.id);
       control.setAttribute('aria-expanded', String(control.getAttribute('aria-pressed') === 'true'
-        && flowPanel.open && inspector.open && !inspector.hidden));
+        && inspectorOpen && !inspector.hidden));
     }
   }
   listen(flowPanel, 'toggle', syncInspectorControls);
-  listen(inspector, 'toggle', syncInspectorControls);
 
+  function loadPlan(id, source) {
+    if (disposed || !isActive() || id !== null && !studio.read().state.work.some(item => item.id === id)) return;
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(id, source) === false || !retains(epoch, prior) || !isActive()) return;
+    loadedPlanId = id;
+    selected = { kind: 'horizon', id: '' };
+    inspectorOpen = false; flowPanel.open = false;
+    render();
+  }
+  function removeLoadedPlan() {
+    if (!removal || studio.read() !== removal.projection || removal.id !== loadedPlanId) return;
+    const epoch = ++generation, request = removal;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return;
+    const result = studio.applyCommand({ type: 'work.remove', workId: request.id }, request.projection);
+    if (!result.ok) { announce(result.error.message); return; }
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return;
+    const index = request.projection.state.work.findIndex(row => row.id === request.id);
+    loadedPlanId = result.projection.state.work[Math.min(index, result.projection.state.work.length - 1)]?.id ?? null;
+    removal = null; selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    if (!publishAccepted(epoch, accepted)) return;
+    announce('Plan and its sessions removed. Undo restores them and their connections.');
+    const destination = loadedPlanId ? removePlan : projectionRoot.querySelector('button');
+    destination?.focus({ preventScroll: true });
+  }
+  function loadStarter(id) {
+    const unavailable = () => ({ ok: false, error: { message: 'Return to the empty Plans shelf to load an example.' } });
+    if (disposed || !isActive()) return unavailable();
+    const epoch = ++generation, parked = editing.park();
+    if (!parked.ok) return parked;
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(null) === false || !retains(epoch, prior) || !isActive()) return unavailable();
+    const prepared = prepareStarterPlan(prior.projection.state, id);
+    if (!prepared.ok) return prepared;
+    const result = studio.replace(prepared.plan, prior.projection);
+    if (!result.ok) return result;
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return result;
+    loadedPlanId = null; periodId = null; removal = null;
+    selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    if (publishAccepted(epoch, accepted)) {
+      announce('Example plans loaded. Choose a tape to add or edit its sessions. Undo restores the empty shelf.');
+      projectionRoot.querySelector('[data-studio-plan-id]')?.focus({ preventScroll: true });
+    }
+    return result;
+  }
+  function acceptCadence(update, message) {
+    const unavailable = () => ({ ok: false, error: { message: 'Return to this plan and try the change again.' } });
+    if (disposed || !isActive()) return unavailable();
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!parked.ok) { render(); announce(parked.error.message); return parked; }
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return unavailable();
+    const base = studio.read(), current = base.state.scoreSettings.cadence;
+    const next = update(current, base.state);
+    if (!next) return unavailable();
+    if (next === current) return { ok: true };
+    const result = studio.replace({ ...base.state, revision: base.state.revision + 1,
+      scoreSettings: { ...base.state.scoreSettings, cadence: next } }, base);
+    if (!result.ok) { render(); announce(result.error.message); return result; }
+    selected = { kind: 'horizon', id: '' }; fieldSignature = '';
+    inspectorOpen = false; flowPanel.open = false;
+    if (publishAccepted(epoch, { ...prior, projection: result.projection })) announce(message);
+    return result;
+  }
+  function renamePeriod({ id, label }) {
+    return acceptCadence(current => {
+      const period = current?.periods.find(row => row.id === id);
+      if (!period || (period.caption ?? '') === label) return current;
+      const { caption: _previousCaption, ...identity } = period;
+      return { ...current, periods: current.periods.map(row => row.id === id
+        ? { ...identity, ...(label ? { caption: label } : {}) } : row) };
+    }, 'Period caption updated.');
+  }
+  function addPeriod() {
+    acceptCadence(current => current && current.periods.length < CADENCE_PERIOD_LIMIT
+      ? resizeCadence(current, current.periods.length + 1) : current,
+    'Period added. Undo restores the previous horizon.');
+  }
   function ensure() {
     if (disposed || !canOpen()) return null;
     if (editor.read().draft && editing.read().active?.kind === 'score') return { ok: true, view: editor.read() };
@@ -111,32 +224,18 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   function changeCadence(update) {
     const opened = ensure(); if (!opened?.ok) { announce(opened?.error?.message ?? 'Open the current arrangement.'); return; }
-    const current = editor.read(); if (current.status !== 'editing') { render(); inspector.open = true; return; }
+    const current = editor.read(); if (current.status !== 'editing') { inspectorOpen = true; render(); return; }
     const cadence = cadenceFrom(current.draft.raw);
     const result = operate('setText', current.draft.token, 'cadence', JSON.stringify(update(cadence, current)));
     render(); announce(result.ok ? 'Preview the arrangement, then Apply to keep it.' : result.error.message); onEditing();
   }
   function proposeHorizon() {
-    selected = { kind: 'horizon', id: '' };
-    changeCadence((cadence, current) => cadence ?? createShowcaseCadence(current.projection.state, 4));
-  }
-  function tryLaterReview() {
-    selected = { kind: 'horizon', id: '' };
-    changeCadence(cadence => {
-      if (!cadence || cadence.basis !== 'sprint' || cadence.periods.length >= CADENCE_PERIOD_LIMIT) return cadence;
-      const placements = cadence.placements.filter(row => row.workId === 'review');
-      if (!placements.length) return cadence;
-      const next = resizeCadence(cadence, cadence.periods.length + 1), later = next.periods.at(-1);
-      arrangementNote = 'The review and its decision move to ' + later.label + '. The receiving team waits longer; the same sessions keep their effort and cost.';
-      return { ...next, placements: next.placements.map(row => row.workId === 'review' ? { ...row, periodId: later.id } : row),
-        delays: [...next.delays, { id: freshId('delay', next.delays), label: 'Allow another sprint before review',
-          anchor: { kind: 'work', id: 'review' }, fromPeriodId: placements.at(-1).periodId, toPeriodId: later.id,
-          reason: 'The receiving team needs more time to prepare its review.', receiverPersonId: null }] };
-    });
+    acceptCadence((cadence, state) => cadence ?? createShowcaseCadence(state, 4),
+      'Sprint plan added. Undo restores the previous arrangement.');
   }
   function open(_target = 'score', focus = true) {
-    const result = ensure(); render(); if (!result || disposed) return result;
-    inspector.open = true; flowPanel.open = true; const epoch = generation, mark = boundary(); onEditing();
+    const result = ensure(); inspectorOpen = Boolean(result); render(); if (!result || disposed) return result;
+    const epoch = generation, mark = boundary(); onEditing();
     if (!retains(epoch, mark)) return result;
     if (focus) (fields.querySelector('input, select, textarea') ?? title).focus();
     return result;
@@ -151,12 +250,13 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (match) target = { kind: 'handoff', id: match.id };
     }
     if (!['stage', 'handoff', 'gate', 'delay', 'person', 'horizon', 'legacy-availability', ...Object.keys(RETAINED_LISTS)].includes(target.kind)) return;
+    if (source && inspectorOpen && source.dataset.cadenceKey === inspectionEntryKey && selected.kind === target.kind && selected.id === target.id) { closeInspection(); return; }
     inspectionEntryKey = source?.dataset.cadenceKey ?? null;
-    selected = target; fieldSignature = ''; const result = ensure(); render();
+    selected = target; fieldSignature = ''; const result = ensure(); inspectorOpen = Boolean(result); render();
     if (!result || disposed) return;
-    inspector.open = true; flowPanel.open = true; const epoch = generation, mark = boundary(); onEditing();
+    const epoch = generation, mark = boundary(); onEditing();
     if (!retains(epoch, mark)) return;
-    if (reveal) { (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); revealStudioDestination(inspector); onInspect(inspector); }
+    if (reveal) { (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); onInspect(inspector); }
   }
   function navigate(target, source = null) {
     if (disposed || !resolveScoreDestination(target, studio.read().state)) return;
@@ -175,6 +275,25 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     }
     const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
     onCreateSession(context, source);
+  }
+  function addOccurrence({ workId, periodId: destination, subdivision }) {
+    if (disposed || !isActive()) return;
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return;
+    const base = studio.read(), cadence = base.state.scoreSettings.cadence;
+    const work = base.state.work.find(row => row.id === workId);
+    if (!work || !cadence?.periods.some(period => period.id === destination)) return;
+    const placements = cadence.placements.filter(row => row.workId === workId)
+      .map(({ occurrenceIndex, periodId, subdivision }) => ({ occurrenceIndex, periodId, subdivision }));
+    placements.push({ occurrenceIndex: work.occurrences, periodId: destination, subdivision });
+    const result = studio.applyCommand({ type: 'work.update', work: { ...work, occurrences: work.occurrences + 1 }, placements }, base);
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
+    if (publishAccepted(epoch, { ...prior, projection: result.projection }))
+      announce(`Session added to ${work.label}. Undo restores the previous sessions.`);
   }
   function writeRaw(key, value) {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
@@ -224,6 +343,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const signature = JSON.stringify([selected, periodId, raw.stageIds, raw.gateIds, cadence?.periods, cadence?.handoffs.map(row => row.id), cadence?.delays.map(row => row.id)]);
     if (signature === fieldSignature && lastProjection === state) return;
     fieldSignature = signature; lastProjection = state; controls.clear(); fields.replaceChildren(); contextActions.replaceChildren();
+    actions.querySelector('[data-score-action="remove"]')?.remove();
+    inspector.dataset.recordKind = selected.kind;
     const people = [['', 'Choose when known'], ...state.people.map(row => [row.id, row.label])];
     const periods = [['', 'Choose a period'], ...(cadence?.periods ?? []).map(row => [row.id, row.label])];
     const endpoints = [...state.work.map(row => ['work:' + row.id, row.label]), ...raw.stageIds.map(id => ['stage:' + id, raw['stage.' + id + '.label'] || 'New stage'])];
@@ -253,9 +374,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       rawField('gate.' + selected.id + '.reviewerPersonId', raw, people);
       rawField('gate.' + selected.id + '.modeledDecision', raw, Object.entries(CHOICES));
     } else if (selected.kind === 'handoff') {
-      ownedField('handoffs', 'from', 'Work preparing the handoff', { choices: endpoints, endpoint: true });
-      ownedField('handoffs', 'to', 'Work receiving the handoff', { choices: endpoints, endpoint: true });
-      ownedField('handoffs', 'connectionId', 'Team connection', { choices: [['', 'Choose when useful'], ...state.connections.map(row => [row.id, row.sharedObject])], nullable: true });
+      ownedField('handoffs', 'from', 'From work', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'to', 'To work', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'connectionId', 'Team connection (optional)', { choices: [['', 'Choose when useful'], ...state.connections.map(row => [row.id, row.sharedObject])], nullable: true });
+      fields.lastElementChild?.classList.add('native-score__field--connection');
     } else if (selected.kind === 'delay') {
       ownedField('delays', 'label', 'Delay name');
       ownedField('delays', 'anchor', 'Affected work or handoff', { choices: [...endpoints, ...(cadence?.handoffs ?? []).map(row => ['handoff:' + row.id, 'Handoff · ' + row.id])], endpoint: true });
@@ -275,10 +397,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
         }, { numeric: true, placeholder: 'Unknown' });
       const personLink = button('Open person settings', 'person-settings', 'native-control--navigate'); contextActions.append(personLink);
     }
-    if (['stage', 'handoff'].includes(selected.kind) && selected.id) {
+    if (['stage', 'handoff'].includes(selected.kind) && selected.id && !created.has(selected.kind + ':' + selected.id)) {
       contextActions.append(button('Add decision here', 'add-decision', 'native-control--create'), button('Add delay here', 'add-delay', 'native-control--create'));
     }
-    if (['stage', 'handoff', 'gate', 'delay'].includes(selected.kind) && selected.id) contextActions.append(button('Remove this ' + LABELS[selected.kind], 'remove', 'native-control--remove'));
+    if (['stage', 'handoff', 'gate', 'delay'].includes(selected.kind) && selected.id && !created.has(selected.kind + ':' + selected.id)) actions.append(button('Remove this ' + LABELS[selected.kind], 'remove', 'native-control--remove'));
   }
   function render() {
     const current = editor.read(); if (disposed) return current;
@@ -287,12 +409,18 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const displayedCadence = editable ? cadence : state.scoreSettings.cadence;
     if (periodId && !displayedCadence?.periods.some(row => row.id === periodId)) periodId = null;
     for (const input of basisChoices.querySelectorAll('input')) input.checked = input.value === displayedCadence?.basis;
-    count.value = String(displayedCadence?.periods.length ?? 4); addPeriod.textContent = displayedCadence?.basis === 'quarter' ? 'Add quarter' : 'Add sprint';
-    addPeriod.disabled = (displayedCadence?.periods.length ?? 0) >= CADENCE_PERIOD_LIMIT;
+    if (loadedPlanId && !state.work.some(item => item.id === loadedPlanId)) loadedPlanId = null;
+    if (removal && (removal.id !== loadedPlanId || removal.projection !== studio.read())) removal = null;
+    const loadedPlan = state.work.find(item => item.id === loadedPlanId);
+    removePlan.disabled = !loadedPlan; removePlan.hidden = Boolean(removal);
+    removePlan.title = loadedPlan ? `Remove ${loadedPlan.label}` : 'Choose a tape to remove its plan';
+    removalPrompt.hidden = !removal;
+    removalLabel.textContent = removal ? `Remove ${loadedPlan.label} and its sessions?` : '';
     let proposed = null; if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
     const reading = proposed?.ok ? proposed.projection : current.projection;
-    view.refresh(reading, { periodId, selected, preview: Boolean(proposed?.ok && current.draft.changed) });
+    view.refresh(reading, { periodId, loadedPlanId, selected, preview: Boolean(proposed?.ok && current.draft.changed),
+      acceptedWork: current.projection.state.work });
     onViewChanged();
     const isNew = created.has(selected.kind + ':' + selected.id);
     title.textContent = isNew ? 'New ' + LABELS[selected.kind] : selected.kind === 'horizon' ? 'Arrange the work' : 'Inspect ' + (LABELS[selected.kind] ?? 'the work');
@@ -307,7 +435,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     detail.textContent = Object.hasOwn(RETAINED_LISTS, selected.kind) || selected.kind === 'legacy-availability'
       ? 'This reference was saved in an earlier arrangement. Inspect it here, then remove it if it no longer belongs in this plan. Apply keeps the removal; Cancel restores it.'
       : selected.kind === 'stage' ? 'Group the sessions that support this stage. Their people and duration stay with each session.'
-      : selected.kind === 'handoff' ? 'Connect the work preparing a result to the work that receives it.'
+      : selected.kind === 'handoff' ? 'Choose the work that passes a result, then the work that receives it.'
         : selected.kind === 'gate' ? 'Name the question and the person who will review the evidence.'
           : selected.kind === 'delay' ? 'Describe what needs more time. Move the affected sessions when you are ready to revise their placement.'
             : selected.kind === 'person' ? 'Available time describes this period. Leave it blank when unknown; funded time has its own meaning.'
@@ -317,8 +445,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       const next = value(); if (multiple) for (const check of input.querySelectorAll('input')) check.checked = (next ?? []).includes(check.value);
       else if (input.value !== String(next ?? '')) input.value = next ?? '';
     }
-    fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft;
-    inspector.hidden = !current.draft || selected.kind === 'horizon';
+    fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft || !contextActions.children.length;
+    const inspectorHome = displayedCadence ? view.getSessionSlot() : flowPanel;
+    if (inspector.parentElement !== inspectorHome) inspectorHome.append(inspector);
+    if (!displayedCadence && inspectorOpen) flowPanel.open = true;
+    inspector.hidden = !inspectorOpen || !current.draft || selected.kind === 'horizon';
     recovery.hidden = !current.draft || (!['stale', 'parked'].includes(current.status)
       && current.error?.code !== 'cadence-conflict' && proposed?.error?.code !== 'cadence-conflict');
     const changed = Boolean(current.draft?.changed);
@@ -326,7 +457,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       : current.draft ? 'Review the entries before applying this arrangement.' : '';
     pendingText.textContent = arrangementNote + ' ' + preview.textContent;
     pending.hidden = selected.kind !== 'horizon' || !changed;
-    actions.hidden = !current.draft || selected.kind === 'horizon'; preview.hidden = selected.kind === 'horizon';
+    actions.hidden = !current.draft || selected.kind === 'horizon'; preview.hidden = ['horizon', 'handoff'].includes(selected.kind);
     apply.textContent = isNew ? 'Add ' + LABELS[selected.kind] + ' to plan' : 'Apply changes'; apply.disabled = !editable || composing || !changed;
     cancel.disabled = !current.draft;
     for (const el of pendingActions.children) el.disabled = !editable || composing;
@@ -335,47 +466,72 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     syncInspectorControls();
     return current;
   }
+  function acceptScoreAddition(update, message) {
+    if (disposed || !isActive()) return;
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    if (!owns(epoch) || !isActive() || editing.read().active) return;
+    const prior = boundary();
+    const base = studio.read(), settings = update(base.state.scoreSettings, base.state);
+    if (!settings) return;
+    const focusKey = document.activeElement?.dataset.cadenceKey;
+    const result = studio.replace({ ...base.state, revision:base.state.revision + 1, scoreSettings:settings }, base);
+    if (!result.ok) { announce(result.error.message); return; }
+    const accepted = { ...prior, projection: result.projection };
+    if (!retains(epoch, accepted)) return;
+    inspectorOpen = false; fieldSignature = '';
+    if (!publishAccepted(epoch, accepted)) return;
+    announce(message);
+    [...root.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === focusKey)?.focus({ preventScroll:true });
+  }
   function addStage() {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(); if (current.status !== 'editing') { render(); return; }
-    const id = freshId('stage', current.draft.raw.stageIds), token = current.draft.token;
-    operate('setIds', token, 'stageIds', [...current.draft.raw.stageIds, id]); operate('setText', token, 'stage.' + id + '.label', 'Prepare the next step');
-    created.set('stage:' + id, true); select({ kind: 'stage', id }, true);
+    acceptScoreAddition((settings, state) => ({ ...settings, stages:[...settings.stages,
+      { id:freshId('stage', settings.stages), label:nextCreatedLabel(settings.stages, 'stage'),
+        workIds:state.work.some(work => work.id === loadedPlanId) ? [loadedPlanId] : [] }] }),
+    'Stage added. Select it to choose its supporting sessions.');
   }
   function addHandoff() {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence) { proposeHorizon(); return; }
-    if (current.projection.state.work.length < 2) { announce('Add two working sessions before connecting them.'); return; }
-    const id = freshId('handoff', cadence.handoffs), [first, second] = current.projection.state.work;
-    const from = cadence.handoffs[0]?.from ?? { kind: 'work', id: first.id };
-    const to = cadence.handoffs[0]?.to ?? { kind: 'work', id: second.id };
-    changeCadence(next => ({ ...next, handoffs: [...next.handoffs, { id, from, to, connectionId: null }] }));
-    created.set('handoff:' + id, true); select({ kind: 'handoff', id }, true);
+    if (studio.read().state.work.length < 2) { announce('Add another plan before connecting work.'); return; }
+    acceptScoreAddition((settings, state) => {
+      const cadence = settings.cadence; if (!cadence) return null;
+      const id = freshId('handoff', cadence.handoffs), loaded = state.work.find(work => work.id === loadedPlanId);
+      const stageWork = new Map(settings.stages.map(stage => [stage.id, stage.workIds]));
+      const includesLoaded = endpoint => endpoint.kind === 'work' ? endpoint.id === loadedPlanId : stageWork.get(endpoint.id)?.includes(loadedPlanId);
+      // Reusing a connected edge preserves the accepted ordering. A tape with
+      // no connected edge is isolated, so its first connection cannot cycle.
+      const connected = loaded ? cadence.handoffs.find(edge => includesLoaded(edge.from) || includesLoaded(edge.to)) : cadence.handoffs[0];
+      const first = loaded ?? state.work[0], second = state.work.find(work => work.id !== first.id);
+      const from = connected?.from ?? { kind:'work', id:first.id };
+      const to = connected?.to ?? { kind:'work', id:second.id };
+      return { ...settings, cadence:{ ...cadence, handoffs:[...cadence.handoffs, { id, from, to, connectionId:null }] } };
+    }, 'Handoff added. Select it to choose the connected work.');
   }
   function addDecision(anchor = selected) {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
-    const id = freshId('gate', current.draft.raw.gateIds), token = current.draft.token;
-    operate('setIds', token, 'gateIds', [...current.draft.raw.gateIds, id]);
-    operate('setText', token, 'gate.' + id + '.label', 'Review the next commitment');
-    operate('setText', token, 'gate.' + id + '.question', 'What evidence would let the receiving team proceed?');
-    if (anchor.kind === 'stage') operate('setText', token, 'gate.' + id + '.afterStageId', anchor.id);
-    changeCadence(next => ({ ...next, decisionAnchors: [...next.decisionAnchors, { gateId: id, kind: anchor.kind, id: anchor.id }] }));
-    created.set('gate:' + id, true); select({ kind: 'gate', id }, true);
+    acceptScoreAddition(settings => {
+      if (!settings.cadence) return null;
+      const id = freshId('gate', settings.gates);
+      return { ...settings, gates:[...settings.gates, { id, label:nextCreatedLabel(settings.gates, 'decision'),
+        afterStageId:anchor.kind === 'stage' ? anchor.id : null, reviewerPersonId:null,
+        question:'What evidence would let the receiving team proceed?', evidence:null, modeledDecision:'open' }],
+      cadence:{ ...settings.cadence, decisionAnchors:[...settings.cadence.decisionAnchors, { gateId:id, kind:anchor.kind, id:anchor.id }] } };
+    }, 'Decision added. Select it to adjust its question and reviewer.');
   }
   function addDelay(anchor = selected) {
-    const result = ensure(); if (!result?.ok) return;
-    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
-    const id = freshId('delay', cadence.delays), affected = new Set(affectedWorkIds(anchor, cadence, current.draft.raw));
-    const placed = new Set(cadence.placements.filter(row => affected.has(row.workId)).map(row => row.periodId));
-    const from = periodId && placed.has(periodId) ? periodId : cadence.periods.find(row => placed.has(row.id))?.id ?? null;
-    const index = cadence.periods.findIndex(row => row.id === from);
-    changeCadence(next => {
-      if (index === next.periods.length - 1 && next.periods.length < CADENCE_PERIOD_LIMIT) next = resizeCadence(next, next.periods.length + 1);
-      const to = index >= 0 ? next.periods[index + 1]?.id ?? null : null;
-      return { ...next, delays: [...next.delays, { id, label: 'Allow time for review', anchor: { kind: anchor.kind, id: anchor.id }, fromPeriodId: from, toPeriodId: to, reason: 'Clarify the receiving team’s questions before proceeding.', receiverPersonId: null }] };
-    });
-    created.set('delay:' + id, true); select({ kind: 'delay', id }, true);
+    acceptScoreAddition((settings, state) => {
+      let cadence = settings.cadence;
+      if (!cadence) return null;
+      const id = freshId('delay', cadence.delays), affected = new Set(affectedWorkIds(anchor, cadence, startingScoreRaw(state)));
+      const placed = new Set(cadence.placements.filter(row => affected.has(row.workId)).map(row => row.periodId));
+      const from = periodId && placed.has(periodId) ? periodId : cadence.periods.find(row => placed.has(row.id))?.id ?? null;
+      const index = cadence.periods.findIndex(row => row.id === from);
+      if (index === cadence.periods.length - 1 && cadence.periods.length < CADENCE_PERIOD_LIMIT)
+        cadence = resizeCadence(cadence, cadence.periods.length + 1);
+      const to = index >= 0 ? cadence.periods[index + 1]?.id ?? null : null;
+      return { ...settings, cadence:{ ...cadence, delays:[...cadence.delays,
+        { id, label:nextCreatedLabel(cadence.delays, 'delay'), anchor:{ kind:anchor.kind, id:anchor.id },
+          fromPeriodId:from, toPeriodId:to, reason:'Clarify the receiving team’s questions before proceeding.', receiverPersonId:null }] } };
+    }, 'Delay added. Select it to adjust the affected work.');
   }
   function removeSelected() {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
@@ -435,8 +591,16 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!result.ok) { render(); announce(result.error.message); return; }
     created.clear();
     arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
-    if (method === 'apply') { const accepted = result.projection ?? studio.read(); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted) return; }
-    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; inspector.open = false; render(); onEditing();
+    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; inspectorOpen = false;
+    const settled = boundary();
+    if (method === 'apply') {
+      if (!publishAccepted(epoch, settled)) return;
+    } else {
+      render();
+      if (!retains(epoch, settled)) return;
+      onEditing();
+      if (!retains(epoch, settled)) return;
+    }
     announce(method === 'apply' ? 'Arrangement applied. Undo restores the previous plan.' : 'Changes cancelled.');
     if (!owns(epoch) || editing.read().active) return;
     const prefix = (origin.kind === 'gate' ? 'decision' : origin.kind) + ':' + origin.id;
@@ -445,20 +609,33 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       ?? entries.find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
     inspectionEntryKey = null;
     if (marker) { const disclosure = marker.closest('details'); if (disclosure) disclosure.open = true; }
-    const destination = marker ?? flowSummary; destination.focus({ preventScroll: true }); revealStudioDestination(destination);
+    const destination = marker ?? flowSummary; destination.focus({ preventScroll: true });
+  }
+  function closeInspection() {
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    inspectorOpen = false; render(); onEditing();
+    const source = [...projectionRoot.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === inspectionEntryKey);
+    source?.focus({ preventScroll: true });
   }
   function click(event) {
     const control = event.target.closest('[data-score-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.scoreAction;
     if (action === 'apply') { event.preventDefault(); settle('apply'); }
     else if (action === 'cancel') settle('cancel');
-    else if (action === 'add-period') { selected = { kind: 'horizon', id: '' }; changeCadence(next => next ? resizeCadence(next, next.periods.length + 1) : createCadence()); }
+    else if (action === 'close') closeInspection();
+    else if (action === 'add-period') addPeriod();
     else if (action === 'add-stage') addStage();
     else if (action === 'add-handoff') addHandoff();
     else if (action === 'add-decision') addDecision();
     else if (action === 'add-delay') addDelay();
     else if (action === 'move-delayed') moveDelayedSessions();
     else if (action === 'remove') removeSelected();
+    else if (action === 'remove-plan' && loadedPlanId) {
+      removal = { id: loadedPlanId, projection: studio.read() }; render(); cancelRemoval.focus({ preventScroll: true });
+    }
+    else if (action === 'confirm-plan-removal') removeLoadedPlan();
+    else if (action === 'cancel-plan-removal') { removal = null; render(); removePlan.focus({ preventScroll: true }); }
     else if (action === 'person-settings') navigate({ kind: 'person', id: selected.id });
     else if (action === 'chapter') navigate({ kind: 'chapter', id: control.dataset.scoreChapter });
     else if (action === 'example') {
@@ -468,20 +645,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   listen(root, 'click', click);
   listen(basisChoices, 'change', event => {
     if (!Object.hasOwn(event.target.dataset, 'cadenceBasis') || !isActive()) return;
-    const parked = editing.park(); if (!parked.ok) { render(); announce(parked.error.message); return; }
-    const base = studio.read(), basis = event.target.value, current = base.state.scoreSettings.cadence;
-    const next = current ? regroupCadence(current, basis) : createCadence(basis, basis === 'quarter' ? 2 : 4);
-    const result = studio.replace({ ...base.state, revision: base.state.revision + 1,
-      scoreSettings: { ...base.state.scoreSettings, cadence: next } }, base);
-    if (!result.ok) { render(); announce(result.error.message); return; }
-    selected = { kind: 'horizon', id: '' }; periodId = null; fieldSignature = '';
-    onAccepted(result.projection); if (disposed) return; render(); onEditing();
-    announce('The plan now uses ' + (basis === 'quarter' ? 'business quarters' : 'sprints') + '. Undo restores the previous horizon.');
-  });
-  listen(count, 'change', () => {
-    const value = Number(count.value);
-    if (!Number.isSafeInteger(value) || value < 1 || value > CADENCE_PERIOD_LIMIT) { announce('Choose 1 to ' + CADENCE_PERIOD_LIMIT + ' periods.'); return; }
-    selected = { kind: 'horizon', id: '' }; changeCadence(next => next ? resizeCadence(next, value) : createCadence('sprint', value));
+    const basis = event.target.value;
+    periodId = null;
+    acceptCadence(current => current ? regroupCadence(current, basis) : createCadence(basis, basis === 'quarter' ? 2 : 4),
+      'The plan now uses ' + (basis === 'quarter' ? 'business quarters' : 'sprints') + '. Undo restores the previous horizon.');
   });
   function input(event) {
     const item = controls.get(event.target.dataset.cadenceField); if (!item || !editor.read().draft || editor.read().status !== 'editing') return;
@@ -492,14 +659,14 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   listen(form, 'input', input); listen(form, 'change', input);
   listen(form, 'compositionstart', () => { composing = true; }); listen(form, 'compositionend', event => { composing = false; input(event); });
   listen(form, 'submit', event => { event.preventDefault(); settle('apply'); });
-  listen(summary, 'click', event => { if (!inspector.open && !editor.read().draft) { event.preventDefault(); open('score', false); } });
-  function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; if (park && editing.read().active?.kind === 'score') editing.park(); }
+  function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; inspectorOpen = false; inspector.hidden = true; if (park && editing.read().active?.kind === 'score') editing.park(); }
   function dispose() {
     if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
-    close(); disposed = true; operate('read'); view.dispose(); cleanup.splice(0).forEach(release => release());
+    close(); disposed = true; operate('read'); view.dispose(); topApply.dispose(); cleanup.splice(0).forEach(release => release());
     for (const el of [toolbar, pending, projectionRoot, flowPanel, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
   }
   render();
   const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select,
-    getSessionSlot: () => view.getSessionSlot(), dispose }); INSTANCES.set(root, controller); return controller;
+    getSessionSlot: () => view.getSessionSlot(),
+    showPlan: id => { loadedPlanId = id; render(); }, dispose }); INSTANCES.set(root, controller); return controller;
 }

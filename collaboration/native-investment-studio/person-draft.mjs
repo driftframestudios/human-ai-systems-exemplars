@@ -6,7 +6,7 @@ const MAX_HOURS = Math.floor(LIMITS.fundedMinutes / MINUTES_PER_HOUR);
 const MAX_RATE = LIMITS.rateCentsPerHour / CENTS_PER_DOLLAR;
 export const PERSON_DRAFT_TEXT_LIMIT = 32;
 const TEXT_LIMIT = PERSON_DRAFT_TEXT_LIMIT;
-const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
+const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const DIGITS = /^[0-9]+$/;
 const MONEY = /^([0-9]+)(?:\.([0-9]{1,2}))?$/;
 const UNFINISHED = /^(?:-|[0-9]+[eE][+-]?)$/;
@@ -63,12 +63,17 @@ export function preparePersonDraftValues(raw) {
 }
 
 
-const values = preparePersonDraftValues;
+function values(raw) {
+  const result = preparePersonDraftValues(raw), label = raw.label.trim();
+  if (!label || label.length > LIMITS.label) result.errors.push(diagnostic('label', 'draft.label', 'Give this person a short name or role.'));
+  else result.admitted.label = label;
+  return result;
+}
 
 // The caller admits bounded raw text; creation and existing-person edits share this codec.
 export function stepPersonDraftValues(raw, field, direction) {
   const stepFailure = error => ({ error });
-  if (!FIELDS.includes(field)) return stepFailure(diagnostic('field', 'draft', 'Choose the hourly rate or funded-time field.'));
+  if (!FIELDS.includes(field) || field === 'label') return stepFailure(diagnostic('field', 'draft', 'Choose the hourly rate or funded-time field.'));
   const nextRaw = { ...raw };
     if (direction !== -1 && direction !== 1) return stepFailure(diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.'));
     if (field === 'ratePerHour') {
@@ -79,7 +84,7 @@ export function stepPersonDraftValues(raw, field, direction) {
       if (next < 0 || next > LIMITS.rateCentsPerHour) return stepFailure(diagnostic('range', 'draft.ratePerHour', `Keep the rate from $0 through $${MAX_RATE}.`));
       nextRaw.ratePerHour = rateText(next);
     } else {
-      const parsed = values(nextRaw);
+      const parsed = preparePersonDraftValues(nextRaw);
       const durationError = parsed.errors.find(error => error.path !== 'draft.ratePerHour');
       if (durationError) return stepFailure(durationError);
       const next = parsed.admitted.fundedMinutes + direction * (field === 'fundedHours' ? MINUTES_PER_HOUR : 1);
@@ -105,7 +110,7 @@ export function createPersonDraftAdapter(studio) {
     const draft = active === null ? null : Object.freeze({
       token: active.token, personId: active.row.id, baseProjection: active.baseProjection,
       raw: Object.freeze({ ...active.raw }), errors: Object.freeze(parsed.errors),
-      changed: parsed.errors.length > 0 || parsed.admitted.rateCentsPerHour !== active.row.rateCentsPerHour
+      changed: parsed.errors.length > 0 || parsed.admitted.label !== active.row.label || parsed.admitted.rateCentsPerHour !== active.row.rateCentsPerHour
         || parsed.admitted.fundedMinutes !== active.row.fundedMinutes,
     });
     return Object.freeze({ status: disposed ? 'disposed' : isStale ? 'stale' : active ? 'editing' : 'idle',
@@ -134,7 +139,7 @@ export function createPersonDraftAdapter(studio) {
     const row = projection.state.people.find(person => person.id === personId);
     if (!row) return fail(diagnostic('reference', 'draft.personId', 'Choose an existing person.'));
     active = { token: Object.freeze({}), row, baseProjection: projection, rawRevision: 0, preview: null,
-      raw: { ratePerHour: rateText(row.rateCentsPerHour),
+      raw: { label: row.label, ratePerHour: rateText(row.rateCentsPerHour),
         fundedHours: String(Math.floor(row.fundedMinutes / MINUTES_PER_HOUR)), fundedMinutes: String(row.fundedMinutes % MINUTES_PER_HOUR) } };
     return succeed();
   }
@@ -142,8 +147,9 @@ export function createPersonDraftAdapter(studio) {
   function setText(token, field, raw) {
     const error = guard(token) ?? fieldGuard(field);
     if (error) return fail(error);
-    if (typeof raw !== 'string' || raw.length > TEXT_LIMIT) {
-      return fail(diagnostic('text', `draft.${field}`, `Use at most ${TEXT_LIMIT} characters.`));
+    const limit = field === 'label' ? LIMITS.label : TEXT_LIMIT;
+    if (typeof raw !== 'string' || raw.length > limit) {
+      return fail(diagnostic('text', `draft.${field}`, `Use at most ${limit} characters.`));
     }
     if (active.raw[field] !== raw) { active.raw[field] = raw; active.rawRevision += 1; }
     return succeed();
@@ -175,7 +181,7 @@ export function createPersonDraftAdapter(studio) {
     if (errors.length) return fail(errors[0], false);
     const session = active;
     const cached = session.preview;
-    if (!cached || cached.rateCentsPerHour !== admitted.rateCentsPerHour || cached.fundedMinutes !== admitted.fundedMinutes) {
+    if (!cached || cached.label !== admitted.label || cached.rateCentsPerHour !== admitted.rateCentsPerHour || cached.fundedMinutes !== admitted.fundedMinutes) {
       const rawRevision = session.rawRevision;
       const result = studio.previewPerson(session.row.id, { ...session.row, ...admitted }, session.baseProjection);
       const current = guard(token);

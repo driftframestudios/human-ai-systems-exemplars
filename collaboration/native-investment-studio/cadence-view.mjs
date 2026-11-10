@@ -1,18 +1,27 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { duration, money } from './display.mjs';
-import { CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
-import { revealStudioDestination } from './motion.mjs';
+import { CADENCE_PERIOD_LIMIT, CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
+import { createCadenceOccurrenceIndex } from './cadence-occurrences.mjs';
+import { LIMITS } from './config.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
+import { createTapePicker } from './tape-picker.mjs';
+import { revealStudioDestination, revealStudioShelfItem } from './motion.mjs';
+import { createPlanLibraryEmpty } from './plan-library-empty.mjs';
+import { workDefaultsTarget, workSessionTarget } from './navigation-policy.mjs';
 
 const DECISIONS = Object.freeze({ open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 const noop = () => {};
+let viewSequence = 0;
 
 // This view groups admitted occurrences. Clip width expresses a place in the
 // plan; session duration and investment retain their existing model owners.
 export function createCadenceView(root, {
-  onSelect = noop, onNavigate = noop, onPeriod = noop, onAddSession = noop,
-  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onTryReview = noop, flowRoot = null, flowPanel = null,
+  onSelect = noop, onLoadPlan = noop, onNavigate = noop, onPeriod = noop, onAddPeriod = noop, onRenamePeriod = noop, onAddSession = noop, onAddOccurrence = noop,
+  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onLoadStarter = noop, flowRoot = null, flowPanel = null,
 } = {}) {
   const document = root.ownerDocument;
-  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey;
+  const captionPrefix = `cadence-caption-${++viewSequence}`;
+  let disposed = false, previousPeriodId, previousLoadedPlanId, overviewReturn, periodOriginKey, captionEdit = null, lastReading, rendered;
   const actions = new Map();
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -26,15 +35,23 @@ export function createCadenceView(root, {
     control.append(node('span', label)); actions.set(key, { action, target });
     return control;
   }
-  function selection(label, kind, id, key, selected, extra = {}, className = '') {
-    const control = button(label, 'select', { kind, id, ...extra }, key, className);
-    if (kind === 'work') control.dataset.studioSessionId = id;
+  function selection(label, target, key, selected, className = '') {
+    const { kind, id, occurrenceIndex } = target;
+    const control = button(label, 'select', target, key, className);
+    if (kind === 'work') {
+      control.dataset.studioSessionId = id;
+      if (target.scope === 'session') control.dataset.studioSessionOccurrence = String(occurrenceIndex);
+    }
     control.setAttribute('aria-pressed', String(selected?.kind === kind && selected.id === id
-      && (extra.occurrenceIndex === undefined || selected.occurrenceIndex === undefined || selected.occurrenceIndex === extra.occurrenceIndex)));
+      && (occurrenceIndex === undefined || selected.occurrenceIndex === undefined || selected.occurrenceIndex === occurrenceIndex)));
     return control;
   }
   function create(label, action, target, key) {
     return button(label, action, target, key, `native-control--create native-cadence__create${action === 'add-session' ? ' studio-rack-add' : ''}`);
+  }
+  function createSlot(label, action, target, key, className = '') {
+    actions.set(key, { action, target });
+    return createRackAddControl(document, { label, className, dataset: { cadenceAction: action, cadenceKey: key } });
   }
   function disclosure(label, key) {
     const details = node('details', undefined, 'native-cadence__details studio-rack-companion');
@@ -51,7 +68,17 @@ export function createCadenceView(root, {
   // The session owner lends its live controls to this slot. Refresh only the
   // surrounding projections so a dial turn or text edit keeps its DOM owner.
   const screen = node('section', undefined, 'native-cadence__screen');
+  const workspace = node('div', undefined, 'studio-plan-workspace');
+  const library = node('div', undefined, 'studio-plan-library');
   const reading = node('header', undefined, 'native-cadence__reading');
+  const starterRoot = node('div');
+  const starters = createPlanLibraryEmpty(starterRoot, {
+    onLoad: id => onLoadStarter(id),
+    onCreate: source => {
+      source.dataset.cadenceKey = 'cassette-add';
+      onAddSession({ periodId: lastReading?.projection.state.scoreSettings.cadence?.periods[0]?.id, subdivision: 1 }, source);
+    },
+  });
   const board = node('div', undefined, 'native-cadence__board'); board.tabIndex = 0; board.setAttribute('role', 'region');
   const delayRail = node('section', undefined, 'native-cadence__period-delays'); delayRail.hidden = true;
   const sessionSlot = node('div', undefined, 'native-cadence__session-slot'); sessionSlot.dataset.studioSessionSlot = '';
@@ -59,7 +86,8 @@ export function createCadenceView(root, {
   tracks.setAttribute('role', 'region'); tracks.setAttribute('aria-label', 'Session tracks; scroll across the planning periods');
   const previewReading = node('p', undefined, 'native-cadence__preview'); previewReading.dataset.cadencePreviewReading = '';
   const recordRail = node('nav', undefined, 'studio-rack-records'); recordRail.setAttribute('aria-label', 'People and relationships');
-  screen.append(reading, board, delayRail, sessionSlot, tracks, previewReading, recordRail); screen.hidden = true;
+  screen.append(reading, starterRoot, board, delayRail, sessionSlot, tracks, previewReading, recordRail); screen.hidden = true;
+  workspace.append(library, screen);
   const attachments = node('div', undefined, 'studio-rack-companions');
   const availability = disclosure('People and available time', 'people');
   const personRows = node('div', undefined, 'native-cadence__people'); availability.append(personRows);
@@ -67,16 +95,17 @@ export function createCadenceView(root, {
   relationshipPanel.classList.add('studio-rack-companion');
   attachments.append(availability, relationshipPanel);
   const extras = node('div', undefined, 'native-cadence__extras');
-  root.classList.add('studio-rack-composition'); root.replaceChildren(screen, attachments, extras);
+  root.classList.add('studio-rack-composition'); root.replaceChildren(workspace, attachments, extras);
   const externalFlowEvents = flowRoot && !root.contains(flowRoot) ? flowRoot : null;
   function click(event) {
     const control = event.target.closest('[data-cadence-action]');
-    if (disposed || !control || !(root.contains(control) || flowRoot?.contains(control))) return;
+    if (disposed || !control || control.getAttribute('aria-disabled') === 'true' || !(root.contains(control) || flowRoot?.contains(control))) return;
     const item = actions.get(control.dataset.cadenceKey); if (!item) return;
     if (item.action === 'period' && item.target !== null) periodOriginKey = control.dataset.cadenceKey;
-    const receivers = { select: onSelect, navigate: onNavigate, period: onPeriod,
-      'add-session': onAddSession, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
-      'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon, 'try-review': onTryReview };
+    if (item.action === 'load-plan' && control.closest('.studio-plan-navigation')) control.focus({ preventScroll: true });
+    const receivers = { select: onSelect, 'load-plan': onLoadPlan, navigate: onNavigate, period: onPeriod, 'add-period': onAddPeriod,
+      'add-session': onAddSession, 'add-occurrence': onAddOccurrence, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
+      'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon };
     receivers[item.action]?.(item.target, control);
   }
   function showPreview(event) {
@@ -88,17 +117,38 @@ export function createCadenceView(root, {
   root.addEventListener('focusin', showPreview);
   externalFlowEvents?.addEventListener('click', click);
 
-  function refresh(projection, { periodId = null, selected = null, preview = false } = {}) {
+  function refresh(projection, { periodId = null, loadedPlanId = null, selected = null, preview = false, acceptedWork = projection.state.work } = {}) {
     if (disposed) return;
+    lastReading = { projection, options: { periodId, loadedPlanId, selected, preview, acceptedWork } };
+    // Accepted and proposed projections carry their own identity. Selection
+    // values remain comparable when the controller reconstructs its options.
+    const renderKey = [projection, acceptedWork, periodId, loadedPlanId, preview, selected?.kind, selected?.id, selected?.occurrenceIndex];
+    if (rendered?.every((value, index) => value === renderKey[index])) return;
+    rendered = null;
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
     const scrollPosition = { board: board.scrollLeft, tracks: tracks.scrollLeft };
+    const oldShelf = library.querySelector('.studio-tape-shelf');
+    const shelfScroll = { left: oldShelf?.scrollLeft ?? 0, top: oldShelf?.scrollTop ?? 0 };
     const recordScroll = new Map([...recordRail.querySelectorAll('[data-record-rail]')]
       .map(element => [element.dataset.recordRail, element.scrollLeft]));
     actions.clear();
     const { state, result } = projection, cadence = state.scoreSettings.cadence;
     const fragment = document.createDocumentFragment();
     root.classList.add('native-cadence'); root.dataset.cadenceReading = preview ? 'proposed' : 'accepted';
+    const empty = state.work.length === 0;
+    starters.refresh(empty); workspace.dataset.empty = String(empty);
+    for (const element of [library, reading, board, tracks, previewReading, recordRail]) element.hidden = empty;
+    if (empty) {
+      captionEdit = null; previousPeriodId = undefined; overviewReturn = undefined;
+      workspace.hidden = false; screen.hidden = false; screen.dataset.loadedPlan = '';
+      screen.setAttribute('aria-label', 'Start a plan library');
+      for (const element of [library, reading, board, delayRail, tracks, previewReading, recordRail, extras]) element.replaceChildren();
+      delayRail.hidden = true; attachments.hidden = true; flowRoot?.replaceChildren();
+      rendered = renderKey; return;
+    }
     if (!cadence) {
+      captionEdit = null;
+      workspace.hidden = true;
       previousPeriodId = undefined; overviewReturn = undefined;
       flowRoot?.replaceChildren();
       const invitation = node('div', undefined, 'native-cadence__invitation');
@@ -111,14 +161,21 @@ export function createCadenceView(root, {
       // sprint/quarter placement. Only the period reading needs a cadence.
       availability.hidden = true; attachments.hidden = !flowPanel;
       scopeCaption(relationshipPanel, 'Saved arrangement');
-      fragment.append(invitation); extras.replaceChildren(fragment); return;
+      fragment.append(invitation); extras.replaceChildren(fragment); rendered = renderKey; return;
     }
     const model = projectCadence(state);
     const people = new Map(state.people.map(row => [row.id, row]));
     const work = new Map(state.work.map(row => [row.id, row]));
+    // Score previews preserve existing session ordinals while copying their
+    // work records. Bind editor intent to accepted identity; preview-only work
+    // remains subject to the navigation owner's current-record admission.
+    const acceptedWorkById = new Map(acceptedWork.map(row => [row.id, row]));
     const teams = new Map(state.teams.map(row => [row.id, row]));
     const periods = cadence.periods, periodById = new Map(periods.map(row => [row.id, row]));
+    if (captionEdit && (captionEdit.basis !== cadence.basis || !periodById.has(captionEdit.id))) captionEdit = null;
     const activePeriod = periodById.get(periodId) ?? null;
+    const loadedPlan = work.get(loadedPlanId) ?? null;
+    screen.dataset.loadedPlan = loadedPlan?.id ?? '';
     const currentPeriodId = activePeriod?.id ?? null;
     const periodChanged = previousPeriodId !== undefined && previousPeriodId !== currentPeriodId;
     if (periodChanged && previousPeriodId === null) {
@@ -133,19 +190,46 @@ export function createCadenceView(root, {
     const subdivisionCount = CADENCE_SUBDIVISIONS[cadence.basis];
     const subdivisionLabel = value => value == null ? 'Choose a part of the period' : `${subdivisionName} ${value}`;
     const periodLabel = id => periodById.get(id)?.label ?? 'Choose a period';
-    const occurrences = model.occurrences.map(row => ({ ...row, work: work.get(row.workId) })).filter(row => row.work);
-    const visible = activePeriod ? occurrences.filter(row => row.periodId === activePeriod.id) : occurrences;
-    const stages = model.stages;
-    const handoffs = model.handoffs;
-    const decisions = model.decisions;
+    const occurrences = model.occurrences.map(row => ({ ...row, work: work.get(row.workId) }))
+      .filter(row => row.work && (!loadedPlan || row.workId === loadedPlan.id));
+    const membership = createCadenceOccurrenceIndex(occurrences);
+    const visible = activePeriod ? membership.forPeriod(activePeriod.id) : occurrences;
+    const shelf = createTapePicker(document, {
+      variant: 'plan', label: 'Plans', selectedId: loadedPlan?.id ?? null,
+      entries: [{ id: null, title: 'All plans', aggregate: true,
+        detail: `${state.work.reduce((sum, item) => sum + summarizeWorkSessions(item).durationMinutes, 0).toLocaleString('en-US')} min total · ${state.work.reduce((sum, item) => sum + item.occurrences, 0)} sessions`,
+        attributes: { 'data-cadence-key': 'cassette:all', 'data-studio-all-plans': '' },
+      }, ...state.work.map(item => ({
+        id: item.id, title: item.label, eyebrow: teams.get(item.teamId)?.label ?? 'Choose a team',
+        detail: `${item.sessionOverrides ? `${duration(summarizeWorkSessions(item).durationMinutes)} total` : duration(item.minutesPerOccurrence)} · ${item.occurrences} ${item.occurrences === 1 ? 'session' : 'sessions'}`,
+        attributes: { 'data-cadence-key': `cassette:${item.id}`, 'data-studio-plan-id': item.id },
+      }))],
+      onSelect: (id, source) => {
+        if (disposed) return;
+        onLoadPlan(id, source);
+      },
+    });
+    shelf.append(create('New plan', 'add-session', { periodId: activePeriod?.id ?? periods[0]?.id, subdivision: 1 }, 'cassette-add'));
+    library.replaceChildren(shelf);
+    const nextShelf = library.querySelector('.studio-tape-shelf');
+    nextShelf.scrollLeft = shelfScroll.left; nextShelf.scrollTop = shelfScroll.top;
+    workspace.hidden = false;
+    const stages = model.stages.filter(stage => !loadedPlan || stage.workIds.includes(loadedPlan.id));
+    const handoffs = model.handoffs.filter(handoff => !loadedPlan
+      || handoff.fromWorkIds.includes(loadedPlan.id) || handoff.toWorkIds.includes(loadedPlan.id));
+    const stageIds = new Set(stages.map(stage => stage.id)), handoffIds = new Set(handoffs.map(handoff => handoff.id));
+    const inLoadedScope = anchor => !loadedPlan || (anchor.kind === 'work' ? anchor.id === loadedPlan.id
+      : anchor.kind === 'stage' ? stageIds.has(anchor.id) : handoffIds.has(anchor.id));
+    const decisions = model.decisions.filter(decision => inLoadedScope(decision.anchor));
+    const delays = model.delays.filter(delay => inLoadedScope(delay.anchor));
     const incoming = new Map();
     for (const handoff of handoffs) for (const id of handoff.toWorkIds) {
       if (!incoming.has(id)) incoming.set(id, []);
       for (const fromId of handoff.fromWorkIds) if (!incoming.get(id).includes(fromId)) incoming.get(id).push(fromId);
     }
-    const workPreview = row => `${row.work.label} · ${duration(row.work.minutesPerOccurrence)} per person.`
+    const workPreview = row => `${row.label} · ${duration(row.minutesPerOccurrence)} per person.${row.active ? '' : ' Paused.'}`
       + (incoming.get(row.workId)?.length ? ` Needs ${incoming.get(row.workId).map(id => work.get(id)?.label).filter(Boolean).join(', ')}.` : ' Opens this part of the work.');
-    const endpointName = endpoint => endpoint.kind === 'stage' ? stages.find(row => row.id === endpoint.id)?.label ?? 'Stage'
+    const endpointName = endpoint => endpoint.kind === 'stage' ? model.stages.find(row => row.id === endpoint.id)?.label ?? 'Stage'
       : work.get(endpoint.id)?.label ?? 'Session';
     const inPeriod = row => !activePeriod || row.periodId === activePeriod.id || row.periodIds?.includes(activePeriod.id)
       || row.fromPeriodId === activePeriod.id || row.toPeriodId === activePeriod.id;
@@ -153,7 +237,7 @@ export function createCadenceView(root, {
     for (const details of [availability, relationshipPanel]) scopeCaption(details, activePeriod?.label ?? 'Plan overview');
 
     screen.hidden = false; screen.setAttribute('aria-label', activePeriod ? `${activePeriod.label} sessions and decisions` : 'Sprint and quarter plan overview');
-    const context = node('div');
+    const context = node('div', undefined, 'native-cadence__context');
     const heading = node('h4', activePeriod?.label ?? 'Plan overview');
     if (activePeriod) {
       const breadcrumb = node('nav', undefined, 'native-cadence__breadcrumb'); breadcrumb.setAttribute('aria-label', 'Plan scope');
@@ -163,35 +247,67 @@ export function createCadenceView(root, {
       heading.setAttribute('aria-current', 'page');
       breadcrumb.append(overview, separator, heading); context.append(breadcrumb);
     } else context.append(heading);
+    const planNavigation = node('nav', undefined, 'studio-plan-navigation');
+    planNavigation.setAttribute('aria-label', 'Plan library');
+    const allPlans = button('All plans', 'load-plan', null, 'all-plans', 'studio-plan-navigation__all');
+    allPlans.setAttribute('aria-pressed', String(!loadedPlan));
+    const loadedIndex = loadedPlan ? state.work.findIndex(item => item.id === loadedPlan.id) : -1;
+    const previousPlan = state.work[loadedIndex - 1], nextPlan = state.work[loadedIndex + 1];
+    const previous = button('Previous', 'load-plan', previousPlan?.id ?? null, 'previous-plan', 'studio-plan-navigation__browse');
+    const next = button('Next', 'load-plan', nextPlan?.id ?? null, 'next-plan', 'studio-plan-navigation__browse');
+    previous.dataset.direction = 'previous'; next.dataset.direction = 'next';
+    previous.setAttribute('aria-disabled', String(!previousPlan)); next.setAttribute('aria-disabled', String(!nextPlan));
+    const backArrow = node('span', '←'), forwardArrow = node('span', '→');
+    backArrow.setAttribute('aria-hidden', 'true'); forwardArrow.setAttribute('aria-hidden', 'true');
+    previous.prepend(backArrow); next.append(forwardArrow);
+    previous.setAttribute('aria-label', 'Previous plan'); next.setAttribute('aria-label', 'Next plan');
+    if (previousPlan) previous.title = previousPlan.label;
+    if (nextPlan) next.title = nextPlan.label;
+    const currentPlan = node('div', undefined, 'studio-plan-navigation__current');
+    currentPlan.id = `${captionPrefix}-plan`;
+    currentPlan.append(node('strong', loadedPlan?.label ?? 'Whole arrangement'));
+    if (loadedPlan) currentPlan.append(node('small', `${loadedIndex + 1} / ${state.work.length}`));
+    for (const control of [allPlans, previous, next]) control.setAttribute('aria-describedby', currentPlan.id);
+    planNavigation.append(allPlans, currentPlan, previous, next); context.append(planNavigation);
     const cost = node('dl', undefined, 'native-cadence__amount');
-    const amountLabel = result.plannedCommitmentCents === null ? 'Known included work' : 'Included work';
+    const amountLabel = loadedPlan ? (result.plannedCommitmentCents === null ? 'Known whole arrangement' : 'Whole arrangement')
+      : result.plannedCommitmentCents === null ? 'Known included work' : 'Included work';
     cost.append(node('dt', preview ? `Proposed · ${amountLabel.toLowerCase()}` : amountLabel), node('dd', money(result.knownCommitmentCents)));
     reading.replaceChildren(context, cost);
 
     function sessionClip(rows, key) {
       const row = rows[0], item = row.work;
-      const control = selection(item.label, 'work', item.id, key, selected,
-        { ...(rows.length === 1 ? { occurrenceIndex: row.occurrenceIndex } : {}), periodId: row.periodId },
-        'native-cadence__clip native-control--navigate');
-      control.dataset.funding = item.funding; control.dataset.active = String(item.status === 'planned' && item.lifecycle !== 'retired');
-      const effort = `${rows.length > 1 ? `${rows.length} × ` : ''}${duration(item.minutesPerOccurrence)} per person`;
+      const grouped = rows.length > 1;
+      const className = 'native-cadence__clip native-control--navigate';
+      // An overview group opens its sessions. Only an individual session may
+      // supply an edit target; dropping its index would edit the tape defaults.
+      const control = grouped
+        ? button(item.label, 'period', row.periodId, key, className)
+        : selection(row.label, { ...workSessionTarget(acceptedWorkById.get(item.id) ?? item, row.occurrenceIndex), periodId: row.periodId }, key, selected, className);
+      control.dataset.cadenceWorkId = item.id;
+      control.dataset.funding = row.funding;
+      control.dataset.active = String(row.active);
+      const effort = grouped ? `${rows.length} sessions · ${duration(rows.reduce((sum, entry) => sum + entry.minutesPerOccurrence, 0))} total`
+        : `${duration(row.minutesPerOccurrence)} per person`;
       control.append(node('small', effort));
-      if (activePeriod) control.append(node('small', teams.get(item.teamId)?.label ?? 'Team to choose', 'native-cadence__team'),
-        node('small', item.personIds.map(id => people.get(id)?.label).filter(Boolean).join(', ') || 'Choose the people taking part', 'native-cadence__participants'));
-      control.dataset.cadencePreview = workPreview(row);
-      control.setAttribute('aria-label', `${item.label}${activePeriod ? `, session ${row.occurrenceIndex + 1}` : ''}, ${periodLabel(row.periodId)}. ${effort}. Open session settings.`);
-      if (item.status !== 'planned' || item.lifecycle === 'retired') control.append(node('small', item.lifecycle === 'retired' ? 'Retired' : 'Paused', 'native-cadence__state'));
+      if (activePeriod) control.append(node('small', teams.get(row.teamId)?.label ?? 'Team to choose', 'native-cadence__team'),
+        node('small', row.personIds.map(id => people.get(id)?.label).filter(Boolean).join(', ') || 'Choose the people taking part', 'native-cadence__participants'));
+      const funding = row.funding === 'allocated' ? 'Within funded time' : 'Extra investment';
+      const stateLabel = !row.active ? item.lifecycle === 'retired' ? 'Retired' : 'Paused' : funding;
+      control.append(node('small', stateLabel, 'native-cadence__state'));
+      control.dataset.cadencePreview = grouped ? `${item.label} · ${effort}. ${stateLabel}. Open ${periodLabel(row.periodId)} to choose a session.` : workPreview(row);
+      control.setAttribute('aria-label', `${grouped ? item.label : `${row.label}, session ${row.occurrenceIndex + 1}`}, ${periodLabel(row.periodId)}. ${effort}. ${stateLabel}. ${grouped ? 'Open period sessions.' : 'Open session settings.'}`);
       return control;
     }
     function decisionMarker(decision, suffix) {
-      const control = selection(decision.label, 'gate', decision.id, `decision:${decision.id}:${suffix}`, selected, {}, 'native-cadence__decision native-control--navigate');
+      const control = selection(decision.label, { kind: 'gate', id: decision.id }, `decision:${decision.id}:${suffix}`, selected, 'native-cadence__decision native-control--navigate');
       control.dataset.decision = decision.modeledDecision;
       control.append(node('small', DECISIONS[decision.modeledDecision] ?? 'Modeled decision'));
       control.dataset.cadencePreview = decision.question || `Review ${decision.label.toLowerCase()} with the responsible people.`;
       return control;
     }
     function delayMarker(delay, suffix = '') {
-      const control = selection(delay.label, 'delay', delay.id, `delay:${delay.id}${suffix ? ':' + suffix : ''}`, selected, {}, 'native-cadence__delay native-control--navigate');
+      const control = selection(delay.label, { kind: 'delay', id: delay.id }, `delay:${delay.id}${suffix ? ':' + suffix : ''}`, selected, 'native-cadence__delay native-control--navigate');
       control.append(node('small', `${periodLabel(delay.fromPeriodId)} → ${periodLabel(delay.toPeriodId)}`));
       control.dataset.cadencePreview = delay.reason || 'Inspect the work affected by this delay.';
       return control;
@@ -207,25 +323,84 @@ export function createCadenceView(root, {
       } else heading.textContent = `${subdivisionName} ${subdivision}`;
       column.append(heading);
       const matchingStages = stages.filter(stage => stage.periodIds.includes(period.id));
-      if (matchingStages.length && subdivision === null) {
-        const labels = node('p', matchingStages.map(stage => stage.label).join(' · '), 'native-cadence__stage-labels'); column.append(labels);
+      if (subdivision === null) {
+        const rename = node('div', undefined, 'native-cadence__period-label');
+        // A period caption names the shared horizon, even while one tape is loaded.
+        const caption = period.caption ?? model.stages.filter(stage => stage.periodIds.includes(period.id)).map(stage => stage.label).join(' · ');
+        const reading = node('div', undefined, 'native-cadence__caption');
+        const text = node('p', caption, 'native-cadence__stage-labels'); text.hidden = !caption;
+        const trigger = node('button', 'Edit', 'native-cadence__caption-edit'); trigger.type = 'button';
+        trigger.dataset.periodRename = period.id; trigger.dataset.cadenceKey = `caption-edit:${period.id}`;
+        trigger.setAttribute('aria-label', `Edit ${period.label} caption`);
+        trigger.setAttribute('aria-expanded', String(captionEdit?.id === period.id));
+        reading.append(text, trigger);
+        const form = node('form'), label = node('label', 'Period caption'), input = node('input');
+        form.id = `${captionPrefix}-${period.id}`; trigger.setAttribute('aria-controls', form.id);
+        form.hidden = captionEdit?.id !== period.id;
+        input.type = 'text'; input.value = captionEdit?.id === period.id ? captionEdit.value : caption;
+        input.maxLength = LIMITS.label; input.dataset.cadenceKey = `caption-input:${period.id}`;
+        label.append(input);
+        const tools = node('div', undefined, 'native-cadence__caption-tools');
+        const save = node('button', 'Save label'); save.type = 'submit';
+        const cancel = node('button', 'Cancel', 'native-control--cancel'); cancel.type = 'button'; tools.append(save, cancel);
+        const error = node('p', captionEdit?.id === period.id ? captionEdit.error : '', 'native-cadence__caption-error'); error.setAttribute('role', 'alert');
+        const redraw = key => {
+          // Caption editing is local view state, independent of the projection.
+          rendered = null;
+          refresh(lastReading.projection, lastReading.options);
+          [...board.querySelectorAll('[data-cadence-key]')].find(item => item.dataset.cadenceKey === key)?.focus({ preventScroll: true });
+        };
+        trigger.addEventListener('click', () => {
+          if (captionEdit?.id === period.id) { captionEdit = null; redraw(trigger.dataset.cadenceKey); }
+          else { captionEdit = { id: period.id, basis: cadence.basis, value: caption, error: '' }; redraw(input.dataset.cadenceKey); }
+        });
+        cancel.addEventListener('click', () => { captionEdit = null; redraw(trigger.dataset.cadenceKey); });
+        input.addEventListener('input', () => {
+          if (captionEdit?.id === period.id) { captionEdit.value = input.value; captionEdit.error = ''; error.textContent = ''; }
+        });
+        form.append(label, tools, error);
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          if (captionEdit?.id !== period.id) return;
+          const submitted = captionEdit;
+          const value = input.value.trim();
+          // Saving the unchanged stage summary keeps it derived from stages.
+          const result = onRenamePeriod({ id: period.id, label: period.caption === undefined && value === caption ? '' : value });
+          if (disposed || captionEdit !== submitted) return;
+          if (result?.ok) { captionEdit = null; redraw(trigger.dataset.cadenceKey); }
+          else {
+            captionEdit.error = result?.error?.message ?? 'Your caption is kept here. Try saving again.';
+            redraw(input.dataset.cadenceKey);
+          }
+        });
+        rename.append(reading, form); column.append(rename);
       }
       const clips = node('div', undefined, 'native-cadence__clips');
-      const rows = occurrences.filter(row => row.periodId === period.id && (subdivision === null || row.subdivision === subdivision))
+      const rows = [...membership.forPeriod(period.id, subdivision)]
         .sort((a, b) => a.subdivision - b.subdivision);
       if (subdivision === null) {
         const groups = new Map();
-        for (const row of rows) { if (!groups.has(row.workId)) groups.set(row.workId, []); groups.get(row.workId).push(row); }
+        for (const row of rows) {
+          const identity = JSON.stringify([row.workId, row.funding, row.status]);
+          if (!groups.has(identity)) groups.set(identity, []);
+          groups.get(identity).push(row);
+        }
         for (const [id, members] of groups) clips.append(sessionClip(members, `work:${period.id}:${id}`));
       } else for (const row of rows) clips.append(sessionClip([row], `occurrence:${row.workId}:${row.occurrenceIndex}`));
       if (!rows.length) clips.append(node('p', 'Space for working sessions', 'native-cadence__space'));
       for (const decision of decisions.filter(row => row.periodId === period.id && (subdivision === null || row.subdivision === subdivision))) {
         clips.append(decisionMarker(decision, `${period.id}:${subdivision ?? 'overview'}`));
       }
-      for (const delay of model.delays.filter(row => row.toPeriodId === period.id && subdivision === null)) {
+      for (const delay of delays.filter(row => row.toPeriodId === period.id && subdivision === null)) {
         clips.append(delayMarker(delay));
       }
-      column.append(clips, create('Add session', 'add-session', { periodId: period.id, subdivision: subdivision ?? 1 }, `add-session:${period.id}:${subdivision ?? 'overview'}`));
+      const destination = `${period.label}${subdivision === null ? '' : `, ${subdivisionLabel(subdivision)}`}`;
+      const target = { periodId: period.id, subdivision: subdivision ?? 1 };
+      const addSession = createSlot(loadedPlan ? `Add ${loadedPlan.label} session in ${destination}` : `Add a new plan in ${destination}`,
+        loadedPlan ? 'add-occurrence' : 'add-session', loadedPlan ? { ...target, workId: loadedPlan.id } : target,
+        `add-session:${period.id}:${subdivision ?? 'overview'}`, 'studio-rack-create-area');
+      if (loadedPlan) addSession.disabled = loadedPlan.occurrences >= LIMITS.occurrences;
+      column.append(clips, addSession);
       return column;
     }
     board.replaceChildren();
@@ -235,13 +410,19 @@ export function createCadenceView(root, {
     else delete board.dataset.cadenceArrival;
     board.style.setProperty('--cadence-columns', String(activePeriod ? subdivisionCount : periods.length));
     if (activePeriod) for (let part = 1; part <= subdivisionCount; part++) board.append(periodColumn(activePeriod, part));
-    else for (const period of periods) board.append(periodColumn(period));
+    else {
+      for (const period of periods) board.append(periodColumn(period));
+      const add = create(cadence.basis === 'quarter' ? 'Add quarter' : 'Add sprint', 'add-period', null, 'add-period');
+      add.classList.add('native-cadence__period-add');
+      add.disabled = periods.length >= CADENCE_PERIOD_LIMIT;
+      board.append(add);
+    }
     delayRail.replaceChildren(); delayRail.hidden = true;
     if (activePeriod) {
-      const delays = model.delays.filter(row => row.fromPeriodId === activePeriod.id || row.toPeriodId === activePeriod.id);
-      if (delays.length) {
+      const periodDelays = delays.filter(row => row.fromPeriodId === activePeriod.id || row.toPeriodId === activePeriod.id);
+      if (periodDelays.length) {
         delayRail.hidden = false; delayRail.append(node('h5', 'Delays affecting this period'));
-        for (const delay of delays) delayRail.append(delayMarker(delay));
+        for (const delay of periodDelays) delayRail.append(delayMarker(delay));
       }
     }
     const trackColumns = activePeriod
@@ -268,48 +449,58 @@ export function createCadenceView(root, {
       headings.append(th);
     }
     trackHead.append(headings); const trackBody = node('tbody');
-    for (const item of state.work.filter(item => !activePeriod || visible.some(row => row.workId === item.id))) {
+    for (const item of state.work.filter(item => !loadedPlan || item.id === loadedPlan.id)) {
       const tr = node('tr'), label = node('th'); label.scope = 'row';
-      const name = selection(item.label, 'work', item.id, `track-work:${item.id}`, selected, {}, 'studio-track-key native-cadence__track-name native-control--navigate');
+      const name = selection(item.label, workDefaultsTarget(item.id), `track-work:${item.id}`, selected, 'studio-track-key native-cadence__track-name native-control--navigate');
       name.setAttribute('aria-label', `${item.label}, ${duration(item.minutesPerOccurrence)} per person. Open session settings.`); label.append(name); tr.append(label);
       for (const column of trackColumns) {
         const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');
-        pads.style.setProperty('--cadence-pad-columns', String(activePeriod ? slotsPerPart : subdivisionCount * slotsPerPart));
-        const members = occurrences.filter(row => row.workId === item.id && row.periodId === column.period.id
-          && (column.subdivision === null || row.subdivision === column.subdivision));
-        const partCounts = new Map();
-        for (const row of members) {
-          const pad = selection(activePeriod ? `Session ${row.occurrenceIndex + 1}` : `${cadence.basis === 'quarter' ? 'M' : 'W'}${row.subdivision}`,
-            'work', item.id, `pad:${item.id}:${row.occurrenceIndex}`, selected,
-            { occurrenceIndex: row.occurrenceIndex, periodId: row.periodId }, 'native-cadence__pad native-control--navigate');
-          pad.dataset.funding = item.funding; pad.dataset.active = String(row.active);
-          const partIndex = partCounts.get(row.subdivision) ?? 0;
-          partCounts.set(row.subdivision, partIndex + 1);
-          if (!activePeriod) pad.style.gridColumn = String((row.subdivision - 1) * slotsPerPart + partIndex % slotsPerPart + 1);
-          pad.dataset.cadencePreview = workPreview(row);
-          pad.setAttribute('aria-label', `${item.label}, session ${row.occurrenceIndex + 1}, ${column.period.label}, ${subdivisionLabel(row.subdivision)}. ${duration(item.minutesPerOccurrence)} per person. Open session settings.`);
-          pads.append(pad);
+        const subdivisions = column.subdivision === null
+          ? Array.from({ length: subdivisionCount }, (_, index) => index + 1) : [column.subdivision];
+        pads.style.setProperty('--cadence-pad-columns', String(subdivisions.length));
+        for (const subdivision of subdivisions) {
+          const part = node('div', undefined, 'native-cadence__part');
+          part.dataset.cadenceSubdivision = String(subdivision);
+          const members = membership.forCell(item.id, column.period.id, subdivision);
+          for (const row of members) {
+            const pad = selection(activePeriod ? `Session ${row.occurrenceIndex + 1}` : `${cadence.basis === 'quarter' ? 'M' : 'W'}${subdivision}`,
+              { ...workSessionTarget(acceptedWorkById.get(item.id) ?? item, row.occurrenceIndex), periodId: row.periodId },
+              `pad:${item.id}:${row.occurrenceIndex}`, selected, 'native-cadence__pad native-control--navigate');
+            pad.dataset.funding = row.funding; pad.dataset.active = String(row.active);
+            pad.dataset.cadencePreview = workPreview(row);
+            pad.setAttribute('aria-label', `${row.label}, session ${row.occurrenceIndex + 1}, ${column.period.label}, ${subdivisionLabel(subdivision)}. ${duration(row.minutesPerOccurrence)} per person. ${row.active ? 'Planned' : 'Paused'}. Open session settings.`);
+            part.append(pad);
+          }
+          const destination = `${column.period.label}, ${subdivisionLabel(subdivision)}`;
+          const add = createSlot(`Add ${item.label} session in ${destination}`, 'add-occurrence', { workId: item.id, periodId: column.period.id, subdivision },
+            `add-occurrence:${item.id}:${column.period.id}:${subdivision}`);
+          add.disabled = item.occurrences >= LIMITS.occurrences;
+          add.dataset.cadencePreview = `Add another ${item.label} session in ${destination}. ${duration(item.minutesPerOccurrence)} per person.`;
+          part.append(add); pads.append(part);
         }
-        if (!members.length) { const empty = node('span', '—', 'native-cadence__rest'); empty.setAttribute('aria-label', 'No sessions in this period'); pads.append(empty); }
         cell.append(pads); tr.append(cell);
       }
       trackBody.append(tr);
     }
-    const newSession = node('tr', undefined, 'studio-rack-create-row');
-    const newSessionHeading = node('th', 'New session'); newSessionHeading.scope = 'row'; newSession.append(newSessionHeading);
-    for (const column of trackColumns) {
-      const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');
-      pads.style.setProperty('--cadence-pad-columns', '1');
-      const add = create('Add session', 'add-session',
-        { periodId: column.period.id, subdivision: column.subdivision ?? 1 },
-        `new-session:${column.period.id}:${column.subdivision ?? 'overview'}`);
-      add.classList.add('studio-rack-create-zone');
-      const destination = `${column.period.label}${column.subdivision === null ? '' : `, ${subdivisionLabel(column.subdivision)}`}`;
-      add.setAttribute('aria-label', `Add a session in ${destination}`);
-      add.dataset.cadencePreview = `Add a session in ${destination}, then adjust its people and duration.`;
-      pads.append(add); cell.append(pads); newSession.append(cell);
+    if (!loadedPlan) {
+      const newSession = node('tr', undefined, 'studio-rack-create-row');
+      const newSessionHeading = node('th', 'New plan'); newSessionHeading.scope = 'row'; newSession.append(newSessionHeading);
+      for (const column of trackColumns) {
+        const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');
+        const subdivisions = column.subdivision === null
+          ? Array.from({ length: subdivisionCount }, (_, index) => index + 1) : [column.subdivision];
+        pads.style.setProperty('--cadence-pad-columns', String(subdivisions.length));
+        for (const subdivision of subdivisions) {
+          const destination = `${column.period.label}, ${subdivisionLabel(subdivision)}`;
+          const add = createSlot(`Add a new plan in ${destination}`, 'add-session', { periodId: column.period.id, subdivision },
+            `new-session:${column.period.id}:${subdivision}`);
+          add.dataset.cadencePreview = `Add a new plan in ${destination}, then select it to adjust its people and duration.`;
+          pads.append(add);
+        }
+        cell.append(pads); newSession.append(cell);
+      }
+      trackBody.append(newSession);
     }
-    trackBody.append(newSession);
     const markers = node('tr', undefined, 'native-cadence__track-markers'), markerHeading = node('th', 'Handoffs & decisions'); markerHeading.scope = 'row'; markers.append(markerHeading);
     let hasMarkers = false;
     for (const column of trackColumns) {
@@ -318,7 +509,7 @@ export function createCadenceView(root, {
         events.append(decisionMarker(row, `track:${column.period.id}:${column.subdivision ?? 'overview'}`)); hasMarkers = true;
       }
       for (const handoff of handoffs.filter(row => row.toPeriodId === column.period.id && (column.subdivision === null || row.subdivision === column.subdivision))) {
-        const mark = selection('Handoff', 'handoff', handoff.id, `track-handoff:${handoff.id}`, selected, {}, 'native-cadence__handoff-mark native-control--navigate');
+        const mark = selection('Handoff', { kind: 'handoff', id: handoff.id }, `track-handoff:${handoff.id}`, selected, 'native-cadence__handoff-mark native-control--navigate');
         mark.setAttribute('aria-label', `Handoff from ${endpointName(handoff.from)} to ${endpointName(handoff.to)}. Open handoff settings.`);
         mark.dataset.cadencePreview = `Pass ${endpointName(handoff.from)} to ${endpointName(handoff.to)}.`;
         events.append(mark); hasMarkers = true;
@@ -328,12 +519,6 @@ export function createCadenceView(root, {
     if (hasMarkers) trackBody.append(markers);
     trackTable.append(trackHead, trackBody); tracks.replaceChildren(trackTable);
     previewReading.textContent = 'Hover over or focus a pad to see the work it needs.';
-    if (state.planId === 'service-request-pilot' && cadence.basis === 'sprint' && periods.length === 4
-      && work.get('review')?.status === 'planned' && work.get('review')?.lifecycle !== 'retired') {
-      const demonstration = node('div', undefined, 'native-cadence__demonstration');
-      demonstration.append(button('Try a later review', 'try-review', null, 'try-review', 'native-cadence__quiet'));
-      fragment.append(demonstration);
-    }
 
     const flow = node('div');
     flow.classList.add('native-cadence__flow');
@@ -342,9 +527,9 @@ export function createCadenceView(root, {
       create('Connect work', 'add-handoff', null, 'add-handoff'));
     flow.append(flowHeading);
     const stageRows = node('div', undefined, 'native-cadence__stages');
-    for (const stage of stages.filter(inPeriod)) {
+    for (const stage of stages.filter(stage => loadedPlan || inPeriod(stage) || stage.workIds.length === 0)) {
       const card = node('article', undefined, 'native-cadence__stage');
-      const open = selection(stage.label, 'stage', stage.id, `stage:${stage.id}`, selected, {}, 'native-cadence__stage-key native-control--navigate');
+      const open = selection(stage.label, { kind: 'stage', id: stage.id }, `stage:${stage.id}`, selected, 'native-cadence__stage-key native-control--navigate');
       const labels = stage.periodIds.map(periodLabel);
       open.append(node('small', labels.length ? labels.length > 1 ? `${labels[0]} – ${labels.at(-1)}` : labels[0] : 'Choose supporting sessions'));
       const controls = node('div', undefined, 'native-cadence__local-actions');
@@ -356,10 +541,10 @@ export function createCadenceView(root, {
     }
     if (stageRows.childElementCount) flow.append(stageRows);
     const handoffRows = node('div', undefined, 'native-cadence__handoffs');
-    for (const handoff of handoffs.filter(inPeriod)) {
+    for (const handoff of handoffs.filter(row => loadedPlan || inPeriod(row))) {
       const card = node('article', undefined, 'native-cadence__handoff');
       const from = endpointName(handoff.from), to = endpointName(handoff.to);
-      const open = selection(`${from} → ${to}`, 'handoff', handoff.id, `handoff:${handoff.id}`, selected, {}, 'native-cadence__handoff-key native-control--navigate');
+      const open = selection(`${from} → ${to}`, { kind: 'handoff', id: handoff.id }, `handoff:${handoff.id}`, selected, 'native-cadence__handoff-key native-control--navigate');
       open.setAttribute('aria-label', `Inspect the handoff from ${from} to ${to}`);
       const connection = state.connections.find(row => row.id === handoff.connectionId);
       const object = connection?.sharedObject || 'Agree what the receiving team needs.';
@@ -376,18 +561,20 @@ export function createCadenceView(root, {
       controls.append(addDecision, addDelay); card.append(open, controls); handoffRows.append(card);
     }
     if (handoffRows.childElementCount) flow.append(handoffRows);
-    for (const decision of decisions.filter(inPeriod)) flow.append(decisionMarker(decision, 'editorial'));
-    for (const delay of model.delays.filter(inPeriod)) flow.append(delayMarker(delay, 'editorial'));
+    for (const decision of decisions.filter(row => loadedPlan || inPeriod(row))) flow.append(decisionMarker(decision, 'editorial'));
+    for (const delay of delays.filter(row => loadedPlan || inPeriod(row))) flow.append(delayMarker(delay, 'editorial'));
     if (flowRoot) flowRoot.replaceChildren(flow);
     else { relationshipPanel.querySelector(':scope > .native-cadence__flow')?.remove(); relationshipPanel.append(flow); }
 
     const unplaced = occurrences.filter(row => row.periodId === null || !periodById.has(row.periodId));
     if (unplaced.length) {
-      const tray = node('section', undefined, 'native-cadence__unplaced');
-      tray.append(node('h4', 'Choose a period'), node('p', 'These sessions stay in the plan. Open one to give it a place.'));
+      const tray = node('div', undefined, 'native-cadence__unplaced');
+      tray.append(node('span', 'Sessions to place', 'studio-rack-records__label'));
       const clips = node('div', undefined, 'native-cadence__unplaced-clips');
+      // Unplaced sessions have no period to drill into. Each compact tray
+      // card therefore opens its own settings and placement controls.
       for (const row of unplaced) clips.append(sessionClip([row], `unplaced:${row.workId}:${row.occurrenceIndex}`));
-      tray.append(clips); fragment.append(tray);
+      tray.append(clips); tracks.append(tray);
     }
 
     personRows.replaceChildren(); recordRail.replaceChildren();
@@ -400,23 +587,23 @@ export function createCadenceView(root, {
       row.append(controls); recordRail.append(row); return controls;
     }
     const peopleKeys = recordRow('People');
-    const participants = activePeriod ? new Set(visible.flatMap(row => row.work.personIds)) : new Set(state.people.map(row => row.id));
+    const participants = activePeriod || loadedPlan ? new Set(visible.flatMap(row => row.personIds)) : new Set(state.people.map(row => row.id));
     for (const id of participants) {
       const person = people.get(id); if (!person) continue;
       const card = node('article', undefined, 'native-cadence__person'); card.append(node('h5', person.label));
-      const rows = visible.filter(row => row.work.personIds.includes(id) && row.work.status === 'planned' && row.work.lifecycle !== 'retired');
-      const effort = rows.reduce((sum, row) => sum + row.work.minutesPerOccurrence, 0);
+      const rows = visible.filter(row => row.personIds.includes(id) && row.active);
+      const effort = rows.reduce((sum, row) => sum + row.minutesPerOccurrence, 0);
       card.append(node('p', `${duration(effort)} of planned participation`));
       if (activePeriod) {
         const entry = cadence.availability.find(row => row.personId === id && row.periodId === activePeriod.id);
         card.append(node('p', entry?.availableMinutes == null ? 'Availability to choose' : `${duration(entry.availableMinutes)} available in this period`, 'native-cadence__availability'));
       }
-      const action = selection('Review availability', 'person', id, `availability:${id}`, selected,
-        { periodId: activePeriod?.id ?? null }, 'native-cadence__quiet native-control--navigate');
+      const action = selection('Review availability', { kind: 'person', id, periodId: activePeriod?.id ?? null },
+        `availability:${id}`, selected, 'native-cadence__quiet native-control--navigate');
       action.setAttribute('aria-label', `Review availability for ${person.label}`);
-      const rackEntry = selection(person.label, 'person', id, `rack-person:${id}`, selected,
-        { periodId: activePeriod?.id ?? null }, 'studio-rack-record-key native-control--navigate');
-      rackEntry.setAttribute('aria-label', `Review availability for ${person.label}`);
+      const rackEntry = button(person.label, 'navigate', { kind: 'person', id }, `rack-person:${id}`,
+        'studio-rack-record-key native-control--navigate');
+      rackEntry.setAttribute('aria-label', `Open ${person.label} in Team planning`);
       rackEntry.dataset.cadencePreview = `${person.label} · ${duration(effort)} of planned participation.`;
       peopleKeys.append(rackEntry);
       const settings = button('Person settings', 'navigate', { kind: 'person', id }, `person-settings:${id}`, 'native-cadence__quiet native-control--navigate');
@@ -424,17 +611,17 @@ export function createCadenceView(root, {
     }
     if (!participants.size) peopleKeys.append(node('span', 'Add people to a session to plan their time.'));
     const stageKeys = recordRow('Stages');
-    for (const stage of stages.filter(inPeriod)) stageKeys.append(selection(stage.label, 'stage', stage.id, `rack-stage:${stage.id}`, selected,
-      {}, 'studio-rack-record-key native-control--navigate'));
+    for (const stage of stages.filter(stage => loadedPlan || inPeriod(stage) || stage.workIds.length === 0)) stageKeys.append(selection(stage.label, { kind: 'stage', id: stage.id }, `rack-stage:${stage.id}`, selected,
+      'studio-rack-record-key native-control--navigate'));
     stageKeys.append(create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'rack-add-stage'),
       create('Connect work', 'add-handoff', null, 'rack-add-handoff'));
-    const railHandoffs = handoffs.filter(row => activePeriod ? inPeriod(row) && row.toPeriodId !== activePeriod.id : row.toPeriodId === null);
-    const railDecisions = activePeriod ? [] : decisions.filter(row => row.periodId === null);
-    const railDelays = activePeriod ? [] : model.delays.filter(row => row.toPeriodId === null);
+    const railHandoffs = handoffs.filter(row => loadedPlan || (activePeriod ? inPeriod(row) && row.toPeriodId !== activePeriod.id : row.toPeriodId === null));
+    const railDecisions = decisions.filter(row => loadedPlan ? !inPeriod(row) || row.periodId === null : !activePeriod && row.periodId === null);
+    const railDelays = delays.filter(row => loadedPlan ? !inPeriod(row) || row.toPeriodId === null : !activePeriod && row.toPeriodId === null);
     if (railHandoffs.length || railDecisions.length || railDelays.length) {
-      const unplacedKeys = recordRow(activePeriod ? 'Handoffs' : 'To place');
+      const unplacedKeys = recordRow(loadedPlan ? 'Relationships' : activePeriod ? 'Handoffs' : 'To place');
       for (const handoff of railHandoffs) unplacedKeys.append(selection(`${endpointName(handoff.from)} → ${endpointName(handoff.to)}`,
-        'handoff', handoff.id, `rack-handoff:${handoff.id}`, selected, {}, 'studio-rack-record-key native-control--navigate'));
+        { kind: 'handoff', id: handoff.id }, `rack-handoff:${handoff.id}`, selected, 'studio-rack-record-key native-control--navigate'));
       for (const decision of railDecisions) unplacedKeys.append(decisionMarker(decision, 'rack-unplaced'));
       for (const delay of railDelays) unplacedKeys.append(delayMarker(delay, 'rack-unplaced'));
     }
@@ -444,12 +631,17 @@ export function createCadenceView(root, {
       element.scrollLeft = recordScroll.get(element.dataset.recordRail) ?? 0;
     if (arrivalFocus) {
       const arrival = [...root.querySelectorAll('[data-cadence-key]')].find(element => element.dataset.cadenceKey === arrivalFocus);
-      arrival?.focus({ preventScroll: !periodChanged });
+      arrival?.focus({ preventScroll: true });
       if (periodChanged) revealStudioDestination(activePeriod ? reading : arrival);
     }
+    if (previousLoadedPlanId !== (loadedPlan?.id ?? null))
+      revealStudioShelfItem(nextShelf, nextShelf.querySelector('[aria-pressed="true"]'));
+    previousLoadedPlanId = loadedPlan?.id ?? null;
+    rendered = renderKey;
   }
   return Object.freeze({ refresh, getSessionSlot: () => disposed ? null : sessionSlot, dispose() {
-    if (disposed) return; disposed = true; actions.clear();
+    if (disposed) return; disposed = true; captionEdit = null; lastReading = null; rendered = null; actions.clear();
+    starters.dispose();
     root.removeEventListener('click', click); root.removeEventListener('pointerover', showPreview); root.removeEventListener('focusin', showPreview);
     externalFlowEvents?.removeEventListener('click', click);
     root.classList.remove('native-cadence', 'studio-rack-composition'); delete root.dataset.cadenceReading;

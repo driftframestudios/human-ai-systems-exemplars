@@ -3,13 +3,43 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/native-investment-studio/rack-creation-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/rack-creation-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/creation-label.mjs",
+      "projected_path": "collaboration/native-investment-studio/creation-label.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/rack-record-creation.mjs",
+      "projected_path": "collaboration/native-investment-studio/rack-record-creation.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/session-creation.mjs",
       "projected_path": "collaboration/native-investment-studio/session-creation.mjs",
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/work-sessions.mjs",
+      "projected_path": "collaboration/native-investment-studio/work-sessions.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
       "projected_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/tape-picker.mjs",
+      "projected_path": "collaboration/native-investment-studio/tape-picker.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -25,6 +55,11 @@
     {
       "source_path": "collaboration/native-investment-studio/rack-controls.mjs",
       "projected_path": "collaboration/native-investment-studio/rack-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/shared-session-rack.mjs",
+      "projected_path": "collaboration/native-investment-studio/shared-session-rack.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -50,6 +85,11 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
       "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-people.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-people.css",
       "media_type": "text/css"
     },
     {
@@ -413,6 +453,21 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/person-role-mixer.mjs",
+      "projected_path": "collaboration/native-investment-studio/person-role-mixer.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/people-capacity.mjs",
+      "projected_path": "collaboration/native-investment-studio/people-capacity.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/participation-pad.mjs",
+      "projected_path": "collaboration/native-investment-studio/participation-pad.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
       "media_type": "text/javascript"
@@ -420,6 +475,11 @@
     {
       "source_path": "collaboration/native-investment-studio/presets.mjs",
       "projected_path": "collaboration/native-investment-studio/presets.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/ai-starter-plans.mjs",
+      "projected_path": "collaboration/native-investment-studio/ai-starter-plans.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -480,6 +540,11 @@
     {
       "source_path": "collaboration/native-investment-studio/work-controller.mjs",
       "projected_path": "collaboration/native-investment-studio/work-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/work-removal.mjs",
+      "projected_path": "collaboration/native-investment-studio/work-removal.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -2543,6 +2608,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/cadence-occurrences.mjs",
+      "projected_path": "collaboration/native-investment-studio/cadence-occurrences.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/cadence.mjs",
       "projected_path": "collaboration/native-investment-studio/cadence.mjs",
       "media_type": "text/javascript"
@@ -2553,8 +2623,23 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/coordination-starters.mjs",
+      "projected_path": "collaboration/native-investment-studio/coordination-starters.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/plan-library-empty.mjs",
+      "projected_path": "collaboration/native-investment-studio/plan-library-empty.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/score-models.mjs",
       "projected_path": "collaboration/native-investment-studio/score-models.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/removal-references.mjs",
+      "projected_path": "collaboration/native-investment-studio/removal-references.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -2566,6 +2651,61 @@
       "source_path": "collaboration/native-investment-studio/score-time.mjs",
       "projected_path": "collaboration/native-investment-studio/score-time.mjs",
       "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-catalog.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-catalog.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-financials.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-financials.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-state.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-state.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-projection.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-projection.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-deck-config.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-deck-config.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-deck-views.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-deck-views.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-portrait.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-portrait.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/diagram-geometry.mjs",
+      "projected_path": "collaboration/native-investment-studio/diagram-geometry.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-workbench.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-workbench.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css",
+      "media_type": "text/css"
     }
   ]
 }

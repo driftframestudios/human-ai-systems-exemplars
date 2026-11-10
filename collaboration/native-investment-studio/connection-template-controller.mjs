@@ -1,24 +1,23 @@
-import { LIMITS } from './config.mjs';
 import { PlanError } from './contract.mjs';
 import { listCoordinationTemplates, prepareCoordinationReplacement, applyCoordinationTemplate, isGeneratedArrangementRecord } from './connection-templates.mjs';
-import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
+import { prepareWorkDraftValues } from './draft.mjs';
 import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate, projectCoordinationArrangements } from './coordination-arrangements.mjs';
-import { createReel, revealReelResult } from './reel-control.mjs';
-import { createSessionTracks } from './arrangement-surfaces.mjs';
+import { createReel, revealReelResult, animateRackChange } from './reel-control.mjs';
+import { mountSharedSessionRack } from './shared-session-rack.mjs';
 import { createDeliveryBoard } from './delivery-board.mjs';
-import { revealStudioDestination } from './motion.mjs';
+import { syncReorderButtons, mountRackHeader } from './rack-controls.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
 const BY_ID = new Map(TEMPLATES.map(row => [row.id, row]));
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;
-const named = row => `${row.label}${row.lifecycle === 'retired' ? ' · retired' : ''}`;
 let nextInstance = 0;
 
-// One arrangement identity belongs to this receiver. Explicit choices settle
-// through the accepted owner; raw text remains local until its edit is complete.
+// One arrangement identity belongs to this receiver. Preset choices settle
+// through the accepted owner; record edits use the canonical in-rack editors.
 export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
   onViewChanged = () => {}, onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
   const panel = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
@@ -37,13 +36,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const instance = `connection-template-${++nextInstance}`, cleanup = [];
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
   let arrangementId = null, dirty = false, committing = false, undoProjection = null;
-  let pointerDown = false, pendingText = false, settleTimer = null;
-  let projection = studio.read(), bindings = new WeakMap(), controls = new Map(), optionSources = [], dynamic = [];
-  const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
+  let projection = studio.read();
+  const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null, placements: { team: new Map(), connection: new Map() } };
+  let selectedTeamId = null, memberOrder = [], previousMemberIds = null, teamReturnKey = null, teamReturnPhase = null, teamReturn = null;
   const configurations = new Map();
-  const invalid = new Set();
-  let fieldSequence = 0;
-  const form = document.createElement('form'); form.noValidate = true; form.className = 'native-connection-template__form';
+  const form = document.createElement('div'); form.className = 'native-connection-template__form';
   const choice = document.createElement('select'); choice.dataset.templateChoice = '';
   for (const template of TEMPLATES) choice.append(option(template.id, template.label));
   const choiceLabel = document.createElement('label'); choiceLabel.textContent = 'Arrangement'; choiceLabel.append(choice);
@@ -59,7 +56,27 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const amountValue = element('dd'); amountValue.append(amount); readout.append(amountLabel, amountValue);
   rackHeading.append(rackTitle, readout);
   const rackBody = element('div', undefined, 'studio-team-rack__body');
+  const boardSlot = element('div'); boardSlot.dataset.teamRackBoard = '';
+  const editorSlot = element('div'); editorSlot.dataset.teamRackEditor = '';
+  const teamEditor = element('section', undefined, 'studio-team-rack__record'); teamEditor.dataset.teamRackRecord = '';
+  const teamHeader = mountRackHeader(teamEditor, { title: 'Team settings', owner: 'Delivery overview',
+    id: `${instance}-team-title`, onClose: closeTeam });
+  const teamBack = teamHeader.parent; teamBack.dataset.templateAction = 'team-back';
+  teamEditor.setAttribute('aria-labelledby', teamHeader.title.id);
+  const teamFields = element('div', undefined, 'studio-team-rack__record-fields');
+  let teamFieldsSignature = null;
+  teamEditor.append(teamFields);
+  rackBody.append(boardSlot, editorSlot);
   delivery.append(rackHeading, rackBody);
+  const shared = mountSharedSessionRack(rackBody, {
+    onCommand(command, message) {
+      return active(canOpen) && (active() || open()) && directCommand(command, message);
+    },
+    onNavigate: navigate,
+    onCreate: (kind, context, source) => navigate({ kind: `create-${kind}`, ...context }, source),
+    onCloseEditor() { if (shared.editorSlot.querySelector('.studio-rack-editor:not([hidden])'))
+      shared.editorSlot.querySelector('[data-rack-editor-close]')?.click(); },
+  });
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
       if (!active(canOpen) || (!active() && !open())) return;
@@ -69,10 +86,6 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const arrangementDeck = document.createElement('div'); arrangementDeck.className = 'studio-arrangement-deck';
   arrangementDeck.append(reel.element, structure);
   choiceLabel.className = 'studio-arrangement-native-choice';
-  const groups = document.createElement('div'); groups.className = 'native-connection-template__groups';
-  const customization = document.createElement('details'); customization.className = 'studio-arrangement-settings';
-  const customizationTitle = document.createElement('summary'); customizationTitle.textContent = 'Customize teams and handoffs';
-  customization.append(customizationTitle, groups);
   const previewRegion = document.createElement('section'); previewRegion.className = 'native-coordination__preview native-connection-template__preview';
   previewRegion.dataset.templatePreview = ''; previewRegion.hidden = true; previewRegion.setAttribute('aria-label', 'Arrangement preview');
   const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
@@ -81,7 +94,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const undoButton = button('Undo arrangement', 'undo'); undoButton.className = 'native-control--cancel'; undoButton.hidden = true;
   const preserveButton = button('Keep shared records and use this arrangement', 'preserve'); preserveButton.className = 'native-control--confirm'; preserveButton.hidden = true;
   actions.append(undoButton, applyButton, preserveButton, cancelButton);
-  form.append(choiceLabel, arrangementDeck, description, delivery, actions, previewRegion, customization); body.replaceChildren(form);
+  form.append(choiceLabel, arrangementDeck, description, delivery, actions, previewRegion); body.replaceChildren(form);
   function option(value, label) { const node = document.createElement('option'); node.value = value; node.textContent = label; return node; }
   function element(tag, text, className) {
     const node = document.createElement(tag); if (text !== undefined) node.textContent = text;
@@ -107,7 +120,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function retirePreview() {
     proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren();
     applyButton.hidden = true; preserveButton.hidden = true; cancelButton.hidden = true;
-    for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = false;
+    for (const element of [choiceLabel, description, arrangementDeck]) element.hidden = false;
     acceptedReadout();
   }
   function touch() { rawRevision += 1; generation += 1; dirty = true; retirePreview(); announce(''); }
@@ -185,57 +198,107 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function teamLabel(row) {
     return row.selection === 'new' ? row.label : projection.state.teams.find(team => team.id === row.selection.slice(5))?.label ?? `${row.selection.slice(5)} · removed team`;
   }
-  function selectedOptions(control, values, options, optional = false) {
-    const list = optional ? [['', 'Unassigned'], ...options] : options;
-    const current = new Set(list.map(([id]) => id)), selected = Array.isArray(values) ? values : [values];
-    for (const id of selected) if (id && !current.has(id)) list.push([id, `${id} · removed record`]);
-    control.replaceChildren(...list.map(([id, label]) => { const node = option(id, label); node.selected = selected.includes(id); return node; }));
+  function directCommand(command, message) {
+    if (!active()) return false;
+    const epoch = ++generation;
+    const parked = editing.park();
+    if (!owns(epoch)) return false;
+    if (!parked.ok) { announce(parked.error.message); return false; }
+    const result = studio.applyCommand(command, studio.read());
+    if (!owns(epoch)) return false;
+    if (!result.ok) { announce(result.error.message); return false; }
+    refresh(true); onAccepted(result.projection);
+    if (owns(epoch)) { announce(message); if (selectedTeamId) teamHeader.update({ title: projection.state.teams.find(row => row.id === selectedTeamId)?.label ?? 'Team settings', owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Saved' }); }
+    return true;
   }
-  function field(container, path, label, record, key, { max = LIMITS.relationshipText, options, multiple = false, optional = false, numeric = false, dependsOnGroups = false } = {}) {
-    const wrapper = element('div', undefined, 'native-coordination__control'), caption = element('label', label);
-    const input = document.createElement(options ? 'select' : 'input'); input.dataset.templateField = path;
-    input.id = `${instance}-${++fieldSequence}`; caption.htmlFor = input.id;
-    if (options) {
-      input.multiple = multiple; if (multiple) input.size = 4;
-      const update = () => selectedOptions(input, record[key], options(), optional);
-      optionSources.push({ update, dependsOnGroups }); update();
-    } else {
-      input.type = 'text'; input.maxLength = max; input.value = record[key]; input.autocomplete = 'off';
-      if (numeric) { input.inputMode = 'numeric'; input.spellcheck = false; }
+  function renderTeam() {
+    const team = projection.state.teams.find(row => row.id === selectedTeamId);
+    if (!team) { selectedTeamId = null; return false; }
+    teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Saved' });
+    const signature = JSON.stringify([team.id, team.personIds, projection.state.people.map(person => [person.id, person.label])]);
+    if (signature === teamFieldsSignature) {
+      teamFields.querySelector('[data-team-rack-name]').value = team.label;
+      return true;
     }
-    const error = element('p', '', 'native-coordination__error'); error.id = `${input.id}-error`;
-    input.setAttribute('aria-describedby', error.id); input.setAttribute('aria-invalid', 'false');
-    controls.set(path, { input, error, record, key });
-    bindings.set(input, { event: options ? 'change' : 'input', update: () => {
-      if (multiple) {
-        const values = [...input.selectedOptions].map(node => node.value);
-        const maximum = key === 'workIds' ? LIMITS.work : LIMITS.people;
-        if (values.length > maximum) { invalid.add(path); error.textContent = `Choose at most ${maximum} records.`; input.setAttribute('aria-invalid', 'true'); return; }
-        const chosen = new Set(values), prior = new Set(record[key]);
-        record[key] = [...record[key].filter(id => chosen.has(id)), ...values.filter(id => !prior.has(id))];
-      } else if (input.value.length <= max) record[key] = input.value;
-      else { invalid.add(path); error.textContent = `Use at most ${max} characters.`; input.setAttribute('aria-invalid', 'true'); return; }
-      invalid.delete(path); error.textContent = ''; input.setAttribute('aria-invalid', 'false');
-    } });
-    wrapper.append(caption);
-    if (numeric) {
-      const stepper = element('div', undefined, 'native-coordination__stepper');
-      const minus = button('−', 'step'), plus = button('+', 'step');
-      minus.dataset.templateStep = '-1'; plus.dataset.templateStep = '1';
-      for (const node of [minus, plus]) {
-        node.dataset.templatePath = path;
-        node.setAttribute('aria-label', `${node === minus ? 'Decrease' : 'Increase'} ${label.toLowerCase()}`);
-      }
-      stepper.append(minus, input, plus); wrapper.append(stepper);
-    } else wrapper.append(input);
-    wrapper.append(error); container.append(wrapper); return input;
+    teamFieldsSignature = signature;
+    const label = element('label', 'Team name');
+    const name = element('input'); name.value = team.label; name.dataset.teamRackName = '';
+    name.addEventListener('input', () => teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Editing name' }));
+    name.addEventListener('change', () => {
+      const current = studio.read().state.teams.find(row => row.id === team.id);
+      if (current && !directCommand({ type: 'team.update', teamId: team.id,
+        team: { ...current, label: name.value.trim() } }, 'Team name updated. Undo is available.'))
+        teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Check team name' });
+    });
+    label.append(name);
+    const members = element('fieldset', undefined, 'studio-team-members');
+    members.append(element('legend', 'People in this team'));
+    const people = new Map(projection.state.people.map(person => [person.id, person]));
+    memberOrder = memberOrder.filter(id => people.has(id));
+    for (const id of people.keys()) if (!memberOrder.includes(id)) memberOrder.push(id);
+    const included = new Set(team.personIds), previous = new Set(previousMemberIds ?? []);
+    const retainedBefore = previousMemberIds?.filter(id => included.has(id));
+    const retainedNow = team.personIds.filter(id => previous.has(id));
+    // Inclusion leaves every card in place. Accepted ordering changes, including
+    // Undo, reorder the included slots while available cards keep their positions.
+    if (!retainedBefore || retainedBefore.some((id, index) => id !== retainedNow[index])) {
+      let position = 0;
+      memberOrder = memberOrder.map(id => included.has(id) ? team.personIds[position++] : id);
+    }
+    previousMemberIds = [...team.personIds];
+    const positions = new Map(team.personIds.map((id, index) => [id, index]));
+    for (const id of memberOrder) {
+      const person = people.get(id), index = positions.get(id);
+      const row = element('div', undefined, 'studio-team-member'); row.dataset.teamMemberRow = id;
+      row.dataset.selected = String(index !== undefined);
+      const choose = element('label'), checkbox = element('input'); checkbox.type = 'checkbox';
+      checkbox.checked = index !== undefined; checkbox.dataset.teamRackMember = id;
+      const words = element('span');
+      words.append(element('strong', person.label), element('small', index === undefined ? 'Available' : `Included · ${index + 1}`));
+      choose.append(checkbox, words);
+      checkbox.addEventListener('change', () => {
+        const ids = checkbox.checked ? [...team.personIds, id] : team.personIds.filter(member => member !== id);
+        if (directCommand({ type: 'team.members.replace', teamId: team.id, personIds: ids }, 'Team updated. Undo is available.'))
+          teamFields.querySelector(`[data-team-rack-member="${id}"]`)?.focus({ preventScroll: true });
+      });
+      const actions = element('div', undefined, 'native-coordination__actions native-coordination__manipulation');
+      const up = element('button', 'Move up'), down = element('button', 'Move down');
+      up.type = down.type = 'button'; up.dataset.teamMemberMove = 'up'; down.dataset.teamMemberMove = 'down';
+      syncReorderButtons(up, down, { label: `${person.label} in the team`, index, count: team.personIds.length });
+      for (const [control, direction] of [[up, -1], [down, 1]]) control.addEventListener('click', () => {
+        const ids = [...team.personIds], destination = index + direction;
+        if (index === undefined || destination < 0 || destination >= ids.length) return;
+        [ids[index], ids[destination]] = [ids[destination], ids[index]];
+        animateRackChange(teamFields, () => {
+          directCommand({ type: 'team.members.replace', teamId: team.id, personIds: ids }, 'Team order updated. Undo is available.');
+          teamFields.querySelector(`[data-team-rack-member="${id}"]`)?.focus({ preventScroll: true });
+        }, { selector: '[data-team-member-row]', key: 'teamMemberRow' });
+      });
+      actions.append(up, down); row.append(choose, actions); members.append(row);
+    }
+    teamFields.replaceChildren(label, members);
+    return true;
   }
-  function card(label, hook) {
-    const node = element('details', undefined, 'native-connection-template__card'); node.dataset.templateCard = hook;
-    node.append(element('summary', label)); const content = element('fieldset'); node.append(content); groups.append(node); return content;
+  function openTeam(id, source, { onReturn = null, returnLabel = '← Delivery overview' } = {}) {
+    if (!studio.read().state.teams.some(team => team.id === id) || !open()) return false;
+    if (selectedTeamId !== id) { memberOrder = []; previousMemberIds = null; teamFieldsSignature = null; }
+    selectedTeamId = id; teamReturnKey = source?.dataset.studioEntryKey ?? teamReturnKey;
+    teamReturnPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null;
+    teamReturn = onReturn; teamBack.textContent = returnLabel;
+    setEditorOpen(false); renderStructure();
+    teamBack.focus({ preventScroll: true });
+    return true;
   }
-  function peopleOptions() { return projection.state.people.map(row => [row.id, named(row)]); }
-  function workOptions() { return projection.state.work.map(row => [row.id, named(row)]); }
+  function setEditorOpen(opened) { delivery.dataset.editorOpen = String(opened); }
+  function closeTeam() {
+    const returnToOrigin = teamReturn; teamReturn = null;
+    selectedTeamId = null; renderStructure();
+    if (returnToOrigin) { returnToOrigin(); return; }
+    const source = [...panel.querySelectorAll('[data-studio-entry-key]')]
+      .find(node => node.dataset.studioEntryKey === teamReturnKey
+        && (node.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null) === teamReturnPhase);
+    (source ?? panel.querySelector('[data-delivery-open]'))?.focus({ preventScroll: true });
+  }
   function renderStructure() {
     const focused = document.activeElement;
     const focusKey = ['deliveryOpen', 'deliveryOverview', 'deliverySession', 'deliveryConnection', 'deliveryPerson']
@@ -266,45 +329,72 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const examplePlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
     const accepted = currentArrangement();
     const arrangement = accepted ?? exampleArrangement, previewPlan = accepted ? projection.state : examplePlan;
+    // A new custom record remains visible without claiming a template slot.
+    const groupedTeams = new Set(projection.state.arrangements.flatMap(row => row.teamBindings.map(binding => binding.teamId)));
+    const groupedConnections = new Set(projection.state.arrangements.flatMap(row => row.connectionBindings.map(binding => binding.connectionId)));
+    const rackArrangement = { ...arrangement,
+      teams: [...arrangement.teams, ...projection.state.teams.filter(team => !groupedTeams.has(team.id))
+        .map(team => ({ slotId: `custom-team:${team.id}`, slotLabel: team.label, team }))],
+      connections: [...arrangement.connections, ...projection.state.connections.filter(connection => !groupedConnections.has(connection.id))
+        .map(connection => ({ slotId: `custom-connection:${connection.id}`, slotLabel: connection.sharedObject, connection }))] };
+    function acceptedSource(kind, id, source) {
+      const phase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
+      const candidates = [...rackBody.querySelectorAll(kind === 'work' ? '[data-studio-session-id]' : '[data-studio-record-kind]')]
+        .filter(node => kind === 'work' ? node.dataset.studioSessionId === id
+          : node.dataset.studioRecordKind === kind && node.dataset.studioRecordId === id);
+      return candidates.find(node => node.closest('[data-delivery-phase]')?.dataset.deliveryPhase === phase) ?? candidates[0] ?? source;
+    }
+    function acceptStarter() {
+      if (!active(canOpen) || (!active() && !open())) return false;
+      return commit();
+    }
     function inspectTemplate(target, source) {
       if (!active(canOpen)) return;
-      if (target.kind === 'person') { navigate(target, source); return; }
-      if (accepted && ['template-team', 'team'].includes(target.kind)) {
-        const team = target.kind === 'team' ? target.id : arrangement.teams.find(row => row.slotId === target.id)?.team.id;
-        if (team) navigate({ kind: 'team', id: team }, source);
-        return;
+      if (target.kind === 'team') { openTeam(target.id, source); return; }
+      if (['person', 'connection'].includes(target.kind)) { navigate(target, source); return; }
+      const kind = target.kind === 'template-team' ? 'team' : 'connection';
+      if (!accepted && !acceptStarter()) return;
+      const row = currentArrangement();
+      const id = kind === 'team' ? row?.teams.find(binding => binding.slotId === target.id)?.team.id
+        : row?.connections.find(binding => binding.slotId === target.id)?.connection.id;
+      if (id) {
+        const acceptedControl = acceptedSource(kind, id, source);
+        if (kind === 'team') openTeam(id, acceptedControl);
+        else navigate({ kind, id }, acceptedControl);
       }
-      if (!active() && !open()) return;
-      const kind = ['template-team', 'team'].includes(target.kind) ? 'team' : 'connection';
-      const slotId = target.kind === 'team' ? arrangement.teams.find(row => row.team.id === target.id)?.slotId
-        : target.kind === 'connection' ? arrangement.connections.find(row => row.connection.id === target.id)?.slotId : target.id;
-      const section = [...groups.querySelectorAll('[data-template-card]')].find(section => section.dataset.templateCard === `${kind}:${slotId}`);
-      if (!section) return; customization.open = true; section.open = true;
-      section.querySelector('input,select,button')?.focus({ preventScroll: true }); revealStudioDestination(section);
     }
-    const inspectSession = (id, source) => {
+    const inspectSession = (target, source) => {
+      const { id } = target;
       const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
-      if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
-      else navigate({ kind: 'work', id }, source);
+      if (proposed) {
+        const slotId = proposed.slotId;
+        if (!acceptStarter()) return;
+        const row = currentArrangement();
+        const edge = row?.connections.find(binding => binding.slotId === slotId)?.connection;
+        const workId = edge?.workIds.find(workId => isGeneratedArrangementRecord(row.id, 'recovery', slotId, workId));
+        if (workId) navigate(workDefaultsTarget(workId), acceptedSource('work', workId, source));
+      } else navigate(target, source);
     };
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
-    rackBody.replaceChildren(createDeliveryBoard(document, { arrangement, plan: previewPlan, acceptedSessionIds,
+    const board = createDeliveryBoard(document, { arrangement: rackArrangement, plan: previewPlan, acceptedSessionIds,
       acceptedTeamIds: new Set(projection.state.teams.map(team => team.id)),
-      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
-      createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
-        sessionIds: acceptedSessionIds, acceptedPersonIds: new Set(projection.state.people.map(person => person.id)),
-        onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' }));
-    const board = rackBody.querySelector('.studio-delivery__board');
-    if (deliveryView.phaseId === null) board.scrollLeft = deliveryView.overviewScroll;
-    if (focusKey) {
+      acceptedConnectionIds: new Set(projection.state.connections.map(connection => connection.id)),
+      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView,
+      onAdd(kind, deliveryPhase, source) { navigate({ kind: `create-${kind}`, deliveryPhase }, source); } });
+    const nextBoard = renderTeam() ? teamEditor : board;
+    if (boardSlot.firstElementChild !== nextBoard) boardSlot.replaceChildren(nextBoard);
+    shared.update(projection.state);
+    const boardScroller = rackBody.querySelector('.studio-delivery__board');
+    if (boardScroller && deliveryView.phaseId === null) boardScroller.scrollLeft = deliveryView.overviewScroll;
+    if (boardScroller && focusKey) {
       const target = [...rackBody.querySelectorAll('button')].find(node => node.dataset[focusKey] === focusValue
         && (!focusPhase || node.closest('[data-delivery-phase]')?.dataset.deliveryPhase === focusPhase));
       if (target) {
-        const bounds = board.getBoundingClientRect(), key = target.getBoundingClientRect();
-        if (key.left < bounds.left) board.scrollLeft += key.left - bounds.left;
-        else if (key.right > bounds.right) board.scrollLeft += key.right - bounds.right;
-        if (deliveryView.phaseId === null) deliveryView.overviewScroll = board.scrollLeft;
+        const bounds = boardScroller.getBoundingClientRect(), key = target.getBoundingClientRect();
+        if (key.left < bounds.left) boardScroller.scrollLeft += key.left - bounds.left;
+        else if (key.right > bounds.right) boardScroller.scrollLeft += key.right - bounds.right;
+        if (deliveryView.phaseId === null) deliveryView.overviewScroll = boardScroller.scrollLeft;
         target.focus({ preventScroll: true });
       }
     }
@@ -316,82 +406,17 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     projection = next;
     if (changed && !dirty && !committing) { receiveAccepted(); build(); return; }
     acceptedReadout();
-    if (changed) for (const source of optionSources) source.update();
-    for (const update of dynamic) update();
     if (changed || rebuild) renderStructure();
     if (proposal && !fresh(proposal)) {
       retirePreview(); announce('The plan changed. Choose the arrangement again.');
     }
   }
   function build() {
-    const openCards = new Set([...groups.querySelectorAll('details[open]')].map(node => node.dataset.templateCard));
-    const focused = document.activeElement;
-    const focusPath = focused?.dataset.templateField, focusRecovery = focused?.dataset.templateRecovery;
-    const stepPath = focused?.dataset.templatePath, step = focused?.dataset.templateStep;
-    bindings = new WeakMap(); controls = new Map(); optionSources = []; dynamic = []; invalid.clear(); groups.replaceChildren();
-    const template = BY_ID.get(configuration.templateId); choice.value = template.id; reel.select(template.id); description.textContent = template.description;
-    for (const row of configuration.teams) {
-      const definition = template.teams.find(slot => slot.id === row.slotId), group = card(definition.label, `team:${row.slotId}`);
-      field(group, `teams.${row.slotId}.selection`, 'Team', row, 'selection', { max: LIMITS.identifier + 5,
-        options: () => [['new', 'Create a team'], ...projection.state.teams.map(team => [`team:${team.id}`, named(team)])] });
-      const labelInput = field(group, `teams.${row.slotId}.label`, 'Team name', row, 'label', { max: LIMITS.label });
-      const members = field(group, `teams.${row.slotId}.personIds`, 'People', row, 'personIds', { options: peopleOptions, multiple: true });
-      const creationHelp = element('p', 'Selections update this arrangement. Undo restores the previous choice.', 'native-coordination__hint');
-      group.prepend(creationHelp);
-      const addPerson = element('button', 'Add a person'); addPerson.type = 'button';
-      addPerson.className = 'native-control--create native-control--navigate'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
-      group.append(addPerson);
-      dynamic.push(() => {
-        creationHelp.hidden = row.selection !== 'new';
-        const selectedNames = row.personIds.map(id => projection.state.people.find(person => person.id === id)?.label ?? id);
-        group.parentElement.querySelector('summary').textContent = `${definition.label} · ${teamLabel(row)} · ${selectedNames.slice(0, 2).join(', ') || 'Choose people'}${selectedNames.length > 2 ? ` + ${selectedNames.length - 2} more` : ''}`;
-        labelInput.closest('.native-coordination__control').hidden = row.selection !== 'new';
-        members.labels[0].textContent = row.selection === 'new' ? 'People' : 'Add people';
-      });
-    }
-    for (const row of configuration.connections) {
-      const definition = template.connections.find(slot => slot.id === row.slotId), group = card(definition.label, `connection:${row.slotId}`);
-      const direction = element('p', '', 'native-coordination__hint'); group.append(direction);
-      dynamic.push(() => { direction.textContent = `${teamLabel(configuration.teams.find(team => team.slotId === definition.senderSlotId))} → ${teamLabel(configuration.teams.find(team => team.slotId === definition.receiverSlotId))}`; });
-      field(group, `connections.${row.slotId}.sharedObject`, 'Shared object or decision', row, 'sharedObject');
-      field(group, `connections.${row.slotId}.receiverPersonId`, 'Receiving person', row, 'receiverPersonId', { options: peopleOptions, optional: true, max: LIMITS.identifier });
-      field(group, `connections.${row.slotId}.responseExpectation`, 'Expected response', row, 'responseExpectation');
-      field(group, `connections.${row.slotId}.workIds`, 'Supporting sessions', row, 'workIds', { options: workOptions, multiple: true });
-      field(group, `connections.${row.slotId}.status`, 'Connection', row, 'status', { max: 16, options: () => [['active', 'Active'], ['paused', 'Paused']] });
-      const enabledLabel = element('label', 'Add a review session'), enabled = document.createElement('input');
-      enabled.type = 'checkbox'; enabled.checked = row.recoveryEnabled; enabled.dataset.templateRecovery = row.slotId; enabledLabel.prepend(enabled); group.append(enabledLabel);
-      bindings.set(enabled, { event: 'change', update: () => { row.recoveryEnabled = enabled.checked; } });
-      const recovery = element('div', undefined, 'native-connection-template__recovery'); group.append(recovery);
-      dynamic.push(() => { recovery.hidden = !row.recoveryEnabled; });
-      field(recovery, `recovery.${row.slotId}.label`, 'Session name', row.recovery, 'label', { max: LIMITS.label });
-      field(recovery, `recovery.${row.slotId}.team`, 'Session team', row.recovery, 'team', { max: LIMITS.identifier + 5, dependsOnGroups: true,
-        options: () => [...configuration.teams.map(team => [`slot:${team.slotId}`, `${teamLabel(team)} · this arrangement`]), ...projection.state.teams.map(team => [`team:${team.id}`, named(team)])] });
-      field(recovery, `recovery.${row.slotId}.personIds`, 'People in the session', row.recovery, 'personIds', { options: peopleOptions, multiple: true });
-      recovery.append(element('p', 'Time per person, per session', 'native-coordination__control-title'));
-      const numeric = element('div', undefined, 'native-coordination__controls native-connection-template__duration'); recovery.append(numeric);
-      for (const [key, label] of [['hoursPerSession', 'Hours'], ['minutesPerSession', 'Minutes'], ['occurrences', 'Working sessions']]) {
-        field(numeric, `recovery.${row.slotId}.${key}`, label, row.recovery, key, { max: WORK_DRAFT_TEXT_LIMIT, numeric: true });
-      }
-      field(recovery, `recovery.${row.slotId}.funding`, 'Funding', row.recovery, 'funding', { max: 16,
-        options: () => [['additional', 'Extra investment'], ['allocated', 'Within funded time']] });
-      field(recovery, `recovery.${row.slotId}.status`, 'Session', row.recovery, 'status', { max: 16,
-        options: () => [['planned', 'Planned'], ['paused', 'Paused']] });
-    }
+    const template = BY_ID.get(configuration.templateId);
+    choice.value = template.id; reel.select(template.id); description.textContent = template.description;
     refresh(true);
-    for (const card of groups.querySelectorAll('details')) card.open = openCards.has(card.dataset.templateCard);
-    const focusTarget = stepPath ? [...groups.querySelectorAll('[data-template-step]')].find(node => node.dataset.templatePath === stepPath && node.dataset.templateStep === step)
-      : focusPath ? controls.get(focusPath)?.input
-        : focusRecovery ? [...groups.querySelectorAll('[data-template-recovery]')].find(node => node.dataset.templateRecovery === focusRecovery) : null;
-    focusTarget?.focus({ preventScroll: true });
   }
   function request() {
-    const relevant = path => {
-      const [kind, slotId, field] = path.split('.');
-      if (kind === 'recovery') return configuration.connections.find(row => row.slotId === slotId).recoveryEnabled;
-      if (kind === 'teams' && field === 'label') return configuration.teams.find(row => row.slotId === slotId).selection === 'new';
-      return true;
-    };
-    if ([...invalid].some(relevant)) throw new PlanError('text', 'template', 'Complete the marked fields to update this arrangement.');
     const template = BY_ID.get(configuration.templateId);
     const teams = configuration.teams.map(row => row.selection === 'new'
       ? { slotId: row.slotId, kind: 'new', label: row.label, personIds: [...row.personIds] }
@@ -401,7 +426,6 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       if (row.recoveryEnabled) {
         const parsed = prepareWorkDraftValues(row.recovery);
         if (parsed.errors.length) {
-          for (const error of parsed.errors) mark(`recovery.${row.slotId}.${error.path.slice('draft.'.length)}`, error.message);
           throw new PlanError('fields', 'template', 'Correct the session duration or count.');
         }
         const selectedTeam = row.recovery.team.startsWith('slot:')
@@ -414,19 +438,14 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     });
     return { templateId: template.id, version: template.version, proposalId: configuration.proposalId, teams, connections };
   }
-  function mark(path, message) {
-    const control = controls.get(path); if (!control) return;
-    control.error.textContent = message; control.input.setAttribute('aria-invalid', 'true');
-  }
   function parkAndNotify(epoch) {
     const result = editing.park(); if (!owns(epoch)) return false;
     if (!result.ok) { announce(result.error.message); return false; }
     onBegin(); if (!owns(epoch)) return false;
     onEditing(); return owns(epoch);
   }
-  function settleText() { return pendingText && dirty ? commit() : true; }
+  function settleText() { return true; }
   function navigate(target, source) {
-    settleText();
     if (!disposed) onNavigate(target, source);
   }
   function selectArrangement(id) {
@@ -434,6 +453,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (id === configuration.templateId && currentArrangement() && !dirty) return;
     if (!active(canOpen) || (!active() && !open())) return;
     configurations.set(configuration.templateId, configuration);
+    selectedTeamId = null;
     touch(); projection = studio.read();
     configuration = configurations.get(id) ?? startingConfiguration(BY_ID.get(id));
     configuration.proposalId = arrangementId ?? configuration.proposalId;
@@ -441,7 +461,6 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function commit({ preserveShared = false } = {}) {
     if (committing || !active()) return false;
-    pendingText = false;
     const epoch = ++generation; retirePreview(); committing = true;
     try {
       if (!parkAndNotify(epoch)) return false;
@@ -507,7 +526,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const candidate = { command, base, acceptance: studio.readAcceptance(), intent: editing.read().intent, revision: rawRevision };
     if (!fresh(candidate)) return false;
     proposal = candidate;
-    for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = true;
+    for (const element of [choiceLabel, description, arrangementDeck]) element.hidden = true;
     applyButton.hidden = false; cancelButton.hidden = false;
     applyButton.textContent = 'Use connections without template';
     const template = getCoordinationTemplate(row.templateId, row.templateVersion);
@@ -529,8 +548,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1; proposal = null; configuration = null;
-    document.defaultView.clearTimeout(settleTimer); pendingText = false;
-    cleanup.forEach(remove => remove()); reel.dispose(); bindings = new WeakMap(); controls.clear(); optionSources = []; dynamic = [];
+    cleanup.forEach(remove => remove()); reel.dispose(); shared.dispose(); teamHeader.dispose();
     body.replaceChildren(); status.textContent = ''; if (disclosure) panel.open = false; panel.hidden = true; INSTANCES.delete(panel);
   }
   if (disclosure) listen(panel, 'toggle', () => {
@@ -544,68 +562,30 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (event.target.closest('[data-template-rack], [data-studio-record-kind], [data-studio-session-id]')) return;
     if (exposed && !active() && active(canOpen)) open();
   });
-  // Let a pointer's destination receive its click before a completed text edit
-  // refreshes the rack. Keyboard blur and Enter can settle immediately.
-  listen(document, 'pointerdown', event => { pointerDown = form.contains(event.target); });
-  const finishPointer = () => {
-    pointerDown = false;
-    document.defaultView.clearTimeout(settleTimer);
-    settleTimer = document.defaultView.setTimeout(() => {
-      settleTimer = null;
-      if (pendingText && dirty && !disposed) { pendingText = false; commit(); }
-    }, 0);
-  };
-  listen(document, 'pointerup', finishPointer);
-  listen(document, 'pointercancel', finishPointer);
-
-  for (const type of ['input', 'change']) listen(form, type, event => {
-    if (committing || !active()) return;
-    if (event.target === choice && type === 'change') { selectArrangement(choice.value); return; }
-    const binding = bindings.get(event.target);
-    if (!binding) return;
-    if (binding.event === type) {
-      touch(); binding.update(); for (const update of dynamic) update();
-      if (event.target.dataset.templateField?.startsWith('teams.')) for (const source of optionSources) if (source.dependsOnGroups) source.update();
-    }
-    if (type === 'change' && dirty) {
-      if (binding.event === 'input' && pointerDown) pendingText = true;
-      else commit();
-    }
-  });
-  listen(form, 'keydown', event => {
-    if (event.key !== 'Enter' || event.target.tagName !== 'INPUT' || event.target.type === 'checkbox') return;
-    event.preventDefault(); event.stopPropagation(); if (dirty) commit();
-  });
-  listen(form, 'submit', event => { event.preventDefault(); event.stopPropagation(); if (dirty) commit(); });
+  listen(choice, 'change', () => selectArrangement(choice.value));
   listen(form, 'click', event => {
     const target = event.target.closest('[data-template-action]');
-    if (!target || !form.contains(target) || !active()) return;
+    if (!target || !form.contains(target) || !active(canOpen) || (!active() && !open())) return;
     event.preventDefault(); event.stopPropagation();
     const focusedAt = generation;
     target.focus();
     if (!owns(focusedAt) || !active()) return;
     switch (target.dataset.templateAction) {
       case 'apply': apply(); break;
+      case 'team-back': break;
       case 'undo': undo(); break;
       case 'preserve': if (fresh(proposal)) commit({ preserveShared: true }); break;
       case 'cancel':
         dirty = false; receiveAccepted(); retirePreview(); build(); announce('Current arrangement retained.'); break;
-      case 'step': {
-        const path = target.dataset.templatePath, control = controls.get(path);
-        const stepped = stepWorkDraftValues(control.record, control.key, Number(target.dataset.templateStep));
-        touch();
-        if (stepped.error) { mark(path, stepped.error.message); announce(stepped.error.message); break; }
-        Object.assign(control.record, stepped.raw);
-        for (const [key, sibling] of controls) if (sibling.record === control.record && ['hoursPerSession', 'minutesPerSession', 'occurrences'].includes(sibling.key)) {
-          sibling.input.value = control.record[sibling.key]; invalid.delete(key); sibling.error.textContent = ''; sibling.input.setAttribute('aria-invalid', 'false');
-        }
-        commit(); break;
-      }
     }
   });
   configuration = startingConfiguration(TEMPLATES[0]); receiveAccepted(); build(); retirePreview(); panel.hidden = false;
   if (disclosure && exposed) panel.open = true;
-  const controller = Object.freeze({ open, resume: open, close, detach, settleText,
+  const controller = Object.freeze({ open, resume: open, close, detach, settleText, openTeam, setEditorOpen,
+    recordCreated(kind, id, context) {
+      if (deliveryView.placements[kind] && context?.deliveryPhase) deliveryView.placements[kind].set(id, context.deliveryPhase);
+    },
+    isTeamOpen: () => selectedTeamId !== null && teamEditor.isConnected,
     focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
     isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
   INSTANCES.set(panel, controller);

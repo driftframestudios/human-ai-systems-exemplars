@@ -19,7 +19,8 @@ export function mountStudioReports(root, { studio }) {
     actions.append(button);
   }
   const status = document.createElement('p'); status.setAttribute('role', 'status');
-  host.append(title, note, actions, status); root.append(host);
+  host.append(title, note, actions, status);
+  (root.querySelector('[data-investment-reports]') ?? root).append(host);
   const downloads = createDownloadOwner(host);
   let disposed = false;
   function click(event) {

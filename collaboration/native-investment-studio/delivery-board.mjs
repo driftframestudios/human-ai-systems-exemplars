@@ -1,4 +1,7 @@
-import { duration } from './display.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
+import { workDuration } from './display.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const PHASES = Object.freeze([
   ['planning', 'Planning', 'Agree the work and who needs it.'],
@@ -22,26 +25,39 @@ const LAYOUTS = Object.freeze({
 });
 const STAGE_PHASES = Object.freeze({ understand: 'planning', build: 'implementation', review: 'testing' });
 
-export function projectDeliveryBoard({ arrangement, plan }) {
+export function projectDeliveryBoard({ arrangement, plan, placements = {} }) {
   const phases = PHASES.map(phase => ({ ...phase, teams: [], connections: [], sessions: [] }));
   const byPhase = new Map(phases.map(phase => [phase.id, phase]));
   const teams = new Map(arrangement.teams.map(row => [row.slotId, row]));
   const layout = LAYOUTS[arrangement.templateId];
-  const includedTeams = new Set(), linkedPhases = new Map(), stageLabels = new Map(), stagePhases = new Map();
-  for (const [index, slot] of (layout?.teams ?? []).entries()) {
-    const team = teams.get(slot);
-    if (team) { phases[index].teams.push(team); includedTeams.add(slot); }
-  }
-  for (const team of arrangement.teams) if (!includedTeams.has(team.slotId)) phases[0].teams.push(team);
-  for (const row of arrangement.connections) {
-    const phase = byPhase.get(layout?.connections[row.slotId]) ?? phases[0];
-    phase.connections.push(row);
-    for (const id of row.connection.workIds) if (!linkedPhases.has(id)) linkedPhases.set(id, phase.id);
-  }
+  const includedTeams = new Set(), linkedPhases = new Map(), stageLabels = new Map(), stagePhases = new Map(), teamPhases = new Map();
   for (const stage of plan.scoreSettings.stages) for (const id of stage.workIds) {
     if (!stageLabels.has(id)) stageLabels.set(id, []);
     stageLabels.get(id).push(stage.label);
     if (STAGE_PHASES[stage.id] && !stagePhases.has(id)) stagePhases.set(id, STAGE_PHASES[stage.id]);
+  }
+  const workPhases = new Map();
+  for (const work of plan.work) if (stagePhases.has(work.id) && !workPhases.has(work.teamId))
+    workPhases.set(work.teamId, stagePhases.get(work.id));
+  for (const [index, slot] of (layout?.teams ?? []).entries()) {
+    const team = teams.get(slot);
+    if (team) {
+      phases[index].teams.push(team); includedTeams.add(slot);
+      if (!teamPhases.has(team.team.id)) teamPhases.set(team.team.id, phases[index].id);
+    }
+  }
+  let unbound = 0;
+  for (const team of arrangement.teams) if (!includedTeams.has(team.slotId)) {
+    // An unbound team follows its authored work stage when available. Other
+    // teams use successive phases, keeping Planning from becoming a ledger.
+    const phase = byPhase.get(placements.team?.get(team.team.id)) ?? byPhase.get(workPhases.get(team.team.id)) ?? phases[unbound % phases.length];
+    unbound += 1; phase.teams.push(team); teamPhases.set(team.team.id, phase.id);
+  }
+  for (const row of arrangement.connections) {
+    const phase = byPhase.get(placements.connection?.get(row.connection.id)) ?? byPhase.get(layout?.connections[row.slotId])
+      ?? byPhase.get(teamPhases.get(row.connection.receiverTeamId)) ?? phases[0];
+    phase.connections.push(row);
+    for (const id of row.connection.workIds) if (!linkedPhases.has(id)) linkedPhases.set(id, phase.id);
   }
   for (const work of plan.work) {
     const phaseId = stagePhases.get(work.id) ?? linkedPhases.get(work.id) ?? 'planning';
@@ -53,7 +69,7 @@ export function projectDeliveryBoard({ arrangement, plan }) {
 // The receiver owns proposed records and edit routes. This view owns only its
 // phase focus and the return to the full delivery reading.
 export function createDeliveryBoard(document, { arrangement, plan, acceptedSessionIds,
-  acceptedTeamIds = new Set(), onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
+  acceptedTeamIds = new Set(), acceptedConnectionIds = new Set(), onNavigate, onSession, onAdd, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
   const node = (tag, text, className) => {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -64,7 +80,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     const control = node('button', label, className); control.type = 'button';
     control.addEventListener('click', action); return control;
   };
-  const phases = projectDeliveryBoard({ arrangement, plan });
+  const phases = projectDeliveryBoard({ arrangement, plan, placements: viewState.placements });
   const people = new Map(plan.people.map(person => [person.id, person]));
   const teamNames = new Map(plan.teams.map(team => [team.id, team.label]));
   const root = node('section', undefined, 'studio-delivery'); root.dataset.deliveryTemplate = arrangement.templateId;
@@ -121,8 +137,10 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       const group = collection('People', 'studio-delivery__group studio-delivery__teams');
       for (const binding of phase.teams) {
         const card = node('article', undefined, 'studio-delivery__team'); card.dataset.deliveryTeam = binding.slotId;
-        const inspect = event => onNavigate({ kind: 'template-team', id: binding.slotId }, event.currentTarget);
+        const inspect = event => onNavigate(acceptedTeamIds.has(binding.team.id)
+          ? { kind: 'team', id: binding.team.id } : { kind: 'template-team', id: binding.slotId }, event.currentTarget);
         const team = button(binding.team.label, 'studio-delivery__team-key native-control--navigate', inspect);
+        team.dataset.studioEntryKey = `delivery-team:${binding.slotId}`;
         if (acceptedTeamIds.has(binding.team.id)) {
           team.dataset.studioRecordKind = 'team'; team.dataset.studioRecordId = binding.team.id;
         }
@@ -138,6 +156,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
         }
         if (!members.children.length) {
           const item = node('li'), choose = button('Choose people', 'studio-delivery__person native-control--navigate', inspect);
+          choose.dataset.studioEntryKey = `delivery-team-people:${binding.slotId}`;
           if (acceptedTeamIds.has(binding.team.id)) {
             choose.dataset.studioRecordKind = 'team'; choose.dataset.studioRecordId = binding.team.id;
           }
@@ -150,11 +169,11 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     if (phase.sessions.length) {
       const group = collection('Shared work', 'studio-delivery__group studio-delivery__sessions');
       for (const { work, stageLabels } of phase.sessions) {
-        const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(work.id, event.currentTarget));
+        const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
         control.dataset.deliverySession = work.id;
         if (acceptedSessionIds.has(work.id)) control.dataset.studioSessionId = work.id;
-        control.dataset.funding = work.funding;
-        control.append(node('strong', work.label), node('small', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
+        control.dataset.funding = summarizeWorkSessions(work).funding;
+        control.append(node('strong', work.label), node('small', workDuration(work)));
         if (stageLabels.length) control.append(node('small', stageLabels.join(' · '), 'studio-delivery__stage'));
         else control.append(node('small', 'Supporting work', 'studio-delivery__stage'));
         control.setAttribute('aria-label', `${work.label}. ${acceptedSessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);
@@ -166,8 +185,13 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       const group = collection('Handoffs', 'studio-delivery__group studio-delivery__handoffs');
       for (const binding of phase.connections) {
         const edge = binding.connection;
-        const control = button('', 'studio-delivery__handoff native-control--navigate', () => onNavigate({ kind: 'template-connection', id: binding.slotId }));
+        const control = button('', 'studio-delivery__handoff native-control--navigate', event => onNavigate(acceptedConnectionIds.has(edge.id)
+          ? { kind: 'connection', id: edge.id } : { kind: 'template-connection', id: binding.slotId }, event.currentTarget));
+        if (acceptedConnectionIds.has(edge.id)) {
+          control.dataset.studioRecordKind = 'connection'; control.dataset.studioRecordId = edge.id;
+        }
         control.dataset.deliveryConnection = binding.slotId; control.dataset.status = edge.status;
+        control.dataset.studioEntryKey = `delivery-handoff:${binding.slotId}`;
         control.append(node('strong', binding.slotLabel), node('small', `${teamNames.get(edge.senderTeamId)} → ${teamNames.get(edge.receiverTeamId)}`),
           node('small', edge.sharedObject || 'Choose shared work', 'studio-delivery__object'));
         control.title = edge.sharedObject || 'Choose shared work';
@@ -176,7 +200,16 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       }
       content.append(group);
     }
-    lane.append(content); board.append(lane); columns.set(phase.id, lane); phaseKeys.set(phase.id, key);
+    if (onAdd) {
+      const actions = node('div', undefined, 'studio-delivery__add');
+      for (const [kind, label] of [['team', 'Add team'], ['connection', 'Add handoff']]) {
+        const add = createRackAddControl(document, { label: `${label} in ${phase.label}`, text: label,
+          className: 'studio-rack-create-zone--persistent', dataset: { studioEntryKey: `delivery-add:${phase.id}:${kind}` } });
+        add.addEventListener('click', event => onAdd(kind, phase.id, event.currentTarget)); actions.append(add);
+      }
+      lane.append(content, actions);
+    } else lane.append(content);
+    board.append(lane); columns.set(phase.id, lane); phaseKeys.set(phase.id, key);
   }
   selectPhase(columns.has(viewState.phaseId) ? viewState.phaseId : null, { focus: false });
   return root;

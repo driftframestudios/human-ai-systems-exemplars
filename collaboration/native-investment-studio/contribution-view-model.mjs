@@ -1,4 +1,5 @@
 import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
 
 const MODELS = new WeakMap(), EMPTY = Object.freeze([]);
 const LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
@@ -13,7 +14,7 @@ export function createContributionViewModel(projection) {
   const people = new Map(state.people.map(row => [row.id, Object.freeze({ id: row.id, label: row.label,
     name: named(row), lifecycle: row.lifecycle })]));
   const work = new Map(state.work.map(row => [row.id, Object.freeze({ id: row.id, label: row.label,
-    name: named(row), lifecycle: row.lifecycle, status: row.status })]));
+    name: named(row), lifecycle: row.lifecycle, status: summarizeWorkSessions(row).status })]));
   const byWork = new Map(), byConnection = new Map();
   state.connections.forEach(row => {
     byConnection.set(row.id, []);
@@ -37,6 +38,7 @@ export function createContributionViewModel(projection) {
     for (const item of supportingWork) {
       if (item.lifecycle === 'retired') gap('retired-supporting-work', 'workIds', 'A linked working session is retired.', { workId: item.id });
       if (item.status === 'paused') gap('paused-supporting-work', 'workIds', 'A linked working session is paused.', { workId: item.id });
+      if (item.status === 'mixed') gap('paused-supporting-work', 'workIds', 'Some linked sessions are paused.', { workId: item.id });
     }
     const contribution = Object.freeze({ id: row.id, categoryId: row.categoryId, label: LABELS.get(row.categoryId),
       receiver, decisionOwner, reviewBoundary: row.reviewBoundary, decisionBoundary: row.decisionBoundary,

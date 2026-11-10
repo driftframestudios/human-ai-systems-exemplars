@@ -20,7 +20,7 @@ const TYPES = Object.freeze({
     fields: Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']),
     create: studio => createWorkDraftAdapter(studio, null, { durationFormat: 'hours-minutes' }) }),
   person: Object.freeze({ id: 'personId', index: state => indexRows(state.people), step: true,
-    fields: Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']),
+    fields: Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']),
     create: createPersonDraftAdapter }),
   purpose: Object.freeze({ id: 'purposeId', index: state => new Map([['purpose', state.purpose]]),
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
@@ -115,7 +115,10 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
   function targetExists(kind, targetId, projection) {
     if (!TYPES[kind].describe) return rows(projection)[kind].has(targetId);
     const descriptor = TYPES[kind].describe(targetId);
-    return Boolean(descriptor && (descriptor.mode === 'create' || rows(projection)[kind].has(`${descriptor.collection}:${descriptor.id}`)));
+    if (!descriptor) return false;
+    if (descriptor.mode === 'create') return true;
+    const row = rows(projection)[kind].get(`${descriptor.collection}:${descriptor.id}`);
+    return Boolean(row && (descriptor.occurrenceIndex === undefined || descriptor.occurrenceIndex < row.occurrences));
   }
 
   function creationConflict(kind, targetId, projection) {
@@ -149,6 +152,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     return Object.freeze({ status: summary.status, projection, pending: false,
       draft: Object.freeze({ token: record.token, [TYPES[kind].id]: record.targetId, raw: record.raw,
         ...(descriptor ? { form: descriptor.form, targetId: descriptor.id } : {}),
+        ...(descriptor?.occurrenceIndex === undefined ? {} : { occurrenceIndex: descriptor.occurrenceIndex }),
         baseAcceptance: record.baseAcceptance, changed: true, errors: EMPTY_ERRORS }),
       ...(descriptor ? { creationConflict: summary.creationConflict } : {}),
       error: errors[kind] ?? (summary.status === 'stale'
@@ -225,6 +229,12 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     const same = active?.kind === kind && active.targetId === targetId;
     if (mode !== 'resume' && mode !== 'fresh' && (same ? active.token !== token : existing?.token !== token)) {
       return fail(kind, diagnostic('draft-token', 'Choose the saved edit currently shown.'));
+    }
+    // Removing a session can shift an ordinal to another session. Only an
+    // explicit return to current values may reopen that target after acceptance.
+    if (mode === 'review' && TYPES[kind].describe?.(targetId)?.occurrenceIndex !== undefined
+      && !sameAcceptance(same ? active.baseAcceptance : existing.baseAcceptance, acceptance())) {
+      return fail(kind, diagnostic('review-required', 'The sessions changed. Use the current values to choose and edit this session.'));
     }
     if (same && mode === 'resume') return succeed(kind);
     const activeView = active?.adapter.read();

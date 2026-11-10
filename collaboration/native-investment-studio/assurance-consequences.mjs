@@ -1,3 +1,5 @@
+import { summarizeWorkSessions, workSessionGroups } from './work-sessions.mjs';
+
 // Admitted projections own prices and timing. This reading names the explicit
 // support relationships; a linked session or observation does not grant approval.
 function freeze(value) {
@@ -15,7 +17,8 @@ function lineAmounts(lines) {
     lineAmountStatus: !representable ? 'outside-display-range' : lines.some(line => line.cents === null) ? 'incomplete' : 'priced' };
 }
 
-const plannedEffort = row => row.status === 'planned' && row.lifecycle === 'active' && row.personMinutes > 0;
+const plannedEffort = row => Object.hasOwn(row, 'activePersonMinutes') ? row.activePersonMinutes > 0
+  : row.status === 'planned' && row.lifecycle === 'active' && row.personMinutes > 0;
 
 function snapshot(projection) {
   const { state, result, assurance, score } = projection, settings = state.assuranceSettings;
@@ -25,10 +28,14 @@ function snapshot(projection) {
   const ledger = new Map(result.ledger.map(row => [row.workId, row]));
   const timing = new Map(score.workRows.map(row => [row.workId, row]));
   const work = state.work.filter(row => linkedIds.has(row.id)).map(row => {
-    const timed = timing.get(row.id), ledgerLines = structuredClone(ledger.get(row.id).lines);
-    return { workId: row.id, label: row.label, teamId: row.teamId, personIds: [...row.personIds],
+    const timed = timing.get(row.id), ledgerLines = structuredClone(ledger.get(row.id).lines), summary = summarizeWorkSessions(row);
+    const activeGroups = workSessionGroups(row).filter(session => session.status === 'planned' && row.lifecycle === 'active' && session.minutesPerOccurrence > 0);
+    return { workId: row.id, label: row.label, teamId: row.teamId, personIds: summary.personIds,
+      ...(row.sessionOverrides?.length ? { teamIds: summary.teamIds,
+        activePersonIds: [...new Set(activeGroups.flatMap(session => session.personIds))], activeTeamIds: [...new Set(activeGroups.map(session => session.teamId))],
+        durationMinutes: summary.durationMinutes, variedSessions: true, activePersonMinutes: summary.activeParticipantMinutes } : {}),
       minutesPerOccurrence: row.minutesPerOccurrence, occurrences: row.occurrences,
-      personMinutes: timed.participantMinutes, funding: row.funding, status: row.status, lifecycle: row.lifecycle,
+      personMinutes: summary.participantMinutes, funding: summary.funding, status: summary.status, lifecycle: row.lifecycle,
       ledgerLines, ...lineAmounts(ledgerLines),
       timing: { placement: timed.placement, startMinute: timed.firstStartMinute,
         endMinute: timed.lastEndMinute, elapsedMinutes: timed.spanMinutes } };
@@ -37,7 +44,7 @@ function snapshot(projection) {
   const concepts = assurance.quality.concepts.map(row => ({
     conceptId: row.conceptId, label: row.label, included: row.included, workIds: [...row.workIds],
     activeWorkIds: row.workIds.filter(id => plannedEffort(workById.get(id))),
-    pausedWorkIds: row.workIds.filter(id => workById.get(id).status === 'paused'),
+    pausedWorkIds: row.workIds.filter(id => ['paused', 'mixed'].includes(workById.get(id).status)),
     retiredWorkIds: row.workIds.filter(id => workById.get(id).lifecycle === 'retired'),
   }));
   const names = new Map(assurance.rehearsals.map(row => [`${row.definition.id}@${row.definition.version}`, row.definition.name]));
@@ -52,13 +59,13 @@ function snapshot(projection) {
     const personWork = new Map(), teamWork = new Map();
     for (const workId of record.workIds) {
       const row = workById.get(workId); if (!plannedEffort(row)) continue;
-      for (const personId of row.personIds) if (activePeople.has(personId)) {
+      for (const personId of row.activePersonIds ?? row.personIds) if (activePeople.has(personId)) {
         if (!personWork.has(personId)) personWork.set(personId, []);
         personWork.get(personId).push(workId);
       }
-      if (activeTeams.has(row.teamId)) {
-        if (!teamWork.has(row.teamId)) teamWork.set(row.teamId, []);
-        teamWork.get(row.teamId).push(workId);
+      for (const teamId of row.activeTeamIds ?? [row.teamId]) if (activeTeams.has(teamId)) {
+        if (!teamWork.has(teamId)) teamWork.set(teamId, []);
+        teamWork.get(teamId).push(workId);
       }
     }
     const badge = workIds => ({ kind, label, sourceLabel: record.label,
@@ -76,9 +83,11 @@ function snapshot(projection) {
     people.get(rehearsal.reviewerPersonId).badges.push(badge([...rehearsal.workIds]));
     const teamWork = new Map();
     for (const workId of rehearsal.workIds) {
-      const teamId = workById.get(workId).teamId; if (teamId === null) continue;
-      if (!teamWork.has(teamId)) teamWork.set(teamId, []);
-      teamWork.get(teamId).push(workId);
+      for (const teamId of workById.get(workId).teamIds ?? [workById.get(workId).teamId]) {
+        if (teamId === null) continue;
+        if (!teamWork.has(teamId)) teamWork.set(teamId, []);
+        teamWork.get(teamId).push(workId);
+      }
     }
     for (const [teamId, workIds] of teamWork) teams.get(teamId).badges.push(badge(workIds));
   }
@@ -112,9 +121,12 @@ export function summarizeAssuranceWork(reading, workIds) {
   const placement = unplacedWorkIds.length ? placed.length ? 'partial' : 'unspecified' : placed.length ? 'placed' : 'empty';
   const startMinute = placement === 'placed' ? Math.min(...placed.map(row => row.timing.startMinute)) : null;
   const endMinute = placement === 'placed' ? Math.max(...placed.map(row => row.timing.endMinute)) : null;
+  const poolLines = type => rows.flatMap(row => row.ledgerLines.flatMap(line => Object.hasOwn(line, `${type}Minutes`)
+    ? line[`${type}Minutes`] > 0 ? [{ cents: line[`${type}Cents`] }] : []
+    : row.funding === type ? [line] : []));
   return freeze({ workIds: ids, rows, personMinutes: rows.reduce((minutes, row) => minutes + row.personMinutes, 0),
     ...lineAmounts(lines),
-    allocated: lineAmounts(rows.filter(row => row.funding === 'allocated').flatMap(row => row.ledgerLines)),
-    additional: lineAmounts(rows.filter(row => row.funding === 'additional').flatMap(row => row.ledgerLines)),
+    allocated: lineAmounts(poolLines('allocated')),
+    additional: lineAmounts(poolLines('additional')),
     timing: { placement, startMinute, endMinute, elapsedMinutes: endMinute === null ? null : endMinute - startMinute, unplacedWorkIds } });
 }

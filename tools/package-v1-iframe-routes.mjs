@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   assertRegularFile,
+  iframeFaviconHref,
   sha256,
   verifyPackagePlan,
   writePackagePlan,
@@ -48,7 +49,8 @@ function assertFamilyPlan(family, plan) {
   const expectedBasePath = `/v1/${family}/`;
   if (
     plan.receipt.host !== "iframes.vik.guru" ||
-    plan.receipt.base_path !== expectedBasePath
+    plan.receipt.base_path !== expectedBasePath ||
+    plan.receipt.package_contract?.favicon_href !== iframeFaviconHref
   ) {
     fail(
       `Iframe route family ${family} must own iframes.vik.guru${expectedBasePath}.`,
@@ -144,6 +146,7 @@ export async function createAggregatePackagePlan(options = {}) {
       primary_routes: aggregateRoutes,
       generated_files: outputFiles.size + 1,
       generated_bytes: 0,
+      favicon_href: iframeFaviconHref,
       live_cloudflare_mutation: false,
     },
     families,

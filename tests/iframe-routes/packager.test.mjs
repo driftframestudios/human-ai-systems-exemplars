@@ -11,6 +11,7 @@ import {
   artifactLicense,
   attributionContract,
 } from "../../tools/attribution-contract.mjs";
+import { iframeFaviconHref } from "../../tools/iframe-route-package-engine.mjs";
 
 import {
   assertOwnedPackageDirectory,
@@ -82,6 +83,7 @@ test("the route plan preserves the Core population and adds one supplemental ins
   assert.equal(firstPlan.receipt.package_contract.compatibility_aliases_generated, false);
   assert.equal(firstPlan.receipt.package_contract.live_cloudflare_mutation, false);
   assert.equal(firstPlan.receipt.package_contract.neighboring_path_posture, "unmatched");
+  assert.equal(firstPlan.receipt.package_contract.favicon_href, iframeFaviconHref);
   assert.equal(firstPlan.receipt.routes.length, firstPlan.contract.routes.length);
   for (const route of firstPlan.receipt.routes) {
     assert.equal(route.activation_standing, "eligible", `${route.id} is publication eligible`);
@@ -96,6 +98,20 @@ test("the route plan preserves the Core population and adds one supplemental ins
       .equals(secondPlan.outputFiles.get("route-manifest.json")),
     "the receipt is deterministic",
   );
+
+  for (const route of firstPlan.contract.routes) {
+    const projection = firstPlan.outputFiles
+      .get(routeIndexPath(firstPlan.contract, route))
+      .toString("utf8");
+    assert.equal(
+      occurrenceCount(
+        projection,
+        new RegExp(`<link rel="icon" href="${iframeFaviconHref}" sizes="any">`, "g"),
+      ),
+      1,
+      `${route.id} declares the iframe origin favicon once`,
+    );
+  }
 
   for (const route of prototypeRoutes) {
     const source = await readFile(path.join(defaultPaths.sourceRoot, route.source_file), "utf8");
@@ -168,7 +184,12 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
     projection,
     /href="https:\/\/vik\.guru\/prompt-side-conditions-practice\.html#sources-title" target="_blank" rel="noopener noreferrer"/u,
   );
-  assert.deepEqual(scanHtmlClosure(projection, new Set(), "Conditioning Field projection"), {
+  assert.deepEqual(scanHtmlClosure(
+    projection,
+    new Set(),
+    "Conditioning Field projection",
+    { allowedOutsideResources: new Set([iframeFaviconHref]) },
+  ), {
     inline_references: 0,
     package_targets: [],
   });
@@ -474,7 +495,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2784168 });
+  assert.deepEqual(verification, { files: 27, bytes: 2785412 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -831,6 +852,24 @@ test("closure scanning accepts declared package media and rejects ambient depend
       `<video><track src="https://outside.example/captions.vtt"></video>`,
       new Set(),
       "fixture",
+    ),
+    /outside its package closure/,
+  );
+  assert.deepEqual(
+    scanHtmlClosure(
+      `<link rel="icon" href="${iframeFaviconHref}" sizes="any">`,
+      new Set(),
+      "fixture",
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
+    ),
+    { inline_references: 0, package_targets: [] },
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<link rel="icon" href="/different.ico" sizes="any">`,
+      new Set(),
+      "fixture",
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
     ),
     /outside its package closure/,
   );

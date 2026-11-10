@@ -80,7 +80,7 @@ export function sameCapabilityRaw(target, left, right) {
 function startingRaw(descriptor, row) {
   const raw = Object.fromEntries(Object.entries(descriptor.fields).map(([key, field]) => [key, field.kind === 'ids' ? [] : '']));
   if (descriptor.mode === 'remove') return raw;
-  Object.assign(raw, { context: row?.context ?? '', teamId: row?.teamId ?? '',
+  Object.assign(raw, { context: row?.context ?? (descriptor.mode === 'create' ? descriptor.definition.explanation : ''), teamId: row?.teamId ?? '',
     responsiblePersonIds: [...(row?.responsiblePersonIds ?? [])], decisionOwnerPersonId: row?.decisionOwnerPersonId ?? '',
     lifecycle: row?.lifecycle ?? 'active', prerequisites: (row?.prerequisites ?? []).map(ref => `${ref.kind}/${ref.instanceId}`) });
   for (const requirement of descriptor.definition.supportRequirements) {

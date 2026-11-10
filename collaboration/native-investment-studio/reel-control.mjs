@@ -10,16 +10,19 @@ export function createReel(document, { label, choices, value, onSelect, variant 
   };
   const element = node('fieldset', undefined, 'native-reel');
   element.dataset.reelVariant = variant; element.dataset.reelSecondary = String(secondary);
+  element.dataset.reelChoices = String(choices.length);
   const wheel = node('div', undefined, 'native-reel__wheel');
   const rotor = node('div', undefined, 'native-reel__rotor'); rotor.setAttribute('aria-hidden', 'true');
   const hub = node('button', '↻', 'native-reel__hub'); hub.type = 'button'; hub.setAttribute('aria-label', `Next ${label.toLowerCase()}`);
   const reading = node('output', '', 'native-reel__reading'); reading.setAttribute('aria-live', 'off');
   const buttons = new Map(); let selected = options.has(value) ? value : choices[0].id, angle = 0, variation = 0, disposed = false;
+  // Eight labels need distinct horizontal bands around the stationary rotor.
+  const rows = choices.length === 8 ? [8, 29, 50, 71, 92, 71, 50, 29] : undefined;
   for (const choice of choices) {
     const control = node('button', choice.label, 'native-reel__choice'); control.type = 'button'; control.dataset.reelChoice = choice.id;
     const radians = options.get(choice.id).index * Math.PI * 2 / choices.length - Math.PI / 2;
     control.style.setProperty('--reel-x', `${50 + 35 * Math.cos(radians)}%`);
-    control.style.setProperty('--reel-y', `${50 + 36 * Math.sin(radians)}%`);
+    control.style.setProperty('--reel-y', `${rows?.[options.get(choice.id).index] ?? 50 + 36 * Math.sin(radians)}%`);
     buttons.set(choice.id, control); wheel.append(control);
   }
   wheel.prepend(rotor, hub); element.append(node('legend', label), wheel, reading);

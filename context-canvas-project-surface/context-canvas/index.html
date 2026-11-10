@@ -20,10 +20,17 @@
   <link rel="stylesheet" href="styles/routes/studio-session.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-abilities.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-arrangements.css" media="all">
+  <link rel="stylesheet" href="styles/routes/studio-people.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-change.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-assurance.css" media="all">
+  <link rel="stylesheet" href="styles/routes/studio-tapes.css" media="all">
+  <link rel="stylesheet" href="styles/routes/studio-investment.css" media="all">
   <noscript><link rel="stylesheet" href="styles/routes/about-noscript.css" media="all"></noscript>
   <link rel="author" type="text/plain" href="humans.txt">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
   <link rel="manifest" href="manifest.json">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Technology leadership portfolio">
@@ -166,29 +173,24 @@
             <strong data-native-total>$3,980.00</strong>
           </div>
           <dl class="native-coordination__funding">
-            <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
-            <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
-            <div><dt>Included in staffing</dt><dd data-native-allocated>$1,480.00</dd></div>
+              <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
+              <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
+              <div><dt>Included in staffing</dt><dd data-native-allocated>$1,590.00</dd></div>
           </dl>
-          <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
-            <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
-            <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
-            <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
-            <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
-            <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
-            <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
-          </div>
           <div class="native-amp-tools" data-native-amp-tools hidden aria-label="Plan reference and saved work">
-            <button type="button" data-amp-panel="purpose" aria-controls="native-amp-purpose" aria-expanded="false">Purpose</button>
-            <button type="button" data-amp-panel="saved" aria-controls="native-amp-saved" aria-expanded="false" disabled>Saved edits <span data-amp-saved-count>(0)</span></button>
-            <button type="button" data-amp-panel="manual" aria-controls="native-amp-manual" aria-expanded="false">Operating manual</button>
+            <div class="native-amp-tools__group" role="group" aria-label="Plan reference">
+              <button type="button" data-amp-panel="purpose" aria-controls="native-amp-purpose" aria-expanded="false">Set vision</button>
+              <button type="button" data-amp-panel="manual" aria-controls="native-amp-manual" aria-expanded="false">Operating manual</button>
+            </div>
+            <div class="native-amp-tools__group" role="group" aria-label="History" data-native-amp-history>
+              <button type="button" data-amp-panel="saved" aria-controls="native-amp-saved" aria-expanded="false" disabled>Saved edits <span data-amp-saved-count>(0)</span></button>
+            </div>
             <div data-native-motion-controls></div>
           </div>
-          <p class="native-amp-purpose-preview" data-amp-purpose-preview>Operations staff can route a service request, see who owns it, and recover a missed handoff.</p>
           <details class="native-purpose" id="native-amp-purpose" data-native-purpose>
             <summary>Purpose <span data-purpose-summary>Describe the change you are planning.</span></summary>
             <div class="native-purpose__reading" data-purpose-reading>
-              <dl class="native-purpose__current native-purpose__fields" data-purpose-reading-values></dl>
+              <div class="native-purpose__vision-layout" data-purpose-reading-values></div>
               <button type="button" data-purpose-action="edit" disabled>Edit purpose</button>
             </div>
             <div class="native-coordination__recovery" data-purpose-recovery hidden>
@@ -211,24 +213,40 @@
           </details>
           <details class="native-coordination__saved" id="native-amp-saved" data-native-saved hidden>
             <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
+            <p>Unfinished edits last until you reload or close this page. Apply them before downloading in Investment → Keep a plan.</p>
             <ul data-native-saved-list></ul>
           </details>
           <details class="native-manual" id="native-amp-manual">
             <summary>Operating manual <span>Try a change, compare it, and keep what works.</span></summary>
             <div class="native-manual__reading">
-              <p>The starting plan is an illustrative service-request pilot. Its people, rates, and funded time are editable assumptions.</p>
-              <ol>
-                <li><strong>Choose the work.</strong> Coordination connects teams and their sessions. People holds rates, funded time, roles, and human review.</li>
-                <li><strong>Try an adjustment.</strong> Turn a dial, use its arrow keys, tap a step button, or enter a precise value. The editor previews your proposal.</li>
-                <li><strong>Keep the change.</strong> Apply updates the plan and amp total. Cancel returns to the accepted values. Saved edits retain unfinished entries when you change tasks.</li>
-                <li><strong>Compare and recover.</strong> Save a baseline before experimenting. Investment holds the comparison, Undo/Redo, examples, and plan download.</li>
-              </ol>
-              <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
-              <p><a class="native-control--navigate" href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
-              <p><a class="native-control--navigate" href="#native-studio-assurance" data-native-open-assurance>Prepare a review or recovery rehearsal</a> and compare the work before you accept it.</p>
-              <p><a class="native-control--navigate" href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention and explicit supporting sessions.</p>
+              <div class="native-manual__intro">
+                <p>I built this Studio from more than 20 years of hands-on design and engineering in regulated industries. My work connects cloud operations, data science, product, analytics and adoption: helping people make a feasible change, see its effects, and improve it together.</p>
+                <p>Try an example, arrange the people and work, and explore where AI support fits. Staffing funds people's time; extra work adds investment. Use the chapters to compare arrangements, consider quality and recovery, and see what a change asks of the people carrying it.</p>
+                <p class="native-manual__lifetime">Your plan and unfinished edits stay in this page while it is open. Download the accepted plan to return later; a fresh page starts with the example.</p>
+              </div>
+              <table class="native-manual__actions">
+                <caption>Try a change and keep what works</caption>
+                <thead><tr><th scope="col">Control</th><th scope="col">What happens</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Direct choices</th><td>Participation, role choices and investment deck controls update the plan immediately. Creating a record and editing it later are separate changes.</td></tr>
+                  <tr><th scope="row">Apply</th><td>Accepts the proposal in that editor, including its prepared text and quantities.</td></tr>
+                  <tr><th scope="row">Close</th><td>Keeps unfinished entries available in Saved edits while this page stays open.</td></tr>
+                  <tr><th scope="row">Cancel changes</th><td>Restores accepted values in that editor.</td></tr>
+                  <tr><th scope="row">Undo / Redo</th><td>Undo in the amp reverses an accepted change. Investment → Compare a change offers Redo and a baseline.</td></tr>
+                  <tr><th scope="row">Download current plan</th><td>Investment → Keep a plan saves the accepted plan as a file. Unfinished entries and Undo history stay in this page.</td></tr>
+                  <tr><th scope="row">Open a saved plan</th><td>Preview the file, then choose Use this plan to replace the current plan. Undo restores the previous plan.</td></tr>
+                </tbody>
+              </table>
             </div>
           </details>
+          <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
+            <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
+            <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
+            <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
+            <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
+            <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
+            <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
+          </div>
         </header>
         <aside class="native-zine__return" data-native-return-route hidden aria-label="Return to your unfinished work">
           <p data-native-return-note></p>
@@ -237,8 +255,8 @@
         </aside>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-score-title">
           <section class="native-score" data-native-score aria-labelledby="native-score-title">
-            <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>Open a sprint to see the sessions, people and decisions that carry the work forward.</p></header>
-            <p data-score-fallback>The pilot moves through research, prototype work, an operations rehearsal and review. The interactive horizon lets you inspect that illustrative sequence and try another arrangement.</p>
+            <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>Open a sprint to see the sessions, people, and decisions that carry the work forward.</p></header>
+            <p data-score-fallback>The pilot moves through research, prototype work, an operations rehearsal, and review. The interactive horizon lets you inspect that illustrative sequence and try another arrangement.</p>
           </section>
           <section class="native-patch-bay studio-team-planning" data-native-workspace="connection" aria-labelledby="native-patch-bay-title">
             <h3 id="native-patch-bay-title" class="native-zine__heading">Team planning</h3>
@@ -246,7 +264,7 @@
               <div data-connection-template-body></div>
               <p class="native-coordination__status" data-connection-template-status role="status" aria-live="polite" aria-atomic="true"></p>
             </div>
-            <div data-native-connection-view></div>
+            <div data-native-connection-view hidden></div>
             <section class="native-connection" data-native-connection-editor aria-labelledby="native-connection-title">
               <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" class="native-control--create" data-connection-action="create" disabled>Add connection</button></div>
               <details class="native-coordination__configuration native-connection__configuration" data-connection-configure hidden>
@@ -257,41 +275,40 @@
                 </div>
                 <form novalidate>
                   <fieldset disabled aria-label="Connection settings">
-                    <div data-connection-fields>
-                      <div class="native-connection__grid">
-                        <div class="native-connection__field">
-                          <label for="connection-senderTeamId">Sending team</label>
-                          <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
-                          <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-receiverTeamId">Receiving team</label>
-                          <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
-                          <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-receiverPersonId">Receiving person</label>
-                          <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
-                          <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
-                          <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-status">Status</label>
-                          <select id="connection-status" name="status" aria-describedby="connection-status-error"></select>
-                          <p class="native-coordination__error" id="connection-status-error" data-connection-error="status"></p>
-                        </div>
-                        <div class="native-connection__field">
-                          <label for="connection-sharedObject">Shared object or decision</label>
-                          <textarea id="connection-sharedObject" name="sharedObject" rows="3" aria-describedby="connection-sharedObject-error"></textarea>
+                    <div class="native-handoff" data-connection-fields>
+                      <div class="native-handoff__routing">
+                        <div class="native-connection__field native-handoff__name">
+                          <label for="connection-sharedObject">Handoff name</label>
+                          <input id="connection-sharedObject" name="sharedObject" type="text" aria-describedby="connection-sharedObject-error">
                           <p class="native-coordination__error" id="connection-sharedObject-error" data-connection-error="sharedObject"></p>
                         </div>
-                        <div class="native-connection__field">
-                          <label for="connection-responseExpectation">Expected response</label>
-                          <textarea id="connection-responseExpectation" name="responseExpectation" rows="3" aria-describedby="connection-responseExpectation-error"></textarea>
-                          <p class="native-coordination__error" id="connection-responseExpectation-error" data-connection-error="responseExpectation"></p>
+                        <div class="native-connection__grid">
+                          <div class="native-connection__field">
+                            <label for="connection-senderTeamId">Sending team</label>
+                            <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
+                            <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
+                            <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-receiverTeamId">Receiving team</label>
+                            <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
+                            <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
+                            <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-receiverPersonId">Receiving person</label>
+                            <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
+                            <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
+                            <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
+                          </div>
+                          <div class="native-connection__field">
+                            <label for="connection-status">Status</label>
+                            <select id="connection-status" name="status" aria-describedby="connection-status-error"></select>
+                            <p class="native-coordination__error" id="connection-status-error" data-connection-error="status"></p>
+                          </div>
                         </div>
+                        <input id="connection-responseExpectation" name="responseExpectation" type="hidden">
+                        <p id="connection-responseExpectation-error" data-connection-error="responseExpectation" hidden></p>
                       </div>
                       <div class="native-connection__sessions" role="group" aria-labelledby="connection-work-label">
                         <p class="native-coordination__control-title" id="connection-work-label">Supporting sessions</p>
@@ -299,7 +316,7 @@
                         <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="connection">Add a session</button>
                         <p class="native-coordination__error" id="connection-workIds-error" data-connection-error="workIds"></p>
                       </div>
-                      <p class="native-coordination__hint" data-connection-cost></p>
+                      <p class="native-coordination__hint" data-connection-cost hidden></p>
                       <button type="button" class="native-control--remove" data-connection-action="remove" disabled hidden>Remove this connection</button>
                     </div>
                     <p class="native-connection__confirm" data-connection-confirm hidden></p>
@@ -312,7 +329,7 @@
               <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
             </section>
           </section>
-          <details class="native-coordination__workspace" data-native-workspace="session"><summary>Working sessions</summary>
+          <details class="native-coordination__workspace" data-native-workspace="session" hidden><summary>Working sessions</summary>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
@@ -416,14 +433,15 @@
                   <p class="native-coordination__hint" data-native-session-people-empty hidden>This team needs participants. <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="session">Add a person</button></p>
                   <p class="native-coordination__error" id="native-session-people-error" data-native-error="personIds"></p>
                 </div>
-                <div class="native-session__settings-grid">
+                <div class="native-session__settings-grid studio-session-state" role="group" aria-labelledby="native-session-state-heading">
+                  <h4 id="native-session-state-heading">Funding and status</h4>
                   <fieldset id="native-session-funding"><legend>Funding</legend><ul class="native-session__exclusive">
-                    <li><label><input type="radio" name="funding" value="additional" aria-describedby="native-session-funding-error" checked><span>Extra investment</span></label></li>
-                    <li><label><input type="radio" name="funding" value="allocated" aria-describedby="native-session-funding-error"><span>Included in funded time</span></label></li>
+                    <li><label><input type="radio" name="funding" value="additional" aria-labelledby="native-session-additional-label" aria-describedby="native-session-funding-error native-session-additional-hint" checked><span><strong id="native-session-additional-label">Extra investment</strong><small id="native-session-additional-hint">Adds effort beyond funded time.</small></span></label></li>
+                    <li><label><input type="radio" name="funding" value="allocated" aria-labelledby="native-session-allocated-label" aria-describedby="native-session-funding-error native-session-allocated-hint"><span><strong id="native-session-allocated-label">Included in funded time</strong><small id="native-session-allocated-hint">Uses the time already funded.</small></span></label></li>
                   </ul></fieldset>
                   <fieldset id="native-session-status"><legend>Status</legend><ul class="native-session__exclusive">
-                    <li><label><input type="radio" name="status" value="planned" aria-describedby="native-session-status-error native-session-pause-note" checked><span>Planned</span></label></li>
-                    <li><label><input type="radio" name="status" value="paused" aria-describedby="native-session-status-error native-session-pause-note"><span>Paused</span></label></li>
+                    <li><label><input type="radio" name="status" value="planned" aria-labelledby="native-session-planned-label" aria-describedby="native-session-status-error native-session-pause-note native-session-planned-hint" checked><span><strong id="native-session-planned-label">Planned</strong><small id="native-session-planned-hint">Part of the active plan.</small></span></label></li>
+                    <li><label><input type="radio" name="status" value="paused" aria-labelledby="native-session-paused-label" aria-describedby="native-session-status-error native-session-pause-note native-session-paused-hint"><span><strong id="native-session-paused-label">Paused</strong><small id="native-session-paused-hint">Keeps planned time and cost.</small></span></label></li>
                   </ul></fieldset>
                 </div>
                 <p class="native-coordination__hint" id="native-session-pause-note" data-native-session-pause-note hidden>Paused sessions keep their planned time and cost.</p>
@@ -445,27 +463,19 @@
           </section>
           </details>
         </section>
-        <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
+        <section class="native-team studio-people-rack" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
           <h3 id="native-team-title" class="native-zine__heading">People and teams</h3>
-          <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
+          <p class="native-coordination__hint">Arrange teams and choose who joins each working session.</p>
           <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
             <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" class="native-control--create" data-assembly-action="team-create" disabled>Add team</button></div>
-            <ul class="native-assembly__team-list" data-assembly-teams></ul>
+            <div class="studio-team-lanes" role="region" aria-label="Teams and their people" tabindex="0"><ul class="native-assembly__team-list" data-assembly-teams></ul></div>
             <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
           </section>
-            <button type="button" class="native-control--create" data-assembly-action="person-create" disabled>Add person</button>
-          <details class="studio-people-rates">
-            <summary>Rates and available time</summary>
-          <div class="native-assembly__toolbar">
-            <div class="native-assembly__arrange" data-assembly-people-tools>
-              <label for="assembly-person-order">Person to arrange</label>
-              <select id="assembly-person-order" data-assembly-person disabled></select>
-              <div class="native-coordination__actions"><button type="button" data-assembly-action="person-up" disabled>Move up</button><button type="button" data-assembly-action="person-down" disabled>Move down</button><button type="button" class="native-control--remove" data-assembly-action="person-remove" disabled>Remove from plan</button></div>
-            </div>
-          </div>
-          <ul class="native-team__roster" data-team-roster></ul>
+          <section class="studio-people-rates" aria-label="People and available time">
+          <div class="native-assembly__heading"><h4>People in working sessions</h4><button type="button" class="native-control--create" data-assembly-action="person-create" disabled>Add person</button></div>
+          <div class="native-team__roster" data-team-roster></div>
           <p data-team-empty hidden>This plan has no people.</p>
-          </details>
+          </section>
           <details class="native-coordination__configuration" data-person-configure hidden>
             <summary>Settings · <span data-person-name></span></summary>
             <div class="native-coordination__recovery" data-person-recovery hidden>
@@ -475,6 +485,11 @@
             </div>
             <form novalidate>
               <fieldset disabled aria-label="Person rate and funded time">
+                <div class="studio-person-name">
+                  <label for="person-label">Name or role</label>
+                  <textarea id="person-label" name="label" rows="1" autocomplete="off" aria-describedby="person-label-error"></textarea>
+                  <p class="native-coordination__error" id="person-label-error" data-person-error="label"></p>
+                </div>
                 <div class="native-coordination__controls">
                   <div class="native-coordination__control">
                     <label for="person-ratePerHour">Hourly rate · USD</label>
@@ -643,8 +658,8 @@
           </details>
           <p class="native-coordination__status" data-assembly-status role="status" aria-live="polite" aria-atomic="true"></p>
           <section class="native-responsibility" aria-labelledby="native-responsibility-title">
-            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Human review</h4><button type="button" class="native-control--create" data-responsibility-action="create" disabled>Add contribution</button></div>
-            <ul class="native-responsibility__list" data-responsibility-list hidden></ul>
+            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Contributions and sessions</h4><button type="button" class="native-control--create" data-responsibility-action="create" disabled>Add contribution</button></div>
+            <div class="native-responsibility__list" data-responsibility-list hidden></div>
             <p class="native-coordination__hint" data-responsibility-empty hidden>Add an output and name who reviews it.</p>
             <details class="native-coordination__configuration native-responsibility__configuration" data-responsibility-configure="contribution" hidden>
               <summary>Contribution settings</summary>
@@ -652,16 +667,27 @@
               <p data-responsibility-current></p>
               <div class="native-coordination__actions"><button type="button" data-responsibility-action="review">Review saved edits</button><button type="button" data-responsibility-action="useCurrent">Use current values</button><button type="button" data-responsibility-action="freshId" hidden>Use these entries for a new contribution</button><button type="button" data-responsibility-action="cancel">Discard saved edits</button></div>
             </div>
+              <div class="studio-contribution-body">
               <form novalidate>
                 <fieldset disabled aria-label="Contribution settings">
                   <p data-responsibility-accepted hidden></p>
                   <div data-responsibility-fields>
-                    <div class="native-responsibility__grid">
+                    <section class="studio-contribution-work" aria-label="Contribution and supporting work">
+                      <h5>Work</h5>
                   <div class="native-responsibility__field">
                     <label for="contribution-categoryId">Contribution</label>
                     <select id="contribution-categoryId" name="categoryId" aria-describedby="contribution-categoryId-error"></select>
                     <p class="native-coordination__error" id="contribution-categoryId-error" data-responsibility-error="categoryId"></p>
                   </div>
+                    <div class="native-responsibility__sessions" role="group" aria-labelledby="contribution-work-label">
+                      <p class="native-coordination__control-title" id="contribution-work-label">Supporting sessions</p>
+                      <ul class="native-responsibility__work" data-responsibility-work aria-describedby="contribution-workIds-error"></ul>
+                      <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="contribution">Add a session</button>
+                      <p class="native-coordination__error" id="contribution-workIds-error" data-responsibility-error="workIds"></p>
+                    </div>
+                    </section>
+                    <section class="studio-contribution-people" aria-label="Human responsibility">
+                      <h5>Receiver and decision</h5>
                   <div class="native-responsibility__field">
                     <label for="contribution-receiverPersonId">Human receiver</label>
                     <select id="contribution-receiverPersonId" name="receiverPersonId" aria-describedby="contribution-receiverPersonId-error"></select>
@@ -674,25 +700,7 @@
                     <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="contribution" data-native-return-field="decisionOwnerPersonId" aria-label="Add a person to decide">Add a person</button>
                     <p class="native-coordination__error" id="contribution-decisionOwnerPersonId-error" data-responsibility-error="decisionOwnerPersonId"></p>
                   </div>
-                    </div>
-                    <div class="native-responsibility__sessions" role="group" aria-labelledby="contribution-work-label">
-                      <p class="native-coordination__control-title" id="contribution-work-label">Supporting sessions</p>
-                      <ul class="native-responsibility__work" data-responsibility-work aria-describedby="contribution-workIds-error"></ul>
-                      <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="contribution">Add a session</button>
-                      <p class="native-coordination__error" id="contribution-workIds-error" data-responsibility-error="workIds"></p>
-                    </div>
-                    <div class="native-responsibility__grid">
-                  <div class="native-responsibility__field">
-                    <label for="contribution-reviewBoundary">Review before use</label>
-                    <textarea id="contribution-reviewBoundary" name="reviewBoundary" rows="3" aria-describedby="contribution-reviewBoundary-error"></textarea>
-                    <p class="native-coordination__error" id="contribution-reviewBoundary-error" data-responsibility-error="reviewBoundary"></p>
-                  </div>
-                  <div class="native-responsibility__field">
-                    <label for="contribution-decisionBoundary">Decision boundary</label>
-                    <textarea id="contribution-decisionBoundary" name="decisionBoundary" rows="3" aria-describedby="contribution-decisionBoundary-error"></textarea>
-                    <p class="native-coordination__error" id="contribution-decisionBoundary-error" data-responsibility-error="decisionBoundary"></p>
-                  </div>
-                    </div>
+                    </section>
                   </div>
                   <p class="native-responsibility__confirm" data-responsibility-confirm hidden></p>
                   <ul class="native-responsibility__dependencies" data-responsibility-dependencies hidden></ul>
@@ -700,15 +708,15 @@
                   <div class="native-coordination__actions"><button type="submit" data-responsibility-apply>Apply changes</button><button type="button" data-responsibility-action="cancel">Cancel changes</button></div>
                 </fieldset>
               </form>
+              </div>
             </details>
             <p class="native-coordination__status" data-responsibility-status role="status" aria-live="polite" aria-atomic="true"></p>
           </section>
         </section>
         <section class="native-capabilities" id="native-studio-work" data-native-chapter-panel="work" data-native-capabilities aria-labelledby="native-capabilities-title">
           <header class="native-capabilities__heading">
-            <p class="native-coordination__plate">Plan what your users can do</p>
             <h3 id="native-capabilities-title" class="native-zine__heading">Customer abilities and team practices</h3>
-            <p>Choose an action, turn its card over, and plan the work that supports it. Several cards can share the same session and its cost.</p>
+            <p>Plan what users can do by choosing a cell to connect people, preparation, or review to the work.</p>
           </header>
           <div class="native-capabilities__catalogues">
             <section aria-labelledby="native-ability-catalogue-title">
@@ -718,21 +726,18 @@
             </section>
             <section aria-labelledby="native-practice-catalogue-title">
               <h4 id="native-practice-catalogue-title">How the team works</h4>
-              <p>Agree expectations, focus decisions, experiment, price opportunities, carry handoffs, and check outcomes.</p>
+              <p>Agree on expectations, focus decisions, experiment, price opportunities, carry handoffs, and check outcomes.</p>
               <div class="native-capabilities__sequence" data-capability-catalogue="practice" tabindex="0" role="region" aria-label="Team practice support"></div>
             </section>
           </div>
           <article class="native-capability-card" data-capability-selected hidden aria-labelledby="native-capability-title">
             <header><h4 id="native-capability-title" data-capability-title></h4></header>
             <div class="native-coordination__actions native-capability-card__actions">
-              <button type="button" data-capability-action="reverse" disabled>Inspect reverse</button>
-              <button type="button" data-capability-action="beside" disabled>Open beside</button>
               <button type="button" data-capability-action="configure" disabled>Plan this ability</button>
               <button type="button" class="native-control--remove" data-capability-action="remove" disabled>Remove from plan</button>
             </div>
             <div class="native-capability-card__faces">
               <section class="native-capability-card__front" data-capability-front aria-label="Card overview"></section>
-              <section class="native-capability-card__reverse" data-capability-reverse aria-label="Supporting work and observations" hidden></section>
             </div>
           </article>
           <details class="native-capability-settings" data-capability-configure>
@@ -785,11 +790,11 @@
             </fieldset>
           </form>
           <p class="native-coordination__status" data-change-status role="status" aria-live="polite" aria-atomic="true"></p>
-          <noscript><p>Frameworks offer different questions about how work becomes routine. Relative attention describes emphasis. Actual sessions carry their people, time and funding; the complete original Studio remains available below.</p></noscript>
+          <noscript><p>Frameworks offer different questions about how work becomes routine. Relative attention describes emphasis. Actual sessions carry their people, time, and funding; the complete original Studio remains available below.</p></noscript>
         </section>
         <section class="native-assurance" id="native-studio-assurance" data-native-chapter-panel="assurance" data-native-assurance aria-labelledby="native-assurance-title">
           <header class="native-assurance__heading">
-            <h3 id="native-assurance-title" class="native-zine__heading">Prepare for review, recovery and learning</h3>
+            <h3 id="native-assurance-title" class="native-zine__heading">Prepare for review, recovery, and learning</h3>
             <p>Choose the checks your initiative needs, rehearse a complication, and plan the work that helps people respond. Compare the proposed effort and price before applying a change.</p>
           </header>
           <div class="native-coordination__recovery" data-assurance-recovery hidden>
@@ -814,45 +819,71 @@
           <noscript><p>Quality and recovery planning connects explicit assumptions to named working sessions and reviewers. The complete original Studio remains available below; the accepted ledger above shows how declared work receives its price.</p></noscript>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
-          <h3 id="native-investment-title" class="native-zine__heading">Keep and compare your plan.</h3>
-          <div class="native-investment__grid">
-            <section class="native-investment__card" aria-labelledby="native-history-title">
-              <h4 id="native-history-title">Try a change</h4>
-              <p data-investment-history>Undo follows applied changes.</p>
-              <div class="native-coordination__actions"><button type="button" data-investment-action="undo" disabled>Undo</button><button type="button" data-investment-action="redo" disabled>Redo</button></div>
-              <dl class="native-investment__comparison" data-investment-comparison></dl>
-              <div class="native-coordination__actions"><button type="button" data-investment-action="baseline">Save baseline</button><button type="button" data-investment-action="restore" disabled>Restore baseline</button></div>
-            </section>
-            <section class="native-investment__card" aria-labelledby="native-exchange-title">
-              <h4 id="native-exchange-title">Start from a plan</h4>
-              <label for="native-preset">Starting plan</label>
-              <select id="native-preset" data-investment-preset></select>
-              <button type="button" data-investment-action="preset">Preview starting plan</button>
-              <label for="native-plan-file">Open a saved plan</label>
-              <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json">
-              <button type="button" data-investment-action="download">Download current plan</button>
-            </section>
-          </div>
-          <details class="native-coordination__trace" data-native-trace>
-            <summary>Whole-plan cost breakdown</summary>
-            <div class="native-coordination__trace-body">
-              <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
-              <ul class="native-coordination__ledger" data-native-trace-list>
-                <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
-                <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
-                <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
-                <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
-                <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
-                <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
-              </ul>
+          <h3 id="native-investment-title" class="native-zine__heading">Explore the investment.</h3>
+          <div class="studio-investment-workspace" data-investment-workspace>
+            <div data-investment-deck-shelf></div>
+            <div class="studio-investment-loaded" data-investment-loaded>
+              <section id="native-investment-deck-plan" data-investment-deck-panel="plan" aria-labelledby="native-investment-plan-title">
+                <h4 id="native-investment-plan-title" class="visually-hidden">Visualize allocation</h4>
+                <div data-investment-financials></div>
+                <details class="native-coordination__trace" data-native-trace>
+                  <summary>Whole-plan cost breakdown</summary>
+                  <div class="native-coordination__trace-body">
+                    <dl class="native-cost-summary" data-native-trace-summary>
+                        <div><dt>Staffing</dt><dd>$2,840.00</dd></div>
+                        <div><dt>Extra work</dt><dd>$1,140.00</dd></div>
+                        <div><dt>Plan total</dt><dd>$3,980.00</dd></div>
+                    </dl>
+                    <p class="native-cost-note" id="native-cost-note">Total = staffing + extra work. Included work is part of staffing.</p>
+                    <div class="native-cost-scroll" role="region" aria-label="Whole-plan investment by person" tabindex="0">
+                      <table class="native-cost-table" aria-describedby="native-cost-note">
+                        <caption>Investment by person · USD</caption>
+                        <thead><tr><th scope="col">Person</th><th scope="col">Hourly rate</th><th scope="col">Staffing</th><th scope="col">Included work</th><th scope="col">Extra work</th><th scope="col">Total</th></tr></thead>
+                        <tbody data-native-trace-list>
+                          <tr><th scope="row">Product lead</th><td><strong>$120.00</strong></td><td><strong>$480.00</strong><small>4 h</small></td><td><strong>$300.00</strong><small>2 h 30 min</small></td><td><strong>$240.00</strong><small>2 h</small></td><td><strong>$720.00</strong></td></tr>
+                          <tr><th scope="row">Researcher</th><td><strong>$100.00</strong></td><td><strong>$400.00</strong><small>4 h</small></td><td><strong>$250.00</strong><small>2 h 30 min</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$400.00</strong></td></tr>
+                          <tr><th scope="row">Engineering lead</th><td><strong>$140.00</strong></td><td><strong>$840.00</strong><small>6 h</small></td><td><strong>$560.00</strong><small>4 h</small></td><td><strong>$280.00</strong><small>2 h</small></td><td><strong>$1,120.00</strong></td></tr>
+                          <tr><th scope="row">Engineer</th><td><strong>$120.00</strong></td><td><strong>$720.00</strong><small>6 h</small></td><td><strong>$480.00</strong><small>4 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$720.00</strong></td></tr>
+                          <tr><th scope="row">Quality reviewer</th><td><strong>$110.00</strong></td><td><strong>$220.00</strong><small>2 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$440.00</strong><small>4 h</small></td><td><strong>$660.00</strong></td></tr>
+                          <tr><th scope="row">Operations specialist</th><td><strong>$90.00</strong></td><td><strong>$180.00</strong><small>2 h</small></td><td><strong>$0.00</strong><small>0 min</small></td><td><strong>$180.00</strong><small>2 h</small></td><td><strong>$360.00</strong></td></tr>
+                        </tbody>
+                        <tfoot><tr data-native-trace-totals><th scope="row">Plan total</th><td>—</td><td><strong>$2,840.00</strong><small>24 h</small></td><td><strong>$1,590.00</strong><small>13 h</small></td><td><strong>$1,140.00</strong><small>10 h</small></td><td><strong>$3,980.00</strong></td></tr></tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </details>
+              </section>
+              <div id="native-investment-deck-compare" data-investment-deck-panel="compare">
+                <section class="native-investment__card" aria-labelledby="native-history-title">
+                  <h4 id="native-history-title">Compare a change</h4>
+                  <p data-investment-history>Undo follows applied changes.</p>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="undo" disabled>Undo</button><button type="button" data-investment-action="redo" disabled>Redo</button></div>
+                  <dl class="native-investment__comparison" data-investment-comparison></dl>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="baseline">Save baseline</button><button type="button" data-investment-action="restore" disabled>Restore baseline</button></div>
+                </section>
+              </div>
+              <div id="native-investment-deck-exchange" data-investment-deck-panel="exchange">
+                <section class="native-investment__card" aria-labelledby="native-exchange-title">
+                  <h4 id="native-exchange-title">Keep a plan</h4>
+                  <p id="native-plan-retention">Changes and Saved edits last until you reload or close this page. Download keeps the accepted plan; unfinished edits and Undo history stay here.</p>
+                  <label for="native-preset">Starting plan</label>
+                  <select id="native-preset" data-investment-preset></select>
+                  <button type="button" data-investment-action="preset">Preview starting plan</button>
+                  <label for="native-plan-file">Open a saved plan</label>
+                  <p id="native-plan-restore">Open your downloaded file to preview it, then choose Use this plan.</p>
+                  <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json" aria-describedby="native-plan-restore">
+                  <button type="button" data-investment-action="download" aria-describedby="native-plan-retention">Download current plan</button>
+                </section>
+                <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
+                  <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
+                  <p data-investment-preview-total></p>
+                  <div data-investment-changes></div>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
+                </section>
+                <div data-investment-reports></div>
+              </div>
             </div>
-          </details>
-          <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
-            <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
-            <p data-investment-preview-total></p>
-            <div data-investment-changes></div>
-            <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
-          </section>
+          </div>
           <p class="native-coordination__status" data-investment-status role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
         <p class="native-coordination__fallback" data-native-fallback hidden></p>

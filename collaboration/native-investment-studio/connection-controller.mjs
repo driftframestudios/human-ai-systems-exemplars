@@ -3,18 +3,20 @@ import { describeArrangementReference } from './coordination-arrangements.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
+import { focusSubmitControl } from './rack-controls.mjs';
+import { animateRackChange } from './reel-control.mjs';
 
 const INSTANCES = new WeakMap();
 const FIELDS = Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'status']);
 export const CONNECTION_LABELS = Object.freeze({ senderTeamId: 'Sending team', receiverTeamId: 'Receiving team',
-  receiverPersonId: 'Receiving person', sharedObject: 'Shared object or decision', responseExpectation: 'Expected response',
+  receiverPersonId: 'Receiving person', sharedObject: 'Handoff name', responseExpectation: 'Expected response',
   workIds: 'Supporting sessions', status: 'Status' });
 const named = row => row ? `${row.label}${row.lifecycle === 'retired' ? ' · retired' : ''}` : 'Unassigned';
 
 // The host owns the plan and its diagram/list. This receiver lends one complete
 // connection form to the shared draft coordinator.
 export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, isActive = () => true, canOpen = isActive }) {
+  onAccepted = () => {}, onClose = () => false, isActive = () => true, canOpen = isActive }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.connection;
   const find = selector => {
@@ -105,7 +107,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const row = works.get(id), checkbox = previous.get(id) ?? document.createElement('input');
       let item = checkbox.closest('li');
       if (!item) {
-        item = document.createElement('li'); item.className = 'native-coordination__member';
+        item = document.createElement('li'); item.className = 'native-coordination__member'; item.dataset.connectionWorkRow = id;
         const label = document.createElement('label'), words = document.createElement('span');
         const text = document.createElement('span'), state = document.createElement('small');
         text.dataset.memberName = ''; state.className = 'native-coordination__member-status';
@@ -227,7 +229,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   function begin(method, value, focus) {
     if (disposed) return;
     const epoch = ++generation, before = boundary();
-    onBegin();
+    onBegin(describeConnectionTarget(value));
     const active = editing.read().active;
     if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
       || (active && active.token !== before.token)) return;
@@ -251,7 +253,11 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     close({ park: false }); const epoch = generation;
     render(); if (!owns(epoch)) return;
     announce(message); const mark = boundary(); onEditing();
-    if (retains(epoch, mark)) (elements.configure.hidden ? elements.add : elements.summary).focus();
+    if (retains(epoch, mark)) {
+      const handled = onClose();
+      if (handled === true || !retains(epoch, mark)) return;
+      (elements.configure.hidden ? elements.add : elements.summary).focus();
+    }
   }
   function settle(action) {
     if (disposed) return;
@@ -281,7 +287,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     render(); if (!owns(epoch)) return;
     announce(next.ok ? 'Connection updated.' : next.error.message);
     const ready = boundary(); onEditing();
-    if (retains(epoch, ready)) elements.apply.focus();
+    if (retains(epoch, ready)) focusSubmitControl(elements.apply);
   }
   function membership(id, delta = null, checked = false) {
     const view = editor.read();
@@ -298,8 +304,10 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    changed(operate('setIds', view.draft.token, 'workIds', ids), epoch, () =>
-      (memberControls.get(id) ?? elements.members.querySelector('input') ?? elements.apply).focus());
+    const update = () => changed(operate('setIds', view.draft.token, 'workIds', ids), epoch, () =>
+      (memberControls.get(id) ?? elements.members.querySelector('input') ?? elements.apply).focus({ preventScroll: true }));
+    if (delta === null) update();
+    else animateRackChange(elements.members, update, { selector: '[data-connection-work-row]', key: 'connectionWorkRow' });
   }
   function edit(event) {
     if (disposed || inputs[event.target.name] !== event.target) return;
@@ -309,7 +317,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   }
   function click(event) {
     const control = event.target.closest('[data-connection-action]');
-    if (disposed || !control || !root.contains(control) || control.disabled) return;
+    if (disposed || !control || (!root.contains(control) && !elements.configure.contains(control)) || control.disabled) return;
     const action = control.dataset.connectionAction;
     if (action === 'create') { create(); return; }
     if (action === 'remove') {
@@ -340,8 +348,10 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     resume() { if (!disposed) { composing = false; if (elements.configure.open && target) open(target, false); else render(); } }, dispose });
   try {
     inputs.status.replaceChildren(option('active', 'Active'), option('paused', 'Paused'));
-    for (const field of FIELDS) if (inputs[field].tagName === 'TEXTAREA') inputs[field].maxLength = CONNECTION_FORMS['connection.create'].fields[field].maxLength;
-    listen(root, 'click', click); listen(elements.form, 'input', edit);
+    for (const field of ['sharedObject', 'responseExpectation']) inputs[field].maxLength = CONNECTION_FORMS['connection.create'].fields[field].maxLength;
+    listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
+    listen(elements.configure, 'click', click);
+    listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { generation += 1; composing = true; });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });

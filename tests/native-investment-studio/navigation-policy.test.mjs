@@ -1,10 +1,12 @@
 import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { hasReturnDraft, isReturnRouteRetained, returnRoutePrefixLength, resolveScoreDestination } from '../../collaboration/native-investment-studio/navigation-policy.mjs';
+import { hasReturnDraft, isReturnRouteRetained, returnRoutePrefixLength, resolveScoreDestination,
+  resolveWorkEditorTarget, workDefaultsTarget, workSessionTarget } from '../../collaboration/native-investment-studio/navigation-policy.mjs';
 
 const rows = (...ids) => Object.freeze(ids.map(id => Object.freeze({ id })));
-const state = Object.freeze({ people: rows('reviewer'), teams: rows('receiving-team'), work: rows('review'), connections: rows('handoff') });
+const state = Object.freeze({ revision: 7, people: rows('reviewer'), teams: rows('receiving-team'),
+  work: Object.freeze([Object.freeze({ id: 'review', occurrences: 3 })]), connections: rows('handoff') });
 const emptyDrafts = Object.freeze({ active: null, parked: Object.freeze([]) });
 const parked = (kind, targetId) => Object.freeze({ active: null, parked: Object.freeze([Object.freeze({ kind, targetId })]) });
 const routeList = (...routes) => Object.freeze(routes.map(route => Object.freeze(route)));
@@ -86,12 +88,14 @@ test('a supporting-session detour retains the People return while an unrelated c
 });
 
 test('Score resolves only its offered current record and chapter destinations into detached values', () => {
-  const target = { kind: 'work', id: 'review' };
+  const target = { ...workDefaultsTarget('review') };
   const destination = resolveScoreDestination(target, state);
-  assert.deepEqual(destination, { kind: 'work', id: 'review', chapter: 'coordination' });
+  assert.deepEqual(destination, { kind: 'work', scope: 'defaults', id: 'review', targetId: 'work.update:review', chapter: 'coordination' });
   assert.equal(Object.isFrozen(destination), true);
   target.id = 'other';
   assert.equal(destination.id, 'review');
+  assert.deepEqual(resolveScoreDestination(workSessionTarget(state.work[0], 0), state),
+    { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: 0, sourceWork: state.work[0], targetId: 'work.session.update:review:0', chapter: 'coordination' });
   assert.deepEqual(resolveScoreDestination({ kind: 'person', id: 'reviewer' }, state), { kind: 'person', id: 'reviewer', chapter: 'people' });
   assert.deepEqual(resolveScoreDestination({ kind: 'connection', id: 'handoff' }, state), { kind: 'connection', id: 'handoff', chapter: 'coordination' });
   for (const id of ['change', 'assurance', 'investment']) {
@@ -102,9 +106,46 @@ test('Score resolves only its offered current record and chapter destinations in
 test('unsupported Score destinations and removed or wrong-collection records have no receiving route', () => {
   assert.equal(resolveScoreDestination({ kind: 'gate', id: 'review' }, state), null, 'local gate inspection is not onward navigation');
   assert.equal(resolveScoreDestination({ kind: 'chapter', id: 'people' }, state), null, 'only the offered onward chapters are admitted');
-  assert.equal(resolveScoreDestination({ kind: 'work', id: 'removed' }, state), null);
+  assert.equal(resolveScoreDestination(workDefaultsTarget('removed'), state), null);
   assert.equal(resolveScoreDestination({ kind: 'person', id: 'review' }, state), null, 'a work ID does not identify a person');
   assert.equal(resolveScoreDestination({ kind: 'constructor', id: 'review' }, state), null);
   assert.equal(resolveScoreDestination(null, state), null);
   assert.equal(resolveScoreDestination({ kind: 'work' }, state), null);
+});
+
+test('work editor targets distinguish plan defaults from one current session before navigation', () => {
+  const defaults = workDefaultsTarget('review');
+  assert.deepEqual(defaults, { kind: 'work', scope: 'defaults', id: 'review' });
+  const sourceWork = state.work[0];
+  assert.deepEqual(workSessionTarget(sourceWork, 0), { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: 0, sourceWork });
+  for (const index of [0, 2]) {
+    const target = workSessionTarget(sourceWork, index), resolved = resolveWorkEditorTarget(target, state);
+    assert.deepEqual(resolved, { ...target, targetId: `work.session.update:review:${index}` });
+    assert.equal(Object.isFrozen(resolved), true);
+  }
+  assert.deepEqual(resolveWorkEditorTarget(defaults, state), { ...defaults, targetId: 'work.update:review' });
+  const invalid = [
+    ['implicit defaults', { kind: 'work', id: 'review' }],
+    ['missing index', { kind: 'work', scope: 'session', id: 'review', sourceWork }],
+    ['undefined index', { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: undefined, sourceWork }],
+    ...['0', -1, 0.5, NaN, Infinity, 3].map(index => [String(index), { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: index, sourceWork }]),
+    ['missing source record', { kind: 'work', scope: 'session', id: 'review', occurrenceIndex: 0 }],
+    ['copied source record', workSessionTarget({ ...sourceWork }, 0)],
+    ['conflicting defaults index', { ...defaults, occurrenceIndex: 0 }],
+    ['removed work', workSessionTarget({ id: 'removed', occurrences: 1 }, 0)],
+    ['navigation is separate', { kind: 'period', id: 'review' }],
+  ];
+  for (const [label, target] of invalid) {
+    assert.equal(resolveWorkEditorTarget(target, state), null, label);
+    assert.equal(resolveScoreDestination(target, state), null, label);
+  }
+  const captured = workSessionTarget(sourceWork, 2);
+  const shortened = { ...state, revision: 8, work: [{ id: 'review', occurrences: 2 }] };
+  assert.equal(resolveWorkEditorTarget(captured, shortened), null, 'an ordinal removed since projection has no editor');
+  assert.equal(resolveWorkEditorTarget(workSessionTarget(sourceWork, 1), shortened), null,
+    'an in-range ordinal from the earlier projection cannot address the session that moved into its position');
+  assert.equal(resolveWorkEditorTarget(workSessionTarget(sourceWork, 1), { ...shortened, revision: state.revision }), null,
+    'a divergent edit after Undo can reuse a revision while its session identities differ');
+  assert.deepEqual(resolveWorkEditorTarget(workDefaultsTarget('review'), shortened),
+    { ...defaults, targetId: 'work.update:review' }, 'plan defaults keep their stable work ID across acceptance');
 });

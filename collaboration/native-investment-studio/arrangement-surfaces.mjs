@@ -1,4 +1,7 @@
-import { duration } from './display.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
+import { duration, workDuration } from './display.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const node = (document, tag, className, text) => {
   const element = document.createElement(tag);
@@ -71,21 +74,22 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     const choose = node(document, 'button', 'studio-track-key studio-session-tracks__name native-control--navigate'); choose.type = 'button';
     if (sessionIds.has(work.id)) choose.dataset.studioSessionId = work.id;
     choose.setAttribute('aria-label', `${work.label}. ${sessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);
-    choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
-    if (onSession) choose.addEventListener('click', event => onSession(work.id, event.currentTarget));
+    choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', workDuration(work)));
+    if (onSession) choose.addEventListener('click', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
     else choose.dataset.nativeWorkOpen = work.id;
     title.append(choose); row.append(title);
-    const members = new Set(work.personIds);
+    const summary = summarizeWorkSessions(work), members = new Set(summary.personIds);
     for (const person of plan.people) {
       const cell = node(document, 'td');
       if (members.has(person.id)) {
-        const pad = node(document, 'button', 'studio-session-tracks__pad native-control--navigate', work.status === 'paused' ? 'Ⅱ' : work.funding === 'additional' ? '◆' : '●'); pad.type = 'button';
+        const time = work.sessionOverrides?.length ? `${duration(summary.people.find(row => row.personId === person.id).minutes)} across sessions` : `${duration(work.minutesPerOccurrence)} per session`;
+        const pad = node(document, 'button', 'studio-session-tracks__pad native-control--navigate', summary.status === 'paused' ? 'Ⅱ' : summary.funding === 'mixed' ? '● ◆' : summary.funding === 'additional' ? '◆' : '●'); pad.type = 'button';
         pad.dataset.studioSessionPerson = person.id;
         if (sessionIds.has(work.id)) pad.dataset.studioSessionId = work.id;
-        pad.dataset.funding = work.funding; pad.dataset.status = work.status;
-        pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${duration(work.minutesPerOccurrence)} per session · ${work.funding === 'additional' ? 'extra investment' : 'within funded time'}${work.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
-        pad.title = `${person.label} · ${duration(work.minutesPerOccurrence)} per session`;
-        if (onSession) pad.addEventListener('click', event => onSession(work.id, event.currentTarget));
+        pad.dataset.funding = summary.funding; pad.dataset.status = summary.status;
+        pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${time} · ${summary.funding === 'mixed' ? 'funded time and extra investment' : summary.funding === 'additional' ? 'extra investment' : 'within funded time'}${summary.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
+        pad.title = `${person.label} · ${time}`;
+        if (onSession) pad.addEventListener('click', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
         else pad.dataset.nativeWorkOpen = work.id;
         cell.append(pad);
       } else { const empty = node(document, 'span', 'studio-session-tracks__empty', '·'); empty.setAttribute('aria-label', `${person.label}: not included in this session`); cell.append(empty); }
@@ -99,9 +103,8 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     for (const person of plan.people) {
       const cell = node(document, 'td');
       if (acceptedPersonIds.has(person.id)) {
-        const add = node(document, 'button', 'native-control--create studio-rack-add studio-rack-create-zone', 'Add session');
-        add.type = 'button'; add.dataset.studioEntryKey = `shared-session-add:${person.id}`;
-        add.setAttribute('aria-label', `Add a session with ${person.label}`);
+        const add = createRackAddControl(document, { label: `Add a session with ${person.label}`,
+          dataset: { studioEntryKey: `shared-session-add:${person.id}` } });
         add.addEventListener('click', event => onAdd({ personId: person.id }, event.currentTarget)); cell.append(add);
       }
       row.append(cell);

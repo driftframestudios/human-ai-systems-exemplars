@@ -5,6 +5,7 @@ import { createStudio } from '../../collaboration/native-investment-studio/state
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { CONNECTION_PAGE_SIZE, CONNECTION_GEOMETRY, createConnectionViewModel,
   createConnectionViewState, connectionPageGeometry, mountConnectionView, arrangementGeometry } from '../../collaboration/native-investment-studio/connection-view.mjs';
+import { diagramArrowPath } from '../../collaboration/native-investment-studio/diagram-geometry.mjs';
 import { projectCoordinationArrangements } from '../../collaboration/native-investment-studio/coordination-arrangements.mjs';
 
 function plan(count = 2) {
@@ -29,9 +30,42 @@ test('adapted arrangement relationships sharing endpoints retain distinct visibl
   const geometry = arrangementGeometry(arrangement, accepted);
   assert.equal(new Set(geometry.edges.map(edge => edge.path)).size, 3);
   assert.equal(new Set(geometry.edges.map(edge => edge.path.split(' C ')[0])).size, 3);
-  assert.equal(new Set(geometry.edges.map(edge => edge.arrow.split(' ')[0])).size, 3);
+  assert.equal(new Set(geometry.edges.map(edge => edge.end.join(','))).size, 3);
   assert.deepEqual(geometry.edges.map(edge => [edge.connection.senderTeamId, edge.connection.receiverTeamId]),
     [['delivery', 'receiving'], ['delivery', 'receiving'], ['delivery', 'receiving']]);
+});
+
+test('a directed diagram arrow joins its shaft and head in one closed contour', () => {
+  const straight = diagramArrowPath({ start: [0, 0], end: [100, 0] });
+  assert.match(straight, /^M 0 2\.5 L /u);
+  assert.match(straight, /86 2\.5 L 86 7 L 100 0 L 86 -7 L 86 -2\.5 L /u);
+  assert.equal((straight.match(/M /gu) ?? []).length, 1);
+  assert.ok(straight.endsWith(' Z'));
+  const diagonal = diagramArrowPath({ start: [100, 100], end: [40, 20] });
+  assert.match(diagonal, /50\.4 29\.7 L 54 27 L 40 20 L 42\.8 35\.4 L 46\.4 32\.7 L /u,
+    'a reverse diagonal keeps the head aimed at its receiver');
+});
+
+test('tight Matrix bends and curved returns approach their head without folding forward across its base', () => {
+  const cases = [
+    { start: [650, 128], control1: [561, 128], control2: [631, 333], end: [590, 333] },
+    { start: [590, 357], control1: [679, 357], control2: [609, 152], end: [650, 152] },
+    { start: [447, 99], control1: [447, 161], control2: [87, 161], end: [87, 99] },
+  ];
+  for (const geometry of cases) {
+    const points = diagramArrowPath(geometry).slice(2, -2).split(' L ').map(pair => pair.split(' ').map(Number));
+    const neck = (points.length - 3) / 2;
+    const midpoint = (a, b) => a.map((value, axis) => (value + b[axis]) / 2);
+    const base = midpoint(points[neck], points[neck + 2]);
+    const previous = midpoint(points[neck - 2], points[neck + 4]);
+    const direction = geometry.end.map((value, axis) => value - base[axis]);
+    assert.deepEqual(points[neck + 1], geometry.end, 'the tip remains the exact receiving endpoint');
+    const shaftBase = midpoint(points[neck - 1], points[neck + 3]);
+    assert.ok(Math.hypot(...shaftBase.map((value, axis) => value - base[axis])) <= .001,
+      'shaft and head share their actual neck within the path’s three-decimal rounding');
+    assert.ok(previous.reduce((total, value, axis) => total + (value - base[axis]) * direction[axis], 0) < 0,
+      'the shaft approaches from behind the head, leaving its triangle uncut');
+  }
 });
 
 test('one accepted model preserves exact directed endpoints, human/work references and source-owned standing', () => {

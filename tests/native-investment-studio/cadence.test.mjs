@@ -6,7 +6,7 @@ import { createExamplePlan, preparePlan, prepareImport } from '../../collaborati
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createPlanExchange } from '../../collaboration/native-investment-studio/exchange.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
-import { describeScoreChanges, describeScoreReference } from '../../collaboration/native-investment-studio/score-reference.mjs';
+import { describeScoreChanges } from '../../collaboration/native-investment-studio/score-reference.mjs';
 import { prepareCoordinationTemplate, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
 
 function periodPlan() {
@@ -100,14 +100,16 @@ test('session edits replace only their own placements and direct count reduction
   assert.deepEqual(preparePlan(reordered).score.cadence.occurrences.map(row => row.workId), ['review', 'followup']);
 });
 
-test('typed handoffs, decision anchors and delays admit meaningful references and identify deletion receivers', () => {
+test('typed handoffs, decision anchors and delays admit meaningful references and dissolve with removed work', () => {
   const plan = periodPlan();
   plan.scoreSettings.cadence.delays = [{ id: 'receiving-delay', label: 'Await receiving review', anchor: { kind: 'handoff', id: 'review-handoff' },
     fromPeriodId: 'period-1', toPeriodId: 'period-2', reason: 'The receiving team reviews the evidence next sprint.', receiverPersonId: 'product-one' }];
   const studio = createStudio(plan), before = studio.read();
-  const removal = studio.applyCommand({ type: 'work.remove', workId: 'followup' }, before);
-  assert.equal(removal.error.code, 'dependencies');
-  assert.equal(describeScoreReference(before.state.scoreSettings, removal.error.references.find(row => row.field.startsWith('cadence.'))).kind, 'handoff');
+  const removal = studio.previewCommand({ type: 'work.remove', workId: 'followup' }, before);
+  assert.equal(removal.ok, true);
+  assert.deepEqual(removal.projection.state.scoreSettings.cadence.handoffs, []);
+  assert.deepEqual(removal.projection.state.scoreSettings.cadence.delays, []);
+  assert.deepEqual(removal.projection.state.scoreSettings.gates, []);
   for (const [code, mutate] of [
     ['reference', row => { row.scoreSettings.cadence.decisionAnchors[0].id = 'missing'; }],
     ['reference', row => { row.scoreSettings.cadence.delays[0].anchor.id = 'missing'; }],
@@ -123,9 +125,9 @@ test('strict previous-version migration retains arrangement identities and curre
     teams: [{ slotId: 'partner', kind: 'new', label: 'Receiving reviewers', personIds: ['product-one'] }, { slotId: 'pod', kind: 'existing', teamId: 'delivery', addPersonIds: [] }],
     connections: ['feedback', 'handoff'].map(slotId => ({ slotId, receiverPersonId: 'product-one', sharedObject: 'Review evidence', responseExpectation: 'Confirm receipt.', workIds: ['review'], status: 'active', recoveryWork: null })) };
   assert.equal(applyCoordinationTemplate(studio, prepareCoordinationTemplate(studio.read(), request)).ok, true);
-  const old = structuredClone(studio.read().state); old.schemaVersion = '0.8.0'; old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence;
+  const old = structuredClone(studio.read().state); old.schemaVersion = '0.8.0'; old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence; delete old.investmentSettings;
   const migrated = prepareImport(JSON.stringify(old));
-  assert.equal(migrated.sourceSchemaVersion, '0.8.0'); assert.equal(migrated.projection.state.schemaVersion, '0.9.0');
+  assert.equal(migrated.sourceSchemaVersion, '0.8.0'); assert.equal(migrated.projection.state.schemaVersion, '0.11.0');
   assert.deepEqual(migrated.projection.state.arrangements, old.arrangements); assert.deepEqual(migrated.projection.state.work, old.work);
   assert.equal(migrated.projection.state.scoreSettings.cadence, null);
   old.scoreSettings.cadence = createCadence(); assert.throws(() => preparePlan(old), { code: 'fields' });
@@ -136,4 +138,49 @@ test('strict previous-version migration retains arrangement identities and curre
   assert.equal(prepareImport(before.serialized).projection.serialized, before.serialized);
   assert.ok(describeScoreChanges(before.state, receipt.view.preview.projection.state).some(text => text.includes('Sprint 1 · week 2')));
   exchange.dispose(); editing.dispose();
+});
+
+
+test('period captions round-trip independently from identity and remain bounded', () => {
+  const plan = periodPlan(); plan.scoreSettings.cadence.periods[0].caption = 'Discover the receiving work';
+  const accepted = preparePlan(plan);
+  const imported = prepareImport(accepted.serialized).projection;
+  assert.deepEqual(imported.state.scoreSettings.cadence.periods, plan.scoreSettings.cadence.periods);
+  assert.equal(resizeCadence(plan.scoreSettings.cadence, 3).periods[0].caption, 'Discover the receiving work');
+  plan.scoreSettings.cadence.periods[0].caption = 'x'.repeat(121);
+  assert.throws(() => preparePlan(plan), error => error.code === 'text');
+});
+
+for (const basis of ['sprint', 'quarter']) test(`${basis} projection retains ordered memberships, partial endpoints and active participant effort`, () => {
+  const plan = periodPlan(), cadence = plan.scoreSettings.cadence;
+  cadence.basis = basis;
+  Object.assign(plan.work[0], { occurrences: 3, personIds: ['product-one', 'engineering-one'], funding: 'additional',
+    sessionOverrides: [{ occurrenceIndex: 1, label: 'Paused review', teamId: 'delivery', personIds: ['product-two'],
+      minutesPerOccurrence: 60, funding: 'allocated', status: 'paused' }] });
+  Object.assign(plan.work[1], { personIds: ['product-two'], minutesPerOccurrence: 40 });
+  plan.work.push({ ...structuredClone(plan.work[1]), id: 'unplaced', label: 'Receiving work' });
+  cadence.placements = [
+    { workId: 'review', occurrenceIndex: 2, periodId: 'period-2', subdivision: 2 },
+    { workId: 'followup', occurrenceIndex: 0, periodId: 'period-1', subdivision: 2 },
+    { workId: 'review', occurrenceIndex: 0, periodId: 'period-1', subdivision: 1 },
+    { workId: 'review', occurrenceIndex: 1, periodId: 'period-1', subdivision: 2 },
+  ];
+  plan.scoreSettings.stages = [{ id: 'partial', label: 'Receive the work', workIds: ['review', 'unplaced'] },
+    { id: 'ready', label: 'Follow up', workIds: ['followup'] }, { id: 'empty', label: 'Later', workIds: [] }];
+  cadence.handoffs.push({ id: 'partial-handoff', from: { kind: 'stage', id: 'partial' },
+    to: { kind: 'stage', id: 'ready' }, connectionId: null });
+  cadence.availability = ['product-one', 'product-two', 'engineering-one'].map(personId =>
+    ({ personId, periodId: 'period-1', availableMinutes: null }));
+  const view = preparePlan(plan).score.cadence;
+  assert.deepEqual(view.periods.map(period => period.occurrences.map(row => [row.workId, row.occurrenceIndex])),
+    [[['followup', 0], ['review', 0], ['review', 1]], [['review', 2]]]);
+  assert.deepEqual(view.unplaced.map(row => [row.workId, row.occurrenceIndex]), [['unplaced', 0]]);
+  assert.deepEqual(view.availability.map(row => [row.personId, row.plannedMinutes]),
+    [['product-one', 30], ['product-two', 40], ['engineering-one', 30]]);
+  assert.deepEqual(view.stages.map(row => [row.id, row.status, row.periodIds, row.firstPeriodId, row.lastPeriodId]),
+    [['partial', 'partial', ['period-1', 'period-2'], 'period-1', null],
+      ['ready', 'placed', ['period-1'], 'period-1', 'period-1'], ['empty', 'unplaced', [], null, null]]);
+  assert.deepEqual(view.handoffs.map(row => [row.id, row.status, row.fromPeriodId, row.toPeriodId, row.subdivision]),
+    [['review-handoff', 'review-order', 'period-2', 'period-1', 2], ['partial-handoff', 'choose-period', null, 'period-1', 2]]);
+  assert.deepEqual(view.decisions.map(row => [row.id, row.periodId, row.subdivision]), [['review-decision', 'period-1', 2]]);
 });

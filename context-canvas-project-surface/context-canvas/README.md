@@ -59,19 +59,24 @@ count, funding and status. Its session browser route observes arithmetic,
 selection, stale recovery, removal and empty-plan entry.
 `responsibility-controller.mjs` adds the selected person's eight role fields
 and the six contribution categories with human receiver, decision owner,
-supporting sessions and review instructions. The same accepted plan supplies
-these controls, saved edits and exports; descriptive changes preserve money.
+supporting sessions and retained review instructions. Issue #836 composes these
+into a visible role-facet rail and a compact Work / Receiver and decision pair.
+Native role/contribution choices and supporting-session changes accept directly;
+stored review/decision notes retain their existing meaning. `studio-people.css`
+owns the parallel team lanes, recessed roster, record-local arrangement controls
+and compact canonical Person settings, including the borrowed Coordination form.
+Person text and quantities retain their Apply boundary. The same accepted plan
+supplies these controls, saved edits and exports; descriptive changes preserve money.
 Its focused browser route owns complete-field meaning, reference recovery,
 focus, narrow reading and disposal. The assembly and existing person routes
 retain their focused checks.
-`connection-view.mjs` gives Coordination one accepted SVG/list projection with
-eight connections per page and a persistent selected detail. The diagram uses
-explicit sending and receiving racks; its local horizontal scrolling leaves
-vertical reading with About. `connection-controller.mjs` opens the same complete
-editor from a cable or list selection. Session, connection and template
-presentations share the existing coordinator and recover their own saved work.
-The patch bay lives above the complete working-session form; `styles/routes/about.css`
-owns its scoped palette, focus and reading geometry. The retained Studio chapter
+`connection-view.mjs` retains the accepted SVG/list projection for its reference
+consumers. The current About Coordination surface uses the delivery board and
+Shared sessions module, with canonical person/session/handoff forms borrowed into
+the selected local receiver. `connection-controller.mjs` owns that handoff form.
+Session, connection and template presentations share the existing coordinator
+and recover their own saved work. `styles/routes/about.css` supplies their palette;
+the Studio chapter styles own current rack geometry. The retained Studio chapter
 package keeps its source and independent iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` retains the standalone
@@ -758,8 +763,16 @@ selection, recovery, and export behavior. Its companion article retains its
 independent Debrief composition and essay checks.
 
 The native Studio extends About with `studio-instrument.css` for shared reels
-and motion, followed by `studio-arrangements.css`, `studio-change.css` and
-`studio-assurance.css` for their chapter racks. The authored About page loads
+and motion, followed by `studio-arrangements.css`, `studio-people.css`,
+`studio-change.css`, `studio-assurance.css` and `studio-investment.css` for their chapter racks.
+`studio-people.css` follows Arrangement and owns People geometry plus the compact
+canonical Person form wherever that form is borrowed; `studio-abilities.css`
+owns the support tables and compact selected dark rack. `studio-investment.css`
+owns the live five-type financial workbench, its deck shelf and quantity modules.
+Its runtime modules live under `collaboration/native-investment-studio/`;
+the preserved planning specimen remains a separate reference. The primary route
+manifest registers these styles and their runtime dependencies in the About
+asset closure. The authored About page loads
 these after `about.css`; chapter selectors retain their local extension point.
 The [Studio source map](../../collaboration/native-investment-studio/implementation-reference.md#source-map)
 names the rendering owners and the [experience journal](../../collaboration/native-investment-studio/experience-journal.md)

@@ -39,10 +39,10 @@ test('investment comparisons name actual score changes and separate modeled deci
   assert.deepEqual(describeScoreChanges(studio.read().state, preparePlan(unavailable).state), [`Availability — ${before.people[0].label}: minutes 10–90 → No available intervals.`]);
 });
 test('schema0.6 migration preserves amounts and unknown calendar inputs, including an omitted legacy timing member', () => {
-  const legacy = createExamplePlan(); legacy.schemaVersion = '0.6.0'; delete legacy.scoreSettings; delete legacy.arrangements;
+  const legacy = createExamplePlan(); legacy.schemaVersion = '0.6.0'; delete legacy.scoreSettings; delete legacy.arrangements; delete legacy.investmentSettings;
   legacy.people.forEach(row => { delete row.availability; }); delete legacy.work[0].timing;
   const result = prepareImport(JSON.stringify(legacy)).projection;
-  assert.equal(result.state.schemaVersion, '0.9.0'); assert.equal(result.result.knownCommitmentCents, 120000);
+  assert.equal(result.state.schemaVersion, '0.11.0'); assert.equal(result.result.knownCommitmentCents, 120000);
   assert.equal(result.state.work[0].timing, null); assert.ok(result.state.people.every(row => row.availability === null));
   assert.equal(result.state.scoreSettings.window, null); assert.deepEqual(result.state.scoreSettings.proposals, []);
   assert.equal(result.score.workRows[0].placement, 'unspecified');
@@ -123,7 +123,8 @@ test('score-aware removal guards identify the exact records and comparison separ
   const person = studio.previewCommand({ type: 'person.remove', personId: 'product-one' }, before);
   assert.deepEqual(person.error.references.filter(row => row.collection === 'scoreSettings').map(row => row.field), ['waits[0].receiverPersonId', 'gates[0].reviewerPersonId', 'proposals[0].work.personIds']);
   const work = studio.previewCommand({ type: 'work.remove', workId: 'review' }, before);
-  assert.ok(work.error.references.some(row => row.collection === 'scoreSettings' && row.field === 'stages[0].workIds')); assert.strictEqual(studio.read(), before);
+  assert.equal(work.ok, true); assert.deepEqual(work.projection.state.scoreSettings.stages[0].workIds, []);
+  assert.strictEqual(studio.read(), before);
   const candidate = structuredClone(before.state); candidate.work[0].timing = { startMinute: 0, repeatEveryMinutes: 60 };
   candidate.people[0].availability = [{ startMinute: 0, endMinute: 400 }]; candidate.scoreSettings.gates[0].modeledDecision = 'proceed';
   const exchange = createPlanExchange(studio, createDraftCoordinator(studio)).previewText(JSON.stringify(candidate));

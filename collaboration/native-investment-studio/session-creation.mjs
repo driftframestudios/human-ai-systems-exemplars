@@ -1,6 +1,7 @@
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
+import { nextCreatedLabel } from './creation-label.mjs';
 
-const DEFAULT_VALUES = Object.freeze({ label: 'Review the next step', hoursPerSession: '0',
+const DEFAULT_VALUES = Object.freeze({ hoursPerSession: '0',
   minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
 const failure = (path, message) => Object.freeze({ ok: false,
   error: Object.freeze({ code: 'reference', path, message }) });
@@ -31,6 +32,6 @@ export function prepareSessionCreation(state, { periodId, subdivision = 1, teamI
   const personIds = explicitPerson ? [explicitPerson.id] : participants(team);
   if (!personIds.length) personIds.push(currentPeople[0].id);
   const placements = placed ? [{ occurrenceIndex: 0, periodId, subdivision }] : [];
-  return Object.freeze({ ok: true, raw: Object.freeze({ ...DEFAULT_VALUES, teamId: team.id,
+  return Object.freeze({ ok: true, raw: Object.freeze({ ...DEFAULT_VALUES, label: nextCreatedLabel(state.work, 'session'), teamId: team.id,
     personIds: Object.freeze(personIds), cadencePlacements: JSON.stringify(placements) }) });
 }

@@ -1,9 +1,10 @@
+import { workDefaultsTarget, workSessionTarget, resolveWorkEditorTarget } from './navigation-policy.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { mountDurationDials, renderTimeReadout } from './time-controls.mjs';
-import { describeScoreReference } from './score-reference.mjs';
-import { describeAssuranceReference, getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
+import { renderRemovalReferences } from './removal-references.mjs';
+import { getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
-import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
+import { CONTRACT, LIMITS } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
 import { CONTRIBUTION_CATEGORIES, ROLE_CATALOGUES } from './roles.mjs';
 import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
@@ -11,7 +12,9 @@ import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
-import { syncReorderButtons } from './rack-controls.mjs';
+import { syncReorderButtons, focusSubmitControl } from './rack-controls.mjs';
+import { resolveWorkSession, summarizeWorkSessions } from './work-sessions.mjs';
+import { nextCreatedLabel } from './creation-label.mjs';
 import { prepareSessionCreation } from './session-creation.mjs';
 
 const INSTANCES = new WeakMap();
@@ -23,7 +26,6 @@ const LABELS = Object.freeze({ label: 'Session name', teamId: 'Team', hoursPerSe
   occurrences: 'Working sessions', personIds: 'Participants', funding: 'Funding', status: 'Status' });
 const FUNDING = Object.freeze({ additional: 'Extra investment', allocated: 'Included in funded time' });
 const PLACEMENT_PAGE_SIZE = 12;
-const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice.action]));
 const FUNCTION_LABELS = new Map(ROLE_CATALOGUES.functionId.map(role => [role.id, role.label]));
 
 // One complete session form borrows the host's shared draft coordinator. The
@@ -84,12 +86,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   elements.fields.querySelector('.native-time-controls').after(placementElements.fieldset);
   const occurrenceControls = mountSessionOccurrenceControls(document, {
     onPlacement: writePlacement,
-    onAdd() {
-      const view = editor.read();
-      if (disposed || composing || view.status !== 'editing' || !view.draft) return;
-      const epoch = ++generation;
-      changed(operate('step', view.draft.token, 'occurrences', 1), epoch);
+    onSelect(index) {
+      const result = select(workSessionTarget(works.get(selectedId), index), false);
+      if (result?.ok && describeSessionTarget(editor.read().draft?.sessionId)?.occurrenceIndex === index) focusOccurrence(index);
     },
+    onRemove: index => changeSessionCount(index),
+    onAdd: () => changeSessionCount(),
   });
   occurrenceControls.root.hidden = true;
   placementElements.fieldset.after(occurrenceControls.root);
@@ -100,7 +102,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       note: root.querySelector(unit === 'hours' ? '[data-native-hours-knob-note]' : '[data-native-knob-note]') }];
   }));
   const cleanup = [];
-  let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
+  let projection = null, works = new Map(), people = new Map(), teams = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
   let membersProjection = null, membersIds = null, memberControls = new Map();
   let diagramProjection = null, diagramId = null;
@@ -153,7 +155,6 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     works = new Map(next.state.work.map(row => [row.id, row]));
     people = new Map(next.state.people.map(row => [row.id, row]));
     teams = new Map(next.state.teams.map(row => [row.id, row]));
-    practices = new Map(next.state.practices.map(row => [row.id, row]));
     renderedSelection = undefined; renderedTeam = undefined;
   }
   function renderSelection(view) {
@@ -171,18 +172,26 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     }
     elements.select.disabled = projection.state.work.length === 0;
     elements.remove.disabled = !works.has(selectedId);
-    const row = works.get(selectedId);
+    const parent = works.get(selectedId);
+    const session = parent && Number.isSafeInteger(descriptor?.occurrenceIndex) ? resolveWorkSession(parent, descriptor.occurrenceIndex) : null;
+    const summary = parent ? summarizeWorkSessions(parent) : null;
+    const row = session ? { ...parent, ...session, occurrences: 1 } : parent;
+    const ids = session?.personIds ?? summary?.personIds ?? [];
+    const status = session?.status ?? summary?.status;
+    const funding = session?.funding ?? summary?.funding;
     elements.name.textContent = row?.label ?? (descriptor?.mode === 'create' && view.draft ? 'New working session' : 'Working sessions');
-    elements.team.textContent = row ? teams.get(row.teamId).label : 'Choose a team';
-    elements.participants.textContent = row ? `${row.personIds.length} people` : 'Choose participants';
-    elements.effort.textContent = row
-      ? `${row.personIds.length} people × ${duration(row.minutesPerOccurrence)} per session × ${row.occurrences} working sessions = ${duration(row.personIds.length * row.minutesPerOccurrence * row.occurrences)} of participant effort.`
+    elements.team.textContent = row ? session ? teams.get(session.teamId)?.label ?? 'Choose a team'
+      : summary.teamIds.map(id => teams.get(id)?.label).filter(Boolean).join(', ') || teams.get(row.teamId)?.label : 'Choose a team';
+    elements.participants.textContent = row ? `${ids.length} people` : 'Choose participants';
+    elements.effort.textContent = row ? session
+      ? `${ids.length} people × ${duration(session.minutesPerOccurrence)} = ${duration(ids.length * session.minutesPerOccurrence)} of participant effort.`
+      : `${row.occurrences} working sessions · ${duration(summary.participantMinutes)} of participant effort.`
       : view.draft ? 'Set the people, time and funding below.' : 'Add a working session to plan its people, time and funding.';
-    elements.acceptedStatus.textContent = row ? `${row.status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[row.funding]}` : '';
+    elements.acceptedStatus.textContent = row ? `${status === 'mixed' ? 'Planned and paused sessions' : status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[funding] ?? 'Mixed funding'}` : '';
     const cadence = projection.state.scoreSettings.cadence;
     elements.context.textContent = cadence ? `Across ${cadence.periods.length} ${cadence.basis === 'sprint' ? 'sprints' : 'quarters'}.`
       : 'Choose a planning horizon to arrange these sessions.';
-    renderSessionMap(row);
+    renderSessionMap(row, session ? session.personIds : summary?.personIds, session ? session.minutesPerOccurrence : summary?.durationMinutes, descriptor?.occurrenceIndex);
   }
   function placementValues(raw) {
     try {
@@ -194,12 +203,14 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const cadence = (view.draft?.baseProjection ?? projection).state.scoreSettings.cadence;
     placementElements.fieldset.hidden = !cadence || rackMode;
     occurrenceControls.root.hidden = !cadence || !rackMode;
+    elements.fields.querySelector('.studio-repetition').hidden = Boolean(cadence) && rackMode;
     if (!cadence) return;
     if (placementToken !== view.draft?.token) { placementToken = view.draft?.token; placementPage = 0; placementSignature = null; }
     const entered = Number(raw.occurrences);
     const count = Number.isSafeInteger(entered) && entered >= 0 && entered <= LIMITS.occurrences ? entered : 0;
     if (rackMode) occurrenceControls.render({ identity: selectedTarget ?? selectedId, cadence,
-      count, placements: placementValues(raw),
+      count, placements: placementValues(raw), selectedIndex: describeSessionTarget(view.draft?.sessionId)?.occurrenceIndex,
+      canRemove: view.status === 'editing' && !composing,
       canAdd: view.status === 'editing' && !composing && count < LIMITS.occurrences
         && !view.draft?.errors.some(error => error.path === 'draft.occurrences'),
       error: view.draft?.errors.find(error => error.path === 'draft.cadencePlacements')?.message });
@@ -241,20 +252,21 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     placementElements.next.disabled = placementPage === pages - 1;
     placementElements.page.textContent = `Sessions ${first + 1}–${last} of ${count}`;
   }
-  function renderSessionMap(row) {
+  function renderSessionMap(row, personIds = [], totalMinutes = 0, occurrenceIndex) {
     const participantList = root.querySelector('[data-native-session-map-people]');
-    if (!participantList || (diagramProjection === projection && diagramId === row?.id)) return;
-    diagramProjection = projection; diagramId = row?.id;
+    const identity = `${row?.id}:${occurrenceIndex ?? 'plan'}`;
+    if (!participantList || (diagramProjection === projection && diagramId === identity)) return;
+    diagramProjection = projection; diagramId = identity;
     const item = (label, note) => {
       const li = document.createElement('li'), name = document.createElement('strong');
       name.textContent = label; li.append(name);
       if (note) { const small = document.createElement('small'); small.textContent = note; li.append(small); }
       return li;
     };
-    participantList.replaceChildren(...(row?.personIds.length ? row.personIds.map(id => item(people.get(id).label))
+    participantList.replaceChildren(...(personIds?.length ? personIds.map(id => item(people.get(id).label))
       : [item(row ? 'Participants to be chosen' : 'Choose the people for this session')]));
     root.querySelector('[data-native-session-map-time]').textContent = row
-      ? `${duration(row.minutesPerOccurrence)} per person · ${row.occurrences} working sessions` : 'Time to be planned';
+      ? `${duration(totalMinutes)} of session time · ${row.occurrences} ${row.occurrences === 1 ? 'working session' : 'working sessions'}` : 'Time to be planned';
     const supported = [];
     if (row) {
       for (const connection of projection.state.connections) if (connection.workIds.includes(row.id))
@@ -349,39 +361,10 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function renderDependencies(error) {
     const references = error?.references ?? [];
-    elements.dependencies.hidden = references.length === 0;
     const records = new Map(references.map(reference => [`${reference.collection}:${['assuranceSettings', 'scoreSettings'].includes(reference.collection) ? reference.field.split('[')[0] : ''}:${reference.id}`, reference]));
-    elements.dependencies.replaceChildren(...[...records.values()].map(reference => {
-      const row = document.createElement('li');
-      const score = describeScoreReference(projection.state.scoreSettings, reference);
-      if (score) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
-        link.textContent = 'Review in the coordination horizon'; row.append(`${score.label}. `, link); return row;
-      }
-      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
-      if (assurance) {
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
-        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
-        row.append(`${assurance}. `, link); return row;
-      }
-      if (reference.collection === 'changeSettings') {
-        const map = projection.state.changeSettings.frameworkMaps.find(item => item.frameworkId === reference.id);
-        const name = getChangeFramework(map.frameworkId, map.version).name;
-        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
-        link.textContent = 'Review linked sessions in Change'; row.append(`${name}: `, link); return row;
-      }
-      const connection = reference.collection === 'connections' && projection.state.connections.find(row => row.id === reference.id);
-      if (connection) { row.textContent = `Connection: ${connection.sharedObject}`; return row; }
-      const ability = reference.collection === 'abilities' && projection.state.abilities.find(row => row.id === reference.id);
-      if (ability) { row.textContent = `Ability: ${getCapabilityDefinition('ability', ability.definitionId, ability.definitionVersion).action}`; return row; }
-      const contribution = reference.collection === 'contributions' && projection.state.contributions.find(row => row.id === reference.id);
-      if (contribution) { row.textContent = `Contribution: ${CONTRIBUTION_CATEGORIES.find(category => category.id === contribution.categoryId).label}`; return row; }
-      const practice = practices.get(reference.id);
-      const name = PRACTICE_LABELS.get(practice?.definitionId) ?? reference.id;
-      row.textContent = `Practice: ${name}${practice ? ` · ${teams.get(practice.teamId).label}` : ''}`;
-      return row;
-    }));
+    renderRemovalReferences(elements.dependencies, projection.state, [...records.values()]);
   }
+
   function render() {
     const epoch = generation;
     const view = editor.read();
@@ -394,16 +377,18 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.fieldset.disabled = view.status !== 'editing';
     elements.recovery.hidden = view.status !== 'stale';
     elements.fresh.hidden = !view.creationConflict;
-    const row = works.get(selectedId);
+    const parent = works.get(selectedId);
+    const local = descriptor?.occurrenceIndex !== undefined;
+    const row = local && parent ? { ...parent, ...resolveWorkSession(parent, descriptor.occurrenceIndex) } : parent;
     remoteTitle.textContent = removing ? `Remove ${works.get(descriptor.id)?.label ?? 'working session'}`
-      : descriptor?.mode === 'create' && draft ? 'New session settings' : `Session settings · ${row?.label ?? 'Working session'}`;
+      : descriptor?.mode === 'create' && draft ? 'New session settings' : `${local ? `Session ${descriptor.occurrenceIndex + 1}` : 'Plan defaults'} · ${row?.label ?? 'Working session'}`;
     elements.current.textContent = view.creationConflict ? 'The plan already contains this session. Use these entries to prepare a new session.'
       : row ? `Current values: ${row.label} · ${duration(row.minutesPerOccurrence)} per session · ${row.occurrences} working sessions · ${FUNDING[row.funding]} · ${row.status}.`
         : descriptor?.mode === 'create' ? 'The plan changed. Review these entries before adding the session.'
           : 'This session was removed. Your saved entries remain below.';
     elements.fields.hidden = removing;
     elements.confirm.hidden = !removing;
-    elements.confirm.textContent = removing ? `Remove ${row?.label ?? descriptor.id} from this plan?` : '';
+    elements.confirm.textContent = removing ? `Remove ${row?.label ?? descriptor.id} and its links? Undo restores them.` : '';
     const accepted = row ? { label: row.label, teamId: row.teamId, personIds: row.personIds,
       cadencePlacements: JSON.stringify((projection.state.scoreSettings.cadence?.placements ?? [])
         .filter(item => item.workId === row.id).map(({ workId, ...item }) => item)),
@@ -465,7 +450,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const view = editor.read(), descriptor = describeSessionTarget(view.draft?.sessionId);
     if (view.status === 'stale') (view.creationConflict ? elements.fresh : elements.recovery.querySelector('button')).focus({ preventScroll: true });
     else if (view.status === 'editing') (descriptor.mode === 'remove' ? elements.cancel : descriptor.mode === 'create' ? inputs.label : inputs.hoursPerSession).focus({ preventScroll: true });
-    revealStudioDestination(elements.configure);
+    if (!rackMode) revealStudioDestination(elements.configure);
   }
   function focusOccurrence(index) {
     const view = editor.read(), epoch = generation;
@@ -504,9 +489,11 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!owns(epoch)) return;
     return opened(operate('begin', target, projection), epoch, focus);
   }
-  function select(id, focus = true) {
-    if (disposed || !works.has(id)) return;
-    return open(makeSessionTarget('work.update', id), focus);
+  function select(target, focus = true) {
+    if (disposed) return;
+    const destination = resolveWorkEditorTarget(target, studio.read().state);
+    if (!destination) return;
+    return open(destination.targetId, focus);
   }
   function create({ periodId, subdivision = 1 } = {}) {
     if (disposed) return;
@@ -520,7 +507,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!cadence?.periods.some(period => period.id === periodId)) return opened(result, epoch, true);
     const token = result.view.draft.token;
     const team = projection.state.teams.find(row => row.personIds.some(id => people.has(id)));
-    const values = [['label', 'Review the next step']];
+    const values = [['label', nextCreatedLabel(projection.state.work, 'session')]];
     if (team) values.push(['teamId', team.id]);
     values.push(['cadencePlacements', JSON.stringify([
       { occurrenceIndex: 0, periodId, subdivision },
@@ -567,11 +554,41 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     onRecordCreated(descriptor);
     if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return receipt(false);
     selectedId = descriptor.id; lastAcceptedId = descriptor.id;
-    const next = operate('begin', makeSessionTarget('work.update', descriptor.id), accepted);
-    if (!owns(epoch)) return receipt(false);
-    if (!next.ok) { announce(next.error.message); return receipt(false); }
-    opened(next, epoch, false);
-    return receipt(owns(epoch) && editor.read().draft?.token === next.view.draft.token);
+    selectedTarget = null;
+    acknowledgedOpen = false; elements.configure.open = false;
+    render();
+    return receipt(false);
+  }
+  function changeSessionCount(removeIndex) {
+    const view = editor.read(), descriptor = describeSessionTarget(view.draft?.sessionId);
+    if (disposed || composing || view.status !== 'editing' || !descriptor || descriptor.mode !== 'update') return;
+    // A count action publishes only after the visible entries are valid.
+    const epoch = ++generation;
+    const settled = operate(view.draft.changed ? 'apply' : 'cancel', view.draft.token);
+    if (!owns(epoch) || !settled.ok) { changed(settled, epoch); return; }
+    if (view.draft.changed) {
+      onAccepted(settled.projection);
+      if (!owns(epoch) || studio.read() !== settled.projection || editing.read().active !== null) return;
+    }
+    const base = studio.read(), work = base.state.work.find(row => row.id === descriptor.id);
+    if (!work) return;
+    const removing = Number.isSafeInteger(removeIndex);
+    const command = removing ? { type: 'work.session.remove', workId: work.id, occurrenceIndex: removeIndex }
+      : { type: 'work.update', work: { ...work, occurrences: work.occurrences + 1 } };
+    const result = studio.applyCommand(command, base);
+    if (!owns(epoch)) return;
+    if (!result.ok) {
+      opened(operate('begin', view.draft.sessionId, studio.read()), epoch, false);
+      announce(result.error.message); return;
+    }
+    onAccepted(result.projection);
+    if (!owns(epoch) || studio.read() !== result.projection || editing.read().active !== null) return;
+    const count = result.projection.state.work.find(row => row.id === work.id).occurrences;
+    const index = count ? removing ? Math.min(removeIndex, count - 1) : count - 1 : undefined;
+    opened(operate('begin', makeSessionTarget(index === undefined ? 'work.update' : 'work.session.update', work.id, index), studio.read()), epoch, false);
+    if (!owns(epoch)) return;
+    focusOccurrence(index);
+    announce(removing ? 'Session removed. Undo restores it.' : 'Session added. Choose its sprint and settings.');
   }
   function close({ park = true } = {}) {
     if (disposed) return;
@@ -632,7 +649,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (descriptor.mode === 'create') onRecordCreated(descriptor);
     if (!owns(epoch)) return;
     selectedId = descriptor.id; lastAcceptedId = descriptor.id;
-    const next = operate('begin', makeSessionTarget('work.update', descriptor.id), studio.read());
+    const next = operate('begin', makeSessionTarget(descriptor.occurrenceIndex === undefined ? 'work.update' : 'work.session.update', descriptor.id, descriptor.occurrenceIndex), studio.read());
     if (!owns(epoch)) return;
     selectedTarget = next.view.draft?.sessionId ?? null;
     const reopenedToken = next.view.draft?.token;
@@ -641,7 +658,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     acknowledgedOpen = true; elements.configure.open = true;
     announce(next.ok ? `Total updated to ${money(studio.read().result.knownCommitmentCents)}.` : next.error.message);
     onEditing();
-    if (owns(epoch) && editor.read().draft?.token === reopenedToken) elements.apply.focus();
+    if (owns(epoch) && editor.read().draft?.token === reopenedToken) focusSubmitControl(elements.apply);
   }
   function membership(id, delta = null, checked = false) {
     const view = editor.read();
@@ -730,6 +747,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     placementElements.fieldset.remove();
     occurrenceControls.dispose();
     elements.configure.classList.remove('studio-session-deck');
+    elements.fields.querySelector('.studio-repetition').hidden = false;
     agreementRack.before(agreement); agreementRack.remove();
     const active = editing.read().active;
     if (active?.kind === 'session') retiredToken = active.token;
@@ -743,6 +761,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, createAccepted, close, focusOccurrence, setRackMode,
     isOpen: () => !disposed && elements.configure.open,
     readReceiver: () => ({ selectedId: disposed ? null : selectedId,
+      occurrenceIndex: describeSessionTarget(editor.read().draft?.sessionId ?? selectedTarget)?.occurrenceIndex,
       expanded: !disposed && isActive() && elements.configure.open
         && !elements.configure.closest('[hidden], details:not([open])'),
       controlsId: elements.configure.id }),
@@ -764,7 +783,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     ]) requireElement(`[data-native-range="${field}"]`).textContent = `0–${INTEGER.format(maximum)} ${unit}`;
     listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
     listen(elements.configure, 'click', click);
-    listen(elements.select, 'change', () => select(elements.select.value));
+    listen(elements.select, 'change', () => select(workDefaultsTarget(elements.select.value)));
     listen(elements.form, 'input', edit);
     listen(placementElements.rows, 'change', editPlacement);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
@@ -779,7 +798,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       if (elements.configure.open) {
         if (isActive() && !acknowledgedOpen) {
           if (selectedTarget) open(selectedTarget, false);
-          else if (selectedId !== null) select(selectedId, false);
+          else if (selectedId !== null) select(workDefaultsTarget(selectedId), false);
         }
       } else if (acknowledgedOpen) { close(); onEditing(); }
     });
@@ -787,7 +806,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (disposed) return receiver;
     elements.toolbar.hidden = false; elements.add.disabled = false;
     root.dataset.sessionReady = 'true'; INSTANCES.set(root, receiver);
-    if (selectedId !== null && isActive()) select(selectedId, false);
+    if (selectedId !== null && isActive()) select(workDefaultsTarget(selectedId), false);
     return receiver;
   } catch (error) { dispose(); throw error; }
 }

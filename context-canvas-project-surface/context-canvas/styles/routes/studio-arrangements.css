@@ -1,22 +1,19 @@
-/* People, team-arrangement and working-session readings. Controllers own the
+/* Team-arrangement and working-session readings. Controllers own the
    accepted/proposed records; this extension gives their controls a shared rack. */
 .native-coordination {
   --studio-editorial-surface: var(--studio-editorial);
   --studio-extra-work: color-mix(in srgb, var(--about-gold) 60%, var(--native-paper));
 }
-.studio-team-lanes,
-.native-coordination .native-assembly__team-list {
+.studio-team-lanes {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem;
   margin-block: .65rem; padding: 0; list-style: none;
 }
-.studio-team-lane,
-.native-coordination .native-assembly__team-list > li {
+.studio-team-lane {
   min-inline-size: 0; margin: 0; padding: .55rem; border: 1px solid var(--native-rule);
   border-block-start: .25rem solid var(--about-deep-teal); background: var(--studio-editorial-surface);
   box-shadow: none; display: flex; flex-direction: column; gap: .45rem;
 }
 .native-coordination .studio-team-lane__title { inline-size: 100%; text-align: start; font-weight: 750; }
-.native-coordination [data-assembly-team] { inline-size: 100%; text-align: start; }
 .studio-team-lane__people { display: grid; gap: .3rem; list-style: none; margin: 0; padding: 0; }
 .studio-team-lane__people li { margin: 0; padding: 0; }
 .native-coordination .studio-team-lane__person {
@@ -41,20 +38,22 @@
 .native-coordination .studio-session-tracks thead th { font: 600 .7rem/1.3 system-ui, sans-serif; inline-size: 6rem; min-inline-size: 5.5rem; overflow-wrap: normal; }
 .native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { position: sticky; inset-inline-start: 0; z-index: 1; inline-size: 13rem; min-inline-size: 11rem; text-align: start; background: var(--studio-screen); }
 .native-coordination .studio-session-tracks tbody td { border-block-end: 1px solid var(--native-rule); }
-.native-coordination .studio-session-tracks__pad { min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
+.native-coordination .studio-session-tracks__pad { inline-size: 100%; min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
 .native-coordination .studio-session-tracks__pad.native-control--navigate { padding-inline: .3rem 1rem; }
 .native-coordination .studio-session-tracks__pad.native-control--navigate::after { inset-inline-end: .3rem; inline-size: .35rem; block-size: .35rem; }
 .native-coordination .studio-session-tracks__pad[data-funding='additional'] { background: var(--studio-extra-work); border-color: var(--native-paper); box-shadow: inset 0 -.22rem var(--about-muted); }
 .native-coordination .studio-session-tracks__pad[data-status='paused'] { background: var(--about-muted); border-style: dashed; color: var(--native-paper); }
 .studio-session-tracks__empty { color: var(--about-sea-glass); }
 .native-coordination .studio-session-tracks__legend { font: .7rem/1.4 ui-monospace, monospace; margin: .35rem; color: var(--native-paper); }
-.studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: start; min-inline-size: 0; }
+.studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: stretch; min-inline-size: 0; }
 .native-coordination :is(.native-connections, .native-connection-template__form, .studio-connections-tracks) { min-inline-size: 0; max-inline-size: 100%; }
 .native-coordination .native-connection-template__form, .native-coordination .native-patch-bay { grid-template-columns: minmax(0, 1fr); }
 .studio-arrangement-native-choice { display: none; }
-.native-coordination .native-arrangement__status { font-size: .8rem; margin-block: .3rem .6rem; }
-.native-coordination .native-arrangement__viewport { margin-block: .5rem; background: var(--studio-screen); color: var(--native-paper); }
-.native-coordination .native-arrangement__diagram { min-inline-size: 0; inline-size: 100%; block-size: auto; max-block-size: 17rem; }
+.native-coordination .native-arrangement__status { margin-block: .3rem .6rem; }
+.studio-arrangement-deck [data-template-structure] { display: flex; min-inline-size: 0; }
+.studio-arrangement-deck .native-arrangement { display: flex; flex-direction: column; flex: 1; min-inline-size: 0; margin: 0; }
+.native-coordination .native-arrangement__viewport { display: grid; align-items: center; flex: 1; margin-block: .5rem 0; background: var(--studio-screen); color: var(--native-paper); }
+.native-coordination .native-arrangement__diagram { min-inline-size: 48rem; inline-size: 100%; block-size: auto; max-block-size: none; }
 .native-coordination .native-arrangement__companion { display: block; padding: 0; margin-block: .45rem; }
 .native-coordination .native-arrangement__companion > summary { min-block-size: 2.75rem; padding: .5rem; }
 .native-coordination .native-connection-template__groups { margin-block-start: .8rem; }
@@ -63,21 +62,12 @@
 .native-coordination .native-connections__detail { padding: 0; }
 .native-coordination .native-connections__detail > :not(summary) { margin: .7rem; }
 .native-coordination .native-connections__count { font-size: .75rem; margin-block: .45rem; }
-.native-coordination .native-team__roster { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
-.native-coordination .native-team__roster > li { padding: .55rem; gap: .3rem; }
-.native-coordination .native-team__roster p { font-size: .75rem; margin: 0; }
-.studio-people-reading { margin-block: .8rem; min-inline-size: 0; max-inline-size: 100%; }
 .studio-session-details { margin-block: .6rem; }
 .studio-session-details > summary { padding: .55rem; }
-.native-coordination .native-assembly__team-list details { margin: 0; padding: 0; }
-.native-coordination .native-assembly__team-list details > summary { padding: .45rem; font-size: .75rem; }
-.native-coordination .native-assembly__team-list details { border: 0; border-block-start: 1px solid var(--native-rule); background: transparent; box-shadow: none; }
-.native-coordination .native-assembly__team-list details > summary { background: transparent; font-weight: 650; }
-.native-coordination .native-assembly__team-list details .native-coordination__actions { gap: .35rem; margin: .4rem 0 0; }
-.native-coordination .native-assembly__team-list details button { box-shadow: none; }
-.native-coordination .studio-team-planning { background: var(--studio-editorial-surface); }
+.native-coordination .studio-team-planning { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .native-coordination [data-template-exposed] { border: 0; background: transparent; box-shadow: none; margin: 0; }
 .native-coordination [data-template-exposed] > summary { display: none; }
+.native-coordination [data-template-exposed] > [data-connection-template-body] { padding: 0; }
 .native-coordination .native-connection-template__form > .native-coordination__hint { margin: 0; }
 .native-coordination .native-arrangement__identity { margin: 0; font-size: .9rem; }
 .native-coordination .native-arrangement__status { font-size: .75rem; }
@@ -94,11 +84,22 @@
   background: #10251f; color: var(--native-paper); box-shadow: inset 0 0 1.8rem #041711;
 }
 .studio-team-rack__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem 1rem; border-block-end: 1px solid var(--about-sea-glass); padding-block-end: .65rem; }
-.native-coordination .studio-team-rack__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 system-ui, sans-serif; }
+.native-coordination .studio-team-rack__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 Futura, system-ui, sans-serif; }
 .studio-rack-amount { margin: 0; }
 .studio-rack-amount dt { color: var(--native-paper); font: 500 .7rem/1.4 ui-monospace, monospace; }
 .studio-rack-amount dd { margin: 0; color: var(--native-signal); font: 600 clamp(1.2rem, 2.3vw, 1.65rem)/1.4 ui-monospace, monospace; letter-spacing: -.025em; white-space: nowrap; }
 .studio-team-rack__body { min-inline-size: 0; }
+/* Borrowed record editors keep their canonical forms inside one stable rack slot. */
+[data-team-rack-editor] { min-inline-size: 0; }
+[data-team-rack-editor] .studio-rack-editor { margin-block: .75rem; border-color: var(--studio-rack-edge); }
+[data-team-rack-editor] .studio-rack-editor__heading { border-block-end: .15rem solid var(--native-signal); }
+[data-team-rack-editor] .native-connection__field { grid-template-rows: auto; gap: .35rem; }
+[data-team-rack-editor] .native-connection__field .native-coordination__error:empty { display: none; }
+[data-team-rack-editor] .native-connection__field :is(label, button) { font-size: .8rem; }
+[data-team-rack-editor] .native-connection__work { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .5rem; }
+[data-team-rack-editor] .native-connection__work > li { align-content: start; }
+[data-team-rack-editor] .native-connection__work label { flex-basis: 100%; }
+[data-team-rack-editor] .native-connection__work .native-coordination__actions { gap: .4rem; }
 .native-coordination .studio-team-rack .studio-session-tracks { border: 0; border-block-start: 1px solid var(--about-sea-glass); border-radius: 0; background: transparent; padding: .4rem 0 0; margin-block: .8rem .4rem; }
 /* A delivery phase groups illustrative roles, handoffs and existing sessions.
    The cadence owner retains temporal placement; this board owns local scope. */
@@ -106,7 +107,7 @@
 .studio-delivery__scope { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem; margin-block-end: .65rem; }
 .native-coordination .studio-delivery__scope h5 { margin: 0; color: var(--native-paper); font: 700 1rem/1.4 system-ui, sans-serif; }
 .native-coordination .studio-delivery__context { flex-basis: 100%; margin: 0; color: #c2d8c8; font: 500 .7rem/1.4 ui-monospace, monospace; }
-.native-coordination .studio-delivery__return { min-inline-size: 0; padding: .4rem .6rem; border: 1px solid #809484; border-radius: .15rem; background: #ebe9d7; color: #18372d; box-shadow: none; font-size: .75rem; }
+.native-coordination .studio-delivery__return { min-inline-size: 0; padding: .4rem .6rem; border: 1px solid var(--studio-rack-highlight); border-radius: .15rem; background: #ebe9d7; color: var(--studio-deep-green); box-shadow: none; font-size: .75rem; }
 .native-coordination .studio-delivery__return[hidden] { display: none; }
 .studio-delivery__board { display: grid; grid-template-columns: repeat(6, minmax(11.75rem, 1fr)); gap: .55rem; min-inline-size: 0; max-inline-size: 100%; padding: .15rem .15rem .5rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-color: #739e85 #10251f; }
 .studio-delivery__board:focus-visible { outline: .2rem solid #fff4d4; outline-offset: .1rem; }
@@ -120,7 +121,7 @@
 .studio-delivery__group { display: grid; gap: .4rem; align-content: start; min-inline-size: 0; }
 .native-coordination .studio-delivery__group > h6 { margin: .1rem 0 0; padding-block-end: .2rem; border-block-end: 1px solid #567364; color: #dcdec4; font: 650 .65rem/1.4 ui-monospace, monospace; letter-spacing: .055em; text-transform: uppercase; }
 .studio-delivery__team { padding: .35rem; border: 1px solid #b9c3a9; border-inline-start: .22rem solid #769b85; background: #e7e5d4; color: #203b30; }
-.native-coordination .studio-delivery__team-key { display: grid; gap: .2rem; inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .3rem 1.4rem .3rem .25rem; border: 0; border-radius: 0; background: transparent; color: #18372d; box-shadow: none; font-size: .8rem; font-weight: 750; text-align: start; }
+.native-coordination .studio-delivery__team-key { display: grid; gap: .2rem; inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .3rem 1.4rem .3rem .25rem; border: 0; border-radius: 0; background: transparent; color: var(--studio-deep-green); box-shadow: none; font-size: .8rem; font-weight: 750; text-align: start; }
 .studio-delivery__people { display: grid; list-style: none; padding: 0; margin: .15rem 0 0; gap: .2rem; }
 .studio-delivery__people > li { min-inline-size: 0; padding: 0; margin: 0; }
 .native-coordination .studio-delivery__person { inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .3rem 1.25rem .3rem .35rem; border: 1px solid #a9b5a1; border-radius: .1rem; background: #f7f3e2; color: #203a30; box-shadow: none; font-size: .72rem; font-weight: 550; line-height: 1.3; text-align: start; }
@@ -138,7 +139,12 @@
   .studio-delivery__board:not([data-delivery-scope='overview']) .studio-delivery__content { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
   .studio-delivery__board:not([data-delivery-scope='overview']) .studio-delivery__phase > h5 { max-inline-size: 16rem; }
 }
+/* Team arrangement loads its rack from the preserved workbench's downward unfurl. */
+@keyframes studio-team-load { from { opacity: .3; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes studio-team-load-even { from { opacity: .3; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: no-preference) {
+  .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .studio-team-rack[data-reel-arrival] { animation: studio-team-load calc(200ms * var(--studio-speed)) ease-out; }
+  .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .studio-team-rack[data-reel-arrival='even'] { animation-name: studio-team-load-even; }
   .native-coordination[data-native-motion='full'] .studio-delivery__board[data-delivery-arrival='phase'] { animation: native-cadence-open 240ms ease-out both; }
   .native-coordination[data-native-motion='full'] .studio-delivery__board[data-delivery-arrival='overview'] { animation: native-cadence-return 180ms ease-out both; }
   .native-coordination[data-native-motion='lower'] .studio-delivery__board[data-delivery-arrival='phase'] { animation: native-cadence-open 480ms ease-out both; }
@@ -150,14 +156,19 @@
 .native-coordination .native-cadence__handoff-key { border: 1px solid var(--native-rule); }
 .native-coordination .native-cadence__flow .native-control--create { box-shadow: none; background: transparent; border: 1px dashed var(--native-rule); }
 .native-coordination .native-score__inspector [data-score-action='apply'] { background: var(--native-signal); }
+.native-score__inspector > .studio-rack-editor__body { padding: .8rem; }
+.native-score__inspector [data-score-action='remove'] { margin-inline-start: auto; }
+.native-score__inspector[data-record-kind='handoff'] .native-score__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); border: 0; padding: 0; }
+.native-score__field--connection { grid-column: 1 / -1; }
+@container native-coordination-chapter (max-width: 38rem) {
+  .native-score__inspector[data-record-kind='handoff'] .native-score__fields { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 65rem) {
   .studio-arrangement-deck { grid-template-columns: minmax(0, 1fr); }
   .studio-arrangement-deck > .native-reel { max-inline-size: 25rem; justify-self: center; inline-size: 100%; }
 }
 @media (max-width: 42rem) {
-  .studio-team-lanes, .native-coordination .native-assembly__team-list { grid-template-columns: minmax(0, 1fr); }
-  .native-coordination .native-team__roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .native-coordination .native-arrangement__diagram { min-inline-size: 28rem; }
+  .studio-team-lanes { grid-template-columns: minmax(0, 1fr); }
 }
 @media (forced-colors: active) {
   .studio-team-rack, .studio-session-tracks, .studio-team-lane { background: Canvas; color: CanvasText; box-shadow: none; }
@@ -167,4 +178,145 @@
   .studio-delivery__phase, .studio-delivery__team, .native-coordination .studio-delivery button { background: Canvas; color: CanvasText; box-shadow: none; border-color: ButtonText; }
   .native-coordination .studio-delivery :is(h5, h6, p, small) { color: CanvasText; }
   .native-coordination .studio-delivery__session[aria-pressed='true'] { outline-color: Highlight; }
+}
+
+/* Delivery-board drilldown: direct team controls replace its board content. */
+.studio-team-rack__record { padding:.7rem; border:1px solid var(--studio-rack-edge); border-radius:3px; background:var(--studio-rack-shell); color:var(--studio-rack-paper); min-inline-size:0; }
+.native-coordination .studio-team-rack__record :is(h4,legend,label) { color:var(--studio-rack-paper); }
+.studio-team-rack__record-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap:.7rem; }
+.native-coordination .studio-team-rack__record-scope button { background:transparent; color:var(--studio-rack-paper); border:1px solid var(--studio-rack-edge); box-shadow:none; }
+.native-coordination .studio-team-members { grid-column:1/-1; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:.5rem; padding:.5rem; border:0; }
+.studio-team-members > legend { padding:.4rem 0; font-weight:700; }
+.studio-team-member { display:grid; align-content:start; gap:.4rem; min-inline-size:0; padding:.5rem; background:var(--studio-deep-teal); border:1px solid var(--native-signal); border-radius:3px; box-shadow:inset .2rem 0 0 var(--native-signal); }
+.studio-team-member[data-selected='false'] { background:var(--studio-track-green); border-color:var(--studio-rack-edge); border-style:dashed; box-shadow:none; }
+.studio-team-member label { display:flex; align-items:center; gap:.5rem; }
+.studio-team-member label > span { display:grid; gap:.2rem; }
+.studio-team-member small { color:var(--studio-rack-muted); }
+.native-coordination .studio-team-member button { background:var(--studio-rack-paper); color:var(--studio-dark-ink); border:1px solid var(--studio-rack-edge); box-shadow:none; font-size:.75rem; min-block-size:2rem; padding:.35rem; }
+[data-template-rack][data-editor-open='true'] [data-team-rack-board] { display:none; }
+/* Person controls occupy the delivery board's working area. Shared sessions is
+   its own module and remains available below every selected record. */
+[data-team-rack-editor] .studio-rack-editor[data-rack-editor-kind='person'] { margin-block:.65rem 0; border:0; border-radius:0; box-shadow:none; background:transparent; }
+[data-team-rack-editor] .studio-rack-editor[data-rack-editor-kind='person'] .studio-rack-editor__heading { padding:.35rem 0 .65rem; border-block-end:1px solid var(--studio-rack-edge); }
+[data-team-rack-editor] .studio-rack-editor[data-rack-editor-kind='person'] .studio-rack-editor__body { border:1px solid var(--studio-rack-edge); border-radius:3px; }
+[data-team-rack-editor] [data-person-configure] .native-coordination__controls { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; margin-block:.75rem; }
+[data-team-rack-editor] [data-person-configure] .studio-rate { grid-column:1/-1; }
+@media(min-width:48rem) {
+ [data-team-rack-editor] [data-person-configure] .native-coordination__controls { grid-template-columns:1.4fr 1fr 1fr; }
+ [data-team-rack-editor] [data-person-configure] .studio-rate { grid-column:auto; }
+}
+@media(forced-colors:active) {
+ .native-coordination :is(.studio-team-rack__record,.studio-team-member,.studio-team-member[data-selected='false']) { color:CanvasText; background:Canvas; border-color:CanvasText; }
+ .native-coordination .studio-team-rack__record :is(h4,legend,label,small) { color:CanvasText; }
+ .native-coordination :is(.studio-team-rack__record-scope,.studio-team-member) button { color:ButtonText; background:ButtonFace; border-color:ButtonText; }
+ .studio-team-member { box-shadow:none; }
+ .studio-team-member[data-selected='true'] { outline:2px solid Highlight; outline-offset:-3px; }
+}
+
+/* Shared sessions owns direct relationship pads and a local handoff receiver.
+   The delivery board remains an independent sibling working area. */
+.studio-delivery__add { display:grid; gap:.4rem; margin-block-start:auto; padding-block-start:.65rem; }
+.native-coordination .studio-delivery__add button { min-inline-size:0; font-size:.72rem; }
+.studio-shared__tabs,.studio-shared__controls { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
+.native-coordination .studio-shared__tabs .studio-track-key { inline-size:auto; min-inline-size:5.5rem; min-block-size:2.75rem; padding:.45rem .7rem; }
+.native-coordination .studio-shared__tabs [aria-selected='true'] { color:#102d25; background:var(--native-signal); box-shadow:inset 0 .18rem .25rem #123d3266; border-color:#8ae6c9; }
+.native-coordination .studio-shared__pad { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:.25rem; min-block-size:2.75rem; margin:0; padding:.3rem; border:1px solid var(--studio-rack-edge); border-radius:3px; background:#263f34; color:var(--studio-rack-paper); cursor:pointer; }
+.native-coordination .studio-shared__pad[data-selected='true'] { background:var(--native-signal); color:var(--studio-deep-green); border-color:#9cdac6; box-shadow:inset 0 -.2rem #3b7965; }
+.native-coordination .studio-shared__pad[data-selected='true'][data-funding='additional'] { background:var(--studio-extra-work); box-shadow:inset 0 -.2rem #9e8655; border-color:#dfc691; }
+.native-coordination .studio-shared__pad[data-status='paused'] { border-style:dashed; }
+.native-coordination .studio-shared__pad input[type='checkbox'] { appearance:auto; inline-size:1.15rem; block-size:1.15rem; min-inline-size:1.15rem; min-block-size:1.15rem; margin:0; accent-color:#006a5e; cursor:pointer; }
+.native-coordination .studio-shared__pad input[type='checkbox']::before { display:none; }
+.native-coordination .studio-shared__pad small { color:inherit; font:500 .65rem/1.35 system-ui,sans-serif; }
+.studio-shared__pad:focus-within { outline:.2rem solid #fff5cf; outline-offset:.1rem; }
+.native-coordination .studio-shared__handoff { min-inline-size:8rem; text-align:start; }
+.studio-shared__selection { margin-block:.6rem; border:1px solid var(--studio-rack-edge); border-radius:3px; background:var(--studio-rack-shell); }
+.studio-shared__selection[hidden],.studio-session-tracks [role='tabpanel'][hidden] { display:none; }
+.studio-shared__selected-body { display:grid; gap:.65rem; padding:.65rem; }
+.native-coordination .studio-shared__selected-body > label { display:grid; gap:.4rem; max-inline-size:20rem; color:var(--studio-rack-paper); }
+.studio-shared__order { display:flex; flex-wrap:wrap; gap:.5rem; padding:0; margin:0; list-style:none; }
+.native-coordination .studio-shared__order > li { display:grid; gap:.4rem; padding:.5rem; margin:0; border:1px solid var(--studio-rack-edge); border-radius:3px; background:var(--studio-track-green); color:var(--studio-rack-paper); }
+.native-coordination .studio-shared__order button { min-inline-size:0; padding:.35rem .5rem; font-size:.75rem; }
+[data-shared-rack-editor] .studio-rack-editor { margin-block:.65rem; border-color:var(--studio-rack-edge); }
+[data-shared-rack-editor] .native-connection__work { grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:.5rem; }
+[data-shared-rack-editor] .native-connection__work label { flex-basis:100%; }
+@media(forced-colors:active) {
+ .native-coordination :is(.studio-shared__pad,.studio-shared__pad[data-selected='true'],.studio-shared__pad[data-selected='true'][data-funding='additional'],.studio-shared__order > li,.studio-shared__selection) { background:Canvas; color:CanvasText; border-color:CanvasText; box-shadow:none; }
+ .native-coordination .studio-shared__pad[data-selected='true'] { outline:2px solid Highlight; outline-offset:-3px; }
+ .native-coordination .studio-shared__tabs [aria-selected='true'] { background:Highlight; color:HighlightText; }
+ .native-coordination .studio-shared__selected-body > label { color:CanvasText; }
+}
+
+/* The canonical handoff form travels between Delivery and Shared sessions.
+   Its route controls and supporting-work pads share one compact rack reading. */
+.native-handoff { display:grid; gap:.75rem; min-inline-size:0; }
+.native-handoff[hidden] { display:none; }
+.native-handoff__routing { display:grid; align-content:start; gap:.65rem; min-inline-size:0; }
+.native-handoff .native-connection__grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+.native-handoff .native-connection__field { grid-template-rows:none; gap:.35rem; }
+.native-handoff .native-connection__field > label { font-size:.8rem; }
+.native-handoff .native-connection__field > :is(select,input:not([type='hidden'])) { inline-size:100%; min-inline-size:0; min-block-size:2.75rem; padding:.5rem; text-align:start; font:inherit; }
+.native-handoff .native-connection__field > button { min-inline-size:0; font-size:.75rem; padding:.4rem .5rem; }
+.native-handoff .native-connection__field > .native-control--navigate { padding-inline-end:1.8rem; }
+.native-handoff .native-coordination__error:empty { display:none; }
+.native-handoff .native-connection__sessions { align-content:start; gap:.5rem; margin:0; padding:.65rem; border:1px solid var(--studio-rack-edge); border-radius:3px; background:var(--studio-rack-shell); }
+.native-coordination .native-handoff .native-connection__sessions > .native-coordination__control-title { color:var(--studio-rack-paper); margin:0; font-size:.85rem; }
+.native-handoff .native-connection__work { grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr)); gap:.5rem; margin:0; }
+.native-coordination .native-handoff .native-connection__work > li { display:grid; gap:.35rem; align-content:start; padding:.5rem; margin:0; color:var(--native-text); font-size:.85rem; }
+.native-handoff .native-connection__work label { gap:.45rem; min-block-size:2.75rem; }
+.native-handoff .native-coordination__member-status { font-size:.7rem; }
+.native-handoff .native-coordination__manipulation { gap:.4rem; }
+.native-coordination .native-handoff .native-coordination__manipulation > button { padding:.3rem .4rem; min-block-size:2rem; font-size:.7rem; }
+.native-handoff > [data-connection-action='remove'] { grid-column:1/-1; justify-self:end; margin-block-start:.2rem; }
+.native-connection__configuration .native-connection__general-error:empty { display:none; }
+@media(min-width:60rem) {
+ .native-handoff { grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; }
+}
+@media(forced-colors:active) {
+ .native-handoff .native-connection__sessions { background:Canvas; border-color:CanvasText; }
+ .native-coordination .native-handoff .native-connection__sessions > .native-coordination__control-title { color:CanvasText; }
+}
+
+/* Shared closed-path arrows keep the head attached to the same painted shape. */
+.native-coordination .studio-diagram__edge { color: var(--native-signal); }
+.native-coordination .studio-diagram__arrow { fill: currentColor; stroke: none; }
+.native-coordination .studio-diagram__edge[data-direction='return'] { color: var(--studio-extra-work); }
+.native-arrangement__edge[data-status='paused'] .studio-diagram__arrow { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 7 5; }
+.native-coordination .native-arrangement__edge[data-adapted='true'] { color: var(--studio-rose); }
+.native-coordination .native-arrangement__edge:hover { color: var(--native-paper); }
+@media (forced-colors: active) {
+  .native-coordination .studio-diagram__edge:is([data-direction], [data-adapted], :hover) { color: LinkText; }
+}
+
+/* Empty plan library: the shared cobalt reel previews a small recipe beside
+   its own diagram. Existing arrangement and loaded-rack geometry stays owned. */
+.native-score__plan-actions { margin-inline-start:auto; min-inline-size:0; }
+.native-score__removal { display:flex; flex-wrap:wrap; align-items:center; gap:.65rem; }
+.native-score__removal[hidden] { display:none; }
+.native-score__removal > p { flex-basis:100%; margin:0; font-size:.85rem; }
+.studio-plan-workspace[data-empty='true'] { grid-template-columns:minmax(0,1fr); }
+.studio-plan-starters { min-inline-size:0; padding:1rem; border:1px solid var(--studio-rack-edge); border-radius:.4rem; background:var(--studio-rack-shell); color:var(--native-paper); }
+.studio-plan-starters[hidden] { display:none; }
+.native-coordination .studio-plan-starters__heading > h4 { margin:0; color:var(--native-paper); }
+.studio-plan-starters__heading > p { margin:.35rem 0 1rem; }
+.studio-plan-starters__body { display:grid; grid-template-columns:minmax(15rem,21rem) minmax(0,1fr); gap:1rem; align-items:stretch; }
+.studio-plan-starters__result { display:flex; flex-direction:column; min-inline-size:0; }
+.native-coordination .studio-plan-starters__result > h5 { margin:.2rem 0; color:var(--native-paper); font-size:1rem; }
+.studio-plan-starters__result > p { margin:.35rem 0 .75rem; }
+.studio-plan-starters__viewport { display:grid; flex:1; align-items:center; min-inline-size:0; overflow-x:auto; padding:.5rem; border:1px solid var(--studio-rack-edge); border-radius:.3rem; background:var(--studio-screen); color:var(--native-paper); }
+.studio-plan-starters__viewport svg { display:block; inline-size:100%; min-inline-size:30rem; block-size:auto; }
+.studio-plan-starters__node rect { fill:var(--about-cool-blue); stroke:var(--native-rule); stroke-width:2; }
+.studio-plan-starters__node text { fill:var(--native-text); font:650 14px system-ui,sans-serif; }
+.studio-plan-starters__node .studio-plan-starters__duration { font:12px ui-monospace,monospace; }
+.studio-plan-starters__return { fill:var(--native-paper); font:12px ui-monospace,monospace; }
+.native-coordination .studio-plan-starters__actions { justify-content:flex-start; gap:.65rem; margin:.8rem 0 0; }
+.native-coordination .studio-plan-starters__error { color:var(--studio-rose); }
+@media(max-width:60rem) {
+ .studio-plan-starters__body { grid-template-columns:minmax(0,1fr); }
+ .studio-plan-starters__body > .native-reel { inline-size:min(100%,24rem); justify-self:center; }
+}
+@media(forced-colors:active) {
+ .studio-plan-starters, .studio-plan-starters__viewport { background:Canvas; color:CanvasText; border-color:CanvasText; }
+ .native-coordination .studio-plan-starters :is(h4,h5,.studio-plan-starters__error), .studio-plan-starters__return { color:CanvasText; fill:CanvasText; }
+ .studio-plan-starters__node rect { fill:Canvas; stroke:CanvasText; }
+ .studio-plan-starters__node text { fill:CanvasText; }
 }

@@ -1,12 +1,14 @@
 import { PlanError, prepareAssemblyCommand, preparePlan } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
 import { replaceWorkPlacements } from './cadence.mjs';
+import { removeWorkAndReferences } from './work-removal.mjs';
+import { replaceWorkSession, removeWorkSession, resizeWorkSessions, setWholeWorkField, setWorkParticipant, reorderWorkParticipants } from './work-sessions.mjs';
 
 const WORK_CHANGE_FIELDS = new Map([
   ['work.participants.replace', 'personIds'], ['work.funding.set', 'funding'], ['work.status.set', 'status'],
 ]);
 const REMOVAL_TARGETS = new Map([
-  ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']], ['work.remove', ['work', 'workId']],
+  ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']],
   ['contribution.remove', ['contributions', 'contributionId']], ['connection.remove', ['connections', 'connectionId']],
   ['capability.evidence.remove', ['capabilityEvidence', 'evidenceId']],
   ['arrangement.remove', ['arrangements', 'arrangementId']],
@@ -59,6 +61,13 @@ export function recordReferences(state, collection, id) {
     include(state.work, 'work', 'personIds', row => row.personIds.includes(id));
   } else if (collection === 'teams') {
     include(state.work, 'work', 'teamId', row => row.teamId === id);
+  }
+  if (collection === 'people' || collection === 'teams') for (const work of state.work) {
+    for (const session of work.sessionOverrides ?? []) {
+      const field = collection === 'people' ? 'personIds' : 'teamId';
+      if (collection === 'people' ? session.personIds.includes(id) : session.teamId === id)
+        references.push(Object.freeze({ collection: 'work', id: work.id, field: `sessionOverrides[${session.occurrenceIndex}].${field}` }));
+    }
   }
   if (collection === 'people') {
     include(state.contributions, 'contributions', 'receiverPersonId', row => row.receiverPersonId === id);
@@ -183,6 +192,39 @@ export function prepareAssembly(base, candidate) {
   let collection;
   let rows;
   switch (command.type) {
+    case 'person.participation.replace': {
+      position(state.people, command.personId, 'command.personId');
+      const known = new Set(state.work.map(row => row.id));
+      if (command.workIds.some(id => !known.has(id))) throw new PlanError('reference', 'command.workIds', 'Choose sessions in this plan.');
+      const selected = new Set(command.workIds);
+      let changed = false;
+      const work = state.work.map(row => {
+        const next = setWorkParticipant(row, command.personId, selected.has(row.id));
+        if (!next.personIds.length || next.sessionOverrides?.some(session => !session.personIds.length))
+          throw new PlanError('minimum-participants', 'command.workIds', 'Keep a participant in each session.');
+        if (JSON.stringify(next) === JSON.stringify(row)) return row;
+        changed = true; return next;
+      });
+      return { projection: changed ? preparePlan({ ...state, revision: state.revision + 1, work }) : base };
+    }
+    case 'work.participant.set': {
+      position(state.people, command.personId, 'command.personId');
+      const index = position(state.work, command.workId, 'command.workId'), current = state.work[index];
+      const next = setWorkParticipant(current, command.personId, command.included);
+      if (!next.personIds.length || next.sessionOverrides?.some(session => !session.personIds.length))
+        throw new PlanError('minimum-participants', 'command.personId', 'Keep a participant in each session.');
+      if (JSON.stringify(next) === JSON.stringify(current)) return { projection: base };
+      collection = 'work'; rows = update(state.work, index, next); break;
+    }
+    case 'work.participants.reorder': {
+      const index = position(state.work, command.workId, 'command.workId'), current = state.work[index];
+      const participants = new Set([...current.personIds, ...(current.sessionOverrides ?? []).flatMap(session => session.personIds)]);
+      if (participants.size !== command.personIds.length || command.personIds.some(id => !participants.has(id)))
+        throw new PlanError('order', 'command.personIds', 'List each current participant once in the desired order.');
+      const next = reorderWorkParticipants(current, command.personIds);
+      if (JSON.stringify(next) === JSON.stringify(current)) return { projection: base };
+      collection = 'work'; rows = update(state.work, index, next); break;
+    }
     case 'score.arrangement.replace': {
       const settings = command.scoreSettings, proposals = new Map(settings.proposals.map(row => [row.id, row]));
       const gates = new Map(settings.gates.map(row => [row.id, row]));
@@ -207,6 +249,9 @@ export function prepareAssembly(base, candidate) {
         && JSON.stringify(scoreSettings) === JSON.stringify(state.scoreSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, work, people, scoreSettings }) };
     }
+    case 'investment.settings.replace':
+      if (JSON.stringify(command.investmentSettings) === JSON.stringify(state.investmentSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, investmentSettings: command.investmentSettings }) };
     case 'change.settings.replace':
       if (JSON.stringify(command.changeSettings) === JSON.stringify(state.changeSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, changeSettings: command.changeSettings }) };
@@ -228,13 +273,44 @@ export function prepareAssembly(base, candidate) {
     case 'work.create':
     case 'work.update': {
       const index = command.type === 'work.update' ? position(state.work, command.work.id, 'command.work.id') : -1;
-      const row = { ...(index < 0 ? { lifecycle: 'active' } : state.work[index]), ...command.work };
+      const row = resizeWorkSessions({ ...(index < 0 ? { lifecycle: 'active' } : state.work[index]), ...command.work });
       const work = index < 0 ? append(state.work, row, 'command.work.id') : update(state.work, index, row);
       if (state.scoreSettings.cadence === null && command.placements?.length)
         throw new PlanError('reference', 'command.placements', 'Choose a planning horizon before placing sessions.');
       const scoreSettings = { ...state.scoreSettings, cadence: replaceWorkPlacements(state.scoreSettings.cadence, row, command.placements) };
       if (JSON.stringify(work) === JSON.stringify(state.work) && JSON.stringify(scoreSettings) === JSON.stringify(state.scoreSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, work, scoreSettings }) };
+    }
+    case 'work.session.update':
+    case 'work.session.remove': {
+      const index = position(state.work, command.workId, 'command.workId'), current = state.work[index];
+      if (command.occurrenceIndex >= current.occurrences)
+        throw new PlanError('reference', 'command.occurrenceIndex', 'Choose an existing session in this plan.');
+      const removing = command.type === 'work.session.remove';
+      const row = removing ? removeWorkSession(current, command.occurrenceIndex)
+        : replaceWorkSession(current, command.occurrenceIndex, command.session);
+      let cadence = state.scoreSettings.cadence;
+      if (cadence !== null) {
+        let found = false;
+        const placements = cadence.placements.flatMap(item => {
+          if (item.workId !== current.id) return [item];
+          if (item.occurrenceIndex === command.occurrenceIndex) {
+            found = true;
+            if (removing) return [];
+            if (!Object.hasOwn(command, 'placement')) return [item];
+            return command.placement?.periodId ? [{ ...item, ...command.placement }] : [];
+          }
+          return [{ ...item, occurrenceIndex: removing && item.occurrenceIndex > command.occurrenceIndex
+            ? item.occurrenceIndex - 1 : item.occurrenceIndex }];
+        });
+        if (!removing && !found && command.placement?.periodId)
+          placements.push({ workId: current.id, occurrenceIndex: command.occurrenceIndex, ...command.placement });
+        cadence = { ...cadence, placements };
+      } else if (!removing && command.placement?.periodId)
+        throw new PlanError('reference', 'command.placement', 'Choose a planning horizon before placing this session.');
+      if (JSON.stringify(row) === JSON.stringify(current) && JSON.stringify(cadence) === JSON.stringify(state.scoreSettings.cadence)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1,
+        work: update(state.work, index, row), scoreSettings: { ...state.scoreSettings, cadence } }) };
     }
     case 'team.update': {
       const index = position(state.teams, command.teamId, 'command.teamId');
@@ -257,8 +333,9 @@ export function prepareAssembly(base, candidate) {
       const current = state.work[index];
       const field = WORK_CHANGE_FIELDS.get(command.type);
       const value = command[field];
-      if (field === 'personIds' ? sameIds(value, current.personIds) : value === current[field]) return { projection: base };
-      collection = 'work'; rows = update(state.work, index, { ...current, [field]: value }); break;
+      const next = setWholeWorkField(current, field, value);
+      if (JSON.stringify(next) === JSON.stringify(current)) return { projection: base };
+      collection = 'work'; rows = update(state.work, index, next); break;
     }
     case 'person.role.replace': {
       const index = position(state.people, command.personId, 'command.personId');
@@ -334,9 +411,12 @@ export function prepareAssembly(base, candidate) {
       rows = reordered(state[collection], command.ids);
       if (rows.every((row, index) => row === state[collection][index])) return { projection: base };
       break;
+    case 'work.remove': {
+      position(state.work, command.workId, 'command.workId');
+      return { projection: preparePlan({ ...removeWorkAndReferences(state, command.workId), revision: state.revision + 1 }) };
+    }
     case 'person.remove':
     case 'team.remove':
-    case 'work.remove':
     case 'contribution.remove':
     case 'connection.remove':
     case 'arrangement.remove':
@@ -345,11 +425,6 @@ export function prepareAssembly(base, candidate) {
       const next = removal(base, targetCollection, command[targetField], targetField);
       if (next.error) return next;
       ({ collection, rows } = next);
-      if (command.type === 'work.remove' && state.scoreSettings.cadence) {
-        const scoreSettings = { ...state.scoreSettings, cadence: { ...state.scoreSettings.cadence,
-          placements: state.scoreSettings.cadence.placements.filter(row => row.workId !== command.workId) } };
-        return { projection: preparePlan({ ...state, revision: state.revision + 1, work: rows, scoreSettings }) };
-      }
       break;
     }
   }

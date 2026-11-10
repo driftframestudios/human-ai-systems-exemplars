@@ -1,6 +1,8 @@
 import { projectCoordinationArrangements } from './coordination-arrangements.mjs';
 import { createContributionViewModel } from './contribution-view-model.mjs';
 import { createTeamLanes } from './arrangement-surfaces.mjs';
+import { diagramArrowPath } from './diagram-geometry.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 // About owns the .native-connections route styles. This receiver reads an
 // accepted projection; the parent owns edits, publication and monetary values.
@@ -163,8 +165,13 @@ const ARRANGEMENT_POSITIONS = Object.freeze({
   'project-team': { sponsor: [150, 100], project: [480, 240], operations: [810, 380] },
   'shared-service': { requester: [190, 225], service: [690, 225] },
   'stream-aligned': { stream: [480, 235], enablement: [170, 105], operations: [790, 365] },
-  matrix: { delivery: [480, 330], practice: [200, 110], sponsor: [760, 110] },
+  matrix: { delivery: [480, 345], practice: [200, 140], sponsor: [760, 140] },
   'tiger-team': { response: [480, 210], specialists: [160, 210], owner: [800, 360] },
+});
+
+const RETURN_SLOTS = Object.freeze({
+  pod: ['feedback'], guild: ['learning'], 'project-team': ['feedback'],
+  'shared-service': ['response'], 'stream-aligned': ['learn'], matrix: ['review'], 'tiger-team': ['resolve', 'return'],
 });
 
 // Template slots explain placement. Every cable still reads the current
@@ -193,23 +200,26 @@ export function arrangementGeometry(arrangement, plan) {
     const siblings = lanes.get(JSON.stringify([from.id, to.id].sort())), laneIndex = siblings.indexOf(row.connection.id);
     const lane = (laneIndex - (siblings.length - 1) / 2) * 24;
     const vertical = Math.abs(to.y - from.y) > Math.abs(to.x - from.x), bend = 65;
-    let path, end, tangent;
+    let start, control1, control2, end;
     if (from === to) {
       const spread = 50 + laneIndex * 24, rise = 145 + laneIndex * 28;
-      path = `M ${from.x - spread} ${from.y - 36} C ${from.x - 150 - laneIndex * 24} ${from.y - rise}, ${from.x + 150 + laneIndex * 24} ${from.y - rise}, ${from.x + spread} ${from.y - 36}`;
-      end = [from.x + spread, from.y - 36]; tangent = [-.6, .8];
+      start = [from.x - spread, from.y - 36]; end = [from.x + spread, from.y - 36];
+      control1 = [from.x - 150 - laneIndex * 24, from.y - rise];
+      control2 = [from.x + 150 + laneIndex * 24, from.y - rise];
     } else if (vertical) {
       const sign = Math.sign(to.y - from.y), x = from.x + lane, endX = to.x + lane;
       const lateral = (Math.sign(lane) || 1) * bend;
-      path = `M ${x} ${from.y + sign * 36} C ${x + lateral} ${from.y + sign * 110}, ${endX + lateral} ${to.y - sign * 110}, ${endX} ${to.y - sign * 36}`;
-      end = [endX, to.y - sign * 36]; tangent = [0, sign];
+      start = [x, from.y + sign * 36]; end = [endX, to.y - sign * 36];
+      control1 = [x + lateral, from.y + sign * 110]; control2 = [endX + lateral, to.y - sign * 110];
     } else {
       const sign = Math.sign(to.x - from.x), y = from.y + lane, endY = to.y + lane;
-      path = `M ${from.x + sign * 110} ${y} C ${from.x + sign * (110 + bend)} ${y}, ${to.x - sign * (110 + bend)} ${endY}, ${to.x - sign * 110} ${endY}`;
-      end = [to.x - sign * 110, endY]; tangent = [sign, 0];
+      start = [from.x + sign * 110, y]; end = [to.x - sign * 110, endY];
+      control1 = [from.x + sign * (110 + bend) + lane * 2, y];
+      control2 = [to.x - sign * (110 + bend) + lane * 2, endY];
     }
-    const [x, y] = end, [dx, dy] = tangent;
-    return { ...row, path, arrow: `${x},${y} ${x - dx * 12 + dy * 5},${y - dy * 12 - dx * 5} ${x - dx * 12 - dy * 5},${y - dy * 12 + dx * 5}` };
+    const path = `M ${start.join(' ')} C ${control1.join(' ')}, ${control2.join(' ')}, ${end.join(' ')}`;
+    return { ...row, path, end, arrow: diagramArrowPath({ start, control1, control2, end }),
+      direction: RETURN_SLOTS[arrangement.templateId].includes(row.slotId) ? 'return' : 'forward' };
   });
   return { width: 960, height: Math.max(460, ...nodes.map(row => row.y + 80)), nodes, edges };
 }
@@ -247,12 +257,12 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   else if (arrangement.templateId === 'matrix') boundary(45, 45, 865, 390, 'Shared assignment');
   else boundary(330, 110, 300, 190, 'Focused response');
   for (const edge of geometry.edges) {
-    const row = edge.connection, group = svgNode('g', { class: 'native-arrangement__edge', 'data-arrangement-connection': row.id, 'data-sender-team': row.senderTeamId, 'data-receiver-team': row.receiverTeamId, 'data-status': row.status, 'data-adapted': String(edge.adapted) });
+    const row = edge.connection, group = svgNode('g', { class: 'native-arrangement__edge studio-diagram__edge', 'data-arrangement-connection': row.id, 'data-sender-team': row.senderTeamId, 'data-receiver-team': row.receiverTeamId, 'data-status': row.status, 'data-direction': edge.direction, 'data-adapted': String(edge.adapted) });
     group.setAttribute('role', 'button'); group.setAttribute('tabindex', '-1'); group.setAttribute('aria-label', `${edge.slotLabel}: ${row.sharedObject || 'Shared object to choose'}`);
     group.setAttribute('data-arrangement-target-kind', reading !== 'accepted' ? 'template-connection' : 'connection'); group.setAttribute('data-arrangement-target-id', reading !== 'accepted' ? edge.slotId : row.id);
     group.append(svgNode('title', {}, `${edge.slotLabel}: ${row.sharedObject}`),
       svgNode('path', { d: edge.path, fill: 'none', class: 'native-arrangement__hit', 'aria-hidden': 'true' }),
-      svgNode('path', { d: edge.path, fill: 'none', class: 'native-arrangement__cable' }), svgNode('polygon', { points: edge.arrow })); svg.append(group);
+      svgNode('path', { d: edge.arrow, class: 'native-arrangement__cable studio-diagram__arrow' })); svg.append(group);
   }
   for (const team of geometry.nodes) {
     const group = svgNode('g', { class: 'native-arrangement__team', 'data-arrangement-team': team.id, 'data-arrangement-slot': team.slotId ?? 'external' });
@@ -491,7 +501,10 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (control.dataset.connectionSelect) { select(control.dataset.connectionSelect, { notify: true }); return; }
     const action = control.dataset.connectionAction, view = state.read();
     if (action === 'detach-arrangement') { onDetachArrangement(control.dataset.arrangementId); return; }
-    if (action === 'navigate') { onNavigate({ kind: control.dataset.connectionTargetKind, id: control.dataset.connectionTargetId }, control); return; }
+    if (action === 'navigate') {
+      const { connectionTargetKind: kind, connectionTargetId: id } = control.dataset;
+      onNavigate(kind === 'work' ? workDefaultsTarget(id) : { kind, id }, control); return;
+    }
     if (action === 'previous') showPage(view.page - 1);
     else if (action === 'next') showPage(view.page + 1);
     else if (action === 'return' && view.selectedId !== null) {

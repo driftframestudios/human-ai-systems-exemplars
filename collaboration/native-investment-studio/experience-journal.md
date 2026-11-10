@@ -1,893 +1,949 @@
 # Native Studio experience journal
 
-This journal preserves the decisions that let a collaborator continue the
-Studio coherently: what visitors should understand, which state a control owns,
-and why the experience looks and responds as it does. The [README](README.md)
-is the practical entry point; runnable source owns behavior; GitHub Issues and
-PRs own current acceptance and delivery. The
-[implementation reference](implementation-reference.md) carries deeper contracts,
-and [usability research](usability-research.md) records the bounded research.
-
-The 8 November 2026 reconciliation preserves the accepted main contract and
-separates the all-chapter dev workbench from production decisions. The visual
-grammar is owned by the
-[Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
-The supersession table identifies deliberate reversals. Earlier prose and exact
-interim check counts remain recoverable in Git history.
+This record keeps the current design, state ownership and deliberate supersessions
+available for re-entry. Runnable source owns behavior; the [README](README.md)
+provides the practical route; GitHub owns current delivery. Historical detail
+remains in Git and the linked reviewed changes. The
+[implementation reference](implementation-reference.md) carries deeper contracts.
 
 ## Current working contract
 
-The Studio is a populated, visual About-page showcase for a visitor who may
-only scan and try a few controls. Its purpose is to make cross-functional work,
-responsibility and investment understandable through direct exploration.
-Useful examples, visible choices and recoverable interactions lead; precise
-editors remain available when a visitor chooses to inspect them.
+The Studio is a populated About-page showcase for a busy visitor who may scan and
+try a few controls. It makes cross-functional people, work, support and investment
+understandable through direct exploration. Useful examples and visible changes
+lead. An accepted plan supplies all six chapters; edits use existing canonical
+commands and recovery owners.
 
-The working showcase is on main. The cohesion route
-[#735](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/735)
-was delivered under
-[milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23)
-through focused, independently reviewed PRs. Each PR owns its checked source,
-result and recovery path:
+`main` retains the approved reference. The living integration is `dev`.
+#884 combines selected-person settings, connected role reels and whole-session
+spread in one visible mixing desk. Capacity readings distinguish person/session
+effort from the contribution matrix's distinct linked work. This supersedes #881's
+paired disclosure presentation while retaining its contribution-local creation
+and canonical draft owners. #947 separates contribution/session support checkboxes
+from row-heading inspection: links accept directly with Undo, while headings
+toggle the local editor and its reveal. #936 retains open person cards through
+participation and replaces the receiver half-rack during person creation. #890 refines the matrix readings, stable pad alignment
+and footer session actions. #891 replaces the Session spread fader with an analog
+three-way switch and explains sole-participant limits at the control. #893 adds
+the selected person's participation row beneath that switch and compacts the
+laptop session columns while preserving the first column. #882 gives circular
+increment controls one shared raised/pressed shadow owner across the chapters
+and their borrowed editors. **Supersession:** this replaces the separate People
+shadow repairs and duration's resting-only shadow rule; existing sizes, gaps,
+skins and fixed dial lighting retain their owners. The planning workbench stays
+the preserved reference. #879 establishes People
+group identity, local hourly subtotals, compact readings and nested creation
+returns. These extend #864's team lanes and direct session arranger,
+#836's compact receiver and shared creation controls from #837. #863 completes the
+removal notice's reference descriptions; #865 consolidates circular steppers
+and repairs Quality control contrast and spacing.
+#848 carries that composition into Abilities, with local person/team naming in
+#856 and retained pristine creation in #868. #937 gives catalogue and support
+keys local record/section toggles with retained drafts and exact-key return.
+#849 makes Change action selection visible; #857/#858 extend the compact
+local receiver into Change and Quality. #941 gives Change framework-named exact
+fields while keeping the shared attention channels separately inspectable.
+**Supersession:** changing frameworks preserves those channels and unfinished
+entries instead of reapplying the selected lens preset. Faders, exact fields,
+Apply and amp Undo retain their draft and command owners. #943 names the
+Quality control **Review demand** and explains its required-check threshold.
+**Supersession:** this replaces Compliance’s reduction cue with the actual
+check-selection effect. Financial faders gain deck-owned accessible effect
+descriptions while values, proposals, projections and Undo retain their owners. #818 receives the full financial-deck
+workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
+compact cost comparison and shared diagram geometry in #895. #940 joins each
+arrowhead at its sampled curve cutoff, pointing toward the receiving endpoint.
+**Supersession:** this replaces the separate tangent-line head base that folded
+tight Matrix bends; node layout, palette and pointer targets retain their owners. Each feature uses
+its own focused reviewed delivery. #942 fits Change's dense viewpoint keys and
+Investment's two-choice labels while retaining wheel artwork, palette and motion.
+**Supersession:** choice-count spacing replaces the overlapping eight-position
+ellipse and narrow two-position keys. Phone through wide layouts, complete
+labels, separate targets and keyboard selection retain focused browser coverage.
+#831/#833 establish accepted creation and recoverable session removal; #832
+consolidates local headers and Shared sessions. The #827 browser-fixture repair
+keeps focused verification usable across that integration. #844 updates the
+browser journeys to enter current visible rack owners, superseding their retired
+disclosure routes while retaining accepted-state and recovery observations.
+Promotion to main and
+a tagged public release each await
+the human's cue. Ordinary mobile and laptop/wide layouts are the supported
+visual comparison points.
 
-| Design outcome | Issue | Delivered change |
-| --- | --- | --- |
-| Shared composition and controls | #736 | [#741](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/741) |
-| Coordination and People | #737 | [#742](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/742) |
-| Adjacent Abilities inspector | #738 | [#743](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/743) |
-| Framework-specific Change controls | #739 | [#744](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/744) |
-| Quality pads and calm starting preset | #740 | [#745](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/745) |
+The 10 November PR #934 readiness pass retains the human's Futura heading stacks,
+cobalt chapter-key shadows, **Set vision** label and revised practice/starter
+wording. Studio buttons explicitly use the system UI family, preserving numeric
+and pad variants. Plan horizon owns its fieldset padding and internally seated
+legend. **Supersession:** its local spacing replaces the broad fieldset padding
+experiment; the removed amp purpose preview also retires its orphaned CSS. The
+amp grouping in #938 keeps History actions together and labeled motion choices
+visible. The subsequent human layout correction restores the funding breakdown
+to the left while retaining the total at the right. **Supersession:** this balance
+replaces #938’s right-side grouping of the breakdown with the total. Chapter navigation follows
+those tools and their reading panels. **Supersession:** this replaces the mixed
+control row and chapter keys preceding the amp tools; draft and history owners
+remain unchanged. #945 gives Set vision a ruled-paper account of people, outcome,
+example starting context and active planned work beside a compact review table.
+**Supersession:** this reading replaces the equal-weight purpose grid while
+preserving all six saved fields, raw-edit recovery and Undo. Per-session overrides
+determine active work; custom plans receive a current-workflow invitation.
+The completed [#935 route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935)
+brings local editing, amp/shelf orientation, diagram/reel clarity and concise
+vision together. #944 adds AI Enablement and AI Experience through ordinary plan
+records and the existing replacement/Undo owner. The example buttons use
+canvas-paper faces while retaining their raised action treatment.
+**Supersession:** this quieter face replaces their teal acceptance color; Apply
+controls retain the signal color.
 
-The 7 November interaction route delivered dial retention (#753, PR #761) and
-Change disclosure cues (#754, PR #760), with visual-contract persistence in #755.
-The current aesthetic and component placement remain the reference. PR #764
-delivered #756: the selected period and Plan overview return share the rack
-header, with originating focus and local scroll restored on return. The approved
-#765 consolidation gives both Coordination readings shared session keys and
-Add controls through PR #775. The editor supplies selected-record and visible-open
-state. PR #778 completed Team planning's permanent section and darker secondary
-rack. PR #781 delivered #779: teams, people, sessions and handoffs share six
-delivery-phase lanes, with a local phase view and Delivery overview return.
-PR #783 delivered #766: deliberate arrangement choices update one accepted
-instance directly, with local Undo and a linked-work amount. PR #769 and
-PR #774 recorded the earlier route and related design decisions. Direct
-creation (#770) receives that shared entry language. Participant movement (#771)
-and attached editorial companions (#772) consolidate the next receiving controls;
-scoped removal/shared Undo (#773) retains its future acceptance boundary.
-PR #785 delivered the enclosed duration and rate modules (#767). PR #786 delivered
-#757: canonical person/team editors open below Team planning's selected rack,
-preserving those modules and the People chapter. PR #787 delivered #768, extending
-the same placement grammar to session editing from the horizon and Team planning.
-Close retains the proposal; Cancel discards it; Apply accepts it through the
-existing owner. Team arrangement keeps its direct acceptance boundary. PR #790
-delivered #788's borderless peach Hours and paper Minutes with the monetary
-coarse/fine dial geometry. PR #793 repaired the current-entry browser routes
-(#777), enlarged-text readout (#791) and idempotent editor restoration (#792).
-#789 now places the Session detail deck inside Plan overview while Team planning
-keeps its adjacent receiver. One canonical form and session owner serve both.
-PR #794 delivered that focused deck increment after independent review. PR #795
-delivered #758's immediate session creation after independent review and passing
-hosted checks; it also corrected the source-test routing registration (#796).
-PR #797 delivered #770's native New session rows inside both Coordination
-sequencers. Creation Undo remains distinct from cancelling later edits to the
-added session. PR #802 delivered #771/#772: shared participant movement across
-session and team editors and compact editorial drawers attached beneath the
-horizon. Its review and observations own that delivery. The future percentage
-model remains in #798; broader removal remains with #773.
+#874's Operating manual follows the actual acceptance owners: direct choices,
+prepared Apply proposals, local Close/Cancel, amp Undo and Investment comparison/
+file exchange. Its ruled-paper action table sits beside the authored introduction
+on wide screens and below it on phones. **Supersession:** this replaces the
+original instruction that every control previews until Apply. #875 establishes
+page-memory retention and accepted-only download recovery; host, media and
+embedded-route behavior retain separate boundaries. #882 completes the shared
+circular-control treatment. These focused deliveries are included in
+[promotion PR #966](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/966),
+which is the next review surface. Main promotion and tagged publication await
+human approval; this settled route supersedes the prior queued follow-ups.
 
-### Preserved workbench and current Showcase integration
+The 9 November review of `dev` at `fdb445d` reframed #679 around responsive
+creation, manipulation, navigation and recovery. Its JavaScript refinements
+(#901, #915, #902, #903 and #916) are implemented; #900 completes the planned CSS
+source cleanup.
+**Supersession:** these current source owners replace the earlier queued runtime
+sequence. Their decisions and evidence boundaries follow.
 
-The human requested ideation on `dev`, refreshed from `main`, before deciding
-how to incorporate more operations directly into the rack. The
-[#804 study](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804)
-established the loaded tape, people-by-session matrix, scoped period navigation
-and response routing. The approved
-[#805 direction](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
-extended that compact composition to all chapters. It supersedes treating the
-illustration as Coordination-only.
-[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
-preserves the cassette treatment, visible naming and fixed duration lighting.
-The [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
-added preloaded independent financial comparisons and recoverable plan removal.
-The approved [#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
-strengthens the VHS-C bodies, connects Plan investment's allocation reels and
-matches monetary steps to each comparison's scale. The
-[proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
-[Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
-now describe the connected experience and its receiving owners.
+#901 settles accepted score state before one root notification,
+superseding its accepted-then-editing double notification. Cadence reuses the
+mounted rack for an identical projection and rendered view state; local caption
+transitions explicitly invalidate that reuse. The mounted Add session regression
+distinguishes two root refreshes from one while retaining earlier placements,
+focus and Undo. Current interaction latency remains unmeasured. The completed #906
+pass addresses cassette meaning, scoped creation and empty-library recovery.
+#909 restores All plans on entry and adds in-rack sequential browsing (PR #911).
+#939 expresses aggregate scope as the first stacked cassette and keeps adjacent
+pagination below the name on phones. Shared local reveal follows cassette and
+Investment Domain selection while retaining page position, focus and accepted
+records. **Supersession:** this replaces offscreen selected shelves and the
+split pagination rail; manual input cancels reveal and reduced motion settles directly.
+#910 repairs the selected-session target: a pad now carries its occurrence identity
+through the draft, command, pricing and rendered consumers. This supersedes the
+shared-duration/people assumption: new and uncustomized sessions follow tape
+defaults, and an edited session keeps its own complete settings. Removing a session remaps settings and
+placements together; a stale ordinal draft requires explicit recovery. Direct
+count changes retain amp Undo and validate visible edits before accepting them.
+#913 extends that repair to the overview ingress: groups now distinguish funding
+and status and open period detail. Individual cards, including unplaced sessions,
+carry exact occurrence identity. This supersedes grouped cards that silently
+opened tape defaults; that behavior caused apparent neighboring-period edits.
+#914 binds new stages and handoffs to the loaded tape. Related items remain
+reachable from its attached companion and record rail even when a selected period
+is empty, including their decisions and delays. Period markers still derive from
+the work's real placement. Aggregate navigation controls retain projection identity
+without acquiring the selected/expanded semantics of a session-editor trigger.
+#915 now makes that distinction explicit at each work-editor ingress. Track names
+and supporting-work links declare defaults; numbered cards and pads declare one
+session. Admission checks the immutable source work record and ordinal before
+parking, borrowing, focus or return ancestry changes. This supersedes the optional
+index fallback that could broaden an incomplete session request into defaults.
+Object identity supplies the local lifetime boundary: serialized revision numbers
+can repeat after Undo, while a replaced work record has a different identity.
+The targets stay in the mounted view; canonical plan import/export and saved draft
+identities retain their existing owners. A hash or per-record serialization layer
+would serve a different persistence or transport requirement.
 
-The same illustrative session and person identities connect the chapters.
-People uses team lanes and a participation matrix; Abilities retains both support
-tables and a loaded-record editor. Change uses framework/viewpoint reels,
-emphasis faders and linked work. Quality & recovery combines before/after-release
-choices, a CRT-style attention reading and check pads. Investment initially loads
-Plan investment, preserving the shared-session funding lanes and simple saved
-comparison. Additional VHS-C-style decks offer customer rollout, commercial
-cohort, service operations and capital-choice illustrations. Marked session
-routes return to the same Coordination module and provide a route back.
+Score previews bind existing session targets to accepted work records because the
+score proposal changes placement and relationships, rather than existing session
+identity. Preview-only work acquires an editor after acceptance. Returning to a
+saved draft uses its canonical recovery owner and presents the numbered session
+that owner restored, including a selection made within the rack.
 
-The shell owns page-local edits and Undo; chapter adapters read and change that
-model. A rate, duration or participation edit therefore has a visible consequence
-in the investment reading. Linking existing work from another chapter refers to
-the same session, rather than pricing another copy. The study's funding lanes
-group session amounts; production's allocation rules and full baseline/report
-semantics retain their existing owners. The added comparison decks use the
-shared Undo owner while keeping their assumptions and outputs separate from
-the shared-session amount. One of every financial deck type is preloaded; New investment deck
-creates another independent instance. Domain navigation selects a
-deck type. Lifecycle presets, alternatives and metric choices change a compact
-loaded reading with visible consequences. Customer rollout carries price and
-contribution; Commercial cohort separates opening-cohort retention from new
-revenue and acquisition; Service operations keeps time, budget and capacity
-units visible; Capital choices carries quarterly flows, NPV, IRR and payback.
-The canonical core supplies financial formulas through a small study adapter.
+The follow-up source audit enriches #679/#900/#902/#903 and adds #916 for Investment
+deck configuration/renderer ownership. #902 now gives each mounted Investment
+receiver one immutable reading context keyed by the exact accepted projection.
+Its deck index and lazy financial readings serve the shelf, portrait and loaded
+editor together. This supersedes repeated mutable projection preparation during
+rendering: commands decode fresh settings while reusing immutable price, people
+and period readings. Replace and Undo create a fresh context even when revision
+numbers repeat. The existing saved-plan format remains the exchange boundary.
 
-The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
-records the wider VHS-C art, stronger depth and vertical channel with a
-horizontal phone presentation. The stippled grip now sits inside the moving
-cassette face. This supersedes texture attached to its stationary outer button.
-Chocolate companions offset the dark rack around money controls and comparisons,
-extending the preserved Extra investment treatment. Funding identity owns that
-lane's color, including when it appears alone through the lens.
+Shelf buttons, library choices and compatible editors retain their nodes across
+accepted updates. Event callbacks resolve current records; removed or type-changed
+editors retire their callbacks and release controls. This keeps a held event from
+acting on another owner. Prepared formatters retain separate whole-dollar,
+exact-field and ledger-cent meanings. Focused ownership and browser observations
+establish reuse and retained interaction behavior; matched phone/laptop captures
+preserve the approved art. Visitor latency remains unmeasured.
 
-Plan investment now pairs Investment approach with Investment lens. Deliver now,
-Protect delivery and Explore options vary explicit reserve/opportunity budget
-allocations. Four pads make the work, set-asides and remaining amount or shortfall
-visible. The funding lens filters session pads and sprint amounts; the allocation
-still accounts for the whole plan. Manual budget, allocation or funding changes
-show Custom, and a named approach restores its pair through one Undo edit.
-The approach describes spending allocation; actual shared work keeps its price,
-and a claim about improved delivery would require separate evidence.
+#903 now prepares occurrence membership by work, period and subdivision once
+for each projection or render. Private maps return frozen membership arrays in
+the accepted placement order; the caller retains record ownership. This
+supersedes a full occurrence scan inside every sequencer cell. Stage and handoff
+endpoints reuse one ordered reading per endpoint, and availability accumulates
+active participant effort in occurrence order. Empty and partial endpoints keep
+their existing meaning.
 
-Aggregate budgets, revenue and capital use $1,000/$100 relative dials. Unit prices
-and costs retain $100/$5, with exact entry and circular $1 steps throughout.
-Readout layout is fixed by the field: expected thousands sit below the heading;
-small unit costs may sit top-right. Crossing a numeric threshold keeps that
-placement. Face lighting remains fixed and reusable controls retain stable nodes
-through the existing history owner. This supersedes the earlier all-$100/$5
-scale while preserving the approved duration controls.
+Investment groups placements once by work and uses the session owner's local
+override resolver. Grouped summaries continue to price untimed work without
+expanding every occurrence. This supersedes repeated full placement and override
+scans; the saved-plan format and financial formulas retain their existing owners.
+These indexes last for one invocation. Replacement, scope changes and Undo
+prepare fresh membership instead of extending cache invalidation rules.
 
-Quality starts at 4σ with balanced attention. Its response to urgency remains
-an authored illustration, separate from observed process capability or a forecast.
+The source-derived cost changes from a full occurrence scan per track cell to
+one occurrence pass plus cell lookups and emitted pads. Investment placement
+preparation changes from repeated work-by-placement scans to one placement pass
+plus each placed work's override preparation and session reads. The literal
+fixtures establish ordering, mixed funding/status, unplaced work and detached
+settings; focused browser journeys establish scope, editing and recovery.
+These observations support reduced preparation work; visitor latency remains
+unmeasured.
 
-The human approved the compact **Time per person** and **Working sessions**
-layout before this chapter expansion. The
-[duration-panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
-preserves the complete panel at `be8ec7f`: palette, readout, dial faces, circular
-steppers and responsive geometry. The human's subsequent lighting correction
-revises that contract to `0.1.1`: the face gradient, rim and shadow remain fixed;
-the pointer carrier turns. The previous rotation of the entire face is
-superseded, with geometry, palette and gesture ownership preserved.
-The human also asked to preserve the complete cassette artwork and animation.
-The new [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
-pins that treatment at `cedafc3`: angled blocky faces, exact depth and palette,
-the `160ms ease-out` hover and the horizontal shelf at `650px` and below.
-The loaded detail panel retains its `.2s ease-out` downward unfurl from opacity
-`.3` and `translateY(-6px)`. Investment's Extra investment lane keeps its
-chocolate `#403d32` field. These preserved references distinguish settled art
-from the surrounding development experiments.
+#916 now groups the five Investment variants in a closed view registry with
+named factories. Each factory mounts its type's existing controls and returns
+the updater for its readings. Shelf and reel summaries live beside those
+factories. The workbench continues to own editor identity, retained controls,
+focus, gestures, disposal and shared-plan operations. Its guarded command ports
+carry edits from each factory to the current record.
 
-The shelf now reads **Plans**. **New plan** creates the named item; **+ Session**
-adds another session to that item. Cassette faces say **sessions** instead of
-**occurrences**. The source still stores the same `tapes` and `occurrences` IDs
-and arrays; this iteration changes the visitor vocabulary and keeps duration
-and participant ownership intact. Numbered pads remain the repetition control.
-Remove plan clears explicit support/funding references and leaves independent
-response cards with visible unassigned endpoints. People and teams remain. The
-last plan can be removed and recreated; Undo restores its full snapshot, while
-Reset restores the original example. The production amp Reset is separately
-planned in [#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
-Plan overview still means the complete arrangement. Production retains its
-accepted session/count contract until a focused consolidation receives review.
+The choice/effect owner derives ordered choices from the saved-field contract
+and supplies explicit labels. Nested catalogs and field definitions are frozen;
+fresh defaults and command candidates remain independently mutable. Named
+effects preserve linked presets, Custom selections and manual overrides.
+Admission remains with the saved-state owner, and financial calculations retain
+their existing owner.
 
-The proposal still maps Coordination's outside controls, including Customize
-teams and handoffs, to one useful home and its existing owner. Events remains an
-optional bounded reading. Unassigned tapes and independent response cards need
-explicit production model decisions; participant percentages stay with #798.
-The working showcase retains its accepted plan, draft, Apply, Cancel and recovery
-contracts while the study uses immediate illustrative edits. The human now
-approved the planning workbench's promotion to main and dev in #810. This
-supersedes the blanket hold on merging the study. Its Investment art and controls
-are pinned at `93bc69a`; the main Showcase runtime remains anchored at `9338acc`.
+**Supersession:** this implemented division replaces the earlier prospective
+#916 packaging note. Helper-only extraction would leave related type dispatch
+spread across setup, updates and summaries. One file per type would add import
+boundaries for these small, closely related factories. The selected closed
+registry makes each variant's presentation easy to find while retaining one
+mounted lifecycle and explicit dependent effects. A general traversal hierarchy
+remains a candidate when heterogeneous operations demonstrate its value.
 
-The active dev Showcase integration is #811. Study scale and form factor guide
-compact module placement; the Showcase remains the art-direction authority for
-dials, zoetropes, output depth, Kanban/sequence surfaces and participation legend.
-The initial bridge broadens the Studio's usable field and compacts the existing
-session deck. Chocolate repetition housing complements the dark instrument
-surfaces; editorial secondary panels retain their useful contrast. Existing
-contextual creation and Undo owners remain. The numeric count stays available
-until occurrence pads gain a decrement route.
+The extraction retains the existing DOM order, text and control geometry,
+including Plan allocation ahead of its knobs and its connected reel readings.
+The receiving PR records source checks, focused browser journeys, visual
+comparison and independent review.
 
-#812 owns direct team/handoff rack integration, and #813 owns cassette/deck
-projection. Future dev Showcase promotions require the human cue. The preserved
-planning reference continues to provide a comparison while canonical model,
-proposal and recovery behavior guide the actual Showcase implementation.
+#900 retires the elapsed-minute timeline and agenda presentation after a current
+consumer check; score-model agenda data and reports keep their separate purpose.
+Its duration tranche consolidates the shared module in `studio-instrument.css`.
+**Supersession:** one canonical block replaces the earlier base/specimen split,
+carrying forward the live layout, numeric typography and empty-feedback behavior.
+The approved dial geometry and lighting remain intact. Chapter-specific placement,
+repetition layouts and alternate-media rules retain their existing owners.
+The final duplicate pass removes the repeated About OS-motion guard, early Quality
+hidden rule, superseded table minimum and arrangement font size, and the repeated
+mobile quantity columns. The shared motion rule, final hidden guard, `48rem`
+table minimum and `.75rem` arrangement status remain authoritative; the generic
+About fallback and attribute-specific motion guards retain their distinct scopes.
+This completes the planned source cleanup and supersedes the queued duplicate
+audit. The
+[implementation ownership route](implementation-reference.md#sprint-and-quarter-coordination)
+and [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+lead to the receiving composition; each focused PR records its checks, comparison
+and independent review. A new runtime change starts with an observed visitor-path
+cost; refresh-call counts alone cannot identify DOM work when receivers already
+retain unchanged output. Promotion to main retains its separate human cue.
 
-### State, people and evidence
+This supersedes the earlier relationship-option-retention experiment as #679's
+primary route. #641 and #673 retain their frozen measurements; the earlier
+candidate remains a hypothesis to inspect against current code. Reuse the
+[CSS settlement](../../threadkeeping/context-canvas-css-and-visual-reference-settlement.md)
+and [cost/ownership settlement](../../threadkeeping/collaboration-accounts/2026-10-01-cost-and-ownership-analysis.md).
+Preserve exact projection identity, independently owned drafts, focus and Undo.
+#676 supplies served-source/mounted-owner checks; #260 retains About delivery and
+cache measurement. Completion follows useful visitor behavior and fitting
+evidence rather than selector counts or expanded arithmetic suites.
 
-| Owned meaning | Consequence for the experience |
+### Coordination: load, arrange, inspect
+
+The Plans cassette shelf attaches directly to the full height of the period rack.
+Its blocky angled artwork and size stay intact while the surrounding controls are
+more compact. The desktop scroll area now accommodates 80rem of cassettes,
+superseding its four-cassette-height limit. At phone width the shelf becomes a horizontal strip. A cassette
+selects its plan and filters the board/tracks; it closes the detail receiver.
+The initial view shows All plans with detail closed. Its persistent outline
+control sits beside directional Previous/Next pennants and the loaded plan name.
+Next enters the first cassette; browsing follows shelf order with explicit ends.
+The rail and shelf share one selection owner. Navigation keeps focus and leaves
+accepted records and Undo unchanged. An empty library begins unselected.
+**Supersession (#909):** the human preferred the aggregate entry, replacing
+#906's first-cassette convenience default. All plans remains visible in either
+scope. Period selection stays independent, with a visible selected
+sprint/quarter and Plan overview return inside the rack.
+
+The composition reads in this order: period board, optional compact working area,
+session tracks, then small People and Stages routes. Overview groups separate
+funding and paused status and open the period's individual sessions. A single
+session clip opens its canonical controls between board and tracks. Close restores the originating
+scope. A first opening uses the downward reveal; changing the selected record
+keeps the same receiver and its position. The detail border stays flush with its
+rack; the receiving slot reserves one rem above and below the module, replacing
+the former zero-gap insertion so adjacent controls and painted borders stay clear. Duration and Working sessions fill neighboring slots on a wide rack.
+Working sessions uses the regular dark module housing, with its heading/count
+and Add in the top row and Remove at the bottom right. Funding and Status have a
+named module with large stateful pads beside Participants. Each radio sits at
+the top left of its pad, beside the label and a short explanation. Phone layouts stack
+these modules while preserving the Hours/Minutes pair.
+
+One cassette represents a repeatable activity plan; its sessions are occurrences.
+In a loaded cassette, both the period lane's Add session and a track-cell plus
+append one accepted occurrence in that destination. Count and complete placements
+enter one canonical command, retaining the loaded cassette and earlier placements.
+Empty periods remain available. Stages, handoffs, decisions and delays follow the
+loaded plan's relationships so the scoped board describes that plan. Creating a
+stage includes that plan; creating a handoff uses an accepted connected edge when
+available, preserving its ordering, or connects an isolated plan to another one.
+The attached companion keeps related stages, handoffs and their decisions/delays
+reachable independently of the period filter. A one-plan library explains the need for another plan before
+connecting work.
+
+In All plans, the lane explicitly offers New plan; it and the sequencer's New plan
+row create separate work records while retaining the complete arrangement. Shelf
+New plan deliberately creates and loads a cassette. Ordinary creation uses the
+first available **New {item} N** name with editing closed; selecting the record
+opens its canonical editor. The shared `rack-creation-controls.mjs` factory retains
+native targets and accessible names. Week/month creation areas span their track
+cells; pointer hover and keyboard focus reveal the plus, while touch keeps it
+visible.
+
+**Supersession (#906):** the earlier unqualified rule that every period-lane
+addition creates separate work now yields to the visible scope: loaded Add session
+repeats that plan; All plans New plan creates another. This preserves both identity
+and the visitor's selected cassette. The transport now holds Remove plan and its
+compact named confirmation. Canonical removal clears dependent links in one edit,
+and the stable amp Undo restores the arrangement.
+
+The empty library replaces the empty board with a cobalt shared reel and a diagram
+preview. Plan, Design, Test, Build and Deploy select populated activity sets;
+turning the reel only previews. Load accepts the chosen set as one Undo entry,
+retaining existing people, teams, horizon and other chapter state. Create a plan
+keeps the canonical creation path available. Missing people or teams route through
+that guided path; the starter route leaves the retained plan intact and explains
+what to create. The local session receiver remains available for that route.
+
+**Supersession (#944):** the horizon's pilot/rollout-only example choices now
+include AI Enablement and AI Experience. These complete replacements have their
+own people, purpose, five tapes and four-sprint cadence. They remain distinct
+from the empty-library sets, which preserve the visitor's people and horizon.
+The AI starter factory turns authored work into ordinary records; the catalogue,
+canonical admission and existing replacement/Undo flow retain their owners.
+Service-blueprint task/context boundaries, participant/outcome alignment and
+the repository's user-testing and recovery examples inform the work. Source
+access, human confirmation, keyboard and language choices appear in the handoffs
+and review purpose. A visitor can explore the arrangement before entering text.
+The phone/laptop browser checks cover local loading, cassette/period navigation
+and one-step restoration of an edited prior plan. These checks establish that
+receiving behavior; the examples remain revisable working arrangements.
+
+Add sprint/quarter retains its separate accepted horizon operation. A selected
+period can retain its Sprint or Quarter name while a short caption replaces its derived stage summary. Clearing
+the caption restores that summary. Captions travel with the plan and Undo.
+A small underlined Edit now sits beside the displayed caption, superseding the
+large Edit label disclosure. The fixed Sprint/Quarter identity remains visible
+above it. Save reports acceptance through the canonical owner; an interrupted
+save retains the local field and a retry message. Cancel returns to the accepted
+caption. An unchanged derived summary stays derived rather than becoming an
+accidental override. This distinguishes the field being edited and preserves
+unfinished work during projection refresh.
+The live example includes a paused follow-up, so its resting state demonstrates
+both active and paused work without changing the canonical test fixture.
+
+Session pads own repetition in the rack, with Add session and selected-session
+removal; the synchronized numeric field remains an implementation detail. The
+selected pad retains its subtle movement. A stage or handoff opens its existing
+relationship owner in the rack. New handoff accepts a relationship between
+available work records with editing closed. Selecting it reveals From work,
+To work and optional Team connection, followed by decisions, delays and
+bottom-right removal. Its relationship fields carry
+the useful context; a repeated cost preview is hidden. These operations preserve
+the accepted model, reference checks, proposals and shared history.
+
+Team planning follows the horizon with its arrangement reel and concise preview,
+then the delivery-phase board and shared-session matrix. A selected team replaces
+the board contents with its name, stable membership pads and reorder controls.
+The Delivery overview breadcrumb returns locally. Name, membership and ordering
+changes accept directly with visible Saved feedback. Each delivery lane adds a
+team or handoff there, replacing duplicate header additions. Two full-width ghost
+actions stay visible at the lane bottom: Add team and Add handoff have distinct
+meanings and remain discoverable on touch and by keyboard. This supersedes the
+small side-by-side lane buttons. The placement of
+new IDs is local view state: refresh and Undo/redo retain it; a new mount derives
+imported phase placement from relationships. Custom teams follow their authored work stage where
+available, otherwise spread across phases; their handoffs follow the receiving
+team. Template-authored placements retain their meaning.
+
+Session, person and handoff forms remain canonical and can be borrowed into the
+Team planning receiver. Delivery overview and Shared sessions are independent
+working modules: inspecting a person replaces the delivery area while the
+sequencer stays visible. The local return restores Delivery overview. Handoff
+Create team accepts a uniquely named team while retaining the handoff and its
+requested field. The visitor can select that team to refine its direct controls.
+The compact handoff receiver places a short name and routing choices in one
+half-rack and supporting-session pads in the other. Mobile stacks the halves.
+This supersedes the Shared object or decision and Expected response textareas
+and repeated cost preview. New handoffs use a concise response default; imported
+response text remains intact through edits and export. A creation is immediately
+visible as a Delivery card and a Shared sessions column.
+The separate connection diagram and detached Working sessions panel are retired
+from the visible composition. Their retained source owners continue to supply
+shared state and forms where needed.
+
+Shared sessions keeps two small related views. People pads change participation;
+Handoffs pads change supporting-work links. Both accept directly and use amp Undo.
+A selected row opens only host-team and ordered-participant controls inside its
+own module. The final selected participant explains the existing one-person
+minimum; another person can be included before clearing that pad. Selecting a
+handoff heading borrows its canonical form into this same local receiver.
+Duration and period placement stay with Plan overview.
+
+All borrowed receivers, People editors and the Abilities support module share
+an owner/current header. Owner return and Close restore the initiating working
+area and its focus. Apply mirrors the canonical form when a proposal exists;
+direct controls show Saved. Native buttons express the local scope operation.
+The evidence and alternatives are reconciled in the control research.
+
+### People, Abilities and the other chapters
+
+People has one continuous rack composition: horizontal editorial team lanes,
+a people/session arranger with one selected-person mixing desk, then a distinct
+contribution/session working area. Team lanes represent parallel groups. Their
+full-width parent key toggles the local editor; Move left/right and Remove stay
+together at the lane bottom, with Remove at the right. The parent key now has a
+cobalt resting face and bright selected face with contrasting ink, preserving
+the editorial lane beneath it. This supersedes the chocolate parent-key face.
+Team Settings pairs its short name with selected members' hourly subtotal in a
+cool-blue inset, replacing the whole-plan draft reading there. Unknown rates
+remain visible, and member changes update the local subtotal.
+The arranger carries the former roster's rates,
+available/funded-time pills, team names, saved-edit markers, quality indicators
+and per-person operations alongside session participation. Native checkbox pads
+accept participation through the existing work command. Team membership and
+member order retain their separate direct commands. Shared keyed movement
+connects each record's old and new position while reduced motion retains the
+final state.
+
+Compact, equal session columns preserve large participation pads; the first
+column retains the person's identity, capacity readings and local actions.
+Additional plans and phone widths use local horizontal scrolling.
+Their checkbox stays upper left; planned time sits lower left and the stronger
+known-value reading lower right. Stable positions and tabular figures support
+comparison while exact editing retains stored precision. Rates display whole
+dollars per hour, and funded-time pills name both available and funded time.
+The top readings now use native description-list groups: label, prominent value
+and one short context line. Column footers retain explicit zero values. **Card
+actions** collects reordering and removal, replacing the ambiguous More label;
+the person's name remains the settings entry.
+
+A legend names funded, extra and paused work. Paused sessions keep their planned
+effort and money while hatching marks the entire header/body/footer column and a
+circled pause symbol marks participating pads. Available pads retain their
+participation meaning. Unknown rates remain explicit. This #890 pass supersedes
+centered cell readings and a single flat summary line while retaining native table
+headers and the existing ledger scope. The bounded public-source synthesis in
+[control research](rack-control-research.md#compact-readings-and-a-contextual-return)
+supplies the rationale; the receiving PR owns the browser observations.
+
+This supersedes the separate roster cards and passive participation reading.
+The four-option comparison favored team lanes plus an arranger and one selected
+record receiver: teams keep their parent identity, shared people stay comparable,
+and local settings keep a visible All people return. The canonical person form
+retains typed edits; session participation retains accepted history and Undo.
+
+Empty team, people and contribution slots share one creation control. Pointer
+hover and keyboard focus reveal the plus; touch keeps it visible. Add accepts a
+useful record immediately with editing closed, and amp Undo recovers that
+creation. Person and team defaults receive unique names. Selecting a record
+opens its local controls. The compact person draft owns Name or role, rate and
+funded time; Apply accepts those typed values, while Close retains the draft and
+returns focus to its record. Coordination borrows that same mounted form and
+compact treatment.
+
+Nested creation has a different return from collection-level creation. Add person
+opened from Team Settings retains that team as its owner and returns to its
+settings, including meaningful unfinished entries. The header uses the existing
+creation/draft return route for this and analogous tasks. This supersedes its
+generic Teams breadcrumb. The Add person module pairs name and preview above
+its compact quantity controls; circular increment buttons retain the preserved
+workbench's fixed shadows.
+
+Repeated Studio color literals now have named variables under the shared
+instrument owner. Their resolved paint stays intact outside the requested People
+state changes. Chocolate now belongs primarily to Investment modules, dial/knob
+enclosures and small accents. Cool-blue, dark-text information previews replace
+the former chocolate previews in People and the equivalent Abilities/Quality
+reading companions. This supersedes both the broad companion direction and the
+earlier request to retain the Person preview as a chocolate strip. The preserved
+workbench specimen retains its reference paint.
+
+The removal notice formerly recognized fewer reference collections than the
+accepted command layer emitted. Valid handoff, ability and contribution references
+could therefore display an undefined type. The repaired description boundary
+names each supported reference from its owning record or catalogue. If Undo
+removes a dependency while its earlier notice stays open, the notice retains the
+typed stable identity. The existing removal and recovery rules retain their
+authority. Focused unit and browser regressions distinguish this presentation
+omission from accepted-state integrity and exercise that retained-notice lifecycle.
+
+The selected person now opens one visible mixing desk. One header names the
+person, returns to People in working sessions and closes that desk. Its Apply
+mirrors the canonical person submitter. The monetary strip places rate on the
+left and funded Hours/Minutes on the right. Its cool-blue preview pairs the
+amount with dark text and the existing left-edge accent.
+Internal sibling forms retain person and role validation, recovery and borrowed
+Coordination use; their prior summaries and independent headers leave the visitor
+surface. This explicitly supersedes #881's paired Person/Role disclosure contract.
+
+Four options informed this synthesis: one long combined form, exclusive Person /
+Role views, a permanently expanded full choice bank, and one desk with a compact
+preset/override mix. The selected fourth option retains simultaneous financial
+and role context, reuses existing direct acceptance and presents detailed choices
+only for the selected facet. Teal Change model, cobalt Ability enabler and rose
+Decision boundary reels offer six, five and four authored choices. All reel
+variants share canvas-paper resting choices and teal pressed choices with dark
+text and the same depth/focus cues; housing color retains its distinct meaning.
+The welcomed cobalt/rose pressed faces remain separately preserved in the
+[Chromatic Pressed Reel Specimen](../../visual-fidelity-contracts/studio-rack/zoetrope-pressed-palette-specimen.md),
+superseding their use as live wheel-specific selection overrides. A recipe
+updates related role fields in one accepted role command; Function and Seniority
+remain independently chosen. Actual framework component pads and seven facet
+selectors provide exact overrides. Hydrating an existing person preserves their
+recorded role values; a deliberate choice invokes a recipe.
+
+Session spread gives the same desk an immediate relationship control. #891
+supersedes the fader with an analog three-way switch: **One plan**, **Half** and
+**All plans** remain direct native button choices. The matching accepted choice
+stays pressed; a different combination reads **Custom spread**. Beneath the
+switch, a compact participation row mirrors the selected person's actual session
+columns, names, funding colors, symbols, time and value. #893 uses one shared pad
+renderer for both tables. Its native checkboxes update participation immediately
+through the accepted command and shared Undo; the same draft-rebase route retains
+unfinished person fields. Open Card actions disclosures survive the roster
+rebuild by person ID, so selection, deselection and Undo retain the clicked row's
+position (#936). This replaces the incidental collapse that shortened preceding
+rows; it changes local presentation state while keeping accepted commands intact.
+This visual comparison supersedes the long
+assigned/funded/session-count reading. Each preset selects
+complete work rows in visible plan order through one reversible participation
+command.
+
+A plan's sole participant stays assigned. Choices below the required plan count
+are disabled with a nearby reason, so their label accurately describes the result
+they can create. Adding another participant enables those reductions. Recorded
+role and decision authority keep their explicit choices. Fractional per-person
+session time remains #798's separate model decision.
+
+The contribution row heading opens Work beside Receiver and decision, stacking
+them at phone widths; repeated selection closes the editor and clears its caret.
+Opening uses the shared smooth reveal, and closing parks unfinished entries.
+Each matrix checkbox accepts the exact contribution/session link directly with
+amp Undo, retaining local focus and the working view. Pending raw drafts retain
+their existing parking and Review route when an accepted change advances their
+base. **Supersession (#947):** these relation controls replace matrix cells that
+all opened the contribution editor; row headings own inspection. Category, human
+receiver, decision owner, supporting sessions and support order accept directly.
+The two human choices preserve their separate responsibilities. Accepted links
+light the matrix's session cells without changing pad dimensions or paused
+treatment. The contribution rollup selects the union of linked work IDs, so a shared
+session contributes its planned time and known value once. **Supporting time** and
+**Known work value** use the same label/value/context hierarchy as the People
+readings. Supporting effort footers show their totals and quiet **Pause session** /
+**Resume session** actions. These changing action labels use ordinary native
+button semantics. Each action changes the shared session status, retains local
+focus and supports amp Undo. Whole-column hatching, the circled pause marker and
+its legend identify paused work while planned ledger amounts remain visible.
+This supersedes status controls in the column headings. Earlier stored review and
+decision-boundary notes remain in the plan and
+exports while the compact controls edit their current fields.
+
+Add a person requested by a contribution stays inside that contribution's rack.
+The canonical creation form replaces Receiver and decision beside retained Work
+at wide widths and stacks on a phone. **Supersession (#936):** this replaces the
+extra creator below a still-visible receiver. An explicit body grid keeps the
+sibling forms side by side across browser details implementations. Saving the new person returns to the initiating human field with
+that person selected; the contribution proposal keeps its explicit Apply step.
+An intervening accepted change retains the parent's explicit Review step and
+unfinished entries. Closing the parent parks the child draft and restores its
+canonical form to its home. It is a sibling of the contribution form, preserving
+native form ownership. The local header names the contribution that requested the person;
+the retained route carries the receiver or decision field and unfinished entries.
+This supersedes the detour to the upper Team creation area. Collection-level
+creation and other chapters retain their own entry routes.
+
+`presets.mjs` adds Source retrieval and Draft artifacts when
+`peopleExamples: true`. The live showcase opts in alongside its existing
+Cross-source synthesis contribution; the default fixture keeps its earlier
+scope. `studio-people.css`, loaded after Arrangement styles, owns this
+composition and the canonical person form in both receiving chapters.
+`rack-creation-controls.mjs` owns the shared empty-slot button; record creation,
+validation and accepted history retain their existing owners.
+
+Abilities retains both native support tables: What people can do and How the
+team works, with responsibility, preparation, review and observation columns.
+One selected dark module follows the selected catalogue, with a readable item heading,
+owner return, Apply and Close. Its compact pads select Outcome, People,
+Before this, Prepare, Review or Example result. A catalogue key targets Outcome;
+a support cell targets its own section. Repeating that record/section selection
+closes the editor, while a different section switches locally. Close and repeated
+selection park changed raw entries and return focus to the exact initiating key
+with the viewport in place. The selected overview remains visible, and opening
+retains its smooth reveal. **Supersession (#937):** these local toggles replace
+the repeated scroll to an already-open editor. Apply and amp Undo retain their
+existing owners. New catalogue proposals receive the pilot's authored context or
+the definition's concise explanation. **Supersession (#949):** this creation-only
+fallback replaces empty starting context outside the original pilot. Accepted
+blank context and cleared raw drafts remain blank through parking, Review and
+reopening; existing assignments and Apply ownership stay intact. The People receiver pairs
+team/participants with decision owner/status; support groups occupy neighboring
+halves, and observation material uses cool-blue companions. Phone widths stack
+the halves while keeping choices legible. Chapter-owned CSS defines both text
+and background for pale catalogue keys and the dark header, preserves native
+choice sizes, and respects hidden sections before applying responsive grids.
+These rules supersede the inherited table text and generic form sizing that
+made Trace evidence, Close and People controls difficult to read or use.
+
+Supporting person/team/session creation stays in the selected module, retaining
+its entries and preselecting the new record. The shared creation factory gives
+these named local targets the same ghost treatment as other rack additions.
+Creation accepts immediately; Apply accepts the support relationship. Existing
+proposals, shared work identity and pricing remain.
+
+An Abilities person or team can be renamed beside its current identity. A small
+Rename action opens one labeled field with Save and ghost Cancel. The canonical
+person/team update changes only the shared label; stable IDs retain the support
+relationships. The capability draft resumes with its entered fields intact.
+Enter saves, Escape cancels, and an empty name stays in the field for correction.
+The scope cue makes the plan-wide naming effect clear. This supersedes a chapter
+detour or a full borrowed editor for this one-field operation. Broader rate,
+availability and membership work remains with the existing People receivers.
+The local comparison and public design precedents are reconciled in the control
+research; their relevance is a design inference tested in this Studio.
+
+Change keeps its framework/viewpoint reels, piano-like keys and distinct faders.
+Raise, Reduce, Eliminate and Create retain stable native buttons and paper
+resting faces. The selected action uses the Quality rail's inset signal face
+while its component inspector is open. Selection follows the live receiver;
+closing it or inspecting through another route clears the action state. When a
+small framework maps several actions to one component, only the chosen action
+is selected. These inspection controls leave accepted plan history intact.
+Quality & recovery keeps its contrasting controller pads, quality/recovery reels
+and dark attention display. The detail behind each chapter's primary instruments
+now uses an attached dark receiver with the shared owner/current header, Apply
+and Close. Mounted fields remain available through local view changes; the
+canonical draft and submitter retain validation and acceptance. Supporting work
+pairs preserved duration controls with compact identity, participant and funding
+choices. Quality's check/support and financial settings use compact editorial
+modules inside their dark working area. This supersedes the tall pale nested
+Change receiver and separate oversized Quality settings forms while retaining
+their useful method, recovery and rehearsal material.
+Both retain connected support and concise explanations.
+Selected signals describe plan choices; authored examples remain distinct from
+observed evidence. Quantity, emphasis and motion changes have visible effects.
+
+Investment receives the full workbench as five preloaded, independently owned
+deck types: Plan investment, Customer rollout, Commercial cohort, Service
+operations and Capital choices. A deck identity owns its assumptions; adding
+another deck of the same type creates an independent variation. Deck selection
+is local view state. Connected reels set compatible presets and change the
+visible comparison; direct quantity adjustments can make a preset custom.
+Comparison amounts and financial metrics are derived from the selected deck's
+settings. The explicit Plan investment funding action uses the existing shared
+work command; comparison assumptions retain their separate analytical meaning.
+
+The Investment reels use `reel-control.mjs` and shared instrument styling,
+matching Team planning, Change and Quality. A small financial adapter supplies
+choice identity and consequences; the shared control owns stationary perimeter
+buttons, central Next, arrow stepping, selected output, rotor and disposal.
+The green-and-navy Domain wheel floats in the main body beside a concise companion.
+The accepted outer ring uses `#118c4f`, superseding the violet `#6b3399` ring. The existing
+dark-blue core, navy rotor and pale-blue highlights retain the preceding iteration;
+these replace the initial chocolate Domain housing. Chocolate remains available
+for money/dial modules. The human confirmed the green/navy combination after
+PR #899; the Investment Visual Fidelity Contract preserves it through the
+forthcoming CSS and rendering work, including the shared paper/teal choices.
+The shelf remains vertical at the left on tablet and larger widths, then becomes
+a horizontal strip above Domain on mobile. This receiving arrangement supersedes
+the earlier shelf-contained Domain control; the planning specimen stays intact.
+
+A loaded deck supplies an equal-angle rose chart with one unit per series. Radius
+follows the square root of magnitude so area communicates amount. The adjacent
+reading retains exact signed values and unavailable states. A missing deck shows
+a short connected diagram and a local Add action. Operational time derives from
+the existing released-time assumptions and the remaining opportunity at full
+adoption; it introduces no assumed baseline workflow duration. These are views
+of existing deck projections and keep their ownership and Undo path.
+
+Non-Capital inner reels become smaller and share their row with a relevant
+assumption fader: reserve, discount, retention or adoption. Capital choices keeps
+its three existing reel sizes; Capital reading receives the tertiary rose skin.
+A new deck or domain gives the rose a short grow-and-settle arrival and the inner
+rotors a brief spin. Full, Lower, Off and system reduction retain the shared owner.
+Ordinary assumption changes update the current chart and controls in place.
+
+The VHS-C shelf retains the chunky depth, large left reel, internal grip texture
+and moving inner face. A single restrained Y/Z projection and shorter extrusion
+supersede the receiving face's compound X/Y/Z skew and oversized black shadow.
+The selected outline matches Coordination. Information companions and funding
+lanes use existing green/editorial colors; chocolate stays on money/dial modules
+and instrument accents. Monetary controls preserve their large/small steps,
+exact fields, circular buttons and stable readout placement.
+
+The whole-plan breakdown uses one semantic comparison table in place of person
+cards. Named column headers, right-aligned values, secondary effort, ledger
+subtotals and local phone scrolling support scanning. The initial paused follow-up
+contributes included work, so the static amp and table both show $1,590 included
+within staffing; total investment remains $3,980.
+
+Coordination and Investment reuse one filled arrow path for its shaft and head.
+The bounded curve helper owns joins; view-specific routes retain their data and
+selection behavior. Return colors distinguish feedback. Coordination reserves
+space above Matrix nodes and stretches its diagram enclosure to the reel bottom.
+This follows the SVG path coordinate model and coherent CSS transform rendering;
+public source links and exact receiving geometry live in the corresponding VFCs.
+
+Compare a change and Keep a plan remain compact utility routes to the canonical
+baseline, recovery, file and report owners.
+
+Schema 0.10 carries versioned investment settings in the accepted plan. Earlier
+plans migrate to the five populated defaults. Numeric comparison assumptions
+travel as integer hundredths and decode at the financial adapter; identity,
+sequence and choice fields keep their own meanings. Existing canonical history
+owns these edits. One continuous dial gesture shares one owned token and one
+Undo entry; a later gesture or intervening accepted operation starts another.
+The runtime owns its modules and delivery closure. The planning specimen remains
+an unchanged art and interaction reference.
+
+### State, people and recovery
+
+| Owned meaning | Current behavior |
 | --- | --- |
-| Accepted plan | One immutable projection supplies the accepted amount, work relationships, comparisons and downloads. |
-| Editor proposal | Ordinary editors retain raw text and selections until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
-| Team arrangement | A deliberate reel choice revises one accepted arrangement. Bounded customization choices settle immediately; text settles on field exit or Enter. Local Undo restores the preceding plan. |
-| Session addition from a Coordination rack | Add session accepts useful defaults and opens the canonical editor. Cancel reverts later draft edits while retaining that record. Local Undo reverses creation only while it remains the latest accepted change. |
-| Saved edit | The shared coordinator retains target-bound unfinished work. A changed accepted identity can require explicit review even when values happen to match. |
-| History and baseline | Undo/Redo traverse accepted changes. A baseline is an independent comparison and restore point. Saved drafts retain their separate recovery route. |
-| Person | One identity, hourly rate and funded-time account can participate in several teams and sessions. Role labels identify the illustrative people. |
-| Membership and participation | Team membership and session participation are distinct. Known people can join a session directly across team boundaries; this preserves independently edited team rosters. |
-| Purpose and roles | Purpose, function, seniority, posture, human review and decision boundaries describe responsibility. They introduce no implicit price adjustment. |
-| AI contribution | A functional contribution retains its human receiver, reviewer, decision owner, supporting work and review-before-use instructions. Those responsibilities may belong to different people. |
-| Effort and funding | Duration, occurrences and participants establish session effort. Work within funded staffing and extra investment retain separate accounts. Shared work is priced once. |
-| Unknown and zero | An untouched blank rate or availability stays unknown. Zero is an entered value. An explicit rate-dial gesture can begin an amount. |
-| Status and removal | Pausing a connection or changing a check's inclusion preserves separately owned work. Removal reviews references before accepting the requested change. |
-| Evidence | Planned support, rehearsal and recorded observations retain different meanings. Imported findings preserve the reviewer, context and observed revision. Authored examples illustrate possible responses. |
+| Accepted plan | One immutable projection in page memory supplies accepted amounts, relationships, comparisons and downloads. |
+| Ordinary editor proposal | Typed person settings and other proposal forms keep raw values in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
+| Direct rack operation | Arrangement selection, Coordination team membership/name/order, People collection/member order and membership, role values, contribution choices/support, period creation, existing-plan occurrence append and record additions use canonical accepted commands. |
+| Shared name from Abilities | Save accepts the person/team label through its existing command; the surrounding support draft retains its own Apply boundary. |
+| Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
+| Financial comparison | A stable deck ID owns its type and assumptions. Saved files carry those settings, and shared Undo recovers accepted edits. Connected reels change the loaded deck; explicit work funding retains its canonical command. |
+| Saved edit | Target-bound unfinished work stays in the open page, separate from accepted history and downloads. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
+| Baseline | An independent page-memory comparison and restore point, separate from Undo and unfinished edits. |
+| Download and return | Download current plan captures accepted records and settings. Opening the file previews replacement; Use this plan accepts it with Undo. A fresh page starts with the showcase. |
+| Person | A stable identity with role-based example name, rate and funded-time account; may join several teams and sessions. |
+| Membership and participation | Independent relationships. Known people can participate across team boundaries. |
+| Contribution | Functional work linked to people and sessions, with retained responsibility fields; membership alone grants no decision authority. |
+| Effort and funding | Duration, session count and participants establish effort. Shared work is priced once; funded staffing and extra investment stay separate. |
+| Unknown and zero | A blank value remains unknown. Zero is an entered value. An explicit dial gesture can establish a value. |
+| Removal | A named session and its dependent links leave together in one canonical command; amp Undo restores the exact prior plan. Other record types retain their existing reference checks. Remove has quiet rose treatment. |
+| Evidence | Planned support, authored rehearsal and recorded observation have distinct meanings. |
 
-The amp displays accepted investment. Each reel’s receiving controller owns
-its consequence: Team arrangement accepts a deliberate choice; other reels and
-faders retain their reading or draft behavior. Decorative movement carries no
-acceptance or readiness meaning.
-A missing rate retains a known-amount reading and a route to its person editor.
-Line attribution and independently rounded subtotals keep their explanatory
-meaning; the plan's complete funding pools own the settled amount.
+#875 makes that lifetime visible in Saved edits and Investment's Keep a plan
+controls. **Supersession:** Saved feedback describes the current open page;
+returning after reload uses the downloaded accepted plan. Raw entries, baseline
+and Undo history remain page-local. This preserves the existing storage boundary.
+A populated browser journey accepts a duration edit, keeps a different unfinished
+duration separate from the download, reloads, previews and restores the file, then
+exercises rejected import and Undo. Mechanical restoration and readable phone/
+laptop cues are observed separately from human comprehension.
 
-### A plan that reads as enterprise work
+The amp's Undo uses the same history as Investment. It parks unfinished edits
+before returning to the prior accepted projection. New-session creation can be
+undone independently of later unaccepted field changes. Session removal prunes
+support bindings, placements, incident handoffs/dependencies and their dependent
+delays. Stage-backed decisions survive; a decision whose only anchor was a removed
+handoff leaves with it. Other people, teams, evidence and ordering stay intact.
+Removing one occurrence retains the parent session's plan-wide references.
+After deleting the open record, focus returns to a surviving rack control.
 
-Coordination leads with a four-sprint pilot and an aligned session sequencer.
-Each illustrative sprint contains two weeks. A separately authored two-quarter
-example carries preparation into rollout and operating adoption. Its sessions
-represent work within that wider initiative; the amount prices the included work.
+Creating a prerequisite returns to the same visible session receiver and focuses
+its review or requested field. Empty-plan creation uses that receiver directly;
+completion clears the finished detour. Team name changes keep a stable Team
+settings heading so accepting text preserves the next membership click's position.
+The earlier focused recovery repairs are recorded in #822 and #823. #825 supplied
+the local handoff/team return and independent delivery/sequencer visibility;
+#828 preserves those routes while clarifying addition and acceptance.
 
-The view has three useful depths: plan overview, selected sprint or quarter,
-then its session or decision. The rack header names the selected period beside
-the **Plan overview** return, outside the board and tracks' horizontal scroll
-regions. That label names the actual destination. Returning restores the period
-control used to enter from either the board or the tracks, along with the
-overview's local scroll. One scope owner drives the breadcrumb, lanes and tracks.
-Period membership and order are authored. Scope changes preserve plan bytes,
-pending edits, effort and investment. The Session detail deck sits between the
-period board and Session tracks in a stable slot. Its canonical form owns people,
-duration, occurrence count, funding and placement. The selected period and Plan
-overview return remain visible. Repeating the exact initiating control closes
-the deck; a different occurrence selects its own placement context. Close
-retains the draft and returns focus to that entry. Apply accepts through the
-existing owner; Cancel reverts the proposal.
+### Visual and interaction contract
 
-Example buttons replace the plan in place with Undo available. The Sprints /
-Business quarters choice immediately regroups the existing work and supports
-Undo. Period-count changes use a visible horizon proposal with Apply and Cancel.
-Shortening the horizon retains affected sessions for placement. Older plans keep
-their recorded timing until an explicit period-arrangement proposal is accepted.
+The [Studio Rack family](../../visual-fidelity-contracts/studio-rack/README.md)
+separates pale editorial reading from dark instrument controls. The workbench's
+compact panel scale is the receiving direction. Reduce repeated headings,
+wrappers and control bulk before reducing legibility. The Plans shelf retains
+its approved size. Local tables scroll within their rack at phone widths.
 
-A Coordination rack's Add session action accepts a useful starting record:
-Review the next step, one planned 30-minute occurrence with extra investment.
-Its period/week/month or team/person context supplies the starting arrangement.
-The canonical session editor then opens for adjustment. A plan needing a team
-or person uses the existing guided creation route. More occurrences create
-additional placements to choose. The deck's numbered pads
-select one repetition; native radio pads then choose its sprint/quarter and
-week/month. Add occurrence increases the existing work's count. More Hours or
-Minutes makes every occurrence longer, and the ordered participant switches
-apply to every occurrence. Those shared session properties remain distinct from
-an individual repetition's placement.
+Ordinary local controls have light borders and restrained depth. A selected pad
+has a clear pressed state; a disclosure caret reflects the receiver's actual
+visibility. Proposal Apply retains a raised primary treatment beside Close and at
+the bottom of the form. Direct People controls show the saved state locally.
+The top Apply control delegates to the canonical submitter and
+mirrors its label, disabled/validation state and return focus. Removal confirmation
+keeps its own bottom action. Cancel is ghost. Reversible
+Remove is muted rose with a named object. A plus means starting creation, never
+confirming an already-created proposal. Empty creation slots progressively replace
+standalone Add buttons when their object and scope are unambiguous. The
+[research synthesis](rack-control-research.md) gives the evidence and transfer limits.
 
-New session rows put creation under the relevant column: a period/week/month
-in the horizon or an accepted person in Shared sessions. An outlined native
-button carries the plus cue and Add session label. Fine-pointer hover adds
-ghost-pad emphasis; keyboard and touch retain a visible action. Existing
-occurrence gaps and participation dots remain descriptive. The People chapter's
-read-only table keeps its existing behavior, and creation uses accepted people
-without accepting a proposed team arrangement.
+Duration receivers adopt the exact preserved workbench geometry: equal 64px dials,
+8px face inset, stationary gradient/rim/shadow, rotating 4×12px pointer, peach
+Hours and paper Minutes. The shared dark readout sits above them. Exact fields
+and 30px circular steps sit below/right with the preserved gap; the two columns
+wrap internally at phone widths. #846 lets the title/readout row and its two
+readout segments wrap when enlarged text needs more room. The readout stays
+inside its housing; normal-size artwork and the planning specimen stay intact.
+These smaller controls remain native and named.
+Money dials retain their separate coarse/fine quantity contract.
+Module stretching changes the outer slot geometry while preserving that dial
+specimen. Funding and Status use readable native radio pads with a persistent
+pressed state, separate group labels and short explanatory hints. The pale
+Sessions to place tray uses dark text; dark instrument captions keep light text.
 
-Stages group sessions. Handoffs connect the work that prepares a result to its
-receiver. Decisions attach to a stage or handoff and retain their question,
-evidence and reviewer. Delays name affected work and can propose a later period.
-Availability opens beside a person and period; funded time retains its economic
-meaning. Broad period membership establishes sequence, not exact collisions.
+Full Studio motion is the authored preference; visitors may lower it and system
+reduced-motion is honored. Selected occurrence pads keep their small bounce.
+Editorial attachments retain their spring reveal. Keyboard focus, written state,
+contrast and forced-color behavior carry meaning independently of motion.
 
-The default view keeps the overview and MIDI tracks together. Compact People
-and Stages keys inside the screen reach their existing inspectors. People and
-available time and Stages & handoffs are pale drawers attached to the screen's
-lower edge, closed initially and labeled with the current plan or period.
-Handoff, decision and delay pads keep their contextual routes; To place retains
-access to relationships awaiting placement. Detailed chronological readings stay
-in downloadable reports. The earlier eight-category inspector is retired.
+## Preserved workbench
 
-### A coherent visual instrument
+The standalone [workbench](../../planning/context-canvas/studio-rack-tape-study.html)
+remains in planning. PR #814 preserved it on main/dev. Its page-local model is a
+reference for interaction and artwork; production commands remain in the Showcase.
 
-The amp is a compact frame for the Studio identity, accepted amount, chapters,
-Purpose and Saved edits. Its animation choices are Off, Half-speed and Full-speed.
-Full-speed is the requested default. System reduced-motion preferences suppress
-animation; the selected content and all operations remain available.
+- The cassette art baseline is `cedafc3f17c417cf5c90cacb5b1a696acf9cc3c1`.
+- Duration geometry is preserved from `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`,
+  with the later fixed-face lighting correction.
+- Investment artwork and connected-reel reference is `93bc69a`.
 
-The **Editorial Rack** uses pale, readable work areas for relationships, prose,
-kanban lanes and support tables. The **Instrument Rack** uses a dark face for
-reels, aligned faders, exact readouts and responsive visualizations. About's
-existing color tokens own the palette. Chapter styles extend the shared owner
-instead of creating separate button or control systems.
-
-The visual family records this composition and five reusable patterns: Period
-Kanban & Session Sequencer, Support Matrix & Stateful Pads, Zoetrope Preset
-Selection, Precision Dials & Faders, and Contextual Inspection & Recovery.
-Chapter variations use these shared meanings; current runtime and the receiving
-PR supply behavioral evidence. The dated research record supplies principles
-and local design adaptations. Its older elapsed-time, connection-first and
-lower-motion choices yield to the supersession decisions below.
-
-Music-production controllers, euro-rack modules and restrained 16-bit/32-bit
-character guide the tactile treatment. Stationary housings and upper-left light
-keep controls readable while pointers, selected keys and pads respond. ASCII
-rules, grille details and small interstitials have a specific visual job.
-Decorative texture stays outside the accessible reading. Plus signs identify
-creation entries; ordinary headings carry their own hierarchy.
-
-Motion communicates the operation: chapter arrival, a contextual move, local
-inspection, a reel reveal, or a pad changing lanes. Selection and data remain
-stable while the effect settles. Nearby editors stay in view. Longer reveals
-move only as needed and yield to wheel, touch, pointer or keyboard input. Off
-and system reduction settle the same destination directly. General performance
-refinement remains separate from correcting an observed interaction defect.
-
-### Controls and recovery
-
-- A plus identifies creation. Coordination rack Add session accepts a useful
-  starting record and opens its editor. Guided creation forms retain ordinary
-  final Add/Apply confirmation. A nested creation entry keeps its own plus cue.
-- An arrow announces another view or inspector; a caret opens nearby content.
-  Change track labels and Plan session controls share their actual inspector's
-  expanded state, including closure through its native summary.
-  Persistent choices remain visibly pressed. A descriptive title stays distinct
-  from the button that edits or navigates from it.
-- Cancel is a shadow-free ghost action. Removal uses rose treatment with exact
-  relationship wording. Shared action groups retain spacing when feedback clears
-  or labels wrap.
-- Participant cards stay in place when toggled. Included and Available describe
-  the relationship. Explicit reorder controls own intentional movement.
-- Hours has a larger dial than Minutes, beside their exact fields. Rates have
-  $10 and $5 dials, centered $1 step buttons and direct entry. Native keyboard
-  behavior and units remain visible; long repeated operating paragraphs are
-  replaced by useful labels and local validation.
-  A completed adjustment remains in the draft when focus or pointer capture
-  ends. Escape and pointer cancellation restore the start of the active turn.
-  Apply and Cancel continue to own acceptance of the complete editor proposal.
-- Small fixed choice sets expose their options directly. Boolean switches keep
-  native checkbox ownership. Long questions and evidence are readable before
-  editing instead of being clipped inside a small text field.
-- Creation detours retain the originating draft and a visible return. A returned
-  record is checked against current accepted state; Undo can change its meaning.
-  Nested return routes preserve the nearest useful origin and retire discarded
-  or superseded routes.
-
-Known records and references remain admission boundaries. Artificial team
-membership prerequisites have been removed from session participation so a
-visitor can explore cross-functional work directly.
-
-### Chapter-specific decisions
-
-**People and team planning.** Team lanes and person/session tracks lead. Selecting
-a person opens their existing settings; rates and ordering remain in a compact
-secondary route. Team arrangement reels show populated structures and actual
-work directions. A deliberate arrangement choice accepts teams, connections
-and supporting sessions together; Undo restores the prior plan.
-A changed endpoint can show an adapted arrangement. Removing template grouping
-preserves the teams, work and connections. Earlier files retain a custom reading
-until a template is explicitly authored.
-
-**Abilities.** The human preferred full support comparison over an action-pad-only
-catalogue. What people can do and How the team works retain semantic tables for
-responsibility, preparation, review and observation. One editing rack opens
-adjacent to the selected table. Native checkbox pads connect people, prerequisites
-and supporting sessions. Card front, reverse and side-by-side readings retain
-meaningful detail. Authored observation choices replace typing a result in the
-showcase; imported history stays readable. The separate manual UI is retired.
-
-**Change.** Viewpoint and framework reels populate component emphasis, work lanes
-and linked-session tracks. Each framework partitions the stored attention
-channels so changing one visible fader preserves the other components' emphasis.
-The starter has real support links to its existing sessions. Selecting a method
-opens a local explanation and example, then its work proposal. PODA connects
-purpose, objectives, discoverables and activities; Impact Map connects a goal to
-affected people and an investigation; Strategy Canvas compares anchored support.
-Their examples suggest planning work, while the plan retains its actual people,
-sessions and evidence. Manual and repetitive framing blocks are retired.
-
-**Quality & recovery.** Pre-release and post-release reels select authored check
-and rehearsal configurations. Sigma, Quality, Urgency, Compliance, Training and
-Fidelity form the fader bank. Prepare, Rehearse and Operate & learn lanes sit
-beside session tracks; selecting a pad opens its matching settings, rehearsal,
-recovery or illustration pane. Rich rehearsal context stays in the selected
-reading. Recovery and learning entries begin with useful example content.
-
-New showcase plans begin at 4σ with balanced preparation settings. Imported
-settings retain their own values. Authored pressure rules move pads and can keep
-a needed check included; a nearby cue names the control change that releases it.
-The scope changes from calm through warning to salmon intensity with decorative
-ions. Extreme settings add decorative reel stutter. These are deterministic
-illustrations of chosen assumptions, not empirical forecasts. They never advance
-an accepted plan or assign an automatic cost. Only accepted people and sessions
-change their owned investment. Imported observations remain readable; the
-observed-result form and chapter manual are retired.
-
-**Investment.** Baseline comparison, history, save/open controls, the whole-plan
-cost breakdown and downloads remain. The original contribution-trace comparison
-panel is retired. Investment's broader starting-plan selection retains its
-replacement preview; Coordination's two example buttons act in place with Undo.
-Reports, collaboration briefs and JSON describe the same accepted snapshot.
-Unfinished editor entries remain in the Studio. The full original calculator
-retains broader role-pool, service, capital, reserve and commercial models.
+The dedicated [cassette](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md),
+[duration](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+and [Investment](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+contracts preserve exact styling and motion. Main keeps its Showcase reference
+while dev receives selected portions. Independent response cards remain with #816;
+participant time shares remain with #798; production Reset remains with #808.
 
 ## Superseded directions
 
-These changes are intentional. Use the current contract above when an older
-entry, screenshot or technical description presents the earlier behavior.
-
-| Earlier direction | Current replacement and reason |
+| Earlier direction | Current receiving decision |
 | --- | --- |
-| Coordination-only loaded-tape illustration in #804 | #805 extends the compact workbench across People, Abilities, Change, Quality & recovery and Investment. Shared illustrative identities and Undo make the chapter relationships reviewable; production integration remains a later decision. |
-| Blanket merge hold for the illustrative workbench | #810 authorizes preserving the planning specimen on main and dev. The actual Showcase now integrates on dev through #811–#813; its promotion to main remains human-cued. |
-| The complete dev illustration treated as tentative layout | The duration panel and neighboring Working sessions geometry have their own exact reference. #806 also preserves the cassette artwork, hover and narrow shelf in a separate contract, plus the loaded-panel unfurl and chocolate Extra investment lane. The planning reference is now authorized for main/dev preservation in #810; Showcase adoption continues on dev with human-cued promotion. |
-| Rotating the duration dial's entire face, including its gradient and shadow | The approved #806 lighting correction keeps the face and simulated light fixed. A full-face transparent carrier rotates only the existing pointer mark. Duration geometry, palette and value/gesture owners remain preserved; the duration contract is now version 0.1.1. |
-| Session tapes, New session and Occurrence as the study's shelf vocabulary | #806 uses Plans, New plan and + Session; faces show their session count. The same source identities and duration owner remain. This visible naming change leaves production's session model intact. |
-| Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
-| Investment limited to one shared-session cost reading in the dev study | Plan investment retains that reading. #807 preloads financial comparison tapes with connected reels and money dials, preserving separate units and shared Undo. |
-| #806's optional comparison decks, limited to one of each type | #807 preloads all five types and gives every added copy its own identity, settings and comparison state. Domain navigation changes the loaded view; financial edits stay in their tape. |
-| Investment texture on the outer cassette button and a universal $100/$5 money pair | #809 puts the grip inside the face, widens and deepens the VHS-C body, and uses $1,000/$100 for aggregate amounts. Unit costs retain $100/$5; readout placement is fixed per field. |
-| Plan investment driven only by a funding lens | #809 pairs the lens with explicit reserve/opportunity approaches and visible allocation/shortfall. Direct changes show Custom; shared work retains its original pricing owner. |
-| Coordination plans available only for creation and editing in the study | #807 adds direct Remove plan, explicit reference cleanup, an empty-shelf New plan route and snapshot Undo. Production Reset stays separately scoped in #808. |
-| Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
-| Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
-| Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
-| Scrolling amp readings panel and consequence marquee | Compact amp composition. The sticky-header/consequence-channel exploration stays deferred in #699. |
-| Change and Quality manuals, long dial help and default reference-value disclosure | Short labels, populated controls, local examples and contextual detail. Technical explanations stay in source/reference documentation. |
-| Observation-entry forms as the showcase's normal path | Authored illustrative choices with imported observation history preserved. Visitors can explore without composing evidence text. |
-| Team membership required before a person can join a session | Direct cross-team participation using known identities, with team rosters retained independently. |
-| Investment contribution-trace plot and default detailed agendas | Baseline/history/file controls, optional whole-plan breakdown and portable reports. |
-| Dark treatment across every work region | Pale Editorial Rack for reading and work; dark Instrument Rack for controls and visual response. |
-| Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
-| Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
-| Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route supplies shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent person/team (#757) and session (#768) receivers. |
-| Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; #766 supplies direct arrangement acceptance. |
-| Separate proposed-team strip, connection-button strip and Delivery lifecycle disclosure inside Team planning | #779 supersedes these parallel readings with one editorial delivery board. Six phase lanes combine team/member, session and handoff cards; the reel changes the selected structure immediately. Shared sessions retains the people-by-session matrix below. Remaining attached disclosures preserve their spring reveal. |
-| Arrangement preview, Apply and Start another arrangement | #766 replaces the regular selection flow with one revisable accepted instance and local Undo. Shared records retain their identities; text customization settles as a complete field edit. Included work describes deduplicated linked sessions. Existing grouping removal keeps its explicit confirmation. |
-| Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
-| Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
-| Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
-| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
-| Bordered Hours/Minutes inner groups, peach Minutes and smaller duration-only dial artwork | #788 gives borderless peach Hours and paper Minutes. Duration reuses monetary coarse/fine sizes and the same face/pointer treatment; the outward pointer remains legible at each endpoint. The outer enclosure, readout and gesture owners remain. |
-| Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
-| Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 introduced canonical session editing below the originating horizon or Team planning rack, preserving session identity, draft and return focus. #789 refines the horizon placement in the next row. |
-| #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. Team planning retains the adjacent placement. The exact initiating control toggles the deck, while another occurrence selects its placement; one owner preserves the shared draft and session properties. |
-| Every Coordination rack Add session requiring preparation and final confirmation | #758 accepts a useful session immediately and opens its canonical editor. Cancel reverts subsequent edits; creation Undo removes the added record while its accepted change remains latest. Plans needing a team or person retain guided creation. |
-| Empty-space creation awaiting an entry, or treating an existing blank cell as new work | #770 adds a named New session row to both Coordination sequencers. Its native buttons create from period/subdivision or accepted-person context. Existing occurrence gaps and participation dots preserve their descriptive meaning; the read-only People table stays unchanged. |
-| Participant movement applied only in the Session detail deck | #771 shares the keyed Move up/down pattern across session receivers, guided session creation and team membership. Inclusion retains positions; explicit ordering retains person identity and useful focus. Percentage-based effort has a separate future contract in #798. |
-| Detached people and relationship disclosures with uneven in-rack access | #772 attaches the existing pale drawers beneath the horizon, preserving spring reveal and draft owners. Compact People/Stages keys and existing relationship pads open the same inspectors; To place keeps unplaced relationships reachable. |
+| Shared-session references block removing a session | #833 clears the session and its dependent links atomically; amp Undo restores them together. |
+| Per-file root teardown inspects only resources already assigned | #827 joins pending setup through one shared lifecycle owner, then releases every acquired browser and server once. |
+| #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
+| Coordination team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |
+| People arrangement begins with a separate Person to arrange selector | Each person row carries its own Move earlier/later and Remove controls. |
+| Team movement sits inside Arrange this team | Team lanes show Move left/right controls directly; the lanes remain parallel groups. |
+| People team membership and member order wait for Apply | Each bounded membership or order operation accepts directly through the existing owner and shared Undo. |
+| #881 paired Person/Role disclosure modules | One selected-person mixing desk combines rate/funded time, three connected role reels, exact overrides and whole-session spread; one header and Close serve the visible desk. |
+| #884 Session spread fader with additional preset shortcuts | #891 exposes One plan, Half and All plans as an analog three-way switch, with actual usage and explained unavailable reductions. |
+| Session spread's long text reading | #893 shows the selected person's named, interactive participation row directly beneath the switch, matching the main arranger and shared Undo. |
+| Flat capacity summaries and centered participation readings | #890 separates label/value/context and fixes checkbox, time and value to stable pad positions; compact rows retain large selection areas. |
+| Contribution Pause/Resume in column headings | Supporting effort footers hold quiet session actions; paused columns carry hatching and circled pause markers while keeping ledger values. |
+| Contribution Add person opens the upper Team creation area | The canonical creation form occupies a half-rack inside the initiating contribution and returns to its retained human field. |
+| Role and contribution selections wait for Apply | Role values, contribution category, human responsibility and supporting sessions accept directly; typed person settings retain Apply. |
+| Person settings use a large chapter-local form | One compact canonical form serves both People and the borrowed Coordination receiver. |
+| Opening a Delivery person hides Shared sessions | Delivery and Shared sessions remain independent; local editing replaces only the delivery working area. |
+| People creation starts a detached form; Abilities creation changes chapter | Useful accepted defaults and local editors retain the current rack and support selection. |
+| #825 Working-session Remove sits bottom-left | #828 moves it to the bottom right; Add remains top-right and duration retains its full-height slot. |
+| One add target at the start of a period cell | Named week/month creation areas use the full cell width and append without moving earlier sessions. |
+| Adding a record immediately opens its editor | #831 creates a uniquely named stub in place; selecting its representation opens editing. |
+| Every period caption is derived from stages | A short optional caption overrides the summary while retaining the Sprint/Quarter heading; clearing restores derivation. |
+| Every period-lane addition creates separate work | #906 makes loaded Add session repeat the selected plan; All plans New plan creates separate work and retains that overview. Shelf New plan loads its new cassette. |
+| Apply appears only below the form | Shared top Apply beside Close delegates to the canonical bottom action, including validation and focus. |
+| New handoff opens a creation form | A default relationship appears in place; selecting it opens endpoints and follow-on operations. |
+| Shared-session cells reopen the complete duration form above the matrix | #832 gives them local People/Handoffs relationship views and a compact row receiver. |
+| Team changes save silently | Direct controls show Saved; prepared forms keep the shared top and bottom Apply boundary. |
+| Each editor invents its own return arrangement | An owner/current header shares native return, Close and canonical Apply behavior. |
+| Funding has small ungrouped choices | Named large radio pads provide top-left selection controls, short hints and clear pressed state. |
+| All custom teams fall into Planning | Existing stage relationships or distributed phase placement keep the delivery board balanced. |
+| Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
+| Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
+| Pale Abilities receiver and inherited table/control styling | A dark readable header, paired compact support groups, explicit foreground/background pairs and native-size choices. |
+| Renaming a referenced identity requires leaving Abilities | One local name field accepts the shared label and preserves the current support proposal. |
+| Creating an identity from an untouched Abilities proposal leaves its rack unchanged | Creation restores the exact selected target, reveals the new record and retains assignment for Apply. |
+| Tall nested Change and separate Quality detail forms | Attached compact receivers use shared local headers, retained fields and the canonical top/bottom Apply operation. |
+| Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
+| Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
+| Shelf-contained Domain, large paired reels and chocolate information panels | #895 floats Domain beside a per-deck rose or Add diagram, compacts non-Capital controls, and uses green/paper companions; Capital sizing and the frozen specimen remain intact. |
+| Person cards in Whole-plan cost breakdown | One semantic ledger table provides comparable amounts, secondary time and explicit subtotals. |
+| Separate arrowhead geometry and compressed Matrix heading | A shared filled path keeps shaft/head connected; reserved label space and full-height diagram framing preserve selectable components. |
+| Live Investment repeats the specimen's illustrative reel artwork | The shared Showcase zoetrope control carries financial choices; the planning specimen retains its original illustration. |
+| Rates disclosure and long contribution note editors | Direct rate controls, role facets and a contribution/session matrix; stored note data is retained. |
+| Separate roster cards and passive People participation reading | Team parent lanes and one person-by-session arranger retain readings, operations and direct membership. |
+| Removal notice covers only part of the emitted reference union | Typed record/catalogue descriptions retain meaningful names and earlier identities through Undo. |
+| Chapter button padding distorts circular steps | Shared instrument geometry owns the circles; receiving modules own placement and skin. |
+| Large raised buttons for most actions | Quiet local controls, preserved selected-state artwork and stronger Apply emphasis. |
+| Standalone Add controls in every lane | Named empty creation areas reuse the existing accepted creation command where scope is clear. |
+| Showcase-specific duration faces and duplicate repetition stepper | Exact workbench duration specimen plus session pads in the rack. |
+| Elapsed minutes as enterprise plan navigation | Named sprints/quarters, with weeks/months inside each period. |
+| Every detail visible on the About landing surface | Visual overview first; concise local inspection carries detail. |
 
-## Coordination consolidation
+This reconciliation replaces the accumulated chronological journal with a current
+working contract. The earlier record, including interim counts and rejected
+approaches, remains recoverable in Git. It does not change the preserved specimen.
 
-The [consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
-records the approved route. The horizon answers when work happens;
-Team planning answers who works together. Both use existing session identities,
-but period/occurrence columns and people/participation columns keep their own
-meanings. The first #765 increment gives them shared session keys and Add
-controls. `work-controller.mjs` supplies its receiver through `readReceiver()`;
-`rack-controls.mjs` mirrors the selected ID, visible open state and controlled
-element ID into mounted controls. In-place synchronization preserves focus and
-horizontal position. The initial arrangement illustration keeps its starter
-route; after selection, the board and tracks address accepted session IDs. The
-last-click motion cue remains presentation feedback.
+## Evidence and next receiver
 
-Team planning is a permanent sibling section: heading, zoetrope with editorial
-team structure, concise hint, then a subtly darker secondary rack. Its delivery
-board combines team/member, session and handoff cards under Planning, Design,
-Implementation, Testing, Deployment and Maintenance. Three alternatives shaped
-this choice: phase columns, team columns with phase ribbons, and a team-by-phase
-matrix. Phase columns give the reel a visible consequence while Shared sessions
-continues to answer who participates in each session below the board.
+Each receiving PR owns its normalized source/browser observations and independent
+review. #895 joins focused portrait projections with deck identity/Undo, reel hit
+targets, responsive shelf position, semantic cost-table and connected diagram
+observations. Initial-state images also inspect the populated showcase and full
+motion. These checks cover the changed compositions; broader performance and
+real planning validation retain their separate scope. Checks should distinguish a consequential state or interaction fault:
+creation and Undo, selected scope, direct membership, parked drafts, support-cell
+routing, ordinary mobile containment and readable focus. Arithmetic inventories
+and repeated all-page screenshots are unnecessary for these changes.
 
-The board is an authored delivery projection. Explicit template/slot mappings
-place the selected roles and handoffs; plan-owned stage relationships remain readable
-with their sessions. A phase selection and Delivery overview return change only
-the presentation. The horizon continues to own sprint/quarter placement. People
-and accepted-team cards open their adjacent editor; illustrative teams awaiting
-acceptance retain template customization. Handoffs open connection customization,
-and accepted sessions open their canonical receiver directly below the rack. Repeated
-references retain one work identity and cost account.
+The browser suites share one test-local resource lifecycle. Setup awaits each
+owned acquisition; teardown joins setup, including the zero-match root-hook
+ordering observed on the declared Node runtime. Partial setup releases acquired
+resources, and cleanup attempts every close while preserving the original error.
+Controlled resource tests and a bounded child runner exercise this ownership;
+real-browser runs establish the affected fixtures' integration. This supersedes
+the temporary workaround of excluding every file without a matching case.
 
-Independent review found a phone return-focus gap in #780: editing a team
-rebuilt the focused phase and lost its overview scroll position. The receiver
-now retains phase/return context, and the board brings the originating key
-inside its local viewport before restoring focus. The edit-and-return journey
-observes that visible target alongside the retained phase context.
+For People, the [assembly browser route](../../tests/native-investment-studio/assembly.browser.mjs)
+observes accepted membership/order, keyed movement, shared Undo, removal
+dependencies, retained drafts and the borrowed person receiver. The
+[person browser route](../../tests/native-investment-studio/team-controller.browser.mjs)
+observes local person settings, rates and quantity-control behavior. The
+[responsibility route](../../tests/native-investment-studio/responsibility.browser.mjs)
+observes direct session membership, parked drafts and Undo, the connected role
+mixer, direct contribution changes, preserved note data, and phone/desktop
+composition. #890's focused browser observations distinguish stable checkbox/time/
+value alignment, footer-only session actions, retained planned values and exact
+Pause/Resume Undo. #891 observes the three visible spread choices, explained
+sole-participant limits, retained person drafts and one-choice Undo. #893's fitting
+observations compare the main and local participation rows after a direct change
+and Undo, with typed person fields retained. Its laptop observation checks the
+default table's fit while keeping the first column intact. The
+[People fit journey](../../tests/native-investment-studio/people-fit.browser.mjs)
+establishes the populated table's horizontal fit at 1512 × 982 in Chromium,
+Firefox and WebKit, with a readable 15rem person column and equal session columns.
+Its phone observation retains local scrolling and reaches the last session while
+the page stays within the viewport. Focused source checks distinguish atomic whole-session spread,
+preserved Function/Seniority, known-value coverage and deduplicated support totals.
+The related #885 repair keeps grid layout on an ordinary wrapper inside native
+Person and creation fieldsets. This preserves disabled-state semantics while
+preventing Chromium from collapsing inputs when validation changes. The browser
+check measures visible controls within their local group and keeps feedback below
+them; an amount preview can still reflow naturally above that group.
 
-The rack heading, investment readout and Add session stay outside local scroll
-regions. Included work prices the arrangement’s distinct linked sessions once;
-missing rates keep a known-amount label. The amp continues to show the whole plan.
+These checks establish the named local behavior;
+the receiving release supplies the hosted observation.
 
-`connection-template-controller.mjs` owns this composition, its field settlement
-and scoped Undo. `connection-templates.mjs` prepares the replacement transaction
-against the accepted plan; the existing Studio history owns acceptance and
-recovery. `delivery-board.mjs` owns the phase projection and local scope;
-`connection-view.mjs` retains the editorial topology and accepted-arrangement
-readings. `arrangement-surfaces.mjs` owns the participation table and its fixed
-header/local scroller. About markup owns the permanent section; arrangement CSS
-owns the darker housing and editorial board cards. Remaining attached disclosures
-continue through the existing spring/reveal owner. The controller keeps legacy
-disclosure receivers usable while About uses an ordinary exposed container.
-
-The #757 receiver uses `mountRackEditor` in `rack-controls.mjs` to move
-the canonical person or team controls and status into one `studio-rack-editor`.
-It sits after the stable template or accepted-connections root, outside the
-template form and rebuilt board. The parent rack retains its cards and geometry;
-the adjacent reveal occupies normal page flow. A dark title enclosure and peach
-editorial body identify the selected object, with Close above the controls.
-`studio-instrument.css` owns this shared skin and its phone reflow.
-
-`studio-record-key` distinguishes the selected object (`aria-pressed`) from its
-visible receiver (`aria-expanded`). Repeating the selected trigger closes it.
-Close keeps the same draft token and raw entries; Cancel discards the proposal
-and restores the originating logical card, including after a board rebuild.
-Apply uses the current person/team owner and keeps the editor open. Record
-switching parks unfinished proposals and resumes them with a fresh edit lease.
-Chapter changes return the canonical controls to their People homes. This
-placement owner supplies a reusable receiver while existing controllers retain
-membership, removal and creation semantics.
-
-#768 extended the receiver to canonical session controls. #789 now gives that
-owner two placements: a stable Session detail deck between the horizon board
-and tracks, or the adjacent Team planning panel. Horizon keys and occurrence
-pads, delivery cards and participation pads carry their actual origin into the
-route. The selected row stays pressed; its caret follows visible disclosure.
-Repeating the initiating horizon control toggles the deck. Shared-session row
-keys toggle the adjacent receiver; delivery cards and participation pads inspect
-their session. Choosing another occurrence changes the inspected repetition
-while keeping the form open.
-
-`cadence-view.mjs` preserves the deck slot while it refreshes the board and tracks.
-`mountRackEditor` lends the canonical form to that slot or the adjacent host;
-`work-controller.mjs` retains raw entries, the edit lease and acceptance.
-`session-occurrence-controls.mjs` presents numbered repetitions and native radio
-choices for their period and week/month. Add occurrence delegates the count
-change to the session owner. Participant switches edit one ordered collection,
-and the duration module governs every occurrence. The exact repetition field
-remains available; the session model keeps duration and participation shared.
-
-Cross-entry moves the same form and proposal. Close retains the draft and returns
-to the initiating key or pad; Cancel reverts; Apply accepts through the existing
-owner. Period/subdivision and delivery-phase scope remain with their presentation
-owners. The duration readout, peach Hours, paper Minutes and circular step pairs
-stay together. #758 uses this same edit/return owner after a Coordination rack
-adds a useful accepted session. #770 supplies contextual New session rows using
-that same owner.
-
-The whole Studio supplies reusable compositions: Quality tracks' preferred
-matrix skin separates inspect, include, link and create actions; Abilities
-supplies the adjacent inspector; Change/Quality supply keyed movement; editorial
-disclosures supply the spring reveal. Adjacent panels can open into their own
-rack. Change and Quality retain their intentionally different faders.
-
-Generic names belong to genuinely shared roles and owners. `studio-track-key`
-and `studio-rack-add` now live in the shared instrument stylesheet, while chapter
-styles retain track and table geometry. Quality's existing session-key consumer
-uses the generic name with its chapter-specific layout retained. Future shared
-participation pads, duration modules, reorder controls and editorial drawers
-follow the same extraction rule: reconcile consumers and contract references
-when an actual shared owner exists; local geometry and domain state remain with
-their receiving owners.
-
-The #766 replacement transaction updates one arrangement instance. Repeating
-its unchanged configuration leaves history intact; switching configurations
-keeps unrelated and shared records by identity. A shared record that needs a
-separate replacement receives a compact local choice. The initial illustration
-changes no accepted state until the visitor selects an arrangement.
-
-Bounded customization selections settle immediately. Text fields settle on blur
-or Enter so a field edit creates one history entry. Invalid text remains
-correctable locally; other unfinished editors remain with the shared coordinator.
-Local Undo targets the arrangement change that created it and retires after a
-later accepted edit. Investment retains the full Undo/Redo history. This
-supersedes the earlier regular preview/Apply flow while retaining the editorial
-card treatment and the explicit confirmation for removing template grouping.
-A completed text edit lets its pointer destination finish before the board
-refreshes, preserving phase focus and local scroll. Review of
-[#782](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/782)
-also established that authored timing and retired session state survive an
-unrelated customization or later arrangement choice.
-
-The #767 duration module encloses Hours, Minutes and their combined output.
-Its larger readout sits above both dials. #788 refines the inner groups to
-borderless peach Hours and paper Minutes. Duration now shares the monetary
-coarse/fine dial sizes, face inset and shorter outward pointer. This supersedes
-peach Minutes and duration-specific smaller geometry; the gesture logic stays
-with its existing owner. Each dial sits above-left of its exact field and circular step pair. The
-visible gap and the pair's start/end alignment beneath the input preserve the
-familiar adjustment pattern. Working sessions remains a separate repetition
-quantity in the in-rack deck and adjacent receiver.
-
-`studio-quantity-module` supplies the shared enclosure skin, with
-`studio-duration` naming the duration composition. Rate hosts receive the same
-housing grammar around one named amount, $10/$5 dials and $1 steps. The shared
-instrument stylesheet owns this geometry; the superseded About wide-layout rules
-are reconciled into that owner. The main static session markup and dynamic
-supporting-session factory receive the same composition. Their output/input
-associations, artwork, raw-value and acceptance owners stay in place. Browser
-verification exposed a WebKit scroll during a focused duration refresh. The
-[#784 repair](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/784)
-captures the angular origin at pointerdown and keeps it through movement and
-release, so scrolling during the turn preserves the intended adjustment.
-Releasing the gesture discards that origin; the next turn measures its current
-position. Exact output agreement and explicit cancellation retain their existing
-contracts. #757 reuses the rate enclosure in the adjacent person editor. #768
-carries the duration module into session editing beside its originating rack,
-with the same quantity and contextual return grammar.
-
-#789's Session detail deck uses that duration module inside Plan overview and
-retains the same session owner. The
-[consolidation decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
-records why a stable, nonmodal receiving slot fits this showcase: the selected
-work and period remain available while the form retains live input. Numbered
-occurrences and participant tracks provide direct operations through existing
-setters. The supersession above changes the horizon placement; Team planning's
-adjacent receiver remains useful for its participation reading.
-
-#758's `session-creation.mjs` prepares one planned 30-minute session with extra
-investment from the initiating period, team or person context. The existing
-session adapter allocates and accepts its identity; the canonical receiver opens
-to edit that accepted record. This adds a visible example in one action while
-preserving ordinary Apply/Cancel for subsequent adjustments. A missing team or
-person uses the guided creation route.
-
-**Undo session addition** is bound to the exact accepted creation state. A later
-accepted change retires that local action; Investment retains complete history.
-Undo parks unfinished edits before removing the newly created record and closing
-its editor. Cancel reverts the editing proposal while keeping the created session.
-#770 reuses that owner through a New session row in each Coordination sequencer.
-`cadence-view.mjs` creates native buttons with period/subdivision context;
-`arrangement-surfaces.mjs` creates them only for accepted people supplied by the
-Team planning controller. Proposed team identities remain with their own owner.
-`studio-rack-create-zone` supplies one outlined plus-and-label skin, pointer-hover
-emphasis and visible focus/touch treatments. Existing temporal gaps and
-participation dots remain descriptive. The read-only People table receives no
-creation row. Current contextual editing and exact-creation Undo receive each
-new record; the composition adds an entry rather than another acceptance route.
-
-#771 shares participant movement across the canonical session editor, its rack
-and guided receivers, and team membership. A helper in `rack-controls.mjs`
-synchronizes Move up/down labels and edge states. Each controller calls
-`animateRackChange` and restores focus to the moved person's inclusion switch.
-The existing motion preference decides whether keyed cards move or settle
-immediately. Inclusion keeps the available cards mounted in their positions.
-The session and team controllers retain their distinct draft and acceptance owners.
-
-The future Time in this session fader is now scoped in
-[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
-It would describe one person's share of one occurrence, defaulting to 100% and
-showing the corresponding duration. Each person's share would be independent;
-0% would retain selected identity with an explicit zero-time reading. Current
-membership still gives every participant the full duration. A stored/projection
-contract must precede effort, cost or funded-time changes. Period availability
-and funded time retain their separate meanings.
-
-#772 uses `studio-rack-companions` to attach People and available time and Stages
-& handoffs below the horizon. Pale native disclosures keep their spring reveal,
-closed initial state and concise plan/period caption. Dark `studio-rack-records`
-rails supply People and Stages entries inside the screen. Existing handoff,
-decision and delay pads retain their routes; Handoffs or To place keys retain
-outgoing and unplaced relations. The drawer and rack paths address the same
-selected record and inspector. Expanded state follows the actual inspector and
-flow disclosure; Apply/Cancel restores the originating cadence key when present.
-Person settings keeps its explicit onward route to People. The existing
-`flowRoot`, draft and `mountStudioMotion` owners remain authoritative; collapsing
-the editorial reading preserves its unfinished edit.
-
-#773 receives the [removal/recovery research](removal-recovery-research.md): quiet
-rose removal with explicit scope, a concise local result and exact-removal Undo
-for ordinary accepted changes, and a compact consequence choice when linked
-effects need a decision. Draft operations retain Apply/Cancel. The first #765
-increment moves the existing generic Remove skin to the shared instrument
-stylesheet unchanged; #773 owns its proposed refinement and recovery behavior.
-Establish the Coordination example first; human review releases its wider
-chapter adoption.
-
-The proposed amp **Undo (n)** button exposes the existing accepted-plan history
-from every chapter, with a concise indication of its latest target. Its count
-describes remaining recoverable changes, while Saved edits continues to describe
-unfinished proposals. The button acts directly; it introduces no long history
-ledger. Current history exposes counts but no action descriptions, so exact
-labels must come from owned action metadata, with a truthful latest-change
-fallback. Park unfinished work through the existing coordinator before recovery.
-Local Undo removal remains bound to its specific acceptance and retires after
-an intervening change. The global owner stays authoritative.
-
-#717 remains a parallel zine-test quality repair. The source still conflates
-viewport position with document position, while the preceding hosted checks
-passed. If that observation blocks the shared delivery workflow, repair its
-geometry proof first. It is independent of the Studio runtime and the current
-semantic planning decision.
-
-## Material decision history
-
-### 5 November — Stable interaction before further visual expansion
-
-The early native patch-bay checkpoint already supplied accepted state, editors,
-roles, connections, proposals, saved work and Undo. The human's annotated review
-identified concrete instability: selecting participants changed their order,
-controls moved when feedback disappeared, and missing people or teams created
-unclear detours. The #685 usability work retained mounted rows, separated entry
-from confirmation, and added return routes beside dependent controls.
-
-Browser observation corrected an early text-inflation hypothesis. The useful
-repair was to measure an actually visible enlarged card and give participant
-rows their own typography. Scoped text-size adjustment was removed when the
-pinned engine did not support the assumed mechanism. This matters on re-entry:
-retain the visible-control precondition rather than reviving the discarded CSS.
-
-The human endorsed the ASCII specimen and requested targeted ornament, an inset
-select caret, Included/Available language and literal entered names in summaries.
-The resulting composition guidance and public release preparation remain routed
-through #686. The working repair's exact evidence belongs to its receiving PR,
-not to the provisional counts from earlier pauses.
-
-### 5 November — A populated pilot, useful support and explicit cost
-
-The #649/#647 work introduced a connected service-request pilot, a real duration
-dial and a review response. Role labels replaced fictional human names. Its
-$3,980 starting investment and the $370 effect of extending four reviews provide
-a concrete, small demonstration. Pausing a connection preserves its supporting
-work and cost. This remains a useful distinction between a relationship's status
-and a session's commitment.
-
-Abilities (#650/#677/#678), Change (#651), Quality (#652) and method explanations
-(#691) joined the same accepted plan. Shared work retained one account; card
-support, explicit rehearsal and observations kept separate meanings. Independent
-reviews found consequential faults in repeated proposal IDs, composition-end
-capture, retired receivers reclaiming focus and source returns. Focused repairs
-kept those boundaries in their existing owners.
-
-The #694/#696 interaction work established a stable session diagram and
-full-width editor flow, read-before-edit Purpose, direct small choices,
-recognizable creation/confirmation controls, Hours/Minutes dials and $10/$5 rate
-dials. The human's repeated annotations made progressive disclosure, complete
-labels, legible contrast and ordinary mobile operation part of construction.
-
-Arrangement topology (#697) and quality consequences (#698) connected diagrams
-and badges to actual records. Pod, Guild, Project team and Shared service kept
-their own work directions. AI-related support named human receiving and decision
-responsibilities. Badges linked to a specific planned session, rehearsal or
-observation; they did not confer competence or readiness.
-
-### 5 November — One native About experience and reliable owners
-
-PR #707 integrated the working native showcase into About's existing Studio
-section. The surrounding human-authored page, closed static counterpart and full
-original Studio route remained. The main showcase then received #708's focused
-core-quality work: download resource ownership (#709), return policy (#710),
-shared admission limits (#711), and consistent timing controls (#712).
-
-The download adapter retains a successful resource while another attempt runs,
-releases failed attempts and disposes once. Return policy distinguishes a saved
-creation from an accepted record. Shared limits preserve one semantic source.
-These were bounded ownership improvements; broader factories or numeric tests
-would not have answered an additional receiving question.
-
-### 5 November — Enterprise periods replace elapsed-time planning
-
-The human rejected elapsed-time offsets as the primary planning concept.
-The #718 alternatives and synthesis led to #720–#722: explicit period identities,
-occurrence placements, two authored examples, semantic zoom and contextual
-creation. Business periods represent authored sequence; they are not inferred
-calendar conversions from staffing hours.
-
-Independent review preserved interleaved occurrences during replacement and
-reconciled parked arrangement drafts against newly accepted sessions. Keyed
-three-way comparison retains independent changes and names a conflicting edit
-for explicit recovery. Old references remain until deliberate cleanup. Those
-behavioral cases protect data meaning without expanding arithmetic testing.
-
-The compact Coordination landing view was accepted. Later human review restored
-Abilities' comparative support tables through #725, superseding their temporary
-action-pad simplification. Cross-team session participation was relaxed while
-known-reference admission remained. Full motion replaced the earlier lower
-motion default. The detailed contribution trace left Investment; ordinary
-comparison and the optional whole-plan breakdown stayed.
-
-### 6 November — Populated reels become a shared interaction family
-
-The #727 route introduced the shared reel (#729), People and arrangement
-surfaces (#728), Change (#730), and Quality (#731). Native buttons own reel
-choices and keyboard operation; the rotor is decorative. Existing controllers
-continue to own settings, proposals, saved work and acceptance.
-
-Independent review found a remount hazard: a broad data-hook selector matched a
-populated track pad before the intended static receiver. Exact empty data hooks
-now identify the authored owner. The focused remount journey exercises populated
-tracks and a fresh proposal after mounting again. This is a standing ownership
-lesson for new dynamic pads.
-
-The #735 cohesion pass builds on that family. It consolidates pale work
-racks and dark instruments, exposes team planning, keeps local Abilities and
-Change editors beside their visual context, and makes Quality pressure legible
-through authored locks, recoverable cues and decorative response. The README
-and this journal were rewritten as a whole so the current experience can be
-understood without reconstructing every intermediate iteration.
-
-## Verification and next receiving decision
-
-Use the smallest observation that distinguishes a consequential fault. Source
-checks establish admission, state ownership, reference handling and recovery.
-Focused browser journeys establish the exercised action, focus and layout.
-Ordinary mobile and desktop views belong to this showcase; engine-sensitive
-range, fieldset, pointer or composition behavior receives the relevant alternate
-engine. Screenshots stay in ignored `.visual-runs/` for local comparison.
-
-The integrated Studio source suite and focused chapter journeys passed.
-Quality's new reel/pressure paths also passed in Firefox and WebKit. Independent
-source and visual reviews accepted the feature slices after the identified
-focus-return and styling repairs. Follow-up repairs in
-[#747](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/747),
-[#748](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/748)
-and [#749](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/749)
-reconciled the broader suite with accepted editorial changes and source-owned
-projections. The complete Context Canvas source suite now passes. This supersedes
-the earlier standing of twelve reproduced baseline failures; the receiving PRs
-retain the exact observations and reviewed commits.
-
-PR #775 owns the shared-control evidence: source checks and receiver journeys in
-Chromium, Firefox and WebKit at ordinary phone/laptop widths, plus the exercised
-dial and participant behavior. PR #778 owns the independently reviewed permanent
-Team planning composition, preview/acceptance and local-scroll evidence. It also
-repairs the visible reel return in
-[#776](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/776):
-the template receiver now owns focus after a person is added.
-
-The #777 browser-route repair in PR #793 supersedes the earlier known-failure standing.
-People journeys open the rate disclosure; arrangement choices use direct
-acceptance; the populated-showcase journey enters through horizon session keys
-and accepted connections. Editing, comparison, downloads and recovery remain
-the observed outcomes. The responsive journey follows the enclosed duration
-module, separate repetition control and local rack scroll boundaries.
-Its enlarged-text check exposed #791: wrapping numeric readouts changed height
-when a value became unknown. The shared output now reflows its quantity columns
-and keeps each value on one line, preserving the controls below it.
-The same journey exposed #792: restoring an editor already at home needlessly
-moved its focused subtree. Restoration now moves only displaced controls,
-retaining native-summary focus on keyboard reopen.
-
-For re-entry, use PR #781 for the delivery-board projection and PR #783 for the
-direct replacement transaction, local Undo and accepted-record routing. The
-#767 enclosure increment, delivered in PR #785, supplies the shared duration and
-rate composition. PR #786 supplies #757's canonical person/team receiver.
-PR #787 delivered the #768 session receiver with that placement and return owner;
-it owns the focused occurrence/participation entry, switching, retained draft,
-acceptance and return observations.
-PR #764 remains the accepted scope-navigation reference. Guided creation remains
-available where required context must first be supplied; #758 gives Coordination
-rack Add session its direct accepted-record route and scoped local Undo.
-PR #790 owns #788's duration skin and pointer observation. #789's receiving PR
-records the stable in-rack Session detail deck, existing-session draft/return
-behavior and occurrence/participant controls. This journal records the design
-and ownership; PR #794 records its completed review and delivery. PR #795 owns
-#758's immediate-add, later-edit and exact-creation Undo observations. PR #797
-owns #770's contextual period/person entry, ordinary phone/laptop geometry and
-return observations. PR #802 records #771/#772 participant order/focus
-and motion, attached drawer containment and same-record operation routes. Review
-also preserved relationship recovery before a cadence exists (#801). The same
-pass restores the existing stage-choice layout (#799) and aligns the assembly
-rate check with deliberate adjustment from an unknown rate (#800).
-This journal records design and ownership rather than an unrun check result.
-#810 receives the planning-reference promotion and confirms that main's Showcase
-runtime remains unchanged. The next visual receiver is the #811 compact dev
-Showcase pass, followed by direct handoff routing (#812) and cassette/deck
-integration (#813). The approved study remains available for comparison.
-The duration panel retains its geometry and fixed-lighting reference; production
-controllers retain their editing and recovery meanings. Future percentage
-semantics remain with #798 and broader removal with #773.
-Pause before general performance refinement in
-[#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
-The future compact sticky amp remains
-[#699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699),
-and broader economic translation remains
-[#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
-Tagged Pages publication and the production release remain the separately
-human-cued route in
-[#686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686).
+Use the README to run the current proof and the Visual Fidelity Contracts for
+composition. #831 owns compact creation; #832 carries local navigation and the
+Shared sessions workflow; #833 owns atomic session removal and recovery.
+#884 carries the unified person mixing desk and capacity readings; #890 refines
+their presentation and footer actions, #891 owns explicit spread choices, and
+#893 owns the local participation row and compact laptop comparison.
+#936 refines contribution-local creation and stable participation rows;
+#881 retains the separate canonical form owners;
+#947 owns direct contribution/session checkboxes and local heading toggles. #882 supplies
+the shared circular-stepper shadow treatment. #879 refines the current
+People composition from #864 and retains #836's direct responsibility choices,
+with #837 supplying shared creation controls. #863 covers dependency
+notice completeness and recovery; #865 owns circular control consistency and
+Quality readability. #848/#856 carry compact Abilities support and naming;
+#937 owns its record/section toggles and exact initiating-key return.
+#849/#857 settle Change action state and local receivers; #858 carries the
+Quality receiver; #818 receives the financial workbench. Independent response
+records, performance and public release retain their separate issues.

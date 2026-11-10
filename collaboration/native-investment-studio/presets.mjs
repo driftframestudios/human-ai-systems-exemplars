@@ -4,6 +4,7 @@ import { emptyRole } from './roles.mjs';
 import { SCORE_VERSION } from './score-models.mjs';
 import { SHOWCASE_SCENARIOS, createScenarioPlan, createShowcaseCadence } from './showcase-scenarios.mjs';
 import { seedShowcaseChangeSupport } from './change-showcase.mjs';
+import { AI_STARTER_PRESETS } from './ai-starter-plans.mjs';
 
 const PRESET_VERSION = '1.0.0';
 
@@ -17,7 +18,7 @@ const SHOWCASE_CAPABILITY_CONTEXT = Object.freeze({
   'edit-records-in-bulk': 'Preview a routing change across selected service requests and restore their earlier assignments if needed.',
   'coordinate-handoff': 'Agree who receives each service request, what response they owe, and how to recover a missed handoff.',
   'inspect-history': 'Help pilot reviewers find an earlier service-request decision and recover why it changed.',
-  expectation: 'Agree the pilot scope and expected response at each decision review.',
+  expectation: 'Agree on pilot scope and expected response at each decision review.',
   focalization: 'Identify the question the product lead must resolve before choosing the pilot scope.',
   experimentation: 'Rehearse a routine request and a missed handoff before committing to a wider rollout.',
   opportunity: 'Compare extra pilot review time with the engineering and operations work it would displace.',
@@ -64,7 +65,7 @@ function fundedSessions() {
 
 // The showcase uses ordinary plan records. Editors, pricing and exchange share
 // the same owners as visitor-created plans; each entrance receives a fresh plan.
-export function createShowcasePlan() {
+export function createShowcasePlan({ pausedExample = false, peopleExamples = false } = {}) {
   const plan = createExamplePlan();
   plan.planId = 'service-request-pilot';
   plan.horizonWeeks = 8;
@@ -103,7 +104,7 @@ export function createShowcasePlan() {
   }));
   plan.practices = [
     { id: 'shared-expectations', definitionId: 'expectation', definitionVersion: '1.0.0',
-      context: 'Agree the pilot scope and expected response at each decision review.', teamId: 'engineering',
+      context: 'Agree on pilot scope and expected response at each decision review.', teamId: 'engineering',
       responsiblePersonIds: ['maya', 'ari', 'noor'], decisionOwnerPersonId: 'maya', lifecycle: 'active', prerequisites: [],
       supportBindings: [{ requirementId: 'coordination', workIds: ['review'] }, { requirementId: 'review', workIds: ['review'] }] },
     { id: 'readiness-evidence', definitionId: 'assurance', definitionVersion: '1.0.0',
@@ -117,6 +118,15 @@ export function createShowcasePlan() {
     reviewBoundary: 'The researcher checks each draft claim against the interview notes. The quality reviewer checks exception-handling claims in the review.',
     decisionBoundary: 'The product lead chooses the pilot scope after the evidence and review conditions are recorded.',
   }];
+  if (peopleExamples) plan.contributions.push({
+    id: 'source-index', categoryId: 'source-retrieval', receiverPersonId: 'leo', decisionOwnerPersonId: 'maya',
+    workIds: ['research'], reviewBoundary: 'The researcher verifies source identity and dates before synthesis.',
+    decisionBoundary: 'The product lead chooses which evidence informs the pilot scope.',
+  }, {
+    id: 'prototype-draft', categoryId: 'draft-artifacts', receiverPersonId: 'ari', decisionOwnerPersonId: 'maya',
+    workIds: ['pairing', 'review'], reviewBoundary: 'The engineering lead checks the prototype behavior before the decision review.',
+    decisionBoundary: 'The product lead decides whether the reviewed prototype is ready for the pilot.',
+  });
   plan.connections = [
     ['scope', 'product', 'engineering', 'ari', 'Pilot scope and tested user journeys',
       'Confirm an implementable slice and flag evidence gaps', ['research', 'pairing']],
@@ -152,6 +162,9 @@ export function createShowcasePlan() {
         teamId: 'product', personIds: ['maya', 'leo'], minutesPerOccurrence: 30, occurrences: 1, funding: 'additional', status: 'planned', lifecycle: 'active', timing: null } },
     ],
   };
+  if (pausedExample) plan.work.push({ id: 'optional-followup', label: 'Explore a second service route',
+    teamId: 'product', personIds: ['maya', 'leo'], minutesPerOccurrence: 30, occurrences: 1,
+    funding: 'allocated', status: 'paused', timing: null, lifecycle: 'active' });
   plan.scoreSettings.cadence = createShowcaseCadence(plan, 4);
   plan.assuranceSettings.quality.sigmaHalfSteps = 8;
   return seedShowcaseChangeSupport(plan);
@@ -159,8 +172,8 @@ export function createShowcasePlan() {
 
 // This is a separately authored rollout example. Choosing it previews a plan
 // replacement; regrouping an existing plan keeps its own work and investment.
-export function createQuarterShowcasePlan() {
-  const plan = createShowcasePlan();
+export function createQuarterShowcasePlan(options = {}) {
+  const plan = createShowcasePlan(options);
   plan.planId = 'service-request-rollout';
   plan.horizonWeeks = 26;
   plan.purpose = {
@@ -196,7 +209,7 @@ export function createQuarterShowcasePlan() {
     ['rollout-support', 'engineering', 'operations', 'sam', 'Rollout sequence and support responsibilities',
       'Rehearse the receiving work with each participating team', ['rollout-planning', 'receiving-walkthrough']],
     ['adoption-findings', 'operations', 'product', 'maya', 'Adoption findings and outstanding operating questions',
-      'Agree the operating owner and next improvement', ['receiving-walkthrough', 'adoption-review', 'operating-handoff']],
+      'Agree on operating owner and next improvement', ['receiving-walkthrough', 'adoption-review', 'operating-handoff']],
   ].map(([id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds]) => ({
     id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds, status: 'active',
   }));
@@ -238,6 +251,7 @@ export function createQuarterShowcasePlan() {
 const CATALOGUE = new Map([
   ['service-request-pilot', 'Service request pilot', 'Three teams prepare a pilot, review its evidence, and plan the funded time together.', createShowcasePlan],
   ['service-request-rollout', 'Two-quarter service rollout', 'Follow pilot preparation and validation into receiving-team rollout and operating ownership.', createQuarterShowcasePlan],
+  ...AI_STARTER_PRESETS.map(({ id, label, description, create }) => [id, label, description, create]),
   ...SHOWCASE_SCENARIOS.map(scenario => [scenario.id, scenario.label, scenario.description, () => createScenarioPlan(createShowcasePlan(), scenario)]),
   ['shared-working-sessions', 'Shared working sessions', 'Four people meet for half an hour, six times.', workingSessions],
   ['funded-working-sessions', 'Sessions within funded time', 'The same sessions use three funded hours per person.', fundedSessions],

@@ -36,6 +36,8 @@ then identifies each behavior's implementation owner.
 - `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareTeam`, `prepareWork`,
   `preparePurpose`, `prepareAssemblyCommand`, `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
+- `work-sessions.mjs` resolves a tape's defaults and its sparse session overrides,
+  summarizes effective effort and membership, and remaps indexes on removal.
 - `commands.mjs` owns finite assembly transitions and their removal references.
   Each transition receives an immutable projection from the state owner.
 - `connection-templates.mjs` owns four authored coordination arrangements,
@@ -56,6 +58,9 @@ then identifies each behavior's implementation owner.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `rate-controls.mjs` owns relative $10 and $5 dial gestures beside existing hourly-rate fields. People and Quality retain parsing, unknown values, exact cents, $1 steps and accepted-state ownership.
 - `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the amp-head Off / Lower / Full controls. It leaves accepted state and editor history with their existing owners.
+- `rack-creation-controls.mjs` owns the shared native creation target, its accessible
+  label and optional visible wording. `rack-record-creation.mjs` owns useful
+  accepted record defaults, parked-edit coordination and shared history.
 - `arrangement-surfaces.mjs` composes team lanes and person/session tracks from accepted or explicitly proposed records; existing controllers own editing and acceptance.
 - `change-showcase.mjs` and `assurance-showcase.mjs` hold authored exploration configurations; their controllers apply those entries through existing draft adapters.
 - `reel-control.mjs` owns reusable native-button reels. `select()` synchronizes a choice without dispatch, `vary()` changes decorative rotation, `revealReelResult()` cues a refreshed board, and the caller owns preset changes. `studio-instrument.css` supplies the shared visual control family after `about.css`; chapter rack styles extend it.
@@ -65,10 +70,17 @@ then identifies each behavior's implementation owner.
   Each receiving editor retains its raw draft, validation and acceptance.
 - `responsibility-controller.mjs` owns selected-person role details and human
   contribution records within the People chapter. Both forms use the shared
-  command-draft engine and its single active coordinator lease.
+  command-draft engine and its single active coordinator lease. The visible
+  facet rail enters that owner when its selected field is used; bounded role and
+  contribution choices accept through the same owner and shared history.
+- `studio-people.css` follows `studio-arrangements.css` in the About route and its
+  primary asset manifest. It owns parallel team lanes, the recessed roster, role
+  and contribution geometry, and the canonical Person form borrowed by Coordination.
 - `capabilities.mjs` owns the versioned ability/practice definitions and legacy interpretation.
 - `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
-- `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
+- `capability-controller.mjs` receives two support tables and one local selected
+  proposal rack through the shared editor lease. `studio-abilities.css` owns the
+  table keys, readable dark header, paired support groups and mobile composition.
 - `change-models.mjs` transfers the original framework, lens, attention and Four Actions definitions into a finite immutable catalogue; its pure projection reads admitted Change settings.
 - `change-methods.mjs` explains each offered suggestion with its useful result,
   inputs, question and example. It records prototype adaptations separately from
@@ -89,6 +101,14 @@ then identifies each behavior's implementation owner.
 - `browser-download.mjs` owns temporary links and retained object URLs through
   dispatch, failure, replacement and disposal. Report and JSON controllers keep
   their format, accepted snapshot and visitor-feedback ownership.
+- `investment-workbench.mjs` and `investment-controls.mjs` own the loaded deck,
+  connected reels and money controls; `studio-investment.css` owns their receiving
+  artwork. `investment-catalog.mjs` defines types and presets,
+  `investment-state.mjs` admits and encodes assumptions,
+  `investment-projection.mjs` reads accepted work/pricing, and
+  `investment-financials.mjs` derives comparisons through the existing financial
+  core. `investment-controller.mjs` joins those owners to canonical edits and
+  retains baseline and file-exchange utilities.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -147,13 +167,13 @@ original-model economic equivalence remains the receiving task in #705.
 | --- | --- | --- |
 | Arrange people and shared work | Person/team identities, roles, exact rates, funded time, membership, stable participant cards, hours/minutes dials and explicit AI contribution → human review → decision links through shared work. Person, assembly, responsibility and session checks exercise Apply, Cancel and recovery. | Full Studio keeps aggregate role quantities and its allocation model; #705 owns translation. |
 | See how teams coordinate | Pod, Guild, Project team and Shared service templates preserve arrangement identity and actual directed handoffs. Connection and template checks follow teams, people and supporting sessions. | Original routes remain usable independently. |
-| Explain desired abilities and supporting practices | Two semantic tables compare responsibility, preparation, review and observation across customer abilities and team practices. Their cells open the matching editors. Card reverses share existing work and preserve named decision owners. Capability checks exercise retained drafts and shared support. | Original activity catalogue remains available in the full Studio. |
+| Explain desired abilities and supporting practices | Two semantic tables compare responsibility, preparation, review and observation across customer abilities and team practices. Cells open one compact dark support rack with paired People/work controls, preserving named decision owners and shared sessions. Capability checks exercise readable choices, hidden receivers, retained drafts and accepted recovery. | Original activity catalogue remains available in the full Studio. |
 | Interpret change | Six frameworks, eight lenses, attention faders and method explanations retain distinct meanings. Supporting sessions carry actual investment. Change checks cover framework retention, lens interaction and proposal funding. | Broader source-derived heuristic effects keep their original analytical owner. |
 | Prepare quality, recovery and learning | Quality pads, planned response work, human-reviewed observations and People/team support badges have exact accepted/proposed consequences. Assurance checks distinguish reference estimates, planned work and observed outcomes. | Original quality shares, blended rates and disruption equations remain in the full Studio and its analysis owners. |
 | Arrange sessions and decisions | Sprint and quarter overviews open into weeks or months. Contextual editors retain sessions, availability, stages, handoffs, decisions and delays; reports carry the detailed agenda. Score checks cover view-only zoom, creation, Apply/Cancel/Undo and retained placement. | Earlier saved plans retain exact elapsed timing. Working calendars and automatic scheduling require explicit assumptions in later work. |
-| Explain investment and a changed commitment | Accepted investment, a saved baseline and their difference share the native staffing and extra-work ledger. The optional cost breakdown remains in Investment. Comparison checks distinguish unknown amounts, pooled rounding, allocated work and replaced plan identities. | Reserve, complexity, planning bands, cumulative/cash-flow, service and commercial models remain with the full Studio; #705 receives native analytical translation. |
+| Explain investment and a changed commitment | Five independently owned financial decks combine shared accepted pricing with explicit comparison assumptions, connected reels and quantity controls. Baseline and file/report routes remain available. Investment checks distinguish record identity, saved settings, unknown amounts, explicit funding changes and grouped Undo. | The full Studio retains its larger analytical composition and source economics. #705 continues to own broader model equivalence and translation. |
 | Try another initiative | Six authored rehearsal families populate purpose, people, work, prerequisites, change support and quality. Preset/report checks independently price the examples and verify round-trip ownership. | The six original factories retain their original economic meanings; the native families disclose their explicit assumptions. |
-| Keep, compare and carry a plan | Versioned native 0.9.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange and report checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
+| Keep, compare and carry a plan | Versioned native 0.11.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange carries work and financial-deck assumptions together. Checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
 | Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; Lower plays effects at half speed, while Off and the system reduced-motion setting suppress animation. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
 
 The comparison reads the accepted plan and saved baseline. Allocated work stays
@@ -163,25 +183,80 @@ preserves the separately human-cued tagged-release boundary in #686.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.9.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.11.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings` and `scoreSettings` records, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings`,
+`scoreSettings` and `investmentSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
 | --- | --- | --- |
 | `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle`, `availability` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. Nullable availability supplies separate half-open elapsed-minute intervals. |
 | `teams` | `id`, `label`, `personIds`, `lifecycle` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
-| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; `timing` is null or an authored start and recurrence interval in elapsed minutes. |
+| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle`, optional `sessionOverrides` | Defaults seed new sessions. An override keeps a selected session's complete name, host, participants, duration, funding and status. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; `timing` is null or an authored start and recurrence interval in elapsed minutes. |
 | `abilities`, `practices` | `id`, `definitionId`, `definitionVersion`, `context`, `teamId`, `responsiblePersonIds`, `decisionOwnerPersonId`, `lifecycle`, `prerequisites`, `supportBindings` | Separate customer abilities and team arrangements bind exact definitions to shared work. Ordered requirement bindings are authoritative; their unique work union is derived. |
 | `capabilityEvidence` | `id`, `subject`, `stage`, `context`, `observation`, `recorderPersonId`, `reviewBoundary`, `observedPlanRevision` | An explicit observation of a typed ability/practice subject, retained independently of current support checks. |
 | `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
 | `connections` | `id`, `senderTeamId`, `receiverTeamId`, `receiverPersonId`, `sharedObject`, `responseExpectation`, `workIds`, `status` | A directed team handoff with a receiving person, stated object, response expectation and active/paused state. |
+| `investmentSettings.decks` | `id`, `type`, `sequence`, `settings` | An independently editable financial comparison. Its closed settings are defined by type; selection remains local view state. |
 
 Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
+
+### Individual sessions
+
+Schema 0.11 adds optional, bounded `work.sessionOverrides`, indexed by the existing
+occurrence identity. Earlier plans migrate with their defaults intact. Older
+schema admission retains its original closed fields. Overrides are detached
+records; new and uncustomized sessions follow tape defaults. Edited sessions keep
+their own complete settings. Removing one remaps later
+overrides and placements in a single command.
+
+`work.session.update` accepts one session and its optional placement together.
+`work.session.remove` preserves the parent plan and its support links. Whole-plan
+status/funding commands affect all sessions explicitly; participant inclusion and
+reordering preserve each session's other participants. Reordering validates the
+current union and sorts each existing subset. Ledger lines retain one work/person
+identity with mixed-funding amounts, while cadence, capacity, support badges and
+reports read effective sessions. Pausing retains planned investment.
+
+The session draft target includes its occurrence index. A stale occurrence draft
+requires explicit Use current recovery; automatic replay could address a different
+session after removal. The in-rack picker opens the same scoped owner. Add/Remove
+accept their count change with Undo after validating and accepting visible edits;
+invalid entries keep their receiver available. Track keys edit defaults, while
+numbered pads edit one session. All/individual tape navigation changes only view
+scope and parks unfinished edits through the existing coordinator.
+
+### Financial comparison decks
+
+Schema 0.10 adds `investmentSettings` version 1.0.0. Earlier native plans migrate
+to one populated deck of each supported type. The type catalogue identifies Plan
+investment, Customer rollout, Commercial cohort, Service operations and Capital
+choices. Stable IDs distinguish copies of the same type. A closed field descriptor
+defines each saved choice, quantity range and step; UI controls use those same
+bounds. Numeric assumptions travel as integer hundredths, with conversion owned
+by `investment-state.mjs`. Deck identity and sequence remain unscaled.
+
+`investment-projection.mjs` reads canonical people, work, cadence and price lines
+into an owned financial view. `investment-financials.mjs` derives the selected
+comparison through the existing investment-analysis core. Deck assumptions and
+connected-reel presets replace the closed settings through
+`investment.settings.replace`; the explicit funding control continues to use
+`work.funding.set`. This keeps accepted work pricing and comparison assumptions
+legible as separate inputs.
+
+The existing history owner accepts an optional owned Symbol for a continuous
+control gesture. Consecutive changes with that token share one prior projection;
+Undo/Redo, baseline operations and a different accepted edit separate history.
+Ordinary commands retain their individual Undo entries. Local deck navigation
+leaves the accepted projection intact. Controls release interaction state on
+replacement and teardown; a same-ID import with a different type constructs the
+matching editor. The Investment browser/source routes observe these identity,
+recovery and ownership boundaries without duplicating a financial arithmetic
+matrix.
 
 ### Quality, recovery and learning
 
@@ -1257,7 +1332,7 @@ Explicit Apply can recover a retained draft after a failed scheduling attempt.
 Direct scheduler functions and Studio ownership are cooperative host APIs;
 this adapter supplies lifecycle guards rather than an execution sandbox.
 
-### Cost and next measurement
+### Cost and historical measurement
 
 Begin locates one work row in O(W). Read, text edits, field validation, and steps
 operate on two or three bounded strings, according to the duration format.
@@ -1270,16 +1345,16 @@ their own lifetimes; the future receiver bounds any history it keeps.
 
 A new valid preview uses the same complete preparation cost and retains one
 proposed projection. Repeated preview reads of unchanged raw quantities reuse
-that projection. The current UI computes synchronously; #641 measures preview
-preparations separately from raw edits and accepted commits before introducing
-coalescing or a second accounting strategy.
+that projection. The current UI computes synchronously.
 
-[Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
-receives the implemented edit/apply boundary for measurement. Its first slice
-compares direct accepted edits, explicit draft Apply, and deferred Apply through
-identical operation traces. Raw edits, steps, pending requests, accepted commits,
-and complete synchronous Apply cost retain separate metrics. Fake scheduling
-establishes ordering and counts; browser latency begins with native controls.
+The completed [Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
+study compared direct accepted edits, explicit draft Apply and deferred Apply
+through identical operation traces. It retained complete preparation. Raw edits,
+steps, pending requests, accepted commits and complete synchronous Apply cost
+remain distinct observations in that historical study. Fake scheduling establishes
+ordering and counts; a current visitor-latency claim requires a matched browser
+observation through native controls. [Issue #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
+owns the current refinement route.
 
 ## Person draft adapter
 
@@ -1484,12 +1559,14 @@ preview, apply, cancel, review, useCurrent, and freshId operations as the assemb
 form family. The private form engine selects only those two source-owned
 families; callers receive their named finite adapters.
 
-Creation starts with an empty name and team, an empty ordered participant list,
-a 30-minute duration, one session, additional funding, and planned status.
-The visitor supplies a team and at least one participant before preview or
-Apply. Current admission requires every participant to belong to the selected
-team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Historical schema 0.5 required null timing.
+The lower-level session draft port starts creation with an empty name and team,
+an empty ordered participant list, a 30-minute duration, one session, additional
+funding and planned status. A caller supplies a team and at least one known person
+before preview or Apply. Known people may participate across team boundaries;
+team membership and session participation remain independent relationships.
+The rack creation route supplies useful populated defaults through
+`rack-record-creation.mjs` and accepts the new record with editing closed. The
+canonical editor retains selected people while reporting a missing reference. Historical schema 0.5 required null timing.
 Current creation starts with unknown timing, and updates carry the accepted
 row's timing value through the existing work owner. The Score contract owns
 authored timing; session edits retain that accepted placement.
@@ -1561,10 +1638,13 @@ visits those bounded values. Catalogue lookup sets initialize once; receiving
 reference maps rebuild once per accepted projection. Material preview and
 Apply retain the measured full-preparation path.
 
-`responsibility-controller.mjs` presents Role details for the selected person
-and a Human review list within People. Native disclosures keep these editors
-local to the chapter. One grouped selector preserves the framework/component
-pair; adjacent labels and ordered session controls describe each operation.
+`responsibility-controller.mjs` presents the selected person's visible Role mix
+rail and a contribution/session matrix within People. The rail shows eight current
+values and one selected native field; a contribution opens compact Work and
+Receiver and decision sections. Native choices and support changes accept
+directly. One grouped selector preserves the framework/component pair; receiver
+and decision owner remain independent. Retained proposals still use the canonical
+Apply, Cancel and stale-recovery routes.
 `responsibility-draft.test.mjs` and `responsibility-editing.test.mjs` own the
 raw/accepted boundary. `responsibility.browser.mjs` owns complete-field meaning,
 unchanged monetary totals, retained and stale targets, narrow reading, focus
@@ -1572,9 +1652,11 @@ and receiver disposal across the three engines.
 
 ## Native connection patch bay
 
-[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
-places accepted team connections above the complete working-session editor in
-Coordination. `connection-view.mjs` derives the SVG, ordered connection list
+This section records the retained patch-bay component contract from
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668).
+The current About surface uses Delivery and Shared sessions local receivers;
+the former visible patch bay remains available to reference consumers. Its
+canonical handoff form is still owned by `connection-controller.mjs`. `connection-view.mjs` derives the SVG, ordered connection list
 and selected detail from one immutable accepted projection. Its private
 identity and adjacency maps rebuild when that projection changes. Equal
 numeric revisions from separate imports retain their separate cache identity.
@@ -1649,10 +1731,12 @@ listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
 history restoration; an actual departure disposes it.
 
-Mounting prepares Session settings with a fresh draft inside the collapsed
-Working sessions workspace. Explicit session navigation opens that workspace;
-its native summaries handle later opening and closing. Cancel returns focus to
-the Session settings summary.
+The current About integration starts with Plan overview and session detail
+closed. Selecting a session or occurrence mounts its canonical form inside the
+local rack between board and tracks; the originating control and local return
+preserve scope. The earlier collapsed, detached Working sessions workspace is
+a superseded placement. The form owner retains its native configuration and
+Cancel behavior within the selected receiver.
 `work-controller.mjs` owns one complete session form: name, team, ordered
 participants, duration, count, funding and status. Raw text and circular step
 buttons share the `editing.session` lease with every other chapter. The in-card
@@ -1707,14 +1791,14 @@ the About fallback stylesheet hides controls that require a mounted editor.
 
 Session selection retains each unfinished edit under its own stable target.
 Changing chapters parks that target and returning resumes it. Creation offers
-all admitted people and identifies those outside the selected team; validation
-keeps the current membership contract explicit. Changing the team retains the
-selected people for correction. Paused sessions retain declared effort and
+all admitted people and identifies those outside the selected team. Known
+people may participate across teams. Changing the team retains the selected
+people; missing references remain visible for correction. Paused sessions retain declared effort and
 cost. Included funding attributes the session to funded time while extra
 funding contributes to the commitment.
 
-Removal shows any practice that still references the session. An empty work
-collection keeps Add session available. Creation collisions offer a fresh ID
+Removal confirms the named session and its links as one recoverable change.
+An empty work collection keeps Add session available. Creation collisions offer a fresh ID
 with the entered values intact. Cancellation closes the settings and returns
 focus to the entry control; successful removal returns focus to selection or
 Add session. Callback guards preserve a successor editor's focus and resources.
@@ -1735,9 +1819,11 @@ same draft coordinator. Their separate forms and action attributes keep input
 and submission with the selected editor. The root resumes the selected editor
 after Purpose or another chapter; saved entries also have their existing tray.
 
-A person creation previews funded cost before Apply. A team creation or update
-changes membership and its order; session participants remain their own work
-records. Referenced removals display the accepted team, work or practice labels
+Rack Add controls accept useful person/team defaults with editing closed.
+Selecting the record opens its existing editor; person names, rates and funded
+time retain Apply and its preview. Direct team membership and member order enter
+shared accepted history; team names and explicit creation proposals retain Apply.
+Session participants remain their own work records. Referenced removals display the accepted team, work or practice labels
 that still use the record. The visitor can change those relationships first.
 An imported creation collision offers a fresh identity while retaining all
 entered text and ordered selections. Undo restores accepted identities and order.
@@ -1755,8 +1841,11 @@ The receiver retains its displayed projection, bounded maps, selected target
 and listener group. Callback epochs protect a newer editor or disposed receiver
 from late focus and announcement writes.
 
-The About route stylesheet owns the shared palette and form geometry. Circular
-step buttons stay below numeric inputs; feedback follows all input rows. The
+The About route supplies the shared palette. `studio-people.css` owns the compact
+People composition and canonical person form, including its borrowed Coordination
+receiver. Team lanes scroll as one horizontal row; person/team cards carry their
+own arrangement controls. Circular step buttons remain next to numeric values;
+feedback follows the input rows. The
 focused assembly browser route observes literal monetary outcomes, membership
 order, removal references, stale and collision recovery, callback ownership,
 compact controls, and document scrolling. The existing person browser route
@@ -2049,7 +2138,7 @@ and person routes for changes to their controls or state receivers.
 
 The complete native receiver joins the amp-head amount, funding distinctions,
 explicit draft boundaries, teams, practices, Change, quality/recovery and the
-investment trace through one accepted plan.
+Investment workbench through one accepted plan.
 
 About remains the leading home for the native showpiece.
 [Issue #638](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638)
@@ -2057,9 +2146,44 @@ owns the final About placement and the full Studio's AI Systems discovery route,
 preserving its existing URL and capabilities. Main source delivery and tagged
 public release retain separate receiving events.
 
-Re-entry begins with the current journal checkpoint, the final main pull request
-and this package's focused tests. Issue #679 receives performance refinement
-after the human resumes that work; #705 owns broader economic translation.
+Re-entry begins with the current journal checkpoint, the accepted `dev` revision
+and this package's focused tests. #906 establishes loaded-plan repetition,
+separate plan creation, removal and empty-library recovery. #909 restores All
+plans on entry and bounded sequential cassette browsing; #913/#914 preserve
+mixed session groups and scope new stages/handoffs to the loaded plan.
+
+The JavaScript refinement wave under #679 is complete: #901 settles accepted
+edits before one root notification, #915 makes editor scope explicit, #902 reuses
+an immutable Investment context, #903 prepares invocation-local occurrence
+indexes, and #916 groups deck controls and readings in a closed view registry.
+This supersedes the earlier queued #902/#903 continuation. #900 retires the former
+timeline/agenda CSS and consolidates shared duration styling in
+`studio-instrument.css`; chapter layouts and alternate-media rules retain their
+owners. Its final cleanup removes redundant and superseded motion, visibility and
+sizing declarations while retaining the winning rules. Current source and behavior
+observations establish ownership and reduced repeated work. Matched browser
+observations establish any visitor-latency claim. Earlier measurements remain
+historical; #260 retains About delivery measurement and #705 broader economic
+translation. Promotion to `main`
+remains a separate human-cued event.
+
+Circular increment controls have one geometry and shadow owner in
+`studio-instrument.css` (#882): `.native-coordination__stepper`,
+`.native-score__steps`, `.native-change__steps`, `.native-capability__steps`
+and `.study-money__steps`. That owner follows About's ordinary action rules and
+precedes the chapter sheets. Chapters extend size through `--studio-step-size`
+and retain pair placement, gap and skin; resting, pressed and forced-color
+shadow treatment stays shared. This replaces receiver-specific People and
+duration shadow declarations while keeping borrowed forms on the same route.
+
+Accepted score operations settle their local selection and inspector before
+publishing one `onAccepted` notification. Draft and cancellation notifications
+retain `onEditing`. Projection, edit intent, lease and generation checks preserve
+a successor editor through either local view or parent callbacks. Cadence reuse
+compares the exact projection object and rendered scope, selection and preview
+values; the revision number alone is insufficient. Caption editing invalidates
+that retained render explicitly while ordinary unchanged refreshes preserve its
+input, text selection, scroll, disclosures and borrowed session controls.
 
 
 ## Sprint and quarter coordination
@@ -2088,9 +2212,29 @@ timing remain intact, with cadence initially unknown.
 decision, delay and availability editing. The existing work controller owns
 session people, duration, count, funding and placement. The root controller owns
 chapter and return routes. `cadence-view.mjs` projects the overview, weeks/months,
-MIDI tracks and relationships; `about.css` owns the native-cadence composition.
-The detailed agenda remains in downloadable reports.
+MIDI tracks and relationships. `styles/routes/about.css` owns the current
+`native-cadence` board, track table, pads and clips. It also retains the live
+`native-score` shell, transport, projection, inspector, generic tables/forms and
+pressed states. The About entry loads that route before shared instrument and
+chapter-specific rack styles; their existing order supplies the receiving cascade.
+The [Period Kanban and Session Sequencer contract](../../visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md)
+guides the composition. Extend the current cadence family for new board or
+sequencer presentation. #900 retires the former elapsed-minute timeline, axis,
+track, clip, legend and agenda presentation; score-model agenda data and the
+downloadable reports retain their separate purpose.
 Periods are view selections until the visitor changes their count or basis.
+
+One cassette identifies one repeatable work record. Its sessions are occurrences.
+Initial view state shows All plans; an empty library starts unselected.
+The persistent All plans control clears loaded scope. Previous/Next browse
+canonical shelf order through the same callback and retain period scope. Loaded lane and track additions append an occurrence through `work.update` while
+retaining the loaded record; All plans New plan targets use the canonical record
+creation owner. Loaded relationship markers follow the same work scope. Transport
+Remove plan uses canonical removal and shared amp Undo. When work is empty,
+`plan-library-empty.mjs` previews five recipe sets with the shared reel and diagram;
+`coordination-starters.mjs` prepares a detached candidate retaining existing people,
+teams, horizon and other chapter state. Explicit Load publishes one replacement
+and Undo entry. Create a plan retains the ordinary guided prerequisite route.
 
 The raw score adapter carries bounded cadence JSON through the established
 saved-edit coordinator. Admission validates the complete candidate before
@@ -2155,16 +2299,21 @@ remain separate staffing references.
 
 ## Create entry and confirmation controls
 
-The **create entry** starts a new item or nested addition. It receives
-`native-control--create`, a compact plus mark, and a concrete label such as
-**Add session**, **Add a person**, or **Add a decision**. The mark tells the
-visitor that a new editing task begins.
+The **create entry** adds a record or occurrence at its named scope. It receives
+`native-control--create`, a compact plus mark, and a concrete accessible label
+such as **Add session**, **Add a person**, or **Add a decision**. Where the rack
+supplies useful defaults, the entry accepts the addition with editing closed;
+selecting the new representation opens its editor. A creation route that needs
+prerequisite data opens the corresponding guided proposal. The shared
+`rack-creation-controls.mjs` factory owns the native target; receiving controllers
+retain acceptance and recovery.
 
 The **confirmation** accepts the item already being prepared. It uses the
 ordinary commit treatment and the form's action label, such as **Add session**,
 **Create team**, or **Apply proposal**. Its appearance stays with Apply/Save;
 the plus mark remains on the entry control. Copy can share the same verb while
-position and treatment distinguish beginning the task from completing it.
+position and treatment distinguish creating an addition from accepting a
+prepared proposal.
 
 Class assignment follows the operation and editor mode, rather than matching
 an “Add” word. Nested Add actions inside a form still begin their own item and
@@ -2254,7 +2403,10 @@ return restores its raw entries, with stale recovery retaining focus when needed
 
 `investment-controller.mjs` owns baseline comparison, history and plan exchange.
 The contribution-trace panel and its runtime modules were retired following
-human review. The original compact controls remain the visitor path.
+human review. Compact baseline and exchange utilities remain beside the financial
+workbench. The workbench loads independent comparison decks and connects their
+reels and quantity controls through the accepted settings owner described under
+[Financial comparison decks](#financial-comparison-decks).
 
 `showcase-scenarios.mjs` authors six native rehearsal families through the
 existing admitted plan. `reports.mjs` synchronously derives HTML and text from

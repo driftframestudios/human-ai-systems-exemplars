@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { before, after, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -13,26 +14,18 @@ for (const name of names) assert.ok(Object.hasOwn(engines, name));
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-connection-templates');
 let server, fixture;
-before(async () => {
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   fixture = createNativeAboutFixture(source, { tail: '<div aria-hidden="true" style="height:1000px"></div>', nativeBoot: false });
   assert.equal((fixture.match(/\bdata-connection-templates(?:\s|>)/gu) ?? []).length, 1, 'About supplies one authored team-arrangement carrier.');
-  server = await startStaticServer();
-  for (const name of names) browsers.set(name, await engines[name].launch());
+  server = await own(startStaticServer());
+  for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
-after(async () => { try { await Promise.all([...browsers.values()].map(browser => browser.close())); } finally { await server?.close(); } });
 const panel = page => page.locator('[data-connection-templates]');
-const field = (page, path) => panel(page).locator(`[data-template-field="${path}"]`);
 const action = (page, name) => panel(page).locator(`[data-template-action="${name}"]`);
 const status = page => panel(page).locator('[data-connection-template-status]');
 const bytes = page => page.evaluate(() => window.templateFixture.studio.exportText());
-async function card(page, id) {
-  const rack = panel(page).locator('.studio-arrangement-settings');
-  if (!(await rack.evaluate(node => node.open))) await rack.locator(':scope > summary').click();
-  const target = panel(page).locator(`[data-template-card="${id}"]`);
-  if (!(await target.evaluate(node => node.open))) await target.locator('summary').click();
-}
 async function open(t, engine) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
@@ -69,6 +62,121 @@ const history = page => page.evaluate(() => window.templateFixture.studio.readHi
 const arrangement = page => page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0]);
 
 for (const engine of names) {
+  test(`${engine}: arrangement diagrams keep connected arrows, distinct returns and room for labels`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const deck = panel(page).locator('.studio-arrangement-deck');
+    for (const id of ['pod', 'guild', 'project-team', 'shared-service', 'stream-aligned', 'matrix', 'tiger-team']) {
+      await choose(page, id);
+      const diagram = deck.locator('.native-arrangement__diagram');
+      await expect(diagram).toBeVisible();
+      const readings = await diagram.evaluate(svg => {
+        const edges = [...svg.querySelectorAll('.native-arrangement__edge')];
+        return edges.map(edge => {
+          const arrow = edge.querySelector('.studio-diagram__arrow'), paint = getComputedStyle(arrow);
+          return { direction: edge.dataset.direction, path: arrow.getAttribute('d'), color: paint.fill,
+            stroke: paint.stroke, polygons: edge.querySelectorAll('polygon').length };
+        });
+      });
+      assert.ok(readings.every(edge => edge.polygons === 0 && (edge.path.match(/M /gu) ?? []).length === 1 && edge.path.endsWith(' Z')),
+        `${id}: every painted head and shaft shares one connected contour`);
+      assert.ok(readings.every(edge => edge.color !== 'none' && edge.stroke === 'none'));
+      assert.notEqual(readings.find(edge => edge.direction === 'forward').color,
+        readings.find(edge => edge.direction === 'return').color, `${id}: return paths have a distinct paint role`);
+    }
+    await choose(page, 'matrix');
+    const layout = await deck.evaluate(element => {
+      const reel = element.querySelector('.native-reel').getBoundingClientRect();
+      const viewport = element.querySelector('.native-arrangement__viewport').getBoundingClientRect();
+      const label = element.querySelector('.native-arrangement__boundary text').getBBox();
+      const nodes = [...element.querySelectorAll('.native-arrangement__team rect')].map(node => node.getBBox());
+      return { bottomGap: Math.abs(reel.bottom - viewport.bottom), labelBottom: label.y + label.height, topNode: Math.min(...nodes.map(node => node.y)) };
+    });
+    assert.ok(layout.bottomGap <= 2, `diagram fills the reel height: ${JSON.stringify(layout)}`);
+    assert.ok(layout.topNode - layout.labelBottom >= 16, 'the Matrix heading has a clear vertical reserve above team nodes');
+    await deck.screenshot({ path: resolve(captures, `${engine}-matrix-diagram-wide.png`) });
+    const team = deck.locator('[data-arrangement-team]').first(), teamId = await team.getAttribute('data-arrangement-team');
+    await team.click();
+    await expect(panel(page).locator(`[data-team-rack-record]`)).toBeVisible();
+    assert.equal(await panel(page).locator('[data-team-rack-record] [data-team-rack-name]').count(), 1);
+    assert.ok(teamId, 'selectable diagram nodes retain canonical team identities');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await deck.scrollIntoViewIfNeeded();
+    const phone = await deck.evaluate(element => {
+      const viewport = element.querySelector('.native-arrangement__viewport');
+      const label = element.querySelector('.native-arrangement__team text:not(.native-arrangement__role)');
+      viewport.scrollLeft = viewport.scrollWidth;
+      return { viewport: viewport.clientWidth, content: viewport.scrollWidth, scroll: viewport.scrollLeft,
+        page: document.documentElement.scrollWidth, window: innerWidth,
+        labelPixels: parseFloat(getComputedStyle(label).fontSize) * label.getScreenCTM().a };
+    });
+    assert.ok(phone.page <= phone.window + 1, `phone page stays contained: ${JSON.stringify(phone)}`);
+    assert.ok(phone.scroll >= phone.content - phone.viewport - 1, 'phone scrolling reaches the final team');
+    assert.ok(phone.labelPixels >= 11.9, `team labels keep a readable local scale: ${JSON.stringify(phone)}`);
+    await deck.screenshot({ path: resolve(captures, `${engine}-matrix-diagram-phone.png`) });
+  });
+
+  test(`${engine}: team membership changes directly inside the delivery board and shared Undo restores it`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const f = window.templateFixture, base = f.studio.read();
+      const people = [...base.state.people,
+        { ...base.state.people[0], id: 'researcher', label: 'Researcher' },
+        { ...base.state.people[0], id: 'engineer', label: 'Engineer' }];
+      const result = f.studio.replace({ ...base.state, people }, base);
+      assertAccepted(result);
+      f.controller.render();
+      function assertAccepted(result) { if (!result.ok) throw Error(result.error.message); }
+    });
+    await choose(page, 'pod');
+    const key = panel(page).locator('.studio-delivery__team-key[data-studio-record-id]').first();
+    const id = await key.getAttribute('data-studio-record-id');
+    await key.click();
+    const record = panel(page).locator('[data-team-rack-record]');
+    await expect(record).toBeVisible();
+    await expect(panel(page).locator('.studio-delivery')).toHaveCount(0);
+    await expect(panel(page).locator('[data-team-rack-editor] [data-assembly-configure]')).toHaveCount(0);
+    await expect(record.getByRole('button', { name: 'Back to Delivery overview', exact: true })).toBeFocused();
+    const member = record.locator('[data-team-rack-member="researcher"]');
+    const renderedOrder = () => record.locator('[data-team-member-row][data-selected="true"]')
+      .evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow));
+    const cardOrder = await record.locator('[data-team-member-row]').evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow));
+    const before = await bytes(page), count = (await history(page)).undoCount;
+    const prior = await member.isChecked();
+    await member.setChecked(!prior);
+    assert.equal((await history(page)).undoCount, count + 1);
+    const ids = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    assert.equal(ids.includes('researcher'), !prior, 'membership accepts without an Apply action');
+    assert.deepEqual(await record.locator('[data-team-member-row]').evaluateAll(rows => rows.map(row => row.dataset.teamMemberRow)), cardOrder,
+      'inclusion preserves the position of every card');
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    assert.equal(await bytes(page), before);
+    await expect(member).toBeChecked({ checked: prior });
+    await record.locator('[data-team-rack-member="engineer"]').check();
+    await record.locator('[data-team-rack-member="researcher"]').check();
+    const ordered = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    const lastId = ordered.at(-1);
+    await record.locator(`[data-team-member-row="${lastId}"] [data-team-member-move="up"]`).click();
+    const afterOrder = await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds, id);
+    assert.deepEqual(afterOrder, [...ordered.slice(0, -2), ordered.at(-1), ordered.at(-2)]);
+    assert.deepEqual(await renderedOrder(), afterOrder, 'the rendered member order follows the accepted move');
+    await expect(record.locator(`[data-team-rack-member="${lastId}"]`)).toBeFocused();
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    assert.deepEqual(await renderedOrder(), ordered, 'Undo restores the rendered order as well as the accepted member order');
+    await record.locator('[data-team-rack-name]').fill('Shared outcome team');
+    await member.uncheck();
+    assert.equal(await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).label, id), 'Shared outcome team');
+    assert.equal(await page.evaluate(id => window.templateFixture.studio.read().state.teams.find(team => team.id === id).personIds.includes('researcher'), id), false,
+      'clicking a member after typing a team name accepts both interactions');
+    await expect(member).toBeFocused();
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
+    await record.getByRole('button', { name: 'Back to Delivery overview', exact: true }).click();
+    await expect(panel(page).locator('.studio-delivery')).toBeVisible();
+    await expect(key).toContainText('Shared outcome team');
+    await expect(key).toBeFocused();
+    await key.click();
+    assert.deepEqual(await renderedOrder(), ordered, 'reopening the team starts with its accepted member order');
+  });
+
   test(`${engine}: reel selections replace one accepted arrangement and Undo restores its complete preceding state`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     assert.equal((await history(page)).undoCount, 0, 'mounting the starter illustration leaves accepted history untouched');
@@ -84,7 +192,7 @@ for (const engine of names) {
     const tiger = await bytes(page);
     assert.equal((await arrangement(page)).id, first.id);
     assert.equal((await arrangement(page)).templateId, 'tiger-team');
-    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Diagnose and agree a response');
+    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Diagnose and agree on a response');
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 1);
     const acceptedIds = await page.evaluate(() => window.templateFixture.studio.read().state.work.map(row => row.id));
     const rackIds = await panel(page).locator('[data-studio-session-id]').evaluateAll(keys => keys.map(key => key.dataset.studioSessionId));
@@ -106,7 +214,7 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toBeHidden();
   });
 
-  test(`${engine}: complete text edits settle once and preserve unfinished person edits for review`, { timeout: 60000 }, async t => {
+  test(`${engine}: arrangement replacement and Undo preserve unfinished person edits for review`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {
       const f = window.templateFixture, opened = f.editing.person.begin('product-one', f.studio.read());
@@ -116,21 +224,12 @@ for (const engine of names) {
     const saved = await page.evaluate(() => window.templateFixture.editing.read().parked);
     assert.equal(saved.length, 1); assert.equal(saved[0].raw.ratePerHour, '105.50');
     assert.equal(saved[0].status, 'stale', 'the saved person edit stays available for review against the new arrangement');
-    await card(page, 'connection:handoff');
-    const input = field(page, 'connections.handoff.sharedObject');
     const before = await bytes(page), beforeCount = (await history(page)).undoCount;
-    await input.fill('A reviewed implementation plan');
-    assert.equal(await bytes(page), before, 'typing retains a complete local entry before settlement');
-    await input.press('Tab');
+    await choose(page, 'guild');
     assert.equal((await history(page)).undoCount, beforeCount + 1);
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections[0].sharedObject), 'A reviewed implementation plan');
-    await input.fill('A reviewed implementation plan and acceptance examples');
-    await input.press('Enter');
-    assert.equal((await history(page)).undoCount, beforeCount + 2, 'Enter accepts one complete entry');
-    await input.press('Tab');
-    assert.equal((await history(page)).undoCount, beforeCount + 2, 'the subsequent blur leaves the same entry unchanged');
+    assert.equal((await arrangement(page)).templateId, 'guild');
     await action(page, 'undo').click();
-    await expect(input).toHaveValue('A reviewed implementation plan');
+    assert.equal(await bytes(page), before);
     assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked[0].raw.ratePerHour), '105.50');
     // An intervening accepted edit retires the arrangement-specific shortcut.
     await page.evaluate(() => {
@@ -140,7 +239,7 @@ for (const engine of names) {
     await expect(action(page, 'undo')).toBeHidden();
   });
 
-  test(`${engine}: shared records receive a local keep-or-copy choice before an arrangement edit`, { timeout: 60000 }, async t => {
+  test(`${engine}: shared records receive a local keep-or-copy choice before arrangement replacement`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await choose(page, 'pod');
     const sharedTeam = await page.evaluate(() => {
@@ -150,24 +249,34 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code);
       f.controller.render(); return before.state.arrangements[0].teamBindings[0].teamId;
     });
+    await choose(page, 'guild');
+    // The prior Pod team is retained for the external handoff. Another owner
+    // changes it while the Guild is current; the cached Pod choice must ask
+    // before replacing that shared identity.
+    await page.evaluate(id => {
+      const f = window.templateFixture, before = f.studio.read();
+      const team = before.state.teams.find(row => row.id === id);
+      const result = f.studio.applyCommand({ type: 'team.update', teamId: id,
+        team: { ...team, label: 'Delivery for the external handoff' } }, before);
+      if (!result.ok) throw Error(result.error.code);
+      f.controller.render();
+    }, sharedTeam);
     const before = await bytes(page), count = (await history(page)).undoCount;
-    await card(page, 'team:pod');
-    const name = field(page, 'teams.pod.label'), originalName = await name.inputValue();
-    await name.fill('Delivery for this arrangement'); await name.press('Tab');
+    await choose(page, 'pod');
     await expect(action(page, 'preserve')).toBeVisible();
     assert.equal(await bytes(page), before, 'shared records stay intact until the visitor chooses how to proceed');
     assert.equal((await history(page)).undoCount, count);
     await action(page, 'cancel').click();
-    await expect(name).toHaveValue(originalName);
+    await expect(panel(page).locator('[data-reel-choice="guild"]')).toHaveAttribute('aria-pressed', 'true');
     assert.equal(await bytes(page), before);
-    await name.fill('Delivery for this arrangement'); await name.press('Enter');
+    await choose(page, 'pod');
     await action(page, 'preserve').click();
     const result = await page.evaluate(() => window.templateFixture.studio.read().state);
     assert.equal(result.arrangements.length, 1);
     const selectedTeam = result.arrangements[0].teamBindings[0].teamId;
     assert.notEqual(selectedTeam, sharedTeam);
-    assert.equal(result.teams.find(row => row.id === selectedTeam).label, 'Delivery for this arrangement');
-    assert.equal(result.teams.find(row => row.id === sharedTeam).label, originalName);
+    assert.equal(result.arrangements[0].templateId, 'pod');
+    assert.equal(result.teams.find(row => row.id === sharedTeam).label, 'Delivery for the external handoff');
     assert.equal(result.connections.find(row => row.id === 'external-handoff').senderTeamId, sharedTeam);
     await expect(action(page, 'preserve')).toBeHidden();
     assert.equal((await history(page)).undoCount, count + 1);
@@ -175,7 +284,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), before, 'Undo restores the shared-record choice and its arrangement together');
   });
 
-  test(`${engine}: team customization retains a session's recorded timing and lifecycle`, { timeout: 60000 }, async t => {
+  test(`${engine}: arrangement replacement retains a session's recorded timing and lifecycle`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await choose(page, 'matrix');
     const recorded = await page.evaluate(() => {
@@ -186,20 +295,17 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code);
       f.controller.render(); return { id: work.id, timing, lifecycle: 'retired' };
     });
-    await card(page, 'team:delivery');
-    const label = field(page, 'teams.delivery.label');
     const before = await bytes(page);
-    await label.fill('Delivery team for the next release'); await label.press('Tab');
-    await expect(action(page, 'preserve')).toBeVisible();
-    assert.equal(await bytes(page), before, 'the timed session keeps its existing team until the visitor accepts a separate arrangement team');
-    await action(page, 'preserve').click();
+    await choose(page, 'pod');
     const after = await page.evaluate(id => window.templateFixture.studio.read().state.work.find(row => row.id === id), recorded.id);
     assert.deepEqual(after.timing, recorded.timing);
     assert.equal(after.lifecycle, recorded.lifecycle);
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.teams.find(row => row.label === 'Delivery team for the next release') !== undefined), true);
+    assert.equal((await arrangement(page)).templateId, 'pod');
+    await action(page, 'undo').click();
+    assert.equal(await bytes(page), before);
   });
 
-  test(`${engine}: accepted arrangement controls retain topology, editor routes and recoverable detach`, { timeout: 60000 }, async t => {
+  test(`${engine}: accepted arrangement controls keep team editing and recovery inside the rack`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
       const f = window.templateFixture; f.controller.dispose();
@@ -207,75 +313,31 @@ for (const engine of names) {
       mountCoordinationPanel(document.querySelector('[data-native-coordination]')).dispose();
       f.nativeController = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: f.studio });
     });
-    const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
+    const root = page.locator('[data-native-coordination]');
     await choose(page, 'pod');
     const id = (await arrangement(page)).id;
-    await card(page, 'team:pod');
-    const teamName = field(page, 'teams.pod.label');
-    const acceptedTeamName = () => page.evaluate(() => {
-      const state = window.templateFixture.studio.read().state;
-      const teamId = state.arrangements[0].teamBindings.find(row => row.slotId === 'pod').teamId;
-      return state.teams.find(row => row.id === teamId).label;
-    });
-    await teamName.fill('Delivery with named ownership');
-    await root.locator('[data-native-chapter="people"]').click();
-    await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
-    await expect.poll(acceptedTeamName).toBe('Delivery with named ownership');
-    await root.locator('[data-native-chapter="coordination"]').click();
-    await expect(teamName).toHaveValue('Delivery with named ownership');
-    await teamName.fill('Delivery ready for review');
-    await panel(page).locator('[data-session-track="review"] .studio-session-tracks__name').click();
-    await expect(root.locator('[data-native-session-editor] [name="label"]')).toHaveValue('Weekly working session');
-    await expect.poll(acceptedTeamName).toBe('Delivery ready for review');
-    await root.locator('[data-native-return-action]').click();
-    await expect(teamName).toHaveValue('Delivery ready for review');
-    const deliveryTeam = panel(page).locator('[data-delivery-team="pod"] .studio-delivery__team-key').first();
-    await deliveryTeam.click();
-    await expect(root.locator('.studio-rack-editor [data-assembly-form] [name="label"]')).toBeFocused();
-    await root.locator('[data-rack-editor-close]').click(); await expect(deliveryTeam).toBeFocused();
-    const deliveryPerson = panel(page).locator('[data-delivery-team="pod"] [data-studio-record-kind="person"]').first();
-    await deliveryPerson.click();
-    await expect(root.locator('.studio-rack-editor [data-person-configure] [name="ratePerHour"]')).toBeFocused();
-    await root.locator('[data-rack-editor-close]').click(); await expect(deliveryPerson).toBeFocused();
-    await panel(page).locator('[data-delivery-connection="handoff"]').click();
-    await expect(field(page, 'connections.handoff.sharedObject')).toBeFocused();
-    await panel(page).locator('[data-delivery-session="review"]').click();
-    await expect(root.locator('[data-native-session-editor] [name="label"]')).toHaveValue('Weekly working session');
-    await root.locator('[data-native-return-action]').click();
-    await accepted.locator('.studio-accepted-connections > summary').click();
-    const reading = accepted.locator('[data-arrangement-reading="accepted"]');
+    const reading = panel(page).locator('[data-arrangement-reading="accepted"]');
     await expect(reading).toHaveAttribute('data-arrangement-id', id);
-    await reading.locator('.studio-team-lane__title').first().click();
+    const teamKey = panel(page).locator('.studio-delivery__team-key').first();
+    await teamKey.click();
     await expect(root.locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
-    await expect(root.locator('.studio-rack-editor [data-assembly-form] [name="label"]')).toBeFocused();
-    await root.locator('[data-rack-editor-close]').click();
-    await expect(reading.locator('.studio-team-lane__title').first()).toBeFocused();
-    const beforeDetach = await bytes(page);
-    await accepted.locator('[data-connection-action="detach-arrangement"]').click();
-    await expect(panel(page).locator('[data-template-preview]')).toContainText('teams, current connections and working sessions remain available');
-    assert.equal(await bytes(page), beforeDetach);
-    await action(page, 'apply').click();
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 0);
-    await expect(accepted).toContainText('Custom connections');
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
-    assert.equal(await bytes(page), beforeDetach);
+    await expect(panel(page).locator('[data-team-rack-record]')).toBeVisible();
+    await panel(page).locator('[data-template-action="team-back"]').click();
+    await expect(teamKey).toBeFocused();
+    const beforeChange = await bytes(page);
+    await choose(page, 'guild');
+    await root.locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), beforeChange);
     await expect(reading).toHaveAttribute('data-arrangement-id', id);
     await page.setViewportSize({ width: 390, height: 1000 });
     await expect(reading).toBeVisible();
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-    await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
+    await panel(page).screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
   });
 
-  test(`${engine}: invalid recovery entries retain accepted work and callback remount owns focus and status`, { timeout: 60000 }, async t => {
+  test(`${engine}: callback remount owns focus and status after arrangement acceptance`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
-    await choose(page, 'tiger-team'); await card(page, 'connection:diagnose');
-    const before = await bytes(page), hours = field(page, 'recovery.diagnose.hoursPerSession');
-    await hours.fill('-1'); await hours.press('Tab');
-    await expect(hours).toHaveAttribute('aria-invalid', 'true');
-    assert.equal(await bytes(page), before, 'invalid entries leave the accepted arrangement available');
-    await hours.fill('1'); await hours.press('Tab');
-    await expect(hours).toHaveAttribute('aria-invalid', 'false');
-    assert.notEqual(await bytes(page), before);
+    await choose(page, 'tiger-team');
     await page.evaluate(() => {
       const f = window.templateFixture; f.controller.dispose();
       f.controller = f.mount(f.element, { studio: f.studio, editing: f.editing, onAccepted() {

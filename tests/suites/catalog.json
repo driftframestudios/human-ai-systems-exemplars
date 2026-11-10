@@ -309,6 +309,8 @@
         "tests/native-investment-studio/assurance-models.test.mjs",
         "tests/native-investment-studio/assurance-proposals.test.mjs",
         "tests/native-investment-studio/browser-download.test.mjs",
+        "tests/native-investment-studio/browser-fixture-lifecycle.test.mjs",
+        "tests/native-investment-studio/cadence-occurrences.test.mjs",
         "tests/native-investment-studio/cadence.test.mjs",
         "tests/native-investment-studio/capabilities.test.mjs",
         "tests/native-investment-studio/capability-draft.test.mjs",
@@ -329,16 +331,25 @@
         "tests/native-investment-studio/contribution-view-model.test.mjs",
         "tests/native-investment-studio/controller.test.mjs",
         "tests/native-investment-studio/coordination-arrangements.test.mjs",
+        "tests/native-investment-studio/coordination-starters.test.mjs",
+        "tests/native-investment-studio/display.test.mjs",
         "tests/native-investment-studio/draft.test.mjs",
         "tests/native-investment-studio/editing.test.mjs",
         "tests/native-investment-studio/exchange.test.mjs",
+        "tests/native-investment-studio/investment-deck-config.test.mjs",
+        "tests/native-investment-studio/investment-portrait.test.mjs",
+        "tests/native-investment-studio/investment-workbench.test.mjs",
         "tests/native-investment-studio/module-closure.test.mjs",
         "tests/native-investment-studio/navigation-policy.test.mjs",
+        "tests/native-investment-studio/people-capacity.test.mjs",
         "tests/native-investment-studio/person-draft.test.mjs",
+        "tests/native-investment-studio/person-role-mixer.test.mjs",
         "tests/native-investment-studio/person-state.test.mjs",
         "tests/native-investment-studio/presets.test.mjs",
         "tests/native-investment-studio/purpose-draft.test.mjs",
+        "tests/native-investment-studio/rack-record-creation.test.mjs",
         "tests/native-investment-studio/relationships.test.mjs",
+        "tests/native-investment-studio/removal-references.test.mjs",
         "tests/native-investment-studio/reports.test.mjs",
         "tests/native-investment-studio/responsibility-draft.test.mjs",
         "tests/native-investment-studio/responsibility-editing.test.mjs",
@@ -346,12 +357,15 @@
         "tests/native-investment-studio/score-draft.test.mjs",
         "tests/native-investment-studio/score-models.test.mjs",
         "tests/native-investment-studio/score-time.test.mjs",
+        "tests/native-investment-studio/session-consumers.test.mjs",
         "tests/native-investment-studio/session-creation.test.mjs",
         "tests/native-investment-studio/session-draft.test.mjs",
         "tests/native-investment-studio/session-editing.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
         "tests/native-investment-studio/state.test.mjs",
-        "tests/native-investment-studio/team-controller.test.mjs"
+        "tests/native-investment-studio/team-controller.test.mjs",
+        "tests/native-investment-studio/work-removal.test.mjs",
+        "tests/native-investment-studio/work-sessions.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -2931,7 +2945,8 @@
       "family": "native-investment-studio",
       "kind": "node-test",
       "members": [
-        "tests/native-investment-studio/team-controller.browser.mjs"
+        "tests/native-investment-studio/team-controller.browser.mjs",
+        "tests/native-investment-studio/people-fit.browser.mjs"
       ],
       "profile": "browser",
       "command": {
@@ -3085,7 +3100,9 @@
       "family": "native-investment-studio",
       "kind": "node-test",
       "members": [
-        "tests/native-investment-studio/score.browser.mjs"
+        "tests/native-investment-studio/score.browser.mjs",
+        "tests/native-investment-studio/cadence-refresh.browser.mjs",
+        "tests/native-investment-studio/tape-library.browser.mjs"
       ],
       "profile": "browser",
       "command": {
@@ -3614,7 +3631,8 @@
           "tests/native-investment-studio/controller.browser.mjs"
         ],
         "test:native-investment-studio:team-browser": [
-          "tests/native-investment-studio/team-controller.browser.mjs"
+          "tests/native-investment-studio/team-controller.browser.mjs",
+          "tests/native-investment-studio/people-fit.browser.mjs"
         ],
         "test:native-investment-studio:session-browser": [
           "tests/native-investment-studio/session.browser.mjs"
@@ -3710,7 +3728,9 @@
           "tests/native-investment-studio/assurance.browser.mjs"
         ],
         "test:native-investment-studio:score-browser": [
-          "tests/native-investment-studio/score.browser.mjs"
+          "tests/native-investment-studio/score.browser.mjs",
+          "tests/native-investment-studio/cadence-refresh.browser.mjs",
+          "tests/native-investment-studio/tape-library.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

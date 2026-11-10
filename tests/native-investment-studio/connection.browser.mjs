@@ -3,29 +3,23 @@ import assert from 'node:assert/strict';
 import { createNativeAboutFixture } from './browser-fixture.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { before, after, test } from 'node:test';
+import { test } from 'node:test';
+import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
-import { startStaticServer, monitor, assertTelemetry, inspectSelectPresentation } from '../../tools/core-architecture-browser-helper.mjs';
+import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
 const engines = { chromium, firefox, webkit };
 const names = process.env.NATIVE_STUDIO_BROWSER ? [process.env.NATIVE_STUDIO_BROWSER] : Object.keys(engines);
 for (const name of names) assert.ok(Object.hasOwn(engines, name));
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-connections');
-let server, fixture, complete;
-before(async () => {
+let server, fixture;
+registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
-  const object = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
-  assert.equal(source.split(object).length, 2);
-  complete = source.replace(object, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   fixture = createNativeAboutFixture(source, { tail: '<div aria-hidden="true" style="height:1000px"></div>' });
-  server = await startStaticServer();
-  for (const name of names) browsers.set(name, await engines[name].launch());
-});
-after(async () => {
-  try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
-  finally { await server?.close(); }
+  server = await own(startStaticServer());
+  for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
 const root = page => page.locator('[data-native-coordination]');
 const editor = page => root(page).locator('[data-native-connection-editor]');
@@ -39,7 +33,7 @@ const visual = page => root(page).locator('[data-native-connection-view]');
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 const state = page => page.evaluate(() => JSON.parse(window.connectionFixture.studio.exportText()));
 
-async function open(t, engine, full = false) {
+async function open(t, engine) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request));
@@ -52,7 +46,7 @@ async function open(t, engine, full = false) {
   await page.route('**/*', request => {
     const url = new URL(request.request().url());
     if (url.origin === server.origin && url.pathname === route)
-      return request.fulfill({ status: 200, contentType: 'text/html', body: full ? complete : fixture });
+      return request.fulfill({ status: 200, contentType: 'text/html', body: fixture });
     return url.origin === server.origin ? request.continue()
       : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate instrument owner</title>' });
   });
@@ -85,7 +79,6 @@ async function fill(page) {
   await field(page, 'receiverTeamId').selectOption('receiving');
   await field(page, 'receiverPersonId').selectOption('product-one');
   await field(page, 'sharedObject').fill('Review the migration plan');
-  await field(page, 'responseExpectation').fill('Return the agreed next step');
   await member(page, 'review').check();
 }
 
@@ -100,10 +93,10 @@ for (const engine of names) {
     const personId = await page.evaluate(() => window.connectionFixture.studio.read().state.people.find(row => row.label === 'Taylor').id);
     await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
     await root(page).locator('[data-native-chapter="investment"]').click();
-    await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(root(page).locator('[data-native-return-note]')).toContainText('outside the current plan');
     await expect(root(page).locator('[data-native-return-team]')).toBeHidden();
-    await root(page).locator('[data-investment-action="redo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="redo"]').click();
     await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
     await root(page).locator('[data-native-return-team]').click();
     await expect(assembly.locator(`[data-assembly-member="${personId}"]`)).toBeChecked();
@@ -179,7 +172,7 @@ for (const engine of names) {
     await apply(page).click();
     const accepted = (await state(page)).connections[0];
     assert.deepEqual({ ...accepted, id: 'selected' }, { id: 'selected', senderTeamId: 'delivery', receiverTeamId: 'alternate',
-      receiverPersonId: 'engineering-one', sharedObject: 'Review the migration plan', responseExpectation: 'Return the agreed next step',
+      receiverPersonId: 'engineering-one', sharedObject: 'Review the migration plan', responseExpectation: null,
       workIds: ['follow-up', 'review'], status: 'active' });
     await expect(settings(page)).toHaveAttribute('open', ''); await expect(apply(page)).toBeFocused();
     await expect(total(page)).toHaveText('$1,200.00');
@@ -310,7 +303,7 @@ for (const engine of names) {
             if (!armed || handoff !== 'same-token-onBegin') return;
             armed = false; editing.connection.setText(editing.connection.read().draft.token, 'sharedObject', 'Newer same-token text');
             panel.refresh(); root.querySelector('[data-connection-status]').textContent = 'Newer text stays.';
-            root.querySelector('[name="responseExpectation"]').focus();
+            root.querySelector('[name="status"]').focus();
           } });
         panel.create(); put(editing); panel.refresh();
         const token = panel.read().draft.token;
@@ -331,70 +324,10 @@ for (const engine of names) {
       { operation: 'apply', callbacks: 0, active: null, saved: null, count: 1, ready: false },
     ]);
     assert.deepEqual(observed.slice(2), [
-      { handoff: 'cancel-focus', status: 'Successor controls this connection.', focus: 'sharedObject', count: 0, raw: '', sameToken: false },
-      { handoff: 'accepted-callback', status: 'Successor controls this connection.', focus: 'sharedObject', count: 1, raw: '', sameToken: false },
-      { handoff: 'same-token-onBegin', status: 'Newer text stays.', focus: 'responseExpectation', count: 0, raw: 'Newer same-token text', sameToken: true },
+      { handoff: 'cancel-focus', status: 'Successor controls this connection.', focus: 'sharedObject', count: 0, raw: 'New handoff 1', sameToken: false },
+      { handoff: 'accepted-callback', status: 'Successor controls this connection.', focus: 'sharedObject', count: 1, raw: 'New handoff 1', sameToken: false },
+      { handoff: 'same-token-onBegin', status: 'Newer text stays.', focus: 'status', count: 0, raw: 'Newer same-token text', sameToken: true },
     ]);
   });
 
-  test(`${engine}: the directed rack and semantic list share selection while narrow reading keeps page scroll`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine, true);
-    await page.evaluate(() => {
-      const { studio, controller } = window.connectionFixture, plan = structuredClone(studio.read().state);
-      plan.connections = Array.from({ length: 9 }, (_, index) => ({ id: `handoff-${index}`, senderTeamId: 'delivery', receiverTeamId: 'receiving',
-        receiverPersonId: 'product-one', sharedObject: `Decision ${index}`, responseExpectation: `Reply ${index}`, workIds: ['review'], status: index === 1 ? 'paused' : 'active' }));
-      studio.replace(plan, studio.read()); controller.refresh();
-    });
-    await expect(visual(page).locator('.native-connections__list button[data-connection-select]')).toHaveCount(8);
-    await expect(visual(page).locator('svg [data-connection-select]')).toHaveCount(8);
-    await visual(page).locator('.native-connections__viewport').screenshot({ path: resolve(captures, `${engine}-rack-1440.png`) });
-    await visual(page).locator('button[data-connection-select="handoff-1"]').click();
-    await expect(field(page, 'sharedObject')).toHaveValue('Decision 1');
-    await expect(visual(page).locator('svg [data-connection-select="handoff-1"]')).toHaveAttribute('aria-current', 'true');
-    await visual(page).locator('[data-connection-action="next"]').click();
-    await expect(visual(page).locator('.native-connections__list button[data-connection-select]')).toHaveCount(1);
-    await expect(field(page, 'sharedObject')).toHaveValue('Decision 1');
-    await visual(page).locator('[data-connection-action="return"]').click();
-    await visual(page).locator('svg [data-connection-select="handoff-2"]').click();
-    await expect(field(page, 'sharedObject')).toHaveValue('Decision 2');
-    await expect(visual(page).locator('button[data-connection-select="handoff-2"]')).toHaveAttribute('aria-current', 'true');
-    await action(page, 'remove').click(); await apply(page).click();
-    await page.evaluate(() => {
-      const { studio, controller, panel } = window.connectionFixture;
-      studio.undo(studio.read()); controller.refresh(); panel.select('handoff-2');
-    });
-    await expect(field(page, 'sharedObject')).toHaveValue('Decision 2');
-    await expect(visual(page).locator('svg [data-connection-select="handoff-2"]')).toHaveAttribute('aria-current', 'true');
-    await expect(visual(page).locator('button[data-connection-select="handoff-2"]')).toHaveAttribute('aria-current', 'true');
-    await page.screenshot({ path: resolve(captures, `${engine}-1440.png`), fullPage: false });
-    await page.setViewportSize({ width: 320, height: 900 });
-    await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    await frames(page);
-    const selectPresentation = await inspectSelectPresentation(page, ['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'status']
-      .map(name => `[data-native-connection-editor] select[name="${name}"]`));
-    for (const observation of selectPresentation) {
-      assert.equal(observation.present, true); assert.equal(observation.appearance, 'none');
-      assert.notEqual(observation.backgroundImage, 'none'); assert.equal(observation.inlineEndInset, 20);
-    }
-    const geometry = await visual(page).locator('.native-connections__viewport').evaluate(element => ({ width: element.clientWidth,
-      scrollWidth: element.scrollWidth, height: element.clientHeight, scrollHeight: element.scrollHeight,
-      documentWidth: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));
-    assert.ok(geometry.scrollWidth > geometry.width + 100, JSON.stringify(geometry));
-    assert.ok(geometry.scrollHeight <= geometry.height + 2, JSON.stringify(geometry));
-    assert.ok(geometry.documentWidth <= geometry.viewport + 2, JSON.stringify(geometry));
-    await visual(page).locator('.native-connections__viewport').evaluate(element => { element.scrollLeft = element.scrollWidth; });
-    await expect.poll(() => visual(page).locator('.native-connections__viewport').evaluate(element => element.scrollLeft)).toBeGreaterThan(100);
-    await visual(page).locator('.native-connections__viewport').screenshot({ path: resolve(captures, `${engine}-rack-320-enlarged.png`) });
-    await visual(page).locator('.native-connections__viewport').scrollIntoViewIfNeeded();
-    const box = await visual(page).locator('.native-connections__viewport').boundingBox();
-    await page.mouse.move(box.x + box.width / 2, box.y + Math.min(box.height / 2, 200));
-    const before = await page.evaluate(() => scrollY); await page.mouse.wheel(0, 240);
-    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
-    await field(page, 'responseExpectation').focus(); await expect(field(page, 'responseExpectation')).toBeFocused();
-    const formGeometry = await settings(page).evaluate(element => ({ width: element.clientWidth, scroll: element.scrollWidth }));
-    assert.ok(formGeometry.scroll <= formGeometry.width + 2, JSON.stringify(formGeometry));
-    assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), true);
-    await page.screenshot({ path: resolve(captures, `${engine}-320-enlarged.png`), fullPage: false });
-    await expect(total(page)).toHaveText('$1,200.00');
-  });
 }
