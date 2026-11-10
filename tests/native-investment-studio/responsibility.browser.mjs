@@ -517,6 +517,10 @@ for (const engine of names) {
     await expect(teamEditor).toHaveAttribute('open', '');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
+      // Observe the responsive receiver after font/layout work has reached a
+      // rendered frame; screenshotting later must not settle an older reading.
+      await page.evaluate(() => document.fonts.ready);
+      await frames(page);
       const geometry = await teamEditor.evaluate(element => {
         const box = element.getBoundingClientRect(), name = element.querySelector('[data-assembly-name-group]').getBoundingClientRect();
         const total = element.querySelector('[data-assembly-preview]').getBoundingClientRect();
