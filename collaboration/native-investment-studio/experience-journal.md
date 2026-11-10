@@ -46,11 +46,13 @@ a tagged public release each await
 the human's cue. Ordinary mobile and laptop/wide layouts are the supported
 visual comparison points.
 
-The 9 November review of `dev` at `fdb445d` reframes #679 around responsive
-creation, manipulation, navigation and recovery. #900 receives current CSS
-ownership and retirement candidates; #901 receives duplicate accepted-edit
-refreshes; #902 receives Investment model/control reuse; #903 receives occurrence
-indexes. #901 now settles accepted score state before one root notification,
+The 9 November review of `dev` at `fdb445d` reframed #679 around responsive
+creation, manipulation, navigation and recovery. Its JavaScript refinements
+(#901, #915, #902, #903 and #916) are implemented; #900 retains the CSS work.
+**Supersession:** these current source owners replace the earlier queued runtime
+sequence. Their decisions and evidence boundaries follow.
+
+#901 settles accepted score state before one root notification,
 superseding its accepted-then-editing double notification. Cadence reuses the
 mounted rack for an identical projection and rendered view state; local caption
 transitions explicitly invalidate that reuse. The mounted Add session regression
@@ -156,8 +158,20 @@ remains a candidate when heterogeneous operations demonstrate its value.
 The extraction retains the existing DOM order, text and control geometry,
 including Plan allocation ahead of its knobs and its connected reel readings.
 The receiving PR records source checks, focused browser journeys, visual
-comparison and independent review. CSS and further performance work retain
-their separate routes, and promotion to main retains its separate human cue.
+comparison and independent review.
+
+#900's first CSS tranche retires the elapsed-minute timeline and agenda
+presentation after a current consumer check. The period board, sequencer, local
+editors and generic score styles retain their existing cascade and composition.
+Score-model agenda data and reports keep their separate purpose. The
+[implementation ownership route](implementation-reference.md#sprint-and-quarter-coordination)
+points to the current classes and their contract; the reviewed PR receives the
+focused visual and interaction comparison. Live duration rules and exact duplicate
+declarations remain separate focused tranches because earlier base properties
+still contribute to their receivers. A new runtime change starts with an observed
+visitor-path cost; refresh-call counts alone cannot identify DOM work when
+receivers already retain unchanged output. Promotion to main retains its separate
+human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
 primary route. #641 and #673 retain their frozen measurements; the earlier

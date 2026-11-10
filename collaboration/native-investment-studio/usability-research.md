@@ -268,11 +268,14 @@ receiving change; decorative progress alone establishes no achievement.
 
 The current [performance route, #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
 follows adding plans and sessions, retaining the local editor, turning dials,
-switching views and Undo. #900–#903 receive CSS ownership, accepted-edit refresh,
-Investment reuse and occurrence indexing. The earlier relationship study remains
-historical evidence. Current browser observations determine latency claims and
-any further scheduling or calculation changes; ordinary visitor-created growth
-supplies the initial workload.
+switching views and Undo. Accepted-edit refresh (#901), explicit editor scope
+(#915), Investment context reuse (#902), occurrence indexing (#903) and deck
+view ownership (#916) are implemented on `dev`. #900 retires former timeline and
+agenda presentation first; live duration rules and duplicate declarations receive
+separate focused review. This supersedes the earlier queued runtime continuation.
+The earlier relationship study remains historical evidence. A current visitor-path
+observation supplies the basis for a latency claim or further runtime refinement;
+ordinary visitor-created growth supplies the initial workload.
 
 Research stops here because additional examples would repeat the chosen
 patterns. The next evidence comes from the implemented visitor tasks and the

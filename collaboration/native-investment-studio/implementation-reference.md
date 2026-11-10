@@ -1332,7 +1332,7 @@ Explicit Apply can recover a retained draft after a failed scheduling attempt.
 Direct scheduler functions and Studio ownership are cooperative host APIs;
 this adapter supplies lifecycle guards rather than an execution sandbox.
 
-### Cost and next measurement
+### Cost and historical measurement
 
 Begin locates one work row in O(W). Read, text edits, field validation, and steps
 operate on two or three bounded strings, according to the duration format.
@@ -1345,16 +1345,16 @@ their own lifetimes; the future receiver bounds any history it keeps.
 
 A new valid preview uses the same complete preparation cost and retains one
 proposed projection. Repeated preview reads of unchanged raw quantities reuse
-that projection. The current UI computes synchronously; #641 measures preview
-preparations separately from raw edits and accepted commits before introducing
-coalescing or a second accounting strategy.
+that projection. The current UI computes synchronously.
 
-[Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
-receives the implemented edit/apply boundary for measurement. Its first slice
-compares direct accepted edits, explicit draft Apply, and deferred Apply through
-identical operation traces. Raw edits, steps, pending requests, accepted commits,
-and complete synchronous Apply cost retain separate metrics. Fake scheduling
-establishes ordering and counts; browser latency begins with native controls.
+The completed [Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
+study compared direct accepted edits, explicit draft Apply and deferred Apply
+through identical operation traces. It retained complete preparation. Raw edits,
+steps, pending requests, accepted commits and complete synchronous Apply cost
+remain distinct observations in that historical study. Fake scheduling establishes
+ordering and counts; a current visitor-latency claim requires a matched browser
+observation through native controls. [Issue #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
+owns the current refinement route.
 
 ## Person draft adapter
 
@@ -2138,7 +2138,7 @@ and person routes for changes to their controls or state receivers.
 
 The complete native receiver joins the amp-head amount, funding distinctions,
 explicit draft boundaries, teams, practices, Change, quality/recovery and the
-investment trace through one accepted plan.
+Investment workbench through one accepted plan.
 
 About remains the leading home for the native showpiece.
 [Issue #638](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638)
@@ -2147,16 +2147,22 @@ preserving its existing URL and capabilities. Main source delivery and tagged
 public release retain separate receiving events.
 
 Re-entry begins with the current journal checkpoint, the accepted `dev` revision
-and this package's focused tests. The accepted-edit refresh repair (#901) is
-complete. #906 establishes loaded-plan repetition, separate plan
-creation, removal and empty-library recovery. #909 restores the All plans entry
-and adds bounded sequential cassette browsing through the existing scope owner. Issue #679 coordinates later visitor
-performance: #902 owns Investment model/control reuse, #903 occurrence indexing
-and #900 CSS consolidation. Those refinements remain queued for a later cue.
-Source findings define their scopes; matched browser observations establish any
-latency claim. Earlier relationship measurements remain historical, and #260 retains
-About delivery measurement. #705 owns broader economic translation. Promotion
-to `main` remains a separate human-cued event.
+and this package's focused tests. #906 establishes loaded-plan repetition,
+separate plan creation, removal and empty-library recovery. #909 restores All
+plans on entry and bounded sequential cassette browsing; #913/#914 preserve
+mixed session groups and scope new stages/handoffs to the loaded plan.
+
+The JavaScript refinement wave under #679 is complete: #901 settles accepted
+edits before one root notification, #915 makes editor scope explicit, #902 reuses
+an immutable Investment context, #903 prepares invocation-local occurrence
+indexes, and #916 groups deck controls and readings in a closed view registry.
+This supersedes the earlier queued #902/#903 continuation. #900 now retires the
+former timeline/agenda CSS; shared duration rules and duplicate declarations
+retain separate focused review. Current source and behavior observations establish
+ownership and reduced repeated work. Matched browser observations establish any
+visitor-latency claim. Earlier measurements remain historical; #260 retains About
+delivery measurement and #705 broader economic translation. Promotion to `main`
+remains a separate human-cued event.
 
 Accepted score operations settle their local selection and inspector before
 publishing one `onAccepted` notification. Draft and cancellation notifications
@@ -2194,8 +2200,16 @@ timing remain intact, with cadence initially unknown.
 decision, delay and availability editing. The existing work controller owns
 session people, duration, count, funding and placement. The root controller owns
 chapter and return routes. `cadence-view.mjs` projects the overview, weeks/months,
-MIDI tracks and relationships; `about.css` owns the native-cadence composition.
-The detailed agenda remains in downloadable reports.
+MIDI tracks and relationships. `styles/routes/about.css` owns the current
+`native-cadence` board, track table, pads and clips. It also retains the live
+`native-score` shell, transport, projection, inspector, generic tables/forms and
+pressed states. The About entry loads that route before shared instrument and
+chapter-specific rack styles; their existing order supplies the receiving cascade.
+The [Period Kanban and Session Sequencer contract](../../visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md)
+guides the composition. Extend the current cadence family for new board or
+sequencer presentation. #900 retires the former elapsed-minute timeline, axis,
+track, clip, legend and agenda presentation; score-model agenda data and the
+downloadable reports retain their separate purpose.
 Periods are view selections until the visitor changes their count or basis.
 
 One cassette identifies one repeatable work record. Its sessions are occurrences.
