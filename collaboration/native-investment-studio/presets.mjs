@@ -4,6 +4,7 @@ import { emptyRole } from './roles.mjs';
 import { SCORE_VERSION } from './score-models.mjs';
 import { SHOWCASE_SCENARIOS, createScenarioPlan, createShowcaseCadence } from './showcase-scenarios.mjs';
 import { seedShowcaseChangeSupport } from './change-showcase.mjs';
+import { AI_STARTER_PRESETS } from './ai-starter-plans.mjs';
 
 const PRESET_VERSION = '1.0.0';
 
@@ -250,6 +251,7 @@ export function createQuarterShowcasePlan(options = {}) {
 const CATALOGUE = new Map([
   ['service-request-pilot', 'Service request pilot', 'Three teams prepare a pilot, review its evidence, and plan the funded time together.', createShowcasePlan],
   ['service-request-rollout', 'Two-quarter service rollout', 'Follow pilot preparation and validation into receiving-team rollout and operating ownership.', createQuarterShowcasePlan],
+  ...AI_STARTER_PRESETS.map(({ id, label, description, create }) => [id, label, description, create]),
   ...SHOWCASE_SCENARIOS.map(scenario => [scenario.id, scenario.label, scenario.description, () => createScenarioPlan(createShowcasePlan(), scenario)]),
   ['shared-working-sessions', 'Shared working sessions', 'Four people meet for half an hour, six times.', workingSessions],
   ['funded-working-sessions', 'Sessions within funded time', 'The same sessions use three funded hours per person.', fundedSessions],

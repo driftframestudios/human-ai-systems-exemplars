@@ -29,6 +29,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/investment-analysis/staffing-adapter.mjs',
   'collaboration/investment-analysis/studio.js',
   'collaboration/native-investment-studio/assembly-controller.mjs',
+  'collaboration/native-investment-studio/ai-starter-plans.mjs',
   'collaboration/native-investment-studio/assurance-badges.mjs',
   'collaboration/native-investment-studio/assurance-consequences.mjs',
   'collaboration/native-investment-studio/assurance-controller.mjs',

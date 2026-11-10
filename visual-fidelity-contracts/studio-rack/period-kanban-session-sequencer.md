@@ -6,9 +6,10 @@ quarter shows its weeks or months with a visible Plan overview return. Team
 planning uses the same overview/detail relationship for delivery phases and
 participation.
 
-**Standing:** review candidate `0.1.2`; ID
+**Standing:** review candidate `0.1.3`; ID
 `vfc:period-kanban-session-sequencer`; dev receiving contract revised
-10 November 2026 for [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
+10 November 2026 for [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903)
+and the authored AI starters in [#944](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/944).
 It inherits [Studio Rack Composition](README.md). Main retains its approved
 Showcase reference until the human cues promotion.
 
@@ -27,6 +28,14 @@ The selected sprint/quarter and its return stay above the board and track scroll
 areas. Returning restores the originating period control and local scroll.
 Changing scope retains accepted work and unfinished drafts. Add sprint/quarter
 changes the accepted horizon and enters amp Undo history.
+
+The **AI Enablement** and **AI Experience** horizon examples populate this same
+board and sequencer with discovery, bounded AI work, user testing and recovery.
+Named handoffs connect source/context boundaries, receiving teams and observed
+task outcomes. Choosing an example replaces the complete plan in place through
+the existing accepted-state owner; amp Undo restores the visitor's prior plan.
+The example controls retain the ordinary hard-shadow action treatment outside
+the rack, leaving cassette selection and period drill-down unchanged.
 
 | Reading | Columns and pads | Selection meaning |
 | --- | --- | --- |
