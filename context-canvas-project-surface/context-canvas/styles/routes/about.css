@@ -2916,8 +2916,23 @@ p#on-dark-iron-ore {
 .native-purpose__reading { padding: 1rem; }
 .native-purpose__reading dd { white-space: pre-wrap; }
 .native-purpose textarea { min-block-size: 8rem; field-sizing: content; }
-.native-purpose__reading dt { font-size: 1rem; font-weight: 750; margin-block-end: .35rem; }
-.native-purpose__reading .native-purpose__fields { gap: 1.4rem 1.8rem; }
+/* Set vision pairs the accepted purpose with its example context and a ruled
+   review table. purpose-controller.mjs owns the field-to-reading mapping. */
+.native-purpose__vision-layout { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:1.5rem; margin-block-end:1rem; align-items:start; }
+.native-purpose__vision { min-inline-size:0; padding-inline-start:1rem; border-inline-start:3px solid var(--about-deep-teal); }
+.native-coordination .native-purpose__vision h4 { margin:0 0 .75rem; color:var(--native-text); font:650 1.25rem/1.35 Futura,system-ui,sans-serif; }
+.native-purpose__vision dl { display:grid; gap:.85rem; margin:0; }
+.native-purpose__vision dl > div { padding-block-end:.65rem; border-block-end:1px solid color-mix(in srgb,var(--native-rule) 35%,transparent); }
+.native-purpose__vision dt { color:var(--native-text); font:700 .78rem/1.4 system-ui,sans-serif; margin-block-end:.25rem; }
+.native-purpose__vision dd { margin:0; color:var(--native-text); font:.9rem/1.55 system-ui,sans-serif; }
+.native-coordination .native-purpose__review { inline-size:100%; margin:0; border-collapse:collapse; background:var(--native-paper); color:var(--native-text); table-layout:fixed; }
+.native-coordination .native-purpose__review caption { padding:0 0 .65rem; color:var(--native-text); font:650 1rem/1.4 system-ui,sans-serif; text-align:start; }
+.native-coordination .native-purpose__review :is(th,td) { padding:.65rem .55rem; border:0; border-block-end:1px solid color-mix(in srgb,var(--native-rule) 35%,transparent); background:transparent; color:var(--native-text); text-align:start; vertical-align:top; overflow-wrap:anywhere; font:.82rem/1.55 system-ui,sans-serif; white-space:pre-wrap; }
+.native-coordination .native-purpose__review th { inline-size:29%; font-weight:700; }
+.native-coordination .native-purpose__review tr:first-child :is(th,td) { border-block-start:2px solid var(--native-rule); }
+@media (max-width: 52rem) {
+  .native-purpose__vision-layout { grid-template-columns:minmax(0,1fr); }
+}
 .native-coordination .native-showcase { display: block; padding: 0; border: 1px solid var(--native-rule); box-shadow: none; }
 .native-showcase > summary { padding: .55rem .8rem; }
 .native-showcase > summary span { font-weight: 400; }

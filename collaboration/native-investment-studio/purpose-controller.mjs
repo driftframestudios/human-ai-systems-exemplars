@@ -1,10 +1,37 @@
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
 
 export const PURPOSE_LABELS = Object.freeze({
   changedAbility: 'What changes?', affectedPopulation: 'Who is affected?',
   observationSignal: 'How will you tell?', accountableOwner: 'Who decides?',
   reviewBoundary: 'When will you review?', openConditions: 'What is still open?',
 });
+
+// Authored starting situations belong to the example, while the six saved
+// purpose fields retain their original meanings and editing owner.
+const STARTING_SITUATIONS = Object.freeze({
+  'service-request-pilot': 'A service request crosses teams. The next owner and the route back after a missed handoff need to be clear to the people doing the work.',
+  'service-request-rollout': 'A pilot workflow is moving into everyday operations. Receiving teams need usable instructions, clear ownership and a way to recover interrupted work.',
+  'ai-enablement': 'Teams are trying AI in separate tasks; approved sources, action limits and a shared correction route are still uneven.',
+  'ai-experience': 'People must piece together sources and next steps across tools; the team is exploring where AI assistance improves that task.',
+});
+const REVIEW_FIELDS = Object.freeze([
+  ['observationSignal', 'Evidence to look for'], ['accountableOwner', 'Decision owner'],
+  ['reviewBoundary', 'Review'], ['openConditions', 'Still to resolve'],
+]);
+
+export function projectVisionReading(plan) {
+  const work = plan.work.filter(row => summarizeWorkSessions(row).active);
+  return {
+    people: plan.purpose.affectedPopulation ?? 'Name the people whose work should improve.',
+    outcome: plan.purpose.changedAbility ?? 'Describe what those people should be able to do.',
+    startingSituation: Object.hasOwn(STARTING_SITUATIONS, plan.planId) ? STARTING_SITUATIONS[plan.planId] : null,
+    approach: work.length ? work.slice(0, 4).map(row => row.label).join(' · ') + (work.length > 4 ? ' · Further work in Coordination' : '')
+      : 'Add working sessions in Coordination to show how the plan moves toward its outcome.',
+    review: REVIEW_FIELDS.map(([field, label]) => ({ field, label,
+      value: plan.purpose[field] ?? 'Ready to describe when the plan needs it.' })),
+  };
+}
 
 // The root lends one editing port. This receiver owns its disclosure and DOM;
 // accepted purpose and parked text retain the shared Studio owners.
@@ -53,6 +80,32 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
     finally { releaseRetiredLease(); }
   }
   function announce(message) { if (!disposed) status.textContent = message; }
+  function renderReading(plan) {
+    const content = projectVisionReading(plan), document = root.ownerDocument;
+    const node = (tag, text, className) => {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    };
+    const vision = node('section', undefined, 'native-purpose__vision'), narrative = node('dl');
+    vision.append(node('h4', 'What this work should make possible'));
+    const sections = [['People', content.people], ['Desired outcome', content.outcome],
+      [content.startingSituation ? 'Example starting situation' : 'Current workflow', content.startingSituation
+        ?? 'Consider the handoffs, workarounds and interruptions that make this change useful.'],
+      ['Planned approach', content.approach]];
+    for (const [label, value] of sections) {
+      const row = node('div'); row.append(node('dt', label), node('dd', value)); narrative.append(row);
+    }
+    vision.append(narrative);
+    const table = node('table', undefined, 'native-purpose__review'), body = node('tbody');
+    table.append(node('caption', 'Evidence and decisions'));
+    for (const { field, label, value } of content.review) {
+      const row = node('tr'), heading = node('th', label), cell = node('td', value);
+      heading.scope = 'row'; cell.dataset.purposeValue = field; row.append(heading, cell); body.append(row);
+    }
+    table.append(body); readingValues.replaceChildren(vision, table);
+  }
   function refresh() {
     if (disposed) return;
     const epoch = generation;
@@ -66,13 +119,7 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
     accepted.textContent = projection.state.purpose.changedAbility ?? 'Describe the change you are planning.';
     if (ampPreview) ampPreview.textContent = accepted.textContent;
     if (readingProjection !== projection) {
-      readingValues.replaceChildren(...PURPOSE_FIELDS.map(field => {
-        const row = root.ownerDocument.createElement('div');
-        const label = root.ownerDocument.createElement('dt'), value = root.ownerDocument.createElement('dd');
-        label.textContent = PURPOSE_LABELS[field];
-        value.textContent = projection.state.purpose[field] ?? 'Ready to describe when the plan needs it.';
-        row.append(label, value); return row;
-      }));
+      renderReading(projection.state);
       readingProjection = projection;
     }
     reading.hidden = editingShown;

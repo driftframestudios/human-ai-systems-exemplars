@@ -27,6 +27,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
+| Set vision | A ruled-paper reading joins people, desired outcome, the authored example starting situation and current planned work. A compact side table retains evidence, decision owner, review and open conditions. Edit purpose opens the existing six-field form; Apply, parked raw text and amp Undo retain their existing owners. |
 | Plan overview | All plans starts selected with detail closed; an empty library starts unselected. Persistent All plans and directional Previous/Next controls share the cassette scope owner and retain the selected period. A grouped card opens its period; a single-session card or numbered pad opens that session in the detail deck between the board and tracks. A track name opens plan defaults. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
@@ -36,6 +37,15 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Abilities | Both support tables remain available. A catalogue key opens Outcome; a support cell opens its relevant section. Repeating the same record/section selection closes that editor, while a different section switches locally. The selected overview remains visible. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
 | Change | A component or action key opens one dark receiver with Support/Methods views. Its shared header names the selected component and owns local return, Apply and Close; session planning attaches to that working area. |
 | Quality & recovery | Check/support, assumptions, recovery and rehearsal details use compact local modules behind the primary instruments. The attached receiver shares the canonical Apply operation and retains unfinished entries when closed. |
+
+Set vision's example context remains distinct from accepted purpose. The reading
+maps people and outcome directly from their saved fields, derives its short work
+summary from current active, planned sessions, and keeps evidence/review values
+under their own headings. An imported or custom example receives an invitation
+to consider its current workflow rather than an invented history. The layout
+stacks on phones and leaves intentionally empty values available for later edits.
+This replaces the equal-weight purpose reading grid without changing the saved
+record (#945).
 
 The Delivery working area and Shared sessions have separate visibility roles.
 Changing the selected person or team affects the first area; the participation
