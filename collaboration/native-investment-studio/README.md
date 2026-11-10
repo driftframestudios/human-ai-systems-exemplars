@@ -149,8 +149,13 @@ artifacts, alongside Cross-source synthesis. The default preset retains its
 smaller fixture.
 
 Abilities retains **What people can do** and **How the team works**, comparing
-responsibility, preparation, review and observation. Selecting a cell opens one
-dark rack with a readable item heading, local return, Apply and Close. Its People
+responsibility, preparation, review and observation. A catalogue key opens
+**Outcome**; a support cell opens its own section in one dark rack with a readable
+item heading, local return, Apply and Close. Repeating the same record/section
+selection closes the editor; another section switches locally. The selected
+overview stays visible. Close and repeated selection retain unfinished raw entries
+and return focus to the exact initiating key with the viewport in place. Opening
+keeps its smooth reveal. Its People
 view places team and participants beside decision owner and status. Supporting
 work uses compact paired groups; observation material uses cool-blue reading companions.
 Native pads retain their written selected state and fit ordinary mobile widths.
@@ -159,7 +164,7 @@ record, while retaining the current ability or practice proposal. This works
 before typing as well as after editing; Apply accepts its assignment and amp
 Undo retains the separate creation step.
 Add people, teams or sessions in that module, then Apply to accept the support
-relationship. Close retains unfinished work. In the People view, **Rename**
+relationship. In the People view, **Rename**
 opens a small field beside a person or team. Save updates that shared name while
 retaining the support proposal; Cancel leaves the name intact. Amp Undo recovers
 an accepted rename.
@@ -248,7 +253,7 @@ meaning and leave the accepted work price intact. **Compare a change** and
    name, rate and funded time. Choose a contribution to connect its work, receiver
    and decision owner.
    Empty slots add records with editing closed, and amp Undo restores accepted
-   changes. An Abilities support cell opens its own local proposal controls;
+   changes. An Abilities support cell toggles its own local proposal controls;
    **Rename** there changes a shared person or team name without leaving the task.
 6. Turn a Change or Quality reel. Open an action pad to inspect the work it
    selects; the pressed face follows the open receiver.

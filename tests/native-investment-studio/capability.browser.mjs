@@ -74,6 +74,96 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  for (const width of [390, 1440]) test(`${engine}: repeated Abilities title and support selections close locally and retain the draft at ${width}px`, async t => {
+    const page = await open(t, engine, true), initial = await bytes(page);
+    await page.setViewportSize({ width, height: 1000 });
+    const title = choice(page, 'assurance'), configure = panel(page).locator('[data-capability-configure]');
+    const preparation = supportCell(page, 'assurance', 'preparation'), review = supportCell(page, 'assurance', 'review');
+    const context = '  Preserve this recovery rehearsal proposal  ';
+    const retained = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.raw);
+    const overview = panel(page).locator('[data-capability-selected]');
+
+    await title.click(); await field(page, 'context').fill(context);
+    await title.focus(); await page.keyboard.press('Enter');
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(title).toBeFocused();
+    await expect(overview).toBeVisible();
+    await expect(overview.locator('[data-capability-title]')).toHaveText('Establish a fitting acceptance observation');
+    await expect(title).toHaveAttribute('aria-pressed', 'false'); await expect(title).toHaveAttribute('aria-expanded', 'false');
+    await expect(panel(page).locator('[data-capability-row][data-capability-id="readiness-evidence"]')).toHaveAttribute('data-selected', 'true');
+    assert.equal(await bytes(page), initial, 'closing the editor preserves the selected overview and accepts no edits');
+
+    await title.click(); await expect(field(page, 'context')).toHaveValue(context);
+    await preparation.click(); await expect(ids(page, 'support.preparation')).toBeFocused();
+    await expect(preparation).toHaveAttribute('aria-pressed', 'true');
+    await field(page, 'new.preparation.enabled').selectOption('yes');
+    await field(page, 'new.preparation.minutesPerSession').fill('later');
+    const unfinished = await retained();
+    await review.click(); await expect(ids(page, 'support.review')).toBeFocused();
+    await expect(review).toHaveAttribute('aria-pressed', 'true'); await expect(preparation).toHaveAttribute('aria-pressed', 'false');
+    await expect(panel(page).locator('[data-capability-requirement="review"]')).toBeVisible();
+    await expect(panel(page).locator('[data-capability-requirement="preparation"]')).toBeHidden();
+    assert.deepEqual(await retained(), unfinished, 'a different support section opens without discarding unfinished raw entries');
+    await review.screenshot({ path: resolve(captures, `${engine}-support-active-${width}.png`) });
+    await review.click(); await expect(configure).not.toHaveAttribute('open', ''); await expect(review).toBeFocused();
+    await expect(review).toHaveAttribute('aria-pressed', 'false');
+    await review.screenshot({ path: resolve(captures, `${engine}-support-resting-${width}.png`) });
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-toggle-closed-${width}.png`) });
+    await expect(overview).toBeVisible();
+
+    await preparation.click(); await expect(field(page, 'new.preparation.minutesPerSession')).toHaveValue('later');
+    await panel(page).locator('.native-capability-rack').screenshot({ path: resolve(captures, `${engine}-toggle-open-${width}.png`) });
+    assert.deepEqual(await retained(), unfinished);
+    await preparation.click(); await expect(configure).not.toHaveAttribute('open', ''); await expect(preparation).toBeFocused();
+    await preparation.click(); await action(page, 'close').click();
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(preparation).toBeFocused();
+    assert.equal(await bytes(page), initial, 'both title and support return paths keep the accepted record unchanged');
+
+    await preparation.click(); await field(page, 'new.preparation.enabled').selectOption('no');
+    await panel(page).locator('[data-editor-apply]').click();
+    const accepted = JSON.parse(await bytes(page));
+    assert.equal(accepted.practices.find(row => row.id === 'readiness-evidence').context, context.trim());
+    assert.deepEqual(accepted.work, JSON.parse(initial).work, 'applying the text proposal retains existing supporting sessions');
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), initial);
+  });
+  test(`${engine}: support reselect distinguishes instances sharing one definition and returns to the exact cell`, async t => {
+    const page = await open(t, engine, true);
+    await page.evaluate(() => {
+      const { studio, controller } = window.capabilityFixture, candidate = JSON.parse(studio.exportText());
+      const original = candidate.practices.find(row => row.id === 'readiness-evidence');
+      candidate.practices.push({ ...original, id: 'second-readiness', context: 'A separate operational readiness review.' });
+      const result = studio.importText(JSON.stringify(candidate), studio.read()); if (!result.ok) throw Error(result.error.code);
+      controller.refresh();
+    });
+    const initial = await bytes(page);
+    const cell = id => panel(page).locator(`button[data-capability-action="support-cell"][data-capability-id="${id}"][data-capability-phase="preparation"]`);
+    await cell('readiness-evidence').click();
+    await cell('second-readiness').click();
+    await expect(panel(page).locator('[data-capability-configure]')).toHaveAttribute('open', '');
+    await expect(field(page, 'context')).toHaveValue('A separate operational readiness review.');
+    await expect(cell('second-readiness')).toHaveAttribute('aria-pressed', 'true');
+    await expect(cell('readiness-evidence')).toHaveAttribute('aria-pressed', 'false');
+    await cell('second-readiness').click();
+    await expect(panel(page).locator('[data-capability-configure]')).not.toHaveAttribute('open', '');
+    await expect(cell('second-readiness')).toBeFocused();
+    await cell('second-readiness').click(); await action(page, 'close').click();
+    await expect(cell('second-readiness')).toBeFocused();
+    const secondTitle = panel(page).locator('button[data-capability-action="select"][data-capability-id="second-readiness"]');
+    const draftForm = () => page.evaluate(() => window.capabilityFixture.editing.capability.read().draft.form);
+    for (const [trigger, receiver] of [
+      [cell('second-readiness'), panel(page).locator('[data-capability-requirement="preparation"]')],
+      [secondTitle, field(page, 'context')],
+    ]) {
+      await trigger.click(); await action(page, 'remove').click();
+      assert.equal(await draftForm(), 'practice.remove.assurance@1.0.0');
+      await expect(trigger).toHaveAttribute('aria-pressed', 'false');
+      await expect(secondTitle).toHaveAttribute('aria-expanded', 'false');
+      await trigger.click();
+      assert.equal(await draftForm(), 'practice.update.assurance@1.0.0', 'selecting the same source exits removal into its editing form');
+      await expect(receiver).toBeVisible();
+      await action(page, 'close').click(); await expect(trigger).toBeFocused();
+    }
+    assert.equal(await bytes(page), initial, 'inspection and switching out of removal preserve both accepted records');
+  });
   for (const [label, definitionId, collection] of [
     ['new ability', 'trace-evidence', 'abilities'], ['existing practice', 'expectation', 'practices'],
   ]) for (const [key, kind, records] of [
