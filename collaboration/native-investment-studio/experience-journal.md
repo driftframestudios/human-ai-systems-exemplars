@@ -64,7 +64,26 @@ shared-duration/people assumption: new and uncustomized sessions follow tape
 defaults, and an edited session keeps its own complete settings. Removing a session remaps settings and
 placements together; a stale ordinal draft requires explicit recovery. Direct
 count changes retain amp Undo and validate visible edits before accepting them.
-Performance refinements, including #902 and #903, remain queued for a later cue;
+#913 extends that repair to the overview ingress: groups now distinguish funding
+and status and open period detail. Individual cards, including unplaced sessions,
+carry exact occurrence identity. This supersedes grouped cards that silently
+opened tape defaults; that behavior caused apparent neighboring-period edits.
+#914 binds new stages and handoffs to the loaded tape. Related items remain
+reachable from its attached companion and record rail even when a selected period
+is empty, including their decisions and delays. Period markers still derive from
+the work's real placement. Aggregate navigation controls retain projection identity
+without acquiring the selected/expanded semantics of a session-editor trigger.
+The follow-up source audit enriches #679/#900/#902/#903 and adds #915 for explicit
+target scopes and #916 for Investment deck configuration/renderer ownership.
+The sequence is visitor repair, target contract, coherent render context,
+invocation-local indexes, then deck packaging. CSS remains a separate bounded
+route. Immutable catalogs and compatible formatters may share definitions; mutable
+command candidates, dial gestures and mounted controls keep instance ownership.
+Closed registries fit exclusive variants; guards and ordered functions retain
+admission and dependent-effect meaning. A general traversal hierarchy remains a
+candidate only when repeated heterogeneous operations demonstrate its value.
+These source mechanisms establish refinement opportunities, with latency still
+unmeasured. Performance refinements remain queued for a later cue;
 promotion to main retains its separate human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
@@ -95,8 +114,9 @@ scope. Period selection stays independent, with a visible selected
 sprint/quarter and Plan overview return inside the rack.
 
 The composition reads in this order: period board, optional compact working area,
-session tracks, then small People and Stages routes. An existing clip opens the
-canonical session controls between board and tracks. Close restores the originating
+session tracks, then small People and Stages routes. Overview groups separate
+funding and paused status and open the period's individual sessions. A single
+session clip opens its canonical controls between board and tracks. Close restores the originating
 scope. A first opening uses the downward reveal; changing the selected record
 keeps the same receiver and its position. The detail border stays flush with its
 rack; the receiving slot reserves one rem above and below the module, replacing
@@ -112,7 +132,12 @@ In a loaded cassette, both the period lane's Add session and a track-cell plus
 append one accepted occurrence in that destination. Count and complete placements
 enter one canonical command, retaining the loaded cassette and earlier placements.
 Empty periods remain available. Stages, handoffs, decisions and delays follow the
-loaded plan's relationships so the scoped board describes that plan.
+loaded plan's relationships so the scoped board describes that plan. Creating a
+stage includes that plan; creating a handoff uses an accepted connected edge when
+available, preserving its ordering, or connects an isolated plan to another one.
+The attached companion keeps related stages, handoffs and their decisions/delays
+reachable independently of the period filter. A one-plan library explains the need for another plan before
+connecting work.
 
 In All plans, the lane explicitly offers New plan; it and the sequencer's New plan
 row create separate work records while retaining the complete arrangement. Shelf

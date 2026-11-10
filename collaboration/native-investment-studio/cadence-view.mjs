@@ -266,19 +266,27 @@ export function createCadenceView(root, {
 
     function sessionClip(rows, key) {
       const row = rows[0], item = row.work;
-      const control = selection(rows.length === 1 ? row.label : item.label, 'work', item.id, key, selected,
-        { ...(rows.length === 1 ? { occurrenceIndex: row.occurrenceIndex } : {}), periodId: row.periodId },
-        'native-cadence__clip native-control--navigate');
-      control.dataset.funding = rows.every(entry => entry.funding === row.funding) ? row.funding : 'mixed';
-      control.dataset.active = String(rows.some(entry => entry.active));
-      const effort = rows.length > 1 ? `${rows.length} sessions · ${duration(rows.reduce((sum, entry) => sum + entry.minutesPerOccurrence, 0))} total`
+      const grouped = rows.length > 1;
+      const className = 'native-cadence__clip native-control--navigate';
+      // An overview group opens its sessions. Only an individual session may
+      // supply an edit target; dropping its index would edit the tape defaults.
+      const control = grouped
+        ? button(item.label, 'period', row.periodId, key, className)
+        : selection(row.label, 'work', item.id, key, selected,
+          { occurrenceIndex: row.occurrenceIndex, periodId: row.periodId }, className);
+      control.dataset.cadenceWorkId = item.id;
+      control.dataset.funding = row.funding;
+      control.dataset.active = String(row.active);
+      const effort = grouped ? `${rows.length} sessions · ${duration(rows.reduce((sum, entry) => sum + entry.minutesPerOccurrence, 0))} total`
         : `${duration(row.minutesPerOccurrence)} per person`;
       control.append(node('small', effort));
       if (activePeriod) control.append(node('small', teams.get(row.teamId)?.label ?? 'Team to choose', 'native-cadence__team'),
         node('small', row.personIds.map(id => people.get(id)?.label).filter(Boolean).join(', ') || 'Choose the people taking part', 'native-cadence__participants'));
-      control.dataset.cadencePreview = workPreview(row);
-      control.setAttribute('aria-label', `${item.label}${activePeriod ? `, session ${row.occurrenceIndex + 1}` : ''}, ${periodLabel(row.periodId)}. ${effort}. Open session settings.`);
-      if (rows.every(entry => !entry.active)) control.append(node('small', item.lifecycle === 'retired' ? 'Retired' : 'Paused', 'native-cadence__state'));
+      const funding = row.funding === 'allocated' ? 'Within funded time' : 'Extra investment';
+      const stateLabel = !row.active ? item.lifecycle === 'retired' ? 'Retired' : 'Paused' : funding;
+      control.append(node('small', stateLabel, 'native-cadence__state'));
+      control.dataset.cadencePreview = grouped ? `${item.label} · ${effort}. ${stateLabel}. Open ${periodLabel(row.periodId)} to choose a session.` : workPreview(row);
+      control.setAttribute('aria-label', `${grouped ? item.label : `${row.label}, session ${row.occurrenceIndex + 1}`}, ${periodLabel(row.periodId)}. ${effort}. ${stateLabel}. ${grouped ? 'Open period sessions.' : 'Open session settings.'}`);
       return control;
     }
     function decisionMarker(decision, suffix) {
@@ -362,7 +370,11 @@ export function createCadenceView(root, {
         .sort((a, b) => a.subdivision - b.subdivision);
       if (subdivision === null) {
         const groups = new Map();
-        for (const row of rows) { if (!groups.has(row.workId)) groups.set(row.workId, []); groups.get(row.workId).push(row); }
+        for (const row of rows) {
+          const identity = JSON.stringify([row.workId, row.funding, row.status]);
+          if (!groups.has(identity)) groups.set(identity, []);
+          groups.get(identity).push(row);
+        }
         for (const [id, members] of groups) clips.append(sessionClip(members, `work:${period.id}:${id}`));
       } else for (const row of rows) clips.append(sessionClip([row], `occurrence:${row.workId}:${row.occurrenceIndex}`));
       if (!rows.length) clips.append(node('p', 'Space for working sessions', 'native-cadence__space'));
@@ -505,7 +517,7 @@ export function createCadenceView(root, {
       create('Connect work', 'add-handoff', null, 'add-handoff'));
     flow.append(flowHeading);
     const stageRows = node('div', undefined, 'native-cadence__stages');
-    for (const stage of stages.filter(stage => inPeriod(stage) || stage.workIds.length === 0)) {
+    for (const stage of stages.filter(stage => loadedPlan || inPeriod(stage) || stage.workIds.length === 0)) {
       const card = node('article', undefined, 'native-cadence__stage');
       const open = selection(stage.label, 'stage', stage.id, `stage:${stage.id}`, selected, {}, 'native-cadence__stage-key native-control--navigate');
       const labels = stage.periodIds.map(periodLabel);
@@ -519,7 +531,7 @@ export function createCadenceView(root, {
     }
     if (stageRows.childElementCount) flow.append(stageRows);
     const handoffRows = node('div', undefined, 'native-cadence__handoffs');
-    for (const handoff of handoffs.filter(inPeriod)) {
+    for (const handoff of handoffs.filter(row => loadedPlan || inPeriod(row))) {
       const card = node('article', undefined, 'native-cadence__handoff');
       const from = endpointName(handoff.from), to = endpointName(handoff.to);
       const open = selection(`${from} → ${to}`, 'handoff', handoff.id, `handoff:${handoff.id}`, selected, {}, 'native-cadence__handoff-key native-control--navigate');
@@ -539,8 +551,8 @@ export function createCadenceView(root, {
       controls.append(addDecision, addDelay); card.append(open, controls); handoffRows.append(card);
     }
     if (handoffRows.childElementCount) flow.append(handoffRows);
-    for (const decision of decisions.filter(inPeriod)) flow.append(decisionMarker(decision, 'editorial'));
-    for (const delay of delays.filter(inPeriod)) flow.append(delayMarker(delay, 'editorial'));
+    for (const decision of decisions.filter(row => loadedPlan || inPeriod(row))) flow.append(decisionMarker(decision, 'editorial'));
+    for (const delay of delays.filter(row => loadedPlan || inPeriod(row))) flow.append(delayMarker(delay, 'editorial'));
     if (flowRoot) flowRoot.replaceChildren(flow);
     else { relationshipPanel.querySelector(':scope > .native-cadence__flow')?.remove(); relationshipPanel.append(flow); }
 
@@ -549,12 +561,9 @@ export function createCadenceView(root, {
       const tray = node('div', undefined, 'native-cadence__unplaced');
       tray.append(node('span', 'Sessions to place', 'studio-rack-records__label'));
       const clips = node('div', undefined, 'native-cadence__unplaced-clips');
-      const grouped = new Map();
-      for (const row of unplaced) {
-        if (!grouped.has(row.workId)) grouped.set(row.workId, []);
-        grouped.get(row.workId).push(row);
-      }
-      for (const [id, rows] of grouped) clips.append(sessionClip(rows, `unplaced:${id}`));
+      // Unplaced sessions have no period to drill into. Each compact tray
+      // card therefore opens its own settings and placement controls.
+      for (const row of unplaced) clips.append(sessionClip([row], `unplaced:${row.workId}:${row.occurrenceIndex}`));
       tray.append(clips); tracks.append(tray);
     }
 
@@ -592,15 +601,15 @@ export function createCadenceView(root, {
     }
     if (!participants.size) peopleKeys.append(node('span', 'Add people to a session to plan their time.'));
     const stageKeys = recordRow('Stages');
-    for (const stage of stages.filter(stage => inPeriod(stage) || stage.workIds.length === 0)) stageKeys.append(selection(stage.label, 'stage', stage.id, `rack-stage:${stage.id}`, selected,
+    for (const stage of stages.filter(stage => loadedPlan || inPeriod(stage) || stage.workIds.length === 0)) stageKeys.append(selection(stage.label, 'stage', stage.id, `rack-stage:${stage.id}`, selected,
       {}, 'studio-rack-record-key native-control--navigate'));
     stageKeys.append(create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'rack-add-stage'),
       create('Connect work', 'add-handoff', null, 'rack-add-handoff'));
-    const railHandoffs = handoffs.filter(row => activePeriod ? inPeriod(row) && row.toPeriodId !== activePeriod.id : row.toPeriodId === null);
-    const railDecisions = activePeriod ? [] : decisions.filter(row => row.periodId === null);
-    const railDelays = activePeriod ? [] : delays.filter(row => row.toPeriodId === null);
+    const railHandoffs = handoffs.filter(row => loadedPlan || (activePeriod ? inPeriod(row) && row.toPeriodId !== activePeriod.id : row.toPeriodId === null));
+    const railDecisions = decisions.filter(row => loadedPlan ? !inPeriod(row) || row.periodId === null : !activePeriod && row.periodId === null);
+    const railDelays = delays.filter(row => loadedPlan ? !inPeriod(row) || row.toPeriodId === null : !activePeriod && row.toPeriodId === null);
     if (railHandoffs.length || railDecisions.length || railDelays.length) {
-      const unplacedKeys = recordRow(activePeriod ? 'Handoffs' : 'To place');
+      const unplacedKeys = recordRow(loadedPlan ? 'Relationships' : activePeriod ? 'Handoffs' : 'To place');
       for (const handoff of railHandoffs) unplacedKeys.append(selection(`${endpointName(handoff.from)} → ${endpointName(handoff.to)}`,
         'handoff', handoff.id, `rack-handoff:${handoff.id}`, selected, {}, 'studio-rack-record-key native-control--navigate'));
       for (const decision of railDecisions) unplacedKeys.append(decisionMarker(decision, 'rack-unplaced'));

@@ -25,7 +25,7 @@ const action = (page, name) => score(page).locator(`[data-score-action="${name}"
 const bytes = page => page.evaluate(() => window.tapeFixture.studio.exportText());
 const undo = page => root(page).locator('[data-studio-undo]').click();
 
-async function open(t, engine) {
+async function open(t, engine, { groupedBasis = null, unplaced = false } = {}) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request));
@@ -44,14 +44,36 @@ async function open(t, engine) {
   });
   await page.goto(server.origin + route); await page.evaluate(() => document.fonts.ready);
   await expect(root(page)).toHaveAttribute('data-native-ready', 'true');
-  await page.evaluate(async () => {
+  await page.evaluate(async ({ groupedBasis, unplaced }) => {
     const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
     const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
     const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
     const element = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(element).dispose();
-    const studio = createStudio(createShowcasePlan());
+    const plan = createShowcasePlan();
+    if (groupedBasis) {
+      const { createCadence } = await import('/collaboration/native-investment-studio/cadence.mjs');
+      const { copyWorkSession } = await import('/collaboration/native-investment-studio/work-sessions.mjs');
+      const work = plan.work.find(row => row.id === 'research');
+      work.occurrences = 6; work.funding = 'allocated'; work.status = 'planned';
+      work.sessionOverrides = [
+        { occurrenceIndex: 2, ...copyWorkSession(work), label: 'Extended synthesis', funding: 'additional' },
+        { occurrenceIndex: 3, ...copyWorkSession(work), label: 'Deferred synthesis', funding: 'additional', status: 'paused' },
+      ];
+      const cadence = createCadence(groupedBasis, 4);
+      cadence.placements = plan.scoreSettings.cadence.placements.filter(row => row.workId !== work.id);
+      for (const [occurrenceIndex, period, subdivision] of [[0, 2, 1], [1, 3, 1], [2, 3, 1], [3, 3, 2], [4, 3, 2], [5, 4, 1]]) {
+        cadence.placements.push({ workId: work.id, occurrenceIndex, periodId: `period-${period}`, subdivision });
+      }
+      plan.scoreSettings.cadence = cadence;
+    }
+    if (unplaced) {
+      const work = plan.work.find(row => row.id === 'research');
+      work.occurrences = 2;
+      plan.scoreSettings.cadence.placements = plan.scoreSettings.cadence.placements.filter(row => row.workId !== work.id);
+    }
+    const studio = createStudio(plan);
     window.tapeFixture = { studio, controller: mountCoordinationPanel(element, { studio }) };
-  });
+  }, { groupedBasis, unplaced });
   return page;
 }
 
@@ -230,4 +252,99 @@ for (const engine of names) test(`${engine}: individual tape sessions keep their
   await expect(rack.locator('[name="status"][value="planned"]')).toBeChecked();
   await undo(page);
   assert.equal(await bytes(page), beforeRemoval, 'in-rack addition has its own exact Undo');
+});
+
+for (const engine of names) for (const basis of ['sprint', 'quarter']) {
+  test(`${engine}: grouped ${basis} cards preserve distinct session types and drill into local settings`, async t => {
+    const page = await open(t, engine, { groupedBasis: basis });
+    const before = await bytes(page), original = JSON.parse(before);
+    const tape = original.work.find(row => row.id === 'research');
+    const periodNames = original.scoreSettings.cadence.periods.map(row => row.label);
+    const board = shelf(page).locator('.native-cadence__board');
+    const rack = root(page).locator('[data-native-configure]');
+    const pad = index => shelf(page).locator(`[data-cadence-key="pad:research:${index}"]`);
+    const cards = () => board.locator('[data-cadence-period="period-3"] .native-cadence__clip[data-cadence-work-id="research"]');
+    await shelf(page).locator('[data-studio-plan-id="research"]').click();
+    await expect(cards()).toHaveCount(3);
+    const fundedGroup = board.locator('[data-cadence-period="period-3"] .native-cadence__clip[data-cadence-work-id="research"][data-funding="allocated"][data-active="true"]');
+    await expect(fundedGroup).toContainText('2 sessions');
+    await expect(board.locator('[data-cadence-period="period-3"] .native-cadence__clip[data-cadence-work-id="research"][data-funding="mixed"]')).toHaveCount(0);
+    await expect(board.locator('[data-cadence-period="period-3"] .native-cadence__clip[data-funding="additional"][data-active="false"]')).toContainText('Paused');
+    for (const attribute of ['aria-controls', 'aria-expanded', 'aria-pressed']) await expect(fundedGroup).not.toHaveAttribute(attribute);
+    await pad(0).click();
+    await expect(rack).toBeVisible();
+    for (const attribute of ['aria-controls', 'aria-expanded', 'aria-pressed']) await expect(fundedGroup).not.toHaveAttribute(attribute);
+    await pad(0).click();
+    await expect(rack).toBeHidden();
+    await fundedGroup.click();
+    await expect(board).toHaveAttribute('data-cadence-level', 'period');
+    await expect(shelf(page).locator('.native-cadence__context')).toContainText(periodNames[2]);
+    await expect(rack).toBeHidden();
+    assert.equal(await bytes(page), before, 'group inspection changes scope only');
+    const localCard = board.locator('.native-cadence__clip[data-studio-session-id="research"][data-studio-session-occurrence="1"]');
+    await localCard.click();
+    await expect(rack).toContainText('Settings for session 2.');
+    await rack.locator('[name="label"]').fill('Check the proposed response');
+    await rack.locator('[name="hoursPerSession"]').fill('0');
+    await rack.locator('[name="minutesPerSession"]').fill('25');
+    await rack.locator('[name="funding"][value="additional"]').check();
+    await rack.locator('[data-action="apply"]').click();
+    const editedBytes = await bytes(page), edited = JSON.parse(editedBytes);
+    const changed = edited.work.find(row => row.id === tape.id);
+    assert.deepEqual(changed.sessionOverrides.filter(row => row.occurrenceIndex !== 1), tape.sessionOverrides,
+      'other authored sessions keep their settings');
+    assert.equal(changed.sessionOverrides.find(row => row.occurrenceIndex === 1).label, 'Check the proposed response');
+    assert.equal(changed.sessionOverrides.find(row => row.occurrenceIndex === 1).funding, 'additional');
+    for (const key of ['label', 'minutesPerOccurrence', 'personIds', 'teamId', 'funding', 'status', 'occurrences'])
+      assert.deepEqual(changed[key], tape[key], `${key} still supplies the unedited sessions in periods 2 and 4`);
+    assert.deepEqual(edited.scoreSettings.cadence.placements, original.scoreSettings.cadence.placements);
+    await expect(pad(1)).toHaveAttribute('data-funding', 'additional');
+    await expect(pad(2)).toHaveAttribute('data-funding', 'additional');
+    await expect(pad(3)).toHaveAttribute('data-active', 'false');
+    await expect(pad(4)).toHaveAttribute('data-funding', 'allocated');
+    const choices = rack.locator('[data-session-occurrences]');
+    await choices.getByRole('radio', { name: periodNames[1], exact: true }).check();
+    await rack.locator('[data-action="apply"]').click();
+    const movedBytes = await bytes(page), moved = JSON.parse(movedBytes);
+    assert.deepEqual(moved.scoreSettings.cadence.placements.filter(row => row.workId !== 'research' || row.occurrenceIndex !== 1),
+      original.scoreSettings.cadence.placements.filter(row => row.workId !== 'research' || row.occurrenceIndex !== 1));
+    assert.equal(moved.scoreSettings.cadence.placements.find(row => row.workId === 'research' && row.occurrenceIndex === 1).periodId, 'period-2');
+    await choices.getByRole('button', { name: 'Remove session 2', exact: true }).click();
+    assert.equal(JSON.parse(await bytes(page)).work.find(row => row.id === 'research').occurrences, 5);
+    await undo(page); assert.equal(await bytes(page), movedBytes, 'Undo restores the removed session and every placement');
+    await undo(page); assert.equal(await bytes(page), editedBytes, 'Undo restores only the moved session');
+    await shelf(page).getByRole('button', { name: 'All plans', exact: true }).click();
+    await expect(shelf(page).locator('.native-cadence__context')).toContainText(periodNames[2]);
+    await shelf(page).getByRole('button', { name: 'Plan overview', exact: true }).click();
+    await expect(cards()).toHaveCount(3);
+    await expect(pad(0)).toHaveAttribute('data-funding', 'allocated');
+    await expect(pad(5)).toHaveAttribute('data-funding', 'allocated');
+    assert.equal(await bytes(page), editedBytes, 'All plans and overview retain each accepted session');
+  });
+}
+
+for (const engine of names) test(`${engine}: unplaced cards edit one session while its sibling stays unplaced and unchanged`, async t => {
+  const page = await open(t, engine, { unplaced: true });
+  const before = JSON.parse(await bytes(page)), work = before.work.find(row => row.id === 'research');
+  await shelf(page).locator('[data-studio-plan-id="research"]').click();
+  const tray = shelf(page).locator('.native-cadence__unplaced');
+  const cards = tray.locator('.native-cadence__clip[data-cadence-work-id="research"]');
+  await expect(cards).toHaveCount(2);
+  const second = tray.locator('[data-studio-session-occurrence="1"]');
+  await second.click();
+  const rack = root(page).locator('[data-native-configure]');
+  await expect(rack).toContainText('Settings for session 2.');
+  await rack.locator('[name="hoursPerSession"]').fill('0');
+  await rack.locator('[name="minutesPerSession"]').fill('45');
+  await rack.locator('[name="status"][value="paused"]').check();
+  await rack.locator('[data-action="apply"]').click();
+  const after = JSON.parse(await bytes(page)), edited = after.work.find(row => row.id === work.id);
+  const { sessionOverrides, ...defaults } = edited;
+  assert.deepEqual(defaults, work, 'the sibling continues to use the unchanged plan defaults');
+  assert.deepEqual(sessionOverrides, [{ occurrenceIndex: 1, label: work.label, teamId: work.teamId,
+    personIds: work.personIds, minutesPerOccurrence: 45, funding: work.funding, status: 'paused' }]);
+  assert.deepEqual(after.scoreSettings.cadence.placements, before.scoreSettings.cadence.placements);
+  await expect(cards).toHaveCount(2);
+  await expect(tray.locator('[data-studio-session-occurrence="0"]')).toHaveAttribute('data-active', 'true');
+  await expect(second).toHaveAttribute('data-active', 'false');
 });

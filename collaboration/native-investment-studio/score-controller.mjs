@@ -484,17 +484,24 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     [...root.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === focusKey)?.focus({ preventScroll:true });
   }
   function addStage() {
-    acceptScoreAddition(settings => ({ ...settings, stages:[...settings.stages,
-      { id:freshId('stage', settings.stages), label:nextCreatedLabel(settings.stages, 'stage'), workIds:[] }] }),
+    acceptScoreAddition((settings, state) => ({ ...settings, stages:[...settings.stages,
+      { id:freshId('stage', settings.stages), label:nextCreatedLabel(settings.stages, 'stage'),
+        workIds:state.work.some(work => work.id === loadedPlanId) ? [loadedPlanId] : [] }] }),
     'Stage added. Select it to choose its supporting sessions.');
   }
   function addHandoff() {
-    if (studio.read().state.work.length < 2) { announce('Add two working sessions before connecting them.'); return; }
+    if (studio.read().state.work.length < 2) { announce('Add another plan before connecting work.'); return; }
     acceptScoreAddition((settings, state) => {
       const cadence = settings.cadence; if (!cadence) return null;
-      const id = freshId('handoff', cadence.handoffs), [first, second] = state.work;
-      const from = cadence.handoffs[0]?.from ?? { kind:'work', id:first.id };
-      const to = cadence.handoffs[0]?.to ?? { kind:'work', id:second.id };
+      const id = freshId('handoff', cadence.handoffs), loaded = state.work.find(work => work.id === loadedPlanId);
+      const stageWork = new Map(settings.stages.map(stage => [stage.id, stage.workIds]));
+      const includesLoaded = endpoint => endpoint.kind === 'work' ? endpoint.id === loadedPlanId : stageWork.get(endpoint.id)?.includes(loadedPlanId);
+      // Reusing a connected edge preserves the accepted ordering. A tape with
+      // no connected edge is isolated, so its first connection cannot cycle.
+      const connected = loaded ? cadence.handoffs.find(edge => includesLoaded(edge.from) || includesLoaded(edge.to)) : cadence.handoffs[0];
+      const first = loaded ?? state.work[0], second = state.work.find(work => work.id !== first.id);
+      const from = connected?.from ?? { kind:'work', id:first.id };
+      const to = connected?.to ?? { kind:'work', id:second.id };
       return { ...settings, cadence:{ ...cadence, handoffs:[...cadence.handoffs, { id, from, to, connectionId:null }] } };
     }, 'Handoff added. Select it to choose the connected work.');
   }

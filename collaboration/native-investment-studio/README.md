@@ -35,7 +35,9 @@ Loading a cassette filters the board, tracks and relationship markers. **Add ses
 and retains the loaded cassette and earlier placements. In **All plans**, lane
 **New plan** and the sequencer's New plan row create separate records while keeping
 the whole arrangement visible. Shelf **New plan** creates and loads a cassette.
-New records have unique names and stay closed until selected. A numbered pad
+New records have unique names and stay closed until selected. Overview cards
+separate funded, extra-investment and paused sessions within each period. A group
+opens that period's sessions; a single-session card or numbered pad
 opens that session's name, people, duration, funding, status and placement. Apply
 changes that session; its siblings retain their settings. A track name opens the
 plan defaults. New and uncustomized sessions follow those defaults; edited
@@ -45,6 +47,11 @@ sessions keep their planned investment, and mixed tapes show partial participati
 where appropriate. The selected period
 and **Plan overview** return remain visible. The transport's compact **Remove plan**
 confirmation names the cassette; amp Undo restores the complete accepted edit.
+New stages include the loaded plan, and new handoffs connect it through an
+existing valid route or a distinct available plan. The attached relationship list
+keeps those items and their decisions/delays reachable when viewing an empty period; board markers retain
+their actual positions. Connecting work in a one-plan library explains that
+another plan is needed.
 
 An empty library offers a cobalt reel with **Plan**, **Design**, **Test**, **Build**
 and **Deploy** sets beside a preview diagram. Turning the reel changes the preview;
@@ -355,15 +362,22 @@ switching chapters and Undo. The source review routes CSS ownership to
 [#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900),
 accepted-edit refresh to [#901](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/901),
 Investment model reuse to [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
-and occurrence indexing to [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
+and session/placement indexing to [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
 The #901 implementation settles accepted score edits locally before one root
 notification. Cadence retains its rack DOM when the exact projection, scope and
 selection are unchanged; caption editing has its own redraw boundary. Creation,
 focus, scope and Undo remain covered by the focused score/browser checks.
-The current #906 pass clarifies cassette creation, repetition and empty-library
-recovery. Performance refinements, including #902 and #903, remain queued for a
-later cue. Reduced refresh work is observed directly; visitor latency still
-needs a matched measurement before a speed claim. Earlier stress
+The tape-scope repairs in #913/#914 settle the current visitor paths. Deferred
+[#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915)
+then makes aggregate navigation, individual editing and plan defaults explicit
+at receiving boundaries. #902 separates reusable readings from detached mutable
+command settings; #903 prepares invocation-local membership and override indexes.
+[#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
+follows with focused deck configuration and renderer ownership. Each proposal
+uses the smallest fitting registry, factory or shared immutable definition;
+mutable controls and drafts keep their own owners. These refinements remain
+queued for a later cue. Reduced refresh work is observed directly; visitor latency
+still needs a matched measurement before a speed claim. Earlier stress
 studies remain historical evidence; the accepted visual contracts and existing
 accounting behavior remain preservation boundaries. Work receives review on
 `dev`; promotion to `main` and public release await their separate human cues.
