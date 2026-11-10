@@ -17,6 +17,10 @@ creation (#881), Abilities support racks with local shared-name editing (#856),
 compact Change and Quality receivers (#857/#858), and independent financial
 comparison decks (#818), with Domain portraits and compact cost comparison (#895). Shared creation, local navigation and accepted recovery
 retain their existing owners.
+PR #934 aligns supported headings with the Futura stack while buttons keep their
+system UI family. The amp uses **Set vision** and retains its cobalt chapter-key
+shadows; Plan horizon owns its local spacing. The next interaction and orientation
+work follows [#935’s focused issue route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent

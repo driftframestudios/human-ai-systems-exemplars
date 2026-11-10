@@ -1968,7 +1968,6 @@ p#on-dark-iron-ore {
     --native-signal: var(--about-tiffany);
     --native-rule: #66766e;
     --native-key-shadow: #45534b;
-    /*--native-chapter-key-shadow: #2855f3;*/
     --native-error: #853126;
     --native-focus: var(--about-cobalt);
     --native-chapter-shadow: #050909;
@@ -2041,6 +2040,7 @@ p#on-dark-iron-ore {
     border-radius: .3rem;
     box-shadow: .2rem .2rem 0 var(--native-key-shadow);
     color: var(--native-text);
+    font-family: system-ui, sans-serif;
     font-weight: 650;
     min-inline-size: 2.75rem;
     padding: .55rem .85rem;
@@ -2164,7 +2164,7 @@ p#on-dark-iron-ore {
 .native-coordination__preview { background: var(--native-paper); border-inline-start: .25rem solid var(--about-deep-teal); display: grid; gap: .35rem; margin-block: .5rem 1rem; padding: .75rem; }
 .native-coordination__preview output { font: 600 1.65rem/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .native-coordination__preview p:empty { display: none; }
-.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 1em; }
+.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
 .native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
 .native-coordination__control-title { font-weight: 650; }
 .native-coordination__feedback { display: grid; gap: .5rem; }
@@ -2907,7 +2907,6 @@ p#on-dark-iron-ore {
 .native-amp-tools button[aria-expanded='true']::before { rotate: 90deg; }
 .native-coordination .native-amp-tools button[aria-expanded='true'] { background: var(--native-signal); color: var(--native-ink); }
 .native-coordination .native-amp-tools button:focus-visible { outline-color: var(--native-paper); }
-.native-amp-purpose-preview { grid-column: 1 / -1; color: var(--native-paper); font-size: .875rem; max-inline-size: 90ch; }
 .native-coordination[data-native-ready] .native-coordination__amp > details > summary { display: none; }
 .native-coordination[data-native-ready] .native-coordination__amp > details:not([open]) { display: none; }
 .native-coordination__amp > details[open] { grid-column: 1 / -1; border: 1px solid var(--native-rule); border-radius: .2rem; box-shadow: inset 0 .2rem 0 var(--native-signal); animation: native-amp-reveal 160ms ease-out; }
@@ -3168,13 +3167,10 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-score__segments legend { margin-block-end: .35rem; font-size: .85rem; font-weight: 700; }
 .native-score__segments label { display: flex; align-items: center; gap: .4rem; min-block-size: 2.75rem; padding: .45rem .65rem; background: var(--native-paper); border: 1px solid var(--native-rule); cursor: pointer; }
 .native-score__segments label:has(:checked) { background: #68d4b9; box-shadow: inset 0 .15rem .15rem #346b5955; border-block-start: .2rem solid #275b4b; }
-.native-score__horizon-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; min-inline-size: 0; margin: 0; padding: .5rem .6rem .6rem; border: 1px solid #809b8c; background: #d2dfd2; }
-.native-score__horizon-controls > legend { margin: 0; padding-inline: .3rem; font-size: .8rem; font-weight: 750; }
-.native-score__horizon-controls > label { margin-inline-start: .35rem; font-size: .8rem; font-weight: 650; }
-.native-coordination .native-score__horizon-controls > input { inline-size: 4rem; min-inline-size: 4rem; max-inline-size: 4rem; min-block-size: 2.75rem; margin: 0; padding: .4rem; text-align: center; }
+.native-coordination .native-score__horizon-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; min-inline-size: 0; margin: 0; padding: 1rem; border: 1px solid #809b8c; background: #d2dfd2; }
+.native-score__horizon-controls > legend { float: inline-start; inline-size: 100%; margin: 0 0 .5rem; padding: 0; font-size: .8rem; font-weight: 750; }
 .native-score__horizon-controls .native-score__segments { margin: 0; gap: .25rem; }
 .native-score__horizon-controls .native-score__segments label { margin: 0; padding: .4rem .5rem; font-size: .8rem; }
-.native-coordination .native-score__horizon-controls > button { padding: .4rem .6rem; min-inline-size: 0; font-size: .8rem; }
 .native-score__example-links { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; min-inline-size: 0; }
 .native-score__example-links > span { flex-basis: 100%; font-size: .75rem; font-weight: 700; }
 .native-coordination .native-score__example-links button { min-inline-size: 0; padding: .35rem 1.7rem .35rem .55rem; font-size: .75rem; }

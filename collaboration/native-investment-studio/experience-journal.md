@@ -46,6 +46,18 @@ a tagged public release each await
 the human's cue. Ordinary mobile and laptop/wide layouts are the supported
 visual comparison points.
 
+The 10 November PR #934 readiness pass retains the human's Futura heading stacks,
+cobalt chapter-key shadows, **Set vision** label and revised practice/starter
+wording. Studio buttons explicitly use the system UI family, preserving numeric
+and pad variants. Plan horizon owns its fieldset padding and internally seated
+legend. **Supersession:** its local spacing replaces the broad fieldset padding
+experiment; the removed amp purpose preview also retires its orphaned CSS. The
+current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
+local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
+vision/AI examples. Existing #874, #875 and #882 keep their manual, retention and
+precision-control boundaries. This planning route supersedes a chapter-wide
+redesign; each receiver earns a focused PR.
+
 The 9 November review of `dev` at `fdb445d` reframed #679 around responsive
 creation, manipulation, navigation and recovery. Its JavaScript refinements
 (#901, #915, #902, #903 and #916) are implemented; #900 completes the planned CSS
