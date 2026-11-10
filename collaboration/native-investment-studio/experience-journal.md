@@ -160,16 +160,18 @@ including Plan allocation ahead of its knobs and its connected reel readings.
 The receiving PR records source checks, focused browser journeys, visual
 comparison and independent review.
 
-#900's first CSS tranche retires the elapsed-minute timeline and agenda
-presentation after a current consumer check. The period board, sequencer, local
-editors and generic score styles retain their existing cascade and composition.
-Score-model agenda data and reports keep their separate purpose. The
+#900 retires the elapsed-minute timeline and agenda presentation after a current
+consumer check; score-model agenda data and reports keep their separate purpose.
+Its duration tranche consolidates the shared module in `studio-instrument.css`.
+**Supersession:** one canonical block replaces the earlier base/specimen split,
+carrying forward the live layout, numeric typography and empty-feedback behavior.
+The approved dial geometry and lighting remain intact. Chapter-specific placement,
+repetition layouts and alternate-media rules retain their existing owners. The
 [implementation ownership route](implementation-reference.md#sprint-and-quarter-coordination)
-points to the current classes and their contract; the reviewed PR receives the
-focused visual and interaction comparison. Live duration rules and exact duplicate
-declarations remain separate focused tranches because earlier base properties
-still contribute to their receivers. A new runtime change starts with an observed
-visitor-path cost; refresh-call counts alone cannot identify DOM work when
+and [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
+lead to the receiving composition; each focused PR records its comparison. Exact
+duplicate declarations remain a separate CSS tranche. A new runtime change starts
+with an observed visitor-path cost; refresh-call counts alone cannot identify DOM work when
 receivers already retain unchanged output. Promotion to main retains its separate
 human cue.
 
