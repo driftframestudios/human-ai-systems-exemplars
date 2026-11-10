@@ -707,14 +707,15 @@ an unchanged art and interaction reference.
 
 | Owned meaning | Current behavior |
 | --- | --- |
-| Accepted plan | One immutable projection supplies accepted amounts, relationships, comparisons and downloads. |
+| Accepted plan | One immutable projection in page memory supplies accepted amounts, relationships, comparisons and downloads. |
 | Ordinary editor proposal | Typed person settings and other proposal forms keep raw values in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
 | Direct rack operation | Arrangement selection, Coordination team membership/name/order, People collection/member order and membership, role values, contribution choices/support, period creation, existing-plan occurrence append and record additions use canonical accepted commands. |
 | Shared name from Abilities | Save accepts the person/team label through its existing command; the surrounding support draft retains its own Apply boundary. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
 | Financial comparison | A stable deck ID owns its type and assumptions. Saved files carry those settings, and shared Undo recovers accepted edits. Connected reels change the loaded deck; explicit work funding retains its canonical command. |
-| Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
-| Baseline | An independent comparison and restore point, separate from Undo and unfinished edits. |
+| Saved edit | Target-bound unfinished work stays in the open page, separate from accepted history and downloads. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
+| Baseline | An independent page-memory comparison and restore point, separate from Undo and unfinished edits. |
+| Download and return | Download current plan captures accepted records and settings. Opening the file previews replacement; Use this plan accepts it with Undo. A fresh page starts with the showcase. |
 | Person | A stable identity with role-based example name, rate and funded-time account; may join several teams and sessions. |
 | Membership and participation | Independent relationships. Known people can participate across team boundaries. |
 | Contribution | Functional work linked to people and sessions, with retained responsibility fields; membership alone grants no decision authority. |
@@ -722,6 +723,15 @@ an unchanged art and interaction reference.
 | Unknown and zero | A blank value remains unknown. Zero is an entered value. An explicit dial gesture can establish a value. |
 | Removal | A named session and its dependent links leave together in one canonical command; amp Undo restores the exact prior plan. Other record types retain their existing reference checks. Remove has quiet rose treatment. |
 | Evidence | Planned support, authored rehearsal and recorded observation have distinct meanings. |
+
+#875 makes that lifetime visible in Saved edits and Investment's Keep a plan
+controls. **Supersession:** Saved feedback describes the current open page;
+returning after reload uses the downloaded accepted plan. Raw entries, baseline
+and Undo history remain page-local. This preserves the existing storage boundary.
+A populated browser journey accepts a duration edit, keeps a different unfinished
+duration separate from the download, reloads, previews and restores the file, then
+exercises rejected import and Undo. Mechanical restoration and readable phone/
+laptop cues are observed separately from human comprehension.
 
 The amp's Undo uses the same history as Investment. It parks unfinished edits
 before returning to the prior accepted projection. New-session creation can be

@@ -573,6 +573,76 @@ for (const engine of names) {
     assert.equal(await bytes(page), retained);
   });
 
+  test(`${engine}: a downloaded accepted showcase returns after reload while unfinished edits stay page-local`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true, true);
+    const track = root(page).locator('[data-cadence-key="track-work:review"]');
+    await track.click();
+    await work(page, 'minutesPerSession').fill('45');
+    await root(page).locator('[data-action="apply"]').click();
+    await expect(total(page)).toHaveText('$4,350.00');
+    await chapter(page, 'investment').click();
+    const accepted = await downloadText(page);
+    const plan = JSON.parse(accepted);
+    assert.equal(plan.work.find(row => row.id === 'review').minutesPerOccurrence, 45);
+    assert.ok(plan.people.length > 1 && plan.work.length > 1 && plan.connections.length > 0,
+      'the file carries a populated arrangement with people, work and connections');
+
+    await chapter(page, 'coordination').click();
+    if (await track.getAttribute('aria-expanded') !== 'true') await track.click();
+    await work(page, 'minutesPerSession').fill('60');
+    await chapter(page, 'investment').click();
+    await amp(page, 'saved').click();
+    const saved = root(page).locator('[data-native-saved]');
+    await expect(saved).toContainText('Unfinished edits last until you reload or close this page.');
+    await expect(saved.locator('[data-native-saved-list]')).toContainText('60');
+    assert.equal(await downloadText(page), accepted, 'downloading retains accepted values and leaves the unfinished edit separate');
+    await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
+    await saved.screenshot({ path: resolve(captures, `${engine}-page-local-edits.png`) });
+
+    // Reload the actual populated page; do not remount or inject the accepted file.
+    await page.reload({ waitUntil: 'load' });
+    await expect(root(page)).toHaveAttribute('data-native-ready', 'true');
+    await page.evaluate(() => document.fonts.ready);
+    await frame(page);
+    await expect(total(page)).toHaveText('$3,980.00');
+    await expect(amp(page, 'saved')).toBeDisabled();
+    await chapter(page, 'investment').click();
+    const fresh = await downloadText(page);
+    assert.notEqual(fresh, accepted, 'a fresh visit starts with the showcase rather than the previous accepted edit');
+    const upload = investment(page).locator('[data-investment-file]');
+    await upload.setInputFiles({ name: 'investment-plan.json', mimeType: 'application/json', buffer: Buffer.from(accepted) });
+    await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $4,350.00');
+    await expect(total(page)).toHaveText('$3,980.00');
+    assert.equal(await downloadText(page), fresh, 'previewing a file leaves the current accepted plan intact');
+    await performAction(page, 'apply');
+    await expect(total(page)).toHaveText('$4,350.00');
+    assert.equal(await downloadText(page), accepted, 'import restores every accepted value and relationship in the downloaded plan');
+    await expect(amp(page, 'saved')).toBeDisabled();
+    await chapter(page, 'coordination').click();
+    await track.click();
+    await expect(work(page, 'minutesPerSession')).toHaveValue('45');
+    await chapter(page, 'investment').click();
+    await loadDeck(page, 'exchange');
+    await upload.setInputFiles({ name: 'unfinished.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
+    await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');
+    await expect(investment(page).locator('[data-investment-preview]')).toBeHidden();
+    assert.equal(await downloadText(page), accepted, 'a rejected file keeps the restored plan available');
+    await performAction(page, 'undo');
+    await expect(total(page)).toHaveText('$3,980.00');
+    assert.equal(await downloadText(page), fresh, 'Undo restores the plan that preceded the accepted import');
+
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await frame(page);
+      await expect(action(page, 'download')).toHaveAccessibleDescription(/Download keeps the accepted plan/);
+      await expect(upload).toHaveAccessibleDescription('Open your downloaded file to preview it, then choose Use this plan.');
+      await containment(page);
+      await investment(page).locator('[aria-labelledby="native-exchange-title"]').screenshot({
+        path: resolve(captures, `${engine}-keep-a-plan-${width}.png`),
+      });
+    }
+  });
+
   test(`${engine}: saved files migrate explicitly, rejected files retain the plan, and downloads release their URLs`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await chapter(page, 'investment').click();
