@@ -2668,6 +2668,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/investment-deck-config.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-deck-config.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-deck-views.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-deck-views.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/investment-controls.mjs",
       "projected_path": "collaboration/native-investment-studio/investment-controls.mjs",
       "media_type": "text/javascript"

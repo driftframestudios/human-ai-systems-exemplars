@@ -131,16 +131,33 @@ settings; focused browser journeys establish scope, editing and recovery.
 These observations support reduced preparation work; visitor latency remains
 unmeasured.
 
-The next refinement receiver is #916 for deck packaging. CSS remains a separate
-bounded route. Immutable catalogs and
-compatible formatters may share definitions; mutable command candidates, dial
-gestures and mounted controls keep instance ownership.
-Closed registries fit exclusive variants; guards and ordered functions retain
-admission and dependent-effect meaning. A general traversal hierarchy remains a
-candidate only when repeated heterogeneous operations demonstrate its value.
-These source mechanisms establish the remaining refinement opportunities.
-Further performance work awaits its next cue;
-promotion to main retains its separate human cue.
+#916 now groups the five Investment variants in a closed view registry with
+named factories. Each factory mounts its type's existing controls and returns
+the updater for its readings. Shelf and reel summaries live beside those
+factories. The workbench continues to own editor identity, retained controls,
+focus, gestures, disposal and shared-plan operations. Its guarded command ports
+carry edits from each factory to the current record.
+
+The choice/effect owner derives ordered choices from the saved-field contract
+and supplies explicit labels. Nested catalogs and field definitions are frozen;
+fresh defaults and command candidates remain independently mutable. Named
+effects preserve linked presets, Custom selections and manual overrides.
+Admission remains with the saved-state owner, and financial calculations retain
+their existing owner.
+
+**Supersession:** this implemented division replaces the earlier prospective
+#916 packaging note. Helper-only extraction would leave related type dispatch
+spread across setup, updates and summaries. One file per type would add import
+boundaries for these small, closely related factories. The selected closed
+registry makes each variant's presentation easy to find while retaining one
+mounted lifecycle and explicit dependent effects. A general traversal hierarchy
+remains a candidate when heterogeneous operations demonstrate its value.
+
+The extraction retains the existing DOM order, text and control geometry,
+including Plan allocation ahead of its knobs and its connected reel readings.
+The receiving PR records source checks, focused browser journeys, visual
+comparison and independent review. CSS and further performance work retain
+their separate routes, and promotion to main retains its separate human cue.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
 primary route. #641 and #673 retain their frozen measurements; the earlier

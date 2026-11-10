@@ -392,10 +392,15 @@ invocation; exact session identities, funding/status groups and Undo keep their
 existing meaning. Literal fixtures cover interleaved and unplaced sessions,
 partial endpoints and independent replacement readings.
 [#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
-follows with focused deck configuration and renderer ownership. Each proposal
-uses the smallest fitting registry, factory or shared immutable definition;
-mutable controls and drafts keep their own owners. The remaining refinements
-await their next cue. Reduced refresh and preparation work are observed directly; visitor latency
+gives the five deck types one closed view registry and named factories. Pure
+choice labels follow the saved-field contract; preset and manual-edit effects
+operate on owned command candidates. Catalogs and field definitions are deeply
+immutable, while each deck receives fresh settings. The workbench retains
+control lifetimes, focus, gestures, disposal and shared-plan actions. This keeps
+each type's controls and readings together without adding a file boundary for
+every small variant. The receiving PR records source, browser and review
+evidence for this extraction. Further refinements await their next cue.
+Reduced refresh and preparation work are observed directly; visitor latency
 still needs a matched measurement before a speed claim. Earlier stress
 studies remain historical evidence; the accepted visual contracts and existing
 accounting behavior remain preservation boundaries. Work receives review on
@@ -416,8 +421,10 @@ accounting behavior remain preservation boundaries. Work receives review on
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
 | Empty plan library and starter sets | [plan-library-empty.mjs](plan-library-empty.mjs), [coordination-starters.mjs](coordination-starters.mjs) |
 | Plan cassette presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
-| Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
-| Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
+| Investment shelf, editor lifetime and shared-plan actions | [investment-workbench.mjs](investment-workbench.mjs) |
+| Deck-specific controls, connected readings and layout | [investment-deck-views.mjs](investment-deck-views.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
+| Deck vocabulary, admitted fields and preset effects | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-deck-config.mjs](investment-deck-config.mjs) |
+| Immutable reading context and derived comparisons | [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
 | Domain portraits and connected diagram geometry | [investment-portrait.mjs](investment-portrait.mjs), [diagram-geometry.mjs](diagram-geometry.mjs) |
 | Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
 | People lanes, session arranger and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
