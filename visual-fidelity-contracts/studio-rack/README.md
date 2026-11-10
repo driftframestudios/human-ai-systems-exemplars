@@ -101,8 +101,7 @@ Futura leads the supported chapter and module heading stacks; system UI remains
 the explicit Studio button family, with the existing monospace quantity and pad
 variants. Heading or ordered-list inheritance must keep that control boundary.
 The amp retains its cobalt chapter-key shadows and names the purpose control
-**Set vision**. Its reading appears when opened. The funding breakdown sits with
-the total. Plan reference, History and visible Animation speed choices form
+**Set vision**. Its reading appears when opened. The funding breakdown sits at the left, balancing the total on the right. Plan reference, History and visible Animation speed choices form
 compact groups; Undo remains an action beside Saved edits with no disclosure
 caret. Chapter keys follow the tools and open panels in reading order, at the
 amp's bottom edge. Wide layouts center comfortably sized keys; phones retain

@@ -2025,7 +2025,7 @@ p#on-dark-iron-ore {
     font-variant-numeric: tabular-nums;
     letter-spacing: -.055em;
 }
-.native-coordination__funding { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; align-items: end; margin-block-start: .6rem !important; }
+.native-coordination__funding { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; align-items: end; margin-block-start: .6rem !important; }
 .native-coordination__funding dt { color: var(--native-paper); font-size: .8rem; }
 .native-coordination__funding dd { color: var(--native-signal); font: 600 1.15rem/1.6 ui-monospace, monospace; }
 .native-coordination button, .native-coordination summary {
@@ -2226,7 +2226,7 @@ p#on-dark-iron-ore {
 @media (min-width: 52rem) {
     .native-coordination__amp { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
     .native-coordination__readout { text-align: end; }
-    .native-coordination__funding { justify-content: end; }
+    .native-coordination__funding { justify-content: start; }
     .native-coordination__chapters { flex-wrap: wrap; justify-content: center; }
     .native-coordination__chapters button { flex-basis: 12.5rem; justify-content: center; text-align: center; }
     .native-coordination__body { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
