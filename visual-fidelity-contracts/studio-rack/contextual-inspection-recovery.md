@@ -5,7 +5,9 @@ record and unfinished entries intact. One canonical editor owns each proposal;
 its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-dev receiving contract revised 9 November 2026 for explicit edit targets in
+dev receiving contract revised 10 November 2026 for local Abilities toggles in
+[#937](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/937),
+retaining explicit edit targets from
 [#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915),
 retaining the person mixing desk from
 [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
@@ -26,7 +28,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
 | Horizon handoff | New handoff accepts a relationship between available work records with editing closed. Selecting it opens From work, To work, optional Team connection, decisions, delays and removal. Apply accepts later field changes. |
 | People | Add person, team and contribution accept useful starting records with editing closed. Full-width team keys toggle compact local settings; movement/removal tools stay at each lane bottom. The people/session arranger keeps resource readings beside direct participation, with All people/current-person navigation into canonical settings. One selected-person mixing desk and the contribution Work / Receiver and decision pair retain their canonical owners inside the corresponding rack. |
-| Abilities | Both support tables remain available. A cell opens one selected module at its relevant section. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
+| Abilities | Both support tables remain available. A catalogue key opens Outcome; a support cell opens its relevant section. Repeating the same record/section selection closes that editor, while a different section switches locally. The selected overview remains visible. Adding a person, team or session keeps this module open and selects the new record in its support proposal. A small Rename beside a referenced person/team edits its shared name locally. |
 | Change | A component or action key opens one dark receiver with Support/Methods views. Its shared header names the selected component and owns local return, Apply and Close; session planning attaches to that working area. |
 | Quality & recovery | Check/support, assumptions, recovery and rehearsal details use compact local modules behind the primary instruments. The attached receiver shares the canonical Apply operation and retains unfinished entries when closed. |
 
@@ -142,6 +144,10 @@ Abilities also separates record creation from support assignment. Adding a perso
 team or session accepts that record, then selects it within the current support
 proposal. Apply accepts the relationship. Cancel restores the prior support
 selection while retaining the added record; amp Undo can recover its creation.
+Close and repeated selection park changed raw entries for reopening. The exact
+initiating catalogue key or support cell receives focus, keeping the viewport in
+place. Opening retains its smooth reveal. Carets and expanded state follow the
+visible editor; the selected overview and accepted plan retain their own state.
 
 Renaming a shared identity from Abilities follows the same ownership distinction.
 Rename opens one local input with a concise plan-wide scope cue. Save or Enter
@@ -223,6 +229,12 @@ those operations and dimensions; human walkthrough establishes whether the
 composition and return cues feel clear.
 
 ## Supersession and next boundary
+
+#937 replaces repeated Abilities selections that scrolled to an already-open
+editor with a record-and-section toggle. A catalogue key identifies Outcome;
+each support cell identifies its own section. Close and repeated selection share
+draft parking and exact-key focus recovery. Apply and amp Undo retain their
+existing acceptance boundaries.
 
 #856 replaces a chapter detour for a referenced name with one compact local
 Rename operation. #857/#858 replace the tall Change and Quality detail forms

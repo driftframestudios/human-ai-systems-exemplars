@@ -3,7 +3,7 @@
    retained proposals; Support Matrix & Stateful Pads owns their meaning. */
 .native-coordination .native-capabilities__choice { background:var(--about-cool-blue); color:var(--native-text); }
 .native-coordination .native-capabilities__choice:hover { background:var(--studio-peach); color:var(--native-text); }
-.native-coordination .native-capabilities__choice[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 .15rem .2rem var(--native-key-shadow); }
+.native-coordination .native-capabilities__choice[aria-pressed='true'], .native-coordination button.native-capability__cell[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 .15rem .2rem var(--native-key-shadow); }
 
 .native-capability-rack { display:grid; gap:.55rem; margin-block:.75rem; padding:.65rem; min-inline-size:0; max-inline-size:100%; border:1px solid var(--studio-rack-edge); border-radius:.3rem; background:var(--studio-rack-shell); color:var(--native-paper); scroll-margin-block-start:5rem; box-shadow:inset 0 1px var(--studio-rack-highlight),inset 0 -3px var(--studio-track-shadow); }
 .native-coordination .native-capability-rack .studio-rack-header { margin:0; padding:.4rem .25rem .65rem; border-block-end:1px solid var(--studio-rack-edge); background:transparent; color:var(--native-paper); }

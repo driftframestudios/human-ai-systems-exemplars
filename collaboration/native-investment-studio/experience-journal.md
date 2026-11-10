@@ -31,7 +31,9 @@ returns. These extend #864's team lanes and direct session arranger,
 removal notice's reference descriptions; #865 consolidates circular steppers
 and repairs Quality control contrast and spacing.
 #848 carries that composition into Abilities, with local person/team naming in
-#856 and retained pristine creation in #868. #849 makes Change action selection visible; #857/#858 extend the compact
+#856 and retained pristine creation in #868. #937 gives catalogue and support
+keys local record/section toggles with retained drafts and exact-key return.
+#849 makes Change action selection visible; #857/#858 extend the compact
 local receiver into Change and Quality. #818 receives the full financial-deck
 workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
 compact cost comparison and shared diagram geometry in #895. Each feature uses
@@ -504,7 +506,14 @@ Abilities retains both native support tables: What people can do and How the
 team works, with responsibility, preparation, review and observation columns.
 One selected dark module follows the selected catalogue, with a readable item heading,
 owner return, Apply and Close. Its compact pads select Outcome, People,
-Before this, Prepare, Review or Example result. The People receiver pairs
+Before this, Prepare, Review or Example result. A catalogue key targets Outcome;
+a support cell targets its own section. Repeating that record/section selection
+closes the editor, while a different section switches locally. Close and repeated
+selection park changed raw entries and return focus to the exact initiating key
+with the viewport in place. The selected overview remains visible, and opening
+retains its smooth reveal. **Supersession (#937):** these local toggles replace
+the repeated scroll to an already-open editor. Apply and amp Undo retain their
+existing owners. The People receiver pairs
 team/participants with decision owner/status; support groups occupy neighboring
 halves, and observation material uses cool-blue companions. Phone widths stack
 the halves while keeping choices legible. Chapter-owned CSS defines both text
@@ -516,8 +525,8 @@ made Trace evidence, Close and People controls difficult to read or use.
 Supporting person/team/session creation stays in the selected module, retaining
 its entries and preselecting the new record. The shared creation factory gives
 these named local targets the same ghost treatment as other rack additions.
-Creation accepts immediately; Apply accepts the support relationship. Close
-retains the draft. Existing proposals, shared work identity and pricing remain.
+Creation accepts immediately; Apply accepts the support relationship. Existing
+proposals, shared work identity and pricing remain.
 
 An Abilities person or team can be renamed beside its current identity. A small
 Rename action opens one labeled field with Save and ghost Cancel. The canonical
@@ -840,6 +849,7 @@ People composition from #864 and retains #836's direct responsibility choices,
 with #837 supplying shared creation controls. #863 covers dependency
 notice completeness and recovery; #865 owns circular control consistency and
 Quality readability. #848/#856 carry compact Abilities support and naming;
+#937 owns its record/section toggles and exact initiating-key return.
 #849/#857 settle Change action state and local receivers; #858 carries the
 Quality receiver; #818 receives the financial workbench. Independent response
 records, performance and public release retain their separate issues.
