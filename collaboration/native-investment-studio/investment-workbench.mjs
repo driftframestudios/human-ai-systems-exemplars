@@ -1,20 +1,12 @@
 // Shared session pricing stays distinct from the independent financial comparison tapes.
-import { INVESTMENT_TYPES, PLAN_APPROACHES, FINANCIAL_PRESETS, financialSettings } from './investment-catalog.mjs';
+import { INVESTMENT_TYPES, financialSettings } from './investment-catalog.mjs';
 import { INVESTMENT_DECK_LIMIT, INVESTMENT_FIELDS } from './investment-state.mjs';
 import { createMoneyControl, createChoiceReel } from './investment-controls.mjs';
 import { INVESTMENT_DOMAINS, investmentPortrait, renderInvestmentPortrait, renderInvestmentDiagram } from './investment-portrait.mjs';
+import { investmentChoices, writeInvestmentField } from './investment-deck-config.mjs';
+import { investmentDeckView, money, number } from './investment-deck-views.mjs';
 import { revealReelResult } from './reel-control.mjs';
 
-// Financial readings use dollar units; accepted ledger cents keep display.mjs.
-const DOLLARS = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-const NUMBER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
-const money = value => DOLLARS.format(value);
-const number = value => NUMBER.format(value);
-const signedMoney = value => `${value < 0 ? '−' : '+'}${money(Math.abs(value))}`;
-const percent = value => `${number(value * 100)}%`;
-const metric = (value, format = money, fallback = '—') => value?.status === 'known' ? format(value.value) : fallback;
-const paybackText = value => metric(value, amount => `${number(amount)} quarters`, value?.status === 'unreached' ? 'Beyond horizon' : value?.status === 'inapplicable' ? 'No initial outlay' : 'Needs revenue');
-const irrText = value => metric(value, percent, value?.status === 'inapplicable' ? 'Not applicable' : 'Outside range');
 const node = (tag, text, className) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; };
 function button(text, action, className, key) {
   const element = node('button', text, className); element.type = 'button'; element.addEventListener('click', action);
@@ -23,39 +15,6 @@ function button(text, action, className, key) {
 }
 const typeFor = record => INVESTMENT_TYPES.find(type => type.id === record.type);
 const titleFor = record => `${typeFor(record).title}${record.sequence > 1 ? ` ${record.sequence}` : ''}`;
-function masterReading(record, analysis, pricing) {
-  switch (record.type) {
-    case 'rollout': return [money(analysis.implementation), `${record.settings.teams} customer teams`];
-    case 'commercial': return [metric(analysis.metrics.closingRevenue), 'Revenue / quarter'];
-    case 'service': return [`${number(analysis.releasedHours)} h / week`, 'Time released'];
-    case 'capital': return [metric(analysis.selected.npv, signedMoney), `${record.settings.quarters} quarters · NPV`];
-    default: return [`${pricing.complete ? '' : 'Known '}${money(pricing.total)}`, `${number(pricing.effort)} person-hours`];
-  }
-}
-function reelReading(record, analysis, pricing) {
-  const state = record.settings, m = analysis.metrics;
-  if (record.type === 'rollout' && state.domain === 'pricing') return `${metric(m.netPrice)} net · ${metric(m.unitContribution)} contribution`;
-  if (record.type === 'commercial') return state.metric === 'cac' ? `${metric(m.cac, money, 'Needs customers')} per new customer` : state.metric === 'payback' ? `${paybackText(m.cacPayback)} acquisition payback` : `${metric(m[state.metric], percent)} ${state.metric.toUpperCase()} · ${metric(m.closingRevenue)} closing`;
-  if (record.type === 'service' && state.domain !== 'time') return state.domain === 'budget' ? `${metric(m.budgetImpact, signedMoney)} budget change / quarter` : `${metric(m.capacityGap, number)} people · capacity gap`;
-  const [amount, detail] = masterReading(record, analysis, pricing); return `${amount} · ${detail}`;
-}
-function reading(label, value, detail) {
-  const item = node('div', undefined, 'investment-comparison__reading'); item.append(node('span', label), node('strong', value)); if (detail) item.append(node('small', detail)); return item;
-}
-function metricTiles(items, selected) {
-  const grid = node('div', undefined, 'investment-comparison__metrics');
-  for (const [label, value, detail, key] of items) { const item = reading(label, value, detail); if (selected) item.dataset.featured = String(key === selected); grid.append(item); }
-  return grid;
-}
-function bars(entries) {
-  const chart = node('div', undefined, 'investment-comparison__bars'), largest = Math.max(1, ...entries.map(item => Math.abs(item.value || 0)));
-  for (const entry of entries) {
-    const row = node('div', undefined, 'investment-comparison__bar'); row.append(node('span', entry.label), node('strong', entry.text || money(entry.value)));
-    const rail = node('span', undefined, 'investment-comparison__bar-rail'), fill = node('i'); rail.setAttribute('aria-hidden', 'true'); fill.style.width = `${Math.abs(entry.value || 0) / largest * 100}%`; fill.dataset.negative = String(entry.value < 0); rail.append(fill); row.append(rail); chart.append(row);
-  }
-  return chart;
-}
-
 export function createInvestmentWorkbench({ getContext, change, openSession, setFunding }) {
   let selected = 'pairing', activeId = 'investment-plan-1', domain = 'plan', adding = false, disposed = false;
   let outer, shelf, library, libraryToggle, libraryChoices, panel, loaded, domainControl, domainReading, portraitKey;
@@ -110,7 +69,7 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
         face.append(node('span', '', 'investment-master__strip'), node('strong', '', 'investment-master__title'), reels, node('span', '', 'investment-master__amount'), node('small', ''));
         tape.append(face); tapes.set(id, tape);
       }
-      const definition = typeFor(record), [amount, detail] = masterReading(record, context.analysis(record.id), pricing);
+      const definition = typeFor(record), [amount, detail] = investmentDeckView(record.type).masterReading(record, context.analysis(record.id), pricing);
       tape.dataset.investmentType = record.type;
       tape.setAttribute('aria-pressed', String(activeId === record.id));
       tape.querySelector('.investment-master__strip').textContent = definition.strip;
@@ -164,7 +123,8 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
 
   function createEditor(initial) {
     const id = initial.id, type = initial.type, controls = [], updates = [], groups = new Map();
-    let approachReading, lensReading, currentReading, retired = false;
+    const definition = investmentDeckView(type);
+    let currentReading, retired = false;
     const read = () => {
       const current = getContext().record(id);
       return current?.type === type ? current.settings : initial.settings;
@@ -177,11 +137,7 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
         if (record?.type === type) mutator(record, model);
       }, message, gesture);
     }
-    const write = (field, value, key) => edit(record => {
-      record.settings[field] = value;
-      if (type === 'plan' && ['budget', 'reserve', 'opportunity'].includes(field)) record.settings.approach = 'custom';
-      if (FINANCIAL_PRESETS[type]?.some(preset => Object.hasOwn(preset.values, field))) record.settings.lifecycle = 'custom';
-    }, '', key);
+    const write = (field, value, key) => edit(record => writeInvestmentField(record, field, value), '', key);
     const root = node('section', undefined, 'investment-comparison'); root.dataset.investmentEditor = id; root.dataset.investmentType = type;
     const head = node('header', undefined, 'investment-comparison__head'), title = node('h3', titleFor(initial)), titles = node('div');
     titles.append(node('small', typeFor(initial).strip), title);
@@ -209,86 +165,20 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
       input.addEventListener('pointerdown', begin); input.addEventListener('keydown', event => { if (!event.repeat) begin(); }); input.addEventListener('input', () => write(field, Number(input.value), editKey));
       fieldset.append(labelNode, output, input); (besideReels ? reels : group(domain)).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
     }
-    function reel(field, label, choices, receive) {
-      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, variant: type === 'capital' && field === 'metric' ? 'rose' : undefined, secondary: reels.children.length > 0, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
+    function reel(field, label, receive, { variant } = {}) {
+      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, variant, secondary: reels.children.length > 0, options: investmentChoices(type, field).map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
     }
-    function lifecycle() {
-      reel('lifecycle', 'Lifecycle', [...FINANCIAL_PRESETS[type].map(item => [item.id, item.label]), ['custom', 'Custom']], value => edit(record => {
-        Object.assign(record.settings, FINANCIAL_PRESETS[type].find(item => item.id === value)?.values, { lifecycle: value });
-      }, value === 'custom' ? 'Current settings retained.' : 'Lifecycle settings loaded.'));
-    }
-    if (type === 'plan') {
-      reels.classList.add('investment-comparison__reels--connected');
-      reel('approach', 'Investment approach', [...PLAN_APPROACHES.map(item => [item.id, item.label]), ['custom', 'Custom']], value => edit(record => {
-        const state = record.settings, preset = PLAN_APPROACHES.find(item => item.id === value);
-        if (preset) Object.assign(state, { reserve: preset.reserve, opportunity: preset.opportunity }); state.approach = value;
-      }, value === 'custom' ? 'Current allocation retained.' : 'Budget allocation updated.'));
-      reel('domain', 'Investment lens', [['all', 'Whole plan'], ['funded', 'Funded time'], ['extra', 'Extra investment']]); moneyControl('budget', 'Budget to compare', 'all', 'aggregate');
-      approachReading = node('output', '', 'investment-comparison__reel-context'); lensReading = node('output', '', 'investment-comparison__reel-context');
-      reels.children[0].append(approachReading); reels.children[1].append(lensReading); root.insertBefore(companion, knobs);
-      range('reserve', 'Reserve set aside', value => `${value}% of budget`, 'all', true); range('opportunity', 'Options set aside', value => `${value}% of budget`);
-      note.textContent = 'Reserve and options use this deck’s budget. Shared work keeps its planned time and price.';
-    } else if (type === 'rollout') {
-      lifecycle(); reel('domain', 'Customer account', [['pricing', 'Price & margin'], ['implementation', 'Implementation']]);
-      moneyControl('listPrice', 'List price / team / quarter', 'pricing', 'unit', 'stacked'); range('discount', 'Price discount', value => `${value}%`, 'all', true); moneyControl('variableCost', 'Delivery cost / team / quarter', 'pricing'); moneyControl('serviceCost', 'Service cost / team / quarter', 'pricing');
-      range('teams', 'Customer teams', number, 'implementation'); moneyControl('setup', 'Setup per customer team', 'implementation', 'unit', 'stacked'); range('training', 'Training per team', value => `${value} hours`, 'implementation');
-      note.textContent = 'Training uses $120/hour. Customer implementation stays separate from recurring price and contribution.';
-    } else if (type === 'commercial') {
-      lifecycle(); reel('metric', 'Commercial reading', [['grr', 'GRR'], ['nrr', 'NRR'], ['cac', 'CAC'], ['payback', 'Payback']], value => edit(record => { const state = record.settings; state.metric = value; state.domain = ['grr', 'nrr'].includes(value) ? 'retention' : 'acquisition'; }, 'Commercial reading selected.'));
-      moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'all', true); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
-      moneyControl('acquisitionSpend', 'Acquisition spend', 'acquisition', 'aggregate'); range('newCustomers', 'New customers', number, 'acquisition'); moneyControl('newRevenue', 'New revenue / quarter', 'acquisition', 'aggregate'); range('contributionMargin', 'New revenue contribution margin', value => `${value}%`, 'acquisition');
-      note.textContent = 'GRR and NRR track the opening cohort. New and reactivated revenue join the closing total separately.';
-    } else if (type === 'service') {
-      lifecycle(); reel('domain', 'Operational lens', [['time', 'Working time'], ['budget', 'Service budget'], ['capacity', 'Capacity']]);
-      range('people', 'People reached'); range('adoption', 'Adoption', value => `${value}%`, 'all', true); range('minutes', 'Time saved per use', value => `${value} minutes`, 'time');
-      moneyControl('baselineCost', 'Current cost / person / quarter', 'budget'); moneyControl('candidateCost', 'Changed cost / person / quarter', 'budget'); range('capacity', 'People supported per quarter', number, 'capacity');
-      note.textContent = 'The time comparison starts with a 30-minute workflow, twice each week. Budget and capacity retain their own units.';
-    } else {
-      reel('alternative', 'Alternative', [['current', 'Keep current'], ['pilot', 'Pilot'], ['rollout', 'Rollout']]); reel('lifecycle', 'Benefit pattern', [['ramp', 'Ramp up'], ['steady', 'Steady'], ['expand', 'Expand']]);
-      reel('metric', 'Capital reading', [['npv', 'NPV'], ['irr', 'IRR'], ['payback', 'Payback']]);
-      moneyControl('upfront', 'Pilot upfront investment', 'all', 'aggregate'); moneyControl('benefit', 'Pilot net benefit / quarter', 'all', 'aggregate'); range('discount', 'Discount per quarter', value => `${value}%`); range('quarters', 'Comparison horizon', value => `${value} quarters`);
-      note.textContent = 'Quarter-end net cash flows. Rollout uses 2.5× upfront, 1.8× benefit and one quarter to start.';
-    }
-    if (type !== 'plan') { currentReading = node('output', '', 'investment-comparison__reel-context'); reels.children[0].append(currentReading); }
+    const updateView = definition.create({ id, root, reels, screen, knobs, companion, note, reel, edit, write, moneyControl, range,
+      renderPlan: (record, context, analysis) => renderPlan(plan, record, context, analysis, edit, isCurrent),
+    });
+    if (definition.reelReading) { currentReading = node('output', '', 'investment-comparison__reel-context'); reels.children[0].append(currentReading); }
     return { id, type, root, dispose() { retired = true; controls.forEach(control => control.dispose?.()); root.remove(); }, release() { controls.forEach(control => control.release?.()); }, update(record, context) {
       title.textContent = titleFor(record); const state = record.settings, pricing = context.model.pricing, analysis = context.analysis(id);
-      if (currentReading) currentReading.value = reelReading(record, analysis, pricing);
+      if (currentReading) currentReading.value = definition.reelReading(record, analysis, pricing);
       for (const update of updates) update(state);
       for (const [name, element] of groups) element.hidden = name !== 'all' && name !== state.domain;
       screen.replaceChildren(); companion.replaceChildren();
-      if (type === 'plan') {
-        approachReading.value = `Reserve ${money(analysis.reserve)} · options ${money(analysis.opportunity)}`;
-        lensReading.value = `${money(analysis.amount)} in view · ${analysis.remaining < 0 ? 'shortfall' : 'unassigned'} ${money(Math.abs(analysis.remaining))}`;
-        screen.append(reading(state.domain === 'all' ? pricing.complete ? 'Whole plan investment' : 'Known plan investment' : state.domain === 'funded' ? 'Within funded time' : 'Extra investment', money(analysis.amount)), reading(analysis.remaining < 0 ? 'Budget shortfall' : 'Budget unassigned', money(Math.abs(analysis.remaining)), `${money(state.budget)} budget`));
-        const allocation = node('div', undefined, 'investment-comparison__allocation'); allocation.setAttribute('aria-label', 'Budget allocation');
-        for (const [kind, label, amount] of [['work', 'Planned work', pricing.total], ['reserve', 'Reserve', analysis.reserve], ['opportunity', 'Options', analysis.opportunity], ['remaining', analysis.remaining < 0 ? 'Shortfall' : 'Unassigned', Math.abs(analysis.remaining)]]) {
-          const pad = node('div', undefined, 'investment-comparison__allocation-pad'); pad.dataset.allocation = kind; pad.dataset.shortfall = String(kind === 'remaining' && analysis.remaining < 0); pad.style.setProperty('--allocation-share', `${state.budget ? Math.min(100, amount / state.budget * 100) : 0}%`); pad.append(node('span', label), node('strong', `${pricing.complete ? '' : 'Known '}${money(amount)}`)); allocation.append(pad);
-        }
-        companion.append(node('h4', 'Budget allocation'), allocation);
-        renderPlan(plan, record, context, analysis, edit, isCurrent);
-      } else if (type === 'rollout') {
-        const m = analysis.metrics, net = m.netPrice.value, contribution = m.unitContribution.value;
-        screen.append(metricTiles([['Net price / quarter', metric(m.netPrice), 'Per customer team'], ['Contribution / quarter', metric(m.unitContribution), 'Per customer team'], ['Customer implementation', money(analysis.implementation), `${state.teams} teams`]]));
-        companion.append(bars(state.domain === 'pricing' ? [{ label: 'List price', value: state.listPrice }, { label: 'Net price', value: net }, { label: 'Delivery & service', value: state.variableCost + state.serviceCost }, { label: 'Contribution', value: contribution }] : [{ label: 'Setup', value: analysis.setup }, { label: 'Training', value: analysis.training }]));
-      } else if (type === 'commercial') {
-        const m = analysis.metrics;
-        screen.append(metricTiles(state.domain === 'retention' ? [['GRR', metric(m.grr, percent), 'Gross revenue retention', 'grr'], ['NRR', metric(m.nrr, percent), 'Net revenue retention', 'nrr'], ['Closing revenue', metric(m.closingRevenue), 'Per quarter']] : [['CAC', metric(m.cac, money, 'Needs customers'), 'Per new customer', 'cac'], ['Acquisition payback', paybackText(m.cacPayback), 'At the entered contribution margin', 'payback'], ['New revenue', money(state.newRevenue), 'Per quarter']], state.metric));
-        companion.append(bars([{ label: 'Opening cohort retained', value: state.openingRevenue * state.retained / 100 }, { label: 'Cohort expansion', value: state.expansion }, { label: 'New + reactivated', value: state.newRevenue + state.reactivation }]));
-      } else if (type === 'service') {
-        const m = analysis.metrics, reached = m.adoptedPopulation.value;
-        screen.append(metricTiles([['Time released', `${number(analysis.releasedHours)} h / week`, `${number(reached)} people adopting`], ['Budget change', metric(m.budgetImpact, signedMoney), 'Per quarter'], ['Capacity gap', metric(m.capacityGap, number), 'People per quarter']]));
-        const items = state.domain === 'time' ? [{ label: 'Current workflow', value: reached, text: `${number(reached)} h / week` }, { label: 'Changed workflow', value: reached - analysis.releasedHours, text: `${number(reached - analysis.releasedHours)} h / week` }] : state.domain === 'budget' ? [{ label: 'Current service', value: reached * state.baselineCost }, { label: 'Changed service', value: reached * state.candidateCost }] : [{ label: 'People adopting', value: reached, text: number(reached) }, { label: 'Capacity available', value: state.capacity, text: number(state.capacity) }];
-        companion.append(bars(items));
-      } else {
-        const selected = analysis.selected;
-        screen.append(metricTiles([['Net present value', metric(selected.npv, signedMoney), selected.label, 'npv'], ['IRR / quarter', irrText(selected.irr), 'Internal rate of return', 'irr'], ['Payback', paybackText(selected.payback), 'Undiscounted', 'payback']], state.metric));
-        const flows = node('div', undefined, 'investment-comparison__flows'); flows.setAttribute('role', 'region'); flows.setAttribute('aria-label', 'Quarterly net cash flows'); flows.tabIndex = 0;
-        const flowLine = node('div'); selected.flows.forEach((value, index) => { const pad = node('div', undefined, 'investment-comparison__flow'); pad.dataset.negative = String(value < 0); pad.append(node('small', index === 0 ? 'Upfront' : `Q${index}`), node('strong', signedMoney(value))); flowLine.append(pad); }); flows.append(flowLine);
-        const sensitivity = node('fieldset', undefined, 'investment-comparison__sensitivity'); sensitivity.append(node('legend', 'Net benefit sensitivity'));
-        for (const choice of analysis.sensitivity) { const pad = button('', () => write('sensitivity', choice.percent), '', `investment-${id}-sensitivity-${choice.percent}`); pad.setAttribute('aria-pressed', String(choice.percent === state.sensitivity)); pad.append(node('span', choice.percent === 100 ? 'Entered benefit' : choice.percent < 100 ? '20% lower' : '20% higher'), node('strong', metric(choice.npv, signedMoney))); sensitivity.append(pad); }
-        const comparison = state.metric === 'npv' ? { title: 'Net present value', value: option => option.npv.value, text: option => metric(option.npv, signedMoney) } : state.metric === 'irr' ? { title: 'Internal rate of return / quarter', value: option => option.irr.value, text: option => irrText(option.irr) } : { title: 'Undiscounted payback', value: option => option.payback.value, text: option => paybackText(option.payback) };
-        companion.append(node('h4', comparison.title), bars(analysis.alternatives.map(option => ({ label: option.label, value: comparison.value(option), text: comparison.text(option) }))), flows, sensitivity);
-      }
+      updateView(record, context, analysis);
     } };
   }
 

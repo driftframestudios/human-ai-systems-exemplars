@@ -88,6 +88,8 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/investment-catalog.mjs',
   'collaboration/native-investment-studio/investment-financials.mjs',
   'collaboration/native-investment-studio/investment-state.mjs',
+  'collaboration/native-investment-studio/investment-deck-config.mjs',
+  'collaboration/native-investment-studio/investment-deck-views.mjs',
   'collaboration/native-investment-studio/investment-projection.mjs',
   'collaboration/native-investment-studio/investment-controls.mjs',
   'collaboration/native-investment-studio/investment-portrait.mjs',

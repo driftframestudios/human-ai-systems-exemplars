@@ -4,11 +4,13 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.4.5`, ID
-`vfc:investment-master-reels`; 9 November 2026, receiving
+**Standing:** approved reference and receiving composition, version `0.4.6`, ID
+`vfc:investment-master-reels`; 10 November 2026, receiving
 [#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895)
 art and [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
-read/control ownership.
+read/control ownership and
+[#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
+deck factory ownership.
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
 The approved specimen is commit
 [`93bc69a`](https://github.com/driftframestudios/human-ai-systems-exemplars/commit/93bc69acaae6c1f604568449b6e4ace5151c3217).
@@ -69,12 +71,14 @@ contract; current runtime changes belong to the receiving owners.
 | Runtime owner | Receiving responsibility |
 | --- | --- |
 | [Deck catalogue](../../collaboration/native-investment-studio/investment-catalog.mjs) | Closed deck vocabulary, linked presets and fresh defaults |
+| [Deck choice and effect definitions](../../collaboration/native-investment-studio/investment-deck-config.mjs) | Frozen ordered choice labels from admitted fields; named preset and manual-edit effects on owned candidates |
 | [Financial calculation adapter](../../collaboration/native-investment-studio/investment-financials.mjs) | Projection through the existing financial formula owner |
 | [Saved deck contract](../../collaboration/native-investment-studio/investment-state.mjs) | Stable identity, bounded assumptions and integer-hundredth serialization |
 | [Accepted-plan projection](../../collaboration/native-investment-studio/investment-projection.mjs) | Immutable accepted reading context, deck lookup and shared analyses; detached command settings |
 | [Domain portrait](../../collaboration/native-investment-studio/investment-portrait.mjs) | Pure per-deck interpretation, unit-aware rose geometry, exact-value companion and empty-domain diagram |
 | [Shared diagram geometry](../../collaboration/native-investment-studio/diagram-geometry.mjs) | Coherent filled arrows reused with the Coordination diagrams |
-| [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Retained shelf/library controls, independent editor lifetimes, connected reels, allocation pads and cash-flow tracks |
+| [Deck view registry](../../collaboration/native-investment-studio/investment-deck-views.mjs) | Five named factories for existing control order, connected readings, allocation pads, comparisons and cash-flow tracks |
+| [Loaded workbench](../../collaboration/native-investment-studio/investment-workbench.mjs) | Retained shelf/library controls, independent editor lifetimes, focus, gestures, disposal and shared-plan actions |
 | [Financial controls](../../collaboration/native-investment-studio/investment-controls.mjs) | Stable monetary dials, exact fields, circular steppers and a thin shared-reel adapter |
 | [Shared Showcase reel](../../collaboration/native-investment-studio/reel-control.mjs) and [instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Stationary perimeter choices, fixed housing, rotating center, stepping, selected reading, motion and disposal |
 | [Receiving stylesheet](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) | Scoped specimen geometry and integration with the About rack |
@@ -102,6 +106,16 @@ retained editor reads current settings for its stable ID and type. Removal or a
 type change retires that editor and its callbacks; a restored copy receives a
 fresh control owner. These lifetime rules supersede rebuilding shelf/library
 controls on each render while preserving their existing art and interaction.
+
+The closed deck registry keeps each variant's setup and readings together.
+Factories receive guarded edit and control ports from the workbench; they retain
+the existing markup, labels and placement. In particular, Plan allocation stays
+ahead of the monetary controls, its two reel readings stay attached to their
+respective controls, and domain choices reveal the existing control groups.
+Catalogs, choice tuples and admitted-field definitions are deeply immutable;
+each deck's editable settings remain independently owned. This division changes
+source ownership while retaining the composition described below. The receiving
+PR records the extraction's verification and independent review.
 
 Reels select explicit named values through native buttons. Presets update their
 related assumptions together; manual amount or fader edits move the preset

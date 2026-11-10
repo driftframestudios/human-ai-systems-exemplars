@@ -1,17 +1,25 @@
 // Financial deck vocabulary and fresh assumption records.
-export const INVESTMENT_TYPES = [
+export function freezeInvestmentDefinition(value) {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.values(value).forEach(freezeInvestmentDefinition);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+export const INVESTMENT_TYPES = freezeInvestmentDefinition([
   { id: 'plan', title: 'Plan investment', strip: 'Internal effort', detail: 'People, sessions & funding' },
   { id: 'rollout', title: 'Customer rollout', strip: 'Implementation', detail: 'Price, contribution & rollout' },
   { id: 'commercial', title: 'Commercial cohort', strip: 'Recurring revenue', detail: 'Retention, acquisition & growth' },
   { id: 'service', title: 'Service operations', strip: 'Working experience', detail: 'Time, budget & capacity' },
   { id: 'capital', title: 'Capital choices', strip: 'Investment decision', detail: 'Cash flow, return & sensitivity' },
-];
-export const PLAN_APPROACHES = [
+]);
+export const PLAN_APPROACHES = freezeInvestmentDefinition([
   { id: 'deliver', label: 'Deliver now', reserve: 10, opportunity: 5 },
   { id: 'protect', label: 'Protect delivery', reserve: 30, opportunity: 5 },
   { id: 'explore', label: 'Explore options', reserve: 10, opportunity: 30 },
-];
-export const FINANCIAL_PRESETS = {
+]);
+export const FINANCIAL_PRESETS = freezeInvestmentDefinition({
   rollout: [
     { id: 'pilot', label: 'Pilot', values: { teams: 2, setup: 1500, training: 12, listPrice: 1500, discount: 5, variableCost: 450, serviceCost: 300 } },
     { id: 'launch', label: 'Launch', values: { teams: 6, setup: 2500, training: 8, listPrice: 1800, discount: 10, variableCost: 500, serviceCost: 250 } },
@@ -27,7 +35,7 @@ export const FINANCIAL_PRESETS = {
     { id: 'pilot', label: 'Pilot', values: { people: 80, adoption: 60, minutes: 15, candidateCost: 450, capacity: 60 } },
     { id: 'operate', label: 'Operate', values: { people: 160, adoption: 85, minutes: 20, candidateCost: 380, capacity: 120 } },
   ],
-};
+});
 export function financialSettings(type) {
   switch (type) {
     case 'plan': return { baseline: null, domain: 'all', budget: 10000, approach: 'deliver', reserve: 10, opportunity: 5 };

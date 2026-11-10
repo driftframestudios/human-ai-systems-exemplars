@@ -1,4 +1,4 @@
-import { INVESTMENT_TYPES, financialSettings } from './investment-catalog.mjs';
+import { INVESTMENT_TYPES, financialSettings, freezeInvestmentDefinition } from './investment-catalog.mjs';
 
 // Saved numeric assumptions use hundredths; calculator/display values use units.
 // This retains the plan contract's integer-token transport and exact money edits.
@@ -9,7 +9,7 @@ const TYPES = new Set(INVESTMENT_TYPES.map(type => type.id));
 const choices = (...values) => ({ choices: values });
 const range = (min, max, step = .01) => ({ min, max, step });
 const currency = range(0, 1000000);
-export const INVESTMENT_FIELDS = Object.freeze({
+export const INVESTMENT_FIELDS = freezeInvestmentDefinition({
   plan: { baseline: { ...range(0, 1000000000000), nullable: true }, domain: choices('all', 'funded', 'extra'), budget: currency,
     approach: choices('deliver', 'protect', 'explore', 'custom'), reserve: range(0, 60, 5), opportunity: range(0, 60, 5) },
   rollout: { lifecycle: choices('pilot', 'launch', 'scale', 'custom'), domain: choices('pricing', 'implementation'),
