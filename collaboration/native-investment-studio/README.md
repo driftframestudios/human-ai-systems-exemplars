@@ -26,8 +26,11 @@ Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
 compact horizontal strip.
 Each cassette is one repeatable activity plan; its sessions are occurrences of
-that activity. The initial view loads the first available cassette—**Pilot decision
-review** in the showcase—with detail closed. An empty library starts unselected.
+that activity. The initial view shows **All plans**, with detail closed. A persistent scope rail
+keeps All plans beside Previous/Next pennant controls and the loaded plan name.
+Next enters the first cassette; browsing follows shelf order and stops at its
+ends. Scope changes retain the selected sprint/quarter and accepted edits. An
+empty library starts unselected.
 Loading a cassette filters the board, tracks and relationship markers. **Add session** in a loaded lane or track appends an occurrence
 and retains the loaded cassette and earlier placements. In **All plans**, lane
 **New plan** and the sequencer's New plan row create separate records while keeping

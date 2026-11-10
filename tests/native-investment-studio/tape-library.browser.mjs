@@ -63,9 +63,9 @@ async function removeTape(page, id) {
 
 for (const engine of names) test(`${engine}: removing tapes preserves recovery and an empty library can load or create plans`, async t => {
   const page = await open(t, engine), originalBytes = await bytes(page), original = JSON.parse(originalBytes);
-  await expect(shelf(page).locator('.native-cadence__screen')).toHaveAttribute('data-loaded-plan', original.work[0].id);
-  await expect(shelf(page).locator(`[data-studio-plan-id="${original.work[0].id}"]`)).toHaveAttribute('aria-pressed', 'true');
-  await expect(action(page, 'remove-plan')).toBeEnabled();
+  await expect(shelf(page).locator('.native-cadence__screen')).toHaveAttribute('data-loaded-plan', '');
+  await expect(shelf(page).getByRole('button', { name: 'All plans', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(action(page, 'remove-plan')).toBeDisabled();
   await shelf(page).locator('[data-studio-plan-id="research"]').click();
   await action(page, 'remove-plan').click();
   await expect(score(page).locator('.native-score__removal')).toContainText('Remove Research synthesis and its sessions?');
@@ -115,4 +115,43 @@ for (const engine of names) test(`${engine}: removing tapes preserves recovery a
   assert.equal(JSON.parse(await bytes(page)).work.length, 1, 'free creation remains available from the empty shelf');
   await expect(starters).toBeHidden(); await expect(shelf(page).locator('[data-studio-plan-id]')).toHaveCount(1);
   await undo(page); assert.equal(await bytes(page), emptyBytes);
+});
+
+for (const engine of names) test(`${engine}: All plans and sequential browsing preserve period scope and accepted work`, async t => {
+  const page = await open(t, engine), originalBytes = await bytes(page), original = JSON.parse(originalBytes);
+  const rack = shelf(page), all = rack.getByRole('button', { name: 'All plans', exact: true });
+  const previous = rack.getByRole('button', { name: 'Previous plan', exact: true });
+  const next = rack.getByRole('button', { name: 'Next plan', exact: true });
+  const screen = rack.locator('.native-cadence__screen');
+  await expect(all).toHaveAttribute('aria-pressed', 'true');
+  await expect(previous).toHaveAttribute('aria-disabled', 'true');
+  await rack.locator('[data-cadence-key="period:period-1"]').click();
+  for (const work of original.work) {
+    await next.click();
+    await expect(screen).toHaveAttribute('data-loaded-plan', work.id);
+    await expect(rack.locator(`[data-studio-plan-id="${work.id}"]`)).toHaveAttribute('aria-pressed', 'true');
+    await expect(rack.getByRole('button', { name: 'Plan overview', exact: true })).toBeVisible();
+    await expect(next).toBeFocused();
+  }
+  await expect(next).toHaveAttribute('aria-disabled', 'true');
+  await page.keyboard.press('Enter');
+  await expect(screen).toHaveAttribute('data-loaded-plan', original.work.at(-1).id);
+  await previous.click();
+  await expect(screen).toHaveAttribute('data-loaded-plan', original.work.at(-2).id);
+  await rack.locator(`[data-studio-plan-id="${original.work[0].id}"]`).click();
+  await expect(previous).toHaveAttribute('aria-disabled', 'true');
+  await all.click();
+  await expect(screen).toHaveAttribute('data-loaded-plan', '');
+  await expect(all).toHaveAttribute('aria-pressed', 'true');
+  await expect(rack.getByRole('button', { name: 'Plan overview', exact: true })).toBeVisible();
+  await all.click();
+  assert.equal(await bytes(page), originalBytes, 'scope changes leave accepted work and placement untouched');
+  await expect(root(page).locator('[data-studio-undo]')).toBeDisabled();
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const control of [all, previous, next]) {
+      const box = await control.boundingBox();
+      assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1 && box.height >= 32);
+    }
+  }
 });

@@ -92,9 +92,10 @@ export function createCadenceView(root, {
   const externalFlowEvents = flowRoot && !root.contains(flowRoot) ? flowRoot : null;
   function click(event) {
     const control = event.target.closest('[data-cadence-action]');
-    if (disposed || !control || !(root.contains(control) || flowRoot?.contains(control))) return;
+    if (disposed || !control || control.getAttribute('aria-disabled') === 'true' || !(root.contains(control) || flowRoot?.contains(control))) return;
     const item = actions.get(control.dataset.cadenceKey); if (!item) return;
     if (item.action === 'period' && item.target !== null) periodOriginKey = control.dataset.cadenceKey;
+    if (item.action === 'load-plan' && control.closest('.studio-plan-navigation')) control.focus({ preventScroll: true });
     const receivers = { select: onSelect, 'load-plan': onLoadPlan, navigate: onNavigate, period: onPeriod, 'add-period': onAddPeriod,
       'add-session': onAddSession, 'add-occurrence': onAddOccurrence, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
       'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon };
@@ -221,7 +222,7 @@ export function createCadenceView(root, {
     for (const details of [availability, relationshipPanel]) scopeCaption(details, activePeriod?.label ?? 'Plan overview');
 
     screen.hidden = false; screen.setAttribute('aria-label', activePeriod ? `${activePeriod.label} sessions and decisions` : 'Sprint and quarter plan overview');
-    const context = node('div');
+    const context = node('div', undefined, 'native-cadence__context');
     const heading = node('h4', activePeriod?.label ?? 'Plan overview');
     if (activePeriod) {
       const breadcrumb = node('nav', undefined, 'native-cadence__breadcrumb'); breadcrumb.setAttribute('aria-label', 'Plan scope');
@@ -231,12 +232,28 @@ export function createCadenceView(root, {
       heading.setAttribute('aria-current', 'page');
       breadcrumb.append(overview, separator, heading); context.append(breadcrumb);
     } else context.append(heading);
-    if (loadedPlan) {
-      const loaded = node('div', undefined, 'native-cadence__loaded-plan');
-      loaded.append(button('All plans', 'load-plan', null, 'all-plans', 'native-cadence__return'),
-        node('span', loadedPlan.label));
-      context.append(loaded);
-    }
+    const planNavigation = node('nav', undefined, 'studio-plan-navigation');
+    planNavigation.setAttribute('aria-label', 'Plan library');
+    const allPlans = button('All plans', 'load-plan', null, 'all-plans', 'studio-plan-navigation__all');
+    allPlans.setAttribute('aria-pressed', String(!loadedPlan));
+    const loadedIndex = loadedPlan ? state.work.findIndex(item => item.id === loadedPlan.id) : -1;
+    const previousPlan = state.work[loadedIndex - 1], nextPlan = state.work[loadedIndex + 1];
+    const previous = button('Previous', 'load-plan', previousPlan?.id ?? null, 'previous-plan', 'studio-plan-navigation__browse');
+    const next = button('Next', 'load-plan', nextPlan?.id ?? null, 'next-plan', 'studio-plan-navigation__browse');
+    previous.dataset.direction = 'previous'; next.dataset.direction = 'next';
+    previous.setAttribute('aria-disabled', String(!previousPlan)); next.setAttribute('aria-disabled', String(!nextPlan));
+    const backArrow = node('span', '←'), forwardArrow = node('span', '→');
+    backArrow.setAttribute('aria-hidden', 'true'); forwardArrow.setAttribute('aria-hidden', 'true');
+    previous.prepend(backArrow); next.append(forwardArrow);
+    previous.setAttribute('aria-label', 'Previous plan'); next.setAttribute('aria-label', 'Next plan');
+    if (previousPlan) previous.title = previousPlan.label;
+    if (nextPlan) next.title = nextPlan.label;
+    const currentPlan = node('div', undefined, 'studio-plan-navigation__current');
+    currentPlan.id = `${captionPrefix}-plan`;
+    currentPlan.append(node('strong', loadedPlan?.label ?? 'Whole arrangement'));
+    if (loadedPlan) currentPlan.append(node('small', `${loadedIndex + 1} / ${state.work.length}`));
+    for (const control of [allPlans, previous, next]) control.setAttribute('aria-describedby', currentPlan.id);
+    planNavigation.append(allPlans, previous, currentPlan, next); context.append(planNavigation);
     const cost = node('dl', undefined, 'native-cadence__amount');
     const amountLabel = loadedPlan ? (result.plannedCommitmentCents === null ? 'Known whole arrangement' : 'Whole arrangement')
       : result.plannedCommitmentCents === null ? 'Known included work' : 'Included work';

@@ -55,8 +55,9 @@ superseding its accepted-then-editing double notification. Cadence reuses the
 mounted rack for an identical projection and rendered view state; local caption
 transitions explicitly invalidate that reuse. The mounted Add session regression
 distinguishes two root refreshes from one while retaining earlier placements,
-focus and Undo. Current interaction latency remains unmeasured. The current #906
+focus and Undo. Current interaction latency remains unmeasured. The completed #906
 pass addresses cassette meaning, scoped creation and empty-library recovery.
+#909 restores All plans on entry and adds in-rack sequential browsing.
 Performance refinements, including #902 and #903, remain queued for a later cue;
 promotion to main retains its separate human cue.
 
@@ -77,11 +78,14 @@ Its blocky angled artwork and size stay intact while the surrounding controls ar
 more compact. The desktop scroll area now accommodates 80rem of cassettes,
 superseding its four-cassette-height limit. At phone width the shelf becomes a horizontal strip. A cassette
 selects its plan and filters the board/tracks; it closes the detail receiver.
-The initial view loads the first available cassette, Pilot decision review in the
-showcase, with detail closed. An empty library begins unselected. All plans is the
-explicit return from the cassette filter. This #906 convenience default supersedes
-the initially unfiltered overview; subsequent All plans selection remains the
-visitor's choice. Period selection stays independent, with a visible selected
+The initial view shows All plans with detail closed. Its persistent outline
+control sits beside directional Previous/Next pennants and the loaded plan name.
+Next enters the first cassette; browsing follows shelf order with explicit ends.
+The rail and shelf share one selection owner. Navigation keeps focus and leaves
+accepted records and Undo unchanged. An empty library begins unselected.
+**Supersession (#909):** the human preferred the aggregate entry, replacing
+#906's first-cassette convenience default. All plans remains visible in either
+scope. Period selection stays independent, with a visible selected
 sprint/quarter and Plan overview return inside the rack.
 
 The composition reads in this order: period board, optional compact working area,

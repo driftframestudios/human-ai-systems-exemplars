@@ -26,11 +26,18 @@ directly to the full height of the period rack. #837 expands the desktop shelf
 scroll area from 40rem to 80rem while keeping cassette dimensions intact. At
 650px and below it remains a horizontal strip with no vertical height cap.
 
-One cassette represents one repeatable activity plan. The initial view loads the
-first available cassette, Pilot decision review in the showcase, with detail
-closed. An empty library starts unselected. Loading a canonical work identity
-filters the board, tracks and relationship markers. All plans is the explicit
-return to the complete arrangement. The selected sprint/quarter remains visible: All plans clears the cassette filter;
+One cassette represents one repeatable activity plan. The initial view shows
+All plans with detail closed. A persistent outline/ghost All plans control shares
+a compact rail with directional Previous/Next pennants and the loaded name.
+Paper and teal selected states, clear text and a visible focus outline retain the
+existing rack vocabulary. The pennant tip indicates direction while its text
+names the action. Previous/Next follow shelf order with explicit ends; Next from
+All plans opens the first cassette. Both shelf and rail use the same scope owner.
+Unavailable directions retain legible labels and expose their state; focus stays
+on the activated control. An empty library starts unselected. Loading a canonical work identity
+filters the board, tracks and relationship markers. All plans is the persistent
+return to the complete arrangement. #909 supersedes #906's initial-first-tape
+default; scope navigation preserves accepted data and Undo. The selected sprint/quarter remains visible: All plans clears the cassette filter;
 Plan overview clears the period filter. Existing clips open local editing.
 Loaded **Add session** targets append occurrences while retaining that cassette.
 In All plans, explicit **New plan** targets create separate records and retain the
