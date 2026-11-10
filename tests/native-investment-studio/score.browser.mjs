@@ -535,6 +535,7 @@ for (const engine of names) {
         const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
       }, hasCadence);
       const retained = await bytes(page);
+      if (hasCadence) await cadence(page).locator('[data-studio-plan-id="followup"]').click();
       await root(page).locator(hasCadence ? '[data-cadence-key="track-work:followup"]' : '[data-delivery-session="followup"]').click();
       await root(page).locator('[data-rack-remove-plan]').click();
       await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
