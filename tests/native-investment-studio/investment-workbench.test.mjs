@@ -8,11 +8,92 @@ import { encodeInvestment, decodeInvestment } from '../../collaboration/native-i
 import { financialSettings } from '../../collaboration/native-investment-studio/investment-catalog.mjs';
 import { projectInvestment, createInvestmentReader, investmentCommandModel } from '../../collaboration/native-investment-studio/investment-projection.mjs';
 import { analyseInvestment } from '../../collaboration/native-investment-studio/investment-financials.mjs';
+import { createCadence } from '../../collaboration/native-investment-studio/cadence.mjs';
 
 function edit(studio, mutate, gesture = null) {
   const decks = decodeInvestment(studio.read().state.investmentSettings); mutate(decks);
   return studio.applyCommand({ type: 'investment.settings.replace', investmentSettings: encodeInvestment(decks) }, studio.read(), gesture);
 }
+
+function placedInvestmentPlan() {
+  const plan = createExamplePlan();
+  plan.people[1].rateCentsPerHour = null;
+  plan.people[2].rateCentsPerHour = 20000;
+  plan.people[3].rateCentsPerHour = 5000;
+  const work = plan.work[0];
+  Object.assign(work, { label: 'Review', personIds: ['product-one'], occurrences: 4 });
+  work.sessionOverrides = [
+    { occurrenceIndex: 0, label: 'Funded review', teamId: 'delivery', personIds: ['product-one', 'product-two'],
+      minutesPerOccurrence: 60, funding: 'allocated', status: 'planned' },
+    { occurrenceIndex: 2, label: 'Paused review', teamId: 'delivery', personIds: ['engineering-one'],
+      minutesPerOccurrence: 90, funding: 'additional', status: 'paused' },
+  ];
+  plan.work.push(
+    { id: 'followup', label: 'Follow up', teamId: 'delivery', personIds: ['engineering-two'],
+      minutesPerOccurrence: 60, occurrences: 2, funding: 'allocated', status: 'planned', timing: null, lifecycle: 'active' },
+    { id: 'unplaced', label: 'Unplaced work', teamId: 'delivery', personIds: ['engineering-one'],
+      minutesPerOccurrence: 15, occurrences: 1, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' },
+  );
+  plan.scoreSettings.cadence = createCadence('sprint', 3);
+  plan.scoreSettings.cadence.placements = [
+    { workId: 'review', occurrenceIndex: 2, periodId: 'period-2', subdivision: 1 },
+    { workId: 'followup', occurrenceIndex: 0, periodId: 'period-1', subdivision: 1 },
+    { workId: 'review', occurrenceIndex: 0, periodId: 'period-1', subdivision: 1 },
+    { workId: 'review', occurrenceIndex: 3, periodId: null, subdivision: null },
+    { workId: 'followup', occurrenceIndex: 1, periodId: 'period-3', subdivision: 2 },
+    { workId: 'review', occurrenceIndex: 1, periodId: 'period-2', subdivision: 1 },
+  ];
+  return plan;
+}
+
+test('Investment keeps authored placement order and each session setting across overlapping, disjoint and unplaced work', () => {
+  const model = projectInvestment(preparePlan(placedInvestmentPlan()));
+  assert.deepEqual(model.pricing.sessions, [
+    {
+      tape: { id: 'review', name: 'Review', people: ['product-one', 'product-two', 'engineering-one'],
+        occurrences: [{ period: 'period-2' }, { period: 'period-1' }, { period: null }, { period: 'period-2' }] },
+      hours: 3.5, effort: 4.5,
+      fundingParts: { funded: { effort: 2, cost: 100, complete: false }, extra: { effort: 2.5, cost: 400, complete: true } },
+      people: [{ personId: 'product-one', hours: 2, cost: 200 }, { personId: 'product-two', hours: 1, cost: null },
+        { personId: 'engineering-one', hours: 1.5, cost: 300 }],
+      placements: [{ period: 'period-2', funding: 'extra', cost: 300 }, { period: 'period-1', funding: 'funded', cost: 100 },
+        { period: null, funding: 'extra', cost: 50 }, { period: 'period-2', funding: 'extra', cost: 50 }],
+      cost: 500, complete: false, funding: 'mixed',
+    },
+    {
+      tape: { id: 'followup', name: 'Follow up', people: ['engineering-two'],
+        occurrences: [{ period: 'period-1' }, { period: 'period-3' }] },
+      hours: 2, effort: 2,
+      fundingParts: { funded: { effort: 2, cost: 100, complete: true }, extra: { effort: 0, cost: 0, complete: true } },
+      people: [{ personId: 'engineering-two', hours: 2, cost: 100 }],
+      placements: [{ period: 'period-1', funding: 'funded', cost: 50 }, { period: 'period-3', funding: 'funded', cost: 50 }],
+      cost: 100, complete: true, funding: 'funded',
+    },
+    {
+      tape: { id: 'unplaced', name: 'Unplaced work', people: ['engineering-one'], occurrences: [] },
+      hours: 0.25, effort: 0.25,
+      fundingParts: { funded: { effort: 0, cost: 0, complete: true }, extra: { effort: 0.25, cost: 50, complete: true } },
+      people: [{ personId: 'engineering-one', hours: 0.25, cost: 50 }], placements: [],
+      cost: 50, complete: true, funding: 'extra',
+    },
+  ]);
+});
+
+test('Investment placement preparation belongs to one accepted plan and leaves earlier readings intact', () => {
+  const plan = placedInvestmentPlan(), first = projectInvestment(preparePlan(plan));
+  plan.scoreSettings.cadence.placements = [
+    { workId: 'review', occurrenceIndex: 2, periodId: 'period-3', subdivision: 2 },
+  ];
+  plan.work[0].sessionOverrides[1].funding = 'allocated';
+  const next = projectInvestment(preparePlan(plan));
+  assert.deepEqual(next.pricing.sessions[0].placements, [{ period: 'period-3', funding: 'funded', cost: 300 }]);
+  assert.deepEqual(next.pricing.sessions[1].placements, []);
+  assert.deepEqual(first.pricing.sessions[0].placements[0], { period: 'period-2', funding: 'extra', cost: 300 });
+  plan.scoreSettings.cadence = null;
+  const untimed = projectInvestment(preparePlan(plan));
+  assert.deepEqual(untimed.periods, []);
+  assert.deepEqual(untimed.pricing.sessions.map(row => [row.tape.occurrences, row.placements]), [[[], []], [[], []], [[], []]]);
+});
 test('financial copies own their assumptions; remove, global Undo and saved files retain identity and price isolation', () => {
   const studio = createStudio(createShowcasePlan()), price = studio.read().result, original = studio.read();
   assert.equal(edit(studio, decks => decks.push({ id: 'capital-copy', type: 'capital', sequence: 2, settings: financialSettings('capital') })).ok, true);

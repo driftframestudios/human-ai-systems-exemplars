@@ -2603,6 +2603,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/cadence-occurrences.mjs",
+      "projected_path": "collaboration/native-investment-studio/cadence-occurrences.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/cadence.mjs",
       "projected_path": "collaboration/native-investment-studio/cadence.mjs",
       "media_type": "text/javascript"

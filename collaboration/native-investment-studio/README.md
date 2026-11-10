@@ -384,7 +384,13 @@ library and editor controls keep focus while their callbacks read current state.
 Removed or type-changed editors release their controls and reject held events.
 Ownership checks cover reuse, detached commands and replace/Undo lifetimes;
 browser checks cover retained controls and the existing dial/deck journeys.
-Next, #903 prepares invocation-local membership and override indexes.
+The #903 indexes prepare ordered session membership once per projection or
+render. Periods and sequencer cells read their buckets; stage and handoff
+endpoints reuse their local ordered reading. Investment groups placements once
+and resolves overrides through the session owner. These indexes expire with the
+invocation; exact session identities, funding/status groups and Undo keep their
+existing meaning. Literal fixtures cover interleaved and unplaced sessions,
+partial endpoints and independent replacement readings.
 [#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
 follows with focused deck configuration and renderer ownership. Each proposal
 uses the smallest fitting registry, factory or shared immutable definition;
@@ -403,6 +409,7 @@ accounting behavior remain preservation boundaries. Work receives review on
 | Draft coordination and recovery | [editing.mjs](editing.mjs), [implementation reference](implementation-reference.md) |
 | Local owner/current headers and live form receivers | [controller.mjs](controller.mjs), [rack-controls.mjs](rack-controls.mjs) |
 | Period board, cassette scope and sequencer | [cadence-view.mjs](cadence-view.mjs), [score-controller.mjs](score-controller.mjs) |
+| Ordered session membership and repeated override reads | [cadence-occurrences.mjs](cadence-occurrences.mjs), [work-sessions.mjs](work-sessions.mjs) |
 | Team arrangement and direct team editing | [connection-template-controller.mjs](connection-template-controller.mjs), [delivery-board.mjs](delivery-board.mjs) |
 | Shared participation and support links | [shared-session-rack.mjs](shared-session-rack.mjs) |
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |

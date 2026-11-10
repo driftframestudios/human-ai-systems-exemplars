@@ -1,5 +1,5 @@
 import { decodeInvestment } from './investment-state.mjs';
-import { summarizeWorkSessions, resolveWorkSession } from './work-sessions.mjs';
+import { summarizeWorkSessions, createWorkSessionResolver } from './work-sessions.mjs';
 import { analyseInvestment } from './investment-financials.mjs';
 
 function freezeReading(value) {
@@ -45,8 +45,15 @@ export function projectInvestment(projection) {
   const cadence = state.scoreSettings.cadence;
   const ledger = new Map(result.ledger.map(row => [row.workId, row]));
   const rates = new Map(state.people.map(person => [person.id, person.rateCentsPerHour]));
+  const placementsByWork = new Map();
+  for (const placement of cadence?.placements ?? []) {
+    if (!placementsByWork.has(placement.workId)) placementsByWork.set(placement.workId, []);
+    placementsByWork.get(placement.workId).push(placement);
+  }
   const sessions = state.work.map(work => {
     const lines = ledger.get(work.id)?.lines ?? [];
+    const placements = placementsByWork.get(work.id) ?? [];
+    const resolveSession = placements.length ? createWorkSessionResolver(work) : null;
     const summary = summarizeWorkSessions(work), hours = summary.durationMinutes / 60;
     const fundingParts = Object.fromEntries([['funded', 'allocated'], ['extra', 'additional']].map(([name, field]) => {
       const matching = summary.people.filter(person => person[`${field}Minutes`] > 0);
@@ -55,11 +62,11 @@ export function projectInvestment(projection) {
         complete: matching.every(person => rates.get(person.personId) !== null) }];
     }));
     return { tape: { id: work.id, name: work.label, people: summary.personIds,
-      occurrences: (cadence?.placements ?? []).filter(item => item.workId === work.id).map(item => ({ period: item.periodId })) },
+      occurrences: placements.map(item => ({ period: item.periodId })) },
       hours, effort: summary.participantMinutes / 60, fundingParts,
       people: lines.map(line => ({ personId: line.personId, hours: line.minutes / 60, cost: line.cents === null ? null : line.cents / 100 })),
-      placements: (cadence?.placements ?? []).filter(item => item.workId === work.id).map(item => {
-        const session = resolveWorkSession(work, item.occurrenceIndex);
+      placements: placements.map(item => {
+        const session = resolveSession(item.occurrenceIndex);
         return { period: item.periodId, funding: session.funding === 'allocated' ? 'funded' : 'extra',
           cost: session.personIds.reduce((sum, personId) => sum + (rates.get(personId) ?? 0) * session.minutesPerOccurrence / 60, 0) / 100 };
       }),

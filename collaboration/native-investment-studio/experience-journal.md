@@ -107,8 +107,32 @@ exact-field and ledger-cent meanings. Focused ownership and browser observations
 establish reuse and retained interaction behavior; matched phone/laptop captures
 preserve the approved art. Visitor latency remains unmeasured.
 
-The next refinement receivers are #903 for invocation-local indexes and #916 for
-deck packaging. CSS remains a separate bounded route. Immutable catalogs and
+#903 now prepares occurrence membership by work, period and subdivision once
+for each projection or render. Private maps return frozen membership arrays in
+the accepted placement order; the caller retains record ownership. This
+supersedes a full occurrence scan inside every sequencer cell. Stage and handoff
+endpoints reuse one ordered reading per endpoint, and availability accumulates
+active participant effort in occurrence order. Empty and partial endpoints keep
+their existing meaning.
+
+Investment groups placements once by work and uses the session owner's local
+override resolver. Grouped summaries continue to price untimed work without
+expanding every occurrence. This supersedes repeated full placement and override
+scans; the saved-plan format and financial formulas retain their existing owners.
+These indexes last for one invocation. Replacement, scope changes and Undo
+prepare fresh membership instead of extending cache invalidation rules.
+
+The source-derived cost changes from a full occurrence scan per track cell to
+one occurrence pass plus cell lookups and emitted pads. Investment placement
+preparation changes from repeated work-by-placement scans to one placement pass
+plus each placed work's override preparation and session reads. The literal
+fixtures establish ordering, mixed funding/status, unplaced work and detached
+settings; focused browser journeys establish scope, editing and recovery.
+These observations support reduced preparation work; visitor latency remains
+unmeasured.
+
+The next refinement receiver is #916 for deck packaging. CSS remains a separate
+bounded route. Immutable catalogs and
 compatible formatters may share definitions; mutable command candidates, dial
 gestures and mounted controls keep instance ownership.
 Closed registries fit exclusive variants; guards and ordered functions retain

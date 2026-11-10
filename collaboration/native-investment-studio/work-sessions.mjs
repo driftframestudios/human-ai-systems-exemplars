@@ -19,17 +19,25 @@ function sameSession(left, right) {
 export function resolveWorkSession(work, occurrenceIndex) {
   if (!Number.isSafeInteger(occurrenceIndex) || occurrenceIndex < 0 || occurrenceIndex >= work.occurrences) return null;
   const source = work.sessionOverrides?.find(row => row.occurrenceIndex === occurrenceIndex) ?? work;
+  return sessionReading(work, source, occurrenceIndex);
+}
+
+function sessionReading(work, source, occurrenceIndex) {
   return { ...copyWorkSession(source), occurrenceIndex, workId: work.id, lifecycle: work.lifecycle,
     active: source.status === 'planned' && work.lifecycle !== 'retired' };
 }
 
-export function expandWorkSessions(work) {
+// Invocation-local lookup for repeated reads of one admitted work record.
+// Each read owns its fields; the private index never becomes mutable plan state.
+export function createWorkSessionResolver(work) {
   const overrides = new Map((work.sessionOverrides ?? []).map(row => [row.occurrenceIndex, row]));
-  return Array.from({ length: work.occurrences }, (_, occurrenceIndex) => {
-    const source = overrides.get(occurrenceIndex) ?? work;
-    return { ...copyWorkSession(source), occurrenceIndex, workId: work.id, lifecycle: work.lifecycle,
-      active: source.status === 'planned' && work.lifecycle !== 'retired' };
-  });
+  return occurrenceIndex => Number.isSafeInteger(occurrenceIndex) && occurrenceIndex >= 0 && occurrenceIndex < work.occurrences
+    ? sessionReading(work, overrides.get(occurrenceIndex) ?? work, occurrenceIndex) : null;
+}
+
+export function expandWorkSessions(work) {
+  const resolve = createWorkSessionResolver(work);
+  return Array.from({ length: work.occurrences }, (_, occurrenceIndex) => resolve(occurrenceIndex));
 }
 
 // Repeated defaults form one group, so an untimed plan does not need an expanded

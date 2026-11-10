@@ -1,6 +1,7 @@
 import { summarizeWorkSessions } from './work-sessions.mjs';
 import { duration, money } from './display.mjs';
 import { CADENCE_PERIOD_LIMIT, CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
+import { createCadenceOccurrenceIndex } from './cadence-occurrences.mjs';
 import { LIMITS } from './config.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { createTapePicker } from './tape-picker.mjs';
@@ -191,7 +192,8 @@ export function createCadenceView(root, {
     const periodLabel = id => periodById.get(id)?.label ?? 'Choose a period';
     const occurrences = model.occurrences.map(row => ({ ...row, work: work.get(row.workId) }))
       .filter(row => row.work && (!loadedPlan || row.workId === loadedPlan.id));
-    const visible = activePeriod ? occurrences.filter(row => row.periodId === activePeriod.id) : occurrences;
+    const membership = createCadenceOccurrenceIndex(occurrences);
+    const visible = activePeriod ? membership.forPeriod(activePeriod.id) : occurrences;
     const shelf = createTapePicker(document, {
       variant: 'plan', label: 'Plans', selectedId: loadedPlan?.id ?? null,
       entries: state.work.map(item => ({
@@ -371,7 +373,7 @@ export function createCadenceView(root, {
         rename.append(reading, form); column.append(rename);
       }
       const clips = node('div', undefined, 'native-cadence__clips');
-      const rows = occurrences.filter(row => row.periodId === period.id && (subdivision === null || row.subdivision === subdivision))
+      const rows = [...membership.forPeriod(period.id, subdivision)]
         .sort((a, b) => a.subdivision - b.subdivision);
       if (subdivision === null) {
         const groups = new Map();
@@ -456,7 +458,7 @@ export function createCadenceView(root, {
         for (const subdivision of subdivisions) {
           const part = node('div', undefined, 'native-cadence__part');
           part.dataset.cadenceSubdivision = String(subdivision);
-          const members = occurrences.filter(row => row.workId === item.id && row.periodId === column.period.id && row.subdivision === subdivision);
+          const members = membership.forCell(item.id, column.period.id, subdivision);
           for (const row of members) {
             const pad = selection(activePeriod ? `Session ${row.occurrenceIndex + 1}` : `${cadence.basis === 'quarter' ? 'M' : 'W'}${subdivision}`,
               { ...workSessionTarget(acceptedWorkById.get(item.id) ?? item, row.occurrenceIndex), periodId: row.periodId },

@@ -6,10 +6,9 @@ quarter shows its weeks or months with a visible Plan overview return. Team
 planning uses the same overview/detail relationship for delivery phases and
 participation.
 
-**Standing:** review candidate `0.1.1`; ID
+**Standing:** review candidate `0.1.2`; ID
 `vfc:period-kanban-session-sequencer`; dev receiving contract revised
-9 November 2026 for [#913](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/913)
-and [#914](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/914).
+10 November 2026 for [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
 It inherits [Studio Rack Composition](README.md). Main retains its approved
 Showcase reference until the human cues promotion.
 
@@ -48,6 +47,13 @@ cards retain their own name, index and edit target. The unplaced tray shows
 individual sessions because it has no period to open.
 Group controls keep navigation semantics; editor-expanded and selected treatments
 belong to the exact session or explicit plan-default trigger.
+
+Prepared membership retains accepted placement order and every individual
+session, including multiple sessions in the same week or month. Period and cell
+lookups share this ordering contract. Local indexes expire with their projection
+or render; changing scope, accepted work or Undo supplies a fresh reading. This
+preparation boundary preserves the current geometry, colors, selected states,
+keyboard targets and mounted editing controls.
 
 ## Add, place and inspect
 
@@ -191,6 +197,7 @@ Full-speed and system reduced-motion preserve the same readable state.
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Cassette/period scope, board, native tracks, append targets and stable detail slot |
 | [Starter recipes](../../collaboration/native-investment-studio/coordination-starters.mjs), [empty library](../../collaboration/native-investment-studio/plan-library-empty.mjs) | Detached starter preparation, shared-reel preview and explicit load/create callbacks |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Period projection, direct occurrence append and arrangement proposals |
+| [Occurrence index](../../collaboration/native-investment-studio/cadence-occurrences.mjs), [session owner](../../collaboration/native-investment-studio/work-sessions.mjs) | Invocation-local membership and override lookup, accepted order and detached session settings |
 | [Studio controller](../../collaboration/native-investment-studio/controller.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Distinct record creation, deliberate cassette filtering and canonical session editing |
 | [Occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Repetition/placement pads, shared selected/open cues and Apply delegation |
 | [Delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Phase projection, direct team controls and independent participation matrix |
