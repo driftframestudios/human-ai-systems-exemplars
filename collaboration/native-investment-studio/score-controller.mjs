@@ -24,7 +24,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
   let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
-  let loadedPlanId = studio.read().state.work[0]?.id ?? null;
+  let loadedPlanId = null;
   let selected = { kind: 'horizon', id: '' }, fieldSignature = '', lastProjection = null;
   let inspectionEntryKey = null, inspectorOpen = false;
   let removal = null;

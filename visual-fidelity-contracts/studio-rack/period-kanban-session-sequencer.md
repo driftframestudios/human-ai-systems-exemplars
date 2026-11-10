@@ -17,9 +17,9 @@ Showcase reference until the human cues promotion.
 The [Coordination view](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
 begins with the Plans shelf attached to the period rack. The board, optional
 session detail deck and Session tracks share that rack. One cassette is one
-repeatable activity plan; its sessions are occurrences. Initially, the first
-available cassette loads with detail closed: Pilot decision review in the
-showcase. An empty library starts unselected. Loading filters work and related
+repeatable activity plan; its sessions are occurrences. Initially, All plans
+shows the complete arrangement with detail closed. A persistent scope rail pairs
+All plans with Previous/Next pennants and the loaded name. An empty library starts unselected. Loading filters work and related
 stages, handoffs, decisions and delays. All plans explicitly clears that filter;
 Plan overview returns from the selected period. These are independent scopes.
 
@@ -194,6 +194,9 @@ evaluates whether the resulting composition is clear.
 ## Supersession and next boundary
 
 This current contract replaces the accumulated implementation chronology.
+#909 restores All plans as the initial view and keeps its return beside
+Previous/Next cassette browsing, superseding #906's first-tape default. Period
+scope remains independent and navigation retains accepted data and Undo.
 #906 supersedes the unqualified rule that period-lane creation always makes a
 new record: the loaded plan receives another occurrence, while All plans offers
 explicit New plan. Scoped relationship markers and the empty-library starter

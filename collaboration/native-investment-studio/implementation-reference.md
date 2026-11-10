@@ -2121,8 +2121,9 @@ public release retain separate receiving events.
 
 Re-entry begins with the current journal checkpoint, the accepted `dev` revision
 and this package's focused tests. The accepted-edit refresh repair (#901) is
-complete. The current #906 pass clarifies loaded-plan repetition, separate plan
-creation, removal and empty-library recovery. Issue #679 coordinates later visitor
+complete. #906 establishes loaded-plan repetition, separate plan
+creation, removal and empty-library recovery. #909 restores the All plans entry
+and adds bounded sequential cassette browsing through the existing scope owner. Issue #679 coordinates later visitor
 performance: #902 owns Investment model/control reuse, #903 occurrence indexing
 and #900 CSS consolidation. Those refinements remain queued for a later cue.
 Source findings define their scopes; matched browser observations establish any
@@ -2171,9 +2172,9 @@ The detailed agenda remains in downloadable reports.
 Periods are view selections until the visitor changes their count or basis.
 
 One cassette identifies one repeatable work record. Its sessions are occurrences.
-Initial view state loads the first available record, Pilot decision review in the
-showcase; an empty library starts unselected. All plans explicitly clears the
-loaded scope. Loaded lane and track additions append an occurrence through `work.update` while
+Initial view state shows All plans; an empty library starts unselected.
+The persistent All plans control clears loaded scope. Previous/Next browse
+canonical shelf order through the same callback and retain period scope. Loaded lane and track additions append an occurrence through `work.update` while
 retaining the loaded record; All plans New plan targets use the canonical record
 creation owner. Loaded relationship markers follow the same work scope. Transport
 Remove plan uses canonical removal and shared amp Undo. When work is empty,

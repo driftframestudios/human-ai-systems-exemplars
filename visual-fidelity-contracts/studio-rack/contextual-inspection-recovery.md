@@ -18,7 +18,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
-| Plan overview | The first available cassette loads initially with detail closed; an empty library starts unselected. All plans returns from cassette scope. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
+| Plan overview | All plans starts selected with detail closed; an empty library starts unselected. Persistent All plans and directional Previous/Next controls share the cassette scope owner and retain the selected period. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |

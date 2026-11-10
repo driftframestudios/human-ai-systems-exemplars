@@ -18,9 +18,9 @@ verification and independent review.
 ## Current composition
 
 Coordination starts with the Plans cassette shelf, sprint/quarter board and
-Session tracks. The first available cassette loads initially with detail closed;
-an empty library starts unselected. A cassette filters the work. All plans clears
-that filter; Plan overview returns from a selected sprint or quarter. These
+Session tracks. All plans starts selected with detail closed. Previous/Next
+pennants browse cassettes in shelf order; the persistent All plans control returns
+to the aggregate. An empty library starts unselected. A cassette filters the work; Plan overview returns from a selected sprint or quarter. These
 scope controls remain inside the rack above its local scroll areas.
 
 A selected session opens its canonical controls between board and tracks.
