@@ -5,6 +5,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
+import { assertReelFit } from './reel-fit.browser-helper.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -954,6 +955,27 @@ for (const engine of names) test(`${engine}: investment receivers retire cleanly
   assert.match(observed.known, /Known \$/); assert.match(observed.meter, /Known investment/);
   assert.match(observed.session, /Known \$/); assert.equal(observed.retiredUnchanged, true);
   assert.match(observed.refreshed, /Pilot upfront investment/); assert.doesNotMatch(observed.refreshed, /Reserve set aside/);
+});
+
+for (const engine of names) test(`${engine}: Customer account reel fits Implementation and retains stable choice targets`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page);
+  await view.locator('[data-investment-record][data-investment-type="rollout"]').first().click();
+  const reel = view.getByRole('group', { name: 'Customer account', exact: true });
+  for (const width of [360, 390, 768, 1512, 1920]) {
+    await page.setViewportSize({ width, height: 1100 });
+    const geometry = await assertReelFit(reel, width);
+    const implementation = reel.getByRole('button', { name: 'Customer account: Implementation', exact: true });
+    await implementation.click();
+    await expect(implementation).toHaveAttribute('aria-pressed', 'true');
+    assert.deepEqual(await assertReelFit(reel, width), geometry, 'selection keeps both key sizes stable');
+    await implementation.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(reel.getByRole('button', { name: 'Customer account: Price & margin', exact: true })).toBeFocused();
+    await expect(reel.locator('.native-reel__reading')).toHaveText('Price & margin');
+    await view.locator('.investment-comparison__reels').screenshot({ path: resolve(captures, `${engine}-customer-label-fit-${width}.png`) });
+  }
 });
 
 for (const engine of names) test(`${engine}: Investment uses the shared Showcase reel family with reachable choices and silent refresh`, { timeout: 45000 }, async t => {
