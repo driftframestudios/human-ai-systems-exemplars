@@ -3191,7 +3191,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-score__horizon-controls .native-score__segments label { margin: 0; padding: .4rem .5rem; font-size: .8rem; }
 .native-score__example-links { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; min-inline-size: 0; }
 .native-score__example-links > span { flex-basis: 100%; font-size: .75rem; font-weight: 700; }
-.native-coordination .native-score__example-links button { min-inline-size: 0; padding: .35rem 1.7rem .35rem .55rem; font-size: .75rem; }
+.native-coordination .native-score__example-links button.studio-apply-control { min-inline-size: 0; padding: .35rem 1.7rem .35rem .55rem; font-size: .75rem; background: var(--canvas-paper); }
 .native-score__pending { margin-block-end: .85rem; padding: .7rem .85rem; border-inline-start: .25rem solid #007d70; background: #cce7db; }
 .native-score__pending p { margin: 0 0 .5rem; font-size: .8rem; }
 .native-score__pending .native-coordination__actions { margin: 0; }

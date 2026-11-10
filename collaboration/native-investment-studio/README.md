@@ -265,7 +265,8 @@ meaning and leave the accepted work price intact. **Compare a change** and
 ## Try the experience
 
 1. Start in **All plans**, select a cassette or open a sprint. Try **AI Enablement**
-   or **AI Experience** to explore another complete arrangement with one-step Undo.
+   or **AI Experience** through the paper-faced **Try a different example** buttons
+   to explore another complete arrangement with one-step Undo.
    **All plans** returns to the complete arrangement; **Plan overview** returns
    from the selected period.
 2. Select a session clip to adjust its duration, people or placement. Apply accepts
