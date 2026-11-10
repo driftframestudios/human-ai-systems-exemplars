@@ -17,7 +17,7 @@ export function createCadenceView(root, {
 } = {}) {
   const document = root.ownerDocument;
   const captionPrefix = `cadence-caption-${++viewSequence}`;
-  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey, captionEdit = null, lastReading;
+  let disposed = false, previousPeriodId, overviewReturn, periodOriginKey, captionEdit = null, lastReading, rendered;
   const actions = new Map();
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -103,6 +103,11 @@ export function createCadenceView(root, {
   function refresh(projection, { periodId = null, loadedPlanId = null, selected = null, preview = false } = {}) {
     if (disposed) return;
     lastReading = { projection, options: { periodId, loadedPlanId, selected, preview } };
+    // Accepted and proposed projections carry their own identity. Selection
+    // values remain comparable when the controller reconstructs its options.
+    const renderKey = [projection, periodId, loadedPlanId, preview, selected?.kind, selected?.id, selected?.occurrenceIndex];
+    if (rendered?.every((value, index) => value === renderKey[index])) return;
+    rendered = null;
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
     const scrollPosition = { board: board.scrollLeft, tracks: tracks.scrollLeft };
     const oldShelf = library.querySelector('.studio-tape-shelf');
@@ -128,7 +133,7 @@ export function createCadenceView(root, {
       // sprint/quarter placement. Only the period reading needs a cadence.
       availability.hidden = true; attachments.hidden = !flowPanel;
       scopeCaption(relationshipPanel, 'Saved arrangement');
-      fragment.append(invitation); extras.replaceChildren(fragment); return;
+      fragment.append(invitation); extras.replaceChildren(fragment); rendered = renderKey; return;
     }
     const model = projectCadence(state);
     const people = new Map(state.people.map(row => [row.id, row]));
@@ -272,6 +277,8 @@ export function createCadenceView(root, {
         const cancel = node('button', 'Cancel', 'native-control--cancel'); cancel.type = 'button'; tools.append(save, cancel);
         const error = node('p', captionEdit?.id === period.id ? captionEdit.error : '', 'native-cadence__caption-error'); error.setAttribute('role', 'alert');
         const redraw = key => {
+          // Caption editing is local view state, independent of the projection.
+          rendered = null;
           refresh(lastReading.projection, lastReading.options);
           [...board.querySelectorAll('[data-cadence-key]')].find(item => item.dataset.cadenceKey === key)?.focus({ preventScroll: true });
         };
@@ -552,9 +559,10 @@ export function createCadenceView(root, {
       arrival?.focus({ preventScroll: true });
       if (periodChanged) revealStudioDestination(activePeriod ? reading : arrival);
     }
+    rendered = renderKey;
   }
   return Object.freeze({ refresh, getSessionSlot: () => disposed ? null : sessionSlot, dispose() {
-    if (disposed) return; disposed = true; captionEdit = null; lastReading = null; actions.clear();
+    if (disposed) return; disposed = true; captionEdit = null; lastReading = null; rendered = null; actions.clear();
     root.removeEventListener('click', click); root.removeEventListener('pointerover', showPreview); root.removeEventListener('focusin', showPreview);
     externalFlowEvents?.removeEventListener('click', click);
     root.classList.remove('native-cadence', 'studio-rack-composition'); delete root.dataset.cadenceReading;

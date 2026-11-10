@@ -331,9 +331,13 @@ switching chapters and Undo. The source review routes CSS ownership to
 accepted-edit refresh to [#901](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/901),
 Investment model reuse to [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
 and occurrence indexing to [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
-Start JavaScript implementation with refresh ownership; CSS consolidation can
-proceed independently. These are scoped implementation opportunities from source
-review, with current browser measurements still to be taken. Earlier stress
+The #901 implementation settles accepted score edits locally before one root
+notification. Cadence retains its rack DOM when the exact projection, scope and
+selection are unchanged; caption editing has its own redraw boundary. Creation,
+focus, scope and Undo remain covered by the focused score/browser checks.
+Continue JavaScript work with #902, then #903; CSS consolidation can proceed
+independently. Reduced refresh work is observed directly; visitor latency still
+needs a matched measurement before a speed claim. Earlier stress
 studies remain historical evidence; the accepted visual contracts and existing
 accounting behavior remain preservation boundaries. Work receives review on
 `dev`; promotion to `main` and public release await their separate human cues.

@@ -2128,6 +2128,15 @@ claim. Earlier relationship measurements remain historical, and #260 retains
 About delivery measurement. #705 owns broader economic translation. Promotion
 to `main` remains a separate human-cued event.
 
+Accepted score operations settle their local selection and inspector before
+publishing one `onAccepted` notification. Draft and cancellation notifications
+retain `onEditing`. Projection, edit intent, lease and generation checks preserve
+a successor editor through either local view or parent callbacks. Cadence reuse
+compares the exact projection object and rendered scope, selection and preview
+values; the revision number alone is insufficient. Caption editing invalidates
+that retained render explicitly while ordinary unchanged refreshes preserve its
+input, text selection, scroll, disclosures and borrowed session controls.
+
 
 ## Sprint and quarter coordination
 

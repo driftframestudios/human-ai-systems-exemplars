@@ -44,6 +44,15 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     }
   }
   function announce(text) { if (!disposed) status.textContent = text; }
+  function publishAccepted(epoch, accepted) {
+    // Settle the local view before notifying the shared owner. Draft-only
+    // changes use onEditing; an accepted edit needs one root notification.
+    if (!retains(epoch, accepted)) return false;
+    render();
+    if (!retains(epoch, accepted)) return false;
+    onAccepted(accepted.projection);
+    return retains(epoch, accepted);
+  }
   const toolbar = node('div', undefined, 'native-score__transport');
   const horizon = node('fieldset', undefined, 'native-score__horizon-controls'); horizon.append(node('legend', 'Plan horizon'));
   const basisChoices = node('div', undefined, 'native-score__segments');
@@ -117,9 +126,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function acceptCadence(update, message) {
     const unavailable = () => ({ ok: false, error: { message: 'Return to this plan and try the change again.' } });
     if (disposed || !isActive()) return unavailable();
+    const epoch = ++generation;
     const parked = editing.park();
     if (!parked.ok) { render(); announce(parked.error.message); return parked; }
-    if (onLoadPlan(loadedPlanId) === false || disposed || !isActive()) return unavailable();
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return unavailable();
     const base = studio.read(), current = base.state.scoreSettings.cadence;
     const next = update(current, base.state);
     if (!next) return unavailable();
@@ -129,8 +140,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!result.ok) { render(); announce(result.error.message); return result; }
     selected = { kind: 'horizon', id: '' }; fieldSignature = '';
     inspectorOpen = false; flowPanel.open = false;
-    onAccepted(result.projection);
-    if (!disposed) { render(); onEditing(); announce(message); }
+    if (publishAccepted(epoch, { ...prior, projection: result.projection })) announce(message);
     return result;
   }
   function renamePeriod({ id, label }) {
@@ -212,9 +222,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   function addOccurrence({ workId, periodId: destination, subdivision }) {
     if (disposed || !isActive()) return;
+    const epoch = ++generation;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    if (onLoadPlan(loadedPlanId) === false || disposed || !isActive()) return;
+    const prior = boundary();
+    if (!owns(epoch) || onLoadPlan(loadedPlanId) === false || !retains(epoch, prior) || !isActive()) return;
     const base = studio.read(), cadence = base.state.scoreSettings.cadence;
     const work = base.state.work.find(row => row.id === workId);
     if (!work || !cadence?.periods.some(period => period.id === destination)) return;
@@ -224,8 +236,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const result = studio.applyCommand({ type: 'work.update', work: { ...work, occurrences: work.occurrences + 1 }, placements }, base);
     if (!result.ok) { render(); announce(result.error.message); return; }
     selected = { kind: 'horizon', id: '' }; inspectorOpen = false; fieldSignature = '';
-    onAccepted(result.projection);
-    if (!disposed) { render(); onEditing(); announce(`Session added to ${work.label}. Undo restores the previous sessions.`); }
+    if (publishAccepted(epoch, { ...prior, projection: result.projection }))
+      announce(`Session added to ${work.label}. Undo restores the previous sessions.`);
   }
   function writeRaw(key, value) {
     const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
@@ -406,12 +418,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const accepted = { ...prior, projection: result.projection };
     if (!retains(epoch, accepted)) return;
     inspectorOpen = false; fieldSignature = '';
-    onAccepted(result.projection);
-    if (!retains(epoch, accepted)) return;
-    render();
-    if (!retains(epoch, accepted)) return;
-    onEditing();
-    if (!retains(epoch, accepted)) return;
+    if (!publishAccepted(epoch, accepted)) return;
     announce(message);
     [...root.querySelectorAll('[data-cadence-key]')].find(control => control.dataset.cadenceKey === focusKey)?.focus({ preventScroll:true });
   }
@@ -514,8 +521,16 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!result.ok) { render(); announce(result.error.message); return; }
     created.clear();
     arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
-    if (method === 'apply') { const accepted = result.projection ?? studio.read(); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted) return; }
-    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; inspectorOpen = false; render(); onEditing();
+    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; inspectorOpen = false;
+    const settled = boundary();
+    if (method === 'apply') {
+      if (!publishAccepted(epoch, settled)) return;
+    } else {
+      render();
+      if (!retains(epoch, settled)) return;
+      onEditing();
+      if (!retains(epoch, settled)) return;
+    }
     announce(method === 'apply' ? 'Arrangement applied. Undo restores the previous plan.' : 'Changes cancelled.');
     if (!owns(epoch) || editing.read().active) return;
     const prefix = (origin.kind === 'gate' ? 'decision' : origin.kind) + ':' + origin.id;
