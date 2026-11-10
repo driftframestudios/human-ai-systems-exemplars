@@ -360,51 +360,29 @@ Firefox when input or layout behavior warrants it. The receiving PR records the
 actual checks and their scope.
 
 [Performance work (#679)](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
-now follows adding plans and sessions, keeping editors stable, turning dials,
-switching chapters and Undo. The source review routes CSS ownership to
-[#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900),
-accepted-edit refresh to [#901](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/901),
-Investment model reuse to [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
-and session/placement indexing to [#903](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/903).
-The #901 implementation settles accepted score edits locally before one root
-notification. Cadence retains its rack DOM when the exact projection, scope and
-selection are unchanged; caption editing has its own redraw boundary. Creation,
-focus, scope and Undo remain covered by the focused score/browser checks.
-The tape-scope repairs in #913/#914 settle the current visitor paths.
-[#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915)
-makes individual editing and plan defaults explicit at receiving boundaries;
-aggregate cards retain period navigation. `navigation-policy.mjs` admits the
-current record and explicit scope before handing the canonical target to the
-draft owner. Mounted checks cover retained entries on rejection, defaults versus
-numbered edits, proposed arrangements, nested returns and Undo.
-The #902 Investment reader reuses one immutable context for the exact accepted
-projection. Shelf amounts, portraits and loaded controls share its deck lookup
-and financial readings. Commands receive fresh mutable settings; retained shelf,
-library and editor controls keep focus while their callbacks read current state.
-Removed or type-changed editors release their controls and reject held events.
-Ownership checks cover reuse, detached commands and replace/Undo lifetimes;
-browser checks cover retained controls and the existing dial/deck journeys.
-The #903 indexes prepare ordered session membership once per projection or
-render. Periods and sequencer cells read their buckets; stage and handoff
-endpoints reuse their local ordered reading. Investment groups placements once
-and resolves overrides through the session owner. These indexes expire with the
-invocation; exact session identities, funding/status groups and Undo keep their
-existing meaning. Literal fixtures cover interleaved and unplaced sessions,
-partial endpoints and independent replacement readings.
-[#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
-gives the five deck types one closed view registry and named factories. Pure
-choice labels follow the saved-field contract; preset and manual-edit effects
-operate on owned command candidates. Catalogs and field definitions are deeply
-immutable, while each deck receives fresh settings. The workbench retains
-control lifetimes, focus, gestures, disposal and shared-plan actions. This keeps
-each type's controls and readings together without adding a file boundary for
-every small variant. The receiving PR records source, browser and review
-evidence for this extraction. Further refinements await their next cue.
-Reduced refresh and preparation work are observed directly; visitor latency
-still needs a matched measurement before a speed claim. Earlier stress
-studies remain historical evidence; the accepted visual contracts and existing
-accounting behavior remain preservation boundaries. Work receives review on
-`dev`; promotion to `main` and public release await their separate human cues.
+follows adding plans and sessions, keeping editors stable, turning dials,
+switching chapters and Undo. The JavaScript refinement wave is implemented on
+`dev`: accepted score edits notify the root once; editor targets carry explicit
+scope; Investment controls share an immutable reading context; occurrence indexes
+last for one invocation; and a closed registry groups each financial deck's controls
+and readings. Focus, session identity, owned drafts and recovery keep their
+existing boundaries. The [implementation reference](implementation-reference.md#continuing-the-native-instrument)
+and [experience journal](experience-journal.md#current-working-contract) explain
+those decisions and their supersessions.
+
+[#900](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/900)
+retires the former elapsed-minute timeline and agenda styles. The current period
+board, sequencer, local editors and report data retain their source owners.
+Shared duration rules and exact duplicate declarations remain separate focused
+CSS reviews. The source-owner map below and
+[cadence ownership route](implementation-reference.md#sprint-and-quarter-coordination)
+lead to the live composition; the reviewed PR carries the browser comparison.
+
+Reduced refresh and preparation work are observed directly; a visitor-latency
+claim requires a matched measurement. Earlier stress studies remain historical
+evidence. A further runtime change begins with an observed visitor-path cost.
+Work receives independent review on `dev`; promotion to `main` and public release
+await their separate human cues.
 
 ## Find the source owner
 
