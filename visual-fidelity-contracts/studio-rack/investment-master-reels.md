@@ -137,7 +137,10 @@ and wide widths. At `650px` and below, place it in a horizontal local scroller
 above the Domain reel and loaded comparison. The channel keeps a `290px` column,
 reducing to `230px` at `1000px` and below; phone decks keep a `250px` basis. The
 Domain and explanation can stack within the body while the channel remains
-left-aligned. Its relationship to the loaded comparison stays visible.
+left-aligned. Its relationship to the loaded comparison stays visible. Domain
+selection reveals the chosen deck inside this local scroller through the shared
+shelf-reveal owner. Page position and reel focus remain stable; reduced motion
+settles directly and manual shelf input cancels the reveal.
 
 The stable outer button owns focus and selection; its inner cassette owns the
 `160ms ease-out` perspective hover. The VHS-C body preserves the broad paper
@@ -341,6 +344,13 @@ retention and closing revenue, and adoption names time, service cost and
 capacity demand. Capital discount describes its NPV effect. These descriptions
 keep the existing compact fader skin and native control geometry; values,
 connected reels and Undo continue through their established owners.
+
+Sparse comparison reels retain that compact wheel while giving their two
+centered keys 48% of its width. Customer account therefore fits Implementation
+inside its key, with the same geometry for resting, focused and selected states.
+This uses the shared choice-count fit from
+[Zoetrope Preset Selection](zoetrope-preset-selection.md); the green Domain
+housing, navy center, financial presets and comparison grid retain their owners.
 
 Investment owns the grid and short financial context below each reel. The
 shared component owns housing, pad geometry, rotor and selected colors. Broad

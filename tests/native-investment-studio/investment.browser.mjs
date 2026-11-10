@@ -5,6 +5,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
+import { assertReelFit } from './reel-fit.browser-helper.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -995,6 +996,27 @@ for (const engine of names) test(`${engine}: investment receivers retire cleanly
   assert.match(observed.refreshed, /Pilot upfront investment/); assert.doesNotMatch(observed.refreshed, /Reserve set aside/);
 });
 
+for (const engine of names) test(`${engine}: Customer account reel fits Implementation and retains stable choice targets`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page);
+  await view.locator('[data-investment-record][data-investment-type="rollout"]').first().click();
+  const reel = view.getByRole('group', { name: 'Customer account', exact: true });
+  for (const width of [360, 390, 768, 1512, 1920]) {
+    await page.setViewportSize({ width, height: 1100 });
+    const geometry = await assertReelFit(reel, width);
+    const implementation = reel.getByRole('button', { name: 'Customer account: Implementation', exact: true });
+    await implementation.click();
+    await expect(implementation).toHaveAttribute('aria-pressed', 'true');
+    assert.deepEqual(await assertReelFit(reel, width), geometry, 'selection keeps both key sizes stable');
+    await implementation.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(reel.getByRole('button', { name: 'Customer account: Price & margin', exact: true })).toBeFocused();
+    await expect(reel.locator('.native-reel__reading')).toHaveText('Price & margin');
+    await view.locator('.investment-comparison__reels').screenshot({ path: resolve(captures, `${engine}-customer-label-fit-${width}.png`) });
+  }
+});
+
 for (const engine of names) test(`${engine}: Investment uses the shared Showcase reel family with reachable choices and silent refresh`, { timeout: 45000 }, async t => {
   const page = await open(t, engine);
   await chapter(page, 'investment').click();
@@ -1091,6 +1113,18 @@ for (const engine of names) test(`${engine}: domain portraits follow deck assump
     await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-domain.png`) });
   }
   await expect(view.locator('.investment-domain__sectors')).toHaveCSS('animation-name', 'none');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const planning = domain.getByRole('button', { name: 'Domain: Planning', exact: true });
+  await planning.scrollIntoViewIfNeeded();
+  const beforeScroll = await page.evaluate(() => scrollY), beforeReveal = await bytes(page);
+  await planning.click();
+  await expect.poll(() => view.locator('.investment-master[aria-pressed="true"]').evaluate(item => {
+    const a = item.getBoundingClientRect(), b = item.closest('.investment-study__masters').getBoundingClientRect();
+    return a.left >= b.left - 2 && a.right <= b.right + 2;
+  })).toBe(true);
+  await expect(planning).toBeFocused();
+  assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeScroll) < 2, 'Domain reveals only its local deck shelf');
+  assert.equal(await bytes(page), beforeReveal, 'Domain browsing preserves accepted investment settings');
 });
 
 // Isolate the financial owner while retaining the real About styles and browser

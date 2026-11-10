@@ -5,6 +5,7 @@ import { readFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { registerBrowserFixture } from './browser-fixture-lifecycle.mjs';
+import { assertReelFit } from './reel-fit.browser-helper.mjs';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
 import { startStaticServer, monitor, assertTelemetry } from '../../tools/core-architecture-browser-helper.mjs';
 
@@ -117,6 +118,24 @@ for (const engine of names) {
     await action(page, 'cancel').click();
     await root(page).locator('[data-studio-undo]').click();
     assert.equal(await bytes(page), initial, 'amp Undo restores the accepted framework and shared attention together');
+  });
+
+  test(`${engine}: Change reel labels retain separate targets and complete wording across viewports`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const lens = panel(page).locator('[data-change-lens-wheel] .native-reel');
+    const framework = panel(page).locator('[data-change-framework-wheel] .native-reel');
+    for (const width of [360, 390, 768, 1512, 1920]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const geometry = await assertReelFit(lens, width);
+      await lens.getByRole('button', { name: 'Learning / evidence', exact: true }).click();
+      assert.deepEqual(await assertReelFit(lens, width), geometry, 'selection keeps every key size stable');
+      await lens.getByRole('button', { name: 'Learning / evidence', exact: true }).focus();
+      await page.keyboard.press('ArrowRight');
+      await expect(lens.getByRole('button', { name: 'Executive value', exact: true })).toBeFocused();
+      await expect(lens.getByRole('button', { name: 'Executive value', exact: true })).toHaveAttribute('aria-pressed', 'true');
+      await assertReelFit(framework, width);
+      await panel(page).locator('.native-change__reels').screenshot({ path: resolve(captures, `${engine}-label-fit-${width}.png`) });
+    }
   });
   test(`${engine}: the compact Change receiver keeps local edits through views and closes to its initiating pad`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);

@@ -37,8 +37,11 @@ Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
 compact horizontal strip.
 Each cassette is one repeatable activity plan; its sessions are occurrences of
-that activity. The initial view shows **All plans**, with detail closed. A persistent scope rail
-keeps All plans beside Previous/Next pennant controls and the loaded plan name.
+that activity. The initial view selects a stacked **All plans** cassette with total session
+minutes and count, with detail closed. A compact scope rail keeps All plans
+beside the loaded name and adjacent Previous/Next pennants. Sequential browsing
+reveals the selected cassette within its shelf; Domain selection in Investment
+uses the same local reveal while preserving page position and focus.
 Next enters the first cassette; browsing follows shelf order and stops at its
 ends. Scope changes retain the selected sprint/quarter and accepted edits. An
 empty library starts unselected.
@@ -188,6 +191,8 @@ retaining the support proposal; Cancel leaves the name intact. Amp Undo recovers
 an accepted rename.
 
 Change and Quality retain their distinct reels, faders, tracks and pad artwork.
+Reel keys keep complete labels and separate targets: dense viewpoints use spaced
+perimeter rows, while two-choice Investment comparisons use wider keys.
 Their selected details use compact attached racks with an owner return, current
 item, Apply and Close. Related local views retain their fields when switching.
 Supporting-session controls share the preserved duration module and place the
