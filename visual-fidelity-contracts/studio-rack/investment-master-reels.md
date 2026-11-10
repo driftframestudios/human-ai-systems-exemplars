@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference and receiving composition, version `0.4.6`, ID
+**Standing:** approved reference and receiving composition, version `0.4.7`, ID
 `vfc:investment-master-reels`; 10 November 2026, receiving
 [#895](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/895)
 art and [#902](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/902)
@@ -332,6 +332,15 @@ controls stack at phone widths. **Capital choices retains its existing three-ree
 size and layout**: Alternative, Benefit pattern and Capital reading. Capital
 reading uses the rose tertiary housing. The other two retain their established
 teal/cobalt relationship.
+
+Cross-cutting faders carry one short, visible effect description beneath the
+input. The shared range factory associates it through `aria-describedby`; the
+deck view owns the wording. Reserve and options explain the budget they set
+aside, price discount names net price and contribution, retained revenue names
+retention and closing revenue, and adoption names time, service cost and
+capacity demand. Capital discount describes its NPV effect. These descriptions
+keep the existing compact fader skin and native control geometry; values,
+connected reels and Undo continue through their established owners.
 
 Investment owns the grid and short financial context below each reel. The
 shared component owns housing, pad geometry, rotor and selected colors. Broad

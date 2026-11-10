@@ -95,6 +95,12 @@ tracks. Its four-key rail selects one receiver for a quality check, rehearsal,
 recovery/learning, or the quality illustration. The selected track key has a
 pressed face and expanded caret that identify this local receiver.
 
+The Review demand fader names the amount of review the example calls for.
+Above Balanced, Security and privacy and Independent review stay included;
+their lock cue explains that relationship. The underlying setting keeps its
+existing identity and proposal boundary. This control configures supporting
+checks in the example; real review obligations retain their own authority.
+
 The receiver uses the shared owner/title, Close and top Apply header. Close hides
 its controls and retains the proposal; the visible entry regains focus even when
 a projection replaced its track key. A source inside the closed receiver returns

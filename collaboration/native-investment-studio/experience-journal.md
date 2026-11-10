@@ -41,7 +41,11 @@ local receiver into Change and Quality. #941 gives Change framework-named exact
 fields while keeping the shared attention channels separately inspectable.
 **Supersession:** changing frameworks preserves those channels and unfinished
 entries instead of reapplying the selected lens preset. Faders, exact fields,
-Apply and amp Undo retain their draft and command owners. #818 receives the full financial-deck
+Apply and amp Undo retain their draft and command owners. #943 names the
+Quality control **Review demand** and explains its required-check threshold.
+**Supersession:** this replaces Compliance’s reduction cue with the actual
+check-selection effect. Financial faders gain deck-owned accessible effect
+descriptions while values, proposals, projections and Undo retain their owners. #818 receives the full financial-deck
 workbench in Investment, with shared Showcase reels in #854 and Domain portraits,
 compact cost comparison and shared diagram geometry in #895. Each feature uses
 its own focused reviewed delivery.
