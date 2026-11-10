@@ -6,9 +6,9 @@ quarter shows its weeks or months with a visible Plan overview return. Team
 planning uses the same overview/detail relationship for delivery phases and
 participation.
 
-**Standing:** review candidate `0.1.0`; ID
+**Standing:** review candidate `0.1.1`; ID
 `vfc:period-kanban-session-sequencer`; dev receiving contract revised
-8 November 2026 for [#831](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/831).
+9 November 2026 for [#906](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/906).
 It inherits [Studio Rack Composition](README.md). Main retains its approved
 Showcase reference until the human cues promotion.
 
@@ -16,9 +16,12 @@ Showcase reference until the human cues promotion.
 
 The [Coordination view](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
 begins with the Plans shelf attached to the period rack. The board, optional
-session detail deck and Session tracks share that rack. A cassette filters the
-work with detail closed. All plans clears the cassette filter; Plan overview
-returns from the selected period. These are independent scopes.
+session detail deck and Session tracks share that rack. One cassette is one
+repeatable activity plan; its sessions are occurrences. Initially, the first
+available cassette loads with detail closed: Pilot decision review in the
+showcase. An empty library starts unselected. Loading filters work and related
+stages, handoffs, decisions and delays. All plans explicitly clears that filter;
+Plan overview returns from the selected period. These are independent scopes.
 
 The selected sprint/quarter and its return stay above the board and track scroll
 areas. Returning restores the originating period control and local scroll.
@@ -43,17 +46,19 @@ have text or accessible wording alongside their color and shape.
 | Entry | Result |
 | --- | --- |
 | Plus inside an existing plan's track cell | Appends one accepted occurrence to that plan in the named period/week/month, retaining every earlier placement |
-| Period-lane creation area | Creates a distinct, uniquely named work record with one initial placed session; editing stays closed |
+| Add session in a loaded period lane | Appends an occurrence to the loaded plan and retains its cassette selection; editing stays closed |
+| New plan in an All plans period lane | Creates a distinct, uniquely named work record with one initial placed session; editing stays closed |
 | New plan row in Session tracks | Creates a distinct, uniquely named work record in that column's period; editing stays closed |
 | New plan on the cassette shelf | Creates a distinct work record and deliberately loads its cassette with detail closed |
 | Existing occurrence pad | Opens its canonical session editor at that occurrence |
 | Working sessions Add/Remove | Changes the selected session draft's occurrence collection; Apply accepts the proposal |
 | Working sessions period choice | Moves the selected occurrence while leaving the others in their existing periods |
 
-Period-lane and track New plan additions keep All plans visible. Repeated
-additions in one sprint or another therefore leave earlier clips on screen.
-Cassette selection is the deliberate way to filter those records. In a loaded
-plan, track rows remain available in periods that have no occurrence yet.
+The visible scope gives creation its meaning: loaded Add session repeats that
+plan; All plans New plan creates separate work. All plans lane and track New plan
+additions retain the overview, so earlier clips stay visible. Loaded creation
+retains its cassette and earlier placements, including when adding to an empty
+period. The New plan row belongs to the All plans view.
 
 Existing-plan appends use one canonical `work.update` command containing the
 new count and complete placements. It is one accepted history entry, reversible
@@ -61,6 +66,18 @@ through amp Undo. A fresh work record uses the existing creation adapter, with
 useful people/team defaults, a 30-minute session and extra-investment funding.
 A plan needing people or a team uses the existing guided route. Later field
 edits retain their Apply/Cancel boundary.
+
+Remove plan sits at the transport's right edge and opens a compact confirmation
+naming the loaded cassette. Canonical removal and its dependent links form one
+accepted edit; amp Undo restores the complete arrangement.
+
+When the library is empty, a cobalt shared reel and adjacent diagram preview
+replace the board, tracks and attached readings in one full-width composition.
+Plan, Design, Test, Build and Deploy select starter sets. Reel selection previews;
+Load explicitly accepts a detached set as one recoverable replacement while
+preserving people, teams, horizon and other chapter state. Create a plan retains
+the canonical creation route, including guided missing-person/team setup. Its
+local session receiver remains available while the empty composition is visible.
 
 An empty lane is a named native button: fine-pointer hover and keyboard focus
 reveal its ghosted plus; touch keeps the invitation visible. Each week/month
@@ -158,11 +175,13 @@ Full-speed and system reduced-motion preserve the same readable state.
 | Owner or check | Responsibility |
 | --- | --- |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Cassette/period scope, board, native tracks, append targets and stable detail slot |
+| [Starter recipes](../../collaboration/native-investment-studio/coordination-starters.mjs), [empty library](../../collaboration/native-investment-studio/plan-library-empty.mjs) | Detached starter preparation, shared-reel preview and explicit load/create callbacks |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs), [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Period projection, direct occurrence append and arrangement proposals |
 | [Studio controller](../../collaboration/native-investment-studio/controller.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Distinct record creation, deliberate cassette filtering and canonical session editing |
 | [Occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs), [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Repetition/placement pads, shared selected/open cues and Apply delegation |
 | [Delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Phase projection, direct team controls and independent participation matrix |
 | [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css), [session CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-session.css) | Board/track geometry and receiving module layouts |
+| [Starter source checks](../../tests/native-investment-studio/coordination-starters.test.mjs), [tape library browser checks](../../tests/native-investment-studio/tape-library.browser.mjs) | Starter preservation and Undo, loaded occurrence creation, plan removal and empty-library recovery |
 | [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Append versus distinct creation, retained placements and visibility, period scope, Undo and relationship proposals |
 | [Session checks](../../tests/native-investment-studio/session.browser.mjs), [rack checks](../../tests/native-investment-studio/rack-controls.browser.mjs) | Shared controls, occurrence selection, receiver identity, return and phone/laptop geometry |
 
@@ -175,6 +194,10 @@ evaluates whether the resulting composition is clear.
 ## Supersession and next boundary
 
 This current contract replaces the accumulated implementation chronology.
+#906 supersedes the unqualified rule that period-lane creation always makes a
+new record: the loaded plan receives another occurrence, while All plans offers
+explicit New plan. Scoped relationship markers and the empty-library starter
+composition keep that distinction visible.
 #831 supersedes add-then-open with creation in place and deliberate inspection,
 and the single period-cell plus with week/month targets spanning the cell.
 #828 supersedes passive blanks in existing-plan tracks with explicit session
@@ -187,5 +210,6 @@ receivers supersede detached primary settings; amp Undo supersedes a cassette-lo
 Undo. The standalone workbench's exact artwork remains preserved.
 
 Independent response records (#816), percentage participation (#798), broader
-removal (#773) and performance (#679) retain separate outcomes. Revisit this
-contract when scope, record identity, acceptance, placement or return changes.
+removal (#773) and performance (#679) retain separate outcomes. Performance
+implementation, including #902, stays queued for a later cue. Revisit this contract
+when scope, record identity, acceptance, placement or return changes.

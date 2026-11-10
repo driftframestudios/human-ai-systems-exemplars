@@ -42,6 +42,7 @@ async function open(t, engine, options = {}) {
     const element = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(element).dispose();
     const studio = createStudio(createShowcasePlan()); window.scoreFixture = { studio, controller: mountCoordinationPanel(element, { studio }) };
   });
+  await score(page).getByRole('button', { name: 'All plans', exact: true }).click();
   return page;
 }
 const bytes = page => page.evaluate(() => window.scoreFixture.studio.exportText());
@@ -94,7 +95,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await score(page).locator('[data-cadence-basis][value="quarter"]').check();
     const accepted = await bytes(page), before = JSON.parse(accepted);
-    await period(page, 'period-2').getByRole('button', { name: /^Add a session in /u }).click();
+    await period(page, 'period-2').getByRole('button', { name: /^Add a new plan in /u }).click();
     const deck = root(page).locator('[data-rack-editor-kind]');
     await expect(deck).toBeHidden();
     const state = JSON.parse(await bytes(page));
@@ -145,7 +146,7 @@ for (const engine of names) {
     const page = await open(t, engine), original = JSON.parse(await bytes(page));
     const added = [];
     for (const periodId of ['period-4', 'period-4', 'period-2']) {
-      await period(page, periodId).getByRole('button', { name: /^Add a session in /u }).click();
+      await period(page, periodId).getByRole('button', { name: /^Add a new plan in /u }).click();
       const state = JSON.parse(await bytes(page));
       const created = state.work.filter(row => !original.work.some(previous => previous.id === row.id));
       assert.equal(created.length, added.length + 1, 'each creation adds a distinct record');
@@ -162,6 +163,45 @@ for (const engine of names) {
     assert.equal(restored.work.length, original.work.length + 2);
     for (const { id } of added.slice(0, 2))
       await expect(period(page, 'period-4').locator(`[data-studio-session-id="${id}"]`)).toBeVisible();
+  });
+
+  test(`${engine}: a loaded tape adds sessions in its period lanes while New plan creates a distinct tape`, async t => {
+    const page = await open(t, engine), original = JSON.parse(await bytes(page));
+    await cadence(page).locator('[data-cadence-key="cassette-add"]').click();
+    const created = JSON.parse(await bytes(page)), added = created.work.filter(work => !original.work.some(row => row.id === work.id));
+    assert.equal(added.length, 1, 'the shelf creates one distinct plan');
+    await expect(cadence(page).locator('.native-cadence__screen')).toHaveAttribute('data-loaded-plan', added[0].id);
+    await expect(cadence(page).locator('.native-cadence__track-markers')).toHaveCount(0);
+    await expect(flow(page).locator('.native-cadence__stage,.native-cadence__handoff')).toHaveCount(0);
+    await cadence(page).locator('[data-studio-plan-id="rehearsal"]').click();
+    await expect(cadence(page).locator('[data-cadence-key="track-handoff:research-before-pairing"]')).toHaveCount(0);
+    for (const id of ['pairing-before-rehearsal', 'rehearsal-before-review'])
+      await expect(cadence(page).locator(`[data-cadence-key="track-handoff:${id}"]`)).toHaveCount(1);
+    await expect(cadence(page).locator('.native-cadence__decision')).toHaveCount(0);
+    await expect(flow(page).locator('[data-cadence-key="stage:build"]')).toHaveCount(1);
+    const initial = await bytes(page), state = JSON.parse(initial), work = state.work.find(row => row.id === 'rehearsal');
+    const placements = state.scoreSettings.cadence.placements.filter(row => row.workId === work.id);
+    let first;
+    for (const [offset, periodId] of ['period-2', 'period-3'].entries()) {
+      await cadence(page).locator(`[data-cadence-key="add-session:${periodId}:overview"]`).click();
+      const next = JSON.parse(await bytes(page));
+      assert.deepEqual(next.work.map(row => row.id), created.work.map(row => row.id), 'a session retains every cassette identity');
+      assert.equal(next.work.find(row => row.id === work.id).occurrences, work.occurrences + offset + 1);
+      assert.deepEqual(next.scoreSettings.cadence.placements.filter(row => row.workId === work.id), [
+        ...placements, ...['period-2', 'period-3'].slice(0, offset + 1).map((id, index) =>
+          ({ workId: work.id, occurrenceIndex: work.occurrences + index, periodId: id, subdivision: 1 })),
+      ]);
+      await expect(cadence(page).locator('.native-cadence__screen')).toHaveAttribute('data-loaded-plan', work.id);
+      await expect(cadence(page).locator('.native-cadence__track-name')).toHaveCount(1);
+      await expect(cadence(page).locator('.studio-rack-create-row')).toHaveCount(0);
+      if (!offset) first = await bytes(page);
+    }
+    await undo(page); assert.equal(await bytes(page), first);
+    await undo(page); assert.equal(await bytes(page), initial);
+    await expect(cadence(page).locator('.native-cadence__screen')).toHaveAttribute('data-loaded-plan', work.id);
+    await cadence(page).getByRole('button', { name: 'All plans', exact: true }).click();
+    await expect(cadence(page).locator('.native-cadence__track-name')).toHaveCount(created.work.length);
+    await expect(cadence(page).locator('.studio-rack-create-row')).toHaveCount(1);
   });
 
   test(`${engine}: adding working sessions publishes one root refresh and preserves earlier placement`, async t => {
@@ -337,7 +377,7 @@ for (const engine of names) {
     assert.equal(changed.scoreSettings.cadence.periods.length, 5);
     assert.deepEqual(changed.work, original.work);
     await expect(score(page).locator('.native-score__pending')).toBeHidden();
-    await period(page, 'period-5').getByRole('button', { name:/^Add a session in /u }).click();
+    await period(page, 'period-5').getByRole('button', { name:/^Add a new plan in /u }).click();
     const created = JSON.parse(await bytes(page));
     assert.equal(created.work.length, original.work.length + 1, 'the new sprint immediately accepts working sessions');
     await undo(page); await undo(page);
@@ -495,6 +535,7 @@ for (const engine of names) {
         const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
       }, hasCadence);
       const retained = await bytes(page);
+      if (hasCadence) await cadence(page).locator('[data-studio-plan-id="followup"]').click();
       await root(page).locator(hasCadence ? '[data-cadence-key="track-work:followup"]' : '[data-delivery-session="followup"]').click();
       await root(page).locator('[data-rack-remove-plan]').click();
       await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
@@ -581,10 +622,11 @@ for (const engine of names) {
       const external = document.createElement('input'); document.body.append(external);
       for (const action of ['add-period', 'add-occurrence:research:period-2:1']) for (const outcome of ['purpose', 'replacement']) {
         const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
-        let expectedProjection = studio.read(), successorToken = null, callbacks = 0, loads = 0;
+        let expectedProjection = studio.read(), successorToken = null, callbacks = 0, loads = 0, armed = false;
         const receiver = mountScorePanel(element, { studio, editing, isActive: () => true,
           onAccepted() { callbacks++; },
           onLoadPlan() {
+            if (!armed) return true;
             loads++;
             if (outcome === 'purpose') {
               editing.purpose.begin('purpose', studio.read()); successorToken = editing.read().active.token;
@@ -598,6 +640,7 @@ for (const engine of names) {
             external.focus(); return true;
           },
         });
+        element.querySelector('[data-cadence-key="all-plans"]').click(); armed = true;
         const control = element.querySelector(`[data-cadence-key="${action}"]`); control.focus(); control.click();
         results.push({ action, outcome, loads, callbacks, acceptedRetained: studio.read() === expectedProjection,
           periods: studio.read().state.scoreSettings.cadence.periods.length,

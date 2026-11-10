@@ -18,7 +18,8 @@ verification and independent review.
 ## Current composition
 
 Coordination starts with the Plans cassette shelf, sprint/quarter board and
-Session tracks. A cassette filters the work with detail closed. All plans clears
+Session tracks. The first available cassette loads initially with detail closed;
+an empty library starts unselected. A cassette filters the work. All plans clears
 that filter; Plan overview returns from a selected sprint or quarter. These
 scope controls remain inside the rack above its local scroll areas.
 
@@ -106,8 +107,8 @@ and hit targets.
 
 | Operation | Cue and acceptance |
 | --- | --- |
-| Add a working session to an existing plan | Plus target in that plan's track cell; appends one accepted occurrence in the chosen period and retains earlier placements |
-| Create a separate plan | Period-lane creation or the New plan track row adds a distinct record and keeps All plans visible; shelf New plan deliberately loads its new cassette |
+| Add a working session to an existing plan | Loaded lane Add session or a track-cell plus appends one accepted occurrence, retaining the cassette and earlier placements |
+| Create a separate plan | Explicit New plan in an All plans lane or track row adds a distinct record and retains that overview; shelf New plan loads its new cassette |
 | Inspect work or a relationship | Named pad or key; pressed state identifies the record and its caret follows the visible receiver |
 | Include a person or choose a setting | Native checkbox/radio pad with persistent selected state; People team membership and bounded role/contribution choices accept directly |
 | Accept a proposal | Raised Apply beside Close, delegated to the canonical bottom action; both carry the same label, validation and disabled state |
@@ -230,7 +231,7 @@ Meaningful supersessions are explicit:
 | Nested Add person always returns to Teams | The local return names the preceding team or supporting-work task and uses its retained draft route |
 | Contribution-specific creation opens above its working area | The canonical creation form is borrowed inside the contribution as a separate half-rack form and returns to its initiating human field |
 | A blank existing-plan track cell is descriptive only | It can append a working session to that plan; earlier placements remain visible |
-| Every creation auto-loads the newest cassette | Period/track creation retains All plans; the shelf alone loads its new cassette |
+| Every creation auto-loads the newest cassette | Loaded Add session retains its cassette; All plans New plan retains the overview; shelf New plan loads its new cassette |
 | #825 Working sessions Remove sits bottom-left | #828 places it bottom-right; Add remains top-right |
 | Apply appears only at the end of an editor | Shared top Apply delegates to that same canonical action; the bottom action remains |
 | A new handoff opens a creation proposal immediately | The rack accepts useful defaults with editing closed; selecting the relationship opens its fields and follow-on actions |

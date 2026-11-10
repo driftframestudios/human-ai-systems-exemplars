@@ -2120,11 +2120,13 @@ preserving its existing URL and capabilities. Main source delivery and tagged
 public release retain separate receiving events.
 
 Re-entry begins with the current journal checkpoint, the accepted `dev` revision
-and this package's focused tests. Issue #679 coordinates visitor performance:
-#901 owns accepted-edit refresh, #902 Investment model/control reuse and #903
-occurrence indexing; #900 owns current CSS consolidation. Source findings define
-those implementation scopes; matched browser observations establish any latency
-claim. Earlier relationship measurements remain historical, and #260 retains
+and this package's focused tests. The accepted-edit refresh repair (#901) is
+complete. The current #906 pass clarifies loaded-plan repetition, separate plan
+creation, removal and empty-library recovery. Issue #679 coordinates later visitor
+performance: #902 owns Investment model/control reuse, #903 occurrence indexing
+and #900 CSS consolidation. Those refinements remain queued for a later cue.
+Source findings define their scopes; matched browser observations establish any
+latency claim. Earlier relationship measurements remain historical, and #260 retains
 About delivery measurement. #705 owns broader economic translation. Promotion
 to `main` remains a separate human-cued event.
 
@@ -2167,6 +2169,18 @@ chapter and return routes. `cadence-view.mjs` projects the overview, weeks/month
 MIDI tracks and relationships; `about.css` owns the native-cadence composition.
 The detailed agenda remains in downloadable reports.
 Periods are view selections until the visitor changes their count or basis.
+
+One cassette identifies one repeatable work record. Its sessions are occurrences.
+Initial view state loads the first available record, Pilot decision review in the
+showcase; an empty library starts unselected. All plans explicitly clears the
+loaded scope. Loaded lane and track additions append an occurrence through `work.update` while
+retaining the loaded record; All plans New plan targets use the canonical record
+creation owner. Loaded relationship markers follow the same work scope. Transport
+Remove plan uses canonical removal and shared amp Undo. When work is empty,
+`plan-library-empty.mjs` previews five recipe sets with the shared reel and diagram;
+`coordination-starters.mjs` prepares a detached candidate retaining existing people,
+teams, horizon and other chapter state. Explicit Load publishes one replacement
+and Undo entry. Create a plan retains the ordinary guided prerequisite route.
 
 The raw score adapter carries bounded cadence JSON through the established
 saved-edit coordinator. Admission validates the complete candidate before
