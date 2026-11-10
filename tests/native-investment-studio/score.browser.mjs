@@ -164,6 +164,44 @@ for (const engine of names) {
       await expect(period(page, 'period-4').locator(`[data-studio-session-id="${id}"]`)).toBeVisible();
   });
 
+  test(`${engine}: adding working sessions publishes one root refresh and preserves earlier placement`, async t => {
+    const page = await open(t, engine), original = JSON.parse(await bytes(page));
+    const work = original.work.find(row => row.id === 'research');
+    assert.ok(work, 'the default research plan is present');
+    const placements = original.scoreSettings.cadence.placements.filter(row => row.workId === work.id);
+    for (const [offset, periodId] of ['period-4', 'period-2'].entries()) {
+      const key = `add-occurrence:${work.id}:${periodId}:1`;
+      const entry = cadence(page).locator(`[data-cadence-key="${key}"]`);
+      await entry.focus();
+      await root(page).evaluate(element => {
+        // The root stamps its view state once per completed refresh pass.
+        // Observe the mounted owner rather than a second controller instance.
+        window.refreshWitness = { count: 0 };
+        window.refreshWitness.observer = new MutationObserver(records => { window.refreshWitness.count += records.length; });
+        window.refreshWitness.observer.observe(element, { attributes: true, attributeFilter: ['data-native-state'] });
+      });
+      await page.keyboard.press('Enter');
+      const refreshes = await page.evaluate(() => {
+        const witness = window.refreshWitness;
+        const count = witness.count + witness.observer.takeRecords().length;
+        witness.observer.disconnect(); delete window.refreshWitness; return count;
+      });
+      assert.equal(refreshes, 1, 'one accepted occurrence publishes one root refresh');
+      await expect(entry).toBeFocused();
+      const state = JSON.parse(await bytes(page));
+      assert.equal(state.work.find(row => row.id === work.id).occurrences, work.occurrences + offset + 1);
+      placements.push({ workId: work.id, occurrenceIndex: work.occurrences + offset, periodId, subdivision: 1 });
+      assert.deepEqual(state.scoreSettings.cadence.placements.filter(row => row.workId === work.id), placements);
+    }
+    await undo(page);
+    const restoredBytes = await bytes(page), restored = JSON.parse(restoredBytes);
+    assert.equal(restored.work.find(row => row.id === work.id).occurrences, work.occurrences + 1);
+    assert.deepEqual(restored.scoreSettings.cadence.placements.filter(row => row.workId === work.id), placements.slice(0, -1));
+    await root(page).locator('[data-native-chapter="people"]').click();
+    await expect(root(page).locator('.studio-people-arranger')).toBeVisible();
+    assert.equal(await bytes(page), restoredBytes, 'chapter navigation retains the accepted addition and Undo result');
+  });
+
   for (const { width, basis, origin } of [
     { width: 1273, basis: 'sprint', origin: 'period' },
     { width: 390, basis: 'sprint', origin: 'track-period' },
@@ -508,16 +546,17 @@ for (const engine of names) {
       window.scoreFixture.controller.dispose();
       const element = document.querySelector('[data-native-score]'), results = [];
       const external = document.createElement('input'); document.body.append(external);
-      for (const callback of ['onAccepted', 'onEditing']) {
+      for (const callback of ['onAccepted', 'onViewChanged']) {
         const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
         const initialCount = studio.read().state.scoreSettings.stages.length;
-        let successor;
+        let successor, armed = false;
         const receiver = mountScorePanel(element, { studio, editing, [callback]() {
-          if (successor) return;
+          if (!armed || successor) return;
           editing.purpose.begin('purpose', studio.read());
           successor = editing.read().active.token; external.focus();
         } });
         const add = element.querySelector('[data-cadence-key="rack-add-stage"]');
+        armed = true;
         add.focus(); add.click();
         results.push({ callback, added: studio.read().state.scoreSettings.stages.length - initialCount,
           active: editing.read().active.kind, retained: editing.read().active.token === successor,
@@ -526,8 +565,55 @@ for (const engine of names) {
       }
       external.remove(); return results;
     });
-    assert.deepEqual(observed, ['onAccepted', 'onEditing'].map(callback =>
+    assert.deepEqual(observed, ['onAccepted', 'onViewChanged'].map(callback =>
       ({ callback, added: 1, active: 'purpose', retained: true, focusRetained: true })));
+  });
+
+  test(`${engine}: onLoadPlan transfers stop pending period and occurrence additions`, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountScorePanel } = await import('/collaboration/native-investment-studio/score-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.scoreFixture.controller.dispose();
+      const element = document.querySelector('[data-native-score]'), results = [];
+      const external = document.createElement('input'); document.body.append(external);
+      for (const action of ['add-period', 'add-occurrence:research:period-2:1']) for (const outcome of ['purpose', 'replacement']) {
+        const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
+        let expectedProjection = studio.read(), successorToken = null, callbacks = 0, loads = 0;
+        const receiver = mountScorePanel(element, { studio, editing, isActive: () => true,
+          onAccepted() { callbacks++; },
+          onLoadPlan() {
+            loads++;
+            if (outcome === 'purpose') {
+              editing.purpose.begin('purpose', studio.read()); successorToken = editing.read().active.token;
+              editing.purpose.setText(successorToken, 'changedAbility', 'Keep the receiving team in view.');
+            } else {
+              const candidate = structuredClone(studio.read().state);
+              candidate.purpose.changedAbility = 'A newly loaded plan owns this work.';
+              const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code);
+              expectedProjection = result.projection;
+            }
+            external.focus(); return true;
+          },
+        });
+        const control = element.querySelector(`[data-cadence-key="${action}"]`); control.focus(); control.click();
+        results.push({ action, outcome, loads, callbacks, acceptedRetained: studio.read() === expectedProjection,
+          periods: studio.read().state.scoreSettings.cadence.periods.length,
+          occurrences: studio.read().state.work.find(work => work.id === 'research').occurrences,
+          active: editing.read().active?.kind ?? null,
+          successorRetained: (editing.read().active?.token ?? null) === successorToken,
+          purposeDraft: editing.purpose.read().draft?.raw.changedAbility ?? null,
+          focusRetained: document.activeElement === external });
+        receiver.dispose(); editing.dispose();
+      }
+      external.remove(); return results;
+    });
+    assert.deepEqual(observed, ['add-period', 'add-occurrence:research:period-2:1'].flatMap(action =>
+      ['purpose', 'replacement'].map(outcome => ({ action, outcome, loads: 1, callbacks: 0, acceptedRetained: true,
+        periods: 4, occurrences: 2, active: outcome === 'purpose' ? 'purpose' : null, successorRetained: true,
+        purposeDraft: outcome === 'purpose' ? 'Keep the receiving team in view.' : null, focusRetained: true }))));
   });
 
   test(`${engine}: disposal during preview releases the score lease and owned controls`, async t => {

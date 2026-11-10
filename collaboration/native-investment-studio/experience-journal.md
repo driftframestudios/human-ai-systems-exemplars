@@ -50,9 +50,13 @@ The 9 November review of `dev` at `fdb445d` reframes #679 around responsive
 creation, manipulation, navigation and recovery. #900 receives current CSS
 ownership and retirement candidates; #901 receives duplicate accepted-edit
 refreshes; #902 receives Investment model/control reuse; #903 receives occurrence
-indexes. Start JavaScript work with #901, then #902 and #903; CSS can proceed
-independently. This cycle records source findings and future implementation
-boundaries. Current interaction latency remains unmeasured.
+indexes. #901 now settles accepted score state before one root notification,
+superseding its accepted-then-editing double notification. Cadence reuses the
+mounted rack for an identical projection and rendered view state; local caption
+transitions explicitly invalidate that reuse. The mounted Add session regression
+distinguishes two root refreshes from one while retaining earlier placements,
+focus and Undo. Current interaction latency remains unmeasured. Continue with
+#902, then #903; CSS can proceed independently.
 
 This supersedes the earlier relationship-option-retention experiment as #679's
 primary route. #641 and #673 retain their frozen measurements; the earlier
