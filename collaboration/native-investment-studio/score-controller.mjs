@@ -65,8 +65,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   horizon.append(basisChoices);
   const examples = node('div', undefined, 'native-score__example-links'); examples.append(node('span', 'Try a different example'));
-  for (const [id, label] of [['service-request-pilot', 'Four-sprint pilot'], ['service-request-rollout', 'Two-quarter rollout']]) {
-    const el = button(label, 'example'); el.dataset.presetId = id; examples.append(el);
+  for (const [id, label] of [['service-request-pilot', 'Four-sprint pilot'], ['service-request-rollout', 'Two-quarter rollout'],
+    ['ai-enablement', 'AI Enablement'], ['ai-experience', 'AI Experience']]) {
+    const el = button(label, 'example', 'studio-apply-control'); el.dataset.presetId = id; examples.append(el);
   }
   toolbar.append(horizon, examples);
   const planActions = node('div', undefined, 'native-score__plan-actions');

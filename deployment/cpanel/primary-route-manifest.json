@@ -478,6 +478,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/ai-starter-plans.mjs",
+      "projected_path": "collaboration/native-investment-studio/ai-starter-plans.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/purpose-controller.mjs",
       "projected_path": "collaboration/native-investment-studio/purpose-controller.mjs",
       "media_type": "text/javascript"

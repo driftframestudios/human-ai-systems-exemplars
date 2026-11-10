@@ -33,6 +33,12 @@ A human cue selects promotion to main. The preserved
 remains in `planning/` as the art and interaction reference; its independent
 illustrative state is separate from the Showcase's canonical plan.
 
+Coordination offers **AI Enablement** and **AI Experience** beside its pilot and
+rollout examples. Each loads a compact four-sprint arrangement with editable
+tapes, shared work, human review and recovery; one amp Undo restores the prior
+plan. The examples follow approved context and bounded AI actions through to
+representative-user testing and a human scope decision.
+
 Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
 Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
 compact horizontal strip.
@@ -75,6 +81,8 @@ and **Deploy** sets beside a preview diagram. Turning the reel changes the previ
 **Load these plans** accepts the chosen set with one Undo step, retaining existing people,
 teams and the horizon. **Create a plan** keeps the canonical creation route available,
 including its guided people/team setup when those prerequisites are missing.
+The horizon's named examples replace the complete plan with their own people,
+purpose and working sessions; the empty-library sets retain those existing owners.
 Week/month creation areas fill each track cell; pointer hover and keyboard focus
 reveal the plus, while touch keeps it visible. The shared
 `rack-creation-controls.mjs` factory owns these native targets across period,
@@ -256,9 +264,10 @@ meaning and leave the accepted work price intact. **Compare a change** and
 
 ## Try the experience
 
-1. Start with the preloaded **Pilot decision review**, or load another cassette,
-   then open a sprint or quarter. **All plans** explicitly returns to the complete
-   arrangement; **Plan overview** returns from the selected period.
+1. Start in **All plans**, select a cassette or open a sprint. Try **AI Enablement**
+   or **AI Experience** to explore another complete arrangement with one-step Undo.
+   **All plans** returns to the complete arrangement; **Plan overview** returns
+   from the selected period.
 2. Select a session clip to adjust its duration, people or placement. Apply accepts
    the proposal; Cancel restores accepted values. Close retains unfinished work.
 3. Use **Add session** in a loaded lane or track to repeat that plan. Use
@@ -450,7 +459,7 @@ await their separate human cues.
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
 | Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs), [Abilities styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) |
 | Shared creation target, accepted additions and names | [rack-creation-controls.mjs](rack-creation-controls.mjs), [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs) |
-| Populated showcase and opt-in People examples | [presets.mjs](presets.mjs), with live selection in [controller.mjs](controller.mjs) |
+| Populated showcase, AI starters and opt-in People examples | [presets.mjs](presets.mjs), [ai-starter-plans.mjs](ai-starter-plans.mjs), with live selection in [controller.mjs](controller.mjs) |
 | Current rationale and supersessions | [experience journal](experience-journal.md) |
 
 The visual contracts map further chapter-specific source and CSS owners. Follow

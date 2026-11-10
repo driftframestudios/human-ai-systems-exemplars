@@ -1,6 +1,7 @@
 import { resolveWorkSession } from './work-sessions.mjs';
 import { createStudio } from './state.mjs';
 import { createShowcasePlan, createQuarterShowcasePlan } from './presets.mjs';
+import { AI_STARTER_PRESETS } from './ai-starter-plans.mjs';
 import { createDraftCoordinator } from './editing.mjs';
 import { duration, money } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
@@ -31,6 +32,10 @@ import { summarizeScoreDraft } from './score-draft.mjs';
 import { hasReturnDraft, isReturnRouteRetained, returnRoutePrefixLength, resolveScoreDestination, resolveWorkEditorTarget, workDefaultsTarget, workSessionTarget } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
+const HORIZON_EXAMPLES = new Map([
+  ['service-request-pilot', createShowcasePlan], ['service-request-rollout', createQuarterShowcasePlan],
+  ...AI_STARTER_PRESETS.map(({ id, create }) => [id, create]),
+]);
 const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
   role: describeRoleTarget, contribution: describeContributionTarget, connection: describeConnectionTarget, capability: describeCapabilityTarget });
 
@@ -687,7 +692,7 @@ export function mountCoordinationPanel(root, options = {}) {
     announce(`${creation.kind === 'connection' ? 'Handoff' : creation.kind === 'team' ? 'Team' : 'Session'} addition undone.`);
   }
   function useHorizonExample(id) {
-    const create = { 'service-request-pilot': createShowcasePlan, 'service-request-rollout': createQuarterShowcasePlan }[id];
+    const create = HORIZON_EXAMPLES.get(id);
     if (!create || disposed) return;
     const result = studio.replace(create({ pausedExample: true, peopleExamples: true }), studio.read());
     render();

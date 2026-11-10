@@ -554,6 +554,41 @@ for (const engine of names) {
     await undo(page); assert.equal(await bytes(page), accepted);
   });
 
+  for (const [id, label, first, last] of [
+    ['ai-enablement', 'AI Enablement', 'Understand current work', 'Task success and recovery review'],
+    ['ai-experience', 'AI Experience', 'Frame the user task', 'Release and recovery rehearsal'],
+  ]) test(`${engine}: ${label} loads its connected tapes locally and one Undo restores the edited plan`, async t => {
+    const page = await open(t, engine);
+    await score(page).getByRole('button', { name: 'Add sprint', exact: true }).click();
+    const prior = await bytes(page);
+    const history = await page.evaluate(() => window.scoreFixture.studio.readHistory().undoCount);
+    await score(page).getByRole('button', { name: label, exact: true }).click();
+    await expect(root(page).locator('[data-native-chapter="coordination"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(4);
+    await expect(cadence(page).locator('[data-studio-plan-id]')).toHaveCount(5);
+    await expect(cadence(page).locator('[data-studio-plan-id]').first()).toContainText(first);
+    await expect(cadence(page).locator('[data-studio-plan-id]').last()).toContainText(last);
+    const loaded = JSON.parse(await bytes(page));
+    assert.equal(loaded.planId, id);
+    assert.equal(await page.evaluate(() => window.scoreFixture.studio.readHistory().undoCount), history + 1);
+    // Both the broad period board and the loaded cassette receive ordinary work.
+    await cadence(page).locator('[data-studio-plan-id]').last().click();
+    await period(page, 'period-4').getByRole('button', { name: 'Sprint 4 Open sprint detail', exact: true }).click();
+    await expect(cadence(page).locator('.native-cadence__clip')).toHaveCount(1);
+    // Return to the broad view for a compact phone/laptop entry and composition check.
+    await cadence(page).getByRole('button', { name: 'Plan overview', exact: true }).click();
+    await score(page).getByRole('button', { name: 'All plans', exact: true }).click();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await score(page).scrollIntoViewIfNeeded();
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'rack scrolling stays local');
+      assert.notEqual(await score(page).getByRole('button', { name: label, exact: true }).evaluate(element => getComputedStyle(element).boxShadow), 'none', 'example replacement uses the existing raised action');
+      await score(page).locator('.native-score__transport').screenshot({ path: resolve(captures, `${engine}-${id}-entry-${width}.png`) });
+      await cadence(page).locator('.native-cadence__board').screenshot({ path: resolve(captures, `${engine}-${id}-board-${width}.png`) });
+    }
+    await undo(page); assert.equal(await bytes(page), prior);
+  });
+
   test(`${engine}: an arrangement draft retains its entries when a session changes elsewhere`, async t => {
     const page = await open(t, engine);
     await showFlow(page);

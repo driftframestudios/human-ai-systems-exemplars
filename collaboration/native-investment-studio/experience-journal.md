@@ -85,7 +85,9 @@ preserving all six saved fields, raw-edit recovery and Undo. Per-session overrid
 determine active work; custom plans receive a current-workflow invitation.
 The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
 local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
-vision/AI examples. Existing #874, #875 and #882 keep their manual, retention and
+vision. #944 adds the AI Enablement and AI Experience examples through ordinary
+plan records and the existing accepted replacement/Undo owner. Existing #874,
+#875 and #882 keep their manual, retention and
 precision-control boundaries. This planning route supersedes a chapter-wide
 redesign; each receiver earns a focused PR.
 
@@ -306,6 +308,20 @@ retaining existing people, teams, horizon and other chapter state. Create a plan
 keeps the canonical creation path available. Missing people or teams route through
 that guided path; the starter route leaves the retained plan intact and explains
 what to create. The local session receiver remains available for that route.
+
+**Supersession (#944):** the horizon's pilot/rollout-only example choices now
+include AI Enablement and AI Experience. These complete replacements have their
+own people, purpose, five tapes and four-sprint cadence. They remain distinct
+from the empty-library sets, which preserve the visitor's people and horizon.
+The AI starter factory turns authored work into ordinary records; the catalogue,
+canonical admission and existing replacement/Undo flow retain their owners.
+Service-blueprint task/context boundaries, participant/outcome alignment and
+the repository's user-testing and recovery examples inform the work. Source
+access, human confirmation, keyboard and language choices appear in the handoffs
+and review purpose. A visitor can explore the arrangement before entering text.
+The phone/laptop browser checks cover local loading, cassette/period navigation
+and one-step restoration of an edited prior plan. These checks establish that
+receiving behavior; the examples remain revisable working arrangements.
 
 Add sprint/quarter retains its separate accepted horizon operation. A selected
 period can retain its Sprint or Quarter name while a short caption replaces its derived stage summary. Clearing

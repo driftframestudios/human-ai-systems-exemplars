@@ -5,7 +5,7 @@ select, load and revisit. The tilted cassette face carries its name, host,
 duration and session count; its stable button remains easy to point at and use
 with a keyboard. A narrow viewport turns the shelf into a horizontal strip.
 
-**Standing:** human-preserved visual reference, version `0.1.2`, ID
+**Standing:** human-preserved visual reference, version `0.1.3`, ID
 `vfc:cassette-plan-shelf`; recorded 8 November 2026. The exact art and animation
 baseline is `cedafc3f17c417cf5c90cacb5b1a696acf9cc3c1` in
 `planning/context-canvas/studio-rack-tape-study.html`. This records the approved
@@ -72,6 +72,15 @@ message; its borrowed creation receiver remains usable inside the rack.
 
 Artwork, focus targets, stationary shelf, narrow horizontal orientation and hover
 motion retain the exact specimen.
+
+**AI Enablement** and **AI Experience** join the two horizon examples as standard
+hard-shadow actions outside the rack. Each loads an authored four-sprint arrangement
+with five editable tapes, connected handoffs and a human scope decision. Their
+canonical preset factory owns the people, purpose and working sessions; one amp
+Undo restores the prior arrangement. These complete examples and the empty-library
+sets have distinct receiving jobs: the latter retain the visitor's people and horizon.
+Both use the same cassette artwork and ordinary period/session navigation. On
+mobile, example actions wrap while the shelf retains its horizontal strip.
 
 ## The preserved object
 

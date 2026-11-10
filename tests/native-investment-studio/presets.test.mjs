@@ -19,7 +19,7 @@ test('the live People example adds two distinct contributions without changing i
 
 test('the finite native catalogue names its exact version and creates independently owned projections', () => {
   const list = listPresets();
-  assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'service-request-rollout', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
+  assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'service-request-rollout', 'ai-enablement', 'ai-experience', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
   assert.equal(Object.isFrozen(list), true);
   assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.11.0'));
   const first = preparePreset(list[0].id, VERSION);
@@ -58,6 +58,30 @@ test('the synthetic pilot joins named people, shared work and human review with 
   const independent = createShowcasePlan(); independent.people[0].label = 'Changed in this copy';
   assert.equal(createShowcasePlan().people[0].label, 'Product lead');
   assert.equal(createStudio().read().result.plannedCommitmentCents, 120000, 'the explicit showcase entrance preserves the smaller teaching default');
+});
+
+test('AI starters admit distinct complete workflows with owned records and a human scope decision', () => {
+  for (const [id, first, last] of [
+    ['ai-enablement', 'Understand current work', 'Task success and recovery review'],
+    ['ai-experience', 'Frame the user task', 'Release and recovery rehearsal'],
+  ]) {
+    const { projection } = preparePreset(id, VERSION), { state } = projection;
+    assert.deepEqual([state.work[0].label, state.work.at(-1).label], [first, last]);
+    assert.equal(state.work.length, 5);
+    assert.equal(state.scoreSettings.cadence.periods.length, 4);
+    assert.equal(projection.result.standing, 'priced');
+    assert.deepEqual(projection.observations, []);
+    const placed = state.scoreSettings.cadence.placements.map(row => `${row.workId}:${row.occurrenceIndex}`);
+    assert.deepEqual(placed, state.work.flatMap(work => Array.from({ length: work.occurrences }, (_, i) => `${work.id}:${i}`)), 'each session has one authored place');
+    assert.deepEqual(state.scoreSettings.cadence.handoffs.map(edge => edge.connectionId), state.connections.map(edge => edge.id));
+    assert.equal(state.scoreSettings.gates[0].reviewerPersonId, 'lead');
+    assert.equal(state.purpose.accountableOwner.startsWith('The product lead decides'), true);
+    assert.match(state.purpose.observationSignal, /representative users/);
+    assert.match(state.purpose.openConditions, /keyboard access, language choices/i);
+    assert.equal(parsePlan(projection.serialized).serialized, projection.serialized);
+    assert.equal(preparePreset(id, VERSION).projection.serialized, projection.serialized, 'fresh loads retain the authored example');
+    assert.notStrictEqual(preparePreset(id, VERSION).projection.state.teams[0].personIds, state.teams[0].personIds);
+  }
 });
 
 test('four longer reviews cost one extra hour per reviewer, and funding the time exposes a resolvable capacity tradeoff', () => {
