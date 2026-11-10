@@ -19,7 +19,10 @@ comparison decks (#818), with Domain portraits and compact cost comparison (#895
 retain their existing owners.
 PR #934 aligns supported headings with the Futura stack while buttons keep their
 system UI family. The amp uses **Set vision** and retains its cobalt chapter-key
-shadows; Plan horizon owns its local spacing. The next interaction and orientation
+shadows. Its funding breakdown sits beneath the total, Plan reference and History
+controls stay grouped, and Animation speed has a visible label. Chapter keys sit
+at the amp's bottom edge next to the chapter content. Plan horizon owns its local
+spacing. The next interaction and orientation
 work follows [#935’s focused issue route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935).
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)

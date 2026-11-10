@@ -87,7 +87,7 @@ export function mountCoordinationPanel(root, options = {}) {
   const ampUndo = document.createElement('button');
   ampUndo.type = 'button'; ampUndo.className = 'native-amp-control';
   ampUndo.dataset.studioUndo = ''; ampUndo.textContent = 'Undo (0)'; ampUndo.disabled = true;
-  ampTools?.append(ampUndo);
+  (root.querySelector('[data-native-amp-history]') ?? ampTools)?.append(ampUndo);
   let ampHistoryProjection = null;
   const ampPanels = new Map([...root.querySelectorAll('[data-amp-panel]')].map(button =>
     [button.dataset.ampPanel, { button, panel: root.querySelector(`#${button.getAttribute('aria-controls')}`) }]));

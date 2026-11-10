@@ -57,7 +57,11 @@ wording. Studio buttons explicitly use the system UI family, preserving numeric
 and pad variants. Plan horizon owns its fieldset padding and internally seated
 legend. **Supersession:** its local spacing replaces the broad fieldset padding
 experiment; the removed amp purpose preview also retires its orphaned CSS. The
-current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
+amp grouping in #938 keeps the funding breakdown with its total, History
+actions together and labeled motion choices visible. Chapter navigation follows
+those tools and their reading panels. **Supersession:** this replaces the mixed
+control row and chapter keys preceding the amp tools; draft and history owners
+remain unchanged. The current view and commands remain the behavior baseline for [#935](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/935):
 local editing repairs, then amp/shelf orientation, diagram/reel clarity and concise
 vision/AI examples. Existing #874, #875 and #882 keep their manual, retention and
 precision-control boundaries. This planning route supersedes a chapter-wide

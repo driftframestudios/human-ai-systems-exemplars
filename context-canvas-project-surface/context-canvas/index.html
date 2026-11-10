@@ -171,24 +171,20 @@
           <div class="native-coordination__readout">
             <span class="native-coordination__plate" data-native-standing>Total · USD</span>
             <strong data-native-total>$3,980.00</strong>
-          </div>
-          <dl class="native-coordination__funding">
-            <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
-            <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
-            <div><dt>Included in staffing</dt><dd data-native-allocated>$1,590.00</dd></div>
-          </dl>
-          <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
-            <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
-            <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
-            <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
-            <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
-            <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
-            <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
+            <dl class="native-coordination__funding">
+              <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
+              <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
+              <div><dt>Included in staffing</dt><dd data-native-allocated>$1,590.00</dd></div>
+            </dl>
           </div>
           <div class="native-amp-tools" data-native-amp-tools hidden aria-label="Plan reference and saved work">
-            <button type="button" data-amp-panel="purpose" aria-controls="native-amp-purpose" aria-expanded="false">Set vision</button>
-            <button type="button" data-amp-panel="saved" aria-controls="native-amp-saved" aria-expanded="false" disabled>Saved edits <span data-amp-saved-count>(0)</span></button>
-            <button type="button" data-amp-panel="manual" aria-controls="native-amp-manual" aria-expanded="false">Operating manual</button>
+            <div class="native-amp-tools__group" role="group" aria-label="Plan reference">
+              <button type="button" data-amp-panel="purpose" aria-controls="native-amp-purpose" aria-expanded="false">Set vision</button>
+              <button type="button" data-amp-panel="manual" aria-controls="native-amp-manual" aria-expanded="false">Operating manual</button>
+            </div>
+            <div class="native-amp-tools__group" role="group" aria-label="History" data-native-amp-history>
+              <button type="button" data-amp-panel="saved" aria-controls="native-amp-saved" aria-expanded="false" disabled>Saved edits <span data-amp-saved-count>(0)</span></button>
+            </div>
             <div data-native-motion-controls></div>
           </div>
           <details class="native-purpose" id="native-amp-purpose" data-native-purpose>
@@ -235,6 +231,14 @@
               <p><a class="native-control--navigate" href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention, and explicit supporting sessions.</p>
             </div>
           </details>
+          <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
+            <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
+            <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
+            <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
+            <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
+            <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
+            <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
+          </div>
         </header>
         <aside class="native-zine__return" data-native-return-route hidden aria-label="Return to your unfinished work">
           <p data-native-return-note></p>
@@ -818,9 +822,9 @@
                   <summary>Whole-plan cost breakdown</summary>
                   <div class="native-coordination__trace-body">
                     <dl class="native-cost-summary" data-native-trace-summary>
-                      <div><dt>Staffing</dt><dd>$2,840.00</dd></div>
-                      <div><dt>Extra work</dt><dd>$1,140.00</dd></div>
-                      <div><dt>Plan total</dt><dd>$3,980.00</dd></div>
+                        <div><dt>Staffing</dt><dd>$2,840.00</dd></div>
+                        <div><dt>Extra work</dt><dd>$1,140.00</dd></div>
+                        <div><dt>Plan total</dt><dd>$3,980.00</dd></div>
                     </dl>
                     <p class="native-cost-note" id="native-cost-note">Total = staffing + extra work. Included work is part of staffing.</p>
                     <div class="native-cost-scroll" role="region" aria-label="Whole-plan investment by person" tabindex="0">

@@ -113,7 +113,8 @@ export function mountStudioMotion(root) {
   try {
     if (slot) {
       const name = `native-studio-motion-${++sequence}`;
-      group = document.createElement('div'); group.className = 'native-motion'; group.setAttribute('role', 'group'); group.setAttribute('aria-label', 'Animation settings');
+      group = document.createElement('div'); group.className = 'native-motion'; group.setAttribute('role', 'group'); group.setAttribute('aria-labelledby', `${name}-label`);
+      const heading = document.createElement('span'); heading.id = `${name}-label`; heading.className = 'native-motion__label'; heading.textContent = 'Animation speed';
       const choices = document.createElement('div'); choices.className = 'native-motion__choices';
       for (const [value, text] of [['off', 'Off'], ['lower', 'Half-speed'], ['full', 'Full-speed']]) {
         const label = document.createElement('label'), input = document.createElement('input'), words = document.createElement('span');
@@ -121,7 +122,7 @@ export function mountStudioMotion(root) {
         words.textContent = text; label.append(input, words); choices.append(label); controls.push(input);
         listen(input, 'change', () => { if (input.checked) set(value); });
       }
-      group.append(choices); slot.append(group);
+      group.append(heading, choices); slot.append(group);
     }
     listen(root, 'click', event => {
       const summary = event.target.closest('summary'), details = summary?.parentElement;
