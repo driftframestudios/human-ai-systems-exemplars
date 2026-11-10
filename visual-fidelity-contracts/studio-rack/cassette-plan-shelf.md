@@ -27,14 +27,20 @@ scroll area from 40rem to 80rem while keeping cassette dimensions intact. At
 650px and below it remains a horizontal strip with no vertical height cap.
 
 One cassette represents one repeatable activity plan. The initial view shows
-All plans with detail closed. A persistent outline/ghost All plans control shares
-a compact rail with directional Previous/Next pennants and the loaded name.
+All plans with detail closed. Its first shelf entry depicts three stacked tapes
+and carries total session minutes and count; it represents aggregate scope. A
+persistent sharp-cornered outline All plans control retains a half-depth hard
+shadow. The loaded name precedes adjacent Previous/Next muted rounded pennants;
+on phones the controls share one line beneath the name.
 Paper and teal selected states, clear text and a visible focus outline retain the
 existing rack vocabulary. The pennant tip indicates direction while its text
 names the action. Previous/Next follow shelf order with explicit ends; Next from
 All plans opens the first cassette. Both shelf and rail use the same scope owner.
 Unavailable directions retain legible labels and expose their state; focus stays
-on the activated control. An empty library starts unselected. Loading a canonical work identity
+on the activated control. Sequential selection reveals the chosen tape within
+its local shelf, preserving page position and focus. The shared shelf reveal
+settles directly with reduced motion and yields to manual shelf input. This
+supersedes stationary offscreen selection in #909. An empty library starts unselected. Loading a canonical work identity
 filters the board, tracks and relationship markers. All plans is the persistent
 return to the complete arrangement. #909 supersedes #906's initial-first-tape
 default; scope navigation preserves accepted data and Undo. The selected sprint/quarter remains visible: All plans clears the cassette filter;

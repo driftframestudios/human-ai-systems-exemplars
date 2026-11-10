@@ -95,6 +95,11 @@ distinguishes two root refreshes from one while retaining earlier placements,
 focus and Undo. Current interaction latency remains unmeasured. The completed #906
 pass addresses cassette meaning, scoped creation and empty-library recovery.
 #909 restores All plans on entry and adds in-rack sequential browsing (PR #911).
+#939 expresses aggregate scope as the first stacked cassette and keeps adjacent
+pagination below the name on phones. Shared local reveal follows cassette and
+Investment Domain selection while retaining page position, focus and accepted
+records. **Supersession:** this replaces offscreen selected shelves and the
+split pagination rail; manual input cancels reveal and reduced motion settles directly.
 #910 repairs the selected-session target: a pad now carries its occurrence identity
 through the draft, command, pricing and rendered consumers. This supersedes the
 shared-duration/people assumption: new and uncustomized sessions follow tape

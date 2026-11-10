@@ -29,6 +29,12 @@
 .studio-tape-face__reels { position:relative; display:flex; justify-content:space-between; background:linear-gradient(0deg,transparent 8px,#7c8c70 8px 10px,transparent 10px),var(--studio-cabinet-green); border:1px solid #0b2118; margin:.5rem 0; height:22px; padding:2px 13px; border-radius:1px; box-shadow:inset 0 2px 0 #0d2119,0 1px 0 var(--studio-paper-highlight); }
 .studio-tape-face__reels::before,.studio-tape-face__reels::after { content:''; width:16px; height:16px; flex:none; clip-path:polygon(25% 0,75% 0,75% 12.5%,87.5% 12.5%,87.5% 25%,100% 25%,100% 75%,87.5% 75%,87.5% 87.5%,75% 87.5%,75% 100%,25% 100%,25% 87.5%,12.5% 87.5%,12.5% 75%,0 75%,0 25%,12.5% 25%,12.5% 12.5%,25% 12.5%); background:linear-gradient(var(--studio-cabinet-green),var(--studio-cabinet-green)) center/4px 4px no-repeat,repeating-conic-gradient(var(--studio-warm-paper) 0 45deg,#809b83 45deg 90deg); box-shadow:inset 0 0 0 2px var(--studio-warm-paper); }
 
+/* Aggregate shelf entry depicts three tapes and retains a single native target. */
+.studio-tape-key--aggregate { margin-block-start:.6rem; }
+.studio-tape-stack { position:absolute; inset:.2rem .65rem .6rem; pointer-events:none; }
+.studio-tape-stack::before,.studio-tape-stack::after { content:''; position:absolute; inset:0; border:2px solid var(--studio-rack-edge); border-radius:2px; background:var(--studio-editorial-mint); transform:translate(3px,-7px) rotate(-2deg); }
+.studio-tape-stack::before { transform:translate(6px,-13px); background:var(--native-paper); }
+
 /* VHS-C keeps its textured grip inside the moving body. */
 [data-tape-variant='investment'] .studio-tape-shelf { gap:.9rem; padding:.25rem .1rem .9rem; }
 .native-coordination [data-tape-variant='investment'] .studio-tape-key { padding:.65rem .9rem .95rem .65rem; color:var(--studio-warm-paper); }

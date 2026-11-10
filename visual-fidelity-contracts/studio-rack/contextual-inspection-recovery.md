@@ -27,7 +27,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
-| Plan overview | All plans starts selected with detail closed; an empty library starts unselected. Persistent All plans and directional Previous/Next controls share the cassette scope owner and retain the selected period. A grouped card opens its period; a single-session card or numbered pad opens that session in the detail deck between the board and tracks. A track name opens plan defaults. The selected period and Plan overview return remain visible. |
+| Plan overview | All plans starts selected with detail closed; an empty library starts unselected. The first stacked All plans cassette and compact directional Previous/Next rail share the cassette scope owner and retain the selected period. A grouped card opens its period; a single-session card or numbered pad opens that session in the detail deck between the board and tracks. A track name opens plan defaults. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
@@ -203,7 +203,9 @@ explicit movement changes their order and retains focus on the same person.
 The owner return, selected name and Apply/Close sit above draft controls. Direct receivers show Saved instead of an idle Apply action. People uses one person heading and compact role reels/component pads; the chosen facet exposes its exact options within the same desk. Its contribution receiver pairs Work with Receiver and decision, stacking those halves at phone widths. The compact Person settings skin follows the same mounted form into Coordination. Team naming visibly distinguishes editing from saved state. Desktop uses the
 available rack width; ordinary mobile widths reflow controls while tables and
 cassette shelves scroll locally. A short downward unfurl marks loaded detail.
-Reduced motion settles the same state directly. Attached People and available
+Programmatic cassette and Investment Domain selection reveals the selected
+item in its local shelf while retaining page position and focus. Manual shelf
+input cancels that movement. Reduced motion settles the same state directly. Attached People and available
 time and Stages & handoffs disclosures retain their editorial skin and spring
 reveal; their compact rack entries reach the same records. Working sessions
 Remove and existing relationship removal occupy the bottom-right action position.

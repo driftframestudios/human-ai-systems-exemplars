@@ -1052,6 +1052,18 @@ for (const engine of names) test(`${engine}: domain portraits follow deck assump
     await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-domain.png`) });
   }
   await expect(view.locator('.investment-domain__sectors')).toHaveCSS('animation-name', 'none');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const planning = domain.getByRole('button', { name: 'Domain: Planning', exact: true });
+  await planning.scrollIntoViewIfNeeded();
+  const beforeScroll = await page.evaluate(() => scrollY), beforeReveal = await bytes(page);
+  await planning.click();
+  await expect.poll(() => view.locator('.investment-master[aria-pressed="true"]').evaluate(item => {
+    const a = item.getBoundingClientRect(), b = item.closest('.investment-study__masters').getBoundingClientRect();
+    return a.left >= b.left - 2 && a.right <= b.right + 2;
+  })).toBe(true);
+  await expect(planning).toBeFocused();
+  assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeScroll) < 2, 'Domain reveals only its local deck shelf');
+  assert.equal(await bytes(page), beforeReveal, 'Domain browsing preserves accepted investment settings');
 });
 
 // Isolate the financial owner while retaining the real About styles and browser
