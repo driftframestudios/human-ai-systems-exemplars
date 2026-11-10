@@ -227,6 +227,10 @@ test("the built registry resolves current authorship, license, and deployment me
     1,
   );
   assert.ok(html.includes(`<link rel="license" href="${artifactLicense}">`));
+  assert.equal(
+    occurrenceCount(html, '<link rel="icon" href="favicon.ico" sizes="any">'),
+    1,
+  );
   assert.ok(html.includes(`<link rel="canonical" href="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta property="og:url" content="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
@@ -261,6 +265,19 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.equal(structuredData.author.name, artifactAuthor);
   assert.equal(structuredData.publisher.name, publishingCompany);
   assert.equal(structuredData.license, artifactLicense);
+});
+
+test("the built registry carries the repository favicon at its artifact root", async () => {
+  const sourcePath = resolve(
+    repositoryRoot,
+    "context-canvas-project-surface/context-canvas/favicon.ico",
+  );
+  const [sourceBytes, receiverBytes] = await Promise.all([
+    readFile(sourcePath),
+    readFile(resolve(outputRoot, "favicon.ico")),
+  ]);
+
+  assert.deepEqual(receiverBytes, sourceBytes);
 });
 
 test("every declared receiver is discoverable and byte-identical to its source", async () => {
