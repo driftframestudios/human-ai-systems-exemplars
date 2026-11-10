@@ -19,7 +19,9 @@ commands and recovery owners.
 spread in one visible mixing desk. Capacity readings distinguish person/session
 effort from the contribution matrix's distinct linked work. This supersedes #881's
 paired disclosure presentation while retaining its contribution-local creation
-and canonical draft owners. #890 refines the matrix readings, stable pad alignment
+and canonical draft owners. #947 separates contribution/session support checkboxes
+from row-heading inspection: links accept directly with Undo, while headings
+toggle the local editor and its reveal. #890 refines the matrix readings, stable pad alignment
 and footer session actions. #891 replaces the Session spread fader with an analog
 three-way switch and explains sole-participant limits at the control. #893 adds
 the selected person's participation row beneath that switch and compacts the
@@ -466,11 +468,18 @@ they can create. Adding another participant enables those reductions. Recorded
 role and decision authority keep their explicit choices. Fractional per-person
 session time remains #798's separate model decision.
 
-The selected contribution places Work beside Receiver and decision, stacking
-them at phone widths. Category, human receiver, decision owner, supporting
-sessions and support order accept directly. The two human choices preserve
-their separate responsibilities. Accepted links light the matrix's session
-cells. The contribution rollup selects the union of linked work IDs, so a shared
+The contribution row heading opens Work beside Receiver and decision, stacking
+them at phone widths; repeated selection closes the editor and clears its caret.
+Opening uses the shared smooth reveal, and closing parks unfinished entries.
+Each matrix checkbox accepts the exact contribution/session link directly with
+amp Undo, retaining local focus and the working view. Pending raw drafts retain
+their existing parking and Review route when an accepted change advances their
+base. **Supersession (#947):** these relation controls replace matrix cells that
+all opened the contribution editor; row headings own inspection. Category, human
+receiver, decision owner, supporting sessions and support order accept directly.
+The two human choices preserve their separate responsibilities. Accepted links
+light the matrix's session cells without changing pad dimensions or paused
+treatment. The contribution rollup selects the union of linked work IDs, so a shared
 session contributes its planned time and known value once. **Supporting time** and
 **Known work value** use the same label/value/context hierarchy as the People
 readings. Supporting effort footers show their totals and quiet **Pause session** /
@@ -842,8 +851,8 @@ Shared sessions workflow; #833 owns atomic session removal and recovery.
 #884 carries the unified person mixing desk and capacity readings; #890 refines
 their presentation and footer actions, #891 owns explicit spread choices, and
 #893 owns the local participation row and compact laptop comparison.
-#881 retains
-contribution-local creation and the separate canonical form owners. #882 holds
+#881 retains contribution-local creation and the separate canonical form owners;
+#947 owns direct contribution/session checkboxes and local heading toggles. #882 holds
 the global circular-stepper shadow audit. #879 refines the current
 People composition from #864 and retains #836's direct responsibility choices,
 with #837 supplying shared creation controls. #863 covers dependency

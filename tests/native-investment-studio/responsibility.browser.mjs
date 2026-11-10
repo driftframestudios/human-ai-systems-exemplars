@@ -136,6 +136,28 @@ async function draftField(page, kind, name, value) {
     control.value = value; control.dispatchEvent(new Event('input', { bubbles: true }));
   }, value);
 }
+async function assertContainedSwitchThumb(control) {
+  const geometry = await control.evaluate(element => {
+    const body = getComputedStyle(element), thumb = getComputedStyle(element, '::before'), box = element.getBoundingClientRect();
+    const number = value => parseFloat(value) || 0;
+    const dimension = (axis, first, last) => number(thumb[axis]) + (thumb.boxSizing === 'border-box' ? 0
+      : number(thumb[first]) + number(thumb[last]));
+    const width = dimension('width', 'borderLeftWidth', 'borderRightWidth'), height = dimension('height', 'borderTopWidth', 'borderBottomWidth');
+    const x = thumb.left !== 'auto' ? number(body.borderLeftWidth) + number(thumb.left)
+      : box.width - number(body.borderRightWidth) - number(thumb.right) - width;
+    const y = number(body.borderTopWidth) + number(thumb.top);
+    const [shadowX = 0, shadowY = 0, blur = 0, spread = 0] = [...thumb.boxShadow.matchAll(/(-?[\d.]+)px/gu)].map(match => Number(match[1]));
+    return { width: box.width, height: box.height, checked: element.checked, display: thumb.display, content: thumb.content,
+      thumb: { width, height, left: x + Math.min(0, shadowX - blur - spread), top: y + Math.min(0, shadowY - blur - spread),
+        right: x + width + Math.max(0, shadowX + blur + spread), bottom: y + height + Math.max(0, shadowY + blur + spread) } };
+  });
+  assert.notEqual(geometry.display, 'none'); assert.notEqual(geometry.content, 'none');
+  assert.ok(geometry.thumb.width > 0 && geometry.thumb.height > 0, JSON.stringify(geometry));
+  assert.ok(geometry.thumb.left >= -.5 && geometry.thumb.top >= -.5
+    && geometry.thumb.right <= geometry.width + .5 && geometry.thumb.bottom <= geometry.height + .5,
+  `The tactile thumb and shadow stay inside the switch body: ${JSON.stringify(geometry)}`);
+  return geometry;
+}
 async function contribution(page, category = 'source-retrieval', { draft = false } = {}) {
   if (draft) await page.evaluate(async () => {
     const { mountResponsibilityPanel } = await import('/collaboration/native-investment-studio/responsibility-controller.mjs');
@@ -155,6 +177,105 @@ async function contribution(page, category = 'source-retrieval', { draft = false
 }
 
 for (const engine of names) {
+  for (const width of [390, 1440]) test(`${engine}: contribution row keys restore their caret and smoothly reveal retained local edits at ${width}px`, async t => {
+    const page = await open(t, engine);
+    await page.setViewportSize({ width, height: 1000 }); await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await expect(root(page)).toHaveAttribute('data-native-motion', 'full');
+    await page.evaluate(() => {
+      const { studio, controller } = window.responsibilityFixture, plan = structuredClone(studio.read().state);
+      plan.contributions.push({ id: 'draft-output', categoryId: 'draft-artifacts', receiverPersonId: 'product-one', decisionOwnerPersonId: 'engineering-one',
+        workIds: ['review'], reviewBoundary: null, decisionBoundary: null });
+      const result = studio.replace(plan, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const accepted = await state(page), key = people(page).locator('.native-responsibility__selector[data-contribution-id="draft-output"]');
+    const caret = () => key.evaluate(element => { const style = getComputedStyle(element, '::after'); return { transform: style.transform, rotate: style.rotate }; });
+    const resting = await caret();
+    await expect(key).toHaveAttribute('aria-expanded', 'false');
+    await key.evaluate(element => {
+      window.scrollTo({ top: scrollY + element.getBoundingClientRect().bottom - innerHeight + 80, behavior: 'instant' });
+      element.focus({ preventScroll: true });
+      const scroll = window.scrollTo.bind(window); window.contributionScrolls = [];
+      window.scrollTo = (...args) => { scroll(...args); window.contributionScrolls.push(scrollY); };
+    });
+    await page.keyboard.press('Enter');
+    await expect(settings(page, 'contribution')).toHaveAttribute('open', '');
+    await expect(key).toHaveAttribute('aria-expanded', 'true');
+    await expect.poll(caret).not.toEqual(resting);
+    await expect.poll(() => page.evaluate(() => new Set(window.contributionScrolls.map(Math.round)).size)).toBeGreaterThan(2);
+    await expect.poll(() => settings(page, 'contribution').evaluate(element => element.getBoundingClientRect().top)).toBeLessThan(180);
+    const moved = await page.evaluate(() => window.contributionScrolls);
+    assert.ok(moved.some((position, index) => index > 0 && position > moved[index - 1]), 'opening a distant editor moves through intermediate scroll positions');
+    await draftField(page, 'contribution', 'receiverPersonId', 'engineering-one');
+    await key.click(); await expect(key).toHaveAttribute('aria-expanded', 'false');
+    await expect.poll(caret).toEqual(resting);
+    await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
+    await key.click(); await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('engineering-one');
+    await settings(page, 'contribution').screenshot({ path: resolve(captures, `${engine}-contribution-local-open-${width}.png`) });
+    assert.deepEqual(await state(page), accepted, 'opening and closing preserves the raw draft without accepting it');
+  });
+  test(`${engine}: contribution session pads link only their row and session with Undo and preserve a pending editor`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.responsibilityFixture, plan = structuredClone(studio.read().state);
+      plan.work.push({ ...plan.work[0], id: 'rehearsal', label: 'Recovery rehearsal', minutesPerOccurrence: 30, status: 'paused' });
+      plan.contributions.push(
+        { id: 'draft-output', categoryId: 'draft-artifacts', receiverPersonId: 'product-one', decisionOwnerPersonId: 'engineering-one',
+          workIds: ['review'], reviewBoundary: 'Check the assumptions.', decisionBoundary: null },
+        { id: 'source-notes', categoryId: 'source-retrieval', receiverPersonId: 'product-two', decisionOwnerPersonId: 'engineering-one',
+          workIds: ['rehearsal'], reviewBoundary: null, decisionBoundary: 'The receiver reviews the source.' });
+      const result = studio.replace(plan, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const accepted = await state(page);
+    const pad = (id, work) => people(page).locator(`input[data-responsibility-action="work-link"][data-responsibility-id="${id}"][data-responsibility-work-id="${work}"]`);
+    const matrix = people(page).locator('[data-responsibility-list]');
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await matrix.evaluate(element => {
+        const box = element.getBoundingClientRect(); return { left: box.left, right: box.right, pageWidth: document.documentElement.scrollWidth };
+      });
+      assert.ok(geometry.left >= -1 && geometry.right <= width + 1 && geometry.pageWidth <= width + 1, JSON.stringify(geometry));
+      await matrix.screenshot({ path: resolve(captures, `${engine}-contribution-matrix-${width}.png`) });
+    }
+    await expect(pad('draft-output', 'review')).toBeChecked(); await expect(pad('source-notes', 'rehearsal')).toBeChecked();
+    await expect(pad('draft-output', 'rehearsal')).not.toBeChecked(); await expect(pad('source-notes', 'review')).not.toBeChecked();
+    const newlyLinked = pad('draft-output', 'rehearsal'); await newlyLinked.scrollIntoViewIfNeeded();
+    const beforeScroll = await page.evaluate(() => scrollY), beforePad = await newlyLinked.locator('..').boundingBox();
+    const ordinarySwitch = await assertContainedSwitchThumb(newlyLinked);
+    await newlyLinked.locator('..').click(); await expect(newlyLinked).toBeChecked(); await expect(newlyLinked).toBeFocused();
+    await assertContainedSwitchThumb(newlyLinked);
+    const afterPad = await newlyLinked.locator('..').boundingBox();
+    assert.deepEqual([afterPad.width, afterPad.height], [beforePad.width, beforePad.height], 'linking a paused session preserves the pad dimensions');
+    await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
+    assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeScroll) <= 2, 'linking stays in the matrix');
+    const linked = await state(page);
+    assert.deepEqual(linked.contributions, accepted.contributions.map(row => row.id === 'draft-output' ? { ...row, workIds: ['review', 'rehearsal'] } : row));
+    assert.deepEqual(linked.work, accepted.work); assert.deepEqual(linked.people, accepted.people);
+    await root(page).locator('[data-studio-undo]').click(); assert.deepEqual(await state(page), accepted);
+    await pad('source-notes', 'rehearsal').focus(); await page.keyboard.press('Space');
+    await expect(pad('source-notes', 'rehearsal')).not.toBeChecked();
+    assert.deepEqual((await state(page)).contributions, accepted.contributions.map(row => row.id === 'source-notes' ? { ...row, workIds: [] } : row));
+    await root(page).locator('[data-studio-undo]').click(); assert.deepEqual(await state(page), accepted);
+
+    await people(page).locator('.native-responsibility__selector[data-contribution-id="draft-output"]').click();
+    await draftField(page, 'contribution', 'receiverPersonId', 'engineering-one');
+    const raw = await page.evaluate(() => window.responsibilityFixture.editing.contribution.read().draft.raw);
+    await pad('source-notes', 'review').check(); await expect(pad('source-notes', 'review')).toBeFocused();
+    await expect(field(page, 'contribution', 'receiverPersonId')).toHaveValue('engineering-one');
+    assert.deepEqual(await page.evaluate(() => window.responsibilityFixture.editing.contribution.read().draft.raw), raw,
+      'a matrix edit preserves the unfinished receiver draft for review');
+    assert.deepEqual((await state(page)).contributions, accepted.contributions.map(row => row.id === 'source-notes' ? { ...row, workIds: ['rehearsal', 'review'] } : row));
+    await root(page).locator('[data-studio-undo]').click(); assert.deepEqual(await state(page), accepted);
+
+    await tab(page, 'work').click();
+    const abilities = root(page).locator('[data-native-capabilities]');
+    await abilities.locator('[data-capability-action="select"][data-capability-definition="trace-evidence"]').click();
+    await abilities.locator('[data-capability-section-key="responsibility"]').click();
+    const narrower = abilities.locator('ul[data-capability-field="responsiblePersonIds"] input[type="checkbox"]').first();
+    await narrower.setChecked(false); const narrowSwitch = await assertContainedSwitchThumb(narrower);
+    await narrower.setChecked(true); await assertContainedSwitchThumb(narrower);
+    assert.ok(narrowSwitch.width < ordinarySwitch.width, 'the shared thumb also fits the smaller Abilities switch');
+    assert.deepEqual(await state(page), accepted, 'switch inspection leaves the accepted records unchanged');
+  });
   test(`${engine}: one person mixing desk retains typed funding through connected reels, exact overrides and shared Close`, async t => {
     const page = await open(t, engine);
     const person = people(page).locator('[data-person-configure]');
@@ -591,9 +712,9 @@ for (const engine of names) {
     });
     const support = people(page).locator('.studio-contribution-tracks__pad');
     await expect(support).toHaveAttribute('data-included', 'false');
-    await support.click();
+    await support.getByRole('checkbox').check();
+    await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
     await expect(settings(page, 'contribution').locator('textarea')).toHaveCount(0);
-    await member(page, 'review').check();
     await expect(support).toHaveAttribute('data-included', 'true');
     const contribution = (await state(page)).contributions.find(row => row.id === 'kept-source');
     assert.deepEqual(contribution.workIds, ['review']);
@@ -611,7 +732,7 @@ for (const engine of names) {
     await status.click();
     assert.equal((await state(page)).work[0].status, 'paused');
     await expect(support.locator('.studio-pause-marker')).toHaveText('Ⅱ');
-    await expect(support).toHaveAccessibleName(/linked, paused/u);
+    await expect(support.getByRole('checkbox')).toHaveAccessibleName(/linked, paused/u);
     await expect(table.locator('[data-work-id="review"][data-work-status="paused"]')).toHaveCount(3);
     await expect(status).toHaveText('Resume session');
     await expect(status).toBeFocused();
@@ -625,7 +746,7 @@ for (const engine of names) {
     assert.deepEqual(await state(page), paused, 'Undo restores the paused session throughout the contribution column');
     await root(page).locator('[data-studio-undo]').click();
     assert.deepEqual(await state(page), beforePause);
-    await expect(support).toHaveText('●');
+    await expect(support.getByRole('checkbox')).toBeChecked();
     await expect(support.locator('.studio-pause-marker')).toHaveCount(0);
     await expect(status).toHaveText('Pause session');
   });

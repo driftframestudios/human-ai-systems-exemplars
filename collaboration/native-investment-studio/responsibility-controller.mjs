@@ -1,6 +1,7 @@
 import { summarizeWorkSessions } from './work-sessions.mjs';
 import { renderRemovalReferences } from './removal-references.mjs';
 import { animateRackChange } from './reel-control.mjs';
+import { revealStudioDestination } from './motion.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
@@ -92,7 +93,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   let projection = null, people = new Map(), works = new Map(), contributions = new Map();
   let selectedPerson = null, mode = 'role', generation = 0, disposed = false, retired = null;
   let membershipProjection = null, membershipIds = null, memberControls = new Map();
-  let contributionButtons = new Map(), membersTarget = null, memberOrder = [];
+  let contributionButtons = new Map(), contributionLinks = new Map(), membersTarget = null, memberOrder = [];
   let selectedRoleField = 'functionId', acceptedRole = null, roleMixer = null;
 
   function listen(element, type, handler) { element.addEventListener(type, handler); cleanup.push(() => element.removeEventListener(type, handler)); }
@@ -162,7 +163,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     for (const field of ['receiverPersonId', 'decisionOwnerPersonId']) {
       contribution.inputs[field].replaceChildren(option('', 'Unassigned'), ...next.state.people.map(person => option(person.id, named(person))));
     }
-    contributionButtons = new Map();
+    contributionButtons = new Map(); contributionLinks = new Map();
     const supported = summarizeWorkCapacity(next, next.state.contributions.flatMap(row => row.workIds));
     const reading = document.createElement('dl'); reading.className = 'studio-capacity-readings studio-contribution-reading';
     for (const [key, label, value, context] of [
@@ -199,17 +200,21 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const decider = document.createElement('small'); decider.textContent = row.decisionOwnerPersonId
         ? `◇ ${named(people.get(row.decisionOwnerPersonId))} decides` : '◇ Decision owner unassigned';
       open.append(receiver, decider); title.append(open); item.append(title); contributionButtons.set(row.id, open);
+      const links = new Map(); contributionLinks.set(row.id, links);
       for (const work of next.state.work) {
         const cell = sessionCell('td', work), included = row.workIds.includes(work.id);
         const paused = included && summarizeWorkSessions(work).status === 'paused';
-        const pad = button(included ? paused ? '' : '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
+        const pad = document.createElement('label'), input = document.createElement('input'), words = document.createElement('span');
+        pad.className = 'studio-contribution-tracks__pad'; input.type = 'checkbox'; input.checked = included;
+        input.dataset.responsibilityAction = 'work-link'; input.dataset.responsibilityId = row.id; input.dataset.responsibilityWorkId = work.id;
+        input.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? paused ? 'linked, paused' : 'linked' : 'available'}`);
+        words.textContent = included ? 'Linked' : 'Available'; pad.append(input, words); links.set(work.id, input);
         if (paused) {
           const marker = document.createElement('span'); marker.className = 'studio-pause-marker';
           marker.textContent = 'Ⅱ'; marker.setAttribute('aria-hidden', 'true'); pad.append(marker);
         }
         pad.dataset.included = String(included); pad.dataset.paused = String(paused);
-        pad.setAttribute('aria-label', `${CATEGORY_LABELS.get(row.categoryId)} · ${work.label}: ${included ? paused ? 'linked, paused' : 'linked' : 'available'}. Edit contribution.`);
-        pad.setAttribute('aria-controls', contribution.configure.id); cell.append(pad); item.append(cell);
+        cell.append(pad); item.append(cell);
       }
       const removal = document.createElement('td'), remove = button('Remove', 'remove', row.id);
       remove.className = 'native-control--remove'; remove.setAttribute('aria-label', `Remove contribution: ${CATEGORY_LABELS.get(row.categoryId)}`);
@@ -235,7 +240,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     totals.append(document.createElement('td')); foot.append(totals); table.append(foot);
     const legend = document.createElement('p'); legend.className = 'studio-contribution-legend';
     const pauseKey = document.createElement('span'); pauseKey.className = 'studio-pause-marker'; pauseKey.textContent = 'Ⅱ'; pauseKey.setAttribute('aria-hidden', 'true');
-    legend.append('● Linked · ', pauseKey, ' Paused · ◇ Decides · · Available. Paused work retains planned effort and cost.');
+    legend.append('Select pads to link sessions. ', pauseKey, ' Paused · ◇ Decides. Paused work retains planned effort and cost.');
     list.replaceChildren(reading, table, legend); empty.hidden = contributions.size > 0;
   }
   function renderMembers(ids) {
@@ -367,11 +372,13 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   }
   function focusForm(kind) {
     const view = editing[kind].read(), group = groups[kind], descriptor = describe(keyFor(kind, view.draft));
-    if (view.status === 'stale') (view.creationConflict ? contribution.fresh : group.recovery.querySelector('button')).focus();
+    const options = { preventScroll: kind === 'contribution' };
+    if (view.status === 'stale') (view.creationConflict ? contribution.fresh : group.recovery.querySelector('button')).focus(options);
     else if (view.status === 'editing') {
       if (kind === 'role' && roleMixer) roleMixer.focus(selectedRoleField);
-      else (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.fields[0]]).focus();
+      else (descriptor?.mode === 'remove' ? group.cancel : group.inputs[group.fields[0]]).focus(options);
     }
+    if (kind === 'contribution' && ['stale', 'editing'].includes(view.status)) revealStudioDestination(group.configure);
   }
   function reveal(kind) {
     for (const group of Object.values(groups)) {
@@ -538,6 +545,26 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (delta !== null) animateRackChange(contribution.members, update, { selector: '[data-responsibility-member]', key: 'responsibilityMember' });
     else update();
   }
+  function linkWork(event) {
+    const control = event.target, id = control.dataset.responsibilityId, workId = control.dataset.responsibilityWorkId;
+    if (disposed || contributionLinks.get(id)?.get(workId) !== control) return;
+    const current = studio.read(), row = current.state.contributions.find(item => item.id === id), checked = control.checked;
+    control.checked = Boolean(row?.workIds.includes(workId));
+    if (!canOpen() || !row || !current.state.work.some(work => work.id === workId) || checked === control.checked) return;
+    const epoch = ++generation, parked = editing.park();
+    if (!owns(epoch)) return;
+    if (!parked.ok) { announce(parked.error.message); return; }
+    // The matrix changes only this accepted relationship. Any unfinished editor
+    // keeps its own raw entries and follows the existing stale-draft review route.
+    const workIds = checked ? [...row.workIds, workId] : row.workIds.filter(item => item !== workId);
+    const result = studio.applyCommand({ type: 'contribution.update', contributionId: id, contribution: { ...row, workIds } }, current);
+    if (!owns(epoch)) return;
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    const intent = editing.read().intent; onAccepted(result.projection);
+    if (!owns(epoch) || studio.read() !== result.projection || editing.read().intent !== intent) return;
+    render(); announce(`Session ${checked ? 'linked' : 'unlinked'}. Undo is available.`);
+    contributionLinks.get(id)?.get(workId)?.focus({ preventScroll: true });
+  }
   function edit(kind, event) {
     const group = groups[kind], field = event.target.name;
     if (disposed || group.inputs[field] !== event.target) return;
@@ -675,6 +702,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       });
     }
     listen(root, 'click', click);
+    listen(list, 'change', linkWork);
     listen(contribution.members, 'change', event => {
       const id = event.target.dataset.responsibilityWork;
       if (memberControls.get(id) === event.target) membership(id, null, event.target.checked);
