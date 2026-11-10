@@ -100,6 +100,10 @@
 .native-change__attention [data-change-action='reset'] { font-size: .8rem; }
 .native-change__precise-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); gap: .6rem; }
 .native-change__precise-channels > p { grid-column: 1 / -1; }
+.native-change__exact-body { display:grid; gap:1rem; padding:1rem; }
+.native-change__shared-attention > .native-change__precise-channels { padding:1rem; }
+.native-change__precise-channels > [hidden] { display:none; }
+.native-change__precise-channels .native-coordination__error:empty { display:none; }
 @container native-change (max-width: 48rem) {
   .native-change .native-change__mixer { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .native-change__interpretation dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }

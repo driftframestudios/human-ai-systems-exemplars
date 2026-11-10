@@ -191,7 +191,10 @@ remaining choices beside it where space permits. Change's Raise, Reduce,
 Eliminate and Create rail identifies the action with an open receiver through
 its paper-resting/signal-selected face. Quality keeps its reference display and
 check pads as the visual entry point; selected settings and recovery controls
-use the compact working area.
+use the compact working area. Change’s **Choose exact settings** follows the
+selected framework’s components. **Shared attention values** remains separately
+available. Framework switches preserve those values and unfinished entries;
+interpretive lenses retain their authored presets.
 
 The preserved
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,

@@ -58,10 +58,66 @@ async function open(t, engine) {
     const studio = createStudio(plan); window.changeFixture = { studio, controller: mountCoordinationPanel(element, { studio }) };
   });
   await tab(page, 'change').click(); await expect(panel(page)).toHaveAttribute('data-change-state', 'editing');
-  await panel(page).locator('.native-change__setup > summary').click(); return page;
+  await panel(page).locator('.native-change__setup > summary').click();
+  await panel(page).locator('.native-change__shared-attention > summary').click(); return page;
 }
 
 for (const engine of names) {
+  test(`${engine}: exact emphasis follows the framework and preserves shared attention through return and Undo`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const exact = key => panel(page).locator(`input[data-change-emphasis="${key}"]`);
+    const visibleNames = () => panel(page).locator('input[data-change-emphasis]:visible').evaluateAll(inputs => inputs.map(input => input.getAttribute('aria-label')));
+    const shared = panel(page).locator('.native-change__shared-attention');
+    await shared.locator('summary').click();
+    assert.deepEqual(await visibleNames(), ['Urgency', 'Coalition', 'Vision', 'Broad participation', 'Remove barriers', 'Short-term wins', 'Sustain acceleration', 'Anchor in culture'].map(name => `${name} exact emphasis`));
+    await exact('kotter/urgency').fill('007');
+    await expect(panel(page).locator('[data-change-fader="kotter/urgency"]')).toHaveValue('7');
+    await field(page, 'framework').selectOption('adkar@1.0.0');
+    assert.deepEqual(await visibleNames(), ['Awareness', 'Desire', 'Knowledge', 'Ability', 'Reinforcement'].map(name => `${name} exact emphasis`));
+    await field(page, 'framework').selectOption('kotter@1.0.0');
+    await expect(exact('kotter/urgency')).toHaveValue('007');
+    assert.equal(await bytes(page), initial, 'switching the framework retains the unfinished proposal and accepted state');
+    await field(page, 'framework').selectOption('adkar@1.0.0');
+    await exact('adkar/awareness').fill('11');
+    await panel(page).getByRole('button', { name: 'Increase awareness emphasis', exact: true }).click();
+    await expect(exact('adkar/awareness')).toHaveValue('12');
+    await expect(panel(page).locator('[data-change-fader="adkar/awareness"]')).toHaveValue('12');
+    await shared.locator('summary').click();
+    await expect(field(page, 'attention.urgency')).toHaveValue('12');
+    await expect(field(page, 'attention.vision')).toHaveValue('12');
+    await field(page, 'attention.vision').fill('19');
+    await expect(exact('adkar/awareness')).toHaveValue('19');
+    await shared.locator('summary').click();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const layout = await panel(page).locator('.native-change__exact-body').evaluate(body => {
+        const box = body.getBoundingClientRect(), style = getComputedStyle(body);
+        return { left: box.left, right: box.right, padding: parseFloat(style.paddingInlineStart),
+          controls: [...body.querySelectorAll('input,select')].filter(input => input.getClientRects().length).map(input => {
+            const rect = input.getBoundingClientRect(); return { left:rect.left, right:rect.right };
+          }) };
+      });
+      assert.ok(layout.padding >= 12 && layout.controls.length >= 8, JSON.stringify(layout));
+      assert.ok(layout.left >= 0 && layout.right <= width + 1 && layout.controls.every(box => box.left >= layout.left + layout.padding - 1 && box.right <= layout.right - layout.padding + 1), JSON.stringify(layout));
+      await panel(page).locator('.native-change__setup').screenshot({ path: resolve(captures, `${engine}-framework-exact-${width}.png`) });
+    }
+    await action(page, 'apply').click();
+    const accepted = JSON.parse(await bytes(page));
+    assert.equal(accepted.changeSettings.activeFramework.frameworkId, 'adkar');
+    assert.equal(accepted.changeSettings.attention.channels.find(row => row.channelId === 'urgency').parts, 12);
+    assert.equal(accepted.changeSettings.attention.channels.find(row => row.channelId === 'vision').parts, 19);
+    await field(page, 'framework').selectOption('kotter@1.0.0');
+    await expect(exact('kotter/urgency')).toHaveValue('12'); await expect(exact('kotter/vision')).toHaveValue('19');
+    await field(page, 'framework').selectOption('adkar@1.0.0'); await expect(exact('adkar/awareness')).toHaveValue('19');
+    await exact('adkar/awareness').fill(' later ');
+    await field(page, 'framework').selectOption('kotter@1.0.0');
+    await field(page, 'framework').selectOption('adkar@1.0.0');
+    await expect(exact('adkar/awareness')).toHaveValue(' later ');
+    await expect(exact('adkar/awareness')).toHaveAttribute('aria-invalid', 'true');
+    await action(page, 'cancel').click();
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), initial, 'amp Undo restores the accepted framework and shared attention together');
+  });
   test(`${engine}: the compact Change receiver keeps local edits through views and closes to its initiating pad`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     const trigger = panel(page).locator('.native-change__track-label[data-change-component="urgency"]').first();
@@ -74,7 +130,7 @@ for (const engine of names) {
       }));
       assert.ok(steps.length > 0);
       for (const geometry of steps) assert.deepEqual(geometry, [44, 44, '50%', true, true], 'exact emphasis keeps circular steps beneath its field ends');
-      await panel(page).locator('.native-change__precise-channels').screenshot({ path:resolve(captures, `${engine}-exact-emphasis-${width}.png`) });
+      await panel(page).locator('.native-change__precise-channels').first().screenshot({ path:resolve(captures, `${engine}-exact-emphasis-${width}.png`) });
       await trigger.click();
       await expect(inspectorView(page, 'support')).toHaveAttribute('aria-pressed', 'true');
       await choice(page, 'map.kotter.urgency.status', 'look').check();
