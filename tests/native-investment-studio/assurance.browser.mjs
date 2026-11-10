@@ -56,6 +56,33 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: review demand explains supporting checks while preserving Apply and Undo`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const demand = panel(page).getByRole('slider', { name: 'Review demand', exact: true });
+    const security = panel(page).locator('[data-assurance-pad="security-privacy"]');
+    const included = panel(page).locator('.native-quality-tracks [data-assurance-action="toggle-concept"][data-assurance-concept-id="security-privacy"]');
+    await demand.fill('4');
+    await expect(security).toContainText('Review demand above Balanced keeps this check selected.');
+    await expect(included).toBeDisabled();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await panel(page).locator('.native-quality-rack__faders').screenshot({ path: resolve(captures, `${engine}-review-demand-${width}.png`) });
+    }
+    await demand.fill('2');
+    await expect(included).toBeEnabled();
+    await expect(security.locator('.native-quality-lock')).toBeHidden();
+    await expect(panel(page).getByRole('group', { name: 'Before release', exact: true })).toHaveAttribute('data-reel-value', 'independent-review');
+    assert.equal(await bytes(page), initial, 'review demand retains the proposal boundary');
+    await demand.fill('4');
+    await action(page, 'apply').click();
+    const accepted = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.concepts);
+    assert.equal(accepted.find(row => row.conceptId === 'security-privacy').included, true);
+    assert.notEqual(await bytes(page), initial);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), initial);
+  });
+
   test(`${engine}: quality recovery actions, learning fields and numeric steps retain their shared control treatment`, { timeout:45000 }, async t => {
     const page = await open(t, engine), receiver = panel(page).locator('.native-quality-workbench__receiver');
     for (const width of [1440, 390]) {

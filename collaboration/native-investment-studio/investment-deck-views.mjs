@@ -47,7 +47,7 @@ function createPlanView({ root, reels, knobs, companion, screen, note, reel, edi
   reel('domain', 'Investment lens'); moneyControl('budget', 'Budget to compare', 'all', 'aggregate');
   const approachReading = node('output', '', 'investment-comparison__reel-context'), lensReading = node('output', '', 'investment-comparison__reel-context');
   reels.children[0].append(approachReading); reels.children[1].append(lensReading); root.insertBefore(companion, knobs);
-  range('reserve', 'Reserve set aside', value => `${value}% of budget`, 'all', true); range('opportunity', 'Options set aside', value => `${value}% of budget`);
+  range('reserve', 'Reserve set aside', value => `${value}% of budget`, 'all', { besideReels: true, description: 'Reserves part of the budget, reducing the amount left for work and options.' }); range('opportunity', 'Options set aside', value => `${value}% of budget`, 'all', { description: 'Sets aside budget for options, reducing the unassigned amount.' });
   note.textContent = 'Reserve and options use this deck’s budget. Shared work keeps its planned time and price.';
   return (record, context, analysis) => {
     const state = record.settings, pricing = context.model.pricing;
@@ -65,7 +65,7 @@ function createPlanView({ root, reels, knobs, companion, screen, note, reel, edi
 
 function createRolloutView({ companion, screen, note, reel, edit, moneyControl, range }) {
   lifecycle(reel, edit); reel('domain', 'Customer account');
-  moneyControl('listPrice', 'List price / team / quarter', 'pricing', 'unit', 'stacked'); range('discount', 'Price discount', value => `${value}%`, 'all', true); moneyControl('variableCost', 'Delivery cost / team / quarter', 'pricing'); moneyControl('serviceCost', 'Service cost / team / quarter', 'pricing');
+  moneyControl('listPrice', 'List price / team / quarter', 'pricing', 'unit', 'stacked'); range('discount', 'Price discount', value => `${value}%`, 'all', { besideReels: true, description: 'Reduces the price and contribution earned per customer team.' }); moneyControl('variableCost', 'Delivery cost / team / quarter', 'pricing'); moneyControl('serviceCost', 'Service cost / team / quarter', 'pricing');
   range('teams', 'Customer teams', number, 'implementation'); moneyControl('setup', 'Setup per customer team', 'implementation', 'unit', 'stacked'); range('training', 'Training per team', value => `${value} hours`, 'implementation');
   note.textContent = 'Training uses $120/hour. Customer implementation stays separate from recurring price and contribution.';
   return (record, _context, analysis) => {
@@ -78,7 +78,7 @@ function createRolloutView({ companion, screen, note, reel, edit, moneyControl, 
 
 function createCommercialView({ companion, screen, note, reel, edit, moneyControl, range }) {
   lifecycle(reel, edit); reel('metric', 'Commercial reading', value => edit(record => selectCommercialMetric(record, value), 'Commercial reading selected.'));
-  moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'all', true); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
+  moneyControl('openingRevenue', 'Opening revenue / quarter', 'retention', 'aggregate'); range('retained', 'Opening revenue retained', value => `${value}%`, 'all', { besideReels: true, description: 'Sets how much opening revenue carries forward into retention and closing revenue.' }); moneyControl('expansion', 'Cohort expansion / quarter', 'retention', 'aggregate'); moneyControl('reactivation', 'Reactivated revenue / quarter', 'retention', 'aggregate');
   moneyControl('acquisitionSpend', 'Acquisition spend', 'acquisition', 'aggregate'); range('newCustomers', 'New customers', number, 'acquisition'); moneyControl('newRevenue', 'New revenue / quarter', 'acquisition', 'aggregate'); range('contributionMargin', 'New revenue contribution margin', value => `${value}%`, 'acquisition');
   note.textContent = 'GRR and NRR track the opening cohort. New and reactivated revenue join the closing total separately.';
   return (record, _context, analysis) => {
@@ -91,7 +91,7 @@ function createCommercialView({ companion, screen, note, reel, edit, moneyContro
 
 function createServiceView({ companion, screen, note, reel, edit, moneyControl, range }) {
   lifecycle(reel, edit); reel('domain', 'Operational lens');
-  range('people', 'People reached'); range('adoption', 'Adoption', value => `${value}%`, 'all', true); range('minutes', 'Time saved per use', value => `${value} minutes`, 'time');
+  range('people', 'People reached'); range('adoption', 'Adoption', value => `${value}%`, 'all', { besideReels: true, description: 'Sets the share of people using the change, affecting time saved, service cost and capacity demand.' }); range('minutes', 'Time saved per use', value => `${value} minutes`, 'time');
   moneyControl('baselineCost', 'Current cost / person / quarter', 'budget'); moneyControl('candidateCost', 'Changed cost / person / quarter', 'budget'); range('capacity', 'People supported per quarter', number, 'capacity');
   note.textContent = 'The time comparison starts with a 30-minute workflow, twice each week. Budget and capacity retain their own units.';
   return (record, _context, analysis) => {
@@ -106,7 +106,7 @@ function createServiceView({ companion, screen, note, reel, edit, moneyControl, 
 function createCapitalView({ id, companion, screen, note, reel, moneyControl, range, write }) {
   reel('alternative', 'Alternative'); reel('lifecycle', 'Benefit pattern');
   reel('metric', 'Capital reading', undefined, { variant: 'rose' });
-  moneyControl('upfront', 'Pilot upfront investment', 'all', 'aggregate'); moneyControl('benefit', 'Pilot net benefit / quarter', 'all', 'aggregate'); range('discount', 'Discount per quarter', value => `${value}%`); range('quarters', 'Comparison horizon', value => `${value} quarters`);
+  moneyControl('upfront', 'Pilot upfront investment', 'all', 'aggregate'); moneyControl('benefit', 'Pilot net benefit / quarter', 'all', 'aggregate'); range('discount', 'Discount per quarter', value => `${value}%`, 'all', { description: 'Reduces the present value of future cash flows in the NPV comparison.' }); range('quarters', 'Comparison horizon', value => `${value} quarters`);
   note.textContent = 'Quarter-end net cash flows. Rollout uses 2.5× upfront, 1.8× benefit and one quarter to start.';
   return (record, _context, analysis) => {
     const state = record.settings;

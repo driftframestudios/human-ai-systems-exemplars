@@ -1208,3 +1208,44 @@ for (const engine of names) test(`${engine}: brief money taps and outside drags 
   await reopen();
   await assertSaved(1130000, '$11,300.00');
 });
+
+for (const engine of names) test(`${engine}: cross-cutting investment faders describe their effects and retain direct edits with Undo`, { timeout: 45000 }, async t => {
+  const page = await open(t, engine);
+  await chapter(page, 'investment').click();
+  const view = investment(page), domain = view.locator('.investment-study__domain');
+  const choose = name => domain.getByRole('button', { name: `Domain: ${name}`, exact: true }).click();
+  const examples = [
+    ['Internal', 'Reserve set aside', /budget.*work and options/],
+    ['Internal', 'Options set aside', /options.*unassigned amount/],
+    ['Customer', 'Price discount', /price and contribution.*customer team/],
+    ['Commercial', 'Opening revenue retained', /opening revenue.*retention and closing revenue/],
+    ['Operations', 'Adoption', /people using the change.*time saved, service cost and capacity demand/],
+    ['Planning', 'Discount per quarter', /present value.*NPV comparison/],
+  ];
+  for (const [name, label, effect] of examples) {
+    await choose(name);
+    const fader = view.getByRole('slider', { name: label, exact: true });
+    await expect(fader).toHaveAccessibleDescription(effect);
+    const id = await fader.getAttribute('aria-describedby');
+    await expect(view.locator(`[id="${id}"]`)).toBeVisible();
+  }
+  await choose('Operations');
+  const fader = view.getByRole('slider', { name: 'Adoption', exact: true });
+  const initial = await bytes(page), reading = await view.locator('.investment-domain__values').textContent();
+  const value = await fader.inputValue();
+  await fader.focus(); await page.keyboard.press('ArrowRight');
+  await expect(fader).not.toHaveValue(value);
+  await expect(view.locator('.investment-domain__values')).not.toHaveText(reading);
+  await root(page).locator('[data-studio-undo]').click();
+  assert.equal(await bytes(page), initial);
+  await expect(fader).toHaveValue(value);
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const name of ['Operations', 'Internal']) {
+      await choose(name);
+      const reels = view.locator('.investment-comparison__reels');
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await reels.screenshot({ path: resolve(captures, `${engine}-investment-effects-${name.toLowerCase()}-${width}.png`) });
+    }
+  }
+});

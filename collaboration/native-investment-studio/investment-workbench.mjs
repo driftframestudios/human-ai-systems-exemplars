@@ -157,13 +157,18 @@ export function createInvestmentWorkbench({ getContext, change, openSession, set
     function moneyControl(field, label, domain = 'all', scale = 'unit', readout = scale === 'aggregate' ? 'stacked' : 'inline') {
       const control = createMoneyControl({ id: `investment-${id}-${field}`, label, read: () => read()[field], write: (value, key) => write(field, value, key), max: INVESTMENT_FIELDS[type][field].max, increments: scale === 'aggregate' ? [1000, 100] : [100, 5], readout }); controls.push(control); group(domain).append(control.element); updates.push(state => control.update(state[field]));
     }
-    function range(field, label, format = number, domain = 'all', besideReels = false) {
+    function range(field, label, format = number, domain = 'all', { besideReels = false, description } = {}) {
       const { min, max, step } = INVESTMENT_FIELDS[type][field];
       const fieldset = node('div', undefined, 'investment-comparison__fader'), labelNode = node('label', label), output = node('output'), input = node('input');
       input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.id = `investment-${id}-${field}`; input.dataset.focusKey = input.id; labelNode.htmlFor = input.id; output.htmlFor = input.id;
       let editKey; const begin = () => { editKey = Symbol(`investment-${id}-${field}`); };
       input.addEventListener('pointerdown', begin); input.addEventListener('keydown', event => { if (!event.repeat) begin(); }); input.addEventListener('input', () => write(field, Number(input.value), editKey));
-      fieldset.append(labelNode, output, input); (besideReels ? reels : group(domain)).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
+      fieldset.append(labelNode, output, input);
+      if (description) {
+        const detail = node('small', description); detail.id = `${input.id}-description`;
+        input.setAttribute('aria-describedby', detail.id); fieldset.append(detail);
+      }
+      (besideReels ? reels : group(domain)).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
     }
     function reel(field, label, receive, { variant } = {}) {
       const control = createChoiceReel({ id: `investment-${id}-${field}`, label, variant, secondary: reels.children.length > 0, options: investmentChoices(type, field).map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));

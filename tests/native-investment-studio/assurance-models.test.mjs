@@ -42,6 +42,8 @@ test('authored pressure conditions keep relevant checks included and release the
     assert.ok(constrained.required[id]); assert.ok(qualityArrangement(input, 2).included.includes(id));
   }
   assert.equal(constrained.phases['risk-based-testing'], 'rehearse');
+  assert.match(constrained.required['security-privacy'], /Review demand above Balanced/);
+  assert.equal(qualityConstraints({ ...base, compliance: 2 }, 8).required['security-privacy'], undefined);
   const recovered = qualityConstraints(base, 10);
   assert.equal(recovered.pressure, 'calm'); assert.equal(recovered.extreme, false);
   assert.deepEqual(recovered.required, {}); assert.equal(recovered.phases['risk-based-testing'], 'prepare');
