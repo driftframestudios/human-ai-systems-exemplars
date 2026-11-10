@@ -27,6 +27,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
+| Operating manual | A short first-person introduction and ruled-paper action table share the open amp panel on wide screens and stack on phones. The table distinguishes direct choices, Apply, Close, Cancel, amp Undo and Investment comparison/file exchange. Page-lifetime wording sits with the introduction; accepted-only download keeps unfinished entries and history with the loaded page. |
 | Set vision | A ruled-paper reading joins people, desired outcome, the authored example starting situation and current planned work. A compact side table retains evidence, decision owner, review and open conditions. Edit purpose opens the existing six-field form; Apply, parked raw text and amp Undo retain their existing owners. |
 | Plan overview | All plans starts selected with detail closed; an empty library starts unselected. The first stacked All plans cassette and compact directional Previous/Next rail share the cassette scope owner and retain the selected period. A grouped card opens its period; a single-session card or numbered pad opens that session in the detail deck between the board and tracks. A track name opens plan defaults. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |

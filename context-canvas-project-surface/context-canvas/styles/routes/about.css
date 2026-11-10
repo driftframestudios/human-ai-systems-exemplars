@@ -2608,9 +2608,21 @@ p#on-dark-iron-ore {
    Keep this adapter beside native controls; the ASCII family supplies ornament. */
 .native-manual { grid-column: 1 / -1; color: var(--native-text); background: var(--native-paper); }
 .native-manual summary span, .native-showcase__request summary span { display: block; margin-block-start: .25rem; font-size: .875rem; font-weight: 400; }
-.native-manual__reading { display: grid; gap: 1rem; padding: clamp(.65rem, 2vw, 1.3rem); max-inline-size: 78ch; }
-.native-manual__reading ol { margin: 0; padding-inline-start: 1.5rem; }
-.native-manual__reading li { font-size: 1rem; margin-block-end: .65rem; }
+/* Operating manual shares the cost reading's ruled paper; the native table
+   names each action without changing the amp disclosure or editing owners.
+   Grammar: Contextual Inspection & Recovery. */
+.native-manual__reading { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); align-items:start; gap:1.5rem; padding:clamp(.8rem,2vw,1.3rem); }
+.native-manual__intro { min-inline-size:0; }
+.native-coordination .native-manual__intro p { margin:0 0 1rem; color:var(--native-text); font:.9rem/1.6 system-ui,sans-serif; }
+.native-coordination .native-manual__lifetime { padding-inline-start:.75rem; border-inline-start:3px solid var(--about-deep-teal); }
+.native-coordination .native-manual__actions { inline-size:100%; border-collapse:collapse; color:var(--native-text); background:var(--native-paper); font:.8rem/1.5 system-ui,sans-serif; }
+.native-coordination .native-manual__actions caption { padding:0 0 .6rem; color:var(--native-text); text-align:start; font-weight:700; }
+.native-coordination .native-manual__actions :is(th,td) { padding:.5rem .55rem; border:0; border-block-end:1px solid color-mix(in srgb,var(--native-rule) 35%,transparent); color:var(--native-text); background:transparent; text-align:start; vertical-align:top; }
+.native-coordination .native-manual__actions thead th { border-block-end:2px solid var(--native-rule); }
+.native-coordination .native-manual__actions tbody th { inline-size:30%; font-weight:650; }
+@media (max-width:48rem) {
+    .native-manual__reading { grid-template-columns:minmax(0,1fr); gap:.5rem; }
+}
 .native-showcase { display: grid; gap: 1.2rem; padding: clamp(.6rem, 2vw, 1.5rem); border: .125rem solid var(--native-ink); border-block-start: .4rem solid var(--about-deep-teal); background: var(--native-zine-field); box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
 .native-showcase__brief { display: grid; gap: .9rem; min-inline-size: 0; }
 .about-page .native-showcase h3 { color: var(--native-text); font: 700 clamp(1.3rem, 2.5vw, 1.8rem)/1.25 system-ui, sans-serif; }
