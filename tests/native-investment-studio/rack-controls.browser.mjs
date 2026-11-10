@@ -193,8 +193,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     await contained(page, width);
     for (let index = 0; index < 4; index++) await create.click();
     const shelfShape = await shelf.evaluate(node => ({ height:node.clientHeight, horizontal:node.scrollWidth > node.clientWidth,
-      count:node.querySelectorAll('.studio-tape-key').length }));
+      count:node.querySelectorAll('[data-studio-plan-id]').length,
+      aggregates:node.querySelectorAll('.studio-tape-key--aggregate').length }));
     assert.equal(shelfShape.count, 8);
+    assert.equal(shelfShape.aggregates, 1, 'All plans remains a separate scope choice beside the eight plan records');
     if (width === 1440) assert.ok(shelfShape.height > 640, 'the full-height shelf shows more than the former four-cassette area');
     else assert.ok(shelfShape.horizontal && shelfShape.height < 300, 'mobile keeps a compact horizontal shelf');
     if (engine === 'chromium') {
