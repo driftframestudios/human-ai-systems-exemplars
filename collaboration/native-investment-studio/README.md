@@ -161,7 +161,10 @@ item heading, local return, Apply and Close. Repeating the same record/section
 selection closes the editor; another section switches locally. The selected
 overview stays visible. Close and repeated selection retain unfinished raw entries
 and return focus to the exact initiating key with the viewport in place. Opening
-keeps its smooth reveal. Its People
+keeps its smooth reveal. New catalogue proposals start with editable context:
+the pilot uses its authored example, and other plans use the catalogue's concise
+explanation (#949). Saved context and visitor-cleared drafts retain their values.
+Opening a suggestion leaves the accepted plan unchanged until Apply. Its People
 view places team and participants beside decision owner and status. Supporting
 work uses compact paired groups; observation material uses cool-blue reading companions.
 Native pads retain their written selected state and fit ordinary mobile widths.

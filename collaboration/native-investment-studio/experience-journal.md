@@ -522,7 +522,11 @@ selection park changed raw entries and return focus to the exact initiating key
 with the viewport in place. The selected overview remains visible, and opening
 retains its smooth reveal. **Supersession (#937):** these local toggles replace
 the repeated scroll to an already-open editor. Apply and amp Undo retain their
-existing owners. The People receiver pairs
+existing owners. New catalogue proposals receive the pilot's authored context or
+the definition's concise explanation. **Supersession (#949):** this creation-only
+fallback replaces empty starting context outside the original pilot. Accepted
+blank context and cleared raw drafts remain blank through parking, Review and
+reopening; existing assignments and Apply ownership stay intact. The People receiver pairs
 team/participants with decision owner/status; support groups occupy neighboring
 halves, and observation material uses cool-blue companions. Phone widths stack
 the halves while keeping choices legible. Chapter-owned CSS defines both text

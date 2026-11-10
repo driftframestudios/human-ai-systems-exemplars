@@ -74,6 +74,19 @@ async function support(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: new catalogue context is visible and a visitor-cleared value survives close and Apply`, async t => {
+    const page = await open(t, engine), initial = await bytes(page), title = choice(page, 'inspect-history');
+    await title.click();
+    await expect(field(page, 'context')).toHaveValue('Inspect earlier accepted records and distinguish them from the current proposal.');
+    assert.equal(await bytes(page), initial, 'the suggested context remains a proposal');
+    await field(page, 'context').fill(''); await action(page, 'close').click();
+    await title.click(); await expect(field(page, 'context')).toHaveValue('');
+    await action(page, 'apply').click();
+    assert.equal(JSON.parse(await bytes(page)).abilities[0].context, null);
+    await action(page, 'close').click(); await title.click();
+    await expect(field(page, 'context')).toHaveValue('');
+  });
+
   for (const width of [390, 1440]) test(`${engine}: repeated Abilities title and support selections close locally and retain the draft at ${width}px`, async t => {
     const page = await open(t, engine, true), initial = await bytes(page);
     await page.setViewportSize({ width, height: 1000 });
