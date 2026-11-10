@@ -41,7 +41,10 @@ opens that period's sessions; a single-session card or numbered pad
 opens that session's name, people, duration, funding, status and placement. Apply
 changes that session; its siblings retain their settings. A track name opens the
 plan defaults. New and uncustomized sessions follow those defaults; edited
-sessions keep their own settings. Working sessions Add/Remove accepts the
+sessions keep their own settings. Navigation declares that scope explicitly. A
+numbered target carries its immutable source work record and ordinal; the receiver
+admits it before changing the editor or return path. Removed or replaced targets
+leave the current draft intact. Saved drafts keep their separate recovery route. Working sessions Add/Remove accepts the
 count change with amp Undo; valid unfinished entries are accepted first. Paused
 sessions keep their planned investment, and mixed tapes show partial participation
 where appropriate. The selected period
@@ -367,11 +370,15 @@ The #901 implementation settles accepted score edits locally before one root
 notification. Cadence retains its rack DOM when the exact projection, scope and
 selection are unchanged; caption editing has its own redraw boundary. Creation,
 focus, scope and Undo remain covered by the focused score/browser checks.
-The tape-scope repairs in #913/#914 settle the current visitor paths. Deferred
+The tape-scope repairs in #913/#914 settle the current visitor paths.
 [#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915)
-then makes aggregate navigation, individual editing and plan defaults explicit
-at receiving boundaries. #902 separates reusable readings from detached mutable
-command settings; #903 prepares invocation-local membership and override indexes.
+makes individual editing and plan defaults explicit at receiving boundaries;
+aggregate cards retain period navigation. `navigation-policy.mjs` admits the
+current record and explicit scope before handing the canonical target to the
+draft owner. Mounted checks cover retained entries on rejection, defaults versus
+numbered edits, proposed arrangements, nested returns and Undo. Next, #902
+separates reusable readings from detached mutable command settings; #903 prepares
+invocation-local membership and override indexes.
 [#916](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/916)
 follows with focused deck configuration and renderer ownership. Each proposal
 uses the smallest fitting registry, factory or shared immutable definition;

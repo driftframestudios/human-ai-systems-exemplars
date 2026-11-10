@@ -5,7 +5,9 @@ record and unfinished entries intact. One canonical editor owns each proposal;
 its placement follows the visitor's current working area.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-dev receiving contract revised 9 November 2026 for
+dev receiving contract revised 9 November 2026 for explicit edit targets in
+[#915](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/915),
+retaining the person mixing desk from
 [#884](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/884),
 retaining contextual creation returns from
 [#879](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/879),
@@ -18,7 +20,7 @@ comparison anchor; a human cue authorizes promotion from `dev`.
 
 | Working area | Local editing and return |
 | --- | --- |
-| Plan overview | All plans starts selected with detail closed; an empty library starts unselected. Persistent All plans and directional Previous/Next controls share the cassette scope owner and retain the selected period. A session clip or track opens the Session detail deck between the period board and tracks. The selected period and Plan overview return remain visible. |
+| Plan overview | All plans starts selected with detail closed; an empty library starts unselected. Persistent All plans and directional Previous/Next controls share the cassette scope owner and retain the selected period. A grouped card opens its period; a single-session card or numbered pad opens that session in the detail deck between the board and tracks. A track name opens plan defaults. The selected period and Plan overview return remain visible. |
 | Delivery overview | A team opens direct name, membership and order controls with Saved feedback. A person or handoff borrows its canonical form within the delivery working area. Shared sessions remains visible as an independent module. |
 | Shared sessions | People and Handoffs are local matrix views. Participation and supporting-work checkboxes accept directly. A selected session opens compact host-team and participant-order controls; a handoff heading opens its canonical form inside this module. The delivery board remains visible. |
 | Handoff settings | A short name and routing choices share a compact half-rack beside supporting-session pads. Create a team accepts a useful new team while keeping the handoff receiver and its entered text. The requested sender or receiver field selects that team; Apply accepts the handoff relationship. Amp Undo recovers the team addition. |
@@ -158,7 +160,14 @@ canonical configure/status nodes move between their chapter home and the local
 Coordination slot; their event listeners and draft ownership move with them.
 
 A numbered session pad opens that session's name, duration, ordered participants,
-funding, status and placement. Its pressed state identifies only that occurrence;
+funding, status and placement. Its target declares session scope and carries the
+immutable work record that supplied its ordinal. The receiver validates that
+record before changing editor ownership, local focus or return ancestry. An
+incomplete or stale target preserves the current working area. Plan-default
+navigation declares its own scope and stable work ID. Saved entries use the
+canonical draft recovery route; returning presents that draft's current numbered
+session. These semantic boundaries retain the existing palette, geometry and
+motion. Its pressed state identifies only that occurrence;
 the parent track remains a route to plan defaults. Working sessions pads switch
 the same local owner. #910 supersedes the earlier shared-settings rule. Add/Remove
 accept count changes with amp Undo after validating and accepting visible edits;

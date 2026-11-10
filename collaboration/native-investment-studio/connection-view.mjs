@@ -2,6 +2,7 @@ import { projectCoordinationArrangements } from './coordination-arrangements.mjs
 import { createContributionViewModel } from './contribution-view-model.mjs';
 import { createTeamLanes } from './arrangement-surfaces.mjs';
 import { diagramArrowPath } from './diagram-geometry.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 // About owns the .native-connections route styles. This receiver reads an
 // accepted projection; the parent owns edits, publication and monetary values.
@@ -500,7 +501,10 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (control.dataset.connectionSelect) { select(control.dataset.connectionSelect, { notify: true }); return; }
     const action = control.dataset.connectionAction, view = state.read();
     if (action === 'detach-arrangement') { onDetachArrangement(control.dataset.arrangementId); return; }
-    if (action === 'navigate') { onNavigate({ kind: control.dataset.connectionTargetKind, id: control.dataset.connectionTargetId }, control); return; }
+    if (action === 'navigate') {
+      const { connectionTargetKind: kind, connectionTargetId: id } = control.dataset;
+      onNavigate(kind === 'work' ? workDefaultsTarget(id) : { kind, id }, control); return;
+    }
     if (action === 'previous') showPage(view.page - 1);
     else if (action === 'next') showPage(view.page + 1);
     else if (action === 'return' && view.selectedId !== null) {

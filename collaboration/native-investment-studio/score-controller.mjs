@@ -418,7 +418,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     let proposed = null; if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
     const reading = proposed?.ok ? proposed.projection : current.projection;
-    view.refresh(reading, { periodId, loadedPlanId, selected, preview: Boolean(proposed?.ok && current.draft.changed) });
+    view.refresh(reading, { periodId, loadedPlanId, selected, preview: Boolean(proposed?.ok && current.draft.changed),
+      acceptedWork: current.projection.state.work });
     onViewChanged();
     const isNew = created.has(selected.kind + ':' + selected.id);
     title.textContent = isNew ? 'New ' + LABELS[selected.kind] : selected.kind === 'horizon' ? 'Arrange the work' : 'Inspect ' + (LABELS[selected.kind] ?? 'the work');

@@ -1,6 +1,7 @@
 import { summarizeWorkSessions } from './work-sessions.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { duration, workDuration } from './display.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const node = (document, tag, className, text) => {
   const element = document.createElement(tag);
@@ -74,7 +75,7 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     if (sessionIds.has(work.id)) choose.dataset.studioSessionId = work.id;
     choose.setAttribute('aria-label', `${work.label}. ${sessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);
     choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', workDuration(work)));
-    if (onSession) choose.addEventListener('click', event => onSession(work.id, event.currentTarget));
+    if (onSession) choose.addEventListener('click', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
     else choose.dataset.nativeWorkOpen = work.id;
     title.append(choose); row.append(title);
     const summary = summarizeWorkSessions(work), members = new Set(summary.personIds);
@@ -88,7 +89,7 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
         pad.dataset.funding = summary.funding; pad.dataset.status = summary.status;
         pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${time} · ${summary.funding === 'mixed' ? 'funded time and extra investment' : summary.funding === 'additional' ? 'extra investment' : 'within funded time'}${summary.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
         pad.title = `${person.label} · ${time}`;
-        if (onSession) pad.addEventListener('click', event => onSession(work.id, event.currentTarget));
+        if (onSession) pad.addEventListener('click', event => onSession(workDefaultsTarget(work.id), event.currentTarget));
         else pad.dataset.nativeWorkOpen = work.id;
         cell.append(pad);
       } else { const empty = node(document, 'span', 'studio-session-tracks__empty', '·'); empty.setAttribute('aria-label', `${person.label}: not included in this session`); cell.append(empty); }

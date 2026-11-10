@@ -348,3 +348,85 @@ for (const engine of names) test(`${engine}: unplaced cards edit one session whi
   await expect(tray.locator('[data-studio-session-occurrence="0"]')).toHaveAttribute('data-active', 'true');
   await expect(second).toHaveAttribute('data-active', 'false');
 });
+
+for (const engine of names) test(`${engine}: track defaults and numbered sessions keep distinct editing scopes`, async t => {
+  const page = await open(t, engine, { groupedBasis: 'sprint' });
+  const originalBytes = await bytes(page), original = JSON.parse(originalBytes);
+  const work = original.work.find(row => row.id === 'research');
+  const track = shelf(page).locator('[data-cadence-key="track-work:research"]');
+  const pad = shelf(page).locator('[data-cadence-key="pad:research:1"]');
+  const rack = root(page).locator('[data-native-configure]');
+  const close = root(page).locator('[data-rack-editor-kind="session"] [data-rack-editor-close]');
+  await track.click();
+  await expect(rack).toContainText('Plan defaults');
+  await rack.locator('[name="hoursPerSession"]').fill('0');
+  await rack.locator('[name="minutesPerSession"]').fill('45');
+  await rack.locator('[data-action="apply"]').click();
+  const changedDefaults = JSON.parse(await bytes(page)).work.find(row => row.id === work.id);
+  assert.equal(changedDefaults.minutesPerOccurrence, 45);
+  assert.deepEqual(changedDefaults.sessionOverrides, work.sessionOverrides, 'authored sessions retain their own settings');
+  await close.click(); await expect(track).toBeFocused();
+  await undo(page); assert.equal(await bytes(page), originalBytes);
+  await pad.click();
+  await expect(rack).toContainText('Settings for session 2.');
+  await rack.locator('[name="hoursPerSession"]').fill('0');
+  await rack.locator('[name="minutesPerSession"]').fill('25');
+  await rack.locator('[data-action="apply"]').click();
+  const changedSession = JSON.parse(await bytes(page)).work.find(row => row.id === work.id);
+  assert.equal(changedSession.minutesPerOccurrence, work.minutesPerOccurrence, 'a pad preserves the defaults');
+  assert.equal(changedSession.sessionOverrides.find(row => row.occurrenceIndex === 1).minutesPerOccurrence, 25);
+  assert.deepEqual(changedSession.sessionOverrides.filter(row => row.occurrenceIndex !== 1), work.sessionOverrides);
+  await close.click(); await expect(pad).toBeFocused();
+  await undo(page); assert.equal(await bytes(page), originalBytes);
+  await pad.click(); await expect(rack.locator('[name="minutesPerSession"]')).toHaveValue('0');
+});
+
+for (const engine of names) test(`${engine}: proposed arrangement and source-less navigation preserve exact session intent`, async t => {
+  const page = await open(t, engine);
+  const before = await bytes(page);
+  await shelf(page).locator('[data-cadence-key="rack-stage:understand"]').click();
+  await score(page).locator('input[data-cadence-field="stage.understand.label"]').fill('Explore the receiving work');
+  await expect(shelf(page)).toHaveAttribute('data-cadence-reading', 'proposed');
+  await shelf(page).locator('[data-cadence-key="pad:research:1"]').click();
+  const rack = root(page).locator('[data-native-configure]');
+  await expect(rack).toContainText('Settings for session 2.');
+  await rack.locator('[name="label"]').fill('Retain this session draft');
+  const result = await page.evaluate(async () => {
+    const { mountScorePanel } = await import('/collaboration/native-investment-studio/score-controller.mjs');
+    const { workSessionTarget } = await import('/collaboration/native-investment-studio/navigation-policy.mjs');
+    const { studio, controller } = window.tapeFixture;
+    const score = mountScorePanel(document.querySelector('[data-native-score]'), {});
+    const before = controller.read(), focus = document.activeElement, parent = focus.closest('[data-rack-editor-kind]');
+    const route = document.querySelector('[data-native-return-route]')?.outerHTML;
+    const history = studio.readHistory();
+    score.select({ kind: 'work', id: 'research', scope: 'session' });
+    const after = controller.read();
+    const retained = { token: before.draft.token === after.draft.token,
+      entries: JSON.stringify(before.draft.raw) === JSON.stringify(after.draft.raw),
+      focus: document.activeElement === focus, parent: focus.closest('[data-rack-editor-kind]') === parent,
+      return: document.querySelector('[data-native-return-route]')?.outerHTML === route,
+      history: JSON.stringify(studio.readHistory()) === JSON.stringify(history) };
+    score.select(workSessionTarget(studio.read().state.work.find(row => row.id === 'research'), 0));
+    return { retained, target: controller.read().draft?.sessionId };
+  });
+  assert.ok(Object.values(result.retained).every(Boolean), JSON.stringify(result.retained));
+  assert.equal(result.target, 'work.session.update:research:0', 'a source-less route keeps its exact session scope');
+  assert.equal(await bytes(page), before, 'inspection and proposed stage edits leave accepted work unchanged');
+});
+
+for (const engine of names) test(`${engine}: prerequisite return retains the numbered session selected inside its rack`, async t => {
+  const page = await open(t, engine), before = await bytes(page);
+  const rack = root(page).locator('[data-native-configure]');
+  await shelf(page).locator('[data-cadence-key="pad:research:0"]').click();
+  await rack.locator('[data-session-occurrence="1"]').click();
+  await rack.locator('[name="label"]').fill('Second session draft');
+  await rack.locator('[data-native-create="team"]').click();
+  const team = root(page).locator('[data-assembly-configure]');
+  await team.getByRole('button', { name: /^Back to Settings/ }).click();
+  await expect(rack).toContainText('Settings for session 2.');
+  await expect(rack.locator('[name="label"]')).toHaveValue('Second session draft');
+  await expect(rack.locator('[data-session-occurrence="1"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(root(page).locator('[data-rack-editor-kind="session"] > .studio-rack-header h4')).toContainText('Session 2');
+  assert.equal(await page.evaluate(() => window.tapeFixture.controller.read().draft.sessionId), 'work.session.update:research:1');
+  assert.equal(await bytes(page), before);
+});

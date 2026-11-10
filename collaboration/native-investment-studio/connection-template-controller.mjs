@@ -8,6 +8,7 @@ import { createReel, revealReelResult, animateRackChange } from './reel-control.
 import { mountSharedSessionRack } from './shared-session-rack.mjs';
 import { createDeliveryBoard } from './delivery-board.mjs';
 import { syncReorderButtons, mountRackHeader } from './rack-controls.mjs';
+import { workDefaultsTarget } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
@@ -362,7 +363,8 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         else navigate({ kind, id }, acceptedControl);
       }
     }
-    const inspectSession = (id, source) => {
+    const inspectSession = (target, source) => {
+      const { id } = target;
       const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
       if (proposed) {
         const slotId = proposed.slotId;
@@ -370,8 +372,8 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         const row = currentArrangement();
         const edge = row?.connections.find(binding => binding.slotId === slotId)?.connection;
         const workId = edge?.workIds.find(workId => isGeneratedArrangementRecord(row.id, 'recovery', slotId, workId));
-        if (workId) navigate({ kind: 'work', id: workId }, acceptedSource('work', workId, source));
-      } else navigate({ kind: 'work', id }, source);
+        if (workId) navigate(workDefaultsTarget(workId), acceptedSource('work', workId, source));
+      } else navigate(target, source);
     };
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
