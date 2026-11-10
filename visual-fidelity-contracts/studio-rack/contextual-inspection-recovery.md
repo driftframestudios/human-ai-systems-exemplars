@@ -81,7 +81,7 @@ the preceding Add sprint/quarter and lane controls visually separate.
 | Close or return | Ghost action retains unfinished entries and restores the initiating control or named working area. |
 | Cancel edits | Ghost action restores accepted values. A record added earlier remains accepted. |
 | Remove a plan/session record | Muted rose action opens a concise confirmation. Acceptance removes the record and dissolves its links together; amp Undo restores both. |
-| Remove a working-session occurrence | Bottom-right rose action edits repetition and placement within the current proposal; the plan's supporting relationships remain attached. |
+| Remove a working-session occurrence | Bottom-right rose action removes that session and remaps the remaining settings and placements with amp Undo; the plan's supporting relationships remain attached. |
 | Undo | The stable native amp control reverses the latest accepted change through shared history. Its disabled state remains in place at zero. |
 
 The [WAI Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
@@ -134,7 +134,7 @@ Adding through a loaded plan's lane or track appends one accepted occurrence,
 retaining the cassette and earlier placements. In All plans, explicit lane and
 track New plan targets create distinct records while retaining that overview.
 Shelf New plan deliberately loads the new cassette. Amp Undo reverses the accepted operation; ordinary
-session draft additions and placement changes still accept through Apply.
+session settings and placement changes accept through Apply; explicit Working sessions Add/Remove actions accept directly with Undo.
 
 Abilities also separates record creation from support assignment. Adding a person,
 team or session accepts that record, then selects it within the current support
@@ -157,9 +157,12 @@ A refused switch keeps the admitted record and visible editor aligned. The
 canonical configure/status nodes move between their chapter home and the local
 Coordination slot; their event listeners and draft ownership move with them.
 
-Session duration and ordered participants apply to all occurrences of that
-session. Working sessions pads select the occurrence whose sprint/quarter and
-week/month are being edited. The enclosed duration module retains its separate
+A numbered session pad opens that session's name, duration, ordered participants,
+funding, status and placement. Its pressed state identifies only that occurrence;
+the parent track remains a route to plan defaults. Working sessions pads switch
+the same local owner. #910 supersedes the earlier shared-settings rule. Add/Remove
+accept count changes with amp Undo after validating and accepting visible edits;
+invalid entries remain available for repair. The enclosed duration module retains its separate
 [layout contract](loaded-tape-duration-panel.md). Membership keeps cards in place;
 explicit movement changes their order and retains focus on the same person.
 

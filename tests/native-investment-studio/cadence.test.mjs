@@ -127,7 +127,7 @@ test('strict previous-version migration retains arrangement identities and curre
   assert.equal(applyCoordinationTemplate(studio, prepareCoordinationTemplate(studio.read(), request)).ok, true);
   const old = structuredClone(studio.read().state); old.schemaVersion = '0.8.0'; old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence; delete old.investmentSettings;
   const migrated = prepareImport(JSON.stringify(old));
-  assert.equal(migrated.sourceSchemaVersion, '0.8.0'); assert.equal(migrated.projection.state.schemaVersion, '0.10.0');
+  assert.equal(migrated.sourceSchemaVersion, '0.8.0'); assert.equal(migrated.projection.state.schemaVersion, '0.11.0');
   assert.deepEqual(migrated.projection.state.arrangements, old.arrangements); assert.deepEqual(migrated.projection.state.work, old.work);
   assert.equal(migrated.projection.state.scoreSettings.cadence, null);
   old.scoreSettings.cadence = createCadence(); assert.throws(() => preparePlan(old), { code: 'fields' });

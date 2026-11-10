@@ -1,3 +1,4 @@
+import { resolveWorkSession } from './work-sessions.mjs';
 import { createStudio } from './state.mjs';
 import { createShowcasePlan, createQuarterShowcasePlan } from './presets.mjs';
 import { createDraftCoordinator } from './editing.mjs';
@@ -229,6 +230,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const sharedSource = source?.closest('[data-shared-session-rack]');
     const toggle = target.kind !== 'session' || horizonSource || source?.classList.contains('studio-track-key');
     if (allowToggle && toggle && current?.open && current.kind === target.kind && current.id === target.id
+      && (target.kind !== 'session' || workPanel.readReceiver().occurrenceIndex === target.occurrenceIndex)
       && rackEditor.isOrigin(source)) { closeRackEditor(source); return; }
     const anchor = target.kind === 'person' ? requireElement('[data-connection-templates]')
       : horizonSource ?? source?.closest('[data-native-connection-view]') ?? requireElement('[data-connection-templates]');
@@ -240,9 +242,9 @@ export function mountCoordinationPanel(root, options = {}) {
     const ownerFor = kind => ({ person: teamPanel, team: assemblyPanel, session: workPanel, connection: connectionPanel })[kind];
     const open = record => record.kind === 'team'
       ? assemblyPanel.open(makeAssemblyTarget('team.update', record.id), false)
-      : ownerFor(record.kind).select(record.id, false);
+      : ownerFor(record.kind).select(record.id, false, record.occurrenceIndex);
     const targetId = target.kind === 'team' ? makeAssemblyTarget('team.update', target.id)
-      : target.kind === 'session' ? makeSessionTarget('work.update', target.id) : target.kind === 'connection' ? makeConnectionTarget('connection.update', target.id) : target.id;
+      : target.kind === 'session' ? makeSessionTarget(Number.isSafeInteger(target.occurrenceIndex) ? 'work.session.update' : 'work.update', target.id, target.occurrenceIndex) : target.kind === 'connection' ? makeConnectionTarget('connection.update', target.id) : target.id;
     let result;
     try {
       openingRackKind = target.kind;
@@ -737,6 +739,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (target) {
         if (record.kind === 'capability') return `${target.definition.action} · ${target.id}`;
         const enteredName = record.raw.label?.trim();
+        if (target.occurrenceIndex !== undefined) return `${enteredName || collectionLabels[target.collection]?.get(target.id) || 'Session'} · Session ${target.occurrenceIndex + 1}`;
         if (enteredName) return enteredName;
         const currentName = collectionLabels[target.collection]?.get(target.id);
         if (currentName) return currentName;
@@ -1073,6 +1076,7 @@ export function mountCoordinationPanel(root, options = {}) {
   try {
     listen(ampUndo, 'click', () => {
       if (disposed || ampUndo.disabled) return;
+      ampUndo.focus({ preventScroll: true });
       const expected = ampHistoryProjection;
       if (expected !== studio.read()) { render(); return; }
       const parked = editing.park();
@@ -1091,7 +1095,7 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
-      onBegin: () => beginCoordination('session'), onRecordCreated: prerequisiteCreated,
+      onBegin: () => beginCoordination('session', { retainRack: rackEditor?.isOpen('session') }), onRecordCreated: prerequisiteCreated,
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       onClose: closeRackEditor, onAccepted: () => render(), onEditing: () => { borrowCurrentSession(); render(); },
     });
@@ -1167,6 +1171,12 @@ export function mountCoordinationPanel(root, options = {}) {
           ? assemblyPanel?.read().draft?.assemblyId : null),
       readLabel: record => {
         const row = studio.read().state[rackCollections[record.kind]].find(row => row.id === record.id);
+        if (row && record.kind === 'session') {
+          const target = describeSessionTarget(workPanel.read().draft?.sessionId);
+          const index = target?.id === row.id ? target.occurrenceIndex : undefined;
+          if (index !== undefined) return `${resolveWorkSession(row, index)?.label ?? row.label} · Session ${index + 1}`;
+          return `${row.label} · Plan defaults`;
+        }
         return row?.label ?? row?.sharedObject;
       },
     });

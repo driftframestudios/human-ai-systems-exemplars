@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { duration, money } from './display.mjs';
 import { CADENCE_PERIOD_LIMIT, CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
 import { LIMITS } from './config.mjs';
@@ -34,7 +35,10 @@ export function createCadenceView(root, {
   }
   function selection(label, kind, id, key, selected, extra = {}, className = '') {
     const control = button(label, 'select', { kind, id, ...extra }, key, className);
-    if (kind === 'work') control.dataset.studioSessionId = id;
+    if (kind === 'work') {
+      control.dataset.studioSessionId = id;
+      if (Number.isSafeInteger(extra.occurrenceIndex)) control.dataset.studioSessionOccurrence = String(extra.occurrenceIndex);
+    }
     control.setAttribute('aria-pressed', String(selected?.kind === kind && selected.id === id
       && (extra.occurrenceIndex === undefined || selected.occurrenceIndex === undefined || selected.occurrenceIndex === extra.occurrenceIndex)));
     return control;
@@ -186,7 +190,7 @@ export function createCadenceView(root, {
       variant: 'plan', label: 'Plans', selectedId: loadedPlan?.id ?? null,
       entries: state.work.map(item => ({
         id: item.id, title: item.label, eyebrow: teams.get(item.teamId)?.label ?? 'Choose a team',
-        detail: `${duration(item.minutesPerOccurrence)} · ${item.occurrences} ${item.occurrences === 1 ? 'session' : 'sessions'}`,
+        detail: `${item.sessionOverrides ? `${duration(summarizeWorkSessions(item).durationMinutes)} total` : duration(item.minutesPerOccurrence)} · ${item.occurrences} ${item.occurrences === 1 ? 'session' : 'sessions'}`,
         attributes: { 'data-cadence-key': `cassette:${item.id}`, 'data-studio-plan-id': item.id },
       })),
       onSelect: (id, source) => {
@@ -212,7 +216,7 @@ export function createCadenceView(root, {
       if (!incoming.has(id)) incoming.set(id, []);
       for (const fromId of handoff.fromWorkIds) if (!incoming.get(id).includes(fromId)) incoming.get(id).push(fromId);
     }
-    const workPreview = row => `${row.work.label} · ${duration(row.work.minutesPerOccurrence)} per person.`
+    const workPreview = row => `${row.label} · ${duration(row.minutesPerOccurrence)} per person.${row.active ? '' : ' Paused.'}`
       + (incoming.get(row.workId)?.length ? ` Needs ${incoming.get(row.workId).map(id => work.get(id)?.label).filter(Boolean).join(', ')}.` : ' Opens this part of the work.');
     const endpointName = endpoint => endpoint.kind === 'stage' ? model.stages.find(row => row.id === endpoint.id)?.label ?? 'Stage'
       : work.get(endpoint.id)?.label ?? 'Session';
@@ -262,17 +266,19 @@ export function createCadenceView(root, {
 
     function sessionClip(rows, key) {
       const row = rows[0], item = row.work;
-      const control = selection(item.label, 'work', item.id, key, selected,
+      const control = selection(rows.length === 1 ? row.label : item.label, 'work', item.id, key, selected,
         { ...(rows.length === 1 ? { occurrenceIndex: row.occurrenceIndex } : {}), periodId: row.periodId },
         'native-cadence__clip native-control--navigate');
-      control.dataset.funding = item.funding; control.dataset.active = String(item.status === 'planned' && item.lifecycle !== 'retired');
-      const effort = `${rows.length > 1 ? `${rows.length} × ` : ''}${duration(item.minutesPerOccurrence)} per person`;
+      control.dataset.funding = rows.every(entry => entry.funding === row.funding) ? row.funding : 'mixed';
+      control.dataset.active = String(rows.some(entry => entry.active));
+      const effort = rows.length > 1 ? `${rows.length} sessions · ${duration(rows.reduce((sum, entry) => sum + entry.minutesPerOccurrence, 0))} total`
+        : `${duration(row.minutesPerOccurrence)} per person`;
       control.append(node('small', effort));
-      if (activePeriod) control.append(node('small', teams.get(item.teamId)?.label ?? 'Team to choose', 'native-cadence__team'),
-        node('small', item.personIds.map(id => people.get(id)?.label).filter(Boolean).join(', ') || 'Choose the people taking part', 'native-cadence__participants'));
+      if (activePeriod) control.append(node('small', teams.get(row.teamId)?.label ?? 'Team to choose', 'native-cadence__team'),
+        node('small', row.personIds.map(id => people.get(id)?.label).filter(Boolean).join(', ') || 'Choose the people taking part', 'native-cadence__participants'));
       control.dataset.cadencePreview = workPreview(row);
       control.setAttribute('aria-label', `${item.label}${activePeriod ? `, session ${row.occurrenceIndex + 1}` : ''}, ${periodLabel(row.periodId)}. ${effort}. Open session settings.`);
-      if (item.status !== 'planned' || item.lifecycle === 'retired') control.append(node('small', item.lifecycle === 'retired' ? 'Retired' : 'Paused', 'native-cadence__state'));
+      if (rows.every(entry => !entry.active)) control.append(node('small', item.lifecycle === 'retired' ? 'Retired' : 'Paused', 'native-cadence__state'));
       return control;
     }
     function decisionMarker(decision, suffix) {
@@ -438,9 +444,9 @@ export function createCadenceView(root, {
             const pad = selection(activePeriod ? `Session ${row.occurrenceIndex + 1}` : `${cadence.basis === 'quarter' ? 'M' : 'W'}${subdivision}`,
               'work', item.id, `pad:${item.id}:${row.occurrenceIndex}`, selected,
               { occurrenceIndex: row.occurrenceIndex, periodId: row.periodId }, 'native-cadence__pad native-control--navigate');
-            pad.dataset.funding = item.funding; pad.dataset.active = String(row.active);
+            pad.dataset.funding = row.funding; pad.dataset.active = String(row.active);
             pad.dataset.cadencePreview = workPreview(row);
-            pad.setAttribute('aria-label', `${item.label}, session ${row.occurrenceIndex + 1}, ${column.period.label}, ${subdivisionLabel(subdivision)}. ${duration(item.minutesPerOccurrence)} per person. Open session settings.`);
+            pad.setAttribute('aria-label', `${row.label}, session ${row.occurrenceIndex + 1}, ${column.period.label}, ${subdivisionLabel(subdivision)}. ${duration(row.minutesPerOccurrence)} per person. ${row.active ? 'Planned' : 'Paused'}. Open session settings.`);
             part.append(pad);
           }
           const destination = `${column.period.label}, ${subdivisionLabel(subdivision)}`;
@@ -562,12 +568,12 @@ export function createCadenceView(root, {
       row.append(controls); recordRail.append(row); return controls;
     }
     const peopleKeys = recordRow('People');
-    const participants = activePeriod || loadedPlan ? new Set(visible.flatMap(row => row.work.personIds)) : new Set(state.people.map(row => row.id));
+    const participants = activePeriod || loadedPlan ? new Set(visible.flatMap(row => row.personIds)) : new Set(state.people.map(row => row.id));
     for (const id of participants) {
       const person = people.get(id); if (!person) continue;
       const card = node('article', undefined, 'native-cadence__person'); card.append(node('h5', person.label));
-      const rows = visible.filter(row => row.work.personIds.includes(id) && row.work.status === 'planned' && row.work.lifecycle !== 'retired');
-      const effort = rows.reduce((sum, row) => sum + row.work.minutesPerOccurrence, 0);
+      const rows = visible.filter(row => row.personIds.includes(id) && row.active);
+      const effort = rows.reduce((sum, row) => sum + row.minutesPerOccurrence, 0);
       card.append(node('p', `${duration(effort)} of planned participation`));
       if (activePeriod) {
         const entry = cadence.availability.find(row => row.personId === id && row.periodId === activePeriod.id);

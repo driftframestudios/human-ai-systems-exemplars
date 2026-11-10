@@ -7,6 +7,7 @@ import { createAssuranceSettings, listQualityConcepts, getSourcePreset, getRehea
 import { createScoreSettings, projectScore } from './score-models.mjs';
 import { CADENCE_VERSION, CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
+import { WORK_SESSION_FIELDS, summarizeWorkSessions } from './work-sessions.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -40,6 +41,10 @@ const FIELDS = Object.freeze({
   team: ['id', 'label', 'personIds', 'lifecycle'],
   legacyTeam: ['id', 'label', 'personIds'],
   work: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle'],
+  sessionWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle', 'sessionOverrides'],
+  workSession: WORK_SESSION_FIELDS,
+  workSessionOverride: ['occurrenceIndex', ...WORK_SESSION_FIELDS],
+  sessionPlacement: ['periodId', 'subdivision'],
   legacyWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing'],
   untimedWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'lifecycle'],
   workTiming: ['startMinute', 'repeatEveryMinutes'], interval: ['startMinute', 'endMinute'],
@@ -97,15 +102,20 @@ const PROFILES = new Map([
   ['0.8.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, arrangements: true, references: LIMITS.references }],
   ['0.9.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
   ['0.10.0', { fields: 'investmentPlan', investment: true, purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
+  ['0.11.0', { fields: 'investmentPlan', sessions: true, investment: true, purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
   'team.create': ['type', 'team'],
   'work.create': ['type', 'work'],
   'work.update': ['type', 'work'],
+  'work.session.update': ['type', 'workId', 'occurrenceIndex', 'session'],
+  'work.session.remove': ['type', 'workId', 'occurrenceIndex'],
   'team.update': ['type', 'teamId', 'team'],
   'team.members.replace': ['type', 'teamId', 'personIds'],
   'work.participants.replace': ['type', 'workId', 'personIds'],
+  'work.participants.reorder': ['type', 'workId', 'personIds'],
+  'work.participant.set': ['type', 'workId', 'personId', 'included'],
   'person.participation.replace': ['type', 'personId', 'workIds'],
   'work.funding.set': ['type', 'workId', 'funding'],
   'work.status.set': ['type', 'workId', 'status'],
@@ -302,23 +312,20 @@ function calculate(state, peopleById) {
   });
   const obligations = [];
   const ledger = state.work.map(work => {
-    if (work.status === 'paused') obligations.push({ code: 'paused-work', workId: work.id });
-    const minutes = work.minutesPerOccurrence * work.occurrences;
-    const lines = work.personIds.map(personId => {
-      const person = peopleById.get(personId);
-      const cents = price(minutes, person.rateCentsPerHour);
-      const usage = capacity.get(personId);
-      if (work.funding === 'allocated') {
-        usage.allocatedMinutes += minutes;
-        if (cents !== null) allocatedLineCents += BigInt(cents);
-      } else {
-        usage.additionalMinutes += minutes;
-        if (cents !== null) additionalLineCents += BigInt(cents);
-      }
+    const summary = summarizeWorkSessions(work);
+    if (summary.status !== 'planned') obligations.push({ code: 'paused-work', workId: work.id });
+    const lines = summary.people.map(({ personId, minutes, allocatedMinutes, additionalMinutes }) => {
+      const person = peopleById.get(personId), usage = capacity.get(personId);
+      const allocatedCents = price(allocatedMinutes, person.rateCentsPerHour), additionalCents = price(additionalMinutes, person.rateCentsPerHour);
+      const cents = allocatedCents === null || additionalCents === null ? null : sum(allocatedCents, additionalCents);
+      usage.allocatedMinutes += allocatedMinutes; usage.additionalMinutes += additionalMinutes;
+      if (allocatedCents !== null) allocatedLineCents += BigInt(allocatedCents);
+      if (additionalCents !== null) additionalLineCents += BigInt(additionalCents);
       if (cents === null) incomplete = true;
-      return { personId, minutes, cents };
+      return { personId, minutes, cents, ...(work.sessionOverrides?.length
+        ? { allocatedMinutes, additionalMinutes, allocatedCents, additionalCents } : {}) };
     });
-    return { workId: work.id, funding: work.funding, status: work.status, lines };
+    return { workId: work.id, funding: summary.funding, status: summary.status, lines };
   });
   const capacityRows = [...capacity.values()].map(usage => {
     const remainingMinutes = usage.fundedMinutes - usage.allocatedMinutes;
@@ -348,7 +355,8 @@ function calculate(state, peopleById) {
 function editableRecord(candidate, kind, path) {
   const legacy = `legacy${kind[0].toUpperCase()}${kind.slice(1)}`;
   const keys = candidate && typeof candidate === 'object' ? Reflect.ownKeys(candidate) : [];
-  return record(candidate, kind === 'person' && keys.length === FIELDS.scorePerson.length ? 'scorePerson' : keys.length === FIELDS[legacy].length ? legacy : kind, path);
+  return record(candidate, kind === 'work' && keys.includes('sessionOverrides') ? 'sessionWork'
+    : kind === 'person' && keys.length === FIELDS.scorePerson.length ? 'scorePerson' : keys.length === FIELDS[legacy].length ? legacy : kind, path);
 }
 
 export function prepareRole(candidate, path = 'role') {
@@ -418,17 +426,35 @@ export function prepareAssemblyCommand(candidate) {
     reject('command', `${path}.type`, 'Choose a supported assembly command.');
   }
   const withPlacements = ['work.create', 'work.update'].includes(type) && Object.hasOwn(candidate, 'placements');
-  const fields = withPlacements ? [...COMMAND_FIELDS[type], 'placements'] : COMMAND_FIELDS[type];
-  const raw = dataRecord(candidate, fields, withPlacements ? new Set(fields) : COMMAND_FIELD_SETS.get(type), path);
+  const withPlacement = type === 'work.session.update' && Object.hasOwn(candidate, 'placement');
+  const fields = withPlacements ? [...COMMAND_FIELDS[type], 'placements'] : withPlacement ? [...COMMAND_FIELDS[type], 'placement'] : COMMAND_FIELDS[type];
+  const raw = dataRecord(candidate, fields, withPlacements || withPlacement ? new Set(fields) : COMMAND_FIELD_SETS.get(type), path);
   if (raw.type !== type) reject('command', `${path}.type`, 'Keep the admitted command type consistent.');
   switch (type) {
     case 'person.create': return { type, person: preparePerson(raw.person, `${path}.person`) };
     case 'team.create': return { type, team: prepareTeam(raw.team, `${path}.team`) };
     case 'work.create': case 'work.update': return { type, work: prepareWork(raw.work, `${path}.work`),
       ...(withPlacements ? { placements: prepareWorkPlacements(raw.placements, `${path}.placements`) } : {}) };
+    case 'work.session.update': {
+      const occurrenceIndex = integer(raw.occurrenceIndex, LIMITS.occurrences - 1, `${path}.occurrenceIndex`);
+      const session = sessionFields(record(raw.session, 'workSession', `${path}.session`), `${path}.session`);
+      let placement;
+      if (withPlacement) {
+        const value = raw.placement === null ? null : placementFields({ occurrenceIndex,
+          ...record(raw.placement, 'sessionPlacement', `${path}.placement`) }, `${path}.placement`);
+        placement = value === null ? null : { periodId: value.periodId, subdivision: value.subdivision };
+      }
+      return { type, workId: text(raw.workId, `${path}.workId`, true), occurrenceIndex, session,
+        ...(withPlacement ? { placement } : {}) };
+    }
+    case 'work.session.remove': return { type, workId: text(raw.workId, `${path}.workId`, true),
+      occurrenceIndex: integer(raw.occurrenceIndex, LIMITS.occurrences - 1, `${path}.occurrenceIndex`) };
     case 'team.update': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), team: prepareTeam(raw.team, `${path}.team`) };
     case 'team.members.replace': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`) };
-    case 'work.participants.replace': return { type, workId: text(raw.workId, `${path}.workId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1) };
+    case 'work.participants.replace':
+    case 'work.participants.reorder': return { type, workId: text(raw.workId, `${path}.workId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1) };
+    case 'work.participant.set': return { type, workId: text(raw.workId, `${path}.workId`, true),
+      personId: text(raw.personId, `${path}.personId`, true), included: choice(raw.included, [true, false], `${path}.included`) };
     case 'person.participation.replace': return { type, personId: text(raw.personId, `${path}.personId`, true), workIds: identifiers(raw.workIds, LIMITS.work, `${path}.workIds`) };
     case 'work.funding.set': return { type, workId: text(raw.workId, `${path}.workId`, true), funding: choice(raw.funding, FUNDING, `${path}.funding`) };
     case 'work.status.set': return { type, workId: text(raw.workId, `${path}.workId`, true), status: choice(raw.status, WORK_STATUS, `${path}.status`) };
@@ -493,6 +519,29 @@ export function preparePurpose(candidate, path = 'purpose') {
 
 function emptyPurpose() { return Object.fromEntries(PURPOSE_FIELDS.map(field => [field, null])); }
 
+function sessionFields(raw, path) {
+  return { label: text(raw.label, `${path}.label`), teamId: text(raw.teamId, `${path}.teamId`, true),
+    personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1),
+    minutesPerOccurrence: integer(raw.minutesPerOccurrence, LIMITS.minutesPerOccurrence, `${path}.minutesPerOccurrence`),
+    funding: choice(raw.funding, FUNDING, `${path}.funding`), status: choice(raw.status, WORK_STATUS, `${path}.status`) };
+}
+
+function sessionOverrides(candidate, count, path) {
+  const seen = new Set();
+  return list(candidate, Math.min(count, LIMITS.scoreOccurrences), path).map((value, index) => {
+    const rowPath = `${path}[${index}]`, raw = record(value, 'workSessionOverride', rowPath);
+    const occurrenceIndex = integer(raw.occurrenceIndex, count - 1, `${rowPath}.occurrenceIndex`);
+    if (seen.has(occurrenceIndex)) reject('duplicate-reference', rowPath, 'Give each session one settings record.');
+    seen.add(occurrenceIndex);
+    return { occurrenceIndex, ...sessionFields(raw, rowPath) };
+  }).sort((left, right) => left.occurrenceIndex - right.occurrenceIndex);
+}
+
+function assignmentCount(work) {
+  return work.occurrences * work.personIds.length + (work.sessionOverrides ?? [])
+    .reduce((count, row) => count + row.personIds.length - work.personIds.length, 0);
+}
+
 function workFields(work, personIds, path) {
   const timing = prepareWorkTiming(work.timing, `${path}.timing`);
   const row = { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`),
@@ -501,10 +550,13 @@ function workFields(work, personIds, path) {
     occurrences: integer(work.occurrences, LIMITS.occurrences, `${path}.occurrences`),
     funding: choice(work.funding, FUNDING, `${path}.funding`),
     status: choice(work.status, WORK_STATUS, `${path}.status`), timing, ...lifecycleFields(work, path) };
+  if (Object.hasOwn(work, 'sessionOverrides')) row.sessionOverrides = sessionOverrides(work.sessionOverrides, row.occurrences, `${path}.sessionOverrides`);
   if (timing !== null) {
     if (row.occurrences > 1 && timing.repeatEveryMinutes === null) reject('score-cadence', `${path}.timing.repeatEveryMinutes`, 'Supply the minutes between starts for repeated work, or leave its timing unknown.');
     const lastEnd = timing.startMinute + Math.max(0, row.occurrences - 1) * (timing.repeatEveryMinutes ?? 0) + row.minutesPerOccurrence;
     if (row.occurrences && lastEnd > LIMITS.scoreMinute) reject('score-minute-budget', `${path}.timing`, 'Keep every occurrence within the relative-minute boundary.');
+    for (const session of row.sessionOverrides ?? []) if (timing.startMinute + session.occurrenceIndex * (timing.repeatEveryMinutes ?? 0)
+        + session.minutesPerOccurrence > LIMITS.scoreMinute) reject('score-minute-budget', `${path}.sessionOverrides`, 'Keep every session within the relative-minute boundary.');
   }
   return row;
 }
@@ -605,7 +657,7 @@ function prepareCadenceReferences(state, people, work, stages, gates, connection
   const endpoint = (row, p) => reference(row.id, row.kind === 'work' ? work : row.kind === 'stage' ? stages : handoffs, `${p}.id`, budget);
   const workIds = row => row.kind === 'work' ? [row.id] : stages.get(row.id).workIds;
   let occurrences = 0, assignments = 0;
-  for (const row of work.values()) { occurrences += row.occurrences; assignments += row.occurrences * row.personIds.length; }
+  for (const row of work.values()) { occurrences += row.occurrences; assignments += assignmentCount(row); }
   if (occurrences > LIMITS.scoreOccurrences) reject('score-occurrence-budget', 'plan.work', 'Keep this planning horizon within the declared session-occurrence budget.');
   if (assignments > LIMITS.scoreAssignments) reject('score-assignment-budget', 'plan.work', 'Keep this planning horizon within the declared participant-assignment budget.');
   cadence.placements.forEach((row, index) => {
@@ -681,7 +733,7 @@ function prepareScoreReferences(state, people, teams, work, budget) {
   const settings = state.scoreSettings, path = 'plan.scoreSettings', connections = new Map(state.connections.map(row => [row.id, row]));
   let occurrences = 0, assignments = 0;
   for (const row of state.work) if (row.timing !== null) {
-    occurrences += row.occurrences; assignments += row.occurrences * row.personIds.length;
+    occurrences += row.occurrences; assignments += assignmentCount(row);
   }
   if (occurrences > LIMITS.scoreOccurrences) reject('score-occurrence-budget', 'plan.work', 'Keep explicitly timed work within 4096 occurrences; leave other timing unknown.');
   if (assignments > LIMITS.scoreAssignments) reject('score-assignment-budget', 'plan.work', 'Keep explicitly timed work within 16384 person assignments.');
@@ -990,6 +1042,7 @@ function prepareCapabilities(raw, state, people, teams, work, budget) {
 
 function capabilitySummaries(state, graph, people, teams, work, result) {
   const capacity = new Map(result.capacity.map(row => [row.personId, row]));
+  const sessions = new Map(state.work.map(row => [row.id, summarizeWorkSessions(row)]));
   const summaries = new Map(), users = new Map(), evidence = new Map();
   for (const { row, kind } of graph.ordered) for (const id of capabilityWorkIds(row)) {
     if (!users.has(id)) users.set(id, new Set()); users.get(id).add(capabilityKey(kind, row.id));
@@ -1013,12 +1066,12 @@ function capabilitySummaries(state, graph, people, teams, work, result) {
       let complete = ids.length > 0;
       if (!ids.length) gap('support-needed', 'supportBindings', `Choose work for “${requirement.label}”.`, { requirementId: requirement.id });
       for (const id of ids) {
-        const session = work.get(id);
-        if (session.lifecycle === 'retired' || session.status === 'paused' || session.minutesPerOccurrence * session.occurrences === 0) {
+        const session = work.get(id), summary = sessions.get(id);
+        if (!summary.activeParticipantMinutes) {
           complete = false; gap('support-unavailable', 'supportBindings', `Review the time and availability of ${session.label}.`, { requirementId: requirement.id, workId: id });
         }
-        if (teams.get(session.teamId).lifecycle === 'retired') {
-          complete = false; gap('support-team-retired', 'supportBindings', `Review the team carrying ${session.label}.`, { requirementId: requirement.id, workId: id, teamId: session.teamId });
+        for (const teamId of summary.teamIds) if (teams.get(teamId).lifecycle === 'retired') {
+          complete = false; gap('support-team-retired', 'supportBindings', `Review the team carrying ${session.label}.`, { requirementId: requirement.id, workId: id, teamId });
         }
       }
       return { requirementId: requirement.id, workIds: ids, complete };
@@ -1033,10 +1086,10 @@ function capabilitySummaries(state, graph, people, teams, work, result) {
     }
     const workIds = capabilityWorkIds(row), minutes = new Map();
     for (const id of workIds) {
-      const session = work.get(id);
-      for (const personId of session.personIds) {
-        if (!minutes.has(personId)) minutes.set(personId, { allocated: 0, additional: 0 });
-        minutes.get(personId)[session.funding] += session.minutesPerOccurrence * session.occurrences;
+      for (const usage of sessions.get(id).people) {
+        if (!minutes.has(usage.personId)) minutes.set(usage.personId, { allocated: 0, additional: 0 });
+        const total = minutes.get(usage.personId);
+        total.allocated += usage.allocatedMinutes; total.additional += usage.additionalMinutes;
       }
     }
     let allocatedKnownCents = 0, additionalKnownCents = 0, completeMoney = true;
@@ -1076,13 +1129,15 @@ function relationshipObservations(state, peopleById, teamsById, workById, result
   const observations = [];
   const capacityById = new Map(result.capacity.map(row => [row.personId, row]));
   const teamWork = new Map(state.teams.map(row => [row.id, []]));
-  for (const row of state.work) teamWork.get(row.teamId).push(row.id);
+  for (const row of state.work) for (const teamId of new Set([row.teamId, ...(row.sessionOverrides ?? []).map(session => session.teamId)]))
+    teamWork.get(teamId).push(row.id);
   for (const [collection, rows] of [['people', state.people], ['teams', state.teams], ['work', state.work]]) {
     for (const row of rows) if (row.lifecycle === 'retired') {
       const commitments = collection === 'people'
         ? { fundedMinutes: row.fundedMinutes, allocatedMinutes: capacityById.get(row.id).allocatedMinutes, additionalMinutes: capacityById.get(row.id).additionalMinutes }
         : collection === 'teams' ? { workIds: teamWork.get(row.id) }
-          : { minutesPerParticipant: row.minutesPerOccurrence * row.occurrences, funding: row.funding, personIds: row.personIds };
+          : { minutesPerParticipant: summarizeWorkSessions(row).durationMinutes,
+            funding: summarizeWorkSessions(row).funding, personIds: summarizeWorkSessions(row).personIds };
       observations.push({ code: 'retired-record', collection, id: row.id, commitments });
     }
   }
@@ -1159,16 +1214,25 @@ function prepareVersion(candidate, version) {
   });
   const teamsById = indexRecords(state.teams, 'plan.teams');
   const teamMembers = new Map(state.teams.map(team => [team.id, new Set(team.personIds)]));
+  let authoredSessions = 0;
   state.work = list(raw.work, LIMITS.work, 'plan.work').map((value, i) => {
     const path = `plan.work[${i}]`;
     const hasTiming = value && typeof value === 'object' && Object.hasOwn(value, 'timing');
     const work = version === '0.6.0' && !hasTiming ? { ...record(value, 'untimedWork', path), timing: null }
-      : record(value, profile.relationships ? 'work' : 'legacyWork', path);
+      : record(value, profile.sessions && value && Object.hasOwn(value, 'sessionOverrides') ? 'sessionWork'
+        : profile.relationships ? 'work' : 'legacyWork', path);
     if (!profile.score && work.timing !== null) reject('timing-version', `${path}.timing`, 'Use the score schema for authored timing; retain null in this earlier contract.');
     const teamId = text(work.teamId, `${path}.teamId`, true);
     if (!teamsById.has(teamId)) reject('reference', `${path}.teamId`, 'Choose an existing team.');
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
-    return workFields(work, personIds, path);
+    const row = workFields(work, personIds, path);
+    for (const [index, session] of (row.sessionOverrides ?? []).entries()) {
+      if (++authoredSessions > LIMITS.scoreOccurrences) reject('score-occurrence-budget', 'plan.work', 'Keep authored session settings within the session-occurrence budget.');
+      const sessionPath = `${path}.sessionOverrides[${index}]`;
+      reference(session.teamId, teamsById, `${sessionPath}.teamId`, budget);
+      session.personIds = references(session.personIds, peopleById, `${sessionPath}.personIds`, budget, 1);
+    }
+    return row;
   });
   const workById = indexRecords(state.work, 'plan.work');
   if (!profile.capabilities) state.practices = list(raw.practices, LIMITS.practices, 'plan.practices').map((value, i) => {

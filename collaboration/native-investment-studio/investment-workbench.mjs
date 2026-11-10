@@ -279,7 +279,8 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     for (const [funding, title, hint] of [['funded', 'Within funded time', 'Time already set aside'], ['extra', 'Extra investment', 'Work to fund separately']]) {
       if (state.domain !== 'all' && state.domain !== funding) continue;
       const lane = node('section', undefined, 'investment-study__lane'); lane.dataset.funding = funding;
-      const entries = pricing.sessions.filter(item => item.funding === funding);
+      const entries = pricing.sessions.filter(item => item.funding === funding || item.funding === 'mixed')
+        .map(item => ({ ...item, ...item.fundingParts?.[funding] }));
       const heading = node('div', undefined, 'bar'); heading.append(node('h3', title), node('strong', `${entries.every(item => item.complete) ? '' : 'Known '}${money(entries.reduce((sum, item) => sum + item.cost, 0))}`, 'number')); lane.append(heading, node('p', hint, 'hint'));
       for (const item of entries) {
         const pad = button('', () => { selected = item.tape.id; render(outer.parentElement); container.querySelector(`[data-focus-key="investment-${selected}"]`)?.focus({ preventScroll: true }); }, 'investment-study__pad', `investment-${item.tape.id}`);
@@ -297,6 +298,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       if (openSession) heading.append(button('Session controls ↗', event => openSession(current.tape.id, event.currentTarget), 'ghost', 'investment-session')); deck.append(heading);
       const modules = node('div', undefined, 'investment-study__modules');
       const funding = node('fieldset'); funding.append(node('legend', 'How this work is funded'));
+      if (current.funding === 'mixed') funding.append(node('p', 'Sessions use both funding types.', 'hint'));
       for (const [value, label] of [['funded', 'Within funded time'], ['extra', 'Extra investment']]) {
         const pad = button(label, event => {
           const heldFocus = document.activeElement === event.currentTarget;
@@ -309,7 +311,9 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       const chips = node('div', undefined, 'investment-study__people');
       for (const id of current.tape.people) {
         const person = model.people.find(item => item.id === id); if (!person) continue;
-        const chip = node('div'); chip.append(node('strong', person.name), node('span', `${number(current.hours)} h · ${person.rate === null ? 'Rate unknown' : money(current.hours * person.rate)}`)); chips.append(chip);
+        const reading = current.people?.find(item => item.personId === id);
+        const hours = reading?.hours ?? current.hours, cost = reading ? reading.cost : person.rate === null ? null : hours * person.rate;
+        const chip = node('div'); chip.append(node('strong', person.name), node('span', `${number(hours)} h · ${cost === null ? 'Rate unknown' : money(cost)}`)); chips.append(chip);
       }
       if (!current.tape.people.length) chips.append(node('p', 'Choose people in Session controls.', 'hint'));
       people.append(chips); modules.append(funding, people); deck.append(modules); root.append(deck);
@@ -317,7 +321,9 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     const sequence = node('section', undefined, 'investment-study__sequence'); sequence.append(node('h3', state.domain === 'all' ? 'Work across the plan' : state.domain === 'funded' ? 'Funded work across the plan' : 'Extra work across the plan'));
     const periods = node('div', undefined, 'investment-study__periods');
     for (const period of model.periods) {
-      const amount = pricing.sessions.reduce((sum, item) => sum + (item.tape.occurrences.length ? item.cost / item.tape.occurrences.length * item.tape.occurrences.filter(occ => occ.period === period.id).length : 0), 0);
+      const amount = pricing.sessions.reduce((sum, item) => sum + (item.placements
+        ? item.placements.filter(occ => occ.period === period.id && (state.domain === 'all' || occ.funding === state.domain)).reduce((total, occ) => total + occ.cost, 0)
+        : item.tape.occurrences.length ? item.cost / item.tape.occurrences.length * item.tape.occurrences.filter(occ => occ.period === period.id).length : 0), 0);
       const column = node('div'); column.append(node('span', period.caption || period.label), node('strong', `${pricing.complete ? '' : 'Known '}${money(amount)}`));
       const bars = node('div', undefined, 'investment-study__bars'); bars.setAttribute('aria-hidden', 'true');
       for (let step = 0; step < 12; step++) { const bar = node('i'); bar.dataset.lit = String(pricing.total > 0 && step < amount / pricing.total * 12); bars.append(bar); }

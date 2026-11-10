@@ -36,6 +36,8 @@ then identifies each behavior's implementation owner.
 - `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareTeam`, `prepareWork`,
   `preparePurpose`, `prepareAssemblyCommand`, `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
+- `work-sessions.mjs` resolves a tape's defaults and its sparse session overrides,
+  summarizes effective effort and membership, and remaps indexes on removal.
 - `commands.mjs` owns finite assembly transitions and their removal references.
   Each transition receives an immutable projection from the state owner.
 - `connection-templates.mjs` owns four authored coordination arrangements,
@@ -171,7 +173,7 @@ original-model economic equivalence remains the receiving task in #705.
 | Arrange sessions and decisions | Sprint and quarter overviews open into weeks or months. Contextual editors retain sessions, availability, stages, handoffs, decisions and delays; reports carry the detailed agenda. Score checks cover view-only zoom, creation, Apply/Cancel/Undo and retained placement. | Earlier saved plans retain exact elapsed timing. Working calendars and automatic scheduling require explicit assumptions in later work. |
 | Explain investment and a changed commitment | Five independently owned financial decks combine shared accepted pricing with explicit comparison assumptions, connected reels and quantity controls. Baseline and file/report routes remain available. Investment checks distinguish record identity, saved settings, unknown amounts, explicit funding changes and grouped Undo. | The full Studio retains its larger analytical composition and source economics. #705 continues to own broader model equivalence and translation. |
 | Try another initiative | Six authored rehearsal families populate purpose, people, work, prerequisites, change support and quality. Preset/report checks independently price the examples and verify round-trip ownership. | The six original factories retain their original economic meanings; the native families disclose their explicit assumptions. |
-| Keep, compare and carry a plan | Versioned native 0.10.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange carries work and financial-deck assumptions together. Checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
+| Keep, compare and carry a plan | Versioned native 0.11.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange carries work and financial-deck assumptions together. Checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
 | Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; Lower plays effects at half speed, while Off and the system reduced-motion setting suppress animation. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
 
 The comparison reads the accepted plan and saved baseline. Allocated work stays
@@ -181,7 +183,7 @@ preserves the separately human-cued tagged-release boundary in #686.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.10.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.11.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
 `horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings`,
 `scoreSettings` and `investmentSettings` records, and the ordered collections below. Stable IDs carry identity;
@@ -191,7 +193,7 @@ labels and array positions carry presentation.
 | --- | --- | --- |
 | `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle`, `availability` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. Nullable availability supplies separate half-open elapsed-minute intervals. |
 | `teams` | `id`, `label`, `personIds`, `lifecycle` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
-| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; `timing` is null or an authored start and recurrence interval in elapsed minutes. |
+| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle`, optional `sessionOverrides` | Defaults seed new sessions. An override keeps a selected session's complete name, host, participants, duration, funding and status. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; `timing` is null or an authored start and recurrence interval in elapsed minutes. |
 | `abilities`, `practices` | `id`, `definitionId`, `definitionVersion`, `context`, `teamId`, `responsiblePersonIds`, `decisionOwnerPersonId`, `lifecycle`, `prerequisites`, `supportBindings` | Separate customer abilities and team arrangements bind exact definitions to shared work. Ordered requirement bindings are authoritative; their unique work union is derived. |
 | `capabilityEvidence` | `id`, `subject`, `stage`, `context`, `observation`, `recorderPersonId`, `reviewBoundary`, `observedPlanRevision` | An explicit observation of a typed ability/practice subject, retained independently of current support checks. |
 | `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
@@ -202,6 +204,31 @@ Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
+
+### Individual sessions
+
+Schema 0.11 adds optional, bounded `work.sessionOverrides`, indexed by the existing
+occurrence identity. Earlier plans migrate with their defaults intact. Older
+schema admission retains its original closed fields. Overrides are detached
+records; new and uncustomized sessions follow tape defaults. Edited sessions keep
+their own complete settings. Removing one remaps later
+overrides and placements in a single command.
+
+`work.session.update` accepts one session and its optional placement together.
+`work.session.remove` preserves the parent plan and its support links. Whole-plan
+status/funding commands affect all sessions explicitly; participant inclusion and
+reordering preserve each session's other participants. Reordering validates the
+current union and sorts each existing subset. Ledger lines retain one work/person
+identity with mixed-funding amounts, while cadence, capacity, support badges and
+reports read effective sessions. Pausing retains planned investment.
+
+The session draft target includes its occurrence index. A stale occurrence draft
+requires explicit Use current recovery; automatic replay could address a different
+session after removal. The in-rack picker opens the same scoped owner. Add/Remove
+accept their count change with Undo after validating and accepting visible edits;
+invalid entries keep their receiver available. Track keys edit defaults, while
+numbered pads edit one session. All/individual tape navigation changes only view
+scope and parks unfinished edits through the existing coordinator.
 
 ### Financial comparison decks
 

@@ -23,6 +23,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/work-sessions.mjs",
+      "projected_path": "collaboration/native-investment-studio/work-sessions.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
       "projected_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
       "media_type": "text/javascript"

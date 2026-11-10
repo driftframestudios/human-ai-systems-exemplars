@@ -1,4 +1,5 @@
-import { money, duration } from './display.mjs';
+import { money, duration, workDuration } from './display.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { formatScoreTime } from './score-time.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { listQualityConcepts } from './assurance-models.mjs';
@@ -8,7 +9,7 @@ import { describeScoreChanges } from './score-reference.mjs';
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const supplied = value => value || 'To be supplied';
 const amount = result => `${money(result.knownCommitmentCents)}${result.plannedCommitmentCents === null ? ' known; rates remain to be supplied' : ''}`;
-const funding = value => value === 'allocated' ? 'Within funded time' : 'Extra investment';
+const funding = value => value === 'mixed' ? 'Funded time and extra investment' : value === 'allocated' ? 'Within funded time' : 'Extra investment';
 const table = (caption, columns, rows) => `<div class="table-scroll" tabindex="0" role="region" aria-label="${escape(caption)}"><table><caption>${escape(caption)}</caption><thead><tr>${columns.map(label => `<th scope="col">${escape(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map((value, index) => index === 0 ? `<th scope="row">${escape(value)}</th>` : `<td>${escape(value)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 const section = (title, body) => `<section><h2>${escape(title)}</h2>${body}</section>`;
 const paragraphs = entries => entries.map(([label, value]) => `<p><strong>${escape(label)}</strong><br>${escape(supplied(value))}</p>`).join('');
@@ -77,11 +78,16 @@ export function captureStudioReport(projection, baseline = null) {
     ['Review boundary', state.purpose.reviewBoundary], ['Open conditions', state.purpose.openConditions]];
   const decisionRows = state.scoreSettings.gates.map(gate => [gate.label, people.get(gate.reviewerPersonId) ?? 'Reviewer to be chosen',
     supplied(gate.question), supplied(gate.evidence), gate.modeledDecision, ...(cadence?.decisions.get(gate.id) ?? [])]);
-  const workRows = state.work.map(row => [row.label, named(row.personIds, people), `${duration(row.minutesPerOccurrence)} × ${row.occurrences}`,
-    funding(row.funding), `${row.status} · ${row.lifecycle}`, cadence ? [...(cadence.placementByWork.get(row.id) ?? ['Choose a period'])].join('; ')
-      : row.timing ? `${formatScoreTime(row.timing.startMinute)} after plan start${row.timing.repeatEveryMinutes === null ? '' : `; ${formatScoreTime(row.timing.repeatEveryMinutes)} between starts`}` : 'Timing to be supplied']);
-  const ledgerRows = result.ledger.flatMap(entry => entry.lines.map(line => [work.get(entry.workId), people.get(line.personId),
-    funding(entry.funding), duration(line.minutes), money(line.cents)]));
+  const workRows = state.work.map(row => {
+    const summary = summarizeWorkSessions(row);
+    return [row.label, named(summary.personIds, people), row.sessionOverrides?.length ? workDuration(row) : `${duration(row.minutesPerOccurrence)} × ${row.occurrences}`,
+      funding(summary.funding), `${summary.status} · ${row.lifecycle}`, cadence ? [...(cadence.placementByWork.get(row.id) ?? ['Choose a period'])].join('; ')
+        : row.timing ? `${formatScoreTime(row.timing.startMinute)} after plan start${row.timing.repeatEveryMinutes === null ? '' : `; ${formatScoreTime(row.timing.repeatEveryMinutes)} between starts`}` : 'Timing to be supplied'];
+  });
+  const ledgerRows = result.ledger.flatMap(entry => entry.lines.flatMap(line => Object.hasOwn(line, 'allocatedMinutes')
+    ? ['allocated', 'additional'].filter(type => line[`${type}Minutes`] > 0).map(type => [work.get(entry.workId), people.get(line.personId),
+      funding(type), duration(line[`${type}Minutes`]), money(line[`${type}Cents`])])
+    : [[work.get(entry.workId), people.get(line.personId), funding(entry.funding), duration(line.minutes), money(line.cents)]]));
   const qualityNames = new Map(listQualityConcepts().map(row => [row.id, row.label]));
   const comparison = baseline ? paragraphs([
     ['Baseline', `${baseline.state.planId} · revision ${baseline.state.revision} · ${horizonLabel(baseline.state)} · ${amount(baseline.result)}`],

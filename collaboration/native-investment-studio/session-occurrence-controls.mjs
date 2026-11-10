@@ -5,7 +5,7 @@ let sequence = 0;
 
 // A presentation of the session owner's placement field. Selection stays local;
 // all value changes return to the same draft token and acceptance route.
-export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, onRemove }) {
+export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, onRemove, onSelect }) {
   const instance = ++sequence;
   const node = (tag, className, text) => {
     const element = document.createElement(tag);
@@ -41,7 +41,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
   periodField.append(periodLegend, periods); subdivisionField.append(subdivisionLegend, subdivisions);
   placement.append(periodField, subdivisionField);
   const error = node('p', 'native-coordination__error');
-  const meaning = node('p', 'studio-occurrences__meaning', 'Duration and people apply to every session.');
+  const meaning = node('p', 'studio-occurrences__meaning', 'Choose a session to edit its settings.');
   const footer = node('div', 'studio-occurrences__footer');
   title.append(heading, count); header.append(title, add); footer.append(remove);
   root.append(header, pads, pager, placement, meaning, error, footer);
@@ -61,7 +61,9 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
     if (disposed) return;
     current = value;
     if (identity !== value.identity) { identity = value.identity; selected = 0; }
+    if (Number.isSafeInteger(value.selectedIndex)) selected = value.selectedIndex;
     selected = Math.max(0, Math.min(selected, value.count - 1));
+    meaning.textContent = Number.isSafeInteger(value.selectedIndex) ? `Settings for session ${selected + 1}.` : 'Plan defaults. Choose a session to edit its settings.';
     count.textContent = `${value.count} ${value.count === 1 ? 'session' : 'sessions'}`;
     add.disabled = !value.canAdd;
     remove.disabled = !value.canRemove || value.count === 0;
@@ -87,7 +89,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
       const entry = placements.get(index), label = entry ? labels.get(entry.periodId) ?? 'Unplaced' : 'Unplaced';
       button.querySelector('small').textContent = label;
       button.setAttribute('aria-label', `Session ${index + 1} · ${label}${entry ? ` · ${unit} ${entry.subdivision}` : ''}`);
-      button.setAttribute('aria-pressed', String(index === selected));
+      button.setAttribute('aria-pressed', String(index === value.selectedIndex));
       button.dataset.placed = String(Boolean(entry));
     }
     pager.hidden = value.count <= PAGE_SIZE;
@@ -119,7 +121,7 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
   }
   listen(pads, 'click', event => {
     const button = event.target.closest('[data-session-occurrence]');
-    if (button && pads.contains(button)) select(Number(button.dataset.sessionOccurrence));
+    if (button && pads.contains(button)) onSelect?.(Number(button.dataset.sessionOccurrence));
   });
   listen(placement, 'change', event => {
     const input = event.target, field = input.dataset.occurrenceField;
@@ -132,8 +134,8 @@ export function mountSessionOccurrenceControls(document, { onPlacement, onAdd, o
     if (current?.count > selected) select(selected, { focus: true });
   });
   listen(remove, 'click', () => { if (current?.canRemove && current.count > 0) onRemove?.(selected); });
-  listen(previous, 'click', () => select(Math.max(0, selected - PAGE_SIZE), { focus: true }));
-  listen(next, 'click', () => select(Math.min(current.count - 1, selected + PAGE_SIZE), { focus: true }));
+  listen(previous, 'click', () => onSelect?.(Math.max(0, selected - PAGE_SIZE)));
+  listen(next, 'click', () => onSelect?.(Math.min(current.count - 1, selected + PAGE_SIZE)));
   return Object.freeze({ root, render, select, dispose() {
     disposed = true; current = null;
     cleanup.splice(0).forEach(release => release()); root.remove();

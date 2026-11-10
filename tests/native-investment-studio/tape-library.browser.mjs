@@ -155,3 +155,79 @@ for (const engine of names) test(`${engine}: All plans and sequential browsing p
     }
   }
 });
+
+for (const engine of names) test(`${engine}: individual tape sessions keep their own settings through placement, removal and view changes`, async t => {
+  const page = await open(t, engine);
+  const original = JSON.parse(await bytes(page));
+  const research = original.work.find(row => row.id === 'research');
+  const periodIds = original.scoreSettings.cadence.periods.map(period => period.id);
+  const rack = root(page).locator('[data-native-configure]');
+  const chooseTape = id => shelf(page).locator(`[data-studio-plan-id="${id}"]`).click();
+  const pad = index => shelf(page).locator(`[data-cadence-key="pad:research:${index}"]`);
+  const append = (period, week) => shelf(page).locator(`[data-cadence-key="add-occurrence:research:${period}:${week}"]`).click();
+  await chooseTape('research');
+  await append(periodIds[3], 1);
+  const first = research.occurrences;
+  await pad(first).click();
+  await expect(rack).toContainText(`Settings for session ${first + 1}.`);
+  await rack.locator('[name="label"]').fill('Sprint evidence review');
+  await rack.locator('[name="hoursPerSession"]').fill('0');
+  await rack.locator('[name="minutesPerSession"]').fill('45');
+  await rack.locator('[name="status"][value="paused"]').check();
+  await rack.locator('[name="funding"][value="additional"]').check();
+  await rack.locator(`[data-session-person="${research.personIds[0]}"]`).uncheck();
+  await rack.locator('[data-action="apply"]').click();
+  const edited = JSON.parse(await bytes(page)), editedWork = edited.work.find(row => row.id === research.id);
+  assert.equal(editedWork.occurrences, first + 1);
+  assert.deepEqual(editedWork.sessionOverrides, [{ occurrenceIndex: first, label: 'Sprint evidence review',
+    teamId: research.teamId, personIds: research.personIds.slice(1), minutesPerOccurrence: 45, funding: 'additional', status: 'paused' }]);
+  for (const field of ['label', 'teamId', 'personIds', 'minutesPerOccurrence', 'funding', 'status'])
+    assert.deepEqual(editedWork[field], research[field], `${field} remains the tape default`);
+  assert.deepEqual(edited.work.filter(row => row.id !== 'research'), original.work.filter(row => row.id !== 'research'));
+  await expect(pad(first)).toHaveAttribute('data-active', 'false');
+  await expect(pad(0)).toHaveAttribute('data-active', 'true');
+  await rack.locator('[data-session-occurrence="0"]').click();
+  await expect(rack).toContainText('Settings for session 1.');
+  await expect(pad(0)).toHaveAttribute('aria-pressed', 'true');
+  await expect(pad(first)).toHaveAttribute('aria-pressed', 'false');
+  await expect(rack.locator('[name="label"]')).toHaveValue(research.label);
+  await expect(rack.locator('[name="status"][value="planned"]')).toBeChecked();
+  await chooseTape('rehearsal');
+  await chooseTape('research');
+  await append(periodIds[2], 2);
+  const second = first + 1;
+  await pad(second).click();
+  await expect(rack.locator('[name="status"][value="planned"]')).toBeChecked();
+  await expect(rack.locator('[name="minutesPerSession"]')).toHaveValue('0');
+  const choices = rack.locator('[data-session-occurrences]');
+  await choices.getByRole('radio', { name: original.scoreSettings.cadence.periods[1].label, exact: true }).check();
+  await choices.getByRole('radio', { name: 'Week 1', exact: true }).check();
+  await rack.locator('[data-action="apply"]').click();
+  const beforeRemoval = await bytes(page), placed = JSON.parse(beforeRemoval);
+  assert.deepEqual(placed.scoreSettings.cadence.placements.find(row => row.workId === 'research' && row.occurrenceIndex === second),
+    { workId: 'research', occurrenceIndex: second, periodId: periodIds[1], subdivision: 1 });
+  assert.deepEqual(placed.scoreSettings.cadence.placements.find(row => row.workId === 'research' && row.occurrenceIndex === first),
+    { workId: 'research', occurrenceIndex: first, periodId: periodIds[3], subdivision: 1 });
+  await pad(first).click();
+  await choices.getByRole('button', { name: `Remove session ${first + 1}`, exact: true }).click();
+  const removed = JSON.parse(await bytes(page)), remaining = removed.work.find(row => row.id === 'research');
+  assert.equal(remaining.occurrences, second);
+  assert.equal(remaining.sessionOverrides, undefined);
+  assert.deepEqual(removed.scoreSettings.cadence.placements.find(row => row.workId === 'research' && row.occurrenceIndex === first),
+    { workId: 'research', occurrenceIndex: first, periodId: periodIds[1], subdivision: 1 });
+  await undo(page);
+  assert.equal(await bytes(page), beforeRemoval, 'Undo restores settings and both placements exactly');
+  await shelf(page).getByRole('button', { name: 'All plans', exact: true }).click();
+  await expect(pad(first)).toHaveAttribute('data-active', 'false');
+  await expect(pad(second)).toHaveAttribute('data-active', 'true');
+  assert.equal(await bytes(page), beforeRemoval, 'changing scope preserves every session');
+  await pad(0).click();
+  await choices.locator('[data-session-occurrence-add]').click();
+  const extended = JSON.parse(await bytes(page)).work.find(row => row.id === 'research');
+  assert.equal(extended.occurrences, second + 2);
+  assert.deepEqual(extended.sessionOverrides, editedWork.sessionOverrides);
+  await expect(choices.locator(`[data-session-occurrence="${second + 1}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(rack.locator('[name="status"][value="planned"]')).toBeChecked();
+  await undo(page);
+  assert.equal(await bytes(page), beforeRemoval, 'in-rack addition has its own exact Undo');
+});

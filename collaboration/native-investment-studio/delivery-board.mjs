@@ -1,4 +1,5 @@
-import { duration } from './display.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
+import { workDuration } from './display.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 
 const PHASES = Object.freeze([
@@ -170,8 +171,8 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
         const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(work.id, event.currentTarget));
         control.dataset.deliverySession = work.id;
         if (acceptedSessionIds.has(work.id)) control.dataset.studioSessionId = work.id;
-        control.dataset.funding = work.funding;
-        control.append(node('strong', work.label), node('small', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
+        control.dataset.funding = summarizeWorkSessions(work).funding;
+        control.append(node('strong', work.label), node('small', workDuration(work)));
         if (stageLabels.length) control.append(node('small', stageLabels.join(' · '), 'studio-delivery__stage'));
         else control.append(node('small', 'Supporting work', 'studio-delivery__stage'));
         control.setAttribute('aria-label', `${work.label}. ${acceptedSessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);

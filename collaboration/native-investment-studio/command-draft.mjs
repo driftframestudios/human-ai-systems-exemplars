@@ -3,6 +3,7 @@ import { preparePersonDraftValues, stepPersonDraftValues, PERSON_DRAFT_TEXT_LIMI
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 import { ROLE_CATALOGUES, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { nextCreatedLabel } from './creation-label.mjs';
+import { copyWorkSession, resolveWorkSession, WORK_SESSION_FIELDS } from './work-sessions.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const textField = (label, maxLength = LIMITS.label) => Object.freeze({ kind: 'text', label, maxLength });
@@ -32,6 +33,8 @@ export const SESSION_FORMS = Object.freeze({
   'work.create': Object.freeze({ label: 'Add session', collection: 'work', mode: 'create', fields: sessionFields }),
   'work.update': Object.freeze({ label: 'Session settings', collection: 'work', mode: 'update', fields: sessionFields }),
   'work.remove': Object.freeze({ label: 'Remove session', collection: 'work', mode: 'remove', fields: emptyFields }),
+  'work.session.update': Object.freeze({ label: 'Session settings', collection: 'work', mode: 'update', occurrence: true, fields: sessionFields }),
+  'work.session.remove': Object.freeze({ label: 'Remove session', collection: 'work', mode: 'remove', occurrence: true, fields: emptyFields }),
 });
 
 const roleChoices = new Map(Object.entries(ROLE_CATALOGUES).map(([field, choices]) => [field, new Set(choices.map(choice => choice.id))]));
@@ -114,8 +117,22 @@ export const makeAssemblyTarget = (form, id) => makeTarget(ASSEMBLY_FORMS, form,
 export const describeAssemblyTarget = key => describeTarget(ASSEMBLY_FORMS, key);
 export const copyAssemblyRaw = (target, raw) => copyRaw(describeAssemblyTarget, target, raw);
 export const sameAssemblyRaw = (target, left, right) => sameRaw(describeAssemblyTarget, target, left, right);
-export const makeSessionTarget = (form, id) => makeTarget(SESSION_FORMS, form, id);
-export const describeSessionTarget = key => describeTarget(SESSION_FORMS, key);
+export function makeSessionTarget(form, id, occurrenceIndex) {
+  const target = makeTarget(SESSION_FORMS, form, id);
+  if (!SESSION_FORMS[form].occurrence) return target;
+  if (!Number.isSafeInteger(occurrenceIndex) || occurrenceIndex < 0 || occurrenceIndex >= LIMITS.occurrences) {
+    throw new TypeError('Choose an existing session index.');
+  }
+  return `${target}:${occurrenceIndex}`;
+}
+export function describeSessionTarget(key) {
+  if (typeof key !== 'string' || key.length > 96) return null;
+  const [form, id, index, ...extra] = key.split(':');
+  if (!SESSION_FORMS[form]?.occurrence) return describeTarget(SESSION_FORMS, key);
+  if (extra.length || !/^(0|[1-9][0-9]*)$/.test(index ?? '')) return null;
+  const descriptor = describeTarget(SESSION_FORMS, `${form}:${id}`), occurrenceIndex = Number(index);
+  return descriptor && occurrenceIndex < LIMITS.occurrences ? Object.freeze({ ...descriptor, occurrenceIndex }) : null;
+}
 export const copySessionRaw = (target, raw) => copyRaw(describeSessionTarget, target, raw);
 export const sameSessionRaw = (target, left, right) => sameRaw(describeSessionTarget, target, left, right);
 export const makeRoleTarget = (form, id) => makeTarget(ROLE_FORMS, form, id);
@@ -169,12 +186,15 @@ function initialRaw(descriptor, row, plan) {
     receiverPersonId: row?.receiverPersonId ?? '', sharedObject: row?.sharedObject ?? nextCreatedLabel(plan.connections, 'handoff', 'sharedObject'),
     responseExpectation: row?.responseExpectation ?? '', workIds: row ? [...row.workIds] : [], status: row?.status ?? 'active',
   };
-  if (descriptor.collection === 'work') return { label: row?.label ?? nextCreatedLabel(plan.work, 'session'), teamId: row?.teamId ?? '',
-    cadencePlacements: JSON.stringify((plan?.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === descriptor.id).map(({ workId, ...item }) => item)),
-    personIds: row ? [...row.personIds] : [],
-    hoursPerSession: String(Math.floor((row?.minutesPerOccurrence ?? 30) / CONTRACT.minutesPerHour)),
-    minutesPerSession: String((row?.minutesPerOccurrence ?? 30) % CONTRACT.minutesPerHour),
-    occurrences: String(row?.occurrences ?? 1), funding: row?.funding ?? 'additional', status: row?.status ?? 'planned' };
+  if (descriptor.collection === 'work') {
+    const session = descriptor.occurrenceIndex === undefined ? row : resolveWorkSession(row, descriptor.occurrenceIndex);
+    return { label: session?.label ?? nextCreatedLabel(plan.work, 'session'), teamId: session?.teamId ?? '',
+      cadencePlacements: JSON.stringify((plan?.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === descriptor.id).map(({ workId, ...item }) => item)),
+      personIds: session ? [...session.personIds] : [],
+      hoursPerSession: String(Math.floor((session?.minutesPerOccurrence ?? 30) / CONTRACT.minutesPerHour)),
+      minutesPerSession: String((session?.minutesPerOccurrence ?? 30) % CONTRACT.minutesPerHour),
+      occurrences: String(row?.occurrences ?? 1), funding: session?.funding ?? 'additional', status: session?.status ?? 'planned' };
+  }
   return { label: row?.label ?? nextCreatedLabel(plan.teams, 'team'), personIds: row ? [...row.personIds] : [] };
 }
 
@@ -231,7 +251,8 @@ function values(session) {
     errors.push(...parsed.errors);
     command = { type: descriptor.form, person: { id: descriptor.id, label, ...parsed.admitted } };
   } else if (descriptor.mode === 'remove') {
-    command = { type: descriptor.form, [TARGET_FIELDS[descriptor.collection]]: descriptor.id };
+    command = { type: descriptor.form, [TARGET_FIELDS[descriptor.collection]]: descriptor.id,
+      ...(descriptor.occurrenceIndex === undefined ? {} : { occurrenceIndex: descriptor.occurrenceIndex }) };
   } else if (descriptor.form === 'role.update') {
     command = { type: 'person.role.replace', personId: descriptor.id, role: roleValues(raw, errors) };
   } else if (descriptor.collection === 'contributions') {
@@ -243,7 +264,8 @@ function values(session) {
     command = descriptor.mode === 'create' ? { type: descriptor.form, connection }
       : { type: descriptor.form, connectionId: descriptor.id, connection };
   } else if (descriptor.collection === 'work') {
-    const parsed = prepareWorkDraftValues(raw);
+    const isOccurrence = descriptor.occurrenceIndex !== undefined;
+    const parsed = prepareWorkDraftValues(isOccurrence ? { ...raw, occurrences: String(session.row.occurrences) } : raw);
     errors.push(...parsed.errors);
     if (!validId(raw.teamId)) errors.push(diagnostic('reference', 'draft.teamId', 'Choose a team.'));
     if (raw.personIds.length === 0) errors.push(diagnostic('collection', 'draft.personIds', 'Choose at least one person.'));
@@ -252,11 +274,16 @@ function values(session) {
     }
     const work = { id: descriptor.id, label, teamId: raw.teamId, personIds: [...raw.personIds], ...parsed.admitted,
       funding: raw.funding, status: raw.status, timing: session.row?.timing ?? null };
-    command = { type: descriptor.form, work };
+    command = isOccurrence ? { type: descriptor.form, workId: descriptor.id, occurrenceIndex: descriptor.occurrenceIndex,
+      session: copyWorkSession(work) } : { type: descriptor.form, work };
     if (session.baseProjection.state.scoreSettings.cadence) {
       try {
         const placements = JSON.parse(raw.cadencePlacements || '[]');
-        command.placements = Array.isArray(placements) ? placements.filter(item =>
+        if (isOccurrence) {
+          const selected = Array.isArray(placements) ? placements.filter(item => item?.occurrenceIndex === descriptor.occurrenceIndex) : null;
+          if (!selected || selected.length > 1) errors.push(diagnostic('cadence', 'draft.cadencePlacements', 'Choose one period for this session.'));
+          else command.placement = selected.length ? { periodId: selected[0].periodId, subdivision: selected[0].subdivision } : null;
+        } else command.placements = Array.isArray(placements) ? placements.filter(item =>
           !Number.isSafeInteger(item?.occurrenceIndex) || item.occurrenceIndex < work.occurrences) : placements;
       }
       catch { errors.push(diagnostic('cadence', 'draft.cadencePlacements', 'Choose periods for these sessions.')); }
@@ -281,6 +308,15 @@ function changedRow(session, command) {
   if (session.descriptor.collection === 'connections') return Object.keys(connectionFields).some(field => field === 'workIds'
     ? !sameIds(command.connection.workIds, row.workIds) : command.connection[field] !== row[field]);
   if (session.descriptor.collection !== 'work') return command.team.label !== row.label || !sameIds(command.team.personIds, row.personIds);
+  if (session.descriptor.occurrenceIndex !== undefined) {
+    const occurrence = resolveWorkSession(row, session.descriptor.occurrenceIndex);
+    const placement = session.baseProjection.state.scoreSettings.cadence?.placements.find(item =>
+      item.workId === row.id && item.occurrenceIndex === session.descriptor.occurrenceIndex);
+    return WORK_SESSION_FIELDS.some(field => field === 'personIds'
+      ? !sameIds(command.session.personIds, occurrence.personIds) : command.session[field] !== occurrence[field])
+      || (command.placement !== undefined && ((command.placement?.periodId ?? null) !== (placement?.periodId ?? null)
+        || (command.placement?.subdivision ?? null) !== (placement?.subdivision ?? null)));
+  }
   const work = command.work;
   const placements = (session.baseProjection.state.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === row.id).map(({ workId, ...item }) => item);
   return work.label !== row.label || work.teamId !== row.teamId || !sameIds(work.personIds, row.personIds)
@@ -328,6 +364,7 @@ function createFormDraftAdapter(studio, family) {
       || changedRow(active, parsed.command));
     const draft = active ? Object.freeze({ token: active.token, [family.id]: active.target,
       form: active.descriptor.form, targetId: active.descriptor.id, baseProjection: active.baseProjection,
+      ...(active.descriptor.occurrenceIndex === undefined ? {} : { occurrenceIndex: active.descriptor.occurrenceIndex }),
       raw: family.copy(active.target, active.raw), errors: Object.freeze(parsed.errors), changed: Boolean(changed) }) : null;
     return Object.freeze({ status: disposed ? 'disposed' : isStale ? 'stale' : active ? 'editing' : 'idle',
       projection, draft, pending: false, creationConflict, error: lastError ?? (isStale ? stale() : null) });
@@ -353,6 +390,9 @@ function createFormDraftAdapter(studio, family) {
     const row = projection.state[descriptor.collection].find(item => item.id === descriptor.id);
     if (descriptor.mode === 'create' && row) return fail(diagnostic('creation-conflict', 'draft', 'This record is already in the plan. Use these entries to create another.'));
     if (descriptor.mode !== 'create' && !row) return fail(diagnostic('reference', 'draft', 'Choose a record in the current plan.'));
+    if (descriptor.occurrenceIndex !== undefined && !resolveWorkSession(row, descriptor.occurrenceIndex)) {
+      return fail(diagnostic('reference', 'draft', 'Choose an existing session in this plan.'));
+    }
     active = { target, descriptor, row, baseProjection: projection, token: Object.freeze({}),
       raw: initialRaw(descriptor, row, projection.state), rawRevision: 0, preview: null };
     return succeed();

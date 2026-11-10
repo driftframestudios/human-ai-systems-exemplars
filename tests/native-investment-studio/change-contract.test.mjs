@@ -102,7 +102,7 @@ test('exact 0.4 admission preserves capabilities, observations and relationship 
     reviewBoundary: 'Repeat with an unfamiliar request.', observedPlanRevision: 6 }];
   const bytes = JSON.stringify(old), receipt = prepareImport(bytes), next = receipt.projection;
   assert.equal(receipt.sourceSchemaVersion, '0.4.0');
-  assert.equal(next.state.schemaVersion, '0.10.0');
+  assert.equal(next.state.schemaVersion, '0.11.0');
   assert.equal(next.state.modelVersion, '0.1.0');
   const { changeSettings, assuranceSettings, scoreSettings, arrangements, investmentSettings, ...restored } = next.state;
   assert.deepEqual({ ...restored, people: restored.people.map(({ availability, ...row }) => row), schemaVersion: '0.4.0' }, old);
@@ -130,7 +130,7 @@ test('current component links share the exact 16384-reference budget while the a
   plan.work = Array.from({ length: 96 }, (_, i) => ({ ...plan.work[0], id: `session-${i}`, teamId: 'team-0', personIds: i === 95 ? ids.slice(0, 32) : ids }));
   // 4096 memberships +12192 participants +96 owners =16384 references.
   const old = { ...plan, schemaVersion: '0.4.0' }; delete old.changeSettings; delete old.assuranceSettings; delete old.scoreSettings; delete old.arrangements; delete old.investmentSettings; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
-  assert.equal(preparePlan(old).state.schemaVersion, '0.10.0');
+  assert.equal(preparePlan(old).state.schemaVersion, '0.11.0');
   old.abilities[0].teamId = 'team-0'; assert.throws(() => preparePlan(old), { code: 'reference-budget' });
   old.abilities[0].teamId = null;
   const row = component(plan.changeSettings); row.workIds = ['session-0'];
@@ -157,7 +157,7 @@ test('full typed component lists with maximum identifiers remain self-importable
     row.workIds = workIds; row.capabilityRefs = capabilityRefs; row.mapped = false; row.status = 'outside';
   }));
   const current = preparePlan(plan);
-  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.10.0']);
+  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.11.0']);
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(component(current.state.changeSettings).capabilityRefs.at(-1).instanceId, id('practice-127'));
 });

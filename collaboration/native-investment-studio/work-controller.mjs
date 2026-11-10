@@ -12,6 +12,7 @@ import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { syncReorderButtons, focusSubmitControl } from './rack-controls.mjs';
+import { resolveWorkSession, summarizeWorkSessions } from './work-sessions.mjs';
 import { nextCreatedLabel } from './creation-label.mjs';
 import { prepareSessionCreation } from './session-creation.mjs';
 
@@ -84,23 +85,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   elements.fields.querySelector('.native-time-controls').after(placementElements.fieldset);
   const occurrenceControls = mountSessionOccurrenceControls(document, {
     onPlacement: writePlacement,
-    onRemove(index) {
-      const view = editor.read();
-      if (disposed || composing || view.status !== 'editing' || !view.draft
-        || !Number.isSafeInteger(index) || index < 0 || index >= Number(view.draft.raw.occurrences)) return;
-      const epoch = ++generation, token = view.draft.token;
-      const remaining = placementValues(view.draft.raw).filter(item => item.occurrenceIndex !== index)
-        .map(item => ({ ...item, occurrenceIndex: item.occurrenceIndex > index ? item.occurrenceIndex - 1 : item.occurrenceIndex }));
-      const result = operate('step', token, 'occurrences', -1);
-      if (!owns(epoch) || !result.ok) { changed(result, epoch); return; }
-      changed(operate('setText', token, 'cadencePlacements', JSON.stringify(remaining)), epoch);
+    onSelect(index) {
+      const result = select(selectedId, false, index);
+      if (result?.ok && describeSessionTarget(editor.read().draft?.sessionId)?.occurrenceIndex === index) focusOccurrence(index);
     },
-    onAdd() {
-      const view = editor.read();
-      if (disposed || composing || view.status !== 'editing' || !view.draft) return;
-      const epoch = ++generation;
-      changed(operate('step', view.draft.token, 'occurrences', 1), epoch);
-    },
+    onRemove: index => changeSessionCount(index),
+    onAdd: () => changeSessionCount(),
   });
   occurrenceControls.root.hidden = true;
   placementElements.fieldset.after(occurrenceControls.root);
@@ -181,18 +171,26 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     }
     elements.select.disabled = projection.state.work.length === 0;
     elements.remove.disabled = !works.has(selectedId);
-    const row = works.get(selectedId);
+    const parent = works.get(selectedId);
+    const session = parent && Number.isSafeInteger(descriptor?.occurrenceIndex) ? resolveWorkSession(parent, descriptor.occurrenceIndex) : null;
+    const summary = parent ? summarizeWorkSessions(parent) : null;
+    const row = session ? { ...parent, ...session, occurrences: 1 } : parent;
+    const ids = session?.personIds ?? summary?.personIds ?? [];
+    const status = session?.status ?? summary?.status;
+    const funding = session?.funding ?? summary?.funding;
     elements.name.textContent = row?.label ?? (descriptor?.mode === 'create' && view.draft ? 'New working session' : 'Working sessions');
-    elements.team.textContent = row ? teams.get(row.teamId).label : 'Choose a team';
-    elements.participants.textContent = row ? `${row.personIds.length} people` : 'Choose participants';
-    elements.effort.textContent = row
-      ? `${row.personIds.length} people × ${duration(row.minutesPerOccurrence)} per session × ${row.occurrences} working sessions = ${duration(row.personIds.length * row.minutesPerOccurrence * row.occurrences)} of participant effort.`
+    elements.team.textContent = row ? session ? teams.get(session.teamId)?.label ?? 'Choose a team'
+      : summary.teamIds.map(id => teams.get(id)?.label).filter(Boolean).join(', ') || teams.get(row.teamId)?.label : 'Choose a team';
+    elements.participants.textContent = row ? `${ids.length} people` : 'Choose participants';
+    elements.effort.textContent = row ? session
+      ? `${ids.length} people × ${duration(session.minutesPerOccurrence)} = ${duration(ids.length * session.minutesPerOccurrence)} of participant effort.`
+      : `${row.occurrences} working sessions · ${duration(summary.participantMinutes)} of participant effort.`
       : view.draft ? 'Set the people, time and funding below.' : 'Add a working session to plan its people, time and funding.';
-    elements.acceptedStatus.textContent = row ? `${row.status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[row.funding]}` : '';
+    elements.acceptedStatus.textContent = row ? `${status === 'mixed' ? 'Planned and paused sessions' : status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[funding] ?? 'Mixed funding'}` : '';
     const cadence = projection.state.scoreSettings.cadence;
     elements.context.textContent = cadence ? `Across ${cadence.periods.length} ${cadence.basis === 'sprint' ? 'sprints' : 'quarters'}.`
       : 'Choose a planning horizon to arrange these sessions.';
-    renderSessionMap(row);
+    renderSessionMap(row, session ? session.personIds : summary?.personIds, session ? session.minutesPerOccurrence : summary?.durationMinutes, descriptor?.occurrenceIndex);
   }
   function placementValues(raw) {
     try {
@@ -210,7 +208,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const entered = Number(raw.occurrences);
     const count = Number.isSafeInteger(entered) && entered >= 0 && entered <= LIMITS.occurrences ? entered : 0;
     if (rackMode) occurrenceControls.render({ identity: selectedTarget ?? selectedId, cadence,
-      count, placements: placementValues(raw),
+      count, placements: placementValues(raw), selectedIndex: describeSessionTarget(view.draft?.sessionId)?.occurrenceIndex,
       canRemove: view.status === 'editing' && !composing,
       canAdd: view.status === 'editing' && !composing && count < LIMITS.occurrences
         && !view.draft?.errors.some(error => error.path === 'draft.occurrences'),
@@ -253,20 +251,21 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     placementElements.next.disabled = placementPage === pages - 1;
     placementElements.page.textContent = `Sessions ${first + 1}–${last} of ${count}`;
   }
-  function renderSessionMap(row) {
+  function renderSessionMap(row, personIds = [], totalMinutes = 0, occurrenceIndex) {
     const participantList = root.querySelector('[data-native-session-map-people]');
-    if (!participantList || (diagramProjection === projection && diagramId === row?.id)) return;
-    diagramProjection = projection; diagramId = row?.id;
+    const identity = `${row?.id}:${occurrenceIndex ?? 'plan'}`;
+    if (!participantList || (diagramProjection === projection && diagramId === identity)) return;
+    diagramProjection = projection; diagramId = identity;
     const item = (label, note) => {
       const li = document.createElement('li'), name = document.createElement('strong');
       name.textContent = label; li.append(name);
       if (note) { const small = document.createElement('small'); small.textContent = note; li.append(small); }
       return li;
     };
-    participantList.replaceChildren(...(row?.personIds.length ? row.personIds.map(id => item(people.get(id).label))
+    participantList.replaceChildren(...(personIds?.length ? personIds.map(id => item(people.get(id).label))
       : [item(row ? 'Participants to be chosen' : 'Choose the people for this session')]));
     root.querySelector('[data-native-session-map-time]').textContent = row
-      ? `${duration(row.minutesPerOccurrence)} per person · ${row.occurrences} working sessions` : 'Time to be planned';
+      ? `${duration(totalMinutes)} of session time · ${row.occurrences} ${row.occurrences === 1 ? 'working session' : 'working sessions'}` : 'Time to be planned';
     const supported = [];
     if (row) {
       for (const connection of projection.state.connections) if (connection.workIds.includes(row.id))
@@ -377,9 +376,11 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.fieldset.disabled = view.status !== 'editing';
     elements.recovery.hidden = view.status !== 'stale';
     elements.fresh.hidden = !view.creationConflict;
-    const row = works.get(selectedId);
+    const parent = works.get(selectedId);
+    const local = descriptor?.occurrenceIndex !== undefined;
+    const row = local && parent ? { ...parent, ...resolveWorkSession(parent, descriptor.occurrenceIndex) } : parent;
     remoteTitle.textContent = removing ? `Remove ${works.get(descriptor.id)?.label ?? 'working session'}`
-      : descriptor?.mode === 'create' && draft ? 'New session settings' : `Session settings · ${row?.label ?? 'Working session'}`;
+      : descriptor?.mode === 'create' && draft ? 'New session settings' : `${local ? `Session ${descriptor.occurrenceIndex + 1}` : 'Plan defaults'} · ${row?.label ?? 'Working session'}`;
     elements.current.textContent = view.creationConflict ? 'The plan already contains this session. Use these entries to prepare a new session.'
       : row ? `Current values: ${row.label} · ${duration(row.minutesPerOccurrence)} per session · ${row.occurrences} working sessions · ${FUNDING[row.funding]} · ${row.status}.`
         : descriptor?.mode === 'create' ? 'The plan changed. Review these entries before adding the session.'
@@ -487,9 +488,9 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!owns(epoch)) return;
     return opened(operate('begin', target, projection), epoch, focus);
   }
-  function select(id, focus = true) {
+  function select(id, focus = true, occurrenceIndex) {
     if (disposed || !works.has(id)) return;
-    return open(makeSessionTarget('work.update', id), focus);
+    return open(makeSessionTarget(Number.isSafeInteger(occurrenceIndex) ? 'work.session.update' : 'work.update', id, occurrenceIndex), focus);
   }
   function create({ periodId, subdivision = 1 } = {}) {
     if (disposed) return;
@@ -555,6 +556,37 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     render();
     return receipt(false);
   }
+  function changeSessionCount(removeIndex) {
+    const view = editor.read(), descriptor = describeSessionTarget(view.draft?.sessionId);
+    if (disposed || composing || view.status !== 'editing' || !descriptor || descriptor.mode !== 'update') return;
+    // A count action publishes only after the visible entries are valid.
+    const epoch = ++generation;
+    const settled = operate(view.draft.changed ? 'apply' : 'cancel', view.draft.token);
+    if (!owns(epoch) || !settled.ok) { changed(settled, epoch); return; }
+    if (view.draft.changed) {
+      onAccepted(settled.projection);
+      if (!owns(epoch) || studio.read() !== settled.projection || editing.read().active !== null) return;
+    }
+    const base = studio.read(), work = base.state.work.find(row => row.id === descriptor.id);
+    if (!work) return;
+    const removing = Number.isSafeInteger(removeIndex);
+    const command = removing ? { type: 'work.session.remove', workId: work.id, occurrenceIndex: removeIndex }
+      : { type: 'work.update', work: { ...work, occurrences: work.occurrences + 1 } };
+    const result = studio.applyCommand(command, base);
+    if (!owns(epoch)) return;
+    if (!result.ok) {
+      opened(operate('begin', view.draft.sessionId, studio.read()), epoch, false);
+      announce(result.error.message); return;
+    }
+    onAccepted(result.projection);
+    if (!owns(epoch) || studio.read() !== result.projection || editing.read().active !== null) return;
+    const count = result.projection.state.work.find(row => row.id === work.id).occurrences;
+    const index = count ? removing ? Math.min(removeIndex, count - 1) : count - 1 : undefined;
+    opened(operate('begin', makeSessionTarget(index === undefined ? 'work.update' : 'work.session.update', work.id, index), studio.read()), epoch, false);
+    if (!owns(epoch)) return;
+    focusOccurrence(index);
+    announce(removing ? 'Session removed. Undo restores it.' : 'Session added. Choose its sprint and settings.');
+  }
   function close({ park = true } = {}) {
     if (disposed) return;
     durationDials?.release();
@@ -614,7 +646,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (descriptor.mode === 'create') onRecordCreated(descriptor);
     if (!owns(epoch)) return;
     selectedId = descriptor.id; lastAcceptedId = descriptor.id;
-    const next = operate('begin', makeSessionTarget('work.update', descriptor.id), studio.read());
+    const next = operate('begin', makeSessionTarget(descriptor.occurrenceIndex === undefined ? 'work.update' : 'work.session.update', descriptor.id, descriptor.occurrenceIndex), studio.read());
     if (!owns(epoch)) return;
     selectedTarget = next.view.draft?.sessionId ?? null;
     const reopenedToken = next.view.draft?.token;
@@ -726,6 +758,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, createAccepted, close, focusOccurrence, setRackMode,
     isOpen: () => !disposed && elements.configure.open,
     readReceiver: () => ({ selectedId: disposed ? null : selectedId,
+      occurrenceIndex: describeSessionTarget(editor.read().draft?.sessionId ?? selectedTarget)?.occurrenceIndex,
       expanded: !disposed && isActive() && elements.configure.open
         && !elements.configure.closest('[hidden], details:not([open])'),
       controlsId: elements.configure.id }),

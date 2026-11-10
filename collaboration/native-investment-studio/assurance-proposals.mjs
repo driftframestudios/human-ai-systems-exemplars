@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { LIMITS } from './config.mjs';
 import { PlanError, preparePlan, prepareWork, prepareConnection, prepareAssuranceSettings } from './contract.mjs';
 import { replaceWorkPlacements } from './cadence.mjs';
@@ -64,9 +65,11 @@ function updates(original, supplied, path) {
 }
 
 function quantities(row) {
-  return row === null ? null : { minutesPerOccurrence: row.minutesPerOccurrence, occurrences: row.occurrences,
-    participantCount: row.personIds.length, personMinutes: row.minutesPerOccurrence * row.occurrences * row.personIds.length,
-    funding: row.funding, status: row.status, lifecycle: row.lifecycle };
+  if (row === null) return null;
+  const summary = summarizeWorkSessions(row);
+  return { minutesPerOccurrence: row.minutesPerOccurrence, occurrences: row.occurrences,
+    participantCount: summary.personIds.length, personMinutes: summary.participantMinutes,
+    funding: summary.funding, status: summary.status, lifecycle: row.lifecycle };
 }
 
 function money(before, after) {

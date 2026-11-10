@@ -2,6 +2,7 @@ import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepa
 import { HISTORY, PURPOSE_FIELDS } from './config.mjs';
 import { prepareAssembly } from './commands.mjs';
 import { replaceWorkPlacements } from './cadence.mjs';
+import { resizeWorkSessions } from './work-sessions.mjs';
 
 function historyLimit(options) {
   const prototype = options && typeof options === 'object' ? Object.getPrototypeOf(options) : undefined;
@@ -132,12 +133,13 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     if (!id || !Object.hasOwn(id, 'value') || id.value !== workId) {
       throw new PlanError('target', 'edit.workId', 'Keep the replacement bound to its original work identity.');
     }
-    const row = { ...base.state.work[position], ...prepareWorkRecord(candidate, `plan.work[${position}]`) };
+    const row = resizeWorkSessions({ ...base.state.work[position], ...prepareWorkRecord(candidate, `plan.work[${position}]`) });
     if (row.id !== workId) throw new PlanError('target', 'edit.workId', 'Keep the admitted work bound to its original identity.');
     const current = base.state.work[position];
     if (row.id === current.id && row.label === current.label && row.teamId === current.teamId
         && row.minutesPerOccurrence === current.minutesPerOccurrence && row.occurrences === current.occurrences
         && row.lifecycle === current.lifecycle && row.funding === current.funding && row.status === current.status && JSON.stringify(row.timing) === JSON.stringify(current.timing)
+        && JSON.stringify(row.sessionOverrides ?? []) === JSON.stringify(current.sessionOverrides ?? [])
         && row.personIds.length === current.personIds.length && row.personIds.every((id, index) => id === current.personIds[index])) {
       return { projection: base };
     }

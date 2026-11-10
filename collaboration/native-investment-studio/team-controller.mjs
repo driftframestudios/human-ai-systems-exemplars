@@ -1,7 +1,8 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { CONTRACT, LIMITS } from './config.mjs';
 import { revealStudioDestination } from './motion.mjs';
 import { createDraftCoordinator } from './editing.mjs';
-import { money, wholeMoney, duration } from './display.mjs';
+import { money, wholeMoney, duration, workDuration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
@@ -10,7 +11,7 @@ import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { createParticipationPad } from './participation-pad.mjs';
-import { summarizeWorkCapacity, readPersonSessionSpread, planPersonSessionSpread } from './people-capacity.mjs';
+import { summarizeWorkCapacity, readPersonSessionSpread, planPersonSessionSpread, readWorkParticipation } from './people-capacity.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -164,12 +165,12 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const head = document.createElement('thead'), headings = document.createElement('tr');
     const label = document.createElement('th'); label.scope = 'col'; label.textContent = 'People and funded time'; headings.append(label);
     for (const work of next.state.work) {
-      const cell = document.createElement('th'); cell.scope = 'col'; cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
+      const cell = document.createElement('th'); cell.scope = 'col'; cell.dataset.workId = work.id; cell.dataset.workStatus = summarizeWorkSessions(work).status;
       const open = document.createElement('button'); open.type = 'button';
       open.className = 'studio-track-key studio-session-tracks__pad native-control--navigate';
       open.dataset.nativeWorkOpen = work.id; open.dataset.studioSessionId = work.id;
       const title = document.createElement('strong'), detail = document.createElement('small');
-      title.textContent = work.label; detail.textContent = `${duration(work.minutesPerOccurrence)} · ${work.occurrences} sessions${work.status === 'paused' ? ' · Paused' : ''}`;
+      title.textContent = work.label; detail.textContent = `${work.sessionOverrides?.length ? workDuration(work) : `${duration(work.minutesPerOccurrence)} · ${work.occurrences} sessions`}${summarizeWorkSessions(work).status === 'paused' ? ' · Paused' : summarizeWorkSessions(work).status === 'mixed' ? ' · Some paused' : ''}`;
       open.append(title, detail); cell.append(open); headings.append(cell);
     }
     head.append(headings); const body = document.createElement('tbody'); table.append(caption, head, body);
@@ -214,7 +215,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       row.append(item);
       for (const work of next.state.work) {
         const cell = document.createElement('td');
-        cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
+        cell.dataset.workId = work.id; cell.dataset.workStatus = summarizeWorkSessions(work).status;
         cell.append(createParticipationPad(document, { person, work, line: ledger.get(work.id).get(person.id) }));
         row.append(cell);
       }
@@ -228,7 +229,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const work of next.state.work) {
       const total = summarizeWorkCapacity(next, [work.id]);
       const cell = document.createElement('td'), hours = document.createElement('strong'), price = document.createElement('small');
-      cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
+      cell.dataset.workId = work.id; cell.dataset.workStatus = summarizeWorkSessions(work).status;
       hours.textContent = duration(total.personMinutes); price.textContent = `${wholeMoney(total.knownCents)}${total.completeMoney ? '' : ' known'}`;
       cell.append(hours, price); totalRow.append(cell);
     }
@@ -251,7 +252,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const work of next.state.work) {
       const heading = document.createElement('th'), cell = document.createElement('td');
       heading.scope = 'col'; heading.textContent = work.label;
-      for (const entry of [heading, cell]) { entry.dataset.workId = work.id; entry.dataset.workStatus = work.status; }
+      for (const entry of [heading, cell]) { entry.dataset.workId = work.id; entry.dataset.workStatus = summarizeWorkSessions(work).status; }
       cell.append(createParticipationPad(document, { person, work, line: ledger.get(work.id) }));
       headings.append(heading); row.append(cell);
     }
@@ -281,7 +282,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const currentSpread = readPersonSessionSpread(view.projection, selectedId);
     spread.hidden = currentSpread === null;
     if (currentSpread) {
-      const selectedWork = new Set(view.projection.state.work.filter(row => row.personIds.includes(selectedId)).map(row => row.id));
+      const selectedWork = new Set(view.projection.state.work.filter(row => readWorkParticipation(row, selectedId).complete).map(row => row.id));
       const matches = SPREAD_PRESETS.filter(([id]) => {
         const count = spreadCount(id, currentSpread.totalPlans);
         return count === currentSpread.selectedPlans && planPersonSessionSpread(view.projection, selectedId, count).command.workIds.every(id => selectedWork.has(id));
@@ -510,9 +511,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const previous = studio.read();
     rateControls.release(); let epoch = ++generation;
     const parked = editing.park(); if (!owns(epoch)) return;
-    if (!parked.ok) { control.checked = work.personIds.includes(personId); announce(parked.error.message); return; }
-    const personIds = control.checked ? [...new Set([...work.personIds, personId])] : work.personIds.filter(id => id !== personId);
-    const result = studio.applyCommand({ type: 'work.participants.replace', workId, personIds }, previous);
+    if (!parked.ok) { control.checked = readWorkParticipation(work, personId).complete; announce(parked.error.message); return; }
+    const result = studio.applyCommand({ type: 'work.participant.set', workId, personId, included: control.checked }, previous);
     if (!owns(epoch)) return;
     if (result.ok) {
       reconcileRoleChange(previous, result.projection); epoch = generation;
@@ -521,7 +521,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       if (current) onSpread({ ...current, projection: result.projection });
       if (!retains(epoch, mark)) return;
     }
-    else control.checked = work.personIds.includes(personId);
+    else control.checked = readWorkParticipation(work, personId).complete;
     if (!owns(epoch)) return;
     render(); announce(result.ok ? 'Session participation saved.' : result.error.message);
     source.querySelector(`[data-people-work="${workId}"][data-people-participant="${personId}"]`)?.focus({ preventScroll: true });

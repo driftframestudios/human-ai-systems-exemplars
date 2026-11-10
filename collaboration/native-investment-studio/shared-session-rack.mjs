@@ -1,5 +1,7 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
+import { readWorkParticipation } from './people-capacity.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
-import { duration } from './display.mjs';
+import { workDuration } from './display.mjs';
 import { mountRackHeader, syncReorderButtons } from './rack-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
 
@@ -83,28 +85,29 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
     });
     choose.dataset.sharedSelect = work.id; choose.dataset.sharedFocus = `row:${work.id}`;
     choose.setAttribute('aria-controls', `${id}-selected`);
-    choose.append(node('strong', work.label), node('small', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
+    choose.append(node('strong', work.label), node('small', workDuration(work)));
     th.append(choose); row.append(th); return row;
   }
   function renderPeople() {
     const { scroll, body } = shell('Shared sessions · people who take part', plan.people.map(person => node('span', person.label)));
     for (const work of plan.work) {
-      const row = rowFor(work), members = new Set(work.personIds);
+      const row = rowFor(work), summary = summarizeWorkSessions(work);
       for (const person of plan.people) {
         const cell = node('td'), label = node('label', undefined, 'studio-shared__pad');
-        const checkbox = node('input'); checkbox.type = 'checkbox'; checkbox.checked = members.has(person.id);
+        const participation = readWorkParticipation(work, person.id);
+        const checkbox = node('input'); checkbox.type = 'checkbox'; checkbox.checked = participation.complete; checkbox.indeterminate = participation.partial;
         checkbox.dataset.sharedParticipant = person.id; checkbox.dataset.sharedWork = work.id;
         checkbox.dataset.sharedFocus = `person:${work.id}:${person.id}`;
         checkbox.setAttribute('aria-label', `${person.label} in ${work.label}`);
-        label.dataset.funding = work.funding; label.dataset.selected = String(checkbox.checked); label.dataset.status = work.status;
-        const last = checkbox.checked && work.personIds.length === 1;
+        label.dataset.funding = summary.funding; label.dataset.selected = String(participation.included); label.dataset.status = summary.status;
+        const last = checkbox.checked && participation.pinned;
         checkbox.disabled = last;
+        if (participation.partial) label.append(node('small', 'Some sessions'));
         if (last) {
           const reason = node('small', 'Add another person first'); reason.id = `${id}-${work.id}-last-person`;
           checkbox.setAttribute('aria-describedby', reason.id); label.append(reason);
         }
-        checkbox.addEventListener('change', () => accept({ type: 'work.participants.replace', workId: work.id,
-          personIds: checkbox.checked ? [...work.personIds, person.id] : work.personIds.filter(value => value !== person.id) }, 'People saved', checkbox.dataset.sharedFocus));
+        checkbox.addEventListener('change', () => accept({ type: 'work.participant.set', workId: work.id, personId: person.id, included: checkbox.checked }, 'People saved', checkbox.dataset.sharedFocus));
         label.prepend(checkbox); cell.append(label); row.append(cell);
       }
       body.append(row);
@@ -153,27 +156,29 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
     }
     if (!work) return;
     selectedHeader.update({ title: work.label, owner: `Shared sessions · ${view === 'people' ? 'People' : 'Handoffs'}`, saved: 'Saved' });
-    const host = node('label', 'Hosted by'), team = node('select'); team.setAttribute('aria-label', `Team for ${work.label}`);
+    const host = node('label', work.sessionOverrides?.length ? 'Default host' : 'Hosted by'), team = node('select'); team.setAttribute('aria-label', `Team for ${work.label}`);
     for (const row of plan.teams) { const option = node('option', row.label); option.value = row.id; team.append(option); } team.value = work.teamId;
     team.dataset.sharedFocus = `team:${work.id}`;
-    team.addEventListener('change', () => accept({ type: 'work.update', workId: work.id, work: { ...work, teamId: team.value } }, 'Team saved', team.dataset.sharedFocus)); host.append(team);
+    team.addEventListener('change', () => accept({ type: 'work.update', work: { ...work, teamId: team.value } }, 'Team saved', team.dataset.sharedFocus)); host.append(team);
     const people = new Map(plan.people.map(person => [person.id, person]));
     const order = node('ol', undefined, 'studio-shared__order');
-    for (const [index, personId] of work.personIds.entries()) {
+    const orderedIds = work.personIds;
+    for (const [index, personId] of orderedIds.entries()) {
       const person = people.get(personId), row = node('li'); row.dataset.sharedPersonRow = personId;
       const up = button('Move up', '', () => move(-1)), down = button('Move down', '', () => move(1));
       up.dataset.sharedFocus = `order:${work.id}:${personId}`; down.dataset.sharedFocus = `order-down:${work.id}:${personId}`;
-      syncReorderButtons(up, down, { label: person.label, index, count: work.personIds.length });
+      syncReorderButtons(up, down, { label: person.label, index, count: orderedIds.length });
       const actions = node('div', undefined, 'native-coordination__actions'); actions.append(up, down); row.append(node('strong', person.label), actions); order.append(row);
       function move(delta) {
-        const ids = [...work.personIds]; [ids[index], ids[index + delta]] = [ids[index + delta], ids[index]];
+        const ids = [...orderedIds]; [ids[index], ids[index + delta]] = [ids[index + delta], ids[index]];
         const [origin, fallback] = delta < 0 ? [up, down] : [down, up];
-        animateRackChange(selectedBody, () => accept({ type: 'work.participants.replace', workId: work.id, personIds: ids },
+        const remaining = summarizeWorkSessions(work).personIds.filter(id => !ids.includes(id));
+        animateRackChange(selectedBody, () => accept({ type: 'work.participants.reorder', workId: work.id, personIds: [...ids, ...remaining] },
           'Order saved', origin.dataset.sharedFocus, fallback.dataset.sharedFocus, `row:${work.id}`),
           { selector: '[data-shared-person-row]', key: 'sharedPersonRow' });
       }
     }
-    selectedBody.replaceChildren(host, order);
+    selectedBody.replaceChildren(host, ...(work.sessionOverrides?.length ? [node('h6', 'Default participant order')] : []), order);
   }
   function render() {
     if (!plan) return;
