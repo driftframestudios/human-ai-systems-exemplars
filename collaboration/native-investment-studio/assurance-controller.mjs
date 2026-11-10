@@ -391,7 +391,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       const names = row.personIds.map(id => plan.people.find(person => person.id === id)?.label ?? id);
       const accepted = studio.read().state.work.some(work => work.id === row.workId);
       item.append(button(accepted ? `Inspect ${row.label}` : `Edit proposal: ${row.label}`, accepted ? 'work' : 'proposal-settings', { assuranceWork: row.workId }),
-        node('p', `${names.join(', ') || 'Choose participants'}. ${row.minutesPerOccurrence} minutes per person × ${row.occurrences} sessions = ${row.personMinutes} person-minutes. ${row.funding === 'additional' ? 'Extra investment' : 'Within funded time'} · ${row.status}${row.lifecycle === 'retired' ? ' · retired' : ''}.`));
+        node('p', `${names.join(', ') || 'Choose participants'}. ${row.variedSessions ? `${row.durationMinutes} minutes across ${row.occurrences} sessions` : `${row.minutesPerOccurrence} minutes per person × ${row.occurrences} sessions`} = ${row.personMinutes} person-minutes. ${row.funding === 'mixed' ? 'Funded time and extra investment' : row.funding === 'additional' ? 'Extra investment' : 'Within funded time'} · ${row.status}${row.lifecycle === 'retired' ? ' · retired' : ''}.`));
       list.append(item);
     }
     section.append(list); return section;

@@ -181,7 +181,6 @@ for (const engine of names) {
       await placements.locator(`[data-session-occurrence="${index}"]`).click();
       await placements.locator('[data-session-occurrence-remove]').click();
     }
-    await legacy(page, 'apply').click();
     assert.deepEqual(JSON.parse(await bytes(page)).scoreSettings.cadence.placements.filter(row => row.workId === 'review')
       .map(row => row.occurrenceIndex), [0, 1], 'reducing the sessions retires only their trailing placements');
     assert.deepEqual(JSON.parse(await bytes(page)).practices, accepted.practices, 'removing occurrences retains parent-plan support links');
@@ -312,7 +311,7 @@ for (const engine of names) {
     await expect(knob(page)).toHaveAttribute('type', 'range');
     await expect(knob(page)).toHaveAttribute('min', '0');
     await expect(knob(page)).toHaveAttribute('max', '59');
-    await expect(sessions(page).locator('[data-native-remote-title]')).toHaveText('Session settings · Weekly working session');
+    await expect(sessions(page).locator('[data-native-remote-title]')).toHaveText('Plan defaults · Weekly working session');
     await knob(page).focus();
     for (const [key, value] of [['Home', '0'], ['ArrowUp', '1'], ['ArrowRight', '2'], ['ArrowDown', '1'], ['ArrowLeft', '0'], ['End', '59']]) {
       await page.keyboard.press(key);

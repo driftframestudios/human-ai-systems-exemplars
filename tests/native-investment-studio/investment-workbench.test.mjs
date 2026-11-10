@@ -47,7 +47,7 @@ test('one dial gesture is one undo; new turns, intervening edits and traversal s
 test('legacy plans gain independent comparison defaults; canonical ledger and authored periods feed the plan deck', () => {
   const legacy = createShowcasePlan(); legacy.schemaVersion = '0.9.0'; delete legacy.investmentSettings;
   const projection = preparePlan(legacy), model = projectInvestment(projection), plan = model.investment.decks[0];
-  assert.equal(projection.state.schemaVersion, '0.10.0');
+  assert.equal(projection.state.schemaVersion, '0.11.0');
   assert.equal(model.investment.decks.length, 5);
   assert.equal(model.pricing.total, projection.result.knownCommitmentCents / 100);
   assert.equal(analyseInvestment(plan, model.pricing).amount, model.pricing.total);

@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { renderRemovalReferences } from './removal-references.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
@@ -180,7 +181,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     headings.append(contributionHeading);
     const sessionCell = (tag, work) => {
       const cell = document.createElement(tag);
-      cell.dataset.workId = work.id; cell.dataset.workStatus = work.status;
+      cell.dataset.workId = work.id; cell.dataset.workStatus = summarizeWorkSessions(work).status;
       return cell;
     };
     for (const work of next.state.work) {
@@ -200,7 +201,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       open.append(receiver, decider); title.append(open); item.append(title); contributionButtons.set(row.id, open);
       for (const work of next.state.work) {
         const cell = sessionCell('td', work), included = row.workIds.includes(work.id);
-        const paused = included && work.status === 'paused';
+        const paused = included && summarizeWorkSessions(work).status === 'paused';
         const pad = button(included ? paused ? '' : '●' : '·', 'open', row.id); pad.classList.add('studio-contribution-tracks__pad');
         if (paused) {
           const marker = document.createElement('span'); marker.className = 'studio-pause-marker';
@@ -225,7 +226,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const count = document.createElement('small'); count.textContent = `${linked} linked`;
       const effort = document.createElement('strong'); effort.textContent = duration(scope.personMinutes);
       const cost = document.createElement('small'); cost.textContent = `${wholeMoney(scope.knownCents)}${scope.completeMoney ? '' : ' known'}`;
-      const verb = work.status === 'paused' ? 'Resume' : 'Pause';
+      const verb = summarizeWorkSessions(work).status === 'paused' ? 'Resume' : 'Pause';
       const toggle = button(`${verb} session`, 'work-status', work.id);
       toggle.className = 'studio-contribution-tracks__status native-control--cancel';
       toggle.setAttribute('aria-label', `${verb} session: ${work.label} throughout the plan`);
@@ -591,12 +592,12 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const epoch = ++generation, parked = editing.park();
       if (!owns(epoch)) return;
       if (!parked.ok) { announce(parked.error.message); return; }
-      const result = studio.applyCommand({ type: 'work.status.set', workId: id, status: work.status === 'paused' ? 'planned' : 'paused' }, current);
+      const result = studio.applyCommand({ type: 'work.status.set', workId: id, status: summarizeWorkSessions(work).status === 'paused' ? 'planned' : 'paused' }, current);
       if (!owns(epoch)) return;
       if (!result.ok) { render(); announce(result.error.message); return; }
       const intent = editing.read().intent; onAccepted(result.projection);
       if (!owns(epoch) || editing.read().intent !== intent) return;
-      render(); announce(`${work.label} ${work.status === 'paused' ? 'resumed' : 'paused'}. Undo is available.`);
+      render(); announce(`${work.label} ${summarizeWorkSessions(work).status === 'paused' ? 'resumed' : 'paused'}. Undo is available.`);
       list.querySelector(`[data-responsibility-action="work-status"][data-responsibility-id="${id}"]`)?.focus({ preventScroll: true });
       return;
     }

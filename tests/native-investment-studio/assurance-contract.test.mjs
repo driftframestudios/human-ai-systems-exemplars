@@ -116,7 +116,7 @@ test('exact 0.5 plans retain Change maps, capabilities, roles and observations b
     stage: 'rehearsed', context: 'A synthetic pilot', observation: 'The reviewers agreed the recorded scope.',
     recorderPersonId: 'maya', reviewBoundary: 'Check an unfamiliar request.', observedPlanRevision: 6 }];
   const bytes = JSON.stringify(old), receipt = prepareImport(bytes), next = receipt.projection;
-  assert.equal(receipt.sourceSchemaVersion, '0.5.0'); assert.equal(next.state.schemaVersion, '0.10.0');
+  assert.equal(receipt.sourceSchemaVersion, '0.5.0'); assert.equal(next.state.schemaVersion, '0.11.0');
   const { assuranceSettings, scoreSettings, arrangements, investmentSettings, ...restored } = next.state;
   assert.deepEqual({ ...restored, people: restored.people.map(({ availability, ...row }) => row), schemaVersion: '0.5.0' }, old);
   assert.equal(scoreSettings.window, null); assert.ok(restored.people.every(row => row.availability === null));
@@ -144,7 +144,7 @@ test('assurance records and aggregate references have exact boundaries without c
   plan.work = Array.from({ length: 96 }, (_, index) => ({ ...plan.work[0], id: `work-${index}`, teamId: 'team-0', personIds: index === 95 ? ids.slice(0, 32) : ids }));
   // 4096 memberships +12192 participants +96 work owners =16384 references.
   const old = { ...plan, schemaVersion: '0.5.0' }; delete old.assuranceSettings; delete old.scoreSettings; delete old.arrangements; delete old.investmentSettings; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
-  assert.equal(preparePlan(old).state.schemaVersion, '0.10.0');
+  assert.equal(preparePlan(old).state.schemaVersion, '0.11.0');
   plan.assuranceSettings.context.recoveryRatePersonIds = ['person-0'];
   assert.throws(() => preparePlan(plan), { code: 'reference-budget' });
   plan.work.at(-1).personIds.pop();
@@ -163,7 +163,7 @@ test('maximum escaped assurance text remains independently owned and self-import
     assumptions: text, response: text, observation: text, reviewerPersonId: 'noor', personIds: ['noor', 'sam'], workIds: ['rehearsal'], connectionIds: ['readiness'] }));
   const current = preparePlan(plan);
   assert.equal(current.state.assuranceSettings.rehearsals.at(-1).observation, text);
-  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.10.0']);
+  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.11.0']);
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(Object.isFrozen(plan.assuranceSettings.rehearsals[0]), false);
 });

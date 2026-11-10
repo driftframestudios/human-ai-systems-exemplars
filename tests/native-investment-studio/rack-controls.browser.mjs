@@ -61,7 +61,7 @@ async function open(t, engine, width, full = false, touch = false) {
   await horizon(page).getByRole('button', { name: 'All plans', exact: true }).click();
   return page;
 }
-async function receiverReading(page, selectedId, expanded) {
+async function receiverReading(page, selectedId, expanded, occurrenceIndex) {
   const keys = root(page).locator('[data-studio-session-id]');
   assert.ok(await keys.count() >= 8, 'both racks expose accepted session controls');
   const controlsId = await keys.first().getAttribute('aria-controls');
@@ -69,11 +69,13 @@ async function receiverReading(page, selectedId, expanded) {
   assert.equal(await root(page).locator(`[id="${controlsId}"]`).count(), 1);
   if (expanded) assert.equal(await root(page).locator(`[id="${controlsId}"]`).evaluate(node => node.matches('[data-native-configure]') || Boolean(node.querySelector('[data-native-configure]'))), true, 'expanded controls identify the visible canonical settings');
   await expect.poll(() => keys.evaluateAll((controls, expected) => controls.every(control => {
-    const selected = control.dataset.studioSessionId === expected.selectedId;
+    const index = control.dataset.studioSessionOccurrence;
+    const selected = control.dataset.studioSessionId === expected.selectedId
+      && (index === undefined || expected.occurrenceIndex !== undefined && Number(index) === expected.occurrenceIndex);
     return control.getAttribute('aria-pressed') === String(selected)
       && control.getAttribute('aria-expanded') === String(selected && expected.expanded)
       && control.getAttribute('aria-controls') === expected.controlsId;
-  }), { selectedId, expanded, controlsId })).toBe(true);
+  }), { selectedId, expanded, controlsId, occurrenceIndex })).toBe(true);
 }
 const skin = locator => locator.evaluate(element => {
   const style = getComputedStyle(element);
@@ -155,7 +157,6 @@ for (const engine of names) for (const width of [390, 1440]) {
     await configure(page).locator('[data-session-occurrence="1"]').click();
     await configure(page).locator('[data-session-occurrence-remove]').click();
     await expect(configure(page).locator('[name="occurrences"]')).toHaveValue('3');
-    await configure(page).locator('[data-action="apply"]').click();
     assert.deepEqual(await page.evaluate(() => window.rackFixture.studio.read().state.scoreSettings.cadence.placements
       .filter(row => row.workId === 'pairing').map(({ occurrenceIndex, periodId, subdivision }) => ({ occurrenceIndex, periodId, subdivision }))),
     [{ occurrenceIndex:0, periodId:'period-2', subdivision:1 },
@@ -441,7 +442,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
     const placement = configure(page).locator(`[data-session-occurrence="${occurrence}"]`);
     await expect(placement).toBeFocused();
-    await receiverReading(page, 'pairing', true);
+    await receiverReading(page, 'pairing', true, occurrence);
     assert.equal((await rackShape()).width, before.width, 'the in-rack deck preserves its source rack width');
     assert.equal(await adjacent(page).evaluate(node => {
       const slot = node.parentElement, tracks = slot.nextElementSibling;
@@ -511,11 +512,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await occurrenceRack.locator('[data-occurrence-field="periodId"][value="period-3"]').check();
     const placed = await page.evaluate(() => JSON.parse(window.rackFixture.editing.session.read().draft.raw.cadencePlacements));
     assert.equal(placed.find(row => row.occurrenceIndex === occurrence).periodId, 'period-3');
-    await occurrenceRack.locator('[data-session-occurrence-add]').click();
-    await expect(configure(page).locator('[name="occurrences"]')).toHaveValue('5');
-    await expect(occurrenceRack.locator('[data-session-occurrence="4"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(occurrenceRack.locator('[data-occurrence-field="periodId"][value=""]')).toBeChecked();
-    assert.equal(await bytes(page), accepted, 'placement and occurrence pads change the proposal until Apply');
+    assert.equal(await bytes(page), accepted, 'selected session settings and placement remain proposed until Apply');
     await page.evaluate(() => { window.rackFixture.sessionToken = window.rackFixture.editing.session.read().draft.token; });
     await pad.click();
     await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();
@@ -524,19 +521,19 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();
     assert.equal(await horizon(page).locator('.native-cadence__tracks').evaluate(node => node.scrollLeft), sourceScroll, 'Close keeps the originating track position');
     await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
-    await receiverReading(page, 'pairing', false);
+    await receiverReading(page, 'pairing', false, occurrence);
     assert.equal(await bytes(page), accepted);
     await track(page, 'pairing').click();
-    await expect(minutes).toHaveValue('045');
+    await expect(minutes).toHaveValue('0');
     const openCaret = await caret(track(page, 'pairing'));
     assert.notEqual(openCaret, closedCaret, 'the selected row points into its open receiver');
     await track(page, 'pairing').click();
     await expect(adjacent(page)).toBeHidden(); await expect(track(page, 'pairing')).toBeFocused();
     await receiverReading(page, 'pairing', false);
-    await track(page, 'pairing').click();
+    await pad.click();
     await expect(minutes).toHaveValue('045');
     await configure(page).locator('[data-action="cancel"]').click();
-    await expect(adjacent(page)).toBeHidden(); await expect(track(page, 'pairing')).toBeFocused();
+    await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();
     assert.equal(await bytes(page), accepted, 'Cancel discards the session proposal');
     await track(page, 'pairing').click();
     await expect(minutes).toHaveValue('0');
@@ -566,6 +563,11 @@ for (const engine of names) for (const width of [390, 1440]) {
     await sharedTrack(page, 'pairing').click();
     const selected = rack.locator('.studio-shared__selection'); await expect(selected).toBeVisible();
     await expect(selected.locator('.studio-rack-header__owner')).toHaveText('Shared sessions · People');
+    await expect(selected.getByRole('combobox')).toHaveValue('engineering');
+    await selected.getByRole('combobox').selectOption('operations');
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'pairing').teamId), 'operations');
+    await expect(rack.getByRole('status').first()).toHaveText('Team saved');
+    await root(page).locator('[data-studio-undo]').click(); assert.equal(await bytes(page), original);
     await expect(selected.getByRole('combobox')).toHaveValue('engineering');
     await selected.getByRole('button', {name:'Back to Shared sessions · People', exact:true}).click();
     await expect(selected).toBeHidden(); await expect(sharedTrack(page, 'pairing')).toBeFocused();

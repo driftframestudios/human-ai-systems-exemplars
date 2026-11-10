@@ -1,4 +1,5 @@
 import { projectCadence } from './cadence.mjs';
+import { expandWorkSessions, summarizeWorkSessions } from './work-sessions.mjs';
 export const SCORE_VERSION = '1.1.0';
 
 // Each plan receives its own empty settings; old plans acquire no implied timing.
@@ -92,34 +93,36 @@ export function projectScore(plan) {
   const assignmentsByPerson = new Map(plan.people.map(person => [person.id, []]));
   const unplacedByPerson = new Map(plan.people.map(person => [person.id, { minutes: 0, workIds: [] }]));
   for (const work of plan.work) {
-    const active = work.status === 'planned' && work.lifecycle !== 'retired';
-    const row = { workId: work.id, label: work.label, teamId: work.teamId, personIds: [...work.personIds], funding: work.funding,
-      status: work.status, lifecycle: work.lifecycle, active, durationMinutes: work.minutesPerOccurrence,
-      occurrenceCount: work.occurrences, effortMinutesPerPerson: work.minutesPerOccurrence * work.occurrences,
-      participantMinutes: work.minutesPerOccurrence * work.occurrences * work.personIds.length,
+    const summary = summarizeWorkSessions(work), active = summary.active;
+    const row = { workId: work.id, label: work.label, teamId: work.teamId, personIds: summary.personIds, funding: summary.funding,
+      status: summary.status, lifecycle: work.lifecycle, active, durationMinutes: work.minutesPerOccurrence,
+      occurrenceCount: work.occurrences, effortMinutesPerPerson: summary.durationMinutes,
+      participantMinutes: summary.participantMinutes,
       placement: work.occurrences === 0 ? 'empty' : work.timing === null ? 'unspecified' : 'placed',
       repeatEveryMinutes: work.timing?.repeatEveryMinutes ?? null,
       firstStartMinute: null, lastEndMinute: null, spanMinutes: null,
       occurrences: [], navigation: navigation('work', work.id) };
     workRows.push(row);
     if (row.placement === 'unspecified') diagnostics.push({ code: 'needs-timing', kind: 'work', id: work.id, workId: work.id });
-    if (active && work.timing === null && work.occurrences > 0) for (const personId of work.personIds) {
-      const unplaced = unplacedByPerson.get(personId);
-      unplaced.minutes += row.effortMinutesPerPerson; unplaced.workIds.push(work.id);
+    if (active && work.timing === null && work.occurrences > 0) for (const person of summary.people) {
+      if (!person.activeMinutes) continue;
+      const unplaced = unplacedByPerson.get(person.personId);
+      unplaced.minutes += person.activeMinutes; unplaced.workIds.push(work.id);
     }
     if (work.timing === null || work.occurrences === 0) continue;
     const first = work.timing.startMinute, repeat = work.timing.repeatEveryMinutes ?? 0;
-    const lastEnd = first + (work.occurrences - 1) * repeat + work.minutesPerOccurrence;
+    const sessions = expandWorkSessions(work);
+    const lastEnd = Math.max(...sessions.map(session => first + session.occurrenceIndex * repeat + session.minutesPerOccurrence));
     row.firstStartMinute = first; row.lastEndMinute = lastEnd; row.spanMinutes = lastEnd - first;
     if (window && (first < window.startMinute || lastEnd > window.endMinute)) diagnostics.push({ code: 'outside-planning-window', kind: 'work', id: work.id, workId: work.id });
-    for (let index = 0; index < work.occurrences; index++) {
-      const occurrence = { kind: work.minutesPerOccurrence === 0 ? 'milestone' : 'work', workId: work.id, occurrenceIndex: index,
-        label: work.label, teamId: work.teamId, personIds: [...work.personIds], funding: work.funding,
-        status: work.status, lifecycle: work.lifecycle, active,
-        startMinute: first + index * repeat, endMinute: first + index * repeat + work.minutesPerOccurrence,
+    for (const session of sessions) {
+      const occurrence = { kind: session.minutesPerOccurrence === 0 ? 'milestone' : 'work', workId: work.id, occurrenceIndex: session.occurrenceIndex,
+        label: session.label, teamId: session.teamId, personIds: session.personIds, funding: session.funding,
+        status: session.status, lifecycle: work.lifecycle, active: session.active,
+        startMinute: first + session.occurrenceIndex * repeat, endMinute: first + session.occurrenceIndex * repeat + session.minutesPerOccurrence,
         navigation: navigation('work', work.id) };
       occurrences.push(occurrence); row.occurrences.push(occurrence);
-      if (active) for (const personId of work.personIds) {
+      if (session.active) for (const personId of session.personIds) {
         assignmentsByPerson.get(personId).push(occurrence);
       }
     }

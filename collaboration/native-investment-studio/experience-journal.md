@@ -57,7 +57,13 @@ transitions explicitly invalidate that reuse. The mounted Add session regression
 distinguishes two root refreshes from one while retaining earlier placements,
 focus and Undo. Current interaction latency remains unmeasured. The completed #906
 pass addresses cassette meaning, scoped creation and empty-library recovery.
-#909 restores All plans on entry and adds in-rack sequential browsing.
+#909 restores All plans on entry and adds in-rack sequential browsing (PR #911).
+#910 repairs the selected-session target: a pad now carries its occurrence identity
+through the draft, command, pricing and rendered consumers. This supersedes the
+shared-duration/people assumption: new and uncustomized sessions follow tape
+defaults, and an edited session keeps its own complete settings. Removing a session remaps settings and
+placements together; a stale ordinal draft requires explicit recovery. Direct
+count changes retain amp Undo and validate visible edits before accepting them.
 Performance refinements, including #902 and #903, remain queued for a later cue;
 promotion to main retains its separate human cue.
 

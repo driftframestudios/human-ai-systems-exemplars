@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { createTimeControls, mountDurationDials, renderTimeReadout } from './time-controls.mjs';
 import { CHANGE_FIELDS, changeSettingsFromRaw } from './change-draft.mjs';
 import { listChangeFrameworks, listInterpretiveLenses, listAttentionChannels, getChangeSuggestion,
@@ -298,7 +299,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   function renderTracks(reading, view, editable) {
     const works = view.projection.state.work.filter(work => work.lifecycle === 'active');
     const signature = JSON.stringify([reading.framework.id, reading.components,
-      works.map(work => [work.id, work.label, work.minutesPerOccurrence]), editable]);
+      works.map(work => [work.id, work.label, summarizeWorkSessions(work).durationMinutes]), editable]);
     if (signature === trackSignature) return;
     trackSignature = signature;
     const focusedPad = tracks.contains(document.activeElement) ? { map: document.activeElement.dataset.changeMap, work: document.activeElement.dataset.changeWork } : null;
@@ -319,7 +320,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         pad.dataset.changeWork = work.id; pad.dataset.changeMap = `map.${reading.framework.id}.${component.componentId}.workIds`;
         pad.setAttribute('aria-pressed', String(linked));
         pad.setAttribute('aria-label', `${linked ? 'Unlink' : 'Link'} ${work.label} ${linked ? 'from' : 'to'} ${component.label}`);
-        pad.title = `${work.label} · ${work.minutesPerOccurrence} min per person · ${linked ? 'Linked' : 'Available'}`;
+        pad.title = `${work.label} · ${work.sessionOverrides?.length ? `${summarizeWorkSessions(work).durationMinutes} min across sessions` : `${work.minutesPerOccurrence} min per person`} · ${linked ? 'Linked' : 'Available'}`;
         pad.append(node('span', linked ? 'Linked' : 'Link')); cell.append(pad); row.append(cell);
       }
       const planCell = node('td'), plan = button('Plan session', 'component');

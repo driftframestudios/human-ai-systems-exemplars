@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
 import { describeSessionTarget } from '../../collaboration/native-investment-studio/command-draft.mjs';
+import { copyWorkSession } from '../../collaboration/native-investment-studio/work-sessions.mjs';
 
 function setup(options = {}) { const studio = createStudio(); return { studio, editing: createDraftCoordinator(studio, options) }; }
 function rejected(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); return result; }
@@ -76,6 +77,27 @@ test('stale full session review rebases all fields while current-value recovery 
   const current = editing.session.useCurrent(reviewed.view.draft.token, studio.read()); assert.equal(current.ok, true);
   assert.equal(current.view.draft.raw.label, 'Weekly working session'); assert.equal(current.view.draft.raw.funding, 'additional');
   assert.equal(editing.session.cancel(current.view.draft.token).ok, true); assert.equal(studio.read().state.work[0].label, 'Weekly working session');
+});
+
+test('a stale occurrence draft keeps its raw edit and requires current values after another session is removed', () => {
+  const { studio, editing } = setup();
+  const work = studio.read().state.work[0];
+  assert.equal(studio.applyCommand({ type: 'work.session.update', workId: work.id, occurrenceIndex: 2,
+    session: { ...copyWorkSession(work), label: 'Third session' } }, studio.read()).ok, true);
+  const opened = editing.session.begin('work.session.update:review:1', studio.read());
+  assert.equal(opened.ok, true, opened.error?.message);
+  editing.session.setText(opened.view.draft.token, 'label', 'Saved second session');
+  editing.park();
+  assert.equal(studio.applyCommand({ type: 'work.session.remove', workId: work.id, occurrenceIndex: 0 }, studio.read()).ok, true);
+  const saved = editing.session.read().draft;
+  assert.equal(saved.occurrenceIndex, 1);
+  rejected(editing.session.review(saved.token, studio.read()), 'review-required');
+  assert.equal(editing.session.read().draft.raw.label, 'Saved second session');
+  const current = editing.session.useCurrent(saved.token, studio.read());
+  assert.equal(current.ok, true, current.error?.message);
+  assert.equal(current.view.draft.raw.label, 'Third session');
+  assert.equal(current.view.draft.occurrenceIndex, 1);
+  assert.equal(current.view.draft.changed, false);
 });
 
 test('removed saved sessions remain inspectable and can release their held capacity', () => {

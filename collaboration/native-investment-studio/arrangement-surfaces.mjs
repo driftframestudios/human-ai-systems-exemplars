@@ -1,5 +1,6 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 import { createRackAddControl } from './rack-creation-controls.mjs';
-import { duration } from './display.mjs';
+import { duration, workDuration } from './display.mjs';
 
 const node = (document, tag, className, text) => {
   const element = document.createElement(tag);
@@ -72,20 +73,21 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     const choose = node(document, 'button', 'studio-track-key studio-session-tracks__name native-control--navigate'); choose.type = 'button';
     if (sessionIds.has(work.id)) choose.dataset.studioSessionId = work.id;
     choose.setAttribute('aria-label', `${work.label}. ${sessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);
-    choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
+    choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', workDuration(work)));
     if (onSession) choose.addEventListener('click', event => onSession(work.id, event.currentTarget));
     else choose.dataset.nativeWorkOpen = work.id;
     title.append(choose); row.append(title);
-    const members = new Set(work.personIds);
+    const summary = summarizeWorkSessions(work), members = new Set(summary.personIds);
     for (const person of plan.people) {
       const cell = node(document, 'td');
       if (members.has(person.id)) {
-        const pad = node(document, 'button', 'studio-session-tracks__pad native-control--navigate', work.status === 'paused' ? 'Ⅱ' : work.funding === 'additional' ? '◆' : '●'); pad.type = 'button';
+        const time = work.sessionOverrides?.length ? `${duration(summary.people.find(row => row.personId === person.id).minutes)} across sessions` : `${duration(work.minutesPerOccurrence)} per session`;
+        const pad = node(document, 'button', 'studio-session-tracks__pad native-control--navigate', summary.status === 'paused' ? 'Ⅱ' : summary.funding === 'mixed' ? '● ◆' : summary.funding === 'additional' ? '◆' : '●'); pad.type = 'button';
         pad.dataset.studioSessionPerson = person.id;
         if (sessionIds.has(work.id)) pad.dataset.studioSessionId = work.id;
-        pad.dataset.funding = work.funding; pad.dataset.status = work.status;
-        pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${duration(work.minutesPerOccurrence)} per session · ${work.funding === 'additional' ? 'extra investment' : 'within funded time'}${work.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
-        pad.title = `${person.label} · ${duration(work.minutesPerOccurrence)} per session`;
+        pad.dataset.funding = summary.funding; pad.dataset.status = summary.status;
+        pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${time} · ${summary.funding === 'mixed' ? 'funded time and extra investment' : summary.funding === 'additional' ? 'extra investment' : 'within funded time'}${summary.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
+        pad.title = `${person.label} · ${time}`;
         if (onSession) pad.addEventListener('click', event => onSession(work.id, event.currentTarget));
         else pad.dataset.nativeWorkOpen = work.id;
         cell.append(pad);

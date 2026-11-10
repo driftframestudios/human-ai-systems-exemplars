@@ -1,3 +1,4 @@
+import { expandWorkSessions } from './work-sessions.mjs';
 export const CADENCE_VERSION = '1.0.0';
 export const CADENCE_PERIOD_LIMIT = 24;
 export const CADENCE_SUBDIVISIONS = Object.freeze({ sprint: 2, quarter: 3 });
@@ -87,11 +88,10 @@ export function projectCadence(plan) {
   const placementOrder = new Map(cadence.placements.map((row, index) => [`${row.workId}:${row.occurrenceIndex}`, index]));
   const stageById = new Map(plan.scoreSettings.stages.map(row => [row.id, row]));
   const occurrences = [], unplaced = [];
-  for (const work of plan.work) for (let occurrenceIndex = 0; occurrenceIndex < work.occurrences; occurrenceIndex++) {
+  for (const work of plan.work) for (const session of expandWorkSessions(work)) {
+    const { occurrenceIndex } = session;
     const placement = placed.get(`${work.id}:${occurrenceIndex}`);
-    const row = { workId: work.id, occurrenceIndex, label: work.label, teamId: work.teamId, personIds: [...work.personIds],
-      durationMinutes: work.minutesPerOccurrence, minutesPerOccurrence: work.minutesPerOccurrence, funding: work.funding,
-      active: work.status === 'planned' && work.lifecycle !== 'retired', status: work.status, lifecycle: work.lifecycle,
+    const row = { ...session, durationMinutes: session.minutesPerOccurrence,
       periodId: placement?.periodId ?? null, subdivision: placement?.subdivision ?? null };
     occurrences.push(row); if (row.periodId === null) unplaced.push(row);
   }

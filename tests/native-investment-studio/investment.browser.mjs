@@ -552,7 +552,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
-    assert.equal(admitted.schemaVersion, '0.10.0');
+    assert.equal(admitted.schemaVersion, '0.11.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
     await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });

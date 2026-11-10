@@ -1,3 +1,4 @@
+import { summarizeWorkSessions } from './work-sessions.mjs';
 // Authored exploration choices. Their output becomes an ordinary assurance draft.
 export const QUALITY_REELS = Object.freeze({
   before: Object.freeze([
@@ -71,10 +72,10 @@ export function qualityArrangement(exploration, sigmaHalfSteps = 6) {
     response: RESPONSES[definitionId] };
 }
 export function qualityRehearsalExample(definition, arrangement, plan) {
-  const work = plan.work.filter(row => row.status === 'planned' && row.lifecycle !== 'retired');
+  const work = plan.work.filter(row => summarizeWorkSessions(row).active);
   const preferred = definition.id === 'recovery-failure' ? /rehears|recover|operat/i : /review|decision|validat/i;
   const session = work.find(row => preferred.test(row.label)) ?? work.at(-1);
-  const personIds = session?.personIds ?? [];
+  const personIds = session ? summarizeWorkSessions(session).personIds : [];
   const reviewer = plan.people.find(row => /quality|review/i.test(row.label))?.id ?? personIds[0] ?? '';
   return {
     definitionId: definition.id, definitionVersion: definition.version,

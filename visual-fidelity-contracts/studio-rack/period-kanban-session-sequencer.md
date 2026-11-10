@@ -51,7 +51,7 @@ have text or accessible wording alongside their color and shape.
 | New plan row in Session tracks | Creates a distinct, uniquely named work record in that column's period; editing stays closed |
 | New plan on the cassette shelf | Creates a distinct work record and deliberately loads its cassette with detail closed |
 | Existing occurrence pad | Opens its canonical session editor at that occurrence |
-| Working sessions Add/Remove | Changes the selected session draft's occurrence collection; Apply accepts the proposal |
+| Working sessions Add/Remove | Accepts a session addition/removal with amp Undo after validating visible entries; settings and placements remain with their own sessions |
 | Working sessions period choice | Moves the selected occurrence while leaving the others in their existing periods |
 
 The visible scope gives creation its meaning: loaded Add session repeats that
@@ -109,14 +109,16 @@ paused follow-up so the board and cassette shelf demonstrate that state.
 One stable slot between the board and tracks receives the canonical session
 form. Refreshing the surrounding projection retains its DOM, draft and dial
 ownership. The exact initiating control toggles that detail; another occurrence
-selects its placement. Close retains unfinished entries and returns focus to the
+opens its own settings and placement. Close retains unfinished entries and returns focus to the
 origin. A first opening uses the short downward unfurl.
 
 Duration and Working sessions occupy neighboring modules at wider widths.
 Duration fills its slot and preserves the [exact duration specimen](loaded-tape-duration-panel.md).
 Working sessions has Add top-right, Remove bottom-right and numbered occurrence
-pads. Hours/Minutes and ordered participants apply to every occurrence of the
-same work record. Native period/subdivision pads select placement. Funding and
+pads. A numbered pad owns that session's Hours/Minutes, ordered participants,
+name, funding, status and placement. Track keys open plan defaults for new and
+uncustomized sessions; edited sessions keep their own settings. #910 supersedes the shared-settings assumption while retaining this
+layout and its duration controls. Native period/subdivision pads select placement. Funding and
 Status are named large-pad groups beside Participants where width allows.
 
 A raised Apply beside Close delegates to the canonical bottom submit action,

@@ -40,6 +40,10 @@ return to the complete arrangement. #909 supersedes #906's initial-first-tape
 default; scope navigation preserves accepted data and Undo. The selected sprint/quarter remains visible: All plans clears the cassette filter;
 Plan overview clears the period filter. Existing clips open local editing.
 Loaded **Add session** targets append occurrences while retaining that cassette.
+Each session initially uses the tape defaults; its numbered pad edits independent
+settings. Edited durations contribute to the shelf's total duration reading;
+unvaried tapes retain their per-session duration. Session state, funding and
+participants project consistently in All plans and loaded scope.
 In All plans, explicit **New plan** targets create separate records and retain the
 overview. Shelf **New plan** creates and loads a uniquely named record with detail
 closed. These scope-specific meanings supersede the earlier rule that every lane

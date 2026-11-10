@@ -35,7 +35,14 @@ Loading a cassette filters the board, tracks and relationship markers. **Add ses
 and retains the loaded cassette and earlier placements. In **All plans**, lane
 **New plan** and the sequencer's New plan row create separate records while keeping
 the whole arrangement visible. Shelf **New plan** creates and loads a cassette.
-New records have unique names and stay closed until selected. The selected period
+New records have unique names and stay closed until selected. A numbered pad
+opens that session's name, people, duration, funding, status and placement. Apply
+changes that session; its siblings retain their settings. A track name opens the
+plan defaults. New and uncustomized sessions follow those defaults; edited
+sessions keep their own settings. Working sessions Add/Remove accepts the
+count change with amp Undo; valid unfinished entries are accepted first. Paused
+sessions keep their planned investment, and mixed tapes show partial participation
+where appropriate. The selected period
 and **Plan overview** return remain visible. The transport's compact **Remove plan**
 confirmation names the cassette; amp Undo restores the complete accepted edit.
 

@@ -89,9 +89,11 @@ export function syncReorderButtons(up, down, { label, index, count }) {
 
 // Rack readings borrow the session editor's identity and visibility. Updating
 // attributes in place preserves each reading's focus and horizontal position.
-export function syncSessionControls(root, { selectedId, expanded, controlsId }) {
+export function syncSessionControls(root, { selectedId, occurrenceIndex, expanded, controlsId }) {
   for (const control of root.querySelectorAll('[data-studio-session-id]')) {
-    const selected = control.dataset.studioSessionId === selectedId;
+    const occurrence = control.dataset.studioSessionOccurrence;
+    const selected = control.dataset.studioSessionId === selectedId
+      && (occurrence === undefined || occurrenceIndex !== undefined && Number(occurrence) === occurrenceIndex);
     control.setAttribute('aria-pressed', String(selected));
     control.setAttribute('aria-expanded', String(selected && expanded));
     control.setAttribute('aria-controls', controlsId);

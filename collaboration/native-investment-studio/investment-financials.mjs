@@ -39,7 +39,7 @@ export function analyseInvestment(record, pricing) {
     case 'capital': return capitalComparison(value);
     default: {
       const sessions = pricing.sessions;
-      const visibleSessions = sessions.filter(item => value.domain === 'all' || item.funding === value.domain);
+      const visibleSessions = sessions.filter(item => value.domain === 'all' || item.funding === value.domain || item.funding === 'mixed');
       const reserve = value.budget * value.reserve / 100, opportunity = value.budget * value.opportunity / 100;
       return { sessions, visibleSessions, amount: value.domain === 'all' ? pricing.total : value.domain === 'funded' ? pricing.funded : pricing.additional, reserve, opportunity, remaining: value.budget - pricing.total - reserve - opportunity };
     }

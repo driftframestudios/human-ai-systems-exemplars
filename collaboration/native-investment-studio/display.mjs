@@ -1,4 +1,5 @@
 import { CONTRACT } from './config.mjs';
+import { summarizeWorkSessions } from './work-sessions.mjs';
 
 export const INTEGER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
@@ -23,4 +24,10 @@ export function duration(minutes) {
   const hours = Math.floor(minutes / CONTRACT.minutesPerHour);
   const remainder = minutes % CONTRACT.minutesPerHour;
   return [hours ? `${INTEGER.format(hours)} h` : '', remainder || !hours ? `${remainder} min` : ''].filter(Boolean).join(' ');
+}
+
+export function workDuration(work) {
+  return work.sessionOverrides?.length
+    ? `${duration(summarizeWorkSessions(work).durationMinutes)} across ${work.occurrences} sessions`
+    : `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`;
 }
