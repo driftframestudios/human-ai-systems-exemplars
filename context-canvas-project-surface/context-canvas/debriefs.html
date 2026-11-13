@@ -544,29 +544,22 @@
 
 <main id="main-content" class="content__container nudge" role="main" tabindex="-1">
   <div class="non-index-hero__container">
-    <h1 class="txt-h1 h1-spaced h1-hero">Debriefs <span class="stroked-text--salmon">&#65286;</span> Case Briefs</h1>
+    <h1 class="txt-h1 h1-spaced h1-hero">Debriefs <span class="stroked-text--salmon">&#65286;</span> Case Studies</h1>
     <p class="tag-line">
-      Building and leading across enterprises and industries
+      Field notes from inside complex systems.
     </p>
   </div><!-- /non-index-hero__container-->
   <div class="bgr0___projects"></div><!-- bgr___projects-->
   <section class="debrief-system-summary" aria-labelledby="debrief-system-summary-title">
     <div class="content content--wide debrief-system-summary__inner">
       <div>
-        <p class="debrief-eyebrow">Reading orientation · Full accounts and concise entry points</p>
-        <h2 id="debrief-system-summary-title" class="txt-h2">Lived work becomes a reusable case</h2>
+        <p class="debrief-eyebrow">Postmortems · Solutions, implementations, and limits</p>
+        <h2 id="debrief-system-summary-title" class="txt-h2">The work behind the shipped systems</h2>
       </div>
       <div class="debrief-system-summary__copy">
         <p>
-          These Debriefs turn lived work in regulated, high-consequence, and commercially constrained systems into
-          reusable cases. Each separates solution shaping, business context, implementation choices, and evidence limits
-          so readers can examine what changed, reconstruct the reasoning, and adapt the pattern with generative AI systems
-          while keeping roles and contributions visible.
-        </p>
-        <p>
-          Entries preserve friction, including decisions that met resistance, because constraints reveal how judgment was
-          applied. They can support specifications, comparison, training, and team memory. Each remains an example to
-          interpret in context, with a concise Case Brief and the complete Full Debrief available as complementary views.
+          Each Debrief here separates business context, solution shaping, implementation mechanics, and what remained unresolved
+          so you can see how my judgment actually operated under constraint without smoothing over the messy parts.
         </p>
       </div>
     </div>
@@ -575,11 +568,10 @@
   <section class="debrief-catalog" aria-labelledby="debrief-catalog-title">
     <div class="content content--wide debrief-catalog__content">
       <header class="debrief-catalog__header">
-        <p class="debrief-eyebrow">Reading atlas · Mode, topic, and tool</p>
-        <h2 id="debrief-catalog-title" class="txt-h2">Choose a useful way into the work</h2>
+        <p class="debrief-eyebrow">filter · Mode, topic, and tool</p>
+        <h2 id="debrief-catalog-title" class="txt-h2">Choose how much you want to read</h2>
         <p>
-          Choose one reading mode, then add any topics or tools that help narrow the collection. Choose the
-          <strong>Case Brief mode</strong> for a scanning-friendly overview directly on this page.
+          Choose the <strong>Summary mode</strong> for a scanning-friendly overview directly on this page.
         </p>
         <search class="debrief-filter-panel" data-debrief-filters hidden>
           <form method="get" action="debriefs.html" data-debrief-filter-form>
@@ -587,7 +579,7 @@
               <legend>Reading mode</legend>
               <div class="debrief-filter-list">
                 <label class="debrief-filter" for="debrief-filter-catalog"><input id="debrief-filter-catalog" type="radio" name="format" value="catalog" data-filter data-filter-kind="format" checked><span class="debrief-filter__label">Catalog overview</span></label>
-                <label class="debrief-filter" for="debrief-filter-case-brief"><input id="debrief-filter-case-brief" type="radio" name="format" value="case-brief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Case Briefs</span></label>
+                <label class="debrief-filter" for="debrief-filter-case-brief"><input id="debrief-filter-case-brief" type="radio" name="format" value="case-brief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Summary</span></label>
                 <label class="debrief-filter" for="debrief-filter-full-debrief"><input id="debrief-filter-full-debrief" type="radio" name="format" value="full-debrief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Full Debrief index</span></label>
                 <label class="debrief-filter" for="debrief-filter-article"><input id="debrief-filter-article" type="radio" name="format" value="article" data-filter data-filter-kind="format"><span class="debrief-filter__label">Articles</span></label>
               </div>
@@ -1488,7 +1480,7 @@
                 <ul class="debrief-card__topics clean-list" aria-label="Topics and tools"><li>Research</li><li>Practice</li><li>Data Visualization</li><li>AI Systems</li></ul>
                 <dl class="debrief-card__catalog-meta"><div><dt>Reading surfaces</dt><dd>Static reference, native source table, derived data</dd></div><div><dt>Useful for</dt><dd>Choosing a useful comparison and preserving its meaning across receiving forms.</dd></div></dl>
                 <div class="project__media--container"><a href="one-figure-several-readings.html" class="img__anchor"><img class="project__upfront" src="../img/plot/visualization_fidelity_clean_exemplar.svg" width="1200" height="760" alt="July has the highest observed failure rate; August has the most failed tests."></a></div>
-                <div class="project__media--text txt-small"><a href="one-figure-several-readings.html"><h3 class="txt-h3 project--slug">Keep the comparison and its evidence together</h3></a><p>A public manufacturing dataset shows how rates, counts, source context and semantic structure support several readings of one figure.</p></div>
+                <div class="project__media--text txt-small"><a href="one-figure-several-readings.html"><h3 class="txt-h3 project--slug">Keep the comparison and its evidence together</h3></a><p>A public manufacturing dataset shows how rates, counts, source context, and semantic structure support several readings of one figure.</p></div>
                 <span class="txt-right"><a href="one-figure-several-readings.html">Read the Article</a></span>
               </li>
 </ul>
@@ -1594,21 +1586,21 @@
   </section>
   <!-- debrief-case-brief-projections:start -->
   <template data-case-brief-projection="genomic-viewer-replatforming.html" data-case-brief-title="The Queue That Was Secretly a Status Machine" data-case-brief-orientation-heading="At-a-Glance">
-    <p class="debrief-preview-slug">Within Foundation Medicine R&amp;D, I combined principal-level product design with full-stack implementation to keep case assignment, evidence review, and sign-off moving while one capability family transferred into a new platform and consequential legacy areas retained named ownership.</p>
+    <p class="debrief-preview-slug">Within Foundation Medicine R&amp;D, I led principal-level product design and full-stack implementation to overhaul the user experience and rearchitect the front-end and service layers for an FDA-regulated medical device.</p>
     <dl class="debrief-preview-facts">
-        <div><dt>Situation and stakes</dt> <dd>A researcher-built GWT viewer had become a consequential clinical-genomics application. Case assignment, evidence review, and sign-off had to keep moving while the replacement took shape.</dd></div>
-        <div><dt>Scope and role</dt> <dd>From an early Q1 2019 search redesign through the Q3 2022–Q1 2025 platform program, I worked as Principal Product Designer and Software Engineer III in a core seven-person delivery group within a 50-plus-engineer Computational Biology organization. Scientists, researchers, directors, executives, Cloud Operations, and Platform Engineering shaped the work.</dd></div>
-        <div><dt>Core constraint</dt> <dd>Authentication identified a person; authorization still had to account for assay, product, geography, jurisdiction, qualification, and action. The visible queue encoded those distinctions together with operational state and tacit workflow inside a monolith.</dd></div>
-        <div><dt>Key decision</dt> <dd>Model profiles, permissions, cases, and status explicitly; place evidence at the decision; turn participant language into testable scenarios; translate the Masonry concept into bounded typed components; and move capability through a recoverable migration.</dd></div>
-        <div><dt>Outcome and evidence</dt> <dd>I designed and implemented new interfaces and views for specimen overview, variant detail, quality control, profiles, dashboards, search, notes, and shared components. Complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned.</dd></div>
-        <div><dt>Relevance now</dt> <dd>My profile and permission work gave qualified people the right work and supported later automatic assignment. My structured-note work also made human interventions countable across candidates for tiered automation.</dd></div>
+        <div><dt>Situation and stakes</dt> <dd>A researcher-built <abbr title="Google Web Toolkit">GWT</abbr> application made the year after the first Matrix movie came out had become a core clinical-genomics application for the entire company. Service interruption or failed migration would delay time-senstitive treatment decision insights for ordering physicians.</dd></div>
+      <div><dt>Scope and role</dt> <dd><strong>Q1 2019</strong>: redesigned search as Principal Designer until the project is deferred. <strong>Q3 2022–Q1 2025</strong>: Project suddenly roars back to life. I worked as Principal Product Designer &amp; Software Engineer III on a core seven-person delivery group within a 50-plus-engineer Computational Biology organization. Worked directly with scientists, directors, executives, Medical Affairs, Cloud Operations, and Platform Engineering.</dd></div>
+        <div><dt>Core constraint</dt> <dd>Technical and experiential debt accumulated in tacit workflows through Excel, Slack, and custom code. Key interactions went unmeasured by existing system instrumentation, and the primary user group was running interference outside the engineering team's visibility.</dd></div>
+        <div><dt>Key decision</dt> <dd>I ran design sessions with all the teams using the application, and bring them prototypes to try out immediately. Model profiles, permissions, cases, and status first. Translate design concepts into bounded typed components and iterate.</dd></div>
+      <div><dt>Outcome and evidence</dt> <dd>The team delivered more than a redesign. Novel views gathered important operational analytics in a dashboard, saving over <strong>20 minutes per person</strong> that had been devoted to running daily manual SQL and writing emails. React.js with a custom MUI implementation and bespoke Node.js tooling ran beside the existing monolith.</dd></div>
+        <div><dt>Relevance now</dt> <dd>The underlying system now understands who a user is and what cases they are able to complete based on their training. My profile and permission work gave qualified people the right cases, reduced errors, and supported later automatic assignment. My schema-based structured-note work also made human interventions countable across candidates for tiered automation.</dd></div>
     </dl>
-    <p class="debrief-preview-note"><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and views within a partial migration; complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned. Costing requires current inputs, technology choices require current constraints, and AI-assisted delivery effects require separate measurement.</p>
+    <p class="debrief-preview-note"><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and views within a purposeful partial migration; complex Spring transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned.</p>
     <div class="debrief-case-brief__tracks" data-case-brief-detail>
       <h4 class="txt-h4 debrief-case-brief__track-group-title">Solution and implementation quick scan</h4>
       <details class="debrief-case-brief__track debrief-case-brief__track--disclosure" data-case-brief-track="solution">
         <summary class="debrief-case-brief__track-summary"><span class="debrief-case-brief__track-title">Solution Architecture</span> <span class="debrief-case-brief__track-state" aria-hidden="true"><span class="debrief-case-brief__track-state--expand">Expand</span><span class="debrief-case-brief__track-state--collapse">Collapse</span></span></summary>
-        <ol><li><strong><a href="genomic-viewer-replatforming.html#solution-debrief-title">Debrief.</a></strong> I joined a research-built genomic viewer that had become clinical infrastructure, redesigned its search, and worked inside the core team to make curation, pathology, scientific, and engineering decisions visible in one operating experience.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-bottleneck-title">Bottleneck.</a></strong> Manual assignment, plate-wide failures, service limits, study-name conventions, SQL, Slack, email, and a macro-based tracker distributed work state across people and tools; broad authentication still needed assay-, jurisdiction-, profile-, and action-level rules.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-intervention-title">Intervention.</a></strong> I made profile, permission, assignment, case state, and recovery visible in the interface, moved bounded operational layers through a gradual migration, and translated participant language into testable scenarios through Specification by Example.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-outcome-title">Outcome.</a></strong> Profile and permission work eliminated recurring assignment errors and supported qualified automatic assignment; structured notes and visible operating state made interventions countable while clinical effect and causal magnitude remained separate measurement questions.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-repeatability-title">Repeatability.</a></strong> Role-local context, Impact Mapping, profile-first decomposition, scenario specifications, and visible state continued to guide the work as screens, services, and organizational conditions changed.</li></ol>
+        <ol><li><strong><a href="genomic-viewer-replatforming.html#solution-debrief-title">Debrief.</a></strong> I rearchitected the front-end a research-built genomic viewer that had become clinical infrastructure, redesigned its search, and worked inside the core team to make curation, pathology, scientific, and engineering decisions visible in one operating experience.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-bottleneck-title">Bottleneck.</a></strong> Manual assignment, plate-wide failures, service limits, study-name conventions, SQL, Slack, email, and a macro-based tracker distributed work state across people and tools; broad authentication still needed assay-, jurisdiction-, profile-, and action-level rules.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-intervention-title">Intervention.</a></strong> I made profile, permission, assignment, case state, and recovery visible in the interface, moved bounded operational layers through a gradual migration, and translated participant language into testable scenarios through Specification by Example.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-outcome-title">Outcome.</a></strong> Profile and permission work eliminated recurring assignment errors and supported qualified automatic assignment; structured notes and visible operating state made interventions countable while clinical effect and causal magnitude remained separate measurement questions.</li> <li><strong><a href="genomic-viewer-replatforming.html#solution-repeatability-title">Repeatability.</a></strong> Role-local context, Impact Mapping, profile-first decomposition, scenario specifications, and visible state continued to guide the work as screens, services, and organizational conditions changed.</li></ol>
       </details>
       <details class="debrief-case-brief__track debrief-case-brief__track--disclosure" data-case-brief-track="implementation">
         <summary class="debrief-case-brief__track-summary"><span class="debrief-case-brief__track-title">Implementation Architecture</span> <span class="debrief-case-brief__track-state" aria-hidden="true"><span class="debrief-case-brief__track-state--expand">Expand</span><span class="debrief-case-brief__track-state--collapse">Collapse</span></span></summary>
@@ -2032,7 +2024,7 @@
 <footer class="footer__container slug line-height--one" role="contentinfo">
   <div class="content">
     <p>
-      Made with vanilla HTML, CSS and SVG.
+      Made with vanilla HTML, CSS, and SVG.
     </p>
     <p><a href="https://github.com/driftframestudios/human-ai-systems-exemplars" aria-label="Inspect the prototype collection on GitHub (outside Context Canvas)" title="Outside Context Canvas">Inspect the prototype collection on GitHub<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></p>
 
