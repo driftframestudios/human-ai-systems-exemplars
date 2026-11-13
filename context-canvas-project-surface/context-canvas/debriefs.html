@@ -2121,19 +2121,19 @@
         <dl class="debrief-preview-facts">
             <div>
                 <dt>Situation and stakes</dt>
-                <dd>A researcher-built <abbr title="Google Web Toolkit">GWT</abbr> application made the year after the
-                    first Matrix movie came out had become a core clinical-genomics application for the entire company.
-                    Service interruption or failed migration would delay time-senstitive treatment decision insights for
-                    ordering physicians.
+                <dd>A circa-2010 researcher-built <abbr title="Google Web Toolkit">GWT</abbr> application became
+                    a core company-wide clinical-genomics application by 2019. Service interruption or failed migration
+                    would delay time-senstitive treatment decision insights for ordering physicians and the cancer
+                    patients they served.
                 </dd>
             </div>
             <div>
                 <dt>Scope and role</dt>
-                <dd><strong>Q1 2019</strong>: redesigned search as Principal Designer until the project was deferred.
-                    <strong>Q3 2022–Q1 2025</strong>: Project suddenly roars back to life. I worked as Principal Product
-                    Designer &amp; Software Engineer III on a core seven-person delivery group within a 50-plus-engineer
-                    Computational Biology organization. Worked directly with scientists, directors, executives, Medical
-                    Affairs, Cloud Operations, and Platform Engineering.
+                <dd>
+                    <strong>Q3 2022–Q1 2025</strong>: Owned most of the UX/UI as Principal Product Designer &amp; Software
+                    Engineer III on a core seven-person delivery group within a <strong>50-plus-engineer</strong> Computational Biology
+                    organization. Directed requirements gathering with highly technical cross-functional stakeholder groups ranging from
+                    scientists to executives. Delegated specific sessions to other engineers to teach UX/UI.
                 </dd>
             </div>
             <div>
@@ -2145,7 +2145,7 @@
             </div>
             <div>
                 <dt>Key decision</dt>
-                <dd>I ran participatory design sessions with all the user groups centered on clickable prototypes.
+                <dd>I ran participatory design sessions with all the user groups centered around clickable prototypes.
                     I modeled profiles, permissions, cases, and status first and finished making
                     the prototypes live during the sessions. Design concepts were then translated into bounded typed
                     components and connected to realistic data for further iteration.
@@ -2191,8 +2191,9 @@
                             href="genomic-viewer-replatforming.html#solution-bottleneck-title">Bottleneck.</a></strong>
                         <ul>
                             <li>The legacy <abbr title="Model-View-Presenter">MVP</abbr> tech stack tightly coupled a
-                                user's available tools with specific screens, and users needed access to tools based on
-                                what they saw in any given view.
+                                user's available tools with specific screens. Scientists had to switch between screens
+                                because they needed access to features based on their assessment of quality control metrics
+                                and the underlying cancer biology.
                             </li>
                             <li>Nuanced failure states, manual SQL queries, Slack, email, and macro-based Excel trackers
                                 distributed work state across people and tools.
@@ -2210,17 +2211,23 @@
                           interface.
                         </li>
                         <li>
-                          I worked on the operational layers users said were most important through a gradual
+                          I worked on the operational layers users voted most important through a gradual
                           migration, then translated participant language into testable scenarios through Specification by
-                          Example, and bundled design library specifications with real application state.
+                          Example. Every design library specifications was bundled with real application state.
                         </li>
                       </ul>
                     </li>
                     <li><strong><a href="genomic-viewer-replatforming.html#solution-outcome-title">Outcome.</a></strong>
                       <ul>
                         <li>
-                        Profile and permission work eliminated recurring assignment errors and supported qualified
-                        automatic assignment and case notes.
+                            <strong>All recurring assignment errors</strong> were eliminated through a templated,
+                            transparent process for automatically assigning cases to users.
+                        </li>
+                          <li>
+                            Custom profile and permission
+                            assignment rules, combined programmatic case notes, enabled managers to granularly override
+                            automatic assignment to respond to short-term changes in workflows or sudden priorities directly
+                            in the UI.
                         </li>
                         <li>
                         I structured notes from upstream teams separately from
