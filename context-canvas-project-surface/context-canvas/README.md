@@ -31,11 +31,13 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 
 ## About comparison and fitted instruments
 
-About owns vertical reading through its AI Method Gallery, Prompt Conditions
-Explorer, and native Investment Studio. The Studio sits
+About owns vertical reading through its AI Method Gallery and native Investment
+Studio. The Studio sits
 inside the cross-functional investment section beside a closed static counterpart
 table. AI Systems links to the complete original Studio and back to this native
-example; both Studio sources retain their independent routes.
+example; both Studio sources retain their independent routes. The shorter About
+page routes readers to AI Systems for the complete public collaboration system.
+The Prompt Conditions Explorer retains its standalone and hosted routes.
 
 The [native coordination package](../../collaboration/native-investment-studio/README.md)
 owns About's hours/minutes/session draft, live preview, explicit Apply controller,
@@ -92,12 +94,14 @@ After and Side-by-side treatment. The browser route mounts the adapter in an
 explicit local fixture to exercise that retained behavior; it establishes fixture
 behavior, while the current About page keeps its shorter composition.
 
-`about-content-fit.js` admits layout reports for About's two explicit
-`iframe[data-about-content-fit]` consumers: Gallery and Prompt Conditions Explorer. Each document receives its own
+`about-content-fit.js` admits layout reports for About's Gallery
+`iframe[data-about-content-fit]` consumer. Each admitted document receives its own
 MessageChannel, bounded versioned height reports, and navigation cleanup.
-The retained Studio chapter package also supports bounded target geometry
-through this channel. Its explicit host fixture checks height updates and
-visible target placement beneath navigation. Model values remain in the child.
+The retained Prompt Conditions Explorer and Studio chapter packages exercise
+this transport through explicit test hosts. The Studio host also checks bounded
+target geometry and visible placement beneath navigation. These fixtures preserve
+the reusable adapter contract while About keeps its compact reading. Model
+values remain in the child.
 The parent batches writes to `--about-content-block-size`; its ready-state rule
 follows the ordinary route-specific reservations, including the narrow Explorer
 fallback. Other carriers retain their existing dimensions.
@@ -119,18 +123,12 @@ semantic tables, horizontal comparison regions, and onward destinations retain
 their instrument owners. Existing sandbox permissions, hosted route identities,
 and full-view links remain intact. Ordinary reserved sizing supplies the fallback
 while the height channel is unavailable.
-With scripting disabled, About retains the Explorer's native static-overview
-disclosure so visitors can open its complete five-condition reading by keyboard.
-
-Career, Quality, the Studio’s static counterpart table, and the Prompt
-Conditions overview keep their native disclosure summaries available with
-scripting disabled. All four summaries pair a closed-state “Show” action with
+Career, Quality, and the Studio’s static counterpart table keep their native
+disclosure summaries available with scripting disabled. All three summaries pair a closed-state “Show” action with
 an open-state “Hide” action; the folios name the additional record count.
-`styles/routes/about-noscript.css` swaps the interactive Prompt Explorer for
-its native overview; `styles/routes/about.css` owns all four disclosure
-presentations. Its
-`::details-content` rule reveals all thirteen records, the five-row Studio
-counterpart, and the five-condition table for print while preserving the
+`styles/routes/about.css` owns their disclosure presentations. Its
+`::details-content` rule reveals all thirteen records and the five-row Studio
+counterpart for print while preserving the
 visitor's screen `open` attributes. This
 follows the existing Visualization Atlas print approach and uses the authored
 records directly. The focused browser checks observe native visibility and text
@@ -791,7 +789,7 @@ Current high-signal ownership:
 | [`expanded.css`](expanded.css) | 39 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
 | [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
-| [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
+| [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio readings after the About route bundle; retained Prompt hosts use its comparison rules. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, project-reference figure, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
 | [`styles/routes/visualization-fidelity-atlas.css`](styles/routes/visualization-fidelity-atlas.css) | [`visualization-fidelity-atlas.html`](visualization-fidelity-atlas.html) | Flat references, local table/SVG reading canvases, gallery controls, hidden states, and print disclosures; loads directly after the AI Systems family and before the shell. One Figure, Several Readings retains its Debrief composition styles. |
@@ -870,7 +868,8 @@ applications when a report depends on application sandbox policy.
 Authored Context Canvas sources carry stable public-reference keys. Registry
 keys appear as complete anchor `href` values and JSON-LD strings. Page, asset,
 iframe, schema, and skill keys carry canonical identity, social metadata,
-JSON-LD relationships, and sitemap membership. One exact
+JSON-LD relationships, and sitemap membership. External keys carry reviewed
+author-selected links, the license destination, and hosted media. One exact
 `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key appears in the shared footer
 script. The visible label, neighboring explanation, and key keep local source
 useful before a public build; materialization supplies each reviewed
@@ -897,6 +896,14 @@ head-authority matrix records every indexed structured-head and sitemap use,
 so one review can see the token, carrier, JSON pointer, authority class, and
 relationship role together.
 
+The tracked
+[`context-canvas-external-bindings.v1.json`](../../deployment/public-references/context-canvas-external-bindings.v1.json)
+selects the author-approved destinations for `PUBLIC_URL_EXTERNAL_*` keys.
+About uses these keys for external reading and source links, its license,
+and its hosted video and poster. The binding keeps those destinations separate
+from Registry Atlas selections and repository-owned route derivation while
+the materializer resolves all three families into the public build.
+
 The authored footer describes the professional profile as available in the
 public build. A materialized build changes that same shared carrier into an
 ordinary, same-tab “Professional profile” link with a descriptive accessible
@@ -905,8 +912,10 @@ process environment.
 
 Activated visible iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or
-`/v1/canvas/` family, while each adjacent full-view `href` remains an ordinary
-link to the repository-local base prototype that becomes a primary-site route.
+`/v1/canvas/` family. Adjacent full-view links name the standalone destination:
+a repository-local base prototype or a materialized public route. About's
+Gallery reading link uses its approved hosted alias; the activated iframe keeps
+its direct manifest route and existing sandbox policy.
 Inside generated iframe documents, eligible onward links open a secure separate
 top-level tab so the destination cannot replace or nest inside the carrier.
 Fragments, downloads, and page controls keep their in-document behavior. A

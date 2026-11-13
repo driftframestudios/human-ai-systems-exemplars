@@ -4,15 +4,24 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const sourceRouteAuthority = await loadSourceRouteAuthority();
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  const source = await readFile(resolve(canvasRoot, path), "utf8");
+  return path.endsWith(".html")
+    ? source.replace(/\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\}/gu,
+      (token) => resolveSourceRouteValue(token, sourceRouteAuthority))
+    : source;
 }
 
 function cssRule(source, selector) {
@@ -185,7 +194,7 @@ test("the About folios keep selected work in closed disclosures and retain role 
   }
   for (const [disclosure, prefix, ids] of [
     [careerDisclosure, 'career', ['5', '6', '4', '1']],
-    [qualityDisclosure, 'quality', ['1', '4', '5', '6', '7']],
+    [qualityDisclosure, 'quality', ['5', '1', '7', '6', '4']],
   ]) {
     assert.match(disclosure, /^<details class="about-folio-disclosure"><summary>/u);
     assert.doesNotMatch(disclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
@@ -411,32 +420,13 @@ test("the About visual sequence begins on a local poster and leaves native playb
   assert.match(css, /@media print[\s\S]*?\.about-media-sequence:not\(\[open\]\) > :not\(summary\)/su);
 });
 
-test("the About role table connects each role to work, an outcome and its setting", async () => {
+test("the concise About reading keeps role context in its folios", async () => {
   const html = await readCanvasFile("index.html");
-  const table = html.match(
-    /<table class="about-role-table" data-label="I’ve worked as…">[\s\S]*?<\/table>/u,
-  )?.[0];
-  assert.ok(table, "Expected the About role table");
-  assert.match(table, /<caption>[^<]+<\/caption>/u, 'The table names its comparison');
-  const headings = [...table.matchAll(/<th scope="col"[^>]*>([^<]+)<\/th>/gu)].map(match => match[1]);
-  assert.deepEqual(headings, ['My role', 'Changed work', 'What changed', 'Setting']);
-  const body = table.match(/<tbody>([\s\S]*?)<\/tbody>/u)?.[1];
-  assert.ok(body, 'The table has a substantive record population');
-  const rows = [...body.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gu)].map(match => match[1]);
-  const roles = rows.map(row => row.match(/<th scope="row"[^>]*>([^<]+)<\/th>/u)?.[1]);
-  assert.deepEqual(roles, ['Engineer and Designer', 'Senior Manager', 'Product Manager', 'UX Designer']);
-  for (const [index, context] of ['Genomics · 2022–2025', 'Genomics · 2019–2022', 'CPG Reviews · 2016–2019', 'Robotics · 2018–2019'].entries()) {
-    const cells = [...rows[index].matchAll(/<td data-label="([^"]+)">([\s\S]*?)<\/td>/gu)];
-    assert.deepEqual(cells.map(cell => cell[1]), ['Changed work', 'Reported consequence', 'Context']);
-    assert.ok(cells.every(cell => cell[2].replace(/<[^>]*>/gu, '').trim().length > 0), `${roles[index]} has complete context`);
-    assert.equal(cells[2][2], context);
+  assert.doesNotMatch(html, /<table[^>]*data-label="I’ve worked as…"/u);
+  for (const id of ['career-title', 'quality-title', 'method-title']) {
+    assert.match(html, new RegExp(`id="${id}"`, 'u'));
   }
-  // Preserve the reported outcomes and contribution boundaries while prose can evolve.
-  assert.match(rows[0], /FDA<\/abbr>-regulated/u);
-  assert.match(rows[0], /25 minutes/u);
-  assert.match(rows[1], /\$338k/u);
-  assert.match(rows[2], /10%/u);
-  assert.match(rows[3], /Contributed to[\s\S]*\$28M/u);
+  assert.match(html, /href="ai-systems\.html"/u, 'the deeper collection stays reachable');
 });
 
 test("the Studio counterpart table starts collapsed inside a native disclosure", async () => {
@@ -471,33 +461,13 @@ test("the Studio counterpart table starts collapsed inside a native disclosure",
   );
 });
 
-test("the About prompt-side readings resolve through public Registry bindings", async () => {
-  const [html, bindingSource] = await Promise.all([
+test("the concise About keeps the Gallery while the prompt explorer retains its own route", async () => {
+  const [html, manifestSource] = await Promise.all([
     readCanvasFile("index.html"),
-    readFile(resolve(
-      repositoryRoot,
-      "deployment/public-references/context-canvas-registry-bindings.v1.json",
-    ), "utf8"),
+    readFile(resolve(repositoryRoot, "iframe-route-families/canvas/public-iframe-route-manifest-v1.json"), "utf8"),
   ]);
-  const tokens = [
-    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_SHAPE_THE_COLLABORATION_BEFORE_THE_ANSWER",
-    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION",
-  ];
-  const promptSection = html.match(/<section[^>]*aria-labelledby="prompt-conditions-title">([\s\S]*?)<\/section>/u)?.[1];
-  assert.ok(promptSection, "Expected the prompt conditions reading");
-  const promptReading = [...promptSection.matchAll(/<p class="about-evidence-note">[\s\S]*?<\/p>/gu)]
-    .map(match => match[0]).find(paragraph => paragraph.includes(tokens[0]));
-  assert.ok(promptReading, "Expected the About prompt-side Registry reading");
-
-  const bindings = JSON.parse(bindingSource).bindings;
-  for (const token of tokens) {
-    assert.match(promptReading, new RegExp(`href="\\{\\{${token}\\}\\}"`, "u"));
-    const binding = bindings.find(candidate => candidate.token === token);
-    assert.ok(binding, `Expected a binding for ${token}`);
-    const destination = new URL(binding.url);
-    assert.equal(destination.origin, "https://kindlight.systems");
-    assert.equal(binding.expected_source_lifecycle, "Current");
-    assert.equal(binding.expected_route_state, "Identity verified");
-    assert.doesNotMatch(binding.url, /notion\.(?:so|site)|notion\.com/iu);
-  }
+  assert.match(html, /data-about-content-fit="gallery"/u);
+  assert.doesNotMatch(html, /data-about-content-fit="prompt-conditions"|aria-labelledby="prompt-conditions-title"/u);
+  const explorer = JSON.parse(manifestSource).routes.find(route => route.id === 'prompt-conditions-explorer');
+  assert.equal(explorer?.source_file, 'collaboration/about-prompt-conditions-explorer/index.html');
 });

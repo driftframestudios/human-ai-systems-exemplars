@@ -53,6 +53,10 @@ import {
   parsePublicRouteReferenceBinding,
 } from "./public-route-reference-contract.mjs";
 import {
+  DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH,
+  parseExternalReferenceBinding,
+} from "./external-reference-contract.mjs";
+import {
   CONTEXT_CANVAS_SOURCE_ROOT,
   formatContextCanvasHeadRouteDiagnostics,
   validateContextCanvasHeadRoutes,
@@ -95,6 +99,10 @@ const productionRegistryReferenceBinding = path
 const productionPublicReferenceCoordinationRoot =
   path.posix.dirname(productionRegistryReferenceBinding);
 const productionRegistryDataUseNotice = REGISTRY_ATLAS_DATA_USE_NOTICE;
+const productionExternalReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
 const productionRouteReferenceBinding = path
   .relative(repositoryRoot, DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH)
   .split(path.sep)
@@ -3698,6 +3706,7 @@ function transformPrimaryBytes(
   projectedPaths,
   destinations,
   routeDestinations,
+  externalDestinations,
   absoluteProjectionUrls,
   onResolvedReference,
 ) {
@@ -3744,6 +3753,7 @@ function transformPrimaryBytes(
           materializerPath,
           null,
           routeDestinations,
+          externalDestinations,
         );
       }
     } else if (
@@ -3932,7 +3942,11 @@ async function loadPublicationInput(
   const routeKeys = sortedKeys.filter(usesTrackedPublicRouteAuthority);
   const externalKeys = sortedKeys.filter((key) =>
     !key.startsWith(PUBLIC_REFERENCE_NAMESPACE) &&
-    !usesTrackedPublicRouteAuthority(key),
+    !usesTrackedPublicRouteAuthority(key) &&
+    !key.startsWith("PUBLIC_URL_EXTERNAL_"),
+  );
+  const externalReferenceKeys = sortedKeys.filter((key) =>
+    key.startsWith("PUBLIC_URL_EXTERNAL_"),
   );
   const hasTrackedRegistryBinding = trackedBlobs.has(
     productionRegistryReferenceBinding,
@@ -4021,6 +4035,17 @@ async function loadPublicationInput(
     });
   }
 
+  let externalReference = null;
+  let externalReferenceInput = null;
+  if (externalReferenceKeys.length > 0) {
+    externalReferenceInput = await readTrackedAuthorityInput(
+      root, trackedBlobs, trackedInputs, productionExternalReferenceBinding,
+      "Production external-reference binding",
+    );
+    externalReference = parseExternalReferenceBinding(externalReferenceInput.bytes, {
+      requiredKeys: externalReferenceKeys,
+    });
+  }
   const destinations = await resolvePublicReferenceDestinations(keys, {
     configurationSource: configurationBytes.toString("utf8"),
     environment: {},
@@ -4030,12 +4055,16 @@ async function loadPublicationInput(
     ...(routeReference === null
       ? {}
       : { routeDestinations: routeReference.destinations }),
+    ...(externalReference === null
+      ? {}
+      : { externalDestinations: externalReference.destinations }),
   });
-  if (registryReference === null && routeReference === null) {
+  if (registryReference === null && routeReference === null && externalReference === null) {
     return {
       destinations,
       registryReference,
       routeReference,
+      externalReference,
       input: {
         source_relationship: "external_digest_bound_input",
         configuration_path: productionPublicReferenceConfig,
@@ -4054,14 +4083,30 @@ async function loadPublicationInput(
     ? "tracked_registry_and_route_bindings_with_external_digest_bound_input"
     : registryReference !== null
       ? "tracked_registry_binding_with_external_digest_bound_input"
-      : "tracked_route_binding_with_external_digest_bound_input";
+      : routeReference !== null
+        ? "tracked_route_binding_with_external_digest_bound_input"
+        : "tracked_external_binding_with_external_digest_bound_input";
   return {
     destinations,
     registryReference,
     routeReference,
+    externalReference,
     input: {
       source_relationship: sourceRelationship,
       keys: sortedKeys,
+      ...(externalReference === null ? {} : {
+        tracked_external: {
+          keys: externalReferenceKeys,
+          binding: {
+            source_path: productionExternalReferenceBinding,
+            git_blob_id: externalReferenceInput.object,
+            sha256: externalReference.receipt.bindingSha256,
+            id: externalReference.receipt.id,
+            version: externalReference.receipt.version,
+            binding_count: externalReference.receipt.bindingCount,
+          },
+        },
+      }),
       ...(registryReference === null
         ? {}
         : {
@@ -4418,6 +4463,7 @@ export async function createProductionProjectionPlan(options = {}) {
           projectedPaths,
           publicationInput.destinations,
           publicationInput.routeReference?.destinations ?? null,
+          publicationInput.externalReference?.destinations ?? null,
           absoluteProjectionUrls,
           noteResolvedReference,
         );

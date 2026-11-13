@@ -98,22 +98,12 @@ test("the About and AI Systems structured references use the receiving pages' cu
   const aiSystems = jsonLd(aiHtml);
   const sharedMachinery = jsonLd(sharedHtml);
 
-  const aboutReferences = new Map(
-    allObjects(about.hasPart)
-      .filter((entry) => [aiSystemsRoute, sharedMachineryRoute]
-        .some((route) => publicValue(entry.url) === `${publicSourceRoot}${route}`))
-      .map((entry) => [publicValue(entry.url), entry]),
-  );
-  assert.equal(
-    aboutReferences.get(`${publicSourceRoot}${aiSystemsRoute}`)?.name,
-    aiSystemsTitle,
-    "About identifies the current AI Systems collection",
-  );
-  assert.equal(
-    aboutReferences.get(`${publicSourceRoot}${sharedMachineryRoute}`)?.name,
-    sharedMachineryTitle,
-    "About identifies the current Shared Machinery collection",
-  );
+  const onwardRoutes = about.significantLink.map(publicValue);
+  for (const route of [aiSystemsRoute, sharedMachineryRoute, 'debriefs.html']) {
+    assert.ok(onwardRoutes.includes(`${publicSourceRoot}${route}`), `About leads to ${route}`);
+  }
+  assert.equal(allObjects(about.hasPart).some(entry => entry['@type'] === 'CollectionPage'), false,
+    'linked collections retain their separate page owners');
 
   const aiSystemReferences = allObjects(aiSystems.hasPart);
   for (const route of [

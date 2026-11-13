@@ -232,11 +232,11 @@ test("curated social previews describe the pictured subject", async () => {
   for (const [route, expected] of socialImageAlternatives) {
     const html = await readFile(join(canvasRoot, route), "utf8");
     assert.ok(
-      html.includes(`<meta property="og:image:alt" content="${expected}">`),
+      html.replace(/\s+/gu, " ").includes(`<meta property="og:image:alt" content="${expected}">`),
       `${route}: Open Graph alternative`,
     );
     assert.ok(
-      html.includes(`<meta name="twitter:image:alt" content="${expected}">`),
+      html.replace(/\s+/gu, " ").includes(`<meta name="twitter:image:alt" content="${expected}">`),
       `${route}: Twitter alternative`,
     );
     if (route !== "index.html") {

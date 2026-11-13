@@ -41,7 +41,7 @@ const formatLabels = new Map([
 
 const readingModeLabels = new Map([
   ["Catalog overview", "catalog"],
-  ["Case Briefs", "case-brief"],
+  ["Summary", "case-brief"],
   ["Full Debrief index", "full-debrief"],
   ["Articles", "article"],
 ]);
@@ -55,7 +55,8 @@ const topicLabels = new Map([
 ]);
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  const source = await readFile(resolve(canvasRoot, path), "utf8");
+  return path.endsWith(".html") ? source.replace(/\s+/gu, " ").replace(/>\s+</gu, "><") : source;
 }
 
 function attribute(tag, name) {
@@ -256,7 +257,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   );
   assert.match(
     html,
-    /Choose one reading mode, then add any topics or tools that help narrow the collection\. Choose the\s*<strong>Case Brief mode<\/strong> for a scanning-friendly overview directly on this page\./u,
+    /Choose the\s*<strong>Summary mode<\/strong> for a scanning-friendly overview directly on this page\./u,
   );
   assert.equal(
     Array.from(html.matchAll(/\{\{PUBLIC_URL_REGISTRY_SITE_READING_STORY_WALL\}\}/gu)).length,

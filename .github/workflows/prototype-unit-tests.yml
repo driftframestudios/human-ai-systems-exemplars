@@ -61,6 +61,7 @@ on:
       - "tools/build-prod-projection.mjs"
       - "tools/prepare-r2-progressive-video.mjs"
       - "tools/registry-reference-contract.mjs"
+      - "tools/external-reference-contract.mjs"
       - "tools/verify-r2-video-route.mjs"
       - "tools/verify-registry-public-references.mjs"
       - "cloudflare/r2-video-delivery/**"

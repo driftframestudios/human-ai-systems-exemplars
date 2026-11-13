@@ -10,34 +10,29 @@ const route = '/context-canvas-project-surface/context-canvas/index.html';
 const captureRoot = resolve(import.meta.dirname, '../../.visual-runs/about-disclosure-readings');
 const folios = [
   { key: 'career', closed: 'Show 4 more examples', opened: 'Hide 4 additional examples', fields: ['Situation', 'What Changed', 'Boundary'], records: [
-    ['career-case-2', 'Modernizing systems while keeping work moving', 'Scientists and laboratory teams needed better tools'],
+    ['career-case-2', 'Modernizing lab systems while samples kept moving', 'Scientists and laboratory teams needed better tools'],
     ['career-case-3', 'Tracing multi-account abuse', 'Sunk cost of gamed profiles was'],
     ['career-case-5', 'Rapid prototyping with details that matter', 'My polished screens still left a robotics client'],
     ['career-case-6', 'Building at Driftframe Studios, LLC', 'Teams want shorter development cycles'],
     ['career-case-4', 'When tokens expired before keys arrived', 'In an EHR integration, JWT tokens expired'],
     ['career-case-1', 'Catching missing records in bulk exports', 'During a build-versus-buy evaluation'],
   ] },
-  { key: 'quality', closed: 'Show 5 more examples', opened: 'Hide 5 additional examples', fields: ['Situation', 'Mechanism', 'Changed work', 'Boundary'], records: [
-    ['quality-case-2', 'Keeping validation connected to implementation', 'Engineers and executives needed a clear account', ['Situation', 'What Changed', 'Changed work', 'Boundary']],
-    ['quality-case-3', 'Flagging adverse events for review', 'Post-market and pharmacovigilance teams'],
-    ['quality-case-1', 'Making system behavior testable early', 'Teams needed to connect intended use'],
-    ['quality-case-4', 'Tracing deletion through logs & retention', 'Deletion requests could leave discoverable traces'],
+  { key: 'quality', closed: 'Show 5 more examples', opened: 'Hide 5 additional examples', fields: ['Situation', 'What Changed', 'Boundary'], records: [
+    ['quality-case-2', 'Redesigning an FDA-regulated medical device', 'Engineers and executives needed a clear account'],
+    ['quality-case-3', 'Flagging adverse events for review', 'Post-market and pharmacovigilance teams', ['Situation', 'Mechanism', 'Boundary']],
     ['quality-case-5', 'Finding anomalies in seasonal data', 'Batch data and service-level metrics'],
-    ['quality-case-6', 'Preparing evidence for submissions', 'Clinical, product, engineering, quality'],
-    ['quality-case-7', 'Quality engineering for public research & toole', 'Research, education, and public-benefit technology'],
+    ['quality-case-1', 'Enabling stakeholder agreement on validation gates', 'Teams needed to agree on ordinary behavior'],
+    ['quality-case-7', 'Quality engineering for public research & tooling', 'Public research and teaching tools'],
+    ['quality-case-6', 'Preparing evidence for submissions', 'Clinical, product, engineering, quality', ['Situation', 'Mechanism', 'Boundary']],
+    ['quality-case-4', 'Tracing deletion through logs & retention', 'Deletion requests could leave discoverable traces'],
   ] },
 ];
-const promptRows = ['Source diet', 'Desired state', 'Role boundary', 'Input sanitation', 'Working set'];
 const studioRows = ['Internal investment', 'Customer implementation', 'Commercial cohort', 'Service and operational value', 'Capital allocation'];
 const studioDisclosure = {
   closed: 'Show the static counterpart table',
   opened: 'Hide the static counterpart table',
 };
-const promptDisclosure = {
-  closed: 'Show the static five-condition overview and semantic table',
-  opened: 'Hide the static five-condition overview and semantic table',
-};
-const disclosureSelector = '.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static';
+const disclosureSelector = '.about-folio-disclosure, .about-studio-counterpart';
 const engines = { chromium, firefox, webkit };
 const browsers = new Map();
 let server;
@@ -73,7 +68,6 @@ async function assertMembership(page) {
     assert.deepEqual(await records.locator('h4').allTextContents(), definition.records.map(record => record[1]));
   }
   assert.deepEqual(await page.locator('.about-studio-counterpart tbody th[scope="row"]').allTextContents(), studioRows);
-  assert.deepEqual(await page.locator('.about-prompt-static tbody th[scope="row"]').allTextContents(), promptRows);
 }
 
 async function assertVisibleText(locator, label) {
@@ -125,8 +119,6 @@ async function assertCompletePrint(page) {
   for (const definition of folios) await assertRecords(page, definition);
   await assertVisibleText(page.locator('.about-studio-counterpart caption, .about-studio-counterpart th, .about-studio-counterpart td'), 'Studio counterpart print reading');
   assert.equal(await page.locator('.about-studio-counterpart tbody tr').count(), 5);
-  await assertVisibleText(page.locator('.about-prompt-static caption, .about-prompt-static th, .about-prompt-static td'), 'five-condition print reading');
-  assert.equal(await page.locator('.about-prompt-static tbody tr').count(), 5);
 }
 async function states(page) { return page.locator(disclosureSelector).evaluateAll(nodes => nodes.map(node => node.open)); }
 async function injectStyle(page, css) {
@@ -153,23 +145,6 @@ async function assertSummary(detail, definition, open) {
   await expect(detail.locator(':scope > summary')).toHaveAccessibleName(expected);
   await assertVisibleText(detail.locator(open ? '.about-disclosure__hide' : '.about-disclosure__show'), 'native disclosure action');
 }
-async function assertPromptReading(page, visible) {
-  assert.deepEqual(await page.locator('.about-prompt-static tbody th[scope="row"]').allTextContents(), promptRows);
-  const rows = await page.locator('.about-prompt-static tbody tr').evaluateAll(nodes => nodes.map(node => {
-    const box = node.getBoundingClientRect();
-    return node.checkVisibility() && box.width > 0 && box.height > 0;
-  }));
-  assert.deepEqual(rows, Array(5).fill(visible), 'the native action controls the complete five-row reading');
-}
-async function exercisePromptAction(page) {
-  const detail = page.locator('.about-prompt-static');
-  await assertSummary(detail, promptDisclosure, false); await assertPromptReading(page, false);
-  await toggleNative(page, detail);
-  await assertSummary(detail, promptDisclosure, true); await assertPromptReading(page, true);
-  await toggleNative(page, detail);
-  await assertSummary(detail, promptDisclosure, false); await assertPromptReading(page, false);
-}
-
 async function assertStudioReading(page, visible) {
   assert.deepEqual(await page.locator('.about-studio-counterpart tbody th[scope="row"]').allTextContents(), studioRows);
   const rows = await page.locator('.about-studio-counterpart tbody tr').evaluateAll(nodes => nodes.map(node => {
@@ -196,7 +171,7 @@ for (const engine of Object.keys(engines)) {
       try {
         await page.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, sample.font);
         await assertMembership(page);
-        assert.deepEqual(await states(page), [false, false, false, false], 'source reading starts with native collapsed disclosures');
+        assert.deepEqual(await states(page), [false, false, false], 'source reading starts with native collapsed disclosures');
         for (const definition of folios) {
           const detail = folio(page, definition).locator('.about-folio-disclosure');
           await assertSummary(detail, definition, false);
@@ -211,7 +186,6 @@ for (const engine of Object.keys(engines)) {
           await toggleNative(page, detail); await assertSummary(detail, definition, false);
         }
         await exerciseStudioAction(page);
-        await exercisePromptAction(page);
         if (sample.width === 1440) {
           const summary = page.locator('.about-folio--career details > summary');
           const fault = await injectStyle(page, '.about-folio--career details > summary { display: none !important; }');
@@ -227,7 +201,7 @@ for (const engine of Object.keys(engines)) {
     const observation = await session(engine);
     const { page } = observation;
     try {
-      await assertMembership(page); assert.deepEqual(await states(page), [false, false, false, false]);
+      await assertMembership(page); assert.deepEqual(await states(page), [false, false, false]);
       for (const sample of [{ width: 1440, font: 16 }, { width: 390, font: 16 }, { width: 390, font: 32 }]) {
         await page.setViewportSize({ width: sample.width, height: 1000 });
         await page.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, sample.font);
@@ -237,39 +211,38 @@ for (const engine of Object.keys(engines)) {
           await toggleNative(page, detail); await assertSummary(detail, definition, false);
         }
         await exerciseStudioAction(page);
-        await exercisePromptAction(page);
       }
       await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
       await page.setViewportSize({ width: 816, height: 1056 });
       await toggleNative(page, page.locator('.about-folio--career details'));
-      await toggleNative(page, page.locator('.about-prompt-static'));
-      await assertSummary(page.locator('.about-prompt-static'), promptDisclosure, true);
+      await toggleNative(page, page.locator('.about-studio-counterpart'));
+      await assertSummary(page.locator('.about-studio-counterpart'), studioDisclosure, true);
       const accepted = await states(page);
-      assert.deepEqual(accepted, [true, false, false, true], 'the recovery fixture includes both screen choices');
+      assert.deepEqual(accepted, [true, true, false], 'the recovery fixture includes both screen choices');
       for (let cycle = 0; cycle < 2; cycle += 1) {
         await page.emulateMedia({ media: 'print' }); await assertCompletePrint(page);
         assert.deepEqual(await states(page), accepted, 'print presentation preserves native disclosure choices');
         await page.emulateMedia({ media: 'screen' });
         assert.deepEqual(await states(page), accepted, 'screen returns to its prior open and closed choices');
-        for (const [index, definition] of folios.entries()) await assertSummary(folio(page, definition).locator('details'), definition, accepted[index]);
-        await assertSummary(page.locator('.about-prompt-static'), promptDisclosure, true); await assertPromptReading(page, true);
+        for (const [index, definition] of folios.entries()) await assertSummary(folio(page, definition).locator('details'), definition, accepted[index + 1]);
+        await assertSummary(page.locator('.about-studio-counterpart'), studioDisclosure, true); await assertStudioReading(page, true);
       }
     } finally { await observation.close(); }
   });
 
-  test(`${engine}: About print includes all records and both five-row static tables with scripting enabled or unavailable`, { timeout: 60000 }, async () => {
+  test(`${engine}: About print includes all records and the five-row Studio counterpart with scripting enabled or unavailable`, { timeout: 60000 }, async () => {
     for (const javaScriptEnabled of [true, false]) {
       const observation = await session(engine, { javaScriptEnabled, viewport: { width: 816, height: 1056 } });
       const { page } = observation;
       try {
-        const original = await states(page); assert.deepEqual(original, [false, false, false, false]);
+        const original = await states(page); assert.deepEqual(original, [false, false, false]);
         await page.emulateMedia({ media: 'print' }); await assertCompletePrint(page);
         assert.deepEqual(await states(page), original);
         if (engine === 'webkit' && !javaScriptEnabled) {
           await page.locator('[data-source-id="quality-case-7"]').scrollIntoViewIfNeeded();
           await page.screenshot({ path: join(captureRoot, 'scriptless-print-quality-continuation.png') });
         }
-        const fault = await injectStyle(page, '@media print { .about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static)::details-content { content-visibility: hidden !important; } }');
+        const fault = await injectStyle(page, '@media print { .about-page :is(.about-folio-disclosure, .about-studio-counterpart)::details-content { content-visibility: hidden !important; } }');
         try { await assert.rejects(() => assertCompletePrint(page), /native content visibility/); }
         finally { await fault.evaluate(node => node.remove()); }
         await assertCompletePrint(page);

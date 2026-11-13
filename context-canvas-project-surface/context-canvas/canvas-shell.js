@@ -131,7 +131,7 @@
     kindlight.href = "https://kindlight.systems/";
     kindlight.setAttribute("aria-label", "Visit kindlight.systems");
     registry.appendChild(kindlight);
-    registry.appendChild(document.createTextNode(". This link leaves the Context Canvas."));
+    registry.appendChild(document.createTextNode(". This link leaves this site."));
 
     var network = document.createElement("p");
     var github = element("a", "", "GitHub");
@@ -156,7 +156,7 @@
         ),
       );
     }
-    network.appendChild(document.createTextNode(" These destinations are outside the Context Canvas."));
+    network.appendChild(document.createTextNode(" These links leave this site."));
     if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
     contact.classList.add("super-footer__contact");
     contact.setAttribute("data-context-canvas-contact", "");

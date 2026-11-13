@@ -18,6 +18,14 @@ const generatedBlock = [
   "          <!-- debrief-at-a-glance-projection:end -->",
 ].join("\n");
 
+test("genomic compact accounts retain abbreviation expansions in both receiving readings", async () => {
+  const root = new URL("../../context-canvas-project-surface/", import.meta.url);
+  for (const receiver of ["data/debrief-case-briefs.source.html", "context-canvas/debriefs.html", "context-canvas/genomic-viewer-replatforming.html"]) {
+    const source = await readFile(new URL(receiver, root), "utf8");
+    assert.match(source, /<abbr title="Google Web Toolkit">GWT<\/abbr>/u, `${receiver} explains GWT`);
+  }
+});
+
 test("Case Brief source admission accepts regular direct children", async t => {
   const root = await mkdtemp(join(tmpdir(), "case-brief-source-"));
   t.after(() => rm(root, { recursive: true, force: true }));

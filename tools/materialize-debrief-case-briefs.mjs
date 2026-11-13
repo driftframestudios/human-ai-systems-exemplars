@@ -271,6 +271,12 @@ function extractRoutes(catalogTree) {
 
 function validateSafeAttributes(node, route) {
   for (const [name, value] of node.attributes) {
+    if (name === "title" && node.tag === "abbr") {
+      if (typeof value !== "string" || !value.trim()) {
+        fail(`${route} contains an empty abbreviation title in its Case Brief projection`);
+      }
+      continue;
+    }
     if (name === "href" && node.tag === "a") {
       if (typeof value !== "string" || !fragmentPattern.test(value)) {
         fail(`${route} contains an unsupported or unsafe Case Brief link: ${JSON.stringify(value)}`);
@@ -295,6 +301,7 @@ function renderSafeNode(node, route, fragmentPrefix = route) {
   for (const [name, value] of node.attributes) {
     if (name === "href") attributes.push(`href="${escapeAttribute(fragmentPrefix + value)}"`);
     if (name === "class") attributes.push(`class="${escapeAttribute(value)}"`);
+    if (name === "title") attributes.push(`title="${escapeAttribute(decodeTextEntities(value))}"`);
   }
   const open = attributes.length > 0 ? `<${node.tag} ${attributes.join(" ")}>` : `<${node.tag}>`;
   if (voidElements.has(node.tag)) return open;

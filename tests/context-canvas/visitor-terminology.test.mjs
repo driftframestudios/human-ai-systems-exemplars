@@ -223,7 +223,7 @@ test("About distinguishes human decisions, model contributions and software cont
     assert.match(article, heading);
     for (const action of actions) assert.match(article, action);
   }
-  assert.match(html, /href="hiring-surfaces-talent-agent-intake\.html#amplified-hiring-reach"/u);
+  assert.match(html, /href="ai-systems\.html"/u, "About routes to the deeper AI Systems reading");
   assert.doesNotMatch(html, /\brooms?\b|\bviewlets?\b/iu);
 });
 
@@ -434,11 +434,11 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
   for (const route of routes) {
     const html = compactAccountByRoute(compactSource, route);
     assert.ok(html, `${route} should have one compact account`);
-    assert.match(
-      html,
-      /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served|was)\b[\s\S]*?<\/dd>/u,
-      route,
-    );
+    const scope = html.match(/<dt>Scope and role<\/dt>\s*<dd>([\s\S]*?)<\/dd>/u)?.[1];
+    assert.ok(scope, `${route} identifies the person's scope`);
+    assert.match(scope, route === 'genomic-viewer-replatforming.html'
+      ? /Owned most of the UX\/UI as Principal Product Designer &amp; Software Engineer III/u
+      : /\bI (?:worked|served|was)\b/u, route);
   }
 
   const scenarioRoutes = [
@@ -480,8 +480,8 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
   }
 
   const debriefs = await readCanvasFile("debriefs.html");
-  assert.match(debriefs, /These Debriefs turn lived work in regulated, high-consequence, and commercially constrained systems into\s+reusable cases/u);
-  assert.match(debriefs, /Each remains an example to\s+interpret in context/u);
+  assert.match(debriefs, /Each Debrief here separates business context, solution shaping, implementation mechanics, and what\s+remained unresolved/u);
+  assert.match(debriefs, /how my judgment actually operated under constraint/u);
   assert.doesNotMatch(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
 });
 
@@ -502,7 +502,7 @@ test("curated visitor prose states findings directly while citations carry prove
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
   ]);
   assert.match(about, /<title>Technology leadership portfolio \| Context Canvas<\/title>/u);
-  assert.match(about, reportedConsequenceColumnHeader);
+  assert.match(about, /<dt>What Changed<\/dt>/u, "About keeps outcomes in its concise folio records");
   assert.match(fieldInspection, /Global invariants and candidate performance targets become testable against a bounded corpus/u);
   assert.match(hiring, /Vendor descriptions reviewed in public material from 2025–2026/u);
 });

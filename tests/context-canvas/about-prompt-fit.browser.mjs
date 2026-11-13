@@ -18,7 +18,7 @@ const codeSelector = '#condition-prompt, #state-view, #schema-view';
 const captureRoot = resolve(import.meta.dirname, '../../.visual-runs/about-prompt-fit');
 const standalone = '/collaboration/about-prompt-conditions-explorer/index.html';
 let harness;
-before(async () => { await mkdir(captureRoot, { recursive: true }); harness = await createAboutContentFitHarness(); });
+before(async () => { await mkdir(captureRoot, { recursive: true }); harness = await createAboutContentFitHarness({ retainedPromptHost: true }); });
 after(async () => { await harness?.close(); });
 const session = (engine, options) => harness.session('prompt-conditions', engine, options);
 
@@ -58,7 +58,7 @@ async function assertTextFits(frame) {
 }
 
 for (const engine of Object.keys(engines)) {
-  test(`${engine}: five Prompt conditions retain meaning through fit, disclosure, reflow and late content`, { timeout: 90000 }, async () => {
+  test(`${engine}: retained Prompt host: five Prompt conditions retain meaning through fit, disclosure, reflow and late content`, { timeout: 90000 }, async () => {
     const observation = await session(engine);
     try {
       await fitted(observation);
@@ -121,7 +121,7 @@ for (const engine of Object.keys(engines)) {
     } finally { await observation.close(); }
   });
 
-  test(`${engine}: Prompt wheel reading stays with About and detects frame and nested-text capture`, { timeout: 90000 }, async () => {
+  test(`${engine}: retained Prompt host: Prompt wheel reading stays with About and detects frame and nested-text capture`, { timeout: 90000 }, async () => {
     const observation = await session(engine);
     try {
       await fitted(observation);
@@ -152,7 +152,7 @@ for (const engine of Object.keys(engines)) {
     finally { await recovered.close(); }
   });
 
-  test(`${engine}: two admitted instruments retain separate sizing channels and useful fallback`, { timeout: 90000 }, async () => {
+  test(`${engine}: retained Prompt host: two admitted instruments retain separate sizing channels and useful fallback`, { timeout: 90000 }, async () => {
     const observation = await session(engine);
     try {
       await fitted(observation);
@@ -190,7 +190,7 @@ for (const engine of Object.keys(engines)) {
     } finally { await fallback.close(); }
   });
 
-  test(`${engine}: Prompt keyboard, horizontal matrix, static and print readings remain complete`, { timeout: 90000 }, async () => {
+  test(`${engine}: retained Prompt host: Prompt keyboard, horizontal matrix, static and print readings remain complete`, { timeout: 90000 }, async () => {
     const observation = await session(engine, { viewport: { width: 390, height: 900 }, reducedMotion: 'reduce' });
     try {
       await fitted(observation);

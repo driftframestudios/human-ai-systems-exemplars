@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Context Canvas external public-reference bindings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "id", "version", "bindings"],
+  "properties": {
+    "$schema": {"const": "./context-canvas-external-bindings.schema.json"},
+    "id": {"const": "context-canvas.external-public-reference-bindings.v1"},
+    "version": {"const": "1"},
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["token", "url", "allowed_carriers", "selection_basis"],
+        "properties": {
+          "token": {"type": "string", "pattern": "^PUBLIC_URL_EXTERNAL_[A-Z0-9]+(?:_[A-Z0-9]+)*$"},
+          "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+          "allowed_carriers": {
+            "type": "array", "minItems": 1, "uniqueItems": true,
+            "items": {"enum": ["anchor", "license", "video_source", "video_poster"]}
+          },
+          "selection_basis": {"type": "string", "minLength": 1, "maxLength": 2048}
+        }
+      }
+    }
+  }
+}

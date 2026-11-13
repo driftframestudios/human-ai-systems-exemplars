@@ -17,6 +17,7 @@ import test from "node:test";
 import {
   PUBLIC_ASSET_NAMESPACE,
   PUBLIC_AUTHOR_PROFILE_KEY,
+  PUBLIC_EXTERNAL_NAMESPACE,
   PUBLIC_IFRAME_NAMESPACE,
   PUBLIC_PAGE_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
@@ -24,6 +25,8 @@ import {
   PUBLIC_SCHEMA_NAMESPACE,
   PUBLIC_SKILL_NAMESPACE,
   inspectPublicReferenceSource,
+  inspectPublicReferenceHtml,
+  materializePublicReferenceHtml,
   isPublicReferencePathWithin,
   materializePublicReferences,
   resolvePublicReferenceDestinations,
@@ -36,6 +39,10 @@ import {
   DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
   loadPublicRouteReferenceBinding,
 } from "../../tools/public-route-reference-contract.mjs";
+import {
+  loadExternalReferenceBinding,
+  parseExternalReferenceBinding,
+} from "../../tools/external-reference-contract.mjs";
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
@@ -1188,6 +1195,7 @@ test("the repository source materializes from discovered keys without frozen rou
   for (const key of inventory.keys) {
     assert.equal(
       key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
+        key.startsWith(PUBLIC_EXTERNAL_NAMESPACE) ||
         key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
         key.startsWith(PUBLIC_PAGE_NAMESPACE) ||
         key.startsWith(PUBLIC_ASSET_NAMESPACE) ||
@@ -1302,6 +1310,15 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.equal(marker.registry_reference.bindingCount, registryKeys.length);
   assert.equal(marker.registry_reference.atlas.referenceVersion, "0.2.1");
   assert.equal(marker.route_reference.bindingCount, routeKeys.length);
+  const externalKeys = [...inventory.keys].filter((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE));
+  assert.equal(marker.external_reference.bindingCount, externalKeys.length);
+  const generatedAbout = await readFile(join(outputRoot, 'context-canvas/index.html'), 'utf8');
+  const externalReference = await loadExternalReferenceBinding({ requiredKeys: externalKeys });
+  for (const route of externalReference.routes) {
+    assert.ok(generatedAbout.includes(route.url), `${route.token} reaches the generated About page`);
+  }
+  assert.match(generatedAbout, /data-video-poster="https:\/\/vik\.guru\/v1-cdn\/video\//);
+  assert.match(generatedAbout, /<source src="https:\/\/vik\.guru\/v1-cdn\/video\//);
 
   const generatedShell = await readFile(
     join(outputRoot, "context-canvas/canvas-shell.js"),
@@ -1327,4 +1344,46 @@ test("the repository source materializes from discovered keys without frozen rou
     new RegExp(`href=["']${escapedLocalFallback}["']`),
     "Registry-link materialization preserves the repository-local full view",
   );
+});
+
+test('external selections retain their declared carriers and reject build overrides', async () => {
+  const external = await loadExternalReferenceBinding();
+  const html = `<link rel="license" href="{{PUBLIC_URL_EXTERNAL_APACHE_LICENSE}}">
+    <a href="{{PUBLIC_URL_EXTERNAL_GITHUB_PROFILE}}">Source code</a>
+    <video poster="fallback.jpg" data-video-poster="{{PUBLIC_URL_EXTERNAL_ABOUT_SEQUENCE_POSTER}}">
+      <source type="video/mp4" src="{{PUBLIC_URL_EXTERNAL_ABOUT_SEQUENCE_VIDEO}}">
+    </video>`;
+  const inspection = inspectPublicReferenceHtml(html, 'about', null, null, external.destinations);
+  const destinations = await resolvePublicReferenceDestinations(inspection.keys, {
+    configurationSource: '', environment: {}, externalDestinations: external.destinations,
+  });
+  const result = materializePublicReferenceHtml(html, destinations, 'about', null, null, external.destinations);
+  assert.match(result, /href="https:\/\/github\.com\/driftframestudios"/);
+  assert.match(result, /poster="fallback.jpg"/);
+  assert.doesNotMatch(result, /\{\{PUBLIC_URL/);
+  assert.throws(() => inspectPublicReferenceHtml(
+    '<link rel="license" href="{{PUBLIC_URL_EXTERNAL_GITHUB_PROFILE}}">',
+    'about', null, null, external.destinations,
+  ), /not selected for license/);
+  await assert.rejects(resolvePublicReferenceDestinations(inspection.keys, {
+    configurationSource: '', environment: { PUBLIC_URL_EXTERNAL_GITHUB_PROFILE: 'https://other.example/' },
+    externalDestinations: external.destinations,
+  }), { code: 'PUBLIC_REFERENCE_EXTERNAL_OVERRIDE' });
+});
+
+test('external binding requires exact keys, public destinations and distinct tokens', () => {
+  const binding = {
+    $schema: './context-canvas-external-bindings.schema.json',
+    id: 'context-canvas.external-public-reference-bindings.v1', version: '1',
+    bindings: [{ token: 'PUBLIC_URL_EXTERNAL_EXAMPLE', url: 'https://example.org/reading',
+      allowed_carriers: ['anchor'], selection_basis: 'Reviewed public reading.' }],
+  };
+  const parse = (value = binding, options) => parseExternalReferenceBinding(Buffer.from(JSON.stringify(value)), options);
+  assert.equal(parse(binding, { requiredKeys: ['PUBLIC_URL_EXTERNAL_EXAMPLE'] }).destinations.get('PUBLIC_URL_EXTERNAL_EXAMPLE'),
+    'https://example.org/reading');
+  assert.throws(() => parse(binding, { requiredKeys: [] }), /covers the authored semantic tokens exactly/);
+  assert.throws(() => parse({ ...binding, bindings: [...binding.bindings, ...binding.bindings] }), /unique semantic token/);
+  for (const url of ['http://example.org/', 'https://person:secret@example.org/', 'https://example.org/?token=value']) {
+    assert.throws(() => parse({ ...binding, bindings: [{ ...binding.bindings[0], url }] }), /normalized public HTTPS/);
+  }
 });
