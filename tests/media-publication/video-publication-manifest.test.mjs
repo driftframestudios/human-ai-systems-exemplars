@@ -3,6 +3,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const manifestPath = resolve(
@@ -63,6 +67,7 @@ function assertReleaseStanding(value, label) {
 
 test("the bounded video manifest binds each carrier to one semantic family and visitor receiver", async () => {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  const sourceRouteAuthority = await loadSourceRouteAuthority();
   assert.equal(manifest.id, "media-publication.video-families.v0.1");
   assert.equal(manifest.standing, "bounded_publication_descriptor");
   assert.equal(manifest.public_origin, "https://vik.guru");
@@ -228,9 +233,11 @@ test("the bounded video manifest binds each carrier to one semantic family and v
       `${identity} visitor page`,
     );
     const page = await readFile(resolve(repositoryRoot, visitorPage), "utf8");
+    const publicPage = page.replace(/\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\}/gu,
+      (token) => resolveSourceRouteValue(token, sourceRouteAuthority));
     for (const carrier of Object.values(family.carriers)) {
       assert.ok(
-        page.includes(new URL(carrier.public_path, manifest.public_origin).href),
+        publicPage.includes(new URL(carrier.public_path, manifest.public_origin).href),
         `${identity} page references ${carrier.public_path}`,
       );
     }
