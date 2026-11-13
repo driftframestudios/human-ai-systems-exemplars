@@ -205,7 +205,7 @@ for (const engine of Object.keys(engines)) {
     try {
       await fitted(observation);
       const nextLinkKey = engine === 'webkit' ? 'Alt+Tab' : 'Tab';
-      await observation.page.locator('.about-field--prompt-conditions .about-evidence-note a').last().focus();
+      await observation.page.locator('section[aria-labelledby="method-title"] > div > p a').last().focus();
       await observation.page.keyboard.press(nextLinkKey);
       // Firefox may expose the child document as an intermediate tab stop.
       if (await observation.frame.evaluate(() => document.activeElement === document.body)) {

@@ -44,6 +44,8 @@ const assetInventoryRelativePath =
   "deployment/cpanel/asset-inventory.json";
 const registryBindingRelativePath =
   "deployment/public-references/context-canvas-registry-bindings.v1.json";
+const externalBindingRelativePath =
+  "deployment/public-references/context-canvas-external-bindings.v1.json";
 const registryDataUseRelativePath =
   "deployment/public-references/registry-atlas-data-use.txt";
 const routeBindingRelativePath =
@@ -2315,6 +2317,77 @@ test("tracked Registry binding owns Registry routes while external configuration
         aggregatePlan: aggregateFixture(),
       }),
       /tracked Registry binding owns PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("tracked external references materialize their reviewed destination and preserve input-only authority", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const publication = await enableTrackedRegistryPublicationFixture(fixture);
+    const token = "PUBLIC_URL_EXTERNAL_REFERENCE_GUIDE";
+    const destination = "https://reference.example.test/guide";
+    const bindingBytes = Buffer.from(`${JSON.stringify({
+      $schema: "./context-canvas-external-bindings.schema.json",
+      id: "context-canvas.external-public-reference-bindings.v1",
+      version: "1",
+      bindings: [{
+        token,
+        url: destination,
+        allowed_carriers: ["anchor"],
+        selection_basis: "The guide supports the visitor's next reading step.",
+      }],
+    }, null, 2)}\n`);
+    await writeFile(path.join(fixture.root, externalBindingRelativePath), bindingBytes);
+    const sourcePath = path.join(fixture.root, publication.canvasRoot, "index.html");
+    await writeFile(
+      sourcePath,
+      `${await readFile(sourcePath, "utf8")}\n<a href="{{${token}}}">Reference guide</a>\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Accept reviewed external reference");
+    const options = {
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    };
+    const plan = await createProductionProjectionPlan(options);
+    const html = plan.outputFiles.get("primary-public/index.html").toString("utf8");
+    assert.ok(html.includes(`<a href="${destination}">Reference guide</a>`));
+    assert.ok(!html.includes(`{{${token}}}`));
+    assert.deepEqual(plan.manifest.inputs.public_references.tracked_external, {
+      keys: [token],
+      binding: {
+        source_path: externalBindingRelativePath,
+        git_blob_id: await git(fixture.root, ["rev-parse", `HEAD:${externalBindingRelativePath}`]),
+        sha256: sha256(bindingBytes),
+        id: "context-canvas.external-public-reference-bindings.v1",
+        version: "1",
+        binding_count: 1,
+      },
+    });
+    assert.deepEqual(
+      plan.manifest.inputs.public_references.external_configuration.keys,
+      [publication.profileKey],
+    );
+    assert.ok(!JSON.stringify(plan.manifest).includes(destination));
+    assert.ok(
+      [...plan.outputFiles.keys()].every((outputPath) =>
+        !outputPath.includes("deployment/public-references")),
+      "binding inputs remain outside visitor artifacts",
+    );
+
+    await writeFile(
+      path.join(fixture.root, ".env.public"),
+      `${publication.externalConfiguration}${token}=https://alternate.example.test/guide\n`,
+      "utf8",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan(options),
+      /tracked external binding owns its destinations/u,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });

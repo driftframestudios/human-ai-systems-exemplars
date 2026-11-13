@@ -24,6 +24,7 @@ before(async () => {
   // About retired this exhibit. This explicit host exercises the retained adapter
   // and its CSS/runtime without restoring it to the visitor's landing page.
   fixture = about.replace('<main id="main">', `<main id="main"><section class="about-field about-field--tiffany" aria-labelledby="deliver-title"><div class="about-reading about-reading--wide"><h2 id="deliver-title">Retained comparison fixture</h2>${createAboutHeatmapProjection(source)}<p><a href="../../collaboration/about-heatmap-comparison/index.html">Open the comparison</a></p></div></section>`);
+  fixture = fixture.replace('</head>', '<script src="about-heatmap.js" defer></script></head>');
   server = await startStaticServer();
   for (const name of names) browsers.set(name, await engines[name].launch());
 });

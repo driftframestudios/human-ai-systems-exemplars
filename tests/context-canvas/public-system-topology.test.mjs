@@ -3,6 +3,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
+
+const routeAuthority = await loadSourceRouteAuthority();
+const publicValue = value => resolveSourceRouteValue(value, routeAuthority);
 
 const canvasRoot = resolve(
   import.meta.dirname,
@@ -58,8 +62,17 @@ function bodyLinkDestinations(source) {
 }
 
 function assertPublicTopology(about, aiSystems, limsDebrief) {
+  const [aboutRecord] = jsonLd(about);
+  assert.equal(findNamedItemList(aboutRecord, "Public collaboration system"), null,
+    "About routes to the collection owned by AI Systems rather than duplicating it");
+  assert.deepEqual(aboutRecord.hasPart.map(part => [part.name, publicValue(part.url)]), [
+    ['Cross-Functional Investment Studio', 'https://vik.guru/#studio-title'],
+    ['AI and ML Method Gallery', 'https://iframes.vik.guru/v1/canvas/ai-method-gallery/'],
+  ], 'About describes the two prototypes retained in its reading');
+  assert.ok(aboutRecord.significantLink.map(publicValue).includes('https://vik.guru/ai-systems.html'));
+  assert.match(jsonLd(aiSystems)[0].description, /public collaboration system/iu,
+    'AI Systems metadata identifies its expanded public collection');
   const surfaces = [
-    ["index.html", "Public collaboration system", about],
     ["ai-systems.html", "Public system topology", aiSystems],
   ];
 

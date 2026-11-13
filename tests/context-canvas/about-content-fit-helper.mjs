@@ -19,9 +19,12 @@ const retainedStudio = { label: 'Retained Studio chapters', path: '/v1/canvas/in
 
 // These About receivers share their packaged transport, opaque sandbox,
 // telemetry, geometry and cleanup mechanics. Cases retain content expectations.
-export async function createAboutContentFitHarness({ retainedStudioHost = false } = {}) {
+export async function createAboutContentFitHarness({ retainedStudioHost = false, retainedPromptHost = false } = {}) {
   const browsers = new Map();
-  const hostedReceivers = retainedStudioHost ? { ...receivers, 'studio-chapters': retainedStudio } : receivers;
+  const hostedReceivers = { gallery: receivers.gallery,
+    ...(retainedPromptHost ? { 'prompt-conditions': receivers['prompt-conditions'] } : {}),
+    ...(retainedStudioHost ? { 'studio-chapters': retainedStudio } : {}),
+  };
   let parentServer, childServer, temporaryRoot;
   async function close() {
     try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
@@ -35,6 +38,12 @@ export async function createAboutContentFitHarness({ retainedStudioHost = false 
   }
   try {
     let parentHtml = await readFile(join(root, aboutPath), 'utf8');
+    if (retainedPromptHost) {
+      const fixture = await readFile(new URL('./fixtures/retained-prompt-host.html', import.meta.url), 'utf8');
+      const gallery = '<section class="about-field about-field--ledger" aria-labelledby="method-title">';
+      assert.equal(parentHtml.split(gallery).length, 2, 'the retained host precedes the current Gallery reading');
+      parentHtml = parentHtml.replace(gallery, fixture + gallery);
+    }
     // The closed cartography object has a separate static-reading owner. Keep
     // its DOM while limiting these fit journeys to their named child packages.
     parentHtml = parentHtml.replace('data="../img/plot/about_prompt_conditions_cartography.svg"',

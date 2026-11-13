@@ -86,7 +86,7 @@ test("the current Debrief routes expose truthful navigation and progressive enha
   assert.match(catalog, /<a class="skip-link" href="#main-content">/u);
   assert.match(catalog, /<nav aria-label="Primary">/u);
   assert.match(catalog, /<main id="main-content"[^>]*tabindex="-1">/u);
-  assert.match(catalog, /data-debrief-preview hidden>/u);
+  assert.match(catalog, /data-debrief-preview\s+hidden>/u);
   assert.match(enhancement, /preview\.hidden = false;\s*setSelections/u);
 });
 

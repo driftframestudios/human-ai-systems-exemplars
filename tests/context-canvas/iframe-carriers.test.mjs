@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import test from "node:test";
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
+
+const routeAuthority = await loadSourceRouteAuthority();
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const visitorSurfaceRoot = join(
@@ -100,12 +103,6 @@ const expectedCarrierInventory = [
     "context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html",
     "https://iframes.vik.guru/v1/canvas/talent-agent-intake/",
     "Interactive two-reader talent-intake projection field",
-    "lazy",
-  ],
-  [
-    primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/prompt-conditions-explorer/",
-    "Prompt Conditions Routing Explorer",
     "lazy",
   ],
   [
@@ -308,7 +305,7 @@ async function discoverVisitorCarriers() {
         ownerPath: path,
         referrerpolicy: attributeValue(tag, "referrerpolicy"),
         sandbox: attributeValue(tag, "sandbox"),
-        src: attributeValue(tag, "src"),
+        src: resolveSourceRouteValue(attributeValue(tag, "src"), routeAuthority),
         tag,
         title: attributeValue(tag, "title"),
       });
@@ -346,13 +343,13 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
     expectedCarrierInventory,
     "the authored owner, route, title, loading, and source order stay explicit",
   );
-  assert.equal(carriers.length, 26, "the visitor source owns 26 iframe occurrences");
-  assert.equal(new Set(carriers.map(({ src }) => src)).size, 23, "the carriers use 23 routes");
+  assert.equal(carriers.length, 25, "the visitor source owns 25 iframe occurrences");
+  assert.equal(new Set(carriers.map(({ src }) => src)).size, 22, "the carriers use 22 routes");
   assert.equal(new Set(carriers.map(({ owner }) => owner)).size, 18, "18 visitor files own carriers");
   const canvasCarriers = carriers.filter(({ src }) =>
     src.startsWith("https://iframes.vik.guru/v1/canvas/"));
-  assert.equal(canvasCarriers.length, 17, "the Canvas manifest owns 17 carrier occurrences");
-  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 15, "the Canvas carriers use 15 routes");
+  assert.equal(canvasCarriers.length, 16, "the Canvas manifest owns 16 carrier occurrences");
+  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 14, "the Canvas carriers use 14 routes");
   assert.deepEqual(
     routeCountEntries(carriers).filter(([, count]) => count > 1),
     expectedDuplicateRouteCounts,
@@ -480,7 +477,7 @@ test("the retained cobalt exemplar keeps its heatmap and parity for shared prima
       ["investment-studio-chapters", "collaboration/about-investment-studio-chapters/index.html"],
     ], "both established standalone Studio route owners remain available");
   assert.equal(primary.some(({ src }) => src.endsWith('/heatmap-comparison/')), false,
-    "About receives the heatmap as native content");
+    "the concise About leaves the heatmap with its standalone owner");
   for (const exemplar of shared) {
     const twin = primary.find(({ src }) => src === exemplar.src);
     assert.ok(twin, `${exemplar.src} has a primary-index twin`);

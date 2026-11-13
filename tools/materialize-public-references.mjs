@@ -39,6 +39,12 @@ import {
   isPublicRouteReferenceDestinationAuthority,
   loadPublicRouteReferenceBinding,
 } from "./public-route-reference-contract.mjs";
+import {
+  DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH,
+  ExternalReferenceContractError,
+  isExternalReferenceDestinationAuthority,
+  loadExternalReferenceBinding,
+} from "./external-reference-contract.mjs";
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -67,6 +73,7 @@ export const PUBLIC_PAGE_NAMESPACE = "PUBLIC_URL_PAGE_";
 export const PUBLIC_ASSET_NAMESPACE = "PUBLIC_URL_ASSET_";
 export const PUBLIC_SCHEMA_NAMESPACE = "PUBLIC_URL_SCHEMA_";
 export const PUBLIC_SKILL_NAMESPACE = "PUBLIC_URL_SKILL_";
+export const PUBLIC_EXTERNAL_NAMESPACE = "PUBLIC_URL_EXTERNAL_";
 export const PUBLIC_AUTHOR_PROFILE_KEY =
   "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
 
@@ -79,6 +86,7 @@ const PUBLIC_REFERENCE_NAMESPACES = [
   PUBLIC_ASSET_NAMESPACE,
   PUBLIC_SCHEMA_NAMESPACE,
   PUBLIC_SKILL_NAMESPACE,
+  PUBLIC_EXTERNAL_NAMESPACE,
 ];
 const PUBLIC_ROUTE_NAMESPACES = [
   PUBLIC_IFRAME_NAMESPACE,
@@ -95,7 +103,7 @@ const PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH = posix.join(
   "context-canvas",
   "canvas-shell.js",
 );
-const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+$/;
+const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL|EXTERNAL)_[A-Z0-9_]+$/;
 const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
 const PUBLIC_KEY_LOOKALIKE = /PUBLIC_URL(?:_[A-Za-z0-9]+)+/;
@@ -359,7 +367,7 @@ function anchorTokenCarriers(html) {
   const carriers = [];
   for (const match of html.matchAll(/<a\b[^>]*>/gi)) {
     const tag = match[0];
-    const href = /\bhref\s*=\s*(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}\1/i.exec(tag);
+    const href = /\shref\s*=\s*(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL|IFRAME|EXTERNAL)_[A-Z0-9_]+)\}\}\1/i.exec(tag);
     if (href) carriers.push({ key: href[2], tag, carrier: "anchor" });
   }
   return carriers;
@@ -423,6 +431,39 @@ function metadataTokenCarriers(html) {
 
 function usesTrackedRouteAuthority(key) {
   return PUBLIC_ROUTE_NAMESPACES.some((namespace) => key.startsWith(namespace));
+}
+
+function externalAttributeCarriers(html) {
+  const carriers = [];
+  const profiles = {
+    link: { attribute: "href", carrier: "license" },
+    source: { attribute: "src", carrier: "video_source" },
+    video: { attribute: "data-video-poster", carrier: "video_poster" },
+  };
+  for (const match of html.matchAll(/<(link|source|video)\b[^>]*>/gi)) {
+    const tag = match[0];
+    const profile = profiles[match[1].toLowerCase()];
+    const values = attributeMatches(tag, profile.attribute);
+    const token = /^\{\{(PUBLIC_URL_EXTERNAL_[A-Z0-9_]+)\}\}$/.exec(values[0]?.[2] ?? "");
+    if (token === null) continue;
+    if (values.length !== 1 ||
+        (profile.carrier === "license" && attributeMatches(tag, "rel")[0]?.[2] !== "license") ||
+        (profile.carrier === "video_source" && attributeMatches(tag, "type")[0]?.[2] !== "video/mp4")) {
+      throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_CARRIER",
+        `${token[1]} needs its declared license or video carrier`);
+    }
+    carriers.push({ key: token[1], tag, ...profile });
+  }
+  return carriers;
+}
+
+function assertExternalCarrier(authority, key, carrier, safePath) {
+  if (!key.startsWith(PUBLIC_EXTERNAL_NAMESPACE) || authority === null) return;
+  if (!isExternalReferenceDestinationAuthority(authority)) {
+    throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_BINDING",
+      "external references require the immutable authority returned by their binding contract");
+  }
+  authority.assertTokenCarrier(key, carrier, safePath);
 }
 
 function assertTrackedRouteCarrier(authority, key, carrier, safePath) {
@@ -635,6 +676,7 @@ export function inspectPublicReferenceHtml(
   safePath = "Context Canvas HTML",
   iframeCarrierPolicies = null,
   routeDestinations = null,
+  externalDestinations = null,
 ) {
   if (containsDirectNotionPageUrl(html)) {
     throw new PublicReferenceContractError(
@@ -655,12 +697,14 @@ export function inspectPublicReferenceHtml(
 
   const anchors = anchorTokenCarriers(html);
   const metadataCarriers = metadataTokenCarriers(html);
+  const externalAttributes = externalAttributeCarriers(html);
   const iframeCarriers = iframeTokenCarriers(html, safePath);
   const jsonBlocks = tokenBearingJsonBlocks(html);
   const jsonCarriers = jsonBlocks.flatMap((block) => block.carriers);
   const carrierCount =
     anchors.length +
     metadataCarriers.length +
+    externalAttributes.length +
     iframeCarriers.length +
     jsonCarriers.length;
 
@@ -672,12 +716,16 @@ export function inspectPublicReferenceHtml(
   }
 
   for (const carrier of anchors) {
+    assertExternalCarrier(externalDestinations, carrier.key, carrier.carrier, safePath);
     assertTrackedRouteCarrier(
       routeDestinations,
       carrier.key,
       carrier.carrier,
       safePath,
     );
+  }
+  for (const carrier of externalAttributes) {
+    assertExternalCarrier(externalDestinations, carrier.key, carrier.carrier, safePath);
   }
   for (const carrier of metadataCarriers) {
     assertTrackedRouteCarrier(
@@ -696,6 +744,7 @@ export function inspectPublicReferenceHtml(
     );
   }
   for (const carrier of jsonCarriers) {
+    assertExternalCarrier(externalDestinations, carrier.key, "jsonld", safePath);
     assertTrackedRouteCarrier(
       routeDestinations,
       carrier.key,
@@ -745,7 +794,7 @@ export function inspectPublicReferenceHtml(
   // carriers retain the stricter paired iframe/full-view contract above.
 
   const withoutExactTokens = html.replace(
-    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+\}\}/g,
+    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL|EXTERNAL)_[A-Z0-9_]+\}\}/g,
     "",
   );
   if (withoutExactTokens.includes("{{PUBLIC_URL")) {
@@ -782,6 +831,7 @@ export function inspectPublicReferenceHtml(
       (carrier) => carrier.tagName === "iframe",
     ).length,
     metadataCount: metadataCarriers.length,
+    externalAttributeCount: externalAttributes.length,
     jsonLdCount: jsonCarriers.length,
   };
 }
@@ -1249,6 +1299,7 @@ export async function resolvePublicReferenceDestinations(
     configurationSource,
     registryDestinations,
     routeDestinations,
+    externalDestinations,
   } = {},
 ) {
   if (
@@ -1268,6 +1319,10 @@ export async function resolvePublicReferenceDestinations(
       "PUBLIC_REFERENCE_ROUTE_BINDING",
       "typed public routes must use the immutable authority returned by the route binding contract",
     );
+  }
+  if (externalDestinations !== undefined && !isExternalReferenceDestinationAuthority(externalDestinations)) {
+    throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_BINDING",
+      "external references require the immutable authority returned by their binding contract");
   }
   if (configurationSource !== undefined && typeof configurationSource !== "string") {
     throw new PublicReferenceContractError(
@@ -1351,6 +1406,12 @@ export async function resolvePublicReferenceDestinations(
   }
 
   const resolved = new Map();
+  if (externalDestinations !== undefined &&
+      [...assignmentInfo.assignments, ...Object.keys(environment)]
+        .some((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE))) {
+    throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_OVERRIDE",
+      "the tracked external binding owns its destinations; update that binding instead of build settings");
+  }
   for (const key of [...keys].sort()) {
     const usesRegistryBinding =
       registryDestinations !== undefined &&
@@ -1363,6 +1424,8 @@ export async function resolvePublicReferenceDestinations(
       ? registryDestinations.get(key)
       : usesRouteBinding
         ? routeDestinations.get(key)
+      : externalDestinations !== undefined && key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)
+        ? externalDestinations.get(key)
       : processValue === undefined
         ? fileValues[key]
         : processValue;
@@ -1413,21 +1476,24 @@ export function materializePublicReferenceHtml(
   safePath = "Context Canvas HTML",
   iframeCarrierPolicies = null,
   routeDestinations = null,
+  externalDestinations = null,
 ) {
   const expected = inspectPublicReferenceHtml(
     html,
     safePath,
     iframeCarrierPolicies,
     routeDestinations,
+    externalDestinations,
   );
   let anchorCount = 0;
   let iframeCount = 0;
   let metadataCount = 0;
   let jsonLdCount = 0;
+  let externalAttributeCount = 0;
 
   let materialized = html.replace(/<a\b[^>]*>/gi, (tag) =>
     tag.replace(
-      /(\bhref\s*=\s*)(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}\2/i,
+      /(\shref\s*=\s*)(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL|IFRAME|EXTERNAL)_[A-Z0-9_]+)\}\}\2/i,
       (carrier, prefix, quote, key) => {
         const value = destinations.get(key);
         if (value === undefined) {
@@ -1441,6 +1507,19 @@ export function materializePublicReferenceHtml(
       },
     ),
   );
+
+  materialized = materialized.replace(/<(link|source|video)\b[^>]*>/gi, (tag) => {
+    for (const carrier of externalAttributeCarriers(tag)) {
+      const value = destinations.get(carrier.key);
+      if (value === undefined) {
+        throw new PublicReferenceContractError("PUBLIC_REFERENCE_VALUE_MISSING",
+          `${carrier.key} needs an approved destination before ${safePath} can materialize`);
+      }
+      externalAttributeCount += 1;
+      tag = replaceHtmlAttribute(tag, carrier.attribute, value);
+    }
+    return tag;
+  });
 
   materialized = materialized.replace(
     /<(link|meta)\b[^>]*>/gi,
@@ -1505,7 +1584,7 @@ export function materializePublicReferenceHtml(
     (script, open, _quote, body, close) => {
       if (!body.includes("PUBLIC_URL")) return script;
       const transformed = body.replace(
-        /"\{\{(PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}"/g,
+        /"\{\{(PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL|EXTERNAL)_[A-Z0-9_]+)\}\}"/g,
         (carrier, key) => {
           const value = destinations.get(key);
           if (value === undefined) {
@@ -1540,6 +1619,7 @@ export function materializePublicReferenceHtml(
     anchorCount !== expected.anchorCount ||
     iframeCount !== expected.iframeCount ||
     metadataCount !== expected.metadataCount ||
+    externalAttributeCount !== expected.externalAttributeCount ||
     jsonLdCount !== expected.jsonLdCount
   ) {
     throw new PublicReferenceContractError(
@@ -1795,6 +1875,7 @@ export async function materializePublicReferences({
   let inventory;
   let registryReference = null;
   let routeReference = null;
+  let externalReference = null;
 
   try {
     await cp(source, stagedOutput, {
@@ -1823,6 +1904,10 @@ export async function materializePublicReferences({
         path: DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
         requiredKeys: routeKeys,
       });
+      externalReference = await loadExternalReferenceBinding({
+        path: DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH,
+        requiredKeys: [...inventory.keys].filter((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)),
+      });
     }
     const destinations = await resolvePublicReferenceDestinations(
       inventory.keys,
@@ -1831,6 +1916,7 @@ export async function materializePublicReferences({
         environment,
         registryDestinations: registryReference?.destinations,
         routeDestinations: routeReference?.destinations,
+        externalDestinations: externalReference?.destinations,
       },
     );
     const routeProfiles = await loadIframeRouteProfiles(
@@ -1849,6 +1935,7 @@ export async function materializePublicReferences({
         record.safePath,
         iframeCarrierPolicies,
         routeReference?.destinations ?? null,
+        externalReference?.destinations ?? null,
       );
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }
@@ -1899,6 +1986,12 @@ export async function materializePublicReferences({
                   ...routeReference.receipt,
                 },
               }),
+          ...(externalReference === null ? {} : {
+            external_reference: {
+              binding_path: "deployment/public-references/context-canvas-external-bindings.v1.json",
+              ...externalReference.receipt,
+            },
+          }),
         },
         null,
         2,
@@ -1920,6 +2013,9 @@ export async function materializePublicReferences({
         "PUBLIC_REFERENCE_ROUTE_BINDING",
         error.message,
       );
+    }
+    if (error instanceof ExternalReferenceContractError) {
+      throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_BINDING", error.message);
     }
     if (
       error instanceof PublicReferenceContractError ||
@@ -1965,6 +2061,7 @@ export async function materializePublicReferences({
     keys: [...inventory.keys].sort(),
     registryReference: registryReference?.receipt ?? null,
     routeReference: routeReference?.receipt ?? null,
+    externalReference: externalReference?.receipt ?? null,
   };
 }
 

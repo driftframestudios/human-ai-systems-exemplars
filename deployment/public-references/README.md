@@ -1,6 +1,6 @@
 # Context Canvas public-reference bindings
 
-This directory carries two reviewed relationships from Context Canvas semantic
+This directory carries three reviewed relationships from Context Canvas semantic
 tokens to public receivers:
 
 - Registry bindings select public Enterprise Human-AI Practitioner Registry
@@ -8,9 +8,12 @@ tokens to public receivers:
 - Route bindings derive Context Canvas pages, assets, hosted instruments,
   schemas, and published skills from their repository-owned manifests and
   selections.
+- External bindings preserve author-selected public citations, source-code
+  destinations, the document license, and the accepted About video carriers.
+  These selections carry their own provenance separately from the dated Atlas.
 
 Authored source names the intended receiver. The tracked bindings establish its
-current destination. The materializer resolves both families and preserves one
+current destination. The materializer resolves these families and preserves one
 receipt for each authority in generated output.
 
 ## Authority and data boundary
@@ -56,15 +59,15 @@ query strings, fragments, and malformed or incomplete token coverage.
 ## Repository route authority
 
 [`context-canvas-route-bindings.v1.json`](context-canvas-route-bindings.v1.json)
-binds 167 semantic keys to repository-owned publication routes:
+binds semantic keys to repository-owned publication routes:
 
-| Authority class | Keys | Source authority |
-| --- | ---: | --- |
-| Page and fragment | 86 | cPanel primary route manifest and production origin configuration |
-| Asset | 39 | cPanel primary route manifest |
-| Hosted instrument | 5 | Canvas and Core iframe route manifests |
-| Schema | 2 | schema Worker publication manifest |
-| Skill | 35 | skill publication selection and schema companion selection |
+| Authority class | Source authority |
+| --- | --- |
+| Page and fragment | cPanel primary route manifest and production origin configuration |
+| Asset | cPanel primary route manifest |
+| Hosted instrument | Canvas and Core iframe route manifests |
+| Schema | schema Worker publication manifest |
+| Skill | skill publication selection and schema companion selection |
 
 The adjacent
 [`context-canvas-route-bindings.schema.json`](context-canvas-route-bindings.schema.json)
@@ -88,6 +91,27 @@ accepted Worker publication. The selection makes that handoff explicit while
 the currently accepted Worker manifest continues to describe its published
 closure.
 
+## Author-selected external references
+
+[`context-canvas-external-bindings.v1.json`](context-canvas-external-bindings.v1.json)
+owns the `PUBLIC_URL_EXTERNAL_*` selections used by About. Each record names its
+destination, selection basis, and allowed HTML carrier. Registry articles chosen
+after the accepted Atlas snapshot use this independent selection record until a
+reviewed Atlas update supplies their current identities. The existing Registry
+entrance continues to use its Atlas-backed key.
+
+External tokens carry complete anchor destinations, the license link, an MP4
+source, or the remote video poster setting. The local video poster and fallback
+remain authored assets. The contract accepts normalized public HTTPS routes and
+rejects credentials, parameters, duplicate tokens, unsupported carriers and
+build-setting overrides. The binding remains a build input outside the public
+artifact. Its digest accompanies the existing generation receipts.
+
+Hosted-instrument navigation can use an ordinary anchor token when its route
+binding allows `anchor`. The currently published Gallery iframe retains its
+manifest-owned `src` and permissions. The separate paired iframe/full-view
+protocol remains available for a future late-bound receiver.
+
 ## Data use and courteous retrieval
 
 The accepted package's exact notice is preserved in
@@ -104,7 +128,7 @@ Git history and static web delivery cannot control a scraper's behavior.
 
 Authored source discovers the required `PUBLIC_URL_REGISTRY_*`,
 `PUBLIC_URL_PAGE_*`, `PUBLIC_URL_ASSET_*`, `PUBLIC_URL_IFRAME_*`,
-`PUBLIC_URL_SCHEMA_*`, and `PUBLIC_URL_SKILL_*` tokens. The Registry binding
+`PUBLIC_URL_SCHEMA_*`, `PUBLIC_URL_SKILL_*`, and `PUBLIC_URL_EXTERNAL_*` tokens. The Registry binding
 selects one exact current Atlas identity for each Registry key. The route
 binding verifies every repository-published destination against its current
 manifest or selection owner. The ignored `.env.public` receiver carries only
@@ -133,7 +157,7 @@ reports all discovered findings in one pass so a repair cycle can address the
 complete observed set.
 
 The generated `.public-reference-materialization.json` format 3 marker records
-separate `registry_reference` and `route_reference` receipts. Each receipt binds
+separate `registry_reference`, `route_reference`, and `external_reference` receipts. Each receipt binds
 the tracked input digest and authority count while the generated HTML carries
 the resolved destinations.
 
