@@ -335,7 +335,7 @@ td details > summary {
 }
 
 :is(.table-scroll, .table-shell, .about-table-wrap, .framework-table-wrap) tr > :first-child {
-    background: var(--canvas-info, #92d1c0);
+    background: var(--canvas-paper-soft, #92d1c0);
     color: var(--canvas-ink-strong, #1a1a2e);
     box-shadow: .125rem 0 .25rem rgb(23 52 95 / .08);
     inset-inline-start: 0;
@@ -343,7 +343,7 @@ td details > summary {
 }
 
 :is(.table-scroll, .table-shell, .about-table-wrap, .framework-table-wrap) thead tr > :first-child {
-    background: var(--canvas-info, #92d1c0);
+    background: var(--canvas-paper-soft, #92d1c0);
     z-index: 2;
 }
 
