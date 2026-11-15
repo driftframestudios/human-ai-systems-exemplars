@@ -92,7 +92,7 @@
         "headline": "The Queue That Was Secretly a Status Machine",
         "alternativeHeadline": "How profile-scoped permissions and visible operational state guided an incremental genomic-viewer migration",
         "description": "A solution and implementation architecture debrief on how profile-scoped permissions, visible operational state, and incremental migration changed a genomic viewer.",
-        "dateModified": "2026-10-18",
+        "dateModified": "2026-11-15",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -146,7 +146,7 @@
       <header
         class="non-index-hero__container debrief-hero debrief-hero--palette genomic-viewer-hero"
       >
-        <p class="debrief-kicker">Design · Implementation · Q1 2019–Q1 2025</p>
+        <p class="debrief-kicker">Design · Implementation · Q1 2019 &amp; Q1 2023—2025</p>
         <h1 class="txt-h1 h1-spaced h1-hero">
           The Queue That Was Secretly a Status Machine
         </h1>
@@ -368,9 +368,9 @@
               </li>
               <li>
                 <a href="#changed-work-title"
-                  >III. Results and investment
+                  >III. Results
                   <div class="debrief-case-brief__track-state">
-                    Return on investment
+                    Returning on investment
                   </div></a
                 >
               </li>
@@ -378,7 +378,7 @@
                 <a href="#population-cartography-title"
                   >IV. User segments
                   <div class="debrief-case-brief__track-state">
-                    Who received the changed capability
+                    Modeling changed capabilities
                   </div></a
                 >
               </li>
@@ -2755,12 +2755,10 @@
               id="population-cartography-title"
               class="txt-h2 architecture-track-title"
             >
-              Population cartography — who receives the changed capability
+              Changed capabilities — who benefitted from the replatforming and how
             </h2>
             <p class="debrief-lead">
-              The same platform move changes different work for each population.
-              This table keeps each group's decision, receiving interface, and
-              remaining responsibility together.
+              The same replatforming changes different work for each population.
             </p>
             <figure class="table-figure table-figure--wide table-span-all">
               <div
@@ -2950,27 +2948,25 @@
               class="architecture-pair table-span-all cobalt-operating-field-cards"
             >
               <article>
-                <p class="architecture-pair__label">What moved</p>
+                <p class="architecture-pair__label">What the replatforming added</p>
                 <ul>
-                  <li>Profile and permission administration.</li>
-                  <li>Profile-scoped assignment and dashboard views.</li>
-                  <li>Advanced Search and modeled operational state.</li>
+                  <li>Profile and permission administration. Profile scoped-assignment.</li>
+                  <li>New dynamic operational dashboards. Novel interaction patterns for floating tool drawers and exploding tables.</li>
+                  <li>Redesigned specimen screens for viewing the biology of cancer and quality control metrics.</li>
                   <li>
-                    Case &amp; Automated Advice, the Floating Drawer, and
-                    in-case collaboration.
+                    Comprehensive error checking tooling that caught misconfigurations in cases before they were sent to downstream systems
+                    both in the UI and in the backend.
                   </li>
-                  <li>Shared component, scenario, and test foundations.</li>
+                  <li>Shared component, scenario, and test foundations. Multi-themed front-end implementations that could be shared with other engineering teams.</li>
                 </ul>
               </article>
               <article>
-                <p class="architecture-pair__label">What remained</p>
+                <p class="architecture-pair__label">What remained in the legacy stack</p>
                 <ul>
                   <li>
-                    The underlying specimen-overview, variant-detail,
-                    quality-control, and plugin capabilities largely remained
-                    legacy-owned.
+                    Java/Spring services continued to handle server-side authorization, DTOs and database mediation.
                   </li>
-                  <li>The Non-human capability remained uncertain.</li>
+                  <li>A new JSON adapter layer served the updated system. Underlying XML data brokerage continued to drive the analysis pipeline.</li>
                   <li>
                     Reporting capacity, lab-operations communication, cross-unit
                     coordination, and exception handling remained human work.
@@ -2980,9 +2976,10 @@
               </article>
             </div>
             <p class="debrief-lead">
-              The engagement moved one capability family cleanly and revealed
-              the rest of the operating system while keeping its remaining
-              ownership visible.
+              I was fortunate to work with a driven team who valued collaboration. If I were to do this again,
+              I would have focused on the difference between <code>null</code>, <code>undefined</code>, and genuinely empty
+              values and how they cascade down from Spring into a React application running on Node instead of having
+              it bite us before product launch.
             </p>
           </section>
         </div>
