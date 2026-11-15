@@ -20,10 +20,10 @@ const localRoute = resolve(
 const expectedCaseBriefFields = [
   "Situation and stakes",
   "Scope and role",
-  "Core constraint",
+  "Challenges",
   "Key decision",
-  "Outcome and evidence",
-  "Relevance now",
+  "Results",
+  "What this enables",
 ];
 const expectedEhrRoutes = [
   "ehr-discrete-genomic-result.html",
@@ -350,7 +350,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
 
     for (const article of projection.articles) {
       assert.deepEqual(
-        article.fieldLabels,
+        article.fieldLabels.map((label, index) => index === 1 ? label.split(" · ")[0] : label),
         expectedCaseBriefFields,
         `${article.route} should project the ordered six-field scan`,
       );
@@ -780,7 +780,7 @@ test("the Full Debrief index names every EHR reading from its route-specific nav
   assert.deepEqual(labels, [
     "SR1 · Partial The Discrete Result That Kept Arriving as a PDF",
     "SR2 · Pivoted Two Charts, One Result",
-    "SR3 · Successful Three Front Doors",
+    "SR3 · Successful Three Portals",
     "SR4 · Failed The Alert Nobody Clicked",
     "SR5 · Partial Re-platforming the Backbone",
   ]);

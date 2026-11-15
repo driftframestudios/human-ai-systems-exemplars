@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -27,14 +28,14 @@ function publicValue(value) {
 const expectedCaseBriefFields = [
   "Situation and stakes",
   "Scope and role",
-  "Core constraint",
+  "Challenges",
   "Key decision",
-  "Outcome and evidence",
-  "Relevance now",
+  "Results",
+  "What this enables",
 ];
 
 const formatLabels = new Map([
-  ["Case Brief", "case-brief"],
+  ["Summary", "case-brief"],
   ["Full Debrief", "full-debrief"],
   ["Article", "article"],
 ]);
@@ -55,8 +56,8 @@ const topicLabels = new Map([
 ]);
 
 async function readCanvasFile(path) {
-  const source = await readFile(resolve(canvasRoot, path), "utf8");
-  return path.endsWith(".html") ? source.replace(/\s+/gu, " ").replace(/>\s+</gu, "><") : source;
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
+  return source;
 }
 
 function attribute(tag, name) {
@@ -272,7 +273,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   assert.doesNotMatch(html, /Executive Summar(?:y|ies)/u);
   assert.match(
     html,
-    /every complete account remains available through an ordinary Full Debrief link\. The small catalog enhancement presents the scanning-friendly Case Brief mode when scripts run\./u,
+    /every complete account remains available through an ordinary Full Debrief link\. The small catalog enhancement presents the scanning-friendly Summary mode when scripts run\./u,
     "The no-script path should lead with the ordinary complete-reading route and describe the bounded enhancement accurately",
   );
   assert.match(script, /"executive-summary": \{ kind: "format", value: "case-brief" \}/u);
@@ -309,7 +310,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   for (const projection of projections) {
     assert.ok(projection.title, `${projection.route} should carry its source-owned heading`);
     assert.deepEqual(
-      definitionPairs(projection.html).map(pair => pair.label),
+      definitionPairs(projection.html).map((pair, index) => index === 1 ? pair.label.split(" · ")[0] : pair.label),
       expectedCaseBriefFields,
       `${projection.route} should carry the ordered six-field scanning contract`,
     );
@@ -357,7 +358,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
 test("The bounded compact-account source owns every catalogued Case Brief and Full Debrief At-a-Glance", async () => {
   const [catalog, compactSource] = await Promise.all([
     readCanvasFile("debriefs.html"),
-    readFile(compactSourcePath, "utf8"),
+    readSourceContract(compactSourcePath, "utf8"),
   ]);
   const caseBriefRoutes = Array.from(catalog.matchAll(/\bdata-case-brief-routes="([^"]+)"/gu))
     .flatMap(match => match[1].split(/\s+/u));
@@ -389,7 +390,7 @@ test("The bounded compact-account source owns every catalogued Case Brief and Fu
     const definitionList = source.match(/<dl\b[^>]*\bdata-case-brief-fields\b[^>]*>([\s\S]*?)<\/dl>/u);
     assert.ok(definitionList, `${route} should preserve the six-field compact account`);
     const labels = Array.from(definitionList[1].matchAll(/<dt>([^<]+)<\/dt>/gu), match => match[1]);
-    assert.deepEqual(labels, expectedCaseBriefFields, `${route} should carry the six-field Case Brief contract`);
+    assert.deepEqual(labels.map((label, index) => index === 1 ? label.split(" · ")[0] : label), expectedCaseBriefFields, `${route} should carry the six-field Case Brief contract`);
     assert.deepEqual(
       definitionPairs(projection),
       definitionPairs(definitionList[0]),
@@ -539,7 +540,7 @@ test("The bounded compact-account source owns every catalogued Case Brief and Fu
 test("Who To Believe keeps rounded outcome figures anchored to contemporaneous telemetry notes", async () => {
   const [html, compactSource] = await Promise.all([
     readCanvasFile("who-to-believe-reviews-platform.html"),
-    readFile(compactSourcePath, "utf8"),
+    readSourceContract(compactSourcePath, "utf8"),
   ]);
   const caseBrief = caseBriefSources(compactSource)
     .find(source => source.route === "who-to-believe-reviews-platform.html")?.html || "";
@@ -564,7 +565,7 @@ test("Choose Your Player distinguishes employer, client, project leadership, and
   const [fullDebrief, catalog, compactSource] = await Promise.all([
     readCanvasFile("choose-your-player-humatics.html"),
     readCanvasFile("debriefs.html"),
-    readFile(compactSourcePath, "utf8"),
+    readSourceContract(compactSourcePath, "utf8"),
   ]);
   const source = caseBriefSources(compactSource)
     .find(entry => entry.route === "choose-your-player-humatics.html")?.html || "";
@@ -581,10 +582,10 @@ test("Choose Your Player distinguishes employer, client, project leadership, and
 
 test("Debrief diagrams preserve protocol generation and genomic coding distinctions", async () => {
   const [pgx, fanout, frontDoors, discreteResult] = await Promise.all([
-    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_pgx_attention_failure_map.svg"), "utf8"),
-    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_two_charts_fanout_map.svg"), "utf8"),
-    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_canonical_front_doors_map.svg"), "utf8"),
-    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_discrete_result_contract_map.svg"), "utf8"),
+    readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_pgx_attention_failure_map.svg"), "utf8"),
+    readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_two_charts_fanout_map.svg"), "utf8"),
+    readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_canonical_front_doors_map.svg"), "utf8"),
+    readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_discrete_result_contract_map.svg"), "utf8"),
   ]);
 
   assert.match(pgx, /CDS Hooks 1\.x/u);
@@ -597,7 +598,7 @@ test("Debrief diagrams preserve protocol generation and genomic coding distincti
 
 test("Debrief recovery and data-provenance claims match their demonstrated behavior", async () => {
   const [inspectionFlow, limsDebrief, trialDebrief] = await Promise.all([
-    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg"), "utf8"),
+    readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg"), "utf8"),
     readCanvasFile("fmi-lims-eln-replatforming.html"),
     readCanvasFile("fmi-clinical-trial-coordination.html"),
   ]);
@@ -612,7 +613,7 @@ test("inspection readings present an ongoing state while preserving proposal and
   const [field, distributed, compactSource] = await Promise.all([
     readCanvasFile("field-inspection-harness-replatform.html"),
     readCanvasFile("distributed-inspection-harness.html"),
-    readFile(compactSourcePath, "utf8"),
+    readSourceContract(compactSourcePath, "utf8"),
   ]);
 
   assert.match(field, /Ongoing Site Reading · implementation-gated · July 2026 planning basis/u);

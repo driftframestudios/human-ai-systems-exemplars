@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
@@ -110,7 +111,7 @@ const sourceBearingRoleLanguageAllowlist = [
 ];
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function compactAccountByRoute(source, route) {
@@ -144,10 +145,10 @@ function packageSources(route) {
 
 async function currentPublicRoleLanguageSources() {
   const [primaryManifest, coreManifest, canvasManifest, contextCoreManifest] = await Promise.all([
-    readFile(primaryManifestPath, "utf8").then(JSON.parse),
-    readFile(coreIframeManifestPath, "utf8").then(JSON.parse),
-    readFile(canvasIframeManifestPath, "utf8").then(JSON.parse),
-    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(primaryManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(coreIframeManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(canvasIframeManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(contextCoreManifestPath, "utf8").then(JSON.parse),
   ]);
   const directCanvasPrefix = "context-canvas-project-surface/context-canvas/";
   const selectedVisitorSources = primaryManifest.files
@@ -406,7 +407,7 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
     ["who-to-believe-reviews-platform.html"],
   );
 
-  const gallery = await readFile(
+  const gallery = await readSourceContract(
     join(repositoryRoot, "collaboration/about-ai-method-gallery/index.html"),
     "utf8",
   );
@@ -421,7 +422,7 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     "Current visitor pages use direct role and authorship language",
   );
 
-  const compactSource = await readFile(compactCaseBriefSourcePath, "utf8");
+  const compactSource = await readSourceContract(compactCaseBriefSourcePath, "utf8");
   const routes = [
     "choose-your-player-humatics.html",
     "fmi-clinical-trial-coordination.html",
@@ -434,11 +435,11 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
   for (const route of routes) {
     const html = compactAccountByRoute(compactSource, route);
     assert.ok(html, `${route} should have one compact account`);
-    const scope = html.match(/<dt>Scope and role<\/dt>\s*<dd>([\s\S]*?)<\/dd>/u)?.[1];
+    const scope = html.match(/<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>([\s\S]*?)<\/dd>/u)?.[1];
     assert.ok(scope, `${route} identifies the person's scope`);
     assert.match(scope, route === 'genomic-viewer-replatforming.html'
-      ? /Owned most of the UX\/UI as Principal Product Designer &amp; Software Engineer III/u
-      : /\bI (?:worked|served|was)\b/u, route);
+      ? /I owned the UX\/UI as Principal Product Designer &amp; Software Engineer III/u
+      : /\bI (?:worked|served|was|owned)\b/u, route);
   }
 
   const scenarioRoutes = [
@@ -452,14 +453,14 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
-      /<dt>Scope and role<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
+      /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
       route,
     );
   }
 
   assert.match(
     compactAccountByRoute(compactSource, "ehr-three-front-doors.html"),
-    /<dt>Scope and role<\/dt>\s*<dd>[^<]*Other ClinOps teams handled direct integration\.<\/dd>/u,
+    /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>[^<]*Other ClinOps teams handled direct integration\.<\/dd>/u,
     "Three Portals preserves the distinct integration responsibility",
   );
 
@@ -514,7 +515,7 @@ test("current public source owners name generative-system roles precisely", asyn
   );
 
   for (const sourcePath of await currentPublicRoleLanguageSources()) {
-    const source = await readFile(resolve(repositoryRoot, sourcePath), "utf8");
+    const source = await readSourceContract(resolve(repositoryRoot, sourcePath), "utf8");
     for (const match of source.matchAll(genericPersonLikeSystemRole)) {
       const exception = sourceBearingRoleException(sourcePath, source, match);
       if (exception) {

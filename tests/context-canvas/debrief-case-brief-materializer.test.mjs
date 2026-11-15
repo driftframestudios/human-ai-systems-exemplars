@@ -169,3 +169,14 @@ test("Atomic replacement preserves a receiver changed after materialization plan
   );
   assert.equal(await readFile(destination, "utf8"), "newer route-owned edit");
 });
+
+test("Malformed receiver markup reports the source file and tag offset", () => {
+  assert.throws(
+    () => replaceGeneratedAtAGlance(
+      `<main>\n${generatedBlock}\n<a aria-label="Unclosed>Read</a></main>`,
+      generatedBlock,
+      { fileLabel: "broken.html", requireGeneratedBlock: true },
+    ),
+    /broken\.html contains an unterminated tag at offset \d+/u,
+  );
+});

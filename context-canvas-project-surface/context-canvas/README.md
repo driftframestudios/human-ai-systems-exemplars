@@ -631,14 +631,21 @@ visitor job.
 
 The bounded
 [`debrief-case-briefs.source.html`](../data/debrief-case-briefs.source.html)
-file owns all compact accounts. Run `npm run build:debrief-case-briefs` after
-changing that source. The dependency-free materializer validates all declared
+file owns all compact accounts. The visitor-facing Summary scan uses Situation
+and stakes, Scope and role (with optional dates), Challenges, Key decision,
+Results, and What this enables. Edit this source, then run
+`npm run build:debrief-case-briefs` to carry the wording into both readings.
+The dependency-free materializer validates all declared
 routes, ordered six-field scans, paired track disclosures, basis-and-limits
 paragraphs, related-media links, and their source-fragment destinations, then
 refreshes one bounded template block in `debriefs.html` and one bounded
 At-a-Glance block in each declared Full Debrief;
 `npm run check:debrief-case-briefs` confirms exact parity across both receiver
-families.
+families. Prettier and HTML Minifier are pinned development tools; keep
+`package.json` and `package-lock.json` together when updating them. Content
+contracts normalize HTML formatting, while materializer checks retain exact
+parity for their generated blocks. Rebuild those blocks after formatting a
+receiving page.
 The build validates every declared receiver before writing. Each changed file
 is replaced atomically after a last-moment source comparison; a concurrent
 route edit stops the replacement and remains intact. Rerunning the build

@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { access, readdir } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import test from "node:test";
 
@@ -104,7 +105,7 @@ test("parent visitor images carry a legible text relationship", async () => {
   const observedExamples = new Set();
 
   for (const route of await parentRoutes()) {
-    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
     for (const match of html.matchAll(/<img\b[^>]*>/gu)) {
       const tag = match[0];
       const alt = attribute(tag, "alt");
@@ -146,7 +147,7 @@ test("new architecture examples retain one Debrief owner and one AI Systems read
 
   for (const [stem, debriefRoute, systemsRoute] of contracts) {
     for (const route of [debriefRoute, systemsRoute]) {
-      const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+      const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
       assert.match(html, new RegExp(`${stem}\\.webp`, "u"), `${route}: ${stem} original`);
       assert.match(html, new RegExp(`${stem}-960\\.webp 960w`, "u"), `${route}: ${stem} 960w`);
       assert.match(html, new RegExp(`${stem}-1920\\.webp 1920w`, "u"), `${route}: ${stem} 1920w`);
@@ -154,7 +155,7 @@ test("new architecture examples retain one Debrief owner and one AI Systems read
   }
 
   for (const route of ["ai-systems.html", "core-architectures-orientation-index.html"]) {
-    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
     assert.match(html, /IP-free 2026/iu, `${route}: current research standing`);
     assert.match(html, /Figma Make/iu, `${route}: production method`);
     assert.match(html, /kindlight\.systems architecture definitions/iu, `${route}: architecture source`);
@@ -162,7 +163,7 @@ test("new architecture examples retain one Debrief owner and one AI Systems read
 });
 
 test("Who To Believe figures preserve the intended narrative sequence", async () => {
-  const html = withoutComments(await readFile(
+  const html = withoutComments(await readSourceContract(
     join(canvasRoot, "who-to-believe-reviews-platform.html"),
     "utf8",
   ));
@@ -201,7 +202,7 @@ test("static top-level raster carriers declare byte-matched intrinsic geometry",
 
   for (const route of await parentRoutes()) {
     const routePath = join(canvasRoot, route);
-    const html = withoutComments(await readFile(routePath, "utf8"));
+    const html = withoutComments(await readSourceContract(routePath, "utf8"));
     for (const match of html.matchAll(/<img\b[^>]*>/gu)) {
       const tag = match[0];
       const src = attribute(tag, "src");
@@ -217,7 +218,7 @@ test("static top-level raster carriers declare byte-matched intrinsic geometry",
       assert.ok(Number.isInteger(width) && width > 0, `${label} intrinsic width`);
       assert.ok(Number.isInteger(height) && height > 0, `${label} intrinsic height`);
 
-      const bytes = await readFile(resolve(dirname(routePath), sourcePath));
+      const bytes = await readSourceContract(resolve(dirname(routePath), sourcePath));
       const intrinsic = inspectImageDimensions(bytes, mediaType, label);
       assert.equal(width, intrinsic.width, `${label} width matches source bytes`);
       assert.equal(height, intrinsic.height, `${label} height matches source bytes`);
@@ -230,7 +231,7 @@ test("static top-level raster carriers declare byte-matched intrinsic geometry",
 
 test("curated social previews describe the pictured subject", async () => {
   for (const [route, expected] of socialImageAlternatives) {
-    const html = await readFile(join(canvasRoot, route), "utf8");
+    const html = await readSourceContract(join(canvasRoot, route), "utf8");
     assert.ok(
       html.replace(/\s+/gu, " ").includes(`<meta property="og:image:alt" content="${expected}">`),
       `${route}: Open Graph alternative`,
@@ -250,7 +251,7 @@ test("curated social previews describe the pictured subject", async () => {
 
 test("former placeholder alternatives stay out of parent visitor surfaces", async () => {
   const source = (await Promise.all(
-    (await parentRoutes()).map(route => readFile(join(canvasRoot, route), "utf8")),
+    (await parentRoutes()).map(route => readSourceContract(join(canvasRoot, route), "utf8")),
   )).join("\n");
 
   assert.doesNotMatch(source, /alt="Forms upfront"/u);
@@ -261,7 +262,7 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
 
 test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
   for (const { route, directory, publicSafePatterns, alternateReceivers = [] } of debriefProxyContracts) {
-    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
     assert.match(html, /working/iu, `${route}: working-system standing`);
     assert.match(html, /2026/iu, `${route}: contemporary standing`);
     for (const pattern of publicSafePatterns) {
@@ -334,10 +335,10 @@ test("working Debrief systems preserve standing, figure identity, responsive sou
 
 test("Who To Believe routes its graph exemplar and catalog orientation image to their current owners", async () => {
   const [debrief, catalog, atlas, inventory] = await Promise.all([
-    readFile(join(canvasRoot, "who-to-believe-reviews-platform.html"), "utf8"),
-    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
-    readFile(join(canvasRoot, "visualization-fidelity-atlas.html"), "utf8"),
-    readFile(join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8").then(JSON.parse),
+    readSourceContract(join(canvasRoot, "who-to-believe-reviews-platform.html"), "utf8"),
+    readSourceContract(join(canvasRoot, "debriefs.html"), "utf8"),
+    readSourceContract(join(canvasRoot, "visualization-fidelity-atlas.html"), "utf8"),
+    readSourceContract(join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8").then(JSON.parse),
   ]);
 
   assert.match(debrief, /id="wtb-figure-dual-stack-system"[\s\S]*?data-wtb-system-graph/u);

@@ -90,11 +90,11 @@
   </url>
   <url>
     <loc>{{PUBLIC_URL_PAGE_GENOMIC_VIEWER_REPLATFORMING}}</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-15</lastmod>
   </url>
   <url>
     <loc>{{PUBLIC_URL_PAGE_FMI_CLINICAL_TRIAL_COORDINATION}}</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-15</lastmod>
   </url>
   <url>
     <loc>{{PUBLIC_URL_PAGE_EHR_DISCRETE_GENOMIC_RESULT}}</loc>

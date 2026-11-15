@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -21,7 +22,7 @@ function publicValue(value) {
 }
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function countMatches(source, pattern) {

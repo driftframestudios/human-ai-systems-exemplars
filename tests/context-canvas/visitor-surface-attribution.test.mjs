@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 import {
@@ -37,7 +38,7 @@ test("top-level Context Canvas routes expose one consistent authorship and licen
   assert.ok(routes.includes("404.html"));
 
   for (const route of routes) {
-    const html = await readFile(join(visitorRoot, route), "utf8");
+    const html = await readSourceContract(join(visitorRoot, route), "utf8");
     assert.equal(occurrenceCount(html.replace(/\s+/gu, " "), artifactAttribution), 1, `${route} should carry one visible attribution`);
     assert.equal(occurrenceCount(html, authorMeta), 1, `${route} should carry one author metadata element`);
     const licenses = [...html.matchAll(/<link\b[^>]*\brel="license"[^>]*>/gu)]
@@ -47,7 +48,7 @@ test("top-level Context Canvas routes expose one consistent authorship and licen
 });
 
 test("the About hero uses the named dark-and-cobalt heading treatment", async () => {
-  const html = await readFile(join(visitorRoot, "index.html"), "utf8");
+  const html = await readSourceContract(join(visitorRoot, "index.html"), "utf8");
   assert.match(
     html,
     /<h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1>/u,

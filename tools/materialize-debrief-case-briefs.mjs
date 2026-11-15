@@ -24,10 +24,10 @@ const fragmentPattern = /^#[A-Za-z][A-Za-z0-9_.:-]*$/;
 const expectedFieldLabels = [
   "Situation and stakes",
   "Scope and role",
-  "Core constraint",
+  "Challenges",
   "Key decision",
-  "Outcome and evidence",
-  "Relevance now"
+  "Results",
+  "What this enables"
 ];
 const expectedTrackKinds = Object.freeze({
   default: ["solution", "implementation"],
@@ -101,7 +101,7 @@ function normalizedText(node) {
   return decodeTextEntities(value).replace(/\s+/g, " ").trim();
 }
 
-function findTagEnd(source, offset) {
+function findTagEnd(source, offset, fileLabel) {
   let quote = "";
   for (let index = offset; index < source.length; index += 1) {
     const character = source[index];
@@ -113,7 +113,7 @@ function findTagEnd(source, offset) {
       return index;
     }
   }
-  fail("HTML contains an unterminated tag");
+  fail(`${fileLabel} contains an unterminated tag at offset ${offset}`);
 }
 
 function parseAttributes(source, fileLabel) {
@@ -170,10 +170,10 @@ function parseHtml(source, fileLabel) {
       continue;
     }
     if (/^<!doctype\b/i.test(source.slice(offset))) {
-      offset = findTagEnd(source, offset + 2) + 1;
+      offset = findTagEnd(source, offset + 2, fileLabel) + 1;
       continue;
     }
-    const tagEnd = findTagEnd(source, offset + 1);
+    const tagEnd = findTagEnd(source, offset + 1, fileLabel);
     let token = source.slice(offset + 1, tagEnd).trim();
     if (token.startsWith("!")) {
       offset = tagEnd + 1;
@@ -342,7 +342,8 @@ function validateFieldGroups(fields, fileLabel) {
     assertAttributes(terms[0], new Map(), fileLabel);
     assertAttributes(terms[1], new Map(), fileLabel);
     const label = normalizedText(terms[0]);
-    if (label !== expectedFieldLabels[index]) {
+    const baseLabel = index === 1 ? label.split(" · ")[0] : label;
+    if (baseLabel !== expectedFieldLabels[index]) {
       fail(`${fileLabel} field ${index + 1} must be ${JSON.stringify(expectedFieldLabels[index])}; found ${JSON.stringify(label)}`);
     }
   });

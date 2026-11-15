@@ -11,48 +11,48 @@
   <article data-case-brief-source="genomic-viewer-replatforming.html">
     <h2 data-case-brief-title>The Queue That Was Secretly a Status Machine</h2>
     <h3 data-case-brief-orientation-heading>At-a-Glance</h3>
-    <p data-case-brief-orientation>Within Foundation Medicine, Inc. R&amp;D, I led principal-level product design and full-stack implementation to overhaul the user experience and rearchitect the front-end and service layers for an FDA-regulated medical device.</p>
+    <p data-case-brief-orientation>I was asked to redesign the experience and rearchitect the front end of Foundation Medicine’s FDA-regulated clinical-genomics viewer. My work spanned participant research, UX/UI design, React with TypeScript, and Java services—connecting clinical workflows with the systems that supported them.</p>
     <dl data-case-brief-fields>
       <div>
         <dt>Situation and stakes</dt>
-        <dd>A circa-2010 researcher-built <abbr title="Google Web Toolkit">GWT</abbr> application became a core company-wide clinical-genomics application by 2019. Service interruption or failed migration would delay time-senstitive treatment decision insights for ordering physicians and the cancer patients they served.</dd>
+        <dd>A researcher-built <abbr title="Google Web Toolkit">GWT</abbr> application from around 2010 had grown into a core clinical-genomics platform used across the company. By 2019, it needed an overhaul. Interruption delayed time-sensitive treatment insights for physicians and the cancer patients they served.</dd>
       </div>
       <div>
-        <dt>Scope and role</dt>
-        <dd><strong>Q3 2022–Q1 2025</strong>: Owned most of the UX/UI as Principal Product Designer &amp; Software Engineer III on a core seven-person delivery group within a <strong>50-plus-engineer</strong> Computational Biology organization. Directed requirements gathering with highly technical cross-functional stakeholder groups ranging from scientists to executives. Delegated specific sessions to other engineers to teach UX/UI.</dd>
+        <dt>Scope and role · Q1 2019 · Q3 2022–Q1 2025</dt>
+        <dd>I owned the UX/UI as Principal Product Designer &amp; Software Engineer III on a core seven-person delivery group within a <strong>50-plus-engineer</strong> Computational Biology organization. I led requirements gathering with cross-functional stakeholder groups ranging from scientists to executives. I mentored on UX/UI by delegating specific sessions to other engineers.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
-        <dd>Technical and experiential debt accumulated in tacit workflows through Excel, Slack, and custom code. Key interactions went unmeasured by existing system instrumentation, and the primary user group was running interference outside the engineering team's visibility.</dd>
+        <dt>Challenges</dt>
+        <dd>Technical debt accumulated in tacit workarounds through Excel and internal tools. Key interactions went unmeasured by existing system instrumentation, and the primary user group was running interference outside the engineering team's visibility.</dd>
       </div>
       <div>
         <dt>Key decision</dt>
-        <dd>I ran participatory design sessions with all the user groups centered around clickable prototypes. I modeled profiles, permissions, cases, and status first and finished making the prototypes live during the sessions. Design concepts were then translated into bounded typed components and connected to realistic data for further iteration.</dd>
+        <dd>I centered participatory design sessions around functional prototypes. I modeled profiles, permissions, and status first and iterated live during sessions. Design concepts were then translated into bounded typed components for continual refinement.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
-        <dd>The team delivered more than a redesign. Novel views gathered important operational analytics in a dashboard, saving over <strong>20 minutes per person</strong> that had previously been devoted to running daily manual SQL and writing emails. React.js with a custom MUI implementation and bespoke Node.js tooling ran beside the existing monolith.</dd>
+        <dt>Results</dt>
+        <dd>The team delivered more than a redesign. New dashboard views brought operational analytics together, <strong>saving over 20 minutes per person</strong> previously spent on daily SQL queries and emails. New React.js front-end, custom MUI components, and bespoke Node.js tooling ran parallel as iterations continued.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
-        <dd>The underlying system now understands who a user is and what cases they are able to complete based on their training. My profile and permission work gave qualified people the right cases, reduced errors, and supported later automatic assignment. My schema-based structured-note work also made human interventions countable across candidates for tiered automation.</dd>
+        <dt>What this enables</dt>
+        <dd>My profile and permission work gave qualified people the right cases, reduced errors, and supported later automatic assignment. My schema-based structured-note work also made human interventions countable across candidates for tiered automation.</dd>
       </div>
     </dl>
-    <p data-case-brief-basis><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and views within a purposeful partial migration; complex Spring transformations, DTOs, database mediation, plugins, and portions of the underlying stack remained legacy-owned.</p>
+    <p data-case-brief-basis><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and services within a purposeful partial migration; complex Spring transformations, DTOs, database mediation, and portions of the underlying stack remained legacy-owned.</p>
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
-          <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> At FMI, rows in the database are human beings with cancer. I was charged with redesigning the UX/UI for a genomic viewer application while ongoing company agreements and advances in oncology made the original application keep growing. I ran participatory design sessions with stakeholders to make genomics, pathology, scientific, and engineering decisions visible in one frictionless operating experience.</li>
-          <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> <ul> <li>The legacy <abbr title="Model-View-Presenter">MVP</abbr> tech stack tightly coupled a user's available tools with specific screens. Scientists had to switch between screens because they needed access to features based on their assessment of quality control metrics and the underlying cancer biology. </li> <li>Nuanced failure states, manual SQL queries, Slack, email, and macro-based Excel trackers distributed work state across people and tools. </li> <li>Broad authentication lacked assay-, jurisdiction-, profile-, and action-level rules. My initial prototypes were too high-fidelity and made participants feel like the train had left <strong>without them onboard</strong>. </li> </ul></li>
-          <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> <ul> <li> I made profile, permission, assignment, case state, and recovery visible in every view in the interface. </li> <li> I worked on the operational layers users voted most important through a gradual migration, then translated participant language into testable scenarios through Specification by Example. Every design library specifications was bundled with real application state. </li> </ul></li>
-          <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> <ul> <li> <strong>All recurring assignment errors</strong> were eliminated through a templated, transparent process for automatically assigning cases to users. </li> <li> Custom profile and permission assignment rules, combined programmatic case notes, enabled managers to granularly override automatic assignment to respond to short-term changes in workflows or sudden priorities directly in the UI. </li> <li> I structured notes from upstream teams separately from those destined for downstream teams, which enabled new kinds of telemetry. </li> <li> <strong>70–100 clinical users saved 20–30 minutes per person daily</strong>. 900+ non-clinical users now have new ways to see operational data, which meant they no longer needed to email the clinical users with questions. </li> </ul></li>
-          <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> <ul> <li> Profile-first decomposition of workflows continued to guide the work as screens, services, and organizational conditions changed – even if the company reorgs, some logic has to gate access to cases based on jurisdiction. </li> <li> Specification by Example's GIVEN-WHEN-THEN format enabled me to sit with users and draft clear, precise logic in isolation. I could then bundle the results into a single, reusable library of test scenarios. </li> </ul></li>
+          <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> At FMI, rows in the database represent people with cancer. I was responsible for redesigning the UX/UI of a genomic viewer while new company agreements and advances in oncology continued to expand the existing application. I ran participatory design sessions with stakeholders to make genomics, clinical, and engineering decisions visible in one frictionless application experience.</li>
+          <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> <ul> <li>The legacy <abbr title="Model-View-Presenter">MVP</abbr> tech stack tightly coupled a user's available tools with specific screens. Users were constantly context switching when assessing quality control metrics and underlying cancer biology.</li> <li>Nuanced failure states, manual SQL queries, Slack, email, and macro-based Excel trackers distributed work state across people and tools.</li> <li>Broad authentication lacked assay-, jurisdiction-, profile-, and action-level rules. My initial prototypes were too high-fidelity and made participants feel like the train had left <strong>without them onboard</strong>.</li> </ul></li>
+          <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> <ul> <li>I made profile, permission, assignment, case state, and recovery visible in every view in the interface.</li> <li>I worked on the operational layers users voted most important through a gradual migration, then translated participant language into testable scenarios through Specification by Example. Every design library specifications was bundled with real application state.</li> </ul></li>
+          <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> <ul> <li><strong>All recurring assignment errors</strong> were eliminated through a templated, transparent process for automatically assigning cases to users.</li> <li>Custom profile and permission assignment rules, combined programmatic case notes, enabled managers to granularly override automatic assignment to respond to short-term changes in workflows or sudden priorities directly in the UI.</li> <li>I structured notes from upstream teams separately from those destined for downstream teams, which enabled new kinds of telemetry.</li> <li><strong>70–100 clinical users saved 20–30 minutes per person daily</strong>. 900+ non-clinical users now have new ways to see operational data, which meant they no longer needed to email the clinical users with questions.</li> </ul></li>
+          <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> <ul> <li>Profile-first decomposition of workflows continued to guide the work as screens, services, and organizational conditions changed – even if the company reorgs, some logic has to gate access to cases based on jurisdiction.</li> <li>Specification by Example's GIVEN-WHEN-THEN format enabled me to sit with users and draft clear, precise logic in isolation. I could then bundle the results into a single, reusable library of test scenarios.</li> </ul></li>
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> I used React, TypeScript, MUI, and Storybook to open a familiar contribution path into a GWT and Java estate, building the visual system, core tables, forms, operating modes, and shared component library.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> GWT-to-React interop concentrated lifecycle, validation, DTO, payload, and rendering risk; I retired a widely liked global Masonry treatment when its coupling obstructed a stable capability transfer.</li>
@@ -74,48 +74,48 @@
   <article data-case-brief-source="fmi-clinical-trial-coordination.html">
     <h2 data-case-brief-title>The Boolean Building Blocks That Were Quietly an ETL Substrate</h2>
     <h3 data-case-brief-orientation-heading>At-a-Glance</h3>
-    <p data-case-brief-orientation>At Foundation Medicine, I worked directly with directors and executives across scientific, business, and medical-affairs functions; biomarker and biometrics specialists; production engineering; and biomarker-repository operations. As Senior Manager and Principal Designer, then Product Designer and Software Engineer III, I helped six working groups turn their knowledge into one inspectable clinical-trial rule grammar; the shipped coordination interface later became the foundation for a repeatable transformation pathway.</p>
+    <p data-case-brief-orientation>I worked with directors, Data Managers, biomarker specialists, and engineers to redesign how teams coordinated clinical trials at Foundation Medicine. I brought six working groups together to turn their knowledge into a usable interface.</p>
     <dl data-case-brief-fields>
       <div>
         <dt>Situation and stakes</dt>
-        <dd>Foundation Medicine&rsquo;s genomic-profiling products inform cancer-care and clinical-trial decisions. Six groups needed one usable way to translate partner data, biomarker criteria, cohort logic, implementation state, and regulatory consequence while retaining their distinct knowledge.</dd>
+        <dd>A clunky UI slowed partner-trial work when connecting genomic profiling, study requirements, and biopharma data. Data Managers manually reconciled partner-specific formats and rules that governed clinical-trial decisions.</dd>
       </div>
       <div>
-        <dt>Scope and role</dt>
-        <dd>From 2019–2023, I worked directly with directors, opened the engagement, negotiated time with specialists carrying live work, and coordinated decisions across business units—first as Senior Manager and Principal Product Designer on Data Products, then as Product Designer and Software Engineer III in Computational Biology Engineering.</dd>
+        <dt>Scope and role · Q4 2022 – Q2 2023</dt>
+        <dd>As Senior Manager &amp; Principal Designer of Experience Design, I owned the engagement end-to-end, designed the interface, and mentored mid-senior designers on engineering hand-off tactics.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
-        <dd>Each population held a different part of the rule system. The product needed one shared, inspectable model that retained partner-specific meaning and clarified the handoffs.</dd>
+        <dt>Challenges</dt>
+        <dd>The organization was changing, intended users of the new system were still undecieded, and each group approached the work differently. The design had to make those differences workable before the future structure was known.</dd>
       </div>
       <div>
         <dt>Key decision</dt>
-        <dd>Define a shared object grammar with nested Boolean rules, deploy it in tools people already used, and let partner data seed a reviewable initial state that people could correct.</dd>
+        <dd>Rather than wait for the reorganization to settle, I designed a visual rule builder flexible enough to support both partner-study setup and biomarker investigation.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
-        <dd>I designed the shared rule grammar and complete interaction states; engineering built the application in one quarter while the design remained stable. Each Data Manager could set up three to five more cases per week, and measurable setup errors fell 50%.</dd>
+        <dt>Results</dt>
+        <dd>Scientists gained reusable study templates anda visual interface for biomarker investigations. Engineering shipped the application in one quarter. Data Managers could set up <strong>three to five more cases per week, and measurable setup errors fell 50%</strong>.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
-        <dd>The case connects participatory specification with executable data contracts: shared visual objects can carry meaning from inquiry into templates, mappings, and human-reviewed automation.</dd>
+        <dt>What this enables</dt>
+        <dd>Reliable automation and AI depend on structured data, explicit rules, and clear boundaries. This work established a reusable rule model for clinical-trial coordination and the basis of prepopulated partner configurations and measurable error corrections two years later.</dd>
       </div>
     </dl>
-    <p data-case-brief-basis><strong>Basis and limits:</strong> Production use established the throughput gain, measurable error reduction, and durable grammar. My 2023 work established a partner-fed proposal method; its numeric result remains undisclosed, and the partner-facing extension reached design and partial implementation.</p>
+    <p data-case-brief-basis><strong>Basis and limits:</strong> In this case, making a clickable prototype for every rule permutation was prohibitively time-consuming. I made engineering-facing clickable prototypes, so the teams responsible for production implementation had clear depictions of every component state.</p>
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
-          <li><strong><a href="#solution-engagement-title">Debrief.</a></strong> As Senior Manager and Principal Product Designer, I worked with directors, executives, and six operating groups to translate partner data, biomarker criteria, study requirements, and reporting language into a more automated clinical-trial coordination experience.</li>
-          <li><strong><a href="#solution-alignment-title">Bottleneck.</a></strong> Three competing futures—a standalone product, a wider internal suite, and a code-first Genomics Insights workflow—carried different ownership and handoff models while partner mappings and study rules remained distributed across memory, folders, meetings, and careful manual work.</li>
-          <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> I joined an Alignment Worksheet, three Core Architectures, and nested Boolean building blocks into one grammar that Data Managers, genomics specialists, engineers, and partner teams could inspect, correct, template, and extend.</li>
-          <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> Engineering built the stable design in one quarter; Data Managers set up three to five more cases each week with a measured 50% error reduction and about ten minutes saved per setup, while Account Managers began defining trial standards directly with biopharma partners.</li>
-          <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> Shared fields, rules, nesting, partner gates, and provenance carried substrate intent from participatory inquiry into reusable templates, mappings, production components, and later human-reviewed automation.</li>
+          <li><strong><a href="#solution-engagement-title">Debrief.</a></strong> Foundation Medicine works with biopharma partners to develop targeted therapies and help people with cancer find relevant clinical trials based on their tumor’s genomic profile. I was asked to reimagine the internal software that enabled this work.</li>
+          <li><strong><a href="#solution-alignment-title">Bottleneck.</a></strong> <ul> <li>So many teams were involved, the only concrete resolution to meetings was often to schedule other meetings.</li> <li>Three competing futures—a standalone product, a wider internal suite, and a code-first workflow—carried different ownership and handoff models.</li> <li>Partner mappings and study rules were distributed across SharePoint, meetings, and careful manual work.</li> </ul></li>
+          <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> <ul> <li>I made clickable prototypes to focus meetings on disagreements and reducing the cost of friction.</li> <li>From all the ways my prototypes were wrong, I designed an interface that gave leaders a concrete view of how the teams’ future work could connect.</li> <li>I synthesized feedback into interfaces for teams to build and reuse study rules so biomarker investigation and partner-trial teams could check, correct, template, and extend the same workflows.</li> </ul></li>
+          <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> <ul> <li>Engineering built the design in one quarter. I only had to add a missing component state one time to support a new assay product's unique workflow.</li> <li><strong>Unexpected bonus</strong>: Account Managers gained the ability to define trial standards directly with biopharma partners.</li> <li>Data Managers set up three to five more cases each week with a measured 50% error reduction and about ten minutes saved per setup.</li> </ul></li>
+          <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> Make disagreements visible early, then give people a realistic prototype they can correct. Design the rules and relationships to support today’s work and the next set of questions.</li>
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-landscape-title">Debrief.</a></strong> The work entered an aging Angular 2 application during an unsettled move toward React; stale state could associate a population with the wrong partner, cohort, or study, so state transitions and change meaning carried data-integrity and governance consequence.</li>
           <li><strong><a href="#implementation-surfaces-title">Bottleneck.</a></strong> Policy fit, broad access, structured response capture, machine-readable aggregation, and shared manipulation lived across separate tools, creating a precise need for a minimal connective foundation.</li>
@@ -137,18 +137,18 @@
   <article data-case-brief-source="fmi-lims-eln-replatforming.html">
     <h2 data-case-brief-title>The Sample Nobody Could Find</h2>
     <h3 data-case-brief-orientation-heading>At-a-Glance</h3>
-    <p data-case-brief-orientation>At Foundation Medicine, I served as Senior Manager and Principal Product Designer and led research and product design that made shared laboratory objects, failure paths, and build-or-buy choices explicit. My work informed vendor selection; the program completed production authority transfer a couple of business quarters later.</p>
+    <p data-case-brief-orientation>I was asked to lead research and product design for Foundation Medicine's new, multi-institutional, multi-platform <abbr title="Laboratory Information Management System">LIMS</abbr>/ <abbr title="Electronic Laboratory Notebook">ELN</abbr> as sample volume increased. My work informed vendor selection and success metrics for a nationwide rollout.</p>
     <dl data-case-brief-fields>
       <div>
         <dt>Situation and stakes</dt>
         <dd>A build-or-buy decision followed a prior big-bang rollback. Hundreds of lab personnel needed reliable answers about sample location, status, connected work, provenance, and approval.</dd>
       </div>
       <div>
-        <dt>Scope and role</dt>
-        <dd>During the 2021–2022 engagement, I served as Senior Manager and Principal Product Designer, led two Value Streams, and worked with a three-person leadership team and six-plus working groups drawing from eight-plus teams; participatory reach accumulated to roughly n≈70–100+ across sessions.</dd>
+        <dt>Scope and role · Q3 2021 - Q4 2022</dt>
+        <dd>I served as Senior Manager &amp; Principal Product Designer, led two Value Streams, and worked with a three-person leadership team and six-plus working groups. Working with a Design Strategist counterpart, participatory reach accumulated to roughly n≈70–100+ across sessions.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Vendor-feature comparison fragmented shared objects, workflow states, instruments, sites, and approval pathways. The collaboration also needed a medium familiar enough for lab teams to revise together.</dd>
       </div>
       <div>
@@ -156,19 +156,19 @@
         <dd>Reduce the full-suite ambition to a pilot, use an Excel-aligned PowerPoint language, and name shared objects and approval pathways before comparing vendors or implementation paths.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
-        <dd>All candidate vendors were rated with the System Usability Scale and a weighted evaluation matrix. A vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later. My prototypes also made the scale of a bespoke build legible to engineers at the beginning of the decision.</dd>
+        <dt>Results</dt>
+        <dd>All candidate vendors were rated with the System Usability Scale and a weighted evaluation matrix. A vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>Teams can reuse participatory specifications across vendor demonstrations, cost comparison, automation, acceptance tests, and reversible migration.</dd>
       </div>
     </dl>
-    <p data-case-brief-basis><strong>Basis and limits:</strong> My project records, working artifacts, participant quotations, and later program reports document these changes. The 2025–2026 specification and implementation examples answer present-day design questions; each receiving environment qualifies its own behavior.</p>
+    <p data-case-brief-basis><strong>Basis and limits:</strong> My prototypes made the scale of a bespoke build legible to executives and engineers at the beginning of the decision. Engineering groups retained responsibility for production implementation.</p>
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> As Senior Manager and Principal Product Designer, I joined a build-or-buy re-platforming effort after a failed big-bang refresh had returned the laboratories to their legacy LIMS; hundreds of practitioners needed specimen identity, custody, state, review, and scientific meaning to remain coherent across sites and shifts.</li>
           <li><strong><a href="#shared-grammar-title">Bottleneck.</a></strong> Six-plus groups and eight-plus teams had forked their own models of samples, plates, reagents, runs, and sign-offs, while email, Slack, tickets, memory, and separate systems carried the handoffs and failure recovery.</li>
@@ -178,7 +178,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> I compare the 2021–2022 client/server LIMS, ELN, EBR, Sample Monitor, file-processing, on-premises, AWS, batch, and file-drop estate with a distinct 2025–2026 lifecycle-centered reference architecture that retains the shared-object grammar.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Private data models split sample findability, sign-off history, movement, skips, recovery latency, verification, and deletion across systems; a slow EBR screen connected interface performance directly to rescanning, thawing reagents, and recoverable lab work.</li>
@@ -211,7 +211,7 @@
         <dd>During the 2018–2019 engagement, I worked at Janeiro Digital as Senior Product Designer and Lead. I was the Humatics client project&rsquo;s principal designer, mentored two junior designers, and worked with product, engineering, and Humatics field collaborators across a roughly twenty-person consultancy.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>By roughly my third day at the agency, I was leading a client presentation built around tactical browser and interface work. The Humatics Project Manager looked past the polished screens and asked how the product would manage sites and distinct Field Installation Engineer views.</dd>
       </div>
       <div>
@@ -219,11 +219,11 @@
         <dd>Create a five-panel welcome interface for project administration, planning, deployment, support, and operations, then connect those working postures through one site hierarchy and map-based field workflow.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Within two days, I turned the PM&rsquo;s question into a role-aware welcome interface, shared site hierarchy, geographic setup, and pin-linked field workflow. The second presentation earned design approval, restored trust, and moved the new model into engineering handoff.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The case shows how a technically complex product can become legible through role-specific entrances, shared objects, explicit handoffs, and honest recovery conditions.</dd>
       </div>
     </dl>
@@ -232,7 +232,7 @@
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <p data-case-brief-tracks-intro>The <a href="#narrative-architecture-title">Narrative Architecture track</a> carries the client meeting, field inquiry, and two-day reframe that established the paired architecture work below.</p>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I turned five recurring roles into task-specific presentation postures while authenticated identity, tenant membership, and entitlements retained access authority across one shared product and site model.</li>
           <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> Role switching needed to orient each person to current work while the permission model continued to govern access and shared site objects remained coherent across project administration, planning, deployment, support, and operations.</li>
@@ -242,7 +242,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> I designed within a Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, device, and field-network environment; the current implementation examples make its durable role, site, recovery, spatial, and compute contracts explicit.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Field consequence crossed identity, tenant, geometry, artifact, connectivity, browser, server, device, time, and support boundaries, so each transition needed an inspectable authority and recovery state.</li>
@@ -275,7 +275,7 @@
         <dd>I worked in product strategy and experience design across product, engineering, campaign operations, privacy, safety, marketing, and leadership, then returned after ownership changed as a stabilization consultant.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Influencers already managed campaigns as paid work, while ordinary marriages, roommates, and caregiving changes could resemble campaign manipulation in the data. Acquisition also left Symfony with Doctrine ORM and Spring Data JPA with Hibernate ORM writing one US database while Doctrine schema diff and Flyway migration history presented competing accounts of schema state.</dd>
       </div>
       <div>
@@ -283,11 +283,11 @@
         <dd>Create three relationship tiers, score household transitions to focus human review, place mobile actions beside the task, and use nightly reconciliation while two schema-change mechanisms remained active.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Contemporaneous telemetry notes record new signups rising about 20%; multiple-account-abuse logins falling about 10% initially and about 50% by year end; and fewer total logins alongside more activity per session. dunnhumby used my GDPR and data-inventory materials as a company-wide example. The competing schema-change mechanisms persisted.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>I kept weighted signals connected to human interpretation and appeal; my post-acquisition return showed how platform ownership determines whether an interaction survives later change.</dd>
       </div>
     </dl>
@@ -295,7 +295,7 @@
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> At BzzAgent, dunnhumby&rsquo;s product-participation company inside Tesco&rsquo;s customer-science practice, I shaped product strategy and design around contributor specificity, regional purpose, client trust, and a clearer path from campaign entry to review and safety reporting.</li>
           <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> Influencer participants maintained their own spreadsheets and valued compensated conversation, while generic surveys flattened their expertise; account changes also mixed abuse with legitimate household and caregiving transitions, and the service journey exposed unclear handoff, timing, and ownership.</li>
@@ -305,7 +305,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> The platform joined two regional databases, Symfony with Doctrine ORM, Spring Boot with Spring Data JPA and Hibernate ORM, Flyway migration history, React and React Native, Redis browser sessions, JWT service authentication, cron jobs, and a Thunderball batch-scoring box across different regional estates.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Mobile and API boundaries, review classification, purpose state, divided schema-change ownership, manual reconciliation, GDPR urgency, and a legacy Facebook-permission mismatch concentrated operating burden; participants needed continuity while Doctrine&rsquo;s schema-diff view and Flyway&rsquo;s migration history were compared.</li>
@@ -338,7 +338,7 @@
         <dd>This principal-level teaching reconstruction reads 2021–2022 integration patterns alongside the 2025–2026 FHIR, SMART, and vendor-program environment across informatics, pathology, operations, integration, identity, security, and Epic counterparts.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>The carrier arrived before agreement on clinical meaning, patient identity, workflow placement, and the order–specimen–result–variant relationship. Certification followed a separate vendor calendar.</dd>
       </div>
       <div>
@@ -346,11 +346,11 @@
         <dd>Name the clinical contract before the carrier, represent findings discretely, place context at the point of care, and plan the vendor connection as a parallel dependency.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Partial teaching result: the proposed design makes discrete findings and point-of-care context possible while the certified connection remains on a separate calendar.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The scenario shows how shared-object naming can separate clinical-value work from vendor timing while preserving identity, terminology, workflow, and recovery requirements.</dd>
       </div>
     </dl>
@@ -400,7 +400,7 @@
         <dd>This principal-level teaching reconstruction reads 2021–2022 point-to-point patterns alongside 2025–2026 canonical-model practice across two health systems, informatics, integration, identity, security, and vendor programs.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Two bespoke bridges would duplicate terminology, mappings, recovery logic, and change work while each system retained a distinct identity domain, conformance target, and vendor calendar.</dd>
       </div>
       <div>
@@ -408,11 +408,11 @@
         <dd>Make one canonical result the shared asset, then govern per-target transformations, conformance suites, identity binding, recovery, and delivery calendars independently.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Pivoted teaching result: the initial two-bridge plan gives way to one normalized model with independent Epic and Oracle Health emissions.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The scenario offers a reusable pattern for integrating the same clinical meaning across heterogeneous systems without turning every receiving environment into a separate product model.</dd>
       </div>
     </dl>
@@ -462,7 +462,7 @@
         <dd>I was a Principal Product Designer working on biopharma partner integrations through 2021–2022. Other ClinOps teams handled direct integration.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Every EHR has its own local distribution, identity, tenant, workflow, and marketplace boundaries. Organization identity alone was too broad for safe multi-tenant activation.</dd>
       </div>
       <div>
@@ -470,11 +470,11 @@
         <dd>Keep one canonical order-and-result contract and choose each delivery path by distribution needs. Bind organization and tenant identity, then release through per-organization gates.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Successful result: the result reached three EHR environments. A tenant-scoping caching misconfiguration was caught just before release.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>A shared clinical contract can scale through local conformance and activation rather than forcing several institutions into one operating contract. <strong>Remember that FHIR IDs are only unique within a single EHR system.</strong></dd>
       </div>
     </dl>
@@ -524,7 +524,7 @@
         <dd>This principal-level teaching reconstruction reads 2021–2022 interruptive alerts alongside 2025–2026 CDS Hooks and SMART patterns across prescribing, pharmacy, informatics, leadership, engineering, design, analytics, and vendor roles.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>The delivery team optimized technical conformance while leaving clinician attention, workflow placement, adoption state, and ongoing stewardship under-designed.</dd>
       </div>
       <div>
@@ -532,11 +532,11 @@
         <dd>Separate delivery from clinical effect, move suitable guidance into non-interruptive routes, define the behavior that counts as adoption, and give attention stewardship an operating owner.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Failed teaching intervention: the technical path works, yet the interruptive guidance does not earn sustained clinical attention. The delivery result still establishes technical reach.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The scenario helps clinical and AI-assisted product teams distinguish a working integration from a receiving workflow that changes safely and sustainably.</dd>
       </div>
     </dl>
@@ -586,7 +586,7 @@
         <dd>This principal-level teaching reconstruction reads organically grown 2021–2022 channels alongside a 2025–2026 supported iPaaS migration across integration, SRE, operations, identity, terminology, security, vendors, and receiving EHR programs.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Clinical equivalence, recoverability, and safe retirement require representative behavior and operator knowledge alongside source code. A replacement date cannot establish those conditions.</dd>
       </div>
       <div>
@@ -594,11 +594,11 @@
         <dd>Recover behavior through specification by example, shadow-split traffic, compare canonical outputs, rehearse quarantine and replay, and move channels through a parallel run with bounded legacy.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Partial teaching result: most channels reconcile and move to the observable target; unresolved low-volume behavior remains in a deliberately bounded legacy island with an owner and reduction path.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The scenario offers a migration pattern for systems whose real contract spans implementation, operations, tacit knowledge, downstream behavior, and recovery.</dd>
       </div>
     </dl>
@@ -648,7 +648,7 @@
         <dd>I connect a dealer and staff bridge, offline native inspector, tenant-safe core, canonical private media, messaging, staged capital, and human validation authority in one July 2026 plan.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Offline capture, synchronization, restore, and incumbent continuity need proof before replacement. Stage 0 confirms economic-buyer authority and production staffing, then measures operating baselines and willingness to pay.</dd>
       </div>
       <div>
@@ -656,11 +656,11 @@
         <dd>Let the device own field truth during the visit, use the server for durable coordination and acknowledgement, keep Clappia available through a managed dual track, and release capital in stages tied to observable results.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>I produced a versioned architecture and investment instrument: a USD 95k–167k full-build envelope, a USD 125k–230k Year 1 envelope, and a near-USD-20k bounded opening. These remain planning ranges until current scope and staffing inputs support a priced proposal.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The plan separates dependable capture and synchronization from optional assistance. Canada-market assistance returns a positive source signal or <code>UNKNOWN</code>, followed by human confirmation.</dd>
       </div>
     </dl>
@@ -711,7 +711,7 @@
         <dd>I designed version 0.1.0 as a source-native instrument that teams can use with generative AI systems across field inspection, downstream valuation, listings, and arbitration.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Capture, grades, media, identity, and synchronization can diverge across assembled tools. Public grading and inspection references orient the domain without specifying one local implementation.</dd>
       </div>
       <div>
@@ -719,11 +719,11 @@
         <dd>Design one inspection record before the app, with stable identity, human-confirmed observations, a human-owned grade, media hashes, explicit sync state, and reconstructable downstream events.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>I produced a versioned specification that makes the scenario, ontology, operating contracts, population authority, quality gates, and investment sequence inspectable before code. Field and recovery trials must establish delivered performance.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The reading demonstrates how specification by example can reduce ambiguity in offline-first, media-heavy systems while keeping human judgment and downstream consequence connected.</dd>
       </div>
     </dl>
@@ -773,7 +773,7 @@
         <dd>The comparison spans Humatics in 2018–2019, Who To Believe from 2017–2020 and after acquisition, and FMI from 2019–2023. I worked across design, product strategy, and engineering.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Disagreement surfaced through meetings, metrics, and queries because local knowledge lacked one inspectable grammar. Useful reasoning could disappear when the original interface or team changed.</dd>
       </div>
       <div>
@@ -781,11 +781,11 @@
         <dd>Turn local knowledge into durable shared objects whose authority, evidence, handoff, and correction path remained visible after the original interface, implementation, or team changed.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Each case left a durable object or unresolved condition that returned to consequential work: Humatics within two days, Who To Believe more than a year after acquisition, and FMI four years later.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>Teams can use the comparison to judge whether a design artifact carries enough shared meaning for review, disagreement, recovery, and renewed investment after circumstances change.</dd>
       </div>
     </dl>
@@ -833,7 +833,7 @@
         <dd>In Q1 2016, I worked with three other apprentices inside a multidisciplinary agency of more than twenty people. Together, we conducted dozens of interviews across several domains and settings.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>The technology encouraged early convergence on a device capability, while each recurring job required a different spatial representation, evidence standard, rights boundary, reviewer, and correction route.</dd>
       </div>
       <div>
@@ -841,11 +841,11 @@
         <dd>We widened before choosing, treated photographs as a proxy rather than the need itself, focused the source-era recommendation on film production, and made representation fitness explicit.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>I helped turn broad sensor-led discovery into a focused film-production hypothesis. The contemporary continuation develops that insight into a job-led spatial-memory architecture; its local implementation outcome remains open.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The case offers a durable way to design spatial and multimodal systems around the decision a representation supports, its source, preserved properties, reviewers, rights, and revision path.</dd>
       </div>
     </dl>
@@ -853,7 +853,7 @@
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><a href="#solution-debrief-title"><strong>Debrief.</strong></a> A portable depth sensor opened a wide field; interviews across medicine, engineering, construction, scenic work, film, clothing, and retail revealed the jobs each representation could support.</li>
           <li><a href="#solution-bottleneck-title"><strong>Bottleneck.</strong></a> Metric geometry, photorealistic revisit, editable production assets, registered change, and annotated previews preserve different truths and require different evidence.</li>
@@ -863,7 +863,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><a href="#implementation-debrief-title"><strong>Debrief.</strong></a> Frames, depth, calibration, pose, permissions, and intended use make each capture a partial observation within a collaborative spatial record.</li>
           <li><a href="#implementation-bottleneck-title"><strong>Bottleneck.</strong></a> Meshes, point clouds, panoramas, USD stages, NeRFs, Gaussian scenes, measurement reports, and previews carry distinct properties into receiving tools.</li>
@@ -895,7 +895,7 @@
         <dd>In Q1 2016, I joined a four-person Fresh Tilled Soil apprenticeship cohort after years in design and engineering. Five people participated in usability sessions, with three retained in detail.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>Automatic code-switching treated language support as a system choice. It obscured why text changed and made learners work through mixed-language content they had not requested.</dd>
       </div>
       <div>
@@ -903,11 +903,11 @@
         <dd>Move language control to the learner through visible onboarding and explicit choices about when, where, and how vocabulary support appeared.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Five usability participants redirected the concept. The first round exposed an unclear purpose and a frustrating parts-of-speech collision; hand-drawn onboarding made the next round calmer and helped move the design toward learner-controlled vocabulary practice. Learning, program, and commercial effects remain local measurement questions.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>The case centers prior expertise, accessible control, versioned terminology, and recoverable learning state—useful foundations for contemporary multilingual education and service design.</dd>
       </div>
     </dl>
@@ -915,7 +915,7 @@
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I began with multilingual nurses&rsquo; established clinical knowledge and tested a Spanish&ndash;English prototype with five participants; their difficulty reading its purpose and navigating parts-of-speech collisions redirected the concept toward learner control.</li>
           <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> System-directed passage switching interrupted the clinical learning task and foregrounded the application&rsquo;s guess, creating a need for term-level support at the depth each learner selected.</li>
@@ -925,7 +925,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> The architecture joins concept identity, language and dialect, terminology release, provenance, review, and supersession with learning state while the document preserves language, script, keyboard, zoom, reflow, caption, and assistive-technology semantics.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Bare word pairs, silent versions, and offline conflicts fragment learning history; stable concept, version, and event identities make corrections visible and let a learner resume calmly.</li>
@@ -958,7 +958,7 @@
         <dd>In Q2 2016, I focused on front-end architecture in the Fresh Tilled Soil apprenticeship cohort with support from a senior engineering mentor. The current reading adds accessibility, payment, security, and service recovery.</dd>
       </div>
       <div>
-        <dt>Core constraint</dt>
+        <dt>Challenges</dt>
         <dd>A screenshot could show placement while leaving meaning, validation authority, interruption recovery, provider behavior, and the institution’s durable response unspecified.</dd>
       </div>
       <div>
@@ -966,11 +966,11 @@
         <dd>Turn the screenshot into a semantic specification: native HTML as the stable core, shared issue identity across layers, an authoritative submission command, and a durable receipt.</dd>
       </div>
       <div>
-        <dt>Outcome and evidence</dt>
+        <dt>Results</dt>
         <dd>Partial: I implemented the semantic HTML substrate in 2016. The current design extends it into a reviewable architecture for recovery, replay, support, and service continuity; receiving services still need to verify operating outcomes.</dd>
       </div>
       <div>
-        <dt>Relevance now</dt>
+        <dt>What this enables</dt>
         <dd>Teams can use accessible semantics and progressive enhancement to keep people, browsers, services, payment providers, support teams, and AI systems aligned on one recoverable contract.</dd>
       </div>
     </dl>
@@ -978,7 +978,7 @@
     <div data-case-brief-detail>
       <h3 data-case-brief-tracks-heading>Solution and implementation quick scan</h3>
       <article data-case-brief-track="solution">
-        <h4 data-case-brief-track-title>Solution Architecture</h4>
+        <h4 data-case-brief-track-title>Solution Track</h4>
         <ol>
           <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I translated a static account-and-payment screenshot into semantic HTML, exposing labels, groups, input types, and submission behavior as an institutional contract whose response people can understand and continue.</li>
           <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> A page can look complete while browser, service, provider, analytics, and support layers carry different portions of purpose, state, recovery, and receipt; behavioral fidelity coordinates those layers around one request.</li>
@@ -988,7 +988,7 @@
         </ol>
       </article>
       <article data-case-brief-track="implementation">
-        <h4 data-case-brief-track-title>Implementation Architecture</h4>
+        <h4 data-case-brief-track-title>Implementation Track</h4>
         <ol>
           <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> HTML preserves form ownership, labels, groups, input purpose, focus, serialization, and submission while progressive layers add capability; text semantics and a validated provider boundary keep payment identifiers precise and minimize sensitive-data reach.</li>
           <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Shared field and issue identities keep browser constraints, client rules, service schemas, domain policy, provider decisions, and support exceptions distinct while presenting one meaningful state and continuation.</li>
