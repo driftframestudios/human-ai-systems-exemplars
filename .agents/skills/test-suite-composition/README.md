@@ -8,6 +8,8 @@ proof quickly and expand coverage for a clear reason.
 ## Start here
 
 - [Read the authoritative skill contract](SKILL.md).
+- [Choose selective CI admission and check depth](references/selective-ci-admission-and-check-depth.md) when explicit run/skip, focused/full populations, browser choice or shared preparation changes a workflow.
+- [Follow the selective check delivery runbook](../../runbooks/selective-check-delivery.v0.1.md) to implement, exercise and hand back that bounded change.
 - [Use the CI provisioning and runner guide](references/ci-provisioning-and-runner-efficiency.md) when setup time, dependency transfer, caching, or runner images dominate a lane.
 - [Choose a runtime provisioning card](references/runtime-provisioning-cards.md) when Node, Python, browser, system-package, container, database, or release-history coordinates shape reuse.
 - [Return to the repository skills catalog](../README.md).
@@ -15,12 +17,14 @@ proof quickly and expand coverage for a clear reason.
 ## Use it when
 
 Use this skill when several test commands overlap, the checks reopened by a
-change are unclear, a workflow repeats unaffected work, or a slow CI lane needs
-phase-level diagnosis before the team changes coverage.
+change are unclear, optional workflows need predictable admission, a workflow
+repeats unaffected preparation, or a slow CI lane needs phase-level diagnosis
+before the team changes coverage.
 
 ## What it returns
 
 - a map from changed behavior and dependencies to exact checks;
+- separate admission, population and preparation decisions, including explicit skip meaning;
 - a focused composition plus its expansion event;
 - explicit runtimes, prerequisites, side effects, and held receivers;
 - separate preparation, execution, compilation, publication, and total cost;
@@ -39,7 +43,7 @@ phase-level diagnosis before the team changes coverage.
 
 1. Inventory behavior owners and exact commands.
 2. Map dependencies, runtime, environment, side effects, and evidence claims.
-3. Select the smallest adequate composition and its expansion event.
+3. Set admission, select the smallest adequate population, and name its expansion event.
 4. Plan the exact population before expensive work.
 5. Exercise passing and consequential recovery paths.
 6. Measure phase cost and optimize the owning phase.

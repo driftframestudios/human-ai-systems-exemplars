@@ -38,6 +38,11 @@ to form or repair one discriminating observation. Use
 select, time, reuse, and expand several owned observations. Repository overlays
 below supply local commands, budgets, and receiving authority.
 
+For the bounded implementation of optional CI admission, focused/full choices,
+browser preparation and one reviewed delivery, use the companion
+[selective check delivery runbook](selective-check-delivery.v0.1.md). This
+document retains the wider oracle, suite-topology and cross-repository route.
+
 ## Entry condition and task capsule
 
 Use this runbook when a repository has several test families, a slow or costly
