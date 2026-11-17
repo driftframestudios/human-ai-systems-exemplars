@@ -193,7 +193,7 @@ consequential decisions; and the receiver records what it accepted.
 | --- | --- |
 | Browse and understand the primary visitor system | [Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md) |
 | Change an artifact or interaction | Its nearest README or manifest, then the focused command in [the test map](tests/README.md) |
-| Select, diagnose, or maintain a test route | [Evidence-bearing test design](.agents/skills/evidence-bearing-test-design/README.md), [test-suite composition](.agents/skills/test-suite-composition/README.md), and the [cross-repository stewardship runbook](.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md) |
+| Select, diagnose, or maintain a test route | [Evidence-bearing test design](.agents/skills/evidence-bearing-test-design/README.md), [test-suite composition](.agents/skills/test-suite-composition/README.md), [selective check delivery](.agents/runbooks/selective-check-delivery.v0.1.md), and the broader [cross-repository stewardship runbook](.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md) |
 | Re-enter ongoing repository work | [Repository collaboration ground](AGENTS.md), current Git state, and the active GitHub Issue or pull request |
 | Begin a full cold or resumed collaboration cycle | [Repository collaboration cycle runbook](.agents/runbooks/repository-collaboration-cycle.v0.1.md), then the active Issue and its material source owner |
 | Compare or restart from an accepted stable core | Verify the named `snapshot` revision, then create a receiving branch from it or merge from it as described in [branch topology](BRANCHING.md#snapshot-baseline) |

@@ -66,7 +66,7 @@ completes the job.
 | Skill | Use it when | Result |
 | --- | --- | --- |
 | [`evidence-bearing-test-design`](evidence-bearing-test-design/README.md) · [contract](evidence-bearing-test-design/SKILL.md) | One behavior needs an independent oracle, a consequential fault, and the smallest observation that distinguishes them | A focused test whose pass, failure, and evidence boundary remain interpretable |
-| [`test-suite-composition`](test-suite-composition/README.md) · [contract](test-suite-composition/SKILL.md) | Checks, runners, prerequisites, shared setup, or reruns need a proportionate and recoverable topology | An explicit composition with exact population, phase cost, expansion events, and recovery |
+| [`test-suite-composition`](test-suite-composition/README.md) · [contract](test-suite-composition/SKILL.md) | Checks, selective CI admission, runners, prerequisites, shared setup, or reruns need a proportionate and recoverable topology | Explicit run/skip and population decisions with phase cost, expansion events, and recovery |
 
 ### Steward contracts, authority, and delivery boundaries
 

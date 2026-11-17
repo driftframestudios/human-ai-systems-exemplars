@@ -1,6 +1,6 @@
 ---
 name: test-suite-composition
-description: Composes owned checks into explicit, proportionate execution bundles with clear prerequisites, cost, result meaning, and recovery. Applies when test discovery, change-impact routing, shared setup, selective reruns, or cross-runner coordination becomes difficult.
+description: Composes owned checks into explicit, proportionate execution bundles with clear admission, check depth, prerequisites, cost, result meaning, and recovery. Applies when test discovery, selective CI, change-impact routing, shared setup, selective reruns, or cross-runner coordination becomes difficult.
 ---
 
 # Test suite composition
@@ -47,6 +47,14 @@ A composition record may carry:
 Each field needs a consumer. Unknown cost remains unmeasured until an observed
 run supplies the phase and denominator.
 
+For selective CI, identify three choices separately: **admission** determines
+whether a job starts, **depth** names the exact population it will execute,
+and **preparation** supplies that population's runtime, build, browsers, and
+services. Record the defaults for each choice and the owner who can change
+them. Missing source or dependency information receives a conservative
+affected-family route; missing execution authority receives a ready-to-run
+plan with the held action named.
+
 ## Rules
 
 ### Rule: Organize by behavior owner and observation layer
@@ -73,6 +81,15 @@ Unknown dependency edges receive owner review and a conservative affected-
 family route. A shared dependency, cross-family contract, release candidate, or
 explicit acceptance receiver supplies the expansion event for broader proof.
 
+### Rule: Admission precedes expensive preparation
+
+Evaluate optional job admission before allocating its runner and services when
+the platform supports that boundary. Make manual run/skip choices explicit and
+keep automatic triggers, repository activation settings, draft handling, and
+required-check policy consistent. A skipped dispatch preserves an active run
+whose evidence is still required. Selecting fewer cases is a depth decision;
+withholding execution is an admission decision. Each has its own result.
+
 ### Rule: The smallest adequate route runs first
 
 Use a focused source or unit check for a local behavior owner, add family
@@ -88,6 +105,13 @@ Share environment setup, local serving, telemetry, byte capture, artifact
 publication, and teardown where contracts match. Keep expected values and
 source-owned assertions independent of the implementation being checked.
 Migrate one caller at a time when lifecycle, network, or recovery policy differs.
+
+One compatible job can install once, build once, and run several selected
+checks against that source. Fresh test contexts, deterministic fixtures,
+resource ownership, and cleanup preserve isolation inside the shared
+environment. A reusable action shares instructions across jobs; its callers
+still prepare their own runners. Cached dependencies accelerate preparation;
+they carry no new behavior result.
 
 ### Rule: Equivalent selection is a migration condition
 
@@ -138,7 +162,7 @@ changes them.
 1. **Inventory:** Classify maintained source, generated projections, retained examples, local experiments, and external receivers.
 2. **Map:** Connect each check to its behavior owner, dependency edges, runner, prerequisites, cost phases, and evidence claim.
 3. **Select:** Choose the smallest adequate composition and state the event that expands it.
-4. **Plan:** Return exact IDs, commands, environment needs, side effects, holds, expected population, and result meanings before dispatch.
+4. **Plan:** Return admission, depth, exact IDs, commands, environment needs, side effects, holds, expected population, and result meanings before dispatch.
 5. **Consolidate:** Reuse mechanics where ownership matches and preserve independent domain expectations.
 6. **Exercise:** When authorized, compare membership and outcomes through one passing path and one consequential failure, interruption, or fallback path.
 7. **Measure:** Separate preparation, execution, compilation, publication, and total elapsed time using a comparable source and population.
@@ -170,7 +194,21 @@ changes them.
 - **When:** A campaign resumes after interruption.
 - **Then:** The receipt identifies reused evidence and its original scope; new launches and checks describe only the additional work.
 
+### Scenario: An optional run is explicitly skipped
+
+- **Given:** A manual workflow exposes run/skip separately from focused/full selection.
+- **When:** The operator chooses skip while an admitted release check remains active.
+- **Then:** The optional job allocates no runner or service, preserves the active check, and reports withheld execution. Its successful platform conclusion supplies no new behavior evidence; release acceptance continues through the active receiver.
+
 ## Conditional context
+
+Load [selective CI admission, check depth, and preparation reuse](references/selective-ci-admission-and-check-depth.md)
+when run/skip controls, automatic activation, focused/full selection, combined
+jobs, or browser choice changes the execution route. Use the companion
+[selective check delivery runbook](../../runbooks/selective-check-delivery.v0.1.md)
+when implementing and exercising that known route; the broader
+[cross-repository test-system stewardship runbook](../../runbooks/cross-repository-test-system-stewardship.v0.1.md)
+retains oracle design and collection-wide test topology.
 
 Load [CI provisioning and runner efficiency](references/ci-provisioning-and-runner-efficiency.md)
 when environment preparation, dependency transfer, runner image selection,
