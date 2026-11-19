@@ -234,7 +234,6 @@
 @media screen {
     .prose-flow > :is(.interpretive-aside, .discovery-callout, .debrief-quote:not(.debrief-quote--orientation)) {
         break-inside: avoid;
-        display: inline-block;
         inline-size: 100%;
     }
 

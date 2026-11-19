@@ -34,29 +34,29 @@
       ["Give the Comparison Room", "readable-tables-reusable-evidence.html"],
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
-    debriefs: [
-      ["All Debriefs", "debriefs.html"],
-      ["Genomic Viewer", "genomic-viewer-replatforming.html"],
+    showcase: [
+      ["Case Studies & Articles", "debriefs.html"],
+      ["Rearchitecting a Genomic Viewer", "genomic-viewer-replatforming.html"],
       ["Clinical Trial Coordination", "fmi-clinical-trial-coordination.html"],
-      ["EHR · Discrete Genomic Result", "ehr-discrete-genomic-result.html"],
-      ["EHR · Two Charts, One Result", "ehr-two-charts-one-result.html"],
-      ["EHR · Three Front Doors", "ehr-three-front-doors.html"],
-      ["EHR · PGx Alert Failure", "ehr-pgx-alert-failure.html"],
-      ["EHR · Interface Engine", "ehr-interface-engine-replatform.html"],
-      ["FMI LIMS / ELN", "fmi-lims-eln-replatforming.html"],
-      ["Who To Believe", "who-to-believe-reviews-platform.html"],
-      ["Humatics", "choose-your-player-humatics.html"],
-      ["Initiative Costing", "initiative-costing.html"],
+      ["Redesigning LIMS/ELN Platforms", "fmi-lims-eln-replatforming.html"],
+      ["Redesigning a Global Reviews Platform", "who-to-believe-reviews-platform.html"],
+      ["Designing a Physical AI Spatial Robotics Platform", "choose-your-player-humatics.html"],
+      ["AI/LLM Harnesses for Costing Initiatives", "initiative-costing.html"],
       ["Field Inspection Harness", "field-inspection-harness-replatform.html"],
-      ["Distributed Inspection Harness", "distributed-inspection-harness.html"],
-      ["Three-Way Comparative & The Return", "three-way-comparative-return.html"],
-      ["Narrative–Execution Gap Research Atlas", "narrative-execution-gap-research-atlas.html"],
-      ["Prompt-Side Conditions Practice", "prompt-side-conditions-practice.html"],
+      ["Designing Inspections That Work Offline", "distributed-inspection-harness.html"],
+      ["AI Workflows for Comparing Project Write-Ups", "three-way-comparative-return.html"],
+      ["AI/LLM Research Harnesses", "narrative-execution-gap-research-atlas.html"],
+      ["Better Prompting for Educators & Instructors", "prompt-side-conditions-practice.html"],
+      ["Finding Product-Market Fit for a Portable Spatial Capture System", "spatial-capture-collaborative-memory.html"],
+      ["Helping Nurses Bring Their Knowledge Across Languages", "multilingual-clinical-vocabulary-practice.html"],
+      ["Designing Forms That Help People Finish", "recoverable-enterprise-forms.html"],
+      ["EHR · Discrete Genomic Results in Epic", "ehr-discrete-genomic-result.html"],
+      ["EHR · Normalize Once Before Emitting", "ehr-two-charts-one-result.html"],
+      ["EHR · Keeping Patient Records Consistent Across Three EHRs", "ehr-three-front-doors.html"],
+      ["EHR · Designing an Alert Nobody Clicked", "ehr-pgx-alert-failure.html"],
+      ["EHR · Migrating Without Dropping Results", "ehr-interface-engine-replatform.html"],
       ["Benchmark Orientation", "benchmark-orientation.html"],
-      ["MAPS Evaluations", "maps-evaluations.html"],
-      ["The Photographs Were a Proxy", "spatial-capture-collaborative-memory.html"],
-      ["Language Control Belongs with the Learner", "multilingual-clinical-vocabulary-practice.html"],
-      ["The Form Is a Contract", "recoverable-enterprise-forms.html"]
+      ["MAPS Evaluations", "maps-evaluations.html"]
     ]
   };
 
@@ -121,7 +121,7 @@
     var grid = element("div", "super-footer__grid");
     grid.appendChild(routeList("About", routes.about));
     grid.appendChild(routeList("AI Systems", routes.ai));
-    grid.appendChild(routeList("Debriefs", routes.debriefs));
+    grid.appendChild(routeList("Showcase", routes.showcase));
     footer.appendChild(grid);
 
     var closing = element("div", "super-footer__closing");
