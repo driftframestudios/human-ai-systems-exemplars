@@ -6,6 +6,9 @@ current work. This reference preserves the detailed capability, state, cost,
 ownership, and verification contracts formerly carried by the README. Its
 headings retain the corresponding technical anchors.
 
+The [developer docs](development/architecture/README.md) explain how to reuse
+the engine, trace a session command, and evaluate a GraphQL API or React receiver.
+
 This package lets About visitors plan people, teams and working sessions,
 assign roles and human review, and inspect the resulting investment. Each
 editor keeps unfinished entries separate from the accepted plan. Visitors can
