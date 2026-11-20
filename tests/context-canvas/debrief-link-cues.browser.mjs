@@ -23,9 +23,9 @@ routes.push('initiative-costing.html', 'one-figure-several-readings.html', 'read
   'narrative-execution-gap-research-atlas.html', 'prompt-side-conditions-practice.html', 'benchmark-orientation.html',
   'maps-evaluations.html', 'debriefs.html');
 const expectedOutside = new Map([
-  ['genomic-viewer-replatforming.html', 41],
-  ['fmi-clinical-trial-coordination.html', 11],
-  ['fmi-lims-eln-replatforming.html', 24],
+  ['genomic-viewer-replatforming.html', 44],
+  ['fmi-clinical-trial-coordination.html', 16],
+  ['fmi-lims-eln-replatforming.html', 31],
   ['choose-your-player-humatics.html', 8],
   ['who-to-believe-reviews-platform.html', 17],
   ['ehr-discrete-genomic-result.html', 5],

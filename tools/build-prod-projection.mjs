@@ -3297,12 +3297,12 @@ function rewritePrimaryLocalReferences(
     ? rewriteOpeningTags(text, (element) => {
         let tag = rewritePublicationMetadataReferences(element, rewrite);
         tag = tag.replace(
-          /(^|\s)((?:href|src|poster|data|data-motion-src|data-still-src|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          /(^|\s)((?:href|src|poster|data|data-motion-src|data-still-src|data-catalog-preview-src|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
           (carrier, boundary, prefix, quote, reference) =>
             `${boundary}${prefix}${quote}${rewrite(reference)}${quote}`,
         );
         tag = tag.replace(
-          /(^|\s)((?:srcset|imagesrcset)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          /(^|\s)((?:srcset|imagesrcset|data-catalog-preview-srcset)\s*=\s*)(["'])([\s\S]*?)\3/gi,
           (carrier, boundary, prefix, quote, value) =>
             `${boundary}${prefix}${quote}${rewriteSrcset(
               value,

@@ -522,6 +522,7 @@ async function enableLegacyPublicationFixture(fixture) {
       `<meta property="og:image" content="${legacyOrigin}${projectRoot}/img/photo.jpg">`,
       `<meta name="twitter:image" content="${legacyOrigin}${projectRoot}/img/photo.jpg">`,
       '<a href="../img/photo.jpg">Portrait</a>',
+      '<li data-catalog-preview-src="../img/photo.jpg" data-catalog-preview-srcset="../img/photo.jpg?size=small 480w, ../img/photo.jpg 1440w"></li>',
       '<a href="../../collaboration/demo.html#start">Example</a>',
       '<button data-action="open-panel" data-src="lazy-panel" data-href="panel-route">Open panel</button>',
       "<script>const preview = URL.createObjectURL(blob);</script>",
@@ -2146,6 +2147,8 @@ test("publication projection materializes one digest-bound receiver and rewrites
     assert.match(html, /<meta property="og:image" content="https:\/\/vik\.guru\/img\/photo\.jpg">/);
     assert.match(html, /<meta name="twitter:image" content="https:\/\/vik\.guru\/img\/photo\.jpg">/);
     assert.match(html, /href="img\/photo\.jpg"/);
+    assert.ok(html.includes('data-catalog-preview-src="img/photo.jpg"'));
+    assert.ok(html.includes('data-catalog-preview-srcset="img/photo.jpg?size=small 480w, img/photo.jpg 1440w"'));
     assert.match(html, /href="collaboration\/demo\.html#start"/);
     assert.match(html, /data-action="open-panel" data-src="lazy-panel" data-href="panel-route"/);
     assert.match(html, /URL\.createObjectURL\(blob\)/);

@@ -16,6 +16,12 @@ import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const imageRoot = join(repositoryRoot, "context-canvas-project-surface/img/debriefs");
+const rightsBearingCards = [
+  "queue-secretly-status-machine/plate-well-history.webp",
+  "boolean-building-blocks/cohort-rule-groups.webp",
+  "sample-noone-could-find/laboratory-process-lanes.webp",
+];
+
 export const derivativeProfiles = Object.freeze({
   families: Object.freeze([
     Object.freeze({
@@ -34,6 +40,7 @@ export const derivativeProfiles = Object.freeze({
     Object.freeze({
       id: "catalog-card",
       paths: Object.freeze([
+        ...rightsBearingCards,
         "choose-your-player/robotics-upfront.webp",
         "spatial-capture/3d-modeling-scan.webp",
       ]),
@@ -197,7 +204,7 @@ export function runCwebp(sourcePath, targetPath, width) {
       "6",
       "-sharp_yuv",
       "-metadata",
-      "none",
+      rightsBearingCards.some(path => sourcePath === join(imageRoot, path)) ? "xmp" : "none",
       "-resize",
       String(width),
       "0",

@@ -437,23 +437,28 @@ function usesTrackedRouteAuthority(key) {
 function externalAttributeCarriers(html) {
   const carriers = [];
   const profiles = {
-    link: { attribute: "href", carrier: "license" },
-    source: { attribute: "src", carrier: "video_source" },
-    video: { attribute: "data-video-poster", carrier: "video_poster" },
+    link: [{ attribute: "href", carrier: "license" }],
+    source: [{ attribute: "src", carrier: "video_source" }],
+    video: [
+      { attribute: "poster", carrier: "video_poster" },
+      { attribute: "data-video-poster", carrier: "video_poster" },
+    ],
   };
   for (const match of html.matchAll(/<(link|source|video)\b[^>]*>/gi)) {
     const tag = match[0];
-    const profile = profiles[match[1].toLowerCase()];
-    const values = attributeMatches(tag, profile.attribute);
-    const token = /^\{\{(PUBLIC_URL_EXTERNAL_[A-Z0-9_]+)\}\}$/.exec(values[0]?.[2] ?? "");
-    if (token === null) continue;
-    if (values.length !== 1 ||
-        (profile.carrier === "license" && attributeMatches(tag, "rel")[0]?.[2] !== "license") ||
-        (profile.carrier === "video_source" && attributeMatches(tag, "type")[0]?.[2] !== "video/mp4")) {
-      throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_CARRIER",
-        `${token[1]} needs its declared license or video carrier`);
+    const tagName = match[1].toLowerCase();
+    for (const profile of profiles[tagName]) {
+      const values = attributeMatches(tag, profile.attribute);
+      const token = /^\{\{(PUBLIC_URL_EXTERNAL_[A-Z0-9_]+)\}\}$/.exec(values[0]?.[2] ?? "");
+      if (token === null) continue;
+      if (values.length !== 1 ||
+          (profile.carrier === "license" && attributeMatches(tag, "rel")[0]?.[2] !== "license") ||
+          (profile.carrier === "video_source" && attributeMatches(tag, "type")[0]?.[2] !== "video/mp4")) {
+        throw new PublicReferenceContractError("PUBLIC_REFERENCE_EXTERNAL_CARRIER",
+          `${token[1]} needs its declared license or video carrier`);
+      }
+      carriers.push({ key: token[1], tag, ...profile });
     }
-    carriers.push({ key: token[1], tag, ...profile });
   }
   return carriers;
 }

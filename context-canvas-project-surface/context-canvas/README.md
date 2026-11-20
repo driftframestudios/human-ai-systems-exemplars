@@ -673,8 +673,12 @@ Run `npm run build:debrief-image-derivatives` after replacing an accepted source
 The repository-owned generator applies named source profiles: full-Debrief
 figures receive `960w` and `1920w` candidates, while selected catalog cards and
 previews receive `480w`, `960w`, and `1920w` candidates. Each derivative uses
-`cwebp` at quality 82, method 6, sharp YUV, with metadata removed and source
-aspect ratio preserved. The generator skips a candidate at or above the source
+`cwebp` at quality 82, method 6, sharp YUV, and preserves the source
+aspect ratio. The genomic plate, clinical cohort and laboratory lane card masters
+carry the author's copyright in XMP `dc:rights`. Their derivatives retain that
+packet. When replacing one of these masters, transfer the approved rights text
+from the original (including its Finder comment when supplied) into XMP before
+running the generator. The generator skips candidates at or above the source
 width, removes a configured candidate that has become stale, reports an
 unexpected width, reserves configured width suffixes for derivatives, reports
 an orphaned derivative during checks, removes that orphan during builds, writes

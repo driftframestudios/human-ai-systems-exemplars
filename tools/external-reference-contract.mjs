@@ -11,7 +11,8 @@ const TOKEN = /^PUBLIC_URL_EXTERNAL_[A-Z0-9]+(?:_[A-Z0-9]+)*$/;
 const CARRIERS = new Set(['anchor', 'license', 'video_source', 'video_poster']);
 // Bound reviewed selectors to the public document or demonstration that owns them.
 const publicSelectors = new Map([
-  ['kindlight.ai/', ['?scene=plate', '?section=cohort', '?section=profile', '?section=qc', '?section=specimens']],
+  ['kindlight.ai/', ['?scene=plate', '?scene=plate&plate=history', '?scene=corridor',
+    '?section=sources', '?section=requirements', '?section=biomarkers', '?section=cohort', '?section=profile', '?section=qc', '?section=specimens']],
   ['fhir.epic.com/Specifications', ['?api=10304']],
   ['support.google.com/googleplay/android-developer/answer/12053285', ['?hl=en']],
   ['www.ncei.noaa.gov/access/metadata/landing-page/bin/iso', ['?id=gov.noaa.ncdc%3AC00861']],

@@ -11,6 +11,16 @@ import {
   startStaticServer,
 } from "../../tools/core-architecture-browser-helper.mjs";
 
+import { materializePublicReferenceHtml } from '../../tools/materialize-public-references.mjs';
+import { loadExternalReferenceBinding } from '../../tools/external-reference-contract.mjs';
+import { loadPublicRouteReferenceBinding } from '../../tools/public-route-reference-contract.mjs';
+import { loadRegistryReferenceBinding } from '../../tools/registry-reference-contract.mjs';
+
+const [external, repository, registry] = await Promise.all([
+  loadExternalReferenceBinding(), loadPublicRouteReferenceBinding(), loadRegistryReferenceBinding(),
+]);
+const destinations = new Map([...external.destinations.entries(), ...repository.destinations.entries(), ...registry.destinations.entries()]);
+
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const receivers = [
   {
@@ -28,6 +38,7 @@ const receivers = [
   {
     route: "genomic-viewer-replatforming.html",
     families: [
+      "genomics-plate-history",
       "genomics-specimen-qa-biomarker",
       "genomics-responsive-interface",
       "genomics-permissions",
@@ -90,6 +101,12 @@ for (const viewport of viewports) {
     });
     t.after(() => context.close());
 
+    await context.route(`**${visitorRoot}genomic-viewer-replatforming.html`, async route => {
+      const response = await route.fetch();
+      const body = materializePublicReferenceHtml(await response.text(), destinations,
+        "genomic-viewer-replatforming.html", null, repository.destinations, external.destinations);
+      await route.fulfill({ response, body });
+    });
     const requestedPosters = new Set();
     await context.route("https://vik.guru/v1-cdn/video/**", async route => {
       const url = route.request().url();
