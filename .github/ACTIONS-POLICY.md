@@ -187,3 +187,5 @@ and approved budget can introduce the smallest fitting addition.
 - [Secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
 - [Using custom workflows with GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 - [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+
+The prototype job uses an exact-match APT archive cache for Playwright system packages. The resolved package versions, engine selection, Playwright version, runner image, OS and architecture identify each entry. The trusted writer is a successful confirmed browser dispatch on `main`. [Automation guide](AUTOMATION.md)
