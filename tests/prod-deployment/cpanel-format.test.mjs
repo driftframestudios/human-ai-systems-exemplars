@@ -31,6 +31,8 @@ test('compacting preserves verbatim HTML, meaningful SVG text, metadata, and JSO
   assert.match(expanded, /<svg>\s*\n\s+<g>/u);
   assert.ok((await compactSource('page.html', expanded)).includes(graphic));
   assert.ok(compact.includes(graphic));
+  const longForm = '<textarea aria-label="' + 'input '.repeat(25).trim() + '">  Keep this\n</textarea>';
+  assert.ok((await prettySource('page.html', longForm)).includes('>  Keep this\n</textarea>'));
   assert.ok(compact.includes(verbatim));
   assert.ok(compact.includes('title="short"'));
   assert.equal(await compactSource('page.html', compact), compact);

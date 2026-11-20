@@ -124,7 +124,8 @@ async function formatHtml(source, pretty = false) {
       const start = node.sourceSpan.start.offset, end = node.sourceSpan.end.offset;
       ranges.push([start, end, formatInlineGraphic(node)]);
     } else if ((node.name === 'pre' || node.name === 'textarea') && node.endSourceSpan) {
-      const start = node.startSourceSpan.end.offset, end = node.endSourceSpan.start.offset;
+      const start = pretty ? node.sourceSpan.start.offset : node.startSourceSpan.end.offset;
+      const end = pretty ? node.sourceSpan.end.offset : node.endSourceSpan.start.offset;
       ranges.push([start, end, source.slice(start, end)]);
     } else {
       node.children?.forEach(visit);
