@@ -400,6 +400,7 @@ export async function loadTaggedProductionCarrier({
     fail("Production carrier exceeds the entry-count boundary.");
   }
   const files = new Map();
+  const portableKeys = new Set();
   let totalBytes = 0;
   for (const record of records) {
     if (
@@ -414,9 +415,10 @@ export async function loadTaggedProductionCarrier({
       "Production carrier path",
     );
     const key = portablePathKey(relativePath);
-    if ([...files.keys()].some((candidate) => portablePathKey(candidate) === key)) {
+    if (portableKeys.has(key)) {
       fail(`Production carrier repeats a normalized path: ${relativePath}.`);
     }
+    portableKeys.add(key);
     const bytes = await git(root, ["cat-file", "blob", record.object]);
     assertSafeInteger(bytes.byteLength, `Production carrier ${relativePath} bytes`, {
       maximum: defaultLimits.maxEntryBytes,

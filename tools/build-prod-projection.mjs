@@ -5005,19 +5005,23 @@ export async function stageProductionCarrierFromRepository(options = {}) {
 
 async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
   const trackedBlobs = await readTrackedBlobIndex(root, releaseSha);
-  const expectedPaths = [...carrierPlan.outputFiles.keys()]
-    .map((relativePath) => `${carrierRelativeRoot}/${relativePath}`)
-    .sort();
-  const actualPaths = [...trackedBlobs.keys()]
-    .filter((sourcePath) => sourcePath.startsWith(`${carrierRelativeRoot}/`))
-    .sort();
-  const missing = expectedPaths.filter((sourcePath) => !actualPaths.includes(sourcePath));
-  const extra = actualPaths.filter((sourcePath) => !expectedPaths.includes(sourcePath));
+  const prefix = `${carrierRelativeRoot}/`;
+  const missing = [];
+  for (const relativePath of carrierPlan.outputFiles.keys()) {
+    const sourcePath = prefix + relativePath;
+    if (!trackedBlobs.has(sourcePath)) missing.push(sourcePath);
+  }
+  const extra = [];
+  for (const sourcePath of trackedBlobs.keys()) {
+    if (sourcePath.startsWith(prefix) && !carrierPlan.outputFiles.has(sourcePath.slice(prefix.length))) {
+      extra.push(sourcePath);
+    }
+  }
   if (missing.length || extra.length) {
     fail([
       "Tracked production carrier differs from its exact allowlist.",
-      missing.length ? `Missing: ${missing.join(", ")}` : "",
-      extra.length ? `Extra: ${extra.join(", ")}` : "",
+      missing.length ? `Missing: ${missing.sort().join(", ")}` : "",
+      extra.length ? `Extra: ${extra.sort().join(", ")}` : "",
     ].filter(Boolean).join("\n"));
   }
 
@@ -5039,7 +5043,7 @@ async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
     }
     totalBytes += trackedInput.bytes.byteLength;
   }
-  return { files: actualPaths.length, bytes: totalBytes };
+  return { files: carrierPlan.outputFiles.size, bytes: totalBytes };
 }
 
 export async function checkProductionCarrier(options = {}) {
