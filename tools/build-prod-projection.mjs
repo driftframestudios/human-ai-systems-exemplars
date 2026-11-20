@@ -1758,6 +1758,7 @@ async function resolveProductionAssetInventory({
   primaryManifest,
   primaryInputs,
   aggregatePlan,
+  compact,
   inventory,
 }) {
   if (inventory === null) return null;
@@ -1878,9 +1879,11 @@ async function resolveProductionAssetInventory({
       );
       trackedInputs.set(sourcePath, sourceInput);
     }
+    const expectedBytes = compact && selection.iframe_paths.length
+      ? await compact(sourcePath, sourceInput.bytes) : sourceInput.bytes;
     for (const iframePath of selection.iframe_paths) {
       const iframeBytes = aggregatePlan.outputFiles.get(iframePath);
-      if (!Buffer.isBuffer(iframeBytes) || !iframeBytes.equals(sourceInput.bytes)) {
+      if (!Buffer.isBuffer(iframeBytes) || !iframeBytes.equals(expectedBytes)) {
         fail(
           `Iframe production asset bytes differ from canonical source ${sourcePath} at ` +
           `${iframePath}.`,
@@ -4484,6 +4487,7 @@ async function composeProductionProjection(root, readBlob, options) {
     primaryManifest,
     primaryInputs,
     aggregatePlan,
+    compact: directoryRoutes ? compactDeliveryBytes : null,
     inventory: selection.assetInventory,
   });
   const directAssetConsumers = new Map(
