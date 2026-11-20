@@ -976,6 +976,13 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
       owner.type === "skill_publication_selection" &&
       typeof owner.skill_name === "string")
     .map(({ owner, token }) => [owner.skill_name, token]));
+  const pagesHost = (await readFile(resolve(repositoryRoot, "schemas/CNAME"), "utf8")).trim();
+  for (const route of routeContract.routes.filter(({ role }) => role === "skill_pages_html")) {
+    const url = new URL(route.url);
+    assert.equal(url.origin, `https://${pagesHost}`);
+    assert.equal(url.pathname, `/skills/${route.owner.skill_name}/`);
+    assert.ok((await stat(resolve(outputRoot, "." + url.pathname, "index.html"))).isFile());
+  }
   const nameByToken = new Map(
     [...skillBindings].map(([name, token]) => [token, name]),
   );

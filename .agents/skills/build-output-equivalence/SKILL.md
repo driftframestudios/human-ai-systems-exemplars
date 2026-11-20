@@ -39,7 +39,7 @@ Choose one fault made plausible by the change. A streaming reader might stop mid
 1. Ask which deliverable will be accepted, who consumes it and which known-good build or artifact supplies the expectation.
 2. Record the input revision, selection, tool revisions and reproducibility-sensitive settings. Use isolated temporary destinations for the ordinary build and verification commands.
 3. Compare membership, content, and the outer format. Check attestation fields against their own source. Report a discrepancy at the earliest layer where it appears.
-4. Exercise a fault that distinguishes the candidate mechanism from the accepted one. Keep the successful comparison and the failure-path observation separately inspectable.
+4. When the changed mechanism owns a failure or recovery guarantee, exercise a fault that distinguishes the candidate mechanism from the accepted one. Keep the successful comparison and the failure-path observation separately inspectable.
 5. Once the artifacts agree within the stated contract, alternate the two builders on the same workload if cost affects adoption. Record each complete attempt, emitted bytes, elapsed phases, and any setup cost transferred to another process or runner.
 6. Return the observed differences and recovery revision to the release owner. Keep the measured source and workload beside any speed claim.
 
@@ -51,4 +51,4 @@ Choose one fault made plausible by the change. A streaming reader might stop mid
 
 ## Recovery and completion
 
-An unexpected difference stops the adoption comparison at the affected layer. Reuse the known-good builder for the accepted output and replay the smallest input that reproduces the discrepancy. The work is complete when the receiving verifier accepts the artifact, every observed difference has an agreed meaning, and the selected fault produces the promised recovery state. A new archive format, tool-identity field or consumer requirement reopens that comparison.
+An unexpected difference stops the adoption comparison at the affected layer. Reuse the known-good builder for the accepted output and replay the smallest input that reproduces the discrepancy. The work is complete when the receiving verifier accepts the artifact, every observed difference has an agreed meaning, and the reviewer has exercised each recovery guarantee affected by the change. A new archive format, tool-identity field or consumer requirement reopens that comparison.

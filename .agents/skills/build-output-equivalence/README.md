@@ -2,7 +2,7 @@
 
 Use this skill when a build change should make the same files available through a faster or simpler implementation. Start with the artifact people download or consume. Work backward to the fixed inputs and the comparison that could reveal a consequential difference. [Skill contract](SKILL.md)
 
-## Example
+## Concrete example
 
 A team batches Git reads while rebuilding a static site. It supplies the old and new builders with the same source tree. The reviewer compares file paths and bytes, the generated index and the final archive. The receipt correctly identifies a new tool digest. The reviewer verifies that digest independently and compares the other receipt fields. A truncated input checks whether the builder closes the reader and leaves the previous output usable.
 

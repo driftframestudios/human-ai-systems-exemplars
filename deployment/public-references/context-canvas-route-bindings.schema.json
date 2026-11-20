@@ -87,6 +87,7 @@
             "hosted_instrument",
             "schema_retrieval",
             "skill_catalog",
+            "skill_pages_html",
             "skill_retrieval"
           ]
         },
@@ -220,6 +221,14 @@
                   "owner": { "$ref": "#/$defs/skillCatalogOwner" }
                 },
                 "required": ["role", "owner"]
+              },
+              {
+                "properties": {
+                  "role": { "const": "skill_pages_html" },
+                  "owner": { "$ref": "#/$defs/skillRetrievalOwner" },
+                  "fragment": { "type": "null" },
+                  "allowed_carriers": { "const": ["anchor"] }
+                }
               },
               {
                 "properties": {

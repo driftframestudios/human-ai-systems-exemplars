@@ -242,7 +242,7 @@ test('derives page, fragment, asset, iframe, schema, and skill destinations from
   });
 
   const expected = new Map([
-    ['PUBLIC_URL_SKILL_BUILD_OUTPUT_EQUIVALENCE', 'https://schemas.vik.guru/skills/build-output-equivalence/'],
+    ['PUBLIC_URL_SKILL_BUILD_OUTPUT_EQUIVALENCE', 'https://schemas.radiantnull.com/skills/build-output-equivalence/'],
     ['PUBLIC_URL_PAGE_ABOUT', 'https://vik.guru/'],
     ['PUBLIC_URL_PAGE_ABOUT_ABOUT', 'https://vik.guru/#about'],
     ['PUBLIC_URL_PAGE_ABOUT_STUDIO', 'https://vik.guru/#studio-title'],
