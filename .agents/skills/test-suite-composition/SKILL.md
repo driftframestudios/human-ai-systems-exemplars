@@ -139,6 +139,15 @@ telemetry precede publication. The owned teardown handler remains callable
 after partial initialization; a hard cancellation records cleanup as
 `incomplete` when that handler cannot finish.
 
+### Rule: An investigation boundary leads to a phase decision
+
+When a full job reaches its agreed ceiling, the suite owner reads the last
+completed phase and the work still pending. Compare equivalent engine and
+case populations, then choose the smallest preparation or execution change
+that addresses the measured delay. A budget change goes back to its owner
+with cold recovery cost, wall time, total runner time and the behavior the
+extra time would establish.
+
 ### Rule: Results retain population and standing
 
 Return separate counts or identities for source files, runtime cases, browser

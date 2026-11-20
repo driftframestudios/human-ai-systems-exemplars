@@ -193,6 +193,7 @@ consequential decisions; and the receiver records what it accepted.
 | --- | --- |
 | Browse and understand the primary visitor system | [Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md) |
 | Change an artifact or interaction | Its nearest README or manifest, then the focused command in [the test map](tests/README.md) |
+| Verify a build or packaging refactor | [Build output equivalence](.agents/skills/build-output-equivalence/README.md) connects fixed inputs, resulting files, archives and tool identity to the acceptance decision. |
 | Select, diagnose, or maintain a test route | [Evidence-bearing test design](.agents/skills/evidence-bearing-test-design/README.md), [test-suite composition](.agents/skills/test-suite-composition/README.md), [selective check delivery](.agents/runbooks/selective-check-delivery.v0.1.md), and the broader [cross-repository stewardship runbook](.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md) |
 | Re-enter ongoing repository work | [Repository collaboration ground](AGENTS.md), current Git state, and the active GitHub Issue or pull request |
 | Begin a full cold or resumed collaboration cycle | [Repository collaboration cycle runbook](.agents/runbooks/repository-collaboration-cycle.v0.1.md), then the active Issue and its material source owner |

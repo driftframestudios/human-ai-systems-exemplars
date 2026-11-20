@@ -19,7 +19,7 @@ proof quickly and expand coverage for a clear reason.
 Use this skill when several test commands overlap, the checks reopened by a
 change are unclear, optional workflows need predictable admission, a workflow
 repeats unaffected preparation, or a slow CI lane needs phase-level diagnosis
-before the team changes coverage.
+before the team changes coverage. The provisioning guide includes a same-length archive substitution and a cold-download recovery path for teams introducing package reuse.
 
 ## What it returns
 
