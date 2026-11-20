@@ -1351,7 +1351,7 @@ test("the repository source materializes from discovered keys without frozen rou
     }
     for (const key of record.inspection.keys) {
       if (key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)) {
-        assert.ok(generated.includes(externalReference.destinations.get(key)), `${key} reaches ${record.safePath}`);
+        assert.ok(generated.includes(externalReference.destinations.get(key).replaceAll("&", "&amp;")), `${key} reaches ${record.safePath}`);
       }
     }
     for (const body of jsonLdBodies(generated)) {

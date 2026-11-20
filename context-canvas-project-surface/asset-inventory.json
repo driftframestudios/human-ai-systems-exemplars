@@ -753,7 +753,7 @@
         {
           "id": "catalog_preview",
           "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
-          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+          "accessibility_text_owner": "The clinical trial coordination catalog preview."
         }
       ],
       "source_relationship": {
@@ -762,7 +762,7 @@
         "generator_path": "tools/generate-debrief-image-derivatives.mjs",
         "profile": "debrief-catalog-preview-width-480-q82-method6-sharp-yuv-metadata-none"
       },
-      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the clinical trial coordination preview at narrow and wide viewports, and rebuild the production projection."
     },
     {
       "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
@@ -771,7 +771,7 @@
         {
           "id": "catalog_preview",
           "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
-          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+          "accessibility_text_owner": "The clinical trial coordination catalog preview."
         }
       ],
       "source_relationship": {
@@ -780,7 +780,7 @@
         "generator_path": "tools/generate-debrief-image-derivatives.mjs",
         "profile": "debrief-catalog-preview-width-960-q82-method6-sharp-yuv-metadata-none"
       },
-      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the clinical trial coordination preview at narrow and wide viewports, and rebuild the production projection."
     },
     {
       "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
@@ -789,7 +789,7 @@
         {
           "id": "catalog_preview",
           "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
-          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+          "accessibility_text_owner": "The clinical trial coordination catalog preview."
         }
       ],
       "source_relationship": {
@@ -798,7 +798,7 @@
         "generator_path": "tools/generate-debrief-image-derivatives.mjs",
         "profile": "debrief-catalog-preview-width-1920-q82-method6-sharp-yuv-metadata-none"
       },
-      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the clinical trial coordination preview at narrow and wide viewports, and rebuild the production projection."
     },
     {
       "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
@@ -1239,6 +1239,150 @@
         "profile": "ai4i-gallery-conditions-v1"
       },
       "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/plate-well-history-480.webp",
+      "semantic_key": "context-canvas.debrief-media.genomic-viewer.catalog-orientation.width-480",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Color-coded specimen wells extend from a tilted plate in rows, with labels marking individual wells.",
+          "accessibility_text_owner": "Showcase catalog card for genomic-viewer."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/plate-well-history.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/plate-well-history-960.webp",
+      "semantic_key": "context-canvas.debrief-media.genomic-viewer.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Color-coded specimen wells extend from a tilted plate in rows, with labels marking individual wells.",
+          "accessibility_text_owner": "Showcase catalog card for genomic-viewer."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/plate-well-history.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups-480.webp",
+      "semantic_key": "context-canvas.debrief-media.clinical-trial.catalog-orientation.width-480",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Nested rule cards combine biomarker actionability, quality and consent and show how many specimens match the cohort.",
+          "accessibility_text_owner": "Showcase catalog card for clinical-trial."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups-960.webp",
+      "semantic_key": "context-canvas.debrief-media.clinical-trial.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Nested rule cards combine biomarker actionability, quality and consent and show how many specimens match the cohort.",
+          "accessibility_text_owner": "Showcase catalog card for clinical-trial."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.clinical-trial.catalog-orientation.width-1920",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Nested rule cards combine biomarker actionability, quality and consent and show how many specimens match the cohort.",
+          "accessibility_text_owner": "Showcase catalog card for clinical-trial."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/cohort-rule-groups.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes-480.webp",
+      "semantic_key": "context-canvas.debrief-media.lims-eln.catalog-orientation.width-480",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Colored laboratory lanes connect accession and plating to extraction, quality control, sequencing and secondary analysis.",
+          "accessibility_text_owner": "Showcase catalog card for lims-eln."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes-960.webp",
+      "semantic_key": "context-canvas.debrief-media.lims-eln.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Colored laboratory lanes connect accession and plating to extraction, quality control, sequencing and secondary analysis.",
+          "accessibility_text_owner": "Showcase catalog card for lims-eln."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.lims-eln.catalog-orientation.width-1920",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Colored laboratory lanes connect accession and plating to extraction, quality control, sequencing and secondary analysis.",
+          "accessibility_text_owner": "Showcase catalog card for lims-eln."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/laboratory-process-lanes.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-rights-xmp"
+      },
+      "recovery_condition": "Regenerate the catalog card with npm run build:debrief-image-derivatives and verify its responsive selection."
     }
   ]
 }

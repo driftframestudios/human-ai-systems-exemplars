@@ -135,9 +135,15 @@ test("the bounded video manifest binds each carrier to one semantic family and v
       `${identity} poster uses an admitted passive image type`,
     );
     assert.equal(movie.sha256, family.source.sha256);
-    assert.equal(poster.source_master_sha256, movie.sha256);
-    assert.ok(poster.timestamp_seconds >= 0);
-    assert.ok(poster.timestamp_seconds < movie.duration_seconds);
+    const authoredCover = poster.composition?.kind === "authored_cover";
+    if (authoredCover) {
+      assert.match(poster.source_image_sha256, sha256Pattern);
+      assertNonemptyString(poster.composition.reason, `${identity} authored cover composition`);
+    } else {
+      assert.equal(poster.source_master_sha256, movie.sha256);
+      assert.ok(poster.timestamp_seconds >= 0);
+      assert.ok(poster.timestamp_seconds < movie.duration_seconds);
+    }
     assert.ok(poster.width <= movie.width, `${identity} poster width stays source-or-smaller`);
     assert.ok(poster.height <= movie.height, `${identity} poster height stays source-or-smaller`);
     const ratioDelta = Math.abs((poster.width / poster.height) - (movie.width / movie.height));
@@ -145,14 +151,14 @@ test("the bounded video manifest binds each carrier to one semantic family and v
       && typeof poster.composition.reason === "string"
       && poster.composition.reason.trim().length > 0;
     assert.ok(
-      ratioDelta <= 0.002 || explicitCrop,
+      ratioDelta <= 0.002 || explicitCrop || authoredCover,
       `${identity} poster preserves display ratio or records its crop`,
     );
     assert.ok(
       poster.derivation && typeof poster.derivation === "object" && !Array.isArray(poster.derivation),
       `${identity} poster derivation is structured`,
     );
-    assertNonemptyString(poster.derivation.frame_decoder, `${identity} poster frame decoder`);
+    if (!authoredCover) assertNonemptyString(poster.derivation.frame_decoder, `${identity} poster frame decoder`);
     assertNonemptyString(poster.derivation.image_encoder, `${identity} poster image encoder`);
     assert.ok(
       poster.derivation.settings
@@ -319,6 +325,7 @@ test("the bounded video manifest binds each carrier to one semantic family and v
     (family) => ![
       "choose-your-player",
       "about-problem-to-system-sequence",
+      "genomics-plate-history",
     ].includes(family.semantic_id),
   );
   assert.equal(batchFamilies.length, 11);

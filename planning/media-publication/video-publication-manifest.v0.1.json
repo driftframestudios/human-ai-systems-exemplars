@@ -43,10 +43,7 @@
           "derivation": {
             "frame_decoder": "FFmpeg 9.0.2",
             "image_encoder": "cwebp 1.6.0",
-            "settings": {
-              "quality": 82,
-              "metadata": "none"
-            }
+            "settings": { "quality": 82, "metadata": "none" }
           },
           "selection_reason": "The stable opening state presents all four proxy role cards and the shared site context before visitor playback.",
           "review": {
@@ -729,11 +726,101 @@
       }
     },
     {
+      "semantic_id": "genomics-plate-history",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Genomic Viewer Re-platforming Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+      "visitor_placement": "inside #genomics-plate-history-walkthrough before #track-index-title",
+      "source": {
+        "standing": "human_selected_prepared_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_recording_prepared_to_digest_bound_master",
+        "sha256": "6de0f05639c7c0774182955f9ba1af9966492fdb24369e7af0c524283984d966",
+        "original_sha256": "8e0bc88333f1c82b4489a31c2260a1c75e417870163997ffe17562dbb4a1a759",
+        "copyright": "© 2026 Vikrant Varun Kudesia | Driftframe Studios, LLC"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/genomics-plate-history/v0.1.0/movie.mp4",
+          "object_key": "v1/video/genomics-plate-history/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "6de0f05639c7c0774182955f9ba1af9966492fdb24369e7af0c524283984d966",
+          "bytes": 20377776,
+          "duration_seconds": 122.033333,
+          "width": 1920,
+          "height": 990,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/genomics-plate-history/v0.1.0/poster.webp",
+          "object_key": "v1/video/genomics-plate-history/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "6042f474dca24ed258b8c6ffa15743de5c0e1b6c0e7f2d1ddc3ba1a0a8781b1d",
+          "bytes": 112564,
+          "width": 1566,
+          "height": 990,
+          "derivation": {
+            "image_encoder": "cwebp 1.6.0",
+            "settings": {
+              "quality": 82,
+              "metadata": "selected source copyright in XMP dc:rights"
+            }
+          },
+          "selection_reason": "The author selected a view of the wells extending from the plate with the history panels visible.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human publication owner",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "source_copyright_preserved",
+            "evidence": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+          },
+          "source_image_sha256": "2c869ac48a32fb298d1def4e2494a98e04a8dddd51b215e1f8ad914e54fa2f1d",
+          "composition": {
+            "kind": "authored_cover",
+            "reason": "The selected screenshot frames the open plate and its history panels at its original aspect ratio."
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Genomic plate history and laboratory process demonstration",
+        "standing_text_id": "genomics-plate-history-standing",
+        "figure_caption_id": "genomics-plate-history-caption",
+        "visual_sequence_id": "genomics-plate-history-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": "pending",
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-11-20",
+          "observation_owner": "repository browser checks",
+          "evidence": "tests/context-canvas/video-receivers.browser.mjs",
+          "receiver": "materialized_native_receiver_with_passive_poster_at_three_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
       "semantic_id": "genomics-specimen-qa-biomarker",
       "asset_version": "v0.1.0",
       "semantic_owner": "Genomic Viewer Re-platforming Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
-      "visitor_placement": "inside #genomics-specimen-qa-biomarker-walkthrough, after #genomic-proxy-standing-title and before #track-index-title",
+      "visitor_placement": "inside the solution outcome section labelled by #solution-outcome-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,

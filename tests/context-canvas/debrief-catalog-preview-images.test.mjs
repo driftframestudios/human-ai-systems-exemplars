@@ -13,9 +13,9 @@ const canvasRoot = resolve(
 
 const previewSources = new Map([
   ["catalog-genomic-viewer", "../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp"],
-  ["catalog-clinical-trial", "../img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization.webp"],
+  ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization.webp"],
   ["catalog-ehr-integration", "../img/plot/ehr_discrete_result_contract_map.svg"],
-  ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp"],
+  ["catalog-clinical-trial", "../img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp"],
   ["catalog-humatics", "../img/debriefs/choose-your-player/robotics-map-setup.webp"],
   ["catalog-who-to-believe", "../img/plot/who_to_believe_influence_map.svg"],
   ["catalog-field-inspection", "../img/plot/inspection_platform_operating_map.svg"],
@@ -28,9 +28,9 @@ const previewSources = new Map([
 
 const previewDimensions = new Map([
   ["catalog-genomic-viewer", ["5120", "2708"]],
-  ["catalog-clinical-trial", ["5116", "2710"]],
+  ["catalog-lims-eln", ["5116", "2710"]],
   ["catalog-ehr-integration", ["1600", "1120"]],
-  ["catalog-lims-eln", ["480", "269"]],
+  ["catalog-clinical-trial", ["480", "269"]],
   ["catalog-humatics", ["5110", "2708"]],
   ["catalog-who-to-believe", ["1600", "1180"]],
   ["catalog-field-inspection", ["1600", "1200"]],
@@ -42,6 +42,21 @@ const previewDimensions = new Map([
 ]);
 
 const catalogCardImages = new Map([
+  ["catalog-lims-eln", {
+    src: "../img/debriefs/sample-noone-could-find/laboratory-process-lanes-480.webp",
+    srcset: "../img/debriefs/sample-noone-could-find/laboratory-process-lanes-480.webp 480w, ../img/debriefs/sample-noone-could-find/laboratory-process-lanes-960.webp 960w, ../img/debriefs/sample-noone-could-find/laboratory-process-lanes-1920.webp 1920w",
+    width: "480", height: "326",
+  }],
+  ["catalog-clinical-trial", {
+    src: "../img/debriefs/boolean-building-blocks/cohort-rule-groups-480.webp",
+    srcset: "../img/debriefs/boolean-building-blocks/cohort-rule-groups-480.webp 480w, ../img/debriefs/boolean-building-blocks/cohort-rule-groups-960.webp 960w, ../img/debriefs/boolean-building-blocks/cohort-rule-groups-1920.webp 1920w",
+    width: "480", height: "328",
+  }],
+  ["catalog-genomic-viewer", {
+    src: "../img/debriefs/queue-secretly-status-machine/plate-well-history-480.webp",
+    srcset: "../img/debriefs/queue-secretly-status-machine/plate-well-history-480.webp 480w, ../img/debriefs/queue-secretly-status-machine/plate-well-history-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/plate-well-history.webp 1828w",
+    width: "480", height: "363",
+  }],
   [
     "catalog-humatics",
     {

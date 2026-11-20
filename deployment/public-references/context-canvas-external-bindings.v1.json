@@ -1544,6 +1544,66 @@
       "url": "https://html.spec.whatwg.org/dev/input.html",
       "allowed_carriers": ["anchor"],
       "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SCENE_PLATE_HISTORY",
+      "url": "https://kindlight.ai/?scene=plate&plate=history",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Replay well history in the genomic plate demonstration."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SCENE_CORRIDOR",
+      "url": "https://kindlight.ai/?scene=corridor",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Explore the laboratory process lanes shown in the LIMS case study."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_SOURCES",
+      "url": "https://kindlight.ai/?section=sources",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Inspect specimen source relationships."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_INSTRUCTIONS",
+      "url": "https://kindlight.ai/?section=requirements",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Read the instruction ledger shown in the LIMS case study."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_BIOMARKERS",
+      "url": "https://kindlight.ai/?section=biomarkers",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Inspect the evidence behind a biomarker in the clinical trial example."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PLATE_HISTORY_QUERY",
+      "url": "https://github.com/driftframestudios/source-of-truth-systems/blob/fd454d153e82dfda190927c60f05b0378e290623/server/graphql/operations/PlateHistory.graphql",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Inspect the fields requested for a plate history."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_COHORT_RULES",
+      "url": "https://github.com/driftframestudios/source-of-truth-systems/blob/fd454d153e82dfda190927c60f05b0378e290623/src/app/services/cohortRules.ts",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Inspect how nested Boolean groups evaluate specimen criteria."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CORRIDOR_PROJECTION",
+      "url": "https://github.com/driftframestudios/source-of-truth-systems/blob/fd454d153e82dfda190927c60f05b0378e290623/src/app/components/corridor/corridorProjection.ts",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Inspect how the visible laboratory cards determine the connections drawn between lanes."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PLATE_HISTORY_MOVIE",
+      "url": "https://vik.guru/v1-cdn/video/genomics-plate-history/v0.1.0/movie.mp4",
+      "allowed_carriers": ["anchor", "video_source"],
+      "selection_basis": "Selected movie for the genomic plate history demonstration."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PLATE_HISTORY_POSTER",
+      "url": "https://vik.guru/v1-cdn/video/genomics-plate-history/v0.1.0/poster.webp",
+      "allowed_carriers": ["video_poster"],
+      "selection_basis": "Selected poster for the genomic plate history demonstration."
     }
   ]
 }
