@@ -25,20 +25,25 @@ At the recorded execution speed, preparation below 6m28s would put the job under
 | #971 comparison | 33m20s | 9m48s | 22m57s | Public references 41s, media 1m05s | 33m25s / 35m06s |
 | [Cold, `0993177`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44741179312) | 22m57s | 58s | 21m31s | Public references 48s, media 2m08s | 23m00s / 25m53s |
 | [Second cold, `78e1456`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44744681714) | 24m15s | 1m19s | 22m20s | Public references 38s, media 1m28s | 24m19s / 26m21s |
+| [Warm, interrupted, `4cc0f5e5`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44749134379) | 30m18s | 1m13s | 28m29s, incomplete | Public references 41s, media 1m25s | 30m24s / 32m24s |
 
 The cold run queued for 3s. Package resolution took 9s, the restore lookup occupied less than one displayed second, installation took 49s, and saving the verified closure after the proof took 6s. The cache service reported a miss. APT downloaded the 126 MB package closure in 14s, compared with 8m46s on #971. Both runs needed the network. The 10m23s shorter job reflects mirror and runner variation alongside the implementation changes. The browser prerequisite interval contributed 8m50s of that difference.
 
-| Selected browser command | #971 | First cold | Second cold |
-| --- | ---: | ---: | ---: |
-| Core browser aggregate | 6m27s | 6m38s | 6m23s |
-| About CSS parity | 5m24s | 4m22s | 5m00s |
-| Showcase reading | 3m00s | 2m49s | 2m57s |
-| AI Systems layout | 2m10s | 2m09s | 2m06s |
-| Navigation | 1m54s | 1m49s | 1m55s |
+| Selected browser command | #971 | First cold | Second cold | Warm, interrupted |
+| --- | ---: | ---: | ---: | ---: |
+| Core browser aggregate | 6m27s | 6m38s | 6m23s | 6m22s |
+| About CSS parity | 5m24s | 4m22s | 5m00s | 8m25s |
+| Showcase reading | 3m00s | 2m49s | 2m57s | 4m11s |
+| AI Systems layout | 2m10s | 2m09s | 2m06s | 2m57s |
+| Navigation | 1m54s | 1m49s | 1m55s | 2m20s |
 
 The second run queued for 3s and confirmed a cache miss. It needed the same 126 MB and identical package-plan digest. GitHub assigned Ubuntu image `20261116.133.1` after the first run used `20261116.376.1`. Exact-image selection explained the missed reuse. Resolution took 19s, restore lookup under 1s, installation 60s, and saving the new entry 4s. APT downloaded 126 MB in 18s. This run included the accepted build changes and updated skill entries. Its suite commands and engines matched the first run.
 
 [PR #983](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/983) moved the image revision to the end of the key. The restore action can now reuse a verified plan across images when OS, architecture, engines, Playwright version and all resolved package versions agree. Each archive still needs a fresh SHA-256 match. Independent review exercised those dimensions separately and verified migration against the original key generator. The two cold observations retain their original standing.
+
+The next run restored the matching previous-format entry, verified 186 of 186 archive digests and needed 0 B of the 126 MB package closure from Ubuntu. Resolution took 10s, restore 4s and installation including browser engines 59s. The total 73s is between the two cold preparation observations. The 30-minute boundary interrupted Narrative after iframe ancestry. The final exchange command and trusted cache-save step had yet to run. Count this as verified warm preparation and incomplete full behavior. The largest new delay was CSS parity at 8m25s. Core still completed in 6m22s.
+
+[PR #984](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/984) split the manual all-browser selection at whole npm command boundaries. The source checks run once. Reading and media use three engines for ten commands. Production CSS and the prototypes use Chromium for seven. Each group has its own 30-minute limit and per-engine package proof. The prior attempt supplies the measured reason to purchase the second runner.
 
 
 ## Local baseline and controlled comparisons
