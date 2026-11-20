@@ -1,7 +1,9 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -104,20 +106,6 @@ test("the media job reuses a verified package closure and preserves its behavior
   assert.ok(testAt < compileAt, "the media behavior proof precedes Worker compilation");
   assert.ok(compileAt < saveAt, "trusted cache publication follows every required proof");
   assert.ok(saveAt < receiptAt, "the final receipt records cache publication standing");
-
-  const prototypeJob = workflow.slice(0, start);
-  const installScript = prototypeJob.match(/          (engines=\(chromium\)[\s\S]*?npm run playwright[^\n]+)/u)?.[1];
-  assert.ok(installScript, "the prototype job selects its Playwright engines before installing");
-  for (const [suite, engines] of Object.entries({
-    all: "chromium firefox webkit", iframe: "chromium webkit", core: "chromium", narrative: "chromium",
-  })) {
-    const result = spawnSync("bash", ["-eu", "-c", 'npm() { echo "$*"; }\n' + installScript], {
-      encoding: "utf8", env: { ...process.env, SELECTED_SUITE: suite },
-    });
-    assert.ifError(result.error);
-    assert.equal(result.status, 0, result.stderr);
-    assert.equal(result.stdout.trim(), `run playwright -- install --with-deps ${engines}`, suite);
-  }
 });
 
 test("the media package manifest and policy records carry one reviewable cache identity", async () => {
@@ -139,4 +127,41 @@ test("the media package manifest and policy records carry one reviewable cache i
   assert.match(automation, /media 30 minutes/u);
   assert.match(automation, /Exact hit, compatible restore, miss, or\s+unavailable/u);
   assert.match(automation, /native-video receivers through the hosted\s+Google Chrome channel/u);
+});
+
+test("the Linux preparation route verifies and installs the engines admitted for each suite", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "prototype-apt-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "bin"));
+  await writeFile(join(directory, "bin/npm"), '#!/bin/sh\necho "$*"\n', { mode: 0o755 });
+  await writeFile(join(directory, "browser-apt-plan"), "");
+  for (const [suite, engines] of Object.entries({
+    all: "chromium firefox webkit", iframe: "chromium webkit", core: "chromium", narrative: "chromium",
+  })) {
+    const result = spawnSync("bash", [join(root, ".github/dependencies/browser-apt.sh"), "install"], {
+      cwd: directory, encoding: "utf8", env: { ...process.env, PATH: `${join(directory, "bin")}:${process.env.PATH}`, RUNNER_TEMP: directory, SELECTED_SUITE: suite },
+    });
+    assert.ifError(result.error);
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout.trim(), `run --silent playwright -- install-deps --dry-run ${engines}\nrun --silent playwright -- install ${engines}`, suite);
+  }
+});
+
+test("only selected archives with matching SHA-256 enter the install directory", async (t) => {
+  const rootDir = await mkdtemp(join(tmpdir(), "prototype-restore-"));
+  t.after(() => rm(rootDir, { recursive: true, force: true }));
+  const cache = join(rootDir, "cache");
+  const install = join(rootDir, "install");
+  await Promise.all([mkdir(cache), mkdir(install)]);
+  const digest = createHash("sha256").update("valid").digest("hex");
+  const plan = join(rootDir, "uris");
+  await writeFile(plan, ["first.deb", "second.deb"].map(name =>
+    `'file:///example/${name}' ${name} 5 SHA256:${digest}`
+  ).join("\n") + "\n");
+  await writeFile(join(cache, "first.deb"), "valid");
+  await writeFile(join(cache, "second.deb"), "wrong");
+  const result = spawnSync("bash", [join(root, ".github/dependencies/browser-apt-restore.sh"), plan, cache, install]);
+  assert.equal(result.status, 0, result.stderr.toString());
+  assert.equal(await readFile(join(install, "first.deb"), "utf8"), "valid");
+  await assert.rejects(readFile(join(install, "second.deb")), { code: "ENOENT" });
 });
