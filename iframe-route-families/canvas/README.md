@@ -33,6 +33,11 @@ focused package contracts. Use `npm run test:iframe-visual-media-browser` for
 the complete Core-and-Canvas reduced-motion, print, forced-colors, computed
 SVG, and zoomed fixed/sticky-focus reading.
 
+The packager uses the iframe origin’s `/favicon.ico` by default. Routes with a
+document image policy of `data:` use the site’s branded 32×32 PNG as an
+embedded tab icon. The family and aggregate receipts identify those routes,
+and each affected route records the source asset and its SHA-256 digest.
+
 The generated `index.html` files are projections. Preserve the repository
 sources, retain ordinary adjacent full-view links on the primary visitor
 surface, and regenerate the family when a source or route contract changes.

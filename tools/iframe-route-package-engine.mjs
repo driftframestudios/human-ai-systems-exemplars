@@ -52,7 +52,20 @@ function attributeValue(tag, attributeName) {
 
 export const iframeFaviconHref = "/favicon.ico";
 
-export function projectIframeFavicon(html) {
+export function requiresDataFavicon(html) {
+  const markup = markupResourceContext(html, { scanMarkupContextsOnly: true })
+    .replace(/<!--[\s\S]*?-->|<style\b[^>]*>[\s\S]*?<\/style\s*>/giu, "");
+  const head = markup.match(/<head\b[^>]*>([\s\S]*?)<\/head\s*>/iu)?.[1] ?? "";
+  for (const [meta] of head.matchAll(/<meta\b[^>]*>/giu)) {
+    if (attributeValue(meta, "http-equiv")?.toLowerCase() !== "content-security-policy") continue;
+    const directives = (attributeValue(meta, "content") ?? "").toLowerCase().split(";").map(value => value.trim().split(/\s+/u));
+    const images = directives.find(([name]) => name === "img-src") ?? directives.find(([name]) => name === "default-src");
+    if (images?.length === 2 && images[1] === "data:") return true;
+  }
+  return false;
+}
+
+export function projectIframeFavicon(html, embeddedPng = null) {
   if (typeof html !== "string") {
     fail("Iframe favicon projection requires HTML text.");
   }
@@ -79,7 +92,9 @@ export function projectIframeFavicon(html) {
   return [
     html.slice(0, headStart),
     withoutPriorIcons,
-    `  <link rel="icon" href="${iframeFaviconHref}" sizes="any">\n`,
+    embeddedPng
+      ? `  <link rel="icon" type="image/png" href="data:image/png;base64,${embeddedPng.toString("base64")}" sizes="32x32">\n`
+      : `  <link rel="icon" href="${iframeFaviconHref}" sizes="any">\n`,
     html.slice(headEnd),
   ].join("");
 }

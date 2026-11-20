@@ -401,7 +401,7 @@ h2.super-footer__heading {
     }
 }
 
-@media screen and (max-width: 40rem) {
+@media (max-width: 40rem) {
     .super-footer__grid {
         grid-template-columns: 1fr;
     }

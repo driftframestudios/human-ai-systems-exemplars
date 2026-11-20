@@ -16,6 +16,7 @@ import {
   navigationObservation,
   observeIframeRuntimeCapabilities,
   projectIframeFavicon,
+  requiresDataFavicon,
   projectIframeExitLinks,
   scanPackageClosure,
   sha256,
@@ -23,6 +24,7 @@ import {
 
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
+const embeddedFaviconPath = "context-canvas-project-surface/context-canvas/favicon-32x32.png";
 const canvasFamilyRoot = path.join(repositoryRoot, "iframe-route-families/canvas");
 const supportedReceiverStandings = new Set(["byte_identical", "context_adapted"]);
 const supportedActivationStandings = new Set(["eligible"]);
@@ -562,7 +564,7 @@ function rewriteReference(source, reference, replacement, label) {
   };
 }
 
-export function deriveCanvasProjection(html, route) {
+export function deriveCanvasProjection(html, route, embeddedFavicon = null) {
   if (typeof html !== "string") fail(`Canvas route ${route.id} requires HTML text.`);
   let projected = html;
   const rewriteReceipts = [];
@@ -604,7 +606,10 @@ export function deriveCanvasProjection(html, route) {
     assertCanvasPublicAttribution(projected, route, 0);
   }
   const exitProjection = projectIframeExitLinks(projected);
-  projected = projectIframeFavicon(exitProjection.html);
+  projected = projectIframeFavicon(exitProjection.html, embeddedFavicon);
+  if (embeddedFavicon) {
+    rewriteReceipts.push({ kind: "embedded_favicon", source_file: embeddedFaviconPath, sha256: sha256(embeddedFavicon) });
+  }
   rewriteReceipts.push({
     kind: "iframe_exit_behavior",
     exit_links: exitProjection.exit_links,
@@ -712,6 +717,8 @@ export async function createCanvasPackagePlan(options = {}) {
   const outputFiles = new Map();
   const portableOutputPaths = new Set(["route-manifest.json"]);
   const routeReadings = [];
+  let faviconBytes;
+  const embeddedFaviconRoutes = [];
   for (const route of contract.routes) {
     const sourceBytes = await readRepositoryFile(
       paths,
@@ -729,7 +736,12 @@ export async function createCanvasPackagePlan(options = {}) {
     const sourceHtml = sourceBytes.toString("utf8");
     if (INVESTMENT_HOSTS.includes(route.source_file)) assertInvestmentProjection(sourceHtml, investmentSources);
     if (route.source_file === studioChaptersPath) assertStudioChapterProjection(sourceHtml, studioChapterInputs);
-    const projection = deriveCanvasProjection(sourceHtml, route);
+    const embedded = requiresDataFavicon(sourceHtml);
+    if (embedded) {
+      faviconBytes ??= await readRepositoryFile(paths, embeddedFaviconPath, "Canvas embedded favicon");
+      embeddedFaviconRoutes.push(route.public_alias);
+    }
+    const projection = deriveCanvasProjection(sourceHtml, route, embedded ? faviconBytes : null);
     const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
@@ -777,7 +789,7 @@ export async function createCanvasPackagePlan(options = {}) {
       packageReadings,
       `Canvas route ${route.id}`,
       {
-        allowedOutsideResources: new Set([iframeFaviconHref]),
+        allowedOutsideResources: new Set(embedded ? [] : [iframeFaviconHref]),
         scanMarkupContextsOnly: true,
         scanStyleContextsOnly: true,
       },
@@ -861,6 +873,7 @@ export async function createCanvasPackagePlan(options = {}) {
       ).length,
       generated_files: outputFiles.size + 1,
       favicon_href: iframeFaviconHref,
+      embedded_favicon_routes: embeddedFaviconRoutes,
       live_cloudflare_mutation: false,
       closure_observation: "static_resource_graph",
       browser_request_observation_required: true,
