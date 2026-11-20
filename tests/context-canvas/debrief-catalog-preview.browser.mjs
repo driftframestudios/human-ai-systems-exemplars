@@ -92,10 +92,10 @@ async function focusPreview(page, cardSelector) {
         width: preferred("width"),
         height: preferred("height"),
         alt: expectedAlt,
-        caption: `Preview visual — ${expectedCaption}`,
+        caption: expectedCaption,
         linkLabel: card?.getAttribute("data-formats") === "article"
-          ? "Open the Article"
-          : "Read the Case Study",
+          ? "Read Article"
+          : "Read Case Study",
       },
       actual: {
         src: attr(previewImage, "src"),
@@ -334,6 +334,56 @@ for (const width of [390, 1440]) {
     assertTelemetry(telemetry);
   });
 }
+
+test("laptop previews fit and return to the filtered collection", async t => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  t.after(() => page.close());
+  await page.goto(server.origin + route);
+  await page.evaluate(() => document.fonts.ready);
+
+  const panel = page.locator("[data-debrief-preview]");
+  const overview = panel.locator("[data-preview-default]");
+  const back = panel.getByRole("button", { name: "Collection at a glance" });
+  const cards = page.locator("[data-debrief-list] > [data-formats]");
+  const scroller = panel.locator(".debrief-catalog__preview-inner");
+
+  for (const card of await cards.all()) {
+    const link = card.locator("a[href]").first();
+    await link.focus();
+    await settlePreviewImage(page);
+    assert.equal(await panel.locator("[data-preview-image-link]").getAttribute("href"), await link.getAttribute("href"));
+    assert.equal(await panel.locator("[data-preview-link]").getAttribute("href"), await link.getAttribute("href"));
+    assert.ok(await scroller.evaluate(el => el.scrollHeight <= el.clientHeight + 1), await card.getAttribute("id"));
+  }
+
+  await back.press("Enter");
+  assert.equal(await overview.getByRole("heading", { name: "Collection at a glance" }).evaluate(el => el === document.activeElement), true);
+  const article = overview.getByRole("button", { name: /Article/ });
+  await article.click();
+  const research = overview.getByRole("button", { name: /Research/ });
+  await research.press("Space");
+  const filteredUrl = page.url();
+  assert.equal(new URL(filteredUrl).searchParams.get("topic"), "research");
+  await cards.filter({ visible: true }).first().hover();
+  assert.equal(await panel.getByRole("link", { name: "Read Article", exact: true }).isVisible(), true);
+  await back.click();
+  assert.equal(page.url(), filteredUrl);
+  assert.equal(await article.getAttribute("aria-pressed"), "true");
+  assert.equal(await research.getAttribute("aria-pressed"), "true");
+
+  await overview.getByRole("button", { name: "Clear filters" }).click();
+  await overview.getByRole("button", { name: /Case Study/ }).click();
+  const ehrLink = page.locator(".debrief-card__full-index-list a").last();
+  await ehrLink.focus();
+  for (const selector of ["[data-preview-image-link]", "[data-preview-link]"]) {
+    assert.equal(await panel.locator(selector).getAttribute("href"), expectedEhrRoutes.at(-1));
+  }
+  assert.equal(await panel.locator("h4[data-preview-slug]").innerText(), await ehrLink.innerText());
+  await back.press("Enter");
+  await overview.getByRole("button", { name: /Summary/ }).press("Enter");
+  assert.equal(await panel.isVisible(), false);
+  assert.equal(await page.locator("#debrief-filter-case-brief").evaluate(el => el === document.activeElement), true);
+});
 
 for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
   test(`Case Brief mode reveals static source-owned scans with stable badge geometry at ${width}px`, async t => {

@@ -21,6 +21,12 @@
   var entryPanel = preview.querySelector("[data-preview-entry]");
   var previewScroller = preview.querySelector(".debrief-catalog__preview-inner");
   var summary = preview.querySelector("[data-preview-summary]");
+  var collectionHeading = defaultPanel.querySelector("h4");
+  var primaryLink = preview.querySelector("[data-preview-link]");
+  var primaryLinkLabel = preview.querySelector("[data-preview-link-label]");
+  var imageLink = preview.querySelector("[data-preview-image-link]");
+  var overviewFilters = defaultPanel.querySelectorAll("[data-preview-filter]");
+  var overviewClear = defaultPanel.querySelector("[data-preview-clear]");
   var previewCardId = "";
   var previewRoute = "";
   var previewRouteLabel = "";
@@ -191,16 +197,17 @@
     previewRoute = "";
     previewRouteLabel = "";
     previewScroller.scrollTop = 0;
+    primaryLink.hidden = true;
     entryPanel.hidden = true;
     defaultPanel.hidden = false;
 
     if (!hasSelections()) {
-      summary.textContent = "All " + cards.length + " catalog entries are in view. Focus an entry to bring its primary visual and direct reading route into this panel.";
+      summary.textContent = "All " + cards.length + " catalog entries are in view. Focus or point to an entry to see its preview.";
       syncPreviewScroller();
       return;
     }
 
-    summary.textContent = visibleCount + " of " + cards.length + " catalog groups match the selected " + selectionSummary() + ". Focus an entry to inspect its direct reading route.";
+    summary.textContent = visibleCount + " of " + cards.length + " catalog groups match the selected " + selectionSummary() + ".";
     syncPreviewScroller();
   }
 
@@ -545,6 +552,10 @@
     });
 
     clear.disabled = !hasSelections();
+    overviewClear.hidden = clear.disabled;
+    overviewFilters.forEach(function (button) {
+      button.setAttribute("aria-pressed", document.getElementById(button.dataset.previewFilter).checked);
+    });
     zeroResults.hidden = visibleCards.length !== 0;
     status.textContent = visibleCards.length === 0 ? "No catalog entries match the selected reading mode and topics." : statusForMode(mode, visibleCards);
 
@@ -600,9 +611,7 @@
     var image = card.querySelector(".project__upfront");
     var route = card.querySelector(".img__anchor") || card.querySelector("a[href]");
     var routeHref = route ? route.getAttribute("href").split(/[?#]/)[0] : "";
-    var topics = Array.prototype.map.call(card.querySelectorAll(".debrief-card__topics li"), function (item) {
-      return item.textContent.trim();
-    });
+    var topics = card.querySelector(".debrief-card__topics");
     var catalogFacts = card.querySelectorAll(".debrief-card__catalog-meta dd");
     var surfacesText = catalogFacts.length > 0 ? normalizedText(catalogFacts[0]) : "Primary visual and worked account";
     var usefulText = catalogFacts.length > 1 ? normalizedText(catalogFacts[1]) : (normalizedText(slug) || "Enterprise collaboration and implementation review");
@@ -621,20 +630,21 @@
       route: routeHref,
       label: fallbackLabel
     };
-    var primaryLink = preview.querySelector("[data-preview-link]");
-    var primaryLinkLabel = preview.querySelector("[data-preview-link-label]");
+    var useSeriesTitle = routes.length > 1 && selectedRoute.route !== routes[0];
 
     removePreviewState();
     card.setAttribute("data-preview-active", "true");
     previewCardId = card.id;
     previewRoute = selectedRoute.route;
     previewRouteLabel = selectedRoute.label;
+    primaryLink.hidden = false;
     defaultPanel.hidden = true;
     entryPanel.hidden = false;
 
-    preview.querySelector("[data-preview-title]").textContent = selectedRoute.label;
-    preview.querySelector("[data-preview-slug]").textContent = normalizedText(slug) || "Open the complete reading for its evidence and implementation route.";
-    preview.querySelector("[data-preview-topics]").textContent = topics.join(" · ");
+    preview.querySelector("[data-preview-slug]").textContent = useSeriesTitle
+      ? selectedRoute.label
+      : normalizedText(slug) || selectedRoute.label;
+    preview.querySelector("[data-preview-topics]").replaceChildren(topics.cloneNode(true));
     preview.querySelector("[data-preview-surfaces]").textContent = surfacesText;
     preview.querySelector("[data-preview-useful]").textContent = usefulText;
 
@@ -656,17 +666,38 @@
         previewImage.setAttribute("width", previewImageWidth);
         previewImage.setAttribute("height", previewImageHeight);
       }
-      preview.querySelector("[data-preview-caption]").textContent = previewImageCaption ? "Preview visual — " + previewImageCaption : "Preview visual from the selected reading.";
+      preview.querySelector("[data-preview-caption]").textContent = previewImageCaption;
     }
 
+    imageLink.setAttribute("href", selectedRoute.route);
+    imageLink.setAttribute("aria-label", "Read " + selectedRoute.label);
     primaryLink.setAttribute("href", selectedRoute.route);
-    primaryLinkLabel.textContent = routes.length > 0 ? "Read the Case Study" : "Open the Article";
+    primaryLinkLabel.textContent = routes.length > 0 ? "Read Case Study" : "Read Article";
 
     if (cardChanged) {
       previewScroller.scrollTop = 0;
     }
     syncPreviewScroller();
   }
+
+  preview.querySelector("[data-preview-back]").addEventListener("click", function () {
+    showCollectionSummary(cards.filter(function (card) { return !card.hidden; }).length);
+    collectionHeading.focus({ preventScroll: true });
+  });
+
+  overviewFilters.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var input = document.getElementById(button.dataset.previewFilter);
+      input.click();
+      if (preview.hidden) {
+        input.focus();
+      }
+    });
+  });
+  overviewClear.addEventListener("click", function () {
+    clear.click();
+    collectionHeading.focus({ preventScroll: true });
+  });
 
   filters.forEach(function (input) {
     input.addEventListener("change", function () {
@@ -701,6 +732,7 @@
     applyFilters();
   });
   window.addEventListener("resize", syncPreviewScroller);
+  preview.querySelector("[data-preview-image]").addEventListener("load", syncPreviewScroller);
 
   cards.forEach(function (card) {
     card.addEventListener("focusin", function (event) {

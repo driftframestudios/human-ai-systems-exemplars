@@ -110,6 +110,7 @@
 
 .debrief-filter-panel[hidden],
 .debrief-catalog__preview[hidden],
+.debrief-preview-link[hidden],
 .debrief-preview-entry[hidden],
 .debrief-preview-default[hidden],
 .debrief-card__case-brief-list[hidden],
@@ -582,20 +583,48 @@
     border: 1px solid #0d329f;
     box-shadow: .65rem .65rem 0 rgba(21, 63, 190, .14);
     color: var(--debrief-field);
-    padding: clamp(1.1rem, 2.5vw, 1.7rem);
+    padding: clamp(.875rem, 1.3vw, 1.25rem);
     position: static;
 }
 
-.debrief-catalog__preview .debrief-eyebrow {
-    color: var(--debrief-acid);
+.debrief-preview-bar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: space-between;
+    margin-block-end: .65rem;
 }
 
-.debrief-catalog__preview .txt-h3 {
-    color: #fff;
-    font-size: .72rem;
-    letter-spacing: .08em;
-    margin-block: .3rem .7rem;
+.debrief-preview-bar .debrief-preview-heading {
+    color: var(--debrief-acid);
+    font-size: .875rem;
+    letter-spacing: .06em;
+    margin: 0;
     text-transform: uppercase;
+}
+
+.debrief-preview-bar .debrief-preview-link {
+    color: var(--debrief-ink);
+    font-size: .875rem;
+    padding: .35rem .6rem;
+}
+
+.debrief-preview-nav {
+    background: transparent;
+    border: 0;
+    color: var(--debrief-field);
+    cursor: pointer;
+    font: inherit;
+    font-size: .875rem;
+    padding: .25rem 0;
+    text-decoration: underline;
+    text-underline-offset: .18em;
+}
+
+.debrief-catalog__preview :is(a, button):focus-visible {
+    outline: 2px solid var(--debrief-acid);
+    outline-offset: 2px;
 }
 
 .debrief-preview-heading {
@@ -620,15 +649,29 @@
 }
 
 .debrief-tag-cloud li {
+    margin: 0;
+}
+
+.debrief-tag-cloud button {
     align-items: center;
     background: rgba(255, 255, 255, .1);
     border: 1px solid rgba(255, 255, 255, .48);
     display: flex;
-    font-size: .68rem;
-    gap: .55rem;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    font-size: .82rem;
+    gap: .4rem;
     justify-content: space-between;
     min-width: 0;
-    padding: .5rem .6rem;
+    padding: .3rem .45rem;
+    text-align: start;
+    width: 100%;
+}
+
+.debrief-tag-cloud button[aria-pressed="true"] {
+    background: var(--debrief-acid);
+    color: var(--debrief-ink);
 }
 
 .debrief-tag-cloud span {
@@ -654,8 +697,12 @@
 .debrief-preview-figure {
     background: #fff;
     border: 2px solid var(--debrief-acid);
-    margin: 1rem 0;
-    padding: .55rem;
+    margin: 0 0 .55rem;
+    padding: .35rem;
+}
+
+.debrief-preview-figure a {
+    display: block;
 }
 
 .debrief-preview-figure img {
@@ -669,9 +716,10 @@
 .debrief-preview-figure figcaption {
     border-top: 1px solid var(--debrief-powder);
     color: var(--debrief-body);
-    font-size: .68rem;
-    margin-top: .55rem;
-    padding: .55rem .2rem .1rem;
+    font-size: .8125rem;
+    line-height: 1.3;
+    margin-top: .35rem;
+    padding: .3rem .15rem 0;
 }
 
 .debrief-preview-slug {
@@ -703,6 +751,38 @@
     margin: .15rem 0 0;
     overflow-wrap: anywhere;
     font-size: 1rem;
+}
+
+.debrief-preview-entry .debrief-card__topics {
+    margin: 0;
+}
+
+.debrief-preview-entry .debrief-card__topics li {
+    font-size: .75rem;
+    padding: .15rem .35rem;
+    text-transform: none;
+}
+
+.debrief-preview-entry .debrief-preview-slug {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.debrief-preview-entry .debrief-preview-facts {
+    gap: .4rem;
+    margin-block: .5rem;
+}
+
+.debrief-preview-entry .debrief-preview-facts dt {
+    font-size: .75rem;
+    line-height: 1.2;
+}
+
+.debrief-preview-entry .debrief-preview-facts dd {
+    font-size: .875rem;
+    line-height: 1.3;
 }
 
 .debrief-preview-link {
@@ -763,6 +843,10 @@
         overscroll-behavior-block: contain;
         scroll-padding-block: 1rem;
         scrollbar-gutter: stable;
+    }
+
+    .debrief-preview-figure img {
+        max-height: clamp(7rem, min(22dvh, 70dvh - 22rem), 17rem);
     }
 
     .debrief-catalog__preview-inner:focus-visible {
@@ -860,7 +944,7 @@
     .debrief-catalog__header,
     .debrief-catalog__card.project__media,
     .debrief-catalog__preview-inner,
-    .debrief-tag-cloud li,
+    .debrief-tag-cloud button,
     .debrief-filter,
     .debrief-filter-apply,
     .debrief-filter-clear,
@@ -880,6 +964,7 @@
         color: CanvasText;
     }
 
+    .debrief-tag-cloud button[aria-pressed="true"],
     .debrief-filter:has(input:checked) {
         background: Highlight;
         color: HighlightText;
