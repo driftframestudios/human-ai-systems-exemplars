@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
@@ -65,6 +66,7 @@ const catalogRoomContexts = [
     '"name": "Give the Comparison Room"',
   ].map(fragment => ["article title", fragment]),
   ["comparison space", "a useful comparison needs room"],
+  ["audience", "presentations that read the room."],
 ].map(([sense, fragment]) => ({
   sense,
   fragment: fragment.toLowerCase(),
@@ -84,13 +86,16 @@ const aiSystemsRoomContexts = [
 }));
 
 const reportedConsequenceColumnHeader =
-  /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
+  /<th scope="col"(?: data-label="Reported consequence")?>(?:Reported consequence|What changed)<\/th>/u;
 
-// The Review Routing graph retains this exact source node label across its
-// machine-readable contract and equivalent semantic reading. Each bounded
-// carrier earns an independent occurrence so new generic role language still
-// receives the corpus-wide review below.
+// The laboratory author identifies the repository instructions that guide coding work.
+// The Review Routing graph repeats one source label in its data and text equivalent.
+// Each exception admits its single reviewed occurrence.
 const sourceBearingRoleLanguageAllowlist = [
+  {
+    path: "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
+    fragment: "Repository-level instructions guide AI collaborators toward the relevant code, tests, and evidence.",
+  },
   {
     path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     fragment: "<strong>AI assistant.</strong> Symfony PHP monolith",
@@ -105,12 +110,12 @@ const sourceBearingRoleLanguageAllowlist = [
   },
   {
     path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
-    fragment: '\"id\":\"assistant\",\"label\":\"AI assistant\",\"col\":3',
+    fragment: /"id":\s*"assistant",\s*"label":\s*"AI assistant",\s*"col":\s*3\b/u,
   },
 ];
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function compactAccountByRoute(source, route) {
@@ -144,10 +149,10 @@ function packageSources(route) {
 
 async function currentPublicRoleLanguageSources() {
   const [primaryManifest, coreManifest, canvasManifest, contextCoreManifest] = await Promise.all([
-    readFile(primaryManifestPath, "utf8").then(JSON.parse),
-    readFile(coreIframeManifestPath, "utf8").then(JSON.parse),
-    readFile(canvasIframeManifestPath, "utf8").then(JSON.parse),
-    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(primaryManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(coreIframeManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(canvasIframeManifestPath, "utf8").then(JSON.parse),
+    readSourceContract(contextCoreManifestPath, "utf8").then(JSON.parse),
   ]);
   const directCanvasPrefix = "context-canvas-project-surface/context-canvas/";
   const selectedVisitorSources = primaryManifest.files
@@ -191,9 +196,13 @@ async function currentPublicRoleLanguageSources() {
 function sourceBearingRoleException(path, source, match) {
   return sourceBearingRoleLanguageAllowlist.find(entry => {
     if (entry.path !== path) return false;
-    const fragmentStart = source.indexOf(entry.fragment);
+    const fragment = entry.fragment instanceof RegExp
+      ? source.match(entry.fragment)?.[0]
+      : entry.fragment;
+    if (!fragment) return false;
+    const fragmentStart = source.indexOf(fragment);
     if (fragmentStart < 0) return false;
-    const fragmentEnd = fragmentStart + entry.fragment.length;
+    const fragmentEnd = fragmentStart + fragment.length;
     return match.index >= fragmentStart && match.index + match[0].length <= fragmentEnd;
   });
 }
@@ -209,15 +218,21 @@ function classifyRoomUses(source, contexts = tableReadingRoomContexts) {
   });
 }
 
-test("About uses visitor-facing setting, role, and handoff language", async () => {
+test("About distinguishes human decisions, model contributions and software controls", async () => {
   const html = await readCanvasFile("index.html");
-
-  assert.match(html, /settings where a software decision/u);
-  assert.match(html, /Participants across roles gained/u);
-  assert.match(html, /people across roles gain/u);
-  assert.match(html, /work, memory, and judgment held together/u);
-  assert.match(html, /evidence notes and decision handoffs carry the source/u);
-  assert.match(html, /href="hiring-surfaces-talent-agent-intake\.html#amplified-hiring-reach"/u);
+  const roles = html.match(/<div class="about-decision-grid">([\s\S]*?)<\/div>/u)?.[1];
+  assert.ok(roles, "About carries the distinct responsibility reading");
+  const articles = [...roles.matchAll(/<article>([\s\S]*?)<\/article>/gu)].map(([, article]) => article);
+  assert.equal(articles.length, 3, "people, models and software each have their own responsibility group");
+  for (const [article, heading, actions] of [
+    [articles[0], /<h3>People\b/u, [/Define the question/u, /Interpret evidence/u, /Approve materially meaningful actions/u]],
+    [articles[1], /<h3>AI models\b/u, [/Detection models/u, /Predictive models/u, /Generative models/u]],
+    [articles[2], /<h3>Software\b/u, [/sources, versions/u, /permission checks/u, /Save the context/u]],
+  ]) {
+    assert.match(article, heading);
+    for (const action of actions) assert.match(article, action);
+  }
+  assert.match(html, /href="ai-systems\.html"/u, "About routes to the deeper AI Systems reading");
   assert.doesNotMatch(html, /\brooms?\b|\bviewlets?\b/iu);
 });
 
@@ -225,7 +240,6 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\brooms?\b/iu),
     [
-      "ai-systems.html",
       "debriefs.html",
       "grammar-family.html",
       "hiring-surfaces-talent-agent-intake.html",
@@ -234,13 +248,12 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
     ],
   );
 
-  const [runtime, citation, classroom, tableReading, catalog, aiSystems] = await Promise.all([
+  const [runtime, citation, classroom, tableReading, catalog] = await Promise.all([
     readCanvasFile("grammar-family.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("prompt-side-conditions-practice.html"),
     readCanvasFile(tableReadingRoute),
     readCanvasFile("debriefs.html"),
-    readCanvasFile("ai-systems.html"),
   ]);
   assert.match(runtime, /shared room or document/u);
   assert.match(runtime, /per-room coordination/u);
@@ -251,7 +264,7 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.equal(senses.includes(null), false, "Each table-reading room use has a reviewed context");
   assert.deepEqual(
     [...new Set(senses)].sort(),
-    ["comparison space", "embedding space", "latitude"],
+    ["embedding space", "latitude"],
     "The article retains the independently reviewed space and latitude meanings",
   );
 
@@ -259,17 +272,10 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.equal(catalogSenses.includes(null), false, "Each catalog room use belongs to its reviewed article context");
   assert.deepEqual(
     [...new Set(catalogSenses)].sort(),
-    ["article title", "comparison space"],
-    "The catalog retains the accepted article title and its comparison-space description",
+    ["audience"],
+    "The catalog describes adapting presentations to their audience",
   );
 
-  const aiSystemsSenses = classifyRoomUses(aiSystems, aiSystemsRoomContexts);
-  assert.equal(aiSystemsSenses.includes(null), false, "Each AI Systems room use is an exact canonical-title carrier");
-  assert.deepEqual(
-    aiSystemsSenses,
-    ["linked article title", "linked article title", "linked article title"],
-    "AI Systems retains the linked article name, headline, and visible heading",
-  );
 });
 
 for (const { name, source, expected, contexts } of [
@@ -383,6 +389,7 @@ for (const { name, source, expected, contexts } of [
 for (const { name, source, expected } of [
   { name: "native column header", source: '<th scope="col">Reported consequence</th>', expected: true },
   { name: "labeled native column header", source: '<th scope="col" data-label="Reported consequence">Reported consequence</th>', expected: true },
+  { name: "everyday result wording", source: '<th scope="col" data-label="Reported consequence">What changed</th>', expected: true },
   { name: "row header retains its different role", source: '<th scope="row" data-label="Reported consequence">Reported consequence</th>', expected: false },
   { name: "data cell retains its different role", source: '<td scope="col" data-label="Reported consequence">Reported consequence</td>', expected: false },
   { name: "supplemental label leaves native scope unspecified", source: '<th data-label="Reported consequence">Reported consequence</th>', expected: false },
@@ -399,7 +406,7 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
     ["who-to-believe-reviews-platform.html"],
   );
 
-  const gallery = await readFile(
+  const gallery = await readSourceContract(
     join(repositoryRoot, "collaboration/about-ai-method-gallery/index.html"),
     "utf8",
   );
@@ -414,30 +421,30 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     "Current visitor pages use direct role and authorship language",
   );
 
-  const compactSource = await readFile(compactCaseBriefSourcePath, "utf8");
+  const compactSource = await readSourceContract(compactCaseBriefSourcePath, "utf8");
   const routes = [
     "choose-your-player-humatics.html",
     "fmi-clinical-trial-coordination.html",
     "fmi-lims-eln-replatforming.html",
     "genomic-viewer-replatforming.html",
+    "ehr-three-front-doors.html",
     "three-way-comparative-return.html",
     "who-to-believe-reviews-platform.html",
   ];
   for (const route of routes) {
     const html = compactAccountByRoute(compactSource, route);
     assert.ok(html, `${route} should have one compact account`);
-    assert.match(
-      html,
-      /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served)\b[\s\S]*?<\/dd>/u,
-      route,
-    );
+    const scope = html.match(/<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>([\s\S]*?)<\/dd>/u)?.[1];
+    assert.ok(scope, `${route} identifies the person's scope`);
+    assert.match(scope, route === 'genomic-viewer-replatforming.html'
+      ? /I owned the UX\/UI as Principal Product Designer &amp; Software Engineer III/u
+      : /\bI (?:worked|served|was|owned)\b/u, route);
   }
 
   const scenarioRoutes = [
     "ehr-discrete-genomic-result.html",
     "ehr-interface-engine-replatform.html",
     "ehr-pgx-alert-failure.html",
-    "ehr-three-front-doors.html",
     "ehr-two-charts-one-result.html",
   ];
   for (const route of scenarioRoutes) {
@@ -445,17 +452,25 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
-      /<dt>Scope and role<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
+      route === "ehr-discrete-genomic-result.html"
+        ? /<dt>Scope and role<\/dt>\s*<dd>I combined my years of EHR integration/u
+        : /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
       route,
     );
   }
+
+  assert.match(
+    compactAccountByRoute(compactSource, "ehr-three-front-doors.html"),
+    /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>[^<]*Other ClinOps teams handled direct integration\.<\/dd>/u,
+    "Three Portals preserves the distinct integration responsibility",
+  );
 
   const [aiSystems, hiring, threeWay] = await Promise.all([
     readCanvasFile("ai-systems.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("three-way-comparative-return.html"),
   ]);
-  assert.match(aiSystems, /I design, build, test, and publish the open-source methods, software, and multi-agent collaboration environments shown here/u);
+  assert.match(aiSystems, /I design, build, test, and publish these open-source methods and software/u);
   assert.match(hiring, /hiring research with inspectable work in open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
   assert.match(
     compactAccountByRoute(compactSource, "three-way-comparative-return.html"),
@@ -467,8 +482,8 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
   }
 
   const debriefs = await readCanvasFile("debriefs.html");
-  assert.match(debriefs, /These Debriefs turn lived work in regulated, high-consequence, and commercially constrained systems into\s+reusable cases/u);
-  assert.match(debriefs, /Each remains an example to\s+interpret in context/u);
+  assert.match(debriefs, /Each case study here separates business context, solution shaping, implementation mechanics, and what\s+remained unresolved/u);
+  assert.match(debriefs, /how my judgment actually operated under constraint/u);
   assert.doesNotMatch(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
 });
 
@@ -488,8 +503,8 @@ test("curated visitor prose states findings directly while citations carry prove
     readCanvasFile("field-inspection-harness-replatform.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
   ]);
-  assert.match(about, /<title>Technology leadership portfolio \| Context Canvas<\/title>/u);
-  assert.match(about, reportedConsequenceColumnHeader);
+  assert.match(about, /<title>Technology leadership portfolio \| Vikrant Varun Kudesia<\/title>/u);
+  assert.match(about, /<dt>What Changed<\/dt>/u, "About keeps outcomes in its concise folio records");
   assert.match(fieldInspection, /Global invariants and candidate performance targets become testable against a bounded corpus/u);
   assert.match(hiring, /Vendor descriptions reviewed in public material from 2025–2026/u);
 });
@@ -501,7 +516,7 @@ test("current public source owners name generative-system roles precisely", asyn
   );
 
   for (const sourcePath of await currentPublicRoleLanguageSources()) {
-    const source = await readFile(resolve(repositoryRoot, sourcePath), "utf8");
+    const source = await readSourceContract(resolve(repositoryRoot, sourcePath), "utf8");
     for (const match of source.matchAll(genericPersonLikeSystemRole)) {
       const exception = sourceBearingRoleException(sourcePath, source, match);
       if (exception) {

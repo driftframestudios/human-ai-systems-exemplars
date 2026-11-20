@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -63,8 +64,8 @@ test("Service source and declared receiver retain identical executable selection
   assert.equal(source, receiver);
   assert.doesNotThrow(() => new vm.Script(runtime));
   assert.match(source, /id="blueprintSvg" role="group"/u);
-  assert.match(source, /document\.addEventListener\('keydown', activateTopologyKey\)/u);
-  assert.match(source, /if \(action === 'select-cell'\) selectCell\(id\)/u);
+  assert.match(source, /document\.addEventListener\('keydown',\s*activateTopologyKey\)/u);
+  assert.match(source, /if\s*\(action\s*===\s*'select-cell'\)\s*selectCell\(id\)/u);
   assert.match(source, /id="cellText" data-cell-id="\$\{escapeHtml\(cell\.id\)\}" aria-describedby="selectedCellContext"/u);
 });
 
@@ -114,8 +115,9 @@ test("Rename alone refreshes escaped table context without moving input focus or
     assert.equal(type, "input");
     rename = listener;
   };
-  const binding = runtime.split("\n").find(line => line.startsWith("document.getElementById('artifactName').addEventListener('input',"));
-  assert.ok(binding, "Exercise the source-owned name-input handler");
+  const binding = readPrototypeScript(source).select(node => node.type === 'CallExpression' &&
+    node.callee.property?.name === 'addEventListener' && node.arguments[0]?.value === 'input' &&
+    node.callee.object?.arguments?.[0]?.value === 'artifactName');
   f.run(binding);
   f.run("renderTable()");
   const baseline = {

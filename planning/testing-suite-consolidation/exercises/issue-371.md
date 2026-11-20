@@ -10,16 +10,18 @@ execution results.
 
 ## Skills exercised and decision changes
 
-- **Test-suite composition:** explicit suite IDs and seven overlapping bundles preserve existing command owners. Discovery reads metadata. Related aliases keep their different populations and ordered preparation. Known commands can retain holds.
-- **Evidence-bearing test design:** literal fixture IDs and argv provide an independent oracle. The sentinel import, matching-empty, sparse-array, held-command, option-shaped path, alias-cycle, dotted-alias and profile-aliasing cases distinguish consequential plausible faults.
+- **[Test-suite composition](../../../.agents/skills/test-suite-composition/README.md):** explicit suite IDs and seven overlapping bundles preserve existing command owners. Discovery reads metadata. Related aliases keep their different populations and ordered preparation. Known commands can retain holds.
+- **[Evidence-bearing test design](../../../.agents/skills/evidence-bearing-test-design/README.md):** literal fixture IDs and argv provide an independent oracle. The sentinel import, matching-empty, sparse-array, held-command, option-shaped path, alias-cycle, dotted-alias and profile-aliasing cases distinguish consequential plausible faults.
 - **Conversation data visualization:** Python renders two local figures for this conversation, with fixed-denominator values and a separate organization diagram. The images are ordinary inspectable artifacts rather than a hosted website.
 - **Data-visualization foundations:** the counting unit is a source module, not a runtime test case. Different discovery mechanisms are labeled directly. Family identities remain stable, zero direct aliases retain their literal meaning, and overlapping bundles are excluded from additive totals.
 - **Cost and ownership:** metadata projection excludes surplus state, suite arrays detach from shared profiles, and declared-edge tracing avoids shell evaluation.
 - **Supportive change writing:** results describe discoverability and receiving choices; coverage, effectiveness, and runtime improvement await their own observations.
 
-The two testing skills remain drafts with an initial bounded application.
-A useful exercise establishes the particular decisions it changed; wider
-transfer and active/public routing retain separate reviews.
+This exercise supplied the two testing skills' first bounded application. The
+later media-CI receiver supplied a materially different operational use, so the
+contracts now participate in active repository routing with complete
+public-ready source packages. Independent cross-repository use can still
+inform later revision; the established site release process owns projection.
 
 ## Quantitative figure contract
 

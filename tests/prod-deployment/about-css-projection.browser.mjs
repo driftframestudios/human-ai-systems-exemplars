@@ -18,6 +18,11 @@ import {
   formatVisualRequestFailure,
 } from "../../tools/context-canvas-visual-observation-contract.mjs";
 
+import { materializePublicReferenceHtml } from "../../tools/materialize-public-references.mjs";
+import { loadExternalReferenceBinding } from "../../tools/external-reference-contract.mjs";
+import { loadPublicRouteReferenceBinding } from "../../tools/public-route-reference-contract.mjs";
+import { loadRegistryReferenceBinding } from "../../tools/registry-reference-contract.mjs";
+
 const execute = promisify(execFile);
 const ROOT = resolve(import.meta.dirname, "../..");
 const CONFIG_PATH = "deployment/cpanel/production-projection.config.json";
@@ -153,8 +158,8 @@ async function prepareProjection() {
     const pathname = reference.split(/[?#]/u, 1)[0];
     return posix.normalize(posix.join(posix.dirname(CONSUMER_PATH), pathname));
   });
-  assert.equal(stylesheetPaths.length, 8, "the tracked About source graph remains six base + noscript + shell");
-  assert.equal(new Set(stylesheetPaths).size, 8, "the tracked About CSS graph has distinct sources");
+  assert.equal(stylesheetPaths.length, 17, "the tracked About graph includes fifteen base owners, noscript and shell");
+  assert.equal(new Set(stylesheetPaths).size, 17, "the tracked About CSS graph has distinct sources");
 
   const cssSources = new Map();
   for (const sourcePath of stylesheetPaths) {
@@ -172,6 +177,23 @@ async function prepareProjection() {
 
   const consumerProjectedPath = projectedPaths.get(CONSUMER_PATH);
   assert.equal(consumerProjectedPath, "index.html", "the production About consumer remains the root index");
+  const [external, repository, registry] = await Promise.all([
+    loadExternalReferenceBinding(), loadPublicRouteReferenceBinding(), loadRegistryReferenceBinding(),
+  ]);
+  const destinations = new Map([...external.destinations.entries(), ...repository.destinations.entries(), ...registry.destinations.entries()]);
+  const publicHtml = materializePublicReferenceHtml(consumerBytes.toString("utf8"), destinations, CONSUMER_PATH,
+    null, repository.destinations, external.destinations);
+  // CSS projection receives links in their manifest-selected publication locations.
+  // The source-side fixture keeps its authored stylesheet paths for the comparison.
+  const projectedHtml = publicHtml.replace(/<link\b[^>]*>/giu, tag => {
+    const [href] = stylesheetReferences(tag);
+    if (!href) return tag;
+    const sourcePath = posix.join(posix.dirname(CONSUMER_PATH), href);
+    const projectedPath = projectedPaths.get(sourcePath);
+    assert.ok(projectedPath, `the production manifest owns ${href}`);
+    return tag.replace(`href="${href}"`, `href="${projectedPath}"`);
+  });
+  const renderedConsumerBytes = Buffer.from(projectedHtml, "utf8");
   const projection = projectAboutCssProfile({
     consumer: {
       source_path: CONSUMER_PATH,
@@ -180,7 +202,7 @@ async function prepareProjection() {
       git_blob_id: await gitBlobId(CONSUMER_PATH),
     },
     consumerSourceRoot: configuration.publication.source_root,
-    renderedConsumerBytes: consumerBytes,
+    renderedConsumerBytes,
     cssSources,
     projectedPaths,
     profile: configuration.css_projection,
@@ -195,7 +217,7 @@ async function prepareProjection() {
     projectedPaths,
     projectedSources,
     sourceSelected,
-    sourceConsumer: consumerBytes,
+    sourceConsumer: Buffer.from(publicHtml, "utf8"),
     sourceStylesheets: stylesheetPaths,
     ...projection,
   };
@@ -324,14 +346,37 @@ async function settle(page) {
   await page.waitForTimeout(300);
 }
 
-async function renderedSnapshot(page) {
-  return page.evaluate(async () => {
+async function observeAboutPage(page, projection, surface, { structureOnly = false } = {}) {
+  return page.evaluate(async ({ routes, surface, structureOnly }) => {
     const round = value => Math.round(value * 64) / 64;
     const digest = async value => {
       const bytes = new TextEncoder().encode(value);
       const hash = await crypto.subtle.digest("SHA-256", bytes);
       return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
     };
+    const bodyStructureDigest = () => {
+      // Native onward links resolve against each surface's real base. Compare
+      // their exact manifest-owned destination while retaining every other byte.
+      const body = document.body.cloneNode(true);
+      const projectedPaths = new Map(routes);
+      const projectedOwners = new Set(projectedPaths.values());
+      const prefix = surface === "source" ? "/source/" : "/projected/";
+      for (const anchor of body.querySelectorAll("a[href]")) {
+        const authored = anchor.getAttribute("href");
+        if (!/^https?:\/\//iu.test(authored)) continue;
+        const url = new URL(authored);
+        if (url.username || url.password || url.origin !== location.origin || !url.pathname.startsWith(prefix)) continue;
+        const path = url.pathname.slice(prefix.length);
+        const projected = surface === "source" ? projectedPaths.get(path)
+          : projectedOwners.has(path) ? path : undefined;
+        if (projected !== undefined) {
+          anchor.setAttribute("href", `primary-route:${projected}${url.search}${url.hash}`);
+        }
+      }
+      return digest(body.outerHTML);
+    };
+    if (structureOnly) return { structureDigest: await bodyStructureDigest() };
+
     const canonicalValue = value => value.replace(
       /(^|[\s,(])-?(?:0+(?:\.0+)?|\.0+)(?:%|px|rem|em|ch|ex|vw|vh|vmin|vmax|cm|mm|in|pt|pc|deg|rad|grad|turn|s|ms)(?=$|[\s,)])/giu,
       (match, prefix) => `${prefix}0`,
@@ -379,10 +424,9 @@ async function renderedSnapshot(page) {
       records[index].styleDigest = styleDigest;
     }
     const root = document.documentElement;
-    const bodyMarkup = document.body.outerHTML;
     const bodyText = document.body.textContent?.replace(/\s+/gu, " ").trim() ?? "";
     return {
-      structureDigest: await digest(bodyMarkup),
+      structureDigest: await bodyStructureDigest(),
       textDigest: await digest(bodyText),
       records,
       documentBox: {
@@ -400,10 +444,35 @@ async function renderedSnapshot(page) {
         details: document.querySelectorAll("details").length,
         tables: document.querySelectorAll("table").length,
         iframes: document.querySelectorAll("iframe").length,
-        routeCards: document.querySelectorAll(".about-route-grid > a").length,
+        onwardDestinations: document.querySelectorAll(".about-boundary a").length,
       },
     };
-  });
+  }, { routes: [...projection.projectedPaths], surface, structureOnly });
+}
+
+async function assertOnwardDestinationChange(page, projection, acceptedStructure, label) {
+  const onward = page.locator(".about-boundary a").first();
+  const acceptedHref = await onward.getAttribute("href");
+  assert.equal(acceptedHref, "debriefs.html", `${label}: the About hero leads to Showcase`);
+
+  const setHref = href => onward.evaluate((anchor, value) => anchor.setAttribute("href", value), href);
+  const observeStructure = async () => {
+    const snapshot = await observeAboutPage(page, projection, "projected", { structureOnly: true });
+    return snapshot.structureDigest;
+  };
+  try {
+    await setHref(new URL(acceptedHref, page.url()).href);
+    const showcase = await observeStructure();
+    await setHref(page.url());
+    const about = await observeStructure();
+    assert.notEqual(about, showcase, `${label}: a different manifest-owned path remains a structural change`);
+    await setHref(new URL("#studio-title", page.url()).href);
+    const studio = await observeStructure();
+    assert.notEqual(studio, about, `${label}: a different onward fragment remains a structural change`);
+  } finally {
+    await setHref(acceptedHref);
+  }
+  assert.equal(await observeStructure(), acceptedStructure, `${label}: restoring the authored href restores the About structure`);
 }
 
 function compactSnapshot(snapshot) {
@@ -512,6 +581,20 @@ function assertTelemetry(telemetry, parentOrigin, label) {
   assert.deepEqual(classified.remainingRequestFailures, [], `${label}: no unexpected request failures`);
   assert.deepEqual(classified.policyObservations, [], `${label}: every encountered iframe refusal is complete`);
   return classified.expectedRefusals.map(observation => observation.url).sort();
+}
+
+async function exerciseIframeBoundary(page, observation) {
+  if (observation.telemetry.requestFailureDetails.some(failure =>
+    failure.url.startsWith("https://iframes.vik.guru/"))) return;
+  // About's remaining hosted receivers are lazy. Request one after the initial
+  // reading so this separate policy fixture still exercises its refusal.
+  const refused = page.waitForEvent("requestfailed", {
+    predicate: request => request.url().startsWith("https://iframes.vik.guru/"),
+  });
+  await page.locator('iframe[src^="https://iframes.vik.guru/"]').first()
+    .evaluate(frame => { frame.loading = "eager"; });
+  await refused;
+  await settle(page);
 }
 
 async function interactionReceipt(page) {
@@ -644,14 +727,14 @@ async function runScenario(browser, server, projection, viewport, mode) {
     await Promise.all([settle(sourcePage), settle(projectedPage)]);
 
     const [sourceSnapshot, projectedSnapshot] = await Promise.all([
-      renderedSnapshot(sourcePage),
-      renderedSnapshot(projectedPage),
+      observeAboutPage(sourcePage, projection, "source"),
+      observeAboutPage(projectedPage, projection, "projected"),
     ]);
     assertContained(sourceSnapshot, `${label}/source`);
     assertContained(projectedSnapshot, `${label}/projected`);
     assert.ok(
-      sourceSnapshot.presence.routeCards > 0,
-      `${label}: the source About route-card landmark is present`,
+      sourceSnapshot.presence.onwardDestinations === 2,
+      `${label}: the About hero offers two onward destinations`,
     );
     if (
       sourceSnapshot.records.length !== projectedSnapshot.records.length ||
@@ -693,6 +776,7 @@ async function runScenario(browser, server, projection, viewport, mode) {
       mode.forcedColors === "none" &&
       mode.reducedMotion === "no-preference"
     ) {
+      await assertOnwardDestinationChange(projectedPage, projection, projectedSnapshot.structureDigest, label);
       const [sourceInteractions, projectedInteractions] = await Promise.all([
         interactionReceipt(sourcePage),
         interactionReceipt(projectedPage),
@@ -739,11 +823,15 @@ async function runScenario(browser, server, projection, viewport, mode) {
     const projectedExpected = projection.outputs
       .filter(output => !mode.javaScriptEnabled || output.id !== "about-noscript")
       .map(output => `/projected/${output.projected_path}`);
-    assert.equal(sourceExpected.length, mode.javaScriptEnabled ? 7 : 8, `${label}: source request count`);
+    assert.equal(sourceExpected.length, mode.javaScriptEnabled ? 16 : 17, `${label}: source request count`);
     assert.equal(projectedExpected.length, mode.javaScriptEnabled ? 2 : 3, `${label}: projected request count`);
     assertStylesheetResponses(sourceObservation.stylesheets, sourceExpected, `${label}/source`);
     assertStylesheetResponses(projectedObservation.stylesheets, projectedExpected, `${label}/projected`);
 
+    await Promise.all([
+      exerciseIframeBoundary(sourcePage, sourceObservation),
+      exerciseIframeBoundary(projectedPage, projectedObservation),
+    ]);
     const sourceRefusals = assertTelemetry(sourceObservation.telemetry, server.origin, `${label}/source`);
     const projectedRefusals = assertTelemetry(projectedObservation.telemetry, server.origin, `${label}/projected`);
     assert.ok(

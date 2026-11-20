@@ -79,7 +79,12 @@ function parseRules(rawSource) {
 }
 
 function normalizeSelector(selector) {
-  return selector.replace(/\s+/gu, " ").trim();
+  return selector
+    .replace(/\s+/gu, " ")
+    .replace(/\s*,\s*/gu, ",")
+    .replace(/\s*([>+~])\s*/gu, "$1")
+    .replace(/="([a-z-]+)"\]/gu, "=$1]")
+    .trim();
 }
 
 function selectorList(selector) {
@@ -124,7 +129,7 @@ function declaration(rule, property) {
   const match = rule.body.match(
     new RegExp(`(?:^|;)\\s*${escapedProperty}\\s*:\\s*([^;}]+)`, "iu"),
   );
-  return match?.[1].trim() ?? null;
+  return match?.[1].trim().replace(/\s*!important$/iu, " !important") ?? null;
 }
 
 function assertRolePair(
@@ -547,8 +552,8 @@ test("the Who To Believe graph separates source colors from readable text roles"
       source,
       '.wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span',
     ).some(rule => (
-      rule.atRules.includes("@media (forced-colors: active)")
-      && declaration(rule, "color") === "HighlightText"
+      rule.atRules.some(atRule => /^@media\s*\(forced-colors:\s*active\)$/u.test(atRule))
+      && declaration(rule, "color")?.toLowerCase() === "highlighttext"
     )),
     "forced colors replace the companion ink with the visitor-selected highlight text",
   );

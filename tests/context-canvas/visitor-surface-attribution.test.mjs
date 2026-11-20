@@ -1,8 +1,13 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 import {
   artifactAuthor,
@@ -17,8 +22,7 @@ assert.match(visitorGlob, /\/\*\.html$/u);
 const visitorRoot = resolve(repositoryRoot, visitorGlob.slice(0, -"/*.html".length));
 const authorMeta =
   `<meta name="author" content="${artifactAuthor}">`;
-const licenseLink =
-  `<link rel="license" href="${artifactLicense}">`;
+const sourceRouteAuthority = await loadSourceRouteAuthority();
 
 function occurrenceCount(source, value) {
   return source.split(value).length - 1;
@@ -34,15 +38,17 @@ test("top-level Context Canvas routes expose one consistent authorship and licen
   assert.ok(routes.includes("404.html"));
 
   for (const route of routes) {
-    const html = await readFile(join(visitorRoot, route), "utf8");
-    assert.equal(occurrenceCount(html, artifactAttribution), 1, `${route} should carry one visible attribution`);
+    const html = await readSourceContract(join(visitorRoot, route), "utf8");
+    assert.equal(occurrenceCount(html.replace(/\s+/gu, " "), artifactAttribution), 1, `${route} should carry one visible attribution`);
     assert.equal(occurrenceCount(html, authorMeta), 1, `${route} should carry one author metadata element`);
-    assert.equal(occurrenceCount(html, licenseLink), 1, `${route} should carry one Apache-2.0 license link`);
+    const licenses = [...html.matchAll(/<link\b[^>]*\brel="license"[^>]*>/gu)]
+      .map(([tag]) => resolveSourceRouteValue(/\bhref="([^"]+)"/u.exec(tag)?.[1], sourceRouteAuthority));
+    assert.deepEqual(licenses, [artifactLicense], `${route} should carry one Apache-2.0 license link`);
   }
 });
 
 test("the About hero uses the named dark-and-cobalt heading treatment", async () => {
-  const html = await readFile(join(visitorRoot, "index.html"), "utf8");
+  const html = await readSourceContract(join(visitorRoot, "index.html"), "utf8");
   assert.match(
     html,
     /<h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1>/u,

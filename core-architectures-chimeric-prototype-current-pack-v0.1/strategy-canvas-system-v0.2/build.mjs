@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { compactSource } from '../../tools/cpanel-format.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
@@ -24,7 +25,8 @@ const [template, compatibility, css, schemaText, evidenceText, validatorTemplate
 
 const schema = JSON.parse(schemaText);
 const evidence = JSON.parse(evidenceText);
-const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
+const validatorSource = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
+const validator = (await compactSource(validatorPath, validatorSource)).trimEnd() + '\n';
 const compatibilityOutput = compatibility.replaceAll(
   '../strategy-canvas-chimeric-prototype-v0.2.5.html',
   'strategy-canvas-chimeric-prototype-v0.2.5.html'
@@ -79,7 +81,7 @@ const methodSourceNote = `
         <noscript><p>Source URLs: https://www.blueoceanstrategy.com/tools/strategy-canvas/ and https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested. In a sandboxed embedded view, use the source routes provided by the hosting page after the frame.</p></noscript>
         <p>${escapeHtml(representation.adaptationClaim)} ${escapeHtml(representation.boundaryClaim)}</p>`;
 
-const output = template
+const document = template
   .replace('/*__STRATEGY_CANVAS_CSS__*/', () => css.trim())
   .replace('<!--__STRATEGY_CANVAS_RELATED_LOOPS__-->', () => relatedLoopsControl.trim())
   .replace('/*__STRATEGY_CANVAS_DEFAULT_PROMPT_CAPSULE__*/', () => escapeHtml(defaultExample))
@@ -88,7 +90,7 @@ const output = template
   .replace('/*__STRATEGY_CANVAS_CORE__*/', () => core.trim())
   .replace('/*__STRATEGY_CANVAS_CANONICAL__*/', () => canonical.trim());
 
-if (output.includes('__STRATEGY_CANVAS_')) {
+if (document.includes('__STRATEGY_CANVAS_')) {
   throw new Error('The canonical template contains an unresolved build marker.');
 }
 
@@ -99,10 +101,11 @@ const progressiveEnhancementMarkers = [
   "scEnhancementState = 'mounted'",
   "scEnhancementState = 'static'"
 ];
-if (progressiveEnhancementMarkers.some((marker) => !output.includes(marker))) {
+if (progressiveEnhancementMarkers.some((marker) => !document.includes(marker))) {
   throw new Error('The canonical distribution is missing its progressive-enhancement boundary.');
 }
 
+const output = (await compactSource(outputPath, document)).trimEnd() + '\n';
 const outputBytes = Buffer.byteLength(output, 'utf8');
 const outputSha256 = createHash('sha256').update(output).digest('hex');
 

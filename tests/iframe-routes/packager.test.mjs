@@ -4,6 +4,7 @@ import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/pr
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { format } from "prettier";
 
 import {
   artifactAuthor,
@@ -11,6 +12,7 @@ import {
   artifactLicense,
   attributionContract,
 } from "../../tools/attribution-contract.mjs";
+import { iframeFaviconHref } from "../../tools/iframe-route-package-engine.mjs";
 
 import {
   assertOwnedPackageDirectory,
@@ -29,6 +31,7 @@ import {
   verifyPackagePlan,
   writePackagePlan,
 } from "../../tools/package-iframe-routes.mjs";
+import { loadPublicRouteReferenceBinding } from "../../tools/public-route-reference-contract.mjs";
 
 const [coreSourceRoot, contextProjectionPath] =
   attributionContract.public_html.core_projection_roots;
@@ -81,6 +84,7 @@ test("the route plan preserves the Core population and adds one supplemental ins
   assert.equal(firstPlan.receipt.package_contract.compatibility_aliases_generated, false);
   assert.equal(firstPlan.receipt.package_contract.live_cloudflare_mutation, false);
   assert.equal(firstPlan.receipt.package_contract.neighboring_path_posture, "unmatched");
+  assert.equal(firstPlan.receipt.package_contract.favicon_href, iframeFaviconHref);
   assert.equal(firstPlan.receipt.routes.length, firstPlan.contract.routes.length);
   for (const route of firstPlan.receipt.routes) {
     assert.equal(route.activation_standing, "eligible", `${route.id} is publication eligible`);
@@ -95,6 +99,20 @@ test("the route plan preserves the Core population and adds one supplemental ins
       .equals(secondPlan.outputFiles.get("route-manifest.json")),
     "the receipt is deterministic",
   );
+
+  for (const route of firstPlan.contract.routes) {
+    const projection = firstPlan.outputFiles
+      .get(routeIndexPath(firstPlan.contract, route))
+      .toString("utf8");
+    assert.equal(
+      occurrenceCount(
+        projection,
+        new RegExp(`<link rel="icon" href="${iframeFaviconHref}" sizes="any">`, "g"),
+      ),
+      1,
+      `${route.id} declares the iframe origin favicon once`,
+    );
+  }
 
   for (const route of prototypeRoutes) {
     const source = await readFile(path.join(defaultPaths.sourceRoot, route.source_file), "utf8");
@@ -137,7 +155,8 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   const secondProjection = secondPlan.outputFiles.get("conditioning-field/index.html");
   const projection = firstProjection.toString("utf8");
   const receipt = firstPlan.receipt.routes.find(({ id }) => id === "conditioning-field");
-  const derived = deriveConditioningFieldProjection(source);
+  const routeReference = await loadPublicRouteReferenceBinding();
+  const derived = deriveConditioningFieldProjection(source, routeReference.destinations);
 
   assert.ok(firstProjection.equals(secondProjection));
   assert.notEqual(derived, projection);
@@ -166,7 +185,12 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
     projection,
     /href="https:\/\/vik\.guru\/prompt-side-conditions-practice\.html#sources-title" target="_blank" rel="noopener noreferrer"/u,
   );
-  assert.deepEqual(scanHtmlClosure(projection, new Set(), "Conditioning Field projection"), {
+  assert.deepEqual(scanHtmlClosure(
+    projection,
+    new Set(),
+    "Conditioning Field projection",
+    { allowedOutsideResources: new Set([iframeFaviconHref]) },
+  ), {
     inline_references: 0,
     package_targets: [],
   });
@@ -184,12 +208,23 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   assert.equal(receipt.navigation.new_tab_exit_links, 2);
   assert.equal(receipt.navigation.secure_new_tab_exit_links, 2);
 
+  const formattedSource = await format(source, { parser: "html" });
+  const formattedProjection = deriveConditioningFieldProjection(
+    formattedSource,
+    routeReference.destinations,
+  );
+  assert.equal(occurrenceCount(formattedProjection, /<style data-iframe-route-projection>/gu), 1);
+  assert.doesNotMatch(
+    formattedProjection,
+    /canvas-shell\.(?:css|js)|visitor-boundary-contract\.js|\{\{PUBLIC_URL_/u,
+  );
+
   const messagingSource = source.replace(
     "</body>",
     '<script>window.parent.postMessage({type: "conditioning-state"}, "*");</script>\n</body>',
   );
   assert.throws(
-    () => deriveConditioningFieldProjection(messagingSource),
+    () => deriveConditioningFieldProjection(messagingSource, routeReference.destinations),
     /must not initiate cross-document messaging/,
   );
 });
@@ -472,7 +507,18 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2784424 });
+  const expectedBytes = [...plan.outputFiles.values()].reduce(
+    (total, file) => total + file.byteLength, 0,
+  );
+  assert.deepEqual(verification, { files: 27, bytes: expectedBytes });
+  const entry = "conditioning-field/index.html";
+  const entryPath = path.join(temporaryRoot, entry);
+  const original = plan.outputFiles.get(entry);
+  await writeFile(entryPath, Buffer.alloc(original.byteLength));
+  await assert.rejects(
+    verifyPackagePlan(plan, temporaryRoot), /differs from its plan: conditioning-field\/index\.html/,
+  );
+  await writeFile(entryPath, original);
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -829,6 +875,24 @@ test("closure scanning accepts declared package media and rejects ambient depend
       `<video><track src="https://outside.example/captions.vtt"></video>`,
       new Set(),
       "fixture",
+    ),
+    /outside its package closure/,
+  );
+  assert.deepEqual(
+    scanHtmlClosure(
+      `<link rel="icon" href="${iframeFaviconHref}" sizes="any">`,
+      new Set(),
+      "fixture",
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
+    ),
+    { inline_references: 0, package_targets: [] },
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<link rel="icon" href="/different.ico" sizes="any">`,
+      new Set(),
+      "fixture",
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
     ),
     /outside its package closure/,
   );

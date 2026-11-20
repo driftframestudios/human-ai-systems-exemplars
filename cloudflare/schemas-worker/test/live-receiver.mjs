@@ -74,12 +74,12 @@ console.log(`Catalog source observations: ${JSON.stringify(catalogObservations)}
 
 const liveManifest = JSON.parse(observations.get("/publication-manifest.json").bytes);
 assert.deepEqual(liveManifest.peerRelease, {
-  releaseTag: "pages-v0.3.1",
-  tagObject: "15c9a0ced1a49f3f20797682282526a95afbef88",
-  projectionRevision: "fbf568496b90cf26cb0de5993189801d8a8c2be9",
-  closureSha256: "b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0",
+  releaseTag: "pages-v0.4.0",
+  tagObject: "2c253529e85f3b853e139a4c5fd6d83cd328037e",
+  projectionRevision: "4a4a37633e81a80f1ef45386ce22d3de4657384d",
+  closureSha256: "80cb2f1100adaedcda8179abbd4e1c84bcc8fbc5af60ce6eab4ec37cf587d2cb",
 });
-assert.equal(liveManifest.sourceRevision, "c1e35fdd57c2193812c2b183955aca15a5020be8");
+assert.equal(liveManifest.sourceRevision, "a5ed640bb0982044d46e6e874867eb8f0e760169");
 
 let schemaRoutes = 0;
 for (const contract of schemaCatalog.contracts) {
@@ -97,8 +97,8 @@ for (const contract of schemaCatalog.contracts) {
 }
 
 const skillPaths = skillArtifactPaths(skillCatalog);
-assert.equal(skillCatalog.skills.length, 27);
-assert.equal(skillPaths.length, 86);
+assert.equal(skillCatalog.skills.length, 31);
+assert.equal(skillPaths.length, 102);
 for (const [index, skill] of skillCatalog.skills.entries()) {
   const path = `/skills/${skill.projectionPath}`;
   const projection = JSON.parse(await publicAsset(path));

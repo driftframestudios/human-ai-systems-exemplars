@@ -92,6 +92,7 @@ existing independent measurements.
 | schema-delivery.yml | Receiver-specific release/prod budgets admit contracts over the accepted schema Worker publication. Deployment belongs only to a successful `prod` push with `prod` selected in `DEPLOYMENT_ACTIVE_RECEIVERS`, `SCHEMA_WORKER_DEPENDENCY_GATE=open` after Issue #402 or its accepted fallback, and the existing production environment and credential gates satisfied. |
 | schema-pages.yml | Explicit dispatch binds reviewed source/projection coordinates and release identity; verification and build remain connected, and upload/deploy require activate_deployment. |
 | production-carrier-contracts.yml | Existing dispatch or path-filtered matching main PR. Use this workflow's own trigger policy when considering an activation change. |
+| visual-fidelity-contracts.yml | Matching main pull requests run source and generated-artifact closure before the three-engine browser route. Manual dispatch always runs source closure and follows its explicit browser selection. |
 
 Local command availability grants no hosted runner, live network, deployment,
 upload or publication authority. Predictive observations stay with #320, #330

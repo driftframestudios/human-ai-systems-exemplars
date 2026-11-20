@@ -30,6 +30,11 @@ canonical distribution; the Context workbench retains its local owner, and
 iframe packaging records the resulting bytes. The shared Context Canvas
 contract and attribution tests remain the source for exact marker text.
 
+The build compacts the generated HTML and validator with the cPanel formatting
+profile. Its byte count and SHA-256 identify the committed distribution. For
+IDE editing commands and the quoted-attribute setting, see the
+[carrier formatting guide](../../deployment/cpanel/ROUTES-AND-FORMATTING.md).
+
 Generate the distribution:
 
 ```sh

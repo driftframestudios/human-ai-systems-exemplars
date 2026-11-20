@@ -13,6 +13,7 @@ import {
   sha256,
   skillArtifactPaths,
 } from "./test/publication-contract.mjs";
+import { projectSchemaCompanionRoute } from "../../tools/schema-companion-projections.mjs";
 
 const directory = dirname(fileURLToPath(import.meta.url));
 const defaultRepositoryRoot = resolve(directory, "../..");
@@ -270,7 +271,12 @@ export async function verifyAcceptedPublication(options = {}) {
     if (requestPath === "/schemas/schema-catalog.json") continue;
     const workerBytes = await readFile(resolve(publicRoot, assetPath.slice(1)));
     const pagesBytes = gitBytes(repositoryRoot, "show", `${releaseTag}:${requestPath.slice(1)}`);
-    assert(workerBytes.equals(pagesBytes), `${requestPath} matches the accepted Pages release`);
+    const acceptedWorkerBytes = projectSchemaCompanionRoute(
+      { receiverPath: requestPath.slice(1) },
+      pagesBytes,
+      "worker",
+    );
+    assert(workerBytes.equals(acceptedWorkerBytes), `${requestPath} matches its accepted host projection`);
   }
   for (const path of carriers) {
     const workerBytes = await readFile(resolve(publicRoot, path));

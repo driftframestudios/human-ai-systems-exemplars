@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "componentLabId": "visual-fidelity-component-lab",
+  "revision": "catalog-r1",
+  "lineage": {
+    "source": "bundled-fixture",
+    "parentRevision": null
+  },
+  "catalog": [
+    {
+      "sku": "field-notebook",
+      "label": "Field notebook",
+      "unitPriceCents": 1800,
+      "stock": 12
+    },
+    {
+      "sku": "review-cards",
+      "label": "Review cards",
+      "unitPriceCents": 2400,
+      "stock": 8
+    },
+    {
+      "sku": "decision-ledger",
+      "label": "Decision ledger",
+      "unitPriceCents": 3200,
+      "stock": 5
+    }
+  ]
+}

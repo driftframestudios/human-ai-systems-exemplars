@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -93,8 +93,8 @@ function attribute(tag, name) {
 
 test("Choose Your Player presents one bounded progressive-video source receiver", async () => {
   const [html, css] = await Promise.all([
-    readFile(pagePath, "utf8"),
-    readFile(cssPath, "utf8"),
+    readSourceContract(pagePath, "utf8"),
+    readSourceContract(cssPath, "utf8"),
   ]);
   const videos = Array.from(html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gu));
   assert.equal(videos.length, 1, "The Debrief carries one selected video receiver");
@@ -155,7 +155,7 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
 });
 
 test("Who To Believe presents two bounded video receivers at their reading coordinates", async () => {
-  const html = await readFile(whoToBelievePagePath, "utf8");
+  const html = await readSourceContract(whoToBelievePagePath, "utf8");
   const videos = Array.from(html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gu)).map(
     match => match[0],
   );
@@ -201,9 +201,9 @@ test("Who To Believe presents two bounded video receivers at their reading coord
     assert.ok(transcriptIndex > captionIndex, `${receiver.family} carries a visual sequence`);
 
     const transcript = html.match(
-      new RegExp(`<aside\\s+id="${receiver.transcriptId}"[\\s\\S]*?<\\/aside>`, "u"),
+      new RegExp(`<details\\s+id="${receiver.transcriptId}"[\\s\\S]*?<\\/details>`, "u"),
     )?.[0];
-    assert.ok(transcript, `${receiver.family} keeps its visual sequence in an aside`);
+    assert.ok(transcript, `${receiver.family} carries its visual sequence in a disclosure`);
     assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,
@@ -258,7 +258,7 @@ test("Who To Believe presents two bounded video receivers at their reading coord
 test("Core Architecture readings place bounded demonstrations beside their instruments", async (t) => {
   for (const receiver of coreArchitectureReceivers) {
     await t.test(receiver.page, async () => {
-      const html = await readFile(resolve(repositoryRoot, "context-canvas-project-surface/context-canvas", receiver.page), "utf8");
+      const html = await readSourceContract(resolve(repositoryRoot, "context-canvas-project-surface/context-canvas", receiver.page), "utf8");
       const route = `https://vik.guru/v1-cdn/video/${receiver.family}/v0.1.0`;
       const matchingVideo = Array.from(html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gu))
         .map((match) => match[0])

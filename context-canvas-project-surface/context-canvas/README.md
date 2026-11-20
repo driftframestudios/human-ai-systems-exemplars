@@ -1,25 +1,207 @@
 # Context Canvas
 
+Edit the Showcase catalog in [debriefs.html](debriefs.html). The cPanel build publishes that file at `/showcase/` and also serves the existing `/debriefs` links. [Production URL mapping](../../deployment/cpanel/ROUTES-AND-FORMATTING.md)
+
+
 Context Canvas is a static, progressively enhanced enterprise reading system. HTML, CSS, SVG, and semantic state carry the complete reading; small JavaScript modules add shared navigation and bounded instruments. The pages themselves are the primary design inputs: preserve their evidence boundaries, visual contracts, reading order, and role-specific agency as the system develops.
 
-## Start with the reading surface
+## Start with the visitor pages
+
+Choose the page that matches the work or decision in front of you. The opening
+description uses everyday language; the linked page then introduces its exact
+contracts, source owners, and verification routes. This keeps the collection
+useful to a first-time reader while preserving the technical depth needed by a
+practitioner, domain reviewer, executive evaluator, or maintainer.
 
 - [`index.html`](index.html) introduces the technology leadership portfolio and the Context Canvas method.
 - [`ai-systems.html`](ai-systems.html) gathers methods, contracts, and working software for accountable decisions, explicit human authority, and recoverable work.
 - [`shared-machinery.html`](shared-machinery.html) compares ten instruments for framing, shaping, staging, recovering, and handing off work across tools and teams.
 - [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
 - [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
-- [`debriefs.html`](debriefs.html) provides the catalog of completed and ongoing readings.
+- [Showcase](debriefs.html) collects case studies and articles.
 - [`grammar-family.html`](grammar-family.html) compares composable site readings and debriefs across portable assets, embedded instruments, and contextual delivery.
 - [`collaboration-skills.html`](collaboration-skills.html) explains portable skill contracts, bounded projections, candidacy, release, and cross-platform adoption.
 - [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) demonstrates an ongoing, implementation-gated enterprise program with proposed architecture, current planning estimates, and explicit pilot proof gates.
 - [`prototypes/index.html`](prototypes/index.html) exposes the local prototype library and its source-aware manifests.
 
-Each public page remains useful when enhancement is unavailable. Embedded prototypes pair their interactive surface with a semantic orientation or static equivalent in the parent page.
+Each public page carries a complete static reading. Embedded prototypes pair
+their interaction with a semantic orientation or static equivalent in the
+parent page, and JavaScript adds bounded enhancement.
 
-The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/SKILL.md) skills provide compact collaboration routes into this terrain.
+The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas reading](../../.agents/skills/context-canvas-surface-reading/README.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/README.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/README.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/README.md) overviews provide compact collaboration entries and link to their authoritative skill contracts.
 
-The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 `schemas.vik.guru` publication and signed-out receipt.
+The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.vik.guru`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the earlier v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 Worker publication and signed-out receipt.
+
+## About comparison and fitted instruments
+
+About owns vertical reading through its AI Method Gallery and native Investment
+Studio. The Studio sits
+inside the cross-functional investment section beside a closed static counterpart
+table. AI Systems links to the complete original Studio and back to this native
+example; both Studio sources retain their independent routes. The shorter About
+page routes readers to AI Systems for the complete public collaboration system.
+The Prompt Conditions Explorer retains its standalone and hosted routes.
+
+The [native coordination package](../../collaboration/native-investment-studio/README.md)
+owns About's hours/minutes/session draft, live preview, explicit Apply controller,
+and accepted investment model.
+`index.html` supplies its semantic panel and static example;
+`styles/routes/about.css` owns the scoped `.native-coordination` composition.
+The primary route manifest carries the canonical browser module graph with
+its relative import geometry. The shared native-module closure check compares
+parsed imports with that manifest and the browser/shared runtime inventory.
+Source, production-closure, and focused
+three-engine interaction checks belong to Issue #643. Issue #641 records the accepted live-preview and explicit Apply measurement.
+The native Team Assembly receiver adds one roster and a person rate/funded-time
+editor through the same accepted state owner; its focused source and browser
+routes belong to Issue #645. `team-controller.mjs` owns that form,
+`person-draft.mjs` owns its raw draft, and `display.mjs` owns exact-value formatting.
+Issue #648 adds People and Teams creation, ordered memberships and removal
+recovery through `assembly-controller.mjs`, finite `command-draft.mjs` forms,
+and the shared eight-slot coordinator. `work-controller.mjs` adds complete
+working-session creation and editing: team, ordered participants, duration,
+count, funding and status. Its session browser route observes arithmetic,
+selection, stale recovery, removal and empty-plan entry.
+`responsibility-controller.mjs` adds the selected person's eight role fields
+and the six contribution categories with human receiver, decision owner,
+supporting sessions and retained review instructions. Issue #836 composes these
+into a visible role-facet rail and a compact Work / Receiver and decision pair.
+Native role/contribution choices and supporting-session changes accept directly;
+stored review/decision notes retain their existing meaning. `studio-people.css`
+owns the parallel team lanes, recessed roster, record-local arrangement controls
+and compact canonical Person settings, including the borrowed Coordination form.
+Person text and quantities retain their Apply boundary. The same accepted plan
+supplies these controls, saved edits and exports; descriptive changes preserve money.
+Its focused browser route owns complete-field meaning, reference recovery,
+focus, narrow reading and disposal. The assembly and existing person routes
+retain their focused checks.
+`connection-view.mjs` retains the accepted SVG/list projection for its reference
+consumers. The current About Coordination surface uses the delivery board and
+Shared sessions module, with canonical person/session/handoff forms borrowed into
+the selected local receiver. `connection-controller.mjs` owns that handoff form.
+Session, connection and template presentations share the existing coordinator
+and recover their own saved work. `styles/routes/about.css` supplies their palette;
+the Studio chapter styles own current rack geometry. The retained Studio chapter
+package keeps its source and independent iframe route.
+
+`collaboration/about-heatmap-comparison/index.html` retains the standalone
+heatmap comparison. The concise About revision retired its embedded exhibit;
+this supersedes the earlier native-projection route. The retained adapter,
+`tools/materialize-about-heatmap.mjs`, still validates the standalone vocabulary
+and can replace an explicitly marked receiver. With the receiver absent, both
+build and check report that standing and leave About untouched. A partial,
+duplicated or reversed marker pair remains an error.
+
+`about-heatmap.js` and the existing About CSS retain the root-scoped Before,
+After and Side-by-side treatment. The browser route mounts the adapter in an
+explicit local fixture to exercise that retained behavior; it establishes fixture
+behavior, while the current About page keeps its shorter composition.
+
+`about-content-fit.js` admits layout reports for About's Gallery
+`iframe[data-about-content-fit]` consumer. Each admitted document receives its own
+MessageChannel, bounded versioned height reports, and navigation cleanup.
+The retained Prompt Conditions Explorer and Studio chapter packages exercise
+this transport through explicit test hosts. The Studio host also checks bounded
+target geometry and visible placement beneath navigation. These fixtures preserve
+the reusable adapter contract while About keeps its compact reading. Model
+values remain in the child.
+The parent batches writes to `--about-content-block-size`; its ready-state rule
+follows the ordinary route-specific reservations, including the narrow Explorer
+fallback. Other carriers retain their existing dimensions.
+
+`collaboration/embedded-content-fit.js` owns the common child layout adapter.
+`tools/materialize-embedded-content-fit.mjs` projects it inline into exactly the
+Gallery and Explorer HTML sources, preserving their self-contained package
+contract. Edit the common source and regenerate both inline receivers. The
+adapter measures natural body height, including packaged attribution, so both
+expansion and shrinkage remain observable. Keep changing content within Gallery's
+`main` or Explorer's padded `.shell`; a new direct body child must keep its outer
+block margins inside the measured body box. Changes to these flow owners or the
+attribution footer earn another expansion and shrinkage check. The first accepted
+fit event lets each instrument apply its own presentation; Gallery owns matrix disclosures and
+print restoration, and Explorer keeps its routing matrix visible.
+
+The fitted children let prompt and state/schema text grow and wrap. Selection,
+semantic tables, horizontal comparison regions, and onward destinations retain
+their instrument owners. Existing sandbox permissions, hosted route identities,
+and full-view links remain intact. Ordinary reserved sizing supplies the fallback
+while the height channel is unavailable.
+Career, Quality, and the Studio’s static counterpart table keep their native
+disclosure summaries available with scripting disabled. All three summaries pair a closed-state “Show” action with
+an open-state “Hide” action; the folios name the additional record count.
+`styles/routes/about.css` owns their disclosure presentations. Its
+`::details-content` rule reveals all thirteen records and the five-row Studio
+counterpart for print while preserving the
+visitor's screen `open` attributes. This
+follows the existing Visualization Atlas print approach and uses the authored
+records directly. The focused browser checks observe native visibility and text
+fragments because the current Playwright WebKit visibility helper treats closed
+disclosure ancestry as hidden even when print CSS exposes the content. Restored
+hiding faults must fail those same observations.
+
+Focused checks:
+
+```sh
+npm run build:embedded-content-fit
+npm run check:embedded-content-fit
+node --test tests/context-canvas/about-content-fit.test.mjs
+npm run build:about-heatmap
+npm run check:about-heatmap
+npm run test:about-scroll-browser
+npm run test:about-disclosure-browser
+```
+
+The browser suite exercises Chromium, Firefox, and Playwright WebKit. Its fitted
+instrument cases explicitly substitute freshly packaged children on a second
+local origin while preserving the production sandbox. This establishes local
+source and package behavior. Standalone print checks exercise each instrument's
+existing visible comparison; About keeps its established print policy for
+embedded instruments. The retained heatmap fixture separately exercises its
+complete native print reading.
+Native-device input, physical pagination, and the exact hosted release retain
+separate observations.
+
+Issues #616 and #617 and PR #619 hold the first accepted pilot; #620 owns the
+Explorer iteration and shared adapter. The reviewed PR is the durable receiving
+record. A future authorized release publishes and verifies compatible children
+before the parent enhancement. Publication remains held; #596 retains independent
+probability-calibration ownership, and #589 remains human-held.
+Issue #621 owns the parent folio and static-prompt disclosure repair. Its print
+checks cover the declared browser engines and media area; physical pagination,
+native applications, and older engines with different disclosure rendering keep
+their separate receiving observations. The human has set on-screen scroll
+preservation as the current priority; #623 is closed as unplanned for this undertaking.
+
+### Retained Studio chapter package
+
+Issue #625 derived the earlier About presentation from the original full Studio through
+`tools/materialize-about-studio-chapters.mjs`. The
+[chapter receiver](../../collaboration/about-investment-studio-chapters/README.md)
+names its source, adapter, style, and layout owners. The generator adds the
+presentation and shared height adapter while preserving every original control,
+calculation, and state owner. The Canvas packager checks that derivation before
+forming the new `investment-studio-chapters` route.
+
+The original Studio remains available through its current source and hosted
+identity, with a complete-Studio link on AI Systems. The derived chapter route
+remains independently packaged; About now presents the native Studio directly.
+The retained package keeps its live investment summary above the selected
+chapter, and chapter switching preserves mounted inputs and planning state.
+Coordination opens first; Plan, People, Work & recovery, Change Modeling, and
+Comparison complete its working view.
+
+```sh
+npm run build:about-studio-chapters
+npm run check:about-studio-chapters
+node --test tests/context-canvas/about-studio-chapters.test.mjs
+npm run test:about-studio-chapters-browser
+```
+
+The focused browser receiver uses the fresh local package in an explicit host
+fixture with the retained sandbox contract. Screen observations cover edits and
+results, retained state, cross-chapter navigation, active-content sizing and
+parent-owned vertical reading. Native Studio journeys use the authored About
+section, while complete-page journeys also exercise its surrounding content.
 
 ## Primary navigation
 
@@ -179,12 +361,65 @@ and verification of the actually deployed source remain separate receiving
 observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
 holds the family extension and deployment-status boundary.
 
+Eight operating-field comparison grids across the five EHR readings, Spatial
+Capture, and Multilingual Clinical Vocabulary stand between continuous prose
+runs. Each comparison uses the ordinary reading width, preserving its authored
+article order and the existing one- or two-column grid. This HTML boundary
+keeps the grid outside prose fragmentation; shared card palette, borders, and
+shadows retain their existing CSS owners. `test:debrief-architecture-cards-browser`
+checks each card fragment, its text and paint, both responsive seams, alternate
+modes, and a fresh-document restoration of the former nested composition.
+[Issue #566](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/566)
+connects the collection observation with the native-browser receiving checks.
+
+Card groups use their local reading owner's available width. The generated
+rail keeps its existing position; its markers can occupy the accepted hard-shadow
+zone. `canvas-shell.css` retains the separate reservation for wide tables and
+story visuals. Authored FMI navigation and scriptless reading keep their own
+layout boundaries.
+
+`npm run test:card-rail-clearance-browser` retains its established entry point
+and inventories 69 groups across 30 routes: 271 articles and 11 native
+disclosures. Its current oracle observes local card width, complete text and
+paint, and retained rail behavior. A controlled replay of the former width cap
+must fail the width assertion. The screen campaign covers the complete family
+at desktop width and representative narrow, seam, wide, enlarged-text, keyboard,
+and touch states across three engines.
+[Issue #629](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/629)
+records this restoration and the preserved WebKit repairs. The earlier
+[Issue #569](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/569)
+retains the lineage of the dev-only spacing experiment. Publication remains held.
+
 Twelve direct-child orientation callouts participate in continuous prose as
 one atomic painted object. Their statement and footer remain together inside
 the same visible boundary as the reading changes between one and two columns.
 The three-engine layout contract inventories this family, checks child and
 visible-text containment across the standing viewport seams, and exercises the
 ordinary fragmenting state before restoring the accepted component contract.
+
+Twenty-one evidence-boundary cards across ten Debriefs use the same screen
+reading component to keep each label, heading and explanation in one painted
+unit. The composition contract retains their palette, border and spacing;
+print retains ordinary block pagination. The focused
+`test:debrief-evidence-cards-browser` contract observes fresh and scrolled
+reading positions, individual fragments and text, with a deterministic split
+canary and fresh-source recovery. Its images support paint review; native
+Safari/DuckDuckGo observations retain their separate application boundary.
+
+Eighteen prose-local callouts and quotations across seven Debriefs use a
+screen-only atomic boundary for their explanation, statement and attribution.
+Their existing owners retain palette and padding; print keeps ordinary block
+layout. `test:debrief-callout-integrity-browser` exercises the complete family,
+the Clinical reading's two reconstructed quotations, reference-link keyboard
+access, alternate modes and modeled split-definition recovery. Native-browser
+observations and paginated-paper behavior retain their separate evidence.
+[Issue #587](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/587)
+holds this component boundary within the complete Debrief-family review.
+Opening definitions start at the reading-column origin while their statement
+padding remains intact; definitions embedded in an existing prose run retain
+their preceding space. The same contract exercises all four Debrief definition contexts
+and a prior-margin fault with fresh-source recovery for
+[Issue #594](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/594).
 
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
@@ -195,6 +430,31 @@ multi-element passages retain continuous columns. Grammar's specimen section,
 PODA's second section title, and independently composed asides keep their
 authored position. These routes load the neutral component directly after
 `expanded.css`; their route bundles continue to own color, measure, and rhythm.
+
+The AI Systems family also receives a combined narrow-width and enlarged-text
+observation through `npm run test:ai-narrow-reading-browser`. Family-owned
+wrapping preserves the selected type scale while headings and navigation-card
+copy fit their available width. Deliberate code and table scroll regions retain
+their local owners. [Issue #567](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/567)
+records the source scope and the distinction between automated engine evidence
+and native-browser confirmation.
+
+Eight independently styled examples opt their `main` reading into
+`.debrief-reading`: FMI Clinical Trial Coordination, FMI LIMS/ELN, Genomic
+Viewer, Prompt-Side Conditions, Initiative Costing, Recoverable Enterprise
+Forms, One Figure, Several Readings, and Who To Believe. The shared Debrief
+component supplies emergency word wrapping at that authored boundary while
+tables keep their existing intrinsic measures and local scrolling. Other
+component consumers retain their existing typography owners.
+
+`npm run test:linked-reading-containment-browser` observes the eight readings
+at 320px and 390px with ordinary and doubled root text, alongside Conditioning
+Field as an independent control. Individual text fragments, ordinary desktop
+composition, real keyboard controls, local evidence access, alternate modes,
+and restored wrapping faults provide the fitting evidence. The two narrow
+reading suites share the same text-observation helper and retain their distinct
+consumer populations. [Issue #568](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/568)
+connects this repair with the original enlarged-text discovery.
 
 `npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
 AI Systems / Shared Machinery primary and directly linked example readings,
@@ -334,7 +594,8 @@ enlarged desktop text because its measure scales with the text.
 | Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
 | Progressive video | Selected native-video carriers resolve through the same-origin `https://vik.guru/v1-cdn/video/` Worker route. The [bounded video-publication manifest](../../planning/media-publication/video-publication-manifest.v0.1.json) records accepted public identities and open page-release states while R2 retains the media bytes. |
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
-| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` and `schemas.vik.guru` are observed retrieval surfaces for the accepted v0.3.1 closure; completed Issue #406 preserves the v0.3 delivery lineage, and completed Issue #531 carries the current Worker publication and exact-version live checks. |
+| Structured public references | Tracked semantic keys identify pages, assets, hosted instruments, schemas, and skills. The route binding derives their destinations from the primary, iframe, schema, and skill publication owners; materialized output carries ordinary HTTPS routes. |
+| Schemas | A schema's `$id` remains its semantic identity. `schemas.vik.guru` is the accepted Worker retrieval surface. Completed Issue #406 preserves the v0.3 delivery lineage, and completed Issue #531 carries the v0.3.1 Worker publication and exact-version live checks. |
 
 The project-level [`asset-inventory.json`](../asset-inventory.json) supplies the
 semantic family, visitor job, accessibility owner, provenance, and recovery
@@ -343,7 +604,7 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
-## Debrief reading modes
+## Showcase reading modes
 
 The nineteen catalog card slugs use their card's available width, owned by
 `.debrief-catalog__card .project--slug` in `styles/routes/debriefs.css`.
@@ -356,44 +617,49 @@ and a restored 32ch fault across three browser engines. The repair gives
 these short orientation headings the room their cards already provide;
 font choice and title wording continue to determine individual line breaks.
 
-[`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
-Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
-Case Brief mode projects the canonical compact source's orientation, ordered
-six-field scan,
-basis and limits, concise related-media index, and two independently operable
-quick scans directly into the catalog. Each quick scan begins collapsed and
-uses its truthful track names, including Comparison and Return where those
-names describe the reading more accurately than Solution and Implementation.
-One fragment-free action continues into the Full Debrief. The complete reading
-repeats the source-owned At-a-Glance orientation, ordered six-field scan, and
-basis-and-limits paragraph before the route-owned narrative. The paired quick
-scans, related-media index, and continuation action remain in Case Brief mode,
-so each reading context repeats only the orientation contract that serves its
-visitor job.
+The [Showcase](debriefs.html) collects case studies and articles at the existing
+`debriefs.html` address. Full Detail shows all catalog cards. Summary opens
+six-field accounts with related media and two independently expandable quick
+scans. Each summary covers Situation and stakes, Scope and role (with optional
+dates), Challenges, Key decision, Results, and What this enables. Case Study and
+Article link directly to their respective readings. In Collection at a glance,
+choose a format or topic to filter the catalog. Point to a card or focus one of
+its links to preview the reading. The image and reading button open the same
+destination. The return arrow restores the collection view with its filters intact.
 
-The bounded
-[`debrief-case-briefs.source.html`](../data/debrief-case-briefs.source.html)
-file owns all compact accounts. Run `npm run build:debrief-case-briefs` after
-changing that source. The dependency-free materializer validates all declared
-routes, ordered six-field scans, paired track disclosures, basis-and-limits
-paragraphs, related-media links, and their source-fragment destinations, then
-refreshes one bounded template block in `debriefs.html` and one bounded
-At-a-Glance block in each declared Full Debrief;
-`npm run check:debrief-case-briefs` confirms exact parity across both receiver
-families.
-The build validates every declared receiver before writing. Each changed file
-is replaced atomically after a last-moment source comparison; a concurrent
-route edit stops the replacement and remains intact. Rerunning the build
-resumes an interrupted multi-file run, and check mode identifies any receiver
-that still needs projection.
-The generated carrier qualifies each source-local fragment with its Debrief
-route, so those destinations remain correct before JavaScript enhancement.
-Each Full Debrief carries one visible `#case-brief` coordinate whose
-At-a-Glance content comes from the same central source. The central source
-remains the sole owner of the repeated orientation, six-field wording, and
-basis-and-limits statement.
-`debriefs-catalog.js` reveals that authored projection as a bounded enhancement,
-so local file inspection and HTTP delivery use the same source-derived scan.
+**Editing shared summaries.** In `debriefs.html`, find the
+`template[data-case-brief-projection]` for the case-study filename. Edit the
+orientation, six fields, or basis and limits there. Run
+`npm run build:debrief-case-briefs` to carry your edit into the same case
+study’s At-a-Glance section at `#case-brief`. On screen, the case-study header
+introduces the work and At-a-Glance starts with the six fields. The catalog’s
+Summary mode displays the shared introductory paragraph. You can also start with an edit
+on the case-study page or in the [compact source](../data/debrief-case-briefs.source.html).
+Quick scans and related media belong to the catalog summary. Full Detail card
+descriptions belong to their individual cards.
+
+`npm run check:debrief-case-briefs` checks all sixteen routes without writing.
+The builder compares edits with the last synchronized version recorded in the
+compact source. If two copies contain different revisions of the same summary,
+it names the route and the edited files before writing. Combine the wording you
+want in those copies and rerun the build. A second build on synchronized files
+preserves their formatting.
+
+**Editing compact HTML.** Open the page with Prettier in your IDE, edit it,
+then run the pinned minifier from the repository root. This command returns
+the About page to compact form.
+
+```sh
+npm run minify:html -- -o context-canvas-project-surface/context-canvas/index.html context-canvas-project-surface/context-canvas/index.html
+```
+
+The [HTML Minifier configuration](../../html-minifier.config.json) preserves
+attribute quotes for the Prettier editing workflow. Leave
+`--remove-attribute-quotes` out of the command and keep
+`removeAttributeQuotes` set to `false`. The same configuration controls
+conservative whitespace collapse, redundant attributes, default type
+attributes, the short doctype, and inline CSS and SVG minification.
+
 The focused browser contract checks all sixteen compact accounts, thirty-two
 independent disclosure controls, closed initial state, state-aware labels,
 related media, grouped EHR behavior, accurate status counts, repeated mode
@@ -413,8 +679,12 @@ Run `npm run build:debrief-image-derivatives` after replacing an accepted source
 The repository-owned generator applies named source profiles: full-Debrief
 figures receive `960w` and `1920w` candidates, while selected catalog cards and
 previews receive `480w`, `960w`, and `1920w` candidates. Each derivative uses
-`cwebp` at quality 82, method 6, sharp YUV, with metadata removed and source
-aspect ratio preserved. The generator skips a candidate at or above the source
+`cwebp` at quality 82, method 6, sharp YUV, and preserves the source
+aspect ratio. The genomic plate, clinical cohort and laboratory lane card masters
+carry the author's copyright in XMP `dc:rights`. Their derivatives retain that
+packet. When replacing one of these masters, transfer the approved rights text
+from the original (including its Finder comment when supplied) into XMP before
+running the generator. The generator skips candidates at or above the source
 width, removes a configured candidate that has become stale, reports an
 unexpected width, reserves configured width suffixes for derivatives, reports
 an orphaned derivative during checks, removes that orphan during builds, writes
@@ -462,7 +732,7 @@ extends the same selected `img/plot/` family.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` starts the About visual sequence on a local 1280×720 plate-view poster and leaves playback, pause, seeking, and replay with native video controls. The same-origin R2 route carries the high-quality 1280×720 H.264 sequence; the page retains a one-shot 960×540 GIF recovery link and a visible description of its silent visual changes. The script pauses playback for print, background tabs, and a newly selected reduced-motion preference, while the poster and description retain the baseline reading. Eleven digest-verified source frames and the versioned sequence manifest make both carriers rebuildable without recapturing live pages. `npm run capture:about-visual-sequence` intentionally refreshes the six repository-rendered problem-shaping frames and their digests; `npm run build:about-visual-sequence` rebuilds the local GIF and poster through a pinned Pillow runtime; the optional `--mp4-output <path>` argument adds the 25 fps progressive carrier through FFmpeg; `npm run refresh:about-visual-sequence` performs capture and local rebuild after an intentional source-page change. The plate-first sequence moves repeatedly among implementation, problem, and solution views. Its one-shot assembly-relay boundary adapts Codrops’ pixel-grid and slice-reveal studies to the existing cobalt, citron, and paper palette while every source view receives a stable hold.
 - `who-to-believe-system-graph.js` admits one finite, page-local graph contract, then coordinates architecture comparison, concern emphasis, direct node selection, and incoming or outgoing neighbor traversal. Its frozen classic-script/CommonJS API keeps the same controller available to direct local inspection and focused tests. Native controls own input semantics; the adjacent HTML reading carries every node and connection through scriptless, print, and recovery states.
-- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or video-only visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
+- Showcase movies use native playback controls, metadata preload, intrinsic geometry, and a reviewed poster. Each Visual description disclosure opens the written sequence beside its movie. The selected page owns the description and the same-origin R2 Worker delivers the media.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
@@ -472,6 +742,13 @@ context precedes the exact MAPS and BIG-bench markers, and attribution closes
 the footer. Maintained projections and iframe package digests are rebuilt from
 their owners after a source change. Exact marker text remains centralized in
 the shared contract and its tests.
+
+About owns the static portfolio footer. Edit the final footer in `index.html`
+and run `node tools/sync-context-canvas-footer.mjs` to copy it to the other
+top-level pages. All three primary links work before scripting. The shared
+`canvas-shell.js` adds the section links and publication destinations, and
+`canvas-shell.css` owns the footer layout and typography. Production uses
+these checked-in files directly. Embedded instruments carry their own attribution.
 
 Every top-level visitor route carries one source-authored ownership and
 Apache-2.0 notice in its static HTML, preserving the notice in the baseline
@@ -502,6 +779,23 @@ seams in the same three engines. The existing gallery contract owns full
 selection, recovery, and export behavior. Its companion article retains its
 independent Debrief composition and essay checks.
 
+The native Studio extends About with `studio-instrument.css` for shared reels
+and motion, followed by `studio-arrangements.css`, `studio-people.css`,
+`studio-change.css`, `studio-assurance.css` and `studio-investment.css` for their chapter racks.
+`studio-people.css` follows Arrangement and owns People geometry plus the compact
+canonical Person form wherever that form is borrowed; `studio-abilities.css`
+owns the support tables and compact selected dark rack. `studio-investment.css`
+owns the live five-type financial workbench, its deck shelf and quantity modules.
+Its runtime modules live under `collaboration/native-investment-studio/`;
+the preserved planning specimen remains a separate reference. The primary route
+manifest registers these styles and their runtime dependencies in the About
+asset closure. The authored About page loads
+these after `about.css`; chapter selectors retain their local extension point.
+The [Studio source map](../../collaboration/native-investment-studio/implementation-reference.md#source-map)
+names the rendering owners and the [experience journal](../../collaboration/native-investment-studio/experience-journal.md)
+records the interaction decisions. ASCII Zine Field and Cobalt Evidence Field
+guide the control and contrast grammar.
+
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
@@ -514,7 +808,7 @@ Current high-signal ownership:
 | [`expanded.css`](expanded.css) | 39 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
 | [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
-| [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
+| [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio readings after the About route bundle; retained Prompt hosts use its comparison rules. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, project-reference figure, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
 | [`styles/routes/visualization-fidelity-atlas.css`](styles/routes/visualization-fidelity-atlas.css) | [`visualization-fidelity-atlas.html`](visualization-fidelity-atlas.html) | Flat references, local table/SVG reading canvases, gallery controls, hidden states, and print disclosures; loads directly after the AI Systems family and before the shell. One Figure, Several Readings retains its Debrief composition styles. |
@@ -527,7 +821,7 @@ Current high-signal ownership:
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
-| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
+| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`Designing Forms That Help People Finish`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
@@ -591,11 +885,14 @@ applications when a report depends on application sandbox policy.
 ## Materialize approved public references
 
 Authored Context Canvas sources carry stable public-reference keys. Registry
-keys appear as complete anchor `href` values and JSON-LD strings. One exact
+keys appear as complete anchor `href` values and JSON-LD strings. Page, asset,
+iframe, schema, and skill keys carry canonical identity, social metadata,
+JSON-LD relationships, and sitemap membership. External keys carry reviewed
+author-selected links, the license destination, and hosted media. One exact
 `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key appears in the shared footer
 script. The visible label, neighboring explanation, and key keep local source
-useful before a public build; materialization supplies each approved external
-destination. Direct Notion page routes stay with the authorized resolver.
+useful before a public build; materialization supplies each reviewed
+destination. Workspace lineage stays with the authorized resolver.
 
 The tracked
 [`context-canvas-registry-bindings.v1.json`](../../deployment/public-references/context-canvas-registry-bindings.v1.json)
@@ -607,16 +904,39 @@ build. The adjacent [binding documentation](../../deployment/public-references/R
 records the accepted Atlas coordinates, integrity digests, license standing,
 data-use notice, and update boundary.
 
-The authored footer describes the professional profile as available in the
-public build. A materialized build changes that same shared carrier into an
-ordinary, same-tab “Professional profile” link with a descriptive accessible
-name. Its destination lives only in ignored `.env.public` or the delivery
-process environment.
+The tracked
+[`context-canvas-route-bindings.v1.json`](../../deployment/public-references/context-canvas-route-bindings.v1.json)
+selects the current public destination for every `PUBLIC_URL_PAGE_*`,
+`PUBLIC_URL_ASSET_*`, `PUBLIC_URL_IFRAME_*`, `PUBLIC_URL_SCHEMA_*`, and
+`PUBLIC_URL_SKILL_*` key. Its contract derives those destinations from the
+primary route manifest, production origin, Canvas and Core iframe manifests,
+schema Worker manifest, and skill publication selection. The accompanying
+head-authority matrix records every indexed structured-head and sitemap use,
+so one review can see the token, carrier, JSON pointer, authority class, and
+relationship role together.
 
-Activated iframe carriers use their public route manifests directly. Their
+The tracked
+[`context-canvas-external-bindings.v1.json`](../../deployment/public-references/context-canvas-external-bindings.v1.json)
+selects the author-approved destinations for `PUBLIC_URL_EXTERNAL_*` keys.
+About uses these keys for external reading and source links, its license,
+and its hosted video and poster. The binding keeps those destinations separate
+from Registry Atlas selections and repository-owned route derivation while
+the materializer resolves all three families into the public build.
+
+The shared footer shows Registry, GitHub, and professional-profile labels
+when you open the authored HTML directly. GitHub Pages and the production
+build turn them into native, same-tab links. The Registry Atlas binding owns
+the Registry root, and the external-reference binding owns the project
+repository URL. The professional profile takes its destination from ignored
+`.env.public` or the delivery environment. Open the materialized build to
+follow these footer links locally.
+
+Activated visible iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or
-`/v1/canvas/` family, while each adjacent full-view `href` remains an ordinary
-link to the repository-local base prototype that becomes a primary-site route.
+`/v1/canvas/` family. Adjacent full-view links name the standalone destination:
+a repository-local base prototype or a materialized public route. About's
+Gallery reading link uses its approved hosted alias; the activated iframe keeps
+its direct manifest route and existing sandbox policy.
 Inside generated iframe documents, eligible onward links open a secure separate
 top-level tab so the destination cannot replace or nest inside the carrier.
 Fragments, downloads, and page controls keep their in-document behavior. A
@@ -638,11 +958,11 @@ an explicitly late-bound future receiver. Current manifest-owned iframe
 carriers use literal `src` values, so their routes remain inspectable and
 testable in tracked HTML before publication.
 
-The accepted Notion boundary is concise: only the Enterprise Human-AI
-Practitioner Registry root and its descendants are public-possible. A key name
-expresses that scope but cannot prove ancestry, content standing, or anonymous
-availability. The authorized resolver and human review establish those facts
-before a destination enters the tracked binding.
+The accepted Notion boundary is concise: the Enterprise Human-AI Practitioner
+Registry root and its descendants form the eligible source family for public
+bindings. The authorized resolver and human review establish ancestry, content
+standing, and anonymous availability before a destination enters the tracked
+binding. A key name then provides its stable public reference.
 
 From the repository root:
 
@@ -651,26 +971,30 @@ cp .env.public.example .env.public
 # Add the approved professional-profile destination.
 npm run build:public-references
 npm run test:public-references
+npm run test:context-canvas-head-routes
 ```
 
+The tracked bindings remain the Registry and repository-route configuration
+authorities while active.
 An explicit process-environment value can override the professional-profile
 entry, which keeps the same build seam available to a later delivery receiver.
-Registry settings in either external receiver are rejected while the tracked
-binding is active. The materializer never prints destination values. It
-requires exact source-discovered Registry-token coverage and rejects malformed,
-non-HTTPS, userinfo-bearing, credential-shaped, ambiguous, duplicate, or
-unsupported settings before replacing an accepted generation. Authored source
-continues to define the required key set; the reviewed binding supplies its
-Registry destinations.
+The materializer keeps destination values out of logs and terminal output. It
+verifies exact source-discovered token coverage and accepts one unambiguous
+HTTPS destination per required key before atomically replacing an accepted
+generation. Authored source defines the required key set. The Registry binding
+supplies Registry destinations; the route binding verifies repository-published
+destinations against their source owners. The professional-profile receiver
+retains its separate ignored configuration seam.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies
 the complete `context-canvas-project-surface/` subtree, transforms approved
 Context Canvas HTML carriers and the one shared footer-script carrier, and
 preserves every other regular file byte-for-byte. It validates token-bearing
-JSON-LD, scans every copied regular file for direct Notion routes, and replaces
-the prior generation only after the complete result succeeds. Configuration
-and the Registry coordination directory stay outside the copied tree. Symbolic links and special filesystem entries
+metadata, JSON-LD, and sitemap entries, scans every copied regular file for
+workspace routes, and replaces the prior generation only after the complete
+result succeeds. Configuration and the public-reference coordination directory
+stay outside the copied tree. Symbolic links and special filesystem entries
 stay outside this build boundary. Tracked input remains byte-unchanged. An
 operational restore failure preserves the ignored recovery directory for an
 explicit local recovery.

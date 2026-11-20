@@ -53,7 +53,10 @@ export async function runIframeVisualMediaBrowserContract() {
     const aggregatePlan = await createAggregatePackagePlan();
     await writePackagePlan(aggregatePlan, v1Root);
     const routes = routeReadings(aggregatePlan);
-    assert.equal(routes.length, 38, "the media contract covers the complete iframe population");
+    const expectedPaths = [...aggregatePlan.familyPlans.values()]
+      .flatMap(plan => plan.contract.routes.map(route => route.public_alias + "index.html"));
+    assert.deepEqual(routes.map(route => route.path).sort(), expectedPaths.sort(),
+      "the media contract visits every authored Core and Canvas route");
 
     browser = await chromium.launch({ headless: true });
     server = await startStaticServer(temporaryRoot);

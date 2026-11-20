@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -30,7 +31,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
     historicalFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-    currentDigest: "53992af5ad8d7ab02374d78693ee958fa174b15aadcf7a550b21295b3c20049b",
+    currentDigest: "3281ec2945138229a550e9b2989d4562a5ce98ff95337187a9185664bf1ba6a5",
     historicalDigest: "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
     stateContract: "pattern-problem-surface-matrix-state.v0.1",
     apiName: "patternProblemSurfaceMatrix",
@@ -48,7 +49,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
     historicalFile: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-    currentDigest: "f91497ea6c61655084a8cab5a381f1afd86cf020d29c8a190192ff2618a80d18",
+    currentDigest: "64c2c52c8fbd440c03c1e148640503f9bbf8e372ddd5ade87f48d05c37b2e3ca",
     historicalDigest: "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
     stateContract: "jobs-to-be-done-treemap-state.v0.1",
     apiName: "jobsToBeDoneTreemap",
@@ -65,7 +66,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "unit-test-first-design-chimeric-prototype-v0.1.5.html",
     historicalFile: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
-    currentDigest: "46b6806724dfca86408a61e1105d34543fbf021b3a3da7bda8405d04511c9bb8",
+    currentDigest: "bf7dd550f3d4cbfc2036240a27f23ae95948022a73b0fd73fd4176a6a59fb317",
     historicalDigest: "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
     stateContract: "unit-test-first-design-state.v0.1",
     apiName: "unitTestFirstDesign",
@@ -131,13 +132,13 @@ for (const artifact of artifacts) {
     const route = routeManifest.routes.find(({ id }) => id === artifact.id);
 
     assert.match(html, /PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0'/u);
-    assert.ok(html.includes(`PROMPT_CAPSULE_STATE_CONTRACT = '${artifact.stateContract}'`));
+    assert.equal(readPrototypeScript(html).initializer('PROMPT_CAPSULE_STATE_CONTRACT').slice(1, -1), artifact.stateContract);
     assert.match(html, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
     assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
     assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
     assert.match(html, /<noscript>[\s\S]*?complete default plain Markdown remains available/u);
     assert.match(html, new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(`, "u"));
-    assert.ok(html.includes(`PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}'`));
+    assert.equal(readPrototypeScript(html).initializer('PROMPT_CAPSULE_SKILL_REVISION').slice(1, -1), skillRevision);
 
     const orderedSections = [
       "## Purpose and target",

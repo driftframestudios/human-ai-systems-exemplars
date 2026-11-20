@@ -1,11 +1,11 @@
 {
   "schemaVersion": "2",
-  "sourceRevision": "c1e35fdd57c2193812c2b183955aca15a5020be8",
+  "sourceRevision": "a5ed640bb0982044d46e6e874867eb8f0e760169",
   "peerRelease": {
-    "releaseTag": "pages-v0.3.1",
-    "tagObject": "15c9a0ced1a49f3f20797682282526a95afbef88",
-    "projectionRevision": "fbf568496b90cf26cb0de5993189801d8a8c2be9",
-    "closureSha256": "b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0"
+    "releaseTag": "pages-v0.4.0",
+    "tagObject": "2c253529e85f3b853e139a4c5fd6d83cd328037e",
+    "projectionRevision": "4a4a37633e81a80f1ef45386ce22d3de4657384d",
+    "closureSha256": "80cb2f1100adaedcda8179abbd4e1c84bcc8fbc5af60ce6eab4ec37cf587d2cb"
   },
   "frozen": [
     "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
@@ -37,7 +37,39 @@
     "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
     "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
     "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "/schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+    "/schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+    "/schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+    "/schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+    "/schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+    "/schemas/visual-fidelity/component-lab/v1.schema.json",
+    "/schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+    "/schemas/visual-fidelity/data-view-lab/v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-command.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-continuation.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-issue.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-projection.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-receipt.v1.schema.json",
+    "/schemas/visual-fidelity/service-boundary-response.v1.schema.json",
     "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+    "/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+    "/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+    "/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+    "/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+    "/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+    "/visual-fidelity/component-lab/v1.schema.json",
+    "/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+    "/visual-fidelity/data-view-lab/v1.schema.json",
+    "/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+    "/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+    "/visual-fidelity/service-boundary-command.v1.schema.json",
+    "/visual-fidelity/service-boundary-continuation.v1.schema.json",
+    "/visual-fidelity/service-boundary-issue.v1.schema.json",
+    "/visual-fidelity/service-boundary-projection.v1.schema.json",
+    "/visual-fidelity/service-boundary-receipt.v1.schema.json",
+    "/visual-fidelity/service-boundary-response.v1.schema.json",
     "/visualization/visualization-fidelity-atlas.schema.v0.1.json"
   ],
   "routes": {
@@ -58,8 +90,28 @@
     "/na/schema/narrative-sampling-tableau-state.schema.v0.1.json": "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
     "/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json": "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
     "/fg/schema/threadkeeping-ledger.schema.v0.1.json": "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+    "/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json": "/schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+    "/visual-fidelity-contracts/1.0.0/lab-state.schema.json": "/schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+    "/visual-fidelity-contracts/1.0.0/catalog.schema.json": "/schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+    "/visual-fidelity-contracts/1.0.0/example-catalog.schema.json": "/schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+    "/visual-fidelity-contracts/1.0.0/public-lineage.schema.json": "/schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+    "/visual-fidelity/component-lab/v1.schema.json": "/schemas/visual-fidelity/component-lab/v1.schema.json",
+    "/visual-fidelity/data-view-lab/v1.schema.json": "/schemas/visual-fidelity/data-view-lab/v1.schema.json",
+    "/visual-fidelity/components-and-data-probe-catalog/v1.schema.json": "/schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+    "/visual-fidelity/service-boundary-ai-call.v1.schema.json": "/schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+    "/visual-fidelity/service-boundary-checkpoint.v1.schema.json": "/schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+    "/visual-fidelity/service-boundary-command.v1.schema.json": "/schemas/visual-fidelity/service-boundary-command.v1.schema.json",
+    "/visual-fidelity/service-boundary-continuation.v1.schema.json": "/schemas/visual-fidelity/service-boundary-continuation.v1.schema.json",
+    "/visual-fidelity/service-boundary-issue.v1.schema.json": "/schemas/visual-fidelity/service-boundary-issue.v1.schema.json",
+    "/visual-fidelity/service-boundary-projection.v1.schema.json": "/schemas/visual-fidelity/service-boundary-projection.v1.schema.json",
+    "/visual-fidelity/service-boundary-receipt.v1.schema.json": "/schemas/visual-fidelity/service-boundary-receipt.v1.schema.json",
+    "/visual-fidelity/service-boundary-response.v1.schema.json": "/schemas/visual-fidelity/service-boundary-response.v1.schema.json",
     "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
     "/context-canvas/1.0.0/context-canvas.context.jsonld": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+    "/collaboration-skills/0.1.0/README.md": "/schemas/collaboration-skills/0.1.0/README.md",
+    "/collaboration-skills/0.1.0/examples/portable-skill.example.json": "/schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+    "/collaboration-skills/0.1.0/examples/retired-projection.example.json": "/schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+    "/collaboration-skills/0.1.0/examples/collaboration-account.example.json": "/schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
     "/investment-analysis/0.2.0/example.json": "/schemas/investment-analysis/0.2.0/example.json",
     "/investment-analysis/0.2.0/README.md": "/schemas/investment-analysis/0.2.0/README.md",
     "/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld": "/schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld",
@@ -167,6 +219,86 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "immutable"
     },
+    "/schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/component-lab/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/component-lab/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/data-view-lab/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/data-view-lab/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-command.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-command.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-continuation.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-continuation.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-issue.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-issue.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-projection.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-projection.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-receipt.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-receipt.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visual-fidelity/service-boundary-response.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-response.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
     "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json": {
       "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
       "contentType": "application/json; charset=utf-8",
@@ -175,6 +307,26 @@
     "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld": {
       "asset": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
       "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/collaboration-skills/0.1.0/README.md": {
+      "asset": "/schemas/collaboration-skills/0.1.0/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+      "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
     "/schemas/investment-analysis/0.2.0/example.json": {
@@ -277,6 +429,11 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/ascii-zine-composition/projection.json": {
+      "asset": "/skills/ascii-zine-composition/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/audit-anthropomorphic-cues/projection.json": {
       "asset": "/skills/audit-anthropomorphic-cues/projection.json",
       "contentType": "application/json; charset=utf-8",
@@ -284,6 +441,11 @@
     },
     "/skills/bounded-support-routing/projection.json": {
       "asset": "/skills/bounded-support-routing/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/build-output-equivalence/projection.json": {
+      "asset": "/skills/build-output-equivalence/projection.json",
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
@@ -339,6 +501,11 @@
     },
     "/skills/embedded-prototype-layout/projection.json": {
       "asset": "/skills/embedded-prototype-layout/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/evidence-bearing-test-design/projection.json": {
+      "asset": "/skills/evidence-bearing-test-design/projection.json",
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
@@ -402,6 +569,11 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/test-suite-composition/projection.json": {
+      "asset": "/skills/test-suite-composition/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/uv-backed-python-execution/projection.json": {
       "asset": "/skills/uv-backed-python-execution/projection.json",
       "contentType": "application/json; charset=utf-8",
@@ -412,6 +584,11 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/ascii-zine-composition/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/ascii-zine-composition/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md": {
       "asset": "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -419,6 +596,11 @@
     },
     "/skills/source/.agents/skills/bounded-support-routing/SKILL.md": {
       "asset": "/skills/source/.agents/skills/bounded-support-routing/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/build-output-equivalence/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/build-output-equivalence/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -474,6 +656,11 @@
     },
     "/skills/source/.agents/skills/embedded-prototype-layout/SKILL.md": {
       "asset": "/skills/source/.agents/skills/embedded-prototype-layout/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/evidence-bearing-test-design/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/evidence-bearing-test-design/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -537,6 +724,11 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/test-suite-composition/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/test-suite-composition/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/uv-backed-python-execution/SKILL.md": {
       "asset": "/skills/source/.agents/skills/uv-backed-python-execution/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -579,6 +771,11 @@
     },
     "/skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md": {
       "asset": "/skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -647,6 +844,11 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md": {
+      "asset": "/skills/source/.agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md": {
       "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -695,6 +897,36 @@
     "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs": {
       "asset": "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
       "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/tools/node-runtime-admission.mjs": {
+      "asset": "/skills/source/tools/node-runtime-admission.mjs",
+      "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/tools/check-node-runtime.mjs": {
+      "asset": "/skills/source/tools/check-node-runtime.mjs",
+      "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/NODE-RUNTIME.md": {
+      "asset": "/skills/source/NODE-RUNTIME.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md": {
+      "asset": "/skills/source/.agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/test-suite-composition/references/runtime-provisioning-cards.md": {
+      "asset": "/skills/source/.agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md": {
+      "asset": "/skills/source/.agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md",
+      "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
     "/skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md": {
@@ -792,6 +1024,86 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "immutable"
     },
+    "/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity-contracts/1.0.0/lab-state.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity-contracts/1.0.0/catalog.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity-contracts/1.0.0/example-catalog.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity-contracts/1.0.0/public-lineage.schema.json": {
+      "asset": "/schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/component-lab/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/component-lab/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/data-view-lab/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/data-view-lab/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/components-and-data-probe-catalog/v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-ai-call.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-checkpoint.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-command.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-command.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-continuation.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-continuation.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-issue.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-issue.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-projection.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-projection.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-receipt.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-receipt.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visual-fidelity/service-boundary-response.v1.schema.json": {
+      "asset": "/schemas/visual-fidelity/service-boundary-response.v1.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
     "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": {
       "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
       "contentType": "application/json; charset=utf-8",
@@ -800,6 +1112,26 @@
     "/context-canvas/1.0.0/context-canvas.context.jsonld": {
       "asset": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
       "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/collaboration-skills/0.1.0/README.md": {
+      "asset": "/schemas/collaboration-skills/0.1.0/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/collaboration-skills/0.1.0/examples/portable-skill.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/collaboration-skills/0.1.0/examples/retired-projection.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/collaboration-skills/0.1.0/examples/collaboration-account.example.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+      "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
     "/investment-analysis/0.2.0/example.json": {
@@ -906,6 +1238,10 @@
     "schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld",
     "schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
     "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+    "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+    "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+    "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+    "schemas/collaboration-skills/0.1.0/README.md",
     "schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
     "schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
     "schemas/context-canvas/1.0.0/context-canvas.schema.json",
@@ -928,10 +1264,28 @@
     "schemas/narrative-threadkeeping/0.1/README.md",
     "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
     "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "schemas/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+    "schemas/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+    "schemas/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+    "schemas/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+    "schemas/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+    "schemas/visual-fidelity/component-lab/v1.schema.json",
+    "schemas/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+    "schemas/visual-fidelity/data-view-lab/v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-command.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-continuation.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-issue.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-projection.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-receipt.v1.schema.json",
+    "schemas/visual-fidelity/service-boundary-response.v1.schema.json",
     "schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld",
     "schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+    "skills/ascii-zine-composition/projection.json",
     "skills/audit-anthropomorphic-cues/projection.json",
     "skills/bounded-support-routing/projection.json",
+    "skills/build-output-equivalence/projection.json",
     "skills/catalog.json",
     "skills/collaboration-accounting/projection.json",
     "skills/collaboration-runbook-authoring/projection.json",
@@ -944,6 +1298,7 @@
     "skills/data-visualization-foundations/projection.json",
     "skills/declarative-skill-authoring/projection.json",
     "skills/embedded-prototype-layout/projection.json",
+    "skills/evidence-bearing-test-design/projection.json",
     "skills/evidence-grounded-research-spike/projection.json",
     "skills/issue-chain-stewardship/projection.json",
     "skills/locator-boundary-stewardship/projection.json",
@@ -955,10 +1310,12 @@
     "skills/secret-boundary-inspection/projection.json",
     "skills/semantic-table-design/projection.json",
     "skills/source-authority-mapping/projection.json",
+    "skills/source/.agents/skills/ascii-zine-composition/SKILL.md",
     "skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
     "skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
     "skills/source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md",
     "skills/source/.agents/skills/bounded-support-routing/SKILL.md",
+    "skills/source/.agents/skills/build-output-equivalence/SKILL.md",
     "skills/source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
     "skills/source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
     "skills/source/.agents/skills/collaboration-accounting/SKILL.md",
@@ -967,6 +1324,7 @@
     "skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
     "skills/source/.agents/skills/context-canvas-css-ownership/SKILL.md",
     "skills/source/.agents/skills/context-canvas-surface-reading/SKILL.md",
+    "skills/source/.agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
     "skills/source/.agents/skills/context-canvas-visual-verification/SKILL.md",
     "skills/source/.agents/skills/contextual-jargon-scan/SKILL.md",
     "skills/source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md",
@@ -983,6 +1341,8 @@
     "skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
     "skills/source/.agents/skills/declarative-skill-authoring/SKILL.md",
     "skills/source/.agents/skills/embedded-prototype-layout/SKILL.md",
+    "skills/source/.agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+    "skills/source/.agents/skills/evidence-bearing-test-design/SKILL.md",
     "skills/source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
     "skills/source/.agents/skills/issue-chain-stewardship/SKILL.md",
     "skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
@@ -1002,18 +1362,26 @@
     "skills/source/.agents/skills/source-authority-mapping/SKILL.md",
     "skills/source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
     "skills/source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+    "skills/source/.agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+    "skills/source/.agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
+    "skills/source/.agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md",
+    "skills/source/.agents/skills/test-suite-composition/SKILL.md",
     "skills/source/.agents/skills/uv-backed-python-execution/SKILL.md",
     "skills/source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
     "skills/source/.agents/skills/web-data-visualization/SKILL.md",
     "skills/source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
     "skills/source/github/workflows/prototype-unit-tests.yml",
+    "skills/source/NODE-RUNTIME.md",
     "skills/source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
     "skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
     "skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
     "skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
     "skills/source/threadkeeping/context-canvas-public-reference-materialization.md",
     "skills/source/threadkeeping/repository-secret-material-boundary.md",
+    "skills/source/tools/check-node-runtime.mjs",
+    "skills/source/tools/node-runtime-admission.mjs",
     "skills/stateful-artifact-behavior-contracts/projection.json",
+    "skills/test-suite-composition/projection.json",
     "skills/uv-backed-python-execution/projection.json",
     "skills/web-data-visualization/projection.json"
   ]

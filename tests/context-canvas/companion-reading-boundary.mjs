@@ -26,7 +26,7 @@ export async function observeCompanionBoundary(page, ids) {
     });
     const rail = markers.length ? { left: Math.min(...markers.map(r => r.left)), right: Math.max(...markers.map(r => r.right)) } : null;
     return ids.map(id => {
-      const heading = document.getElementById(id), panel = heading.closest('aside'), frame = panel.getBoundingClientRect();
+      const heading = document.getElementById(id), panel = heading.closest('aside, details'), frame = panel.getBoundingClientRect();
       const range = document.createRange(); range.selectNodeContents(heading);
       const fragments = [...range.getClientRects()].filter(r => r.width && r.height).map(r => ({ left: r.left, right: r.right }));
       return { id, left: frame.left, right: frame.right, paint: paint(frame, getComputedStyle(panel).boxShadow), rail,

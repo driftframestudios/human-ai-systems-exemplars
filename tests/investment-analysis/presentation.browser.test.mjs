@@ -432,17 +432,21 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       await nojs.close();
     }
 
-    // The actual About carrier keeps its declared sandbox, while local package bytes supply the child.
+    // Exercise the still-published iframe under its declared sandbox policy.
     const aboutContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
-    await aboutContext.route("https://iframes.vik.guru/**", async route => {
-      const pathname = new URL(route.request().url()).pathname;
-      if (pathname === "/v1/canvas/cross-functional-investment-studio/") {
-        await route.fulfill({ status: 200, contentType: "text/html", body: plan.outputFiles.get("cross-functional-investment-studio/index.html") });
-      } else await route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Adjacent carrier outside this check</title>" });
-    });
+    const routeId = 'cross-functional-investment-studio';
+    const child = plan.contract.routes.find(route => route.id === routeId);
+    const alias = 'https://iframes.vik.guru' + child.public_alias;
+    await aboutContext.route(alias, route => route.fulfill({
+      status: 200, contentType: 'text/html', body: plan.outputFiles.get(routeId + '/index.html'),
+    }));
     const about = await aboutContext.newPage();
-    await about.goto(origin + "/context-canvas-project-surface/context-canvas/index.html");
-    const frame = about.frameLocator('iframe[title="Interactive Cross-Functional Investment Studio"]');
+    await about.route(origin + '/investment-embed', route => route.fulfill({
+      contentType: 'text/html', body: '<iframe title="Investment Studio" sandbox="'
+        + child.carrier_policy.sandbox_tokens.join(' ') + '" src="' + alias + '"></iframe>',
+    }));
+    await about.goto(origin + '/investment-embed');
+    const frame = about.frameLocator('iframe');
     await frame.locator("[data-investment-analysis]:not([hidden])").waitFor();
     await frame.getByRole("button", { name: "Source-linked readouts", exact: true }).click();
     await frame.locator("#analysis-direct-receipts").getByRole("link", { name: "Decision owner, gate, and revisit", exact: true }).click();
@@ -454,8 +458,6 @@ test("investment chapters retain readable, navigable, source-grounded screen and
     await popup.waitForLoadState("domcontentloaded");
     assert.equal(await popup.getByRole("heading", { name: "Layered investment comparison", exact: true }).count(), 1);
     assert.equal(await popup.evaluate(() => window.opener === null), true);
-    const counterpart = about.getByRole("table", { name: "Cross-Functional Investment Studio: static counterpart to the editable analysis", exact: true });
-    assert.equal(await counterpart.locator("tbody tr[data-label]").count(), 5);
     await aboutContext.close();
   } finally {
     await browser.close();

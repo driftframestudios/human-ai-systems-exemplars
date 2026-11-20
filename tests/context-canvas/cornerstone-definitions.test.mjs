@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
@@ -29,7 +30,7 @@ const placements = new Map([
 ]);
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function normalizeText(value) {
@@ -88,7 +89,7 @@ test("About and general prototypes remain definition-free", async () => {
   assert.equal(carriers(await readCanvasFile("index.html")).length, 0);
   const prototypes = await htmlFilesUnder(resolve(canvasRoot, "prototypes"));
   for (const path of prototypes) {
-    assert.doesNotMatch(await readFile(path, "utf8"), /cornerstone-definition/u, path);
+    assert.doesNotMatch(await readSourceContract(path, "utf8"), /cornerstone-definition/u, path);
   }
 });
 

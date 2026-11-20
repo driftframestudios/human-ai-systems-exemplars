@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -10,14 +11,7 @@ const source = await readFile(new URL("../../core-architectures-chimeric-prototy
 const receiver = await readFile(new URL("../../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/" + file, import.meta.url), "utf8");
 const plain = value => JSON.parse(JSON.stringify(value));
 
-// These named source functions have top-level two-space closing braces.
-function definition(name) {
-  const start = source.indexOf("  function " + name + "(");
-  assert(start >= 0, "Named executable owner exists: " + name);
-  const end = source.indexOf("\n  }", start);
-  assert(end > start);
-  return source.slice(start, end + 4);
-}
+const { definition } = readPrototypeScript(source);
 function fixture() {
   const calls = [], controls = [], body = {}, scrolls = [];
   const viewport = { clientWidth: 251, clientHeight: 604 };
@@ -93,8 +87,8 @@ test("canonical and Canvas focus owners stay source-identical, with actual liste
   assert.equal(source, receiver);
   assert.match(source, /renderAllPreservingControlFocus\(e\.currentTarget\)/u);
   for (const kind of ["surface", "asset"]) {
-    assert(source.includes("moveItem('" + kind + "', e.currentTarget.dataset.move" +
-      kind[0].toUpperCase() + kind.slice(1) + ", Number(e.currentTarget.dataset.dir), e.currentTarget)"));
+    assert(source.replace(/\s/gu, "").includes("moveItem('" + kind + "',e.currentTarget.dataset.move" +
+      kind[0].toUpperCase() + kind.slice(1) + ",Number(e.currentTarget.dataset.dir),e.currentTarget)"));
   }
   for (const name of ["renderAllPreservingControlFocus", "renderBasisToggles", "moveItem"]) {
     assert.doesNotThrow(() => new vm.Script(definition(name)));
@@ -263,10 +257,10 @@ function inspectorFixture(kind) {
   }
   f.run(["updateInspectorRouteReadout", "renderInspectorProjections"].map(definition).join("\n"));
   const renderer = definition(kind === "cell" ? "renderCellInspector" : "renderAssetInspector");
-  const marker = kind === "cell" ? "    el.querySelectorAll('[data-cell-basis]')" : "    document.getElementById('asset-desc')";
+  const marker = kind === "cell" ? "el.querySelectorAll('[data-cell-basis]')" : "document.getElementById('asset-desc')";
   const start = renderer.indexOf(marker);
   assert(start > 0, "Use the actual authored listener section");
-  f.run("(function(){ const c = state.cells[0], a = state.shared_assets[0], el = inspector;\n" + renderer.slice(start, -4) + "\n})()");
+  f.run("(function(){ const c = state.cells[0], a = state.shared_assets[0], el = inspector;\n" + renderer.slice(start, renderer.lastIndexOf("}")) + "\n})()");
   return { ...f, record, node, nodes, projectionCalls };
 }
 
@@ -332,8 +326,7 @@ test("inspector focus keys cannot cross a selected record or select an unrelated
 });
 
 test("native route selects keep full canonical options and associated literal wrapping readouts", () => {
-  const escape = source.match(/^  function escapeHtml\(str\)\{[^\n]+\}/m)?.[0];
-  assert(escape);
+  const escape = definition("escapeHtml");
   const context = vm.createContext({});
   vm.runInContext(escape + "\n" + definition("inspectorRouteLabel"), context);
   for (const kind of ["cell", "asset"]) {
