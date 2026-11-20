@@ -2,7 +2,7 @@
 
 The Studio is a browser-local planning engine with a DOM adapter. Reuse the
 engine when you want a bounded plan, exact investment arithmetic, and reversible
-commands. Start with the [Studio quickstart](../../README.md) for the example,
+commands. Start with the [Studio overview](../../README.md), try the [session edit below](#run-a-session-command-from-node),
 or use the [implementation reference](../../implementation-reference.md) for
 the full catalog of commands, limits, and host obligations.
 
@@ -20,7 +20,7 @@ the page that renders it.
 | --- | --- | --- |
 | Identity and context | `kind`, `schemaVersion`, `modelVersion`, `planId`, `revision`, `currency`, `horizonWeeks`, `purpose` | The format version selects the admitted shape. The document revision travels with the plan. The active Studio tracks acceptance separately. |
 | People and teams | Ordered `people` and `teams`, keyed by record IDs. A person has funded minutes, a nullable hourly rate in cents, role, lifecycle, and nullable availability intervals. A team has ordered `personIds`. | A person has one capacity account across teams. A null rate means unknown. Zero is a known rate. Labels can change while IDs continue to identify the record. |
-| Work and schedule | Ordered `work` rows carry host, ordered participant IDs, duration, repeat count, funding, status and nullable timing. A sparse `sessionOverrides` array carries complete session settings for selected occurrences. `scoreSettings` holds the planning horizon, placements and other coordination records. | A scheduled occurrence is addressed by `workId` and zero-based `occurrenceIndex` within a captured plan. Its board position comes from the placement's period and subdivision. Removing an occurrence shifts later indices and their placements. |
+| Work and schedule | Ordered `work` rows carry host, ordered participant IDs, duration, repeat count, funding, status and nullable timing. A sparse `sessionOverrides` array carries complete session settings for selected occurrences. `scoreSettings` holds the optional coordination window, cadence placements and other scheduling records. | A scheduled occurrence is addressed by `workId` and zero-based `occurrenceIndex` within a captured plan. Its board position comes from the placement's period and subdivision. Removing an occurrence shifts later indices and their placements. |
 | Responsibility and support | `abilities`, `practices`, `capabilityEvidence`, `contributions`, `connections`, `arrangements` | Keep definition IDs and versions, support bindings, and the actual receiver and decision owner explicit. Many views can refer to one work record without creating duplicate work. |
 | Chapter settings | `changeSettings`, `assuranceSettings`, `investmentSettings` | Store selections and assumptions that carry across visits. The accepted plan and its model own staffing and work costs. Investment comparisons can vary assumptions independently of those costs. |
 
@@ -99,8 +99,8 @@ fully expanded array for that calculation. A caller that needs repeated reads
 of exact sessions can build one override lookup for the work record.
 [The cadence index](../../cadence-occurrences.mjs) groups supplied occurrences
 once per invocation by work and period so each board cell can select its
-bucket. [The investment reader](../../investment-projection.mjs) retains one
-context per exact accepted projection and computes deck analyses on demand.
+bucket. [The investment reader](../../investment-projection.mjs) caches the most recently
+read projection by identity and computes its deck analyses on demand.
 Use reference identity for these caches. Undo and import can reuse an older
 document revision while carrying a new acceptance. Measure preparation and
 rendering separately before narrowing recomputation.
@@ -108,12 +108,12 @@ rendering separately before narrowing recomputation.
 ## Run a session command from Node
 
 From the repository root, use the [repository Node runtime](../../../../NODE-RUNTIME.md).
-This example exercises the same session and investment change as the browser
-quickstart. It checks the preview, exact cents, sibling occurrence, and
-rejection of a stale capture after Undo.
+This example adds 15 minutes to the first Operations rehearsal session. It
+checks the preview, the accepted cost in cents, the duration of the second
+session, and rejection of a stale edit after Undo.
 
 ```sh
-node --input-type=module <<'EOF_NODE'
+node --import ./tools/node-runtime-admission.mjs --input-type=module <<'EOF_NODE'
 import assert from 'node:assert/strict';
 import { createStudio } from './collaboration/native-investment-studio/state.mjs';
 import { createShowcasePlan } from './collaboration/native-investment-studio/presets.mjs';
@@ -228,7 +228,7 @@ type Mutation { updateSession(input: UpdateSessionInput!): UpdateSessionResult! 
    plan, and command. Inside the transaction, resolve a matching retry before
    checking the current version, so a retry can recover an already committed
    receipt. Bind that receipt to the scoped key and a canonical fingerprint of
-   the command. A changed request with the same key needs an explicit conflict.
+   the plan ID, expected version and command, including placement field presence. A changed request with the same key needs an explicit conflict.
    Then check the expected version and validate the target against that
    version's snapshot. Commit the admitted successor and receipt atomically and
    return the committed plan. GraphQL serializes top-level mutation fields

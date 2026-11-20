@@ -20,14 +20,14 @@ test('native About coordination has one module receiver, a closed static counter
   const peopleStart = about.indexOf('<section class="native-team', panelStart);
   assert.ok(panelStart >= 0 && peopleStart > panelStart, 'Coordination precedes the People chapter');
   const nativePanel = about.slice(panelStart, peopleStart);
-  assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary><span data-native-remote-title>Session settings · Pilot decision review<\/span><\/summary>/u,
+  assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary>\s*<span data-native-remote-title>Session settings · Pilot decision review<\/span>\s*<\/summary>/u,
     'the native session disclosure remains the entry and return control');
   assert.doesNotMatch(nativePanel, /data-action="edit"/u, 'the live editor opens directly through its receiver');
-  assert.equal((nativePanel.slice(0, nativePanel.indexOf('<section class="native-team')).match(/<input\b[^>]*\binputmode="numeric"/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
+  assert.equal((nativePanel.match(/<input\b[^>]*\binputmode="numeric"/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
   for (const field of fields) {
     const input = about.match(new RegExp(`<input\\b(?=[^>]*\\bname="${field}")[^>]*>`, 'u'))?.[0];
     assert.ok(input, `${field} has its own input`);
-    assert.match(input, /\btype="text"/u, 'raw lexical drafts reach the adapter');
+    assert.equal(input.match(/\btype="([^"]*)"/u)?.[1] ?? 'text', 'text', 'raw lexical drafts reach the adapter');
     assert.match(input, /\binputmode="numeric"/u);
     const id = input.match(/\bid="([^"]+)"/u)?.[1];
     assert.ok(id && about.includes(`for="${id}"`), `${field} retains a native label relationship`);
