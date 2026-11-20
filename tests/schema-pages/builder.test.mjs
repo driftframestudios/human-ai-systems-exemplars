@@ -33,6 +33,12 @@ import {
   schemaCompanionRoutes,
 } from "../../tools/schema-publication.mjs";
 import {
+  assertSchemaCompanionProjectionRoutes,
+  projectSchemaCompanionBytes,
+  projectSchemaCompanionRoute,
+  schemaCompanionProjections,
+} from "../../tools/schema-companion-projections.mjs";
+import {
   loadPublicRouteReferenceBinding,
 } from "../../tools/public-route-reference-contract.mjs";
 import {
@@ -337,6 +343,47 @@ test("the projected Collaboration Skills README localizes its repository routes"
   ));
   assert.equal(receiver.includes("../../../.agents/skills/"), false);
   assert.equal(receiver.includes("../../../threadkeeping/"), false);
+});
+
+test("schema companion projections are explicit and deterministic", async () => {
+  const route = schemaCompanionRoutes.find(
+    ({ receiverPath }) => receiverPath === "collaboration-skills/0.1.0/README.md",
+  );
+  const projection = schemaCompanionProjections.find(
+    ({ receiverPath }) => receiverPath === route.receiverPath,
+  );
+  const source = await readFile(resolve(repositoryRoot, route.source));
+  const receiver = await readFile(resolve(outputRoot, route.receiverPath));
+  assert.equal(projection.pagesProjection, "schema-pages-collaboration-readme-v1");
+  assert.equal(projection.workerProjection, "schema-worker-collaboration-readme-v1");
+  assert.deepEqual(projectSchemaCompanionRoute(route, source, "pages"), receiver);
+  const workerProjection = projectSchemaCompanionRoute(route, receiver, "worker").toString("utf8");
+  assert.match(workerProjection, /https:\/\/schemas\.radiantnull\.com\/skills\//u);
+  assert.equal(workerProjection.includes("(../../skills/"), false);
+  assert.doesNotThrow(() => assertSchemaCompanionProjectionRoutes(schemaCompanionRoutes));
+  assert.throws(
+    () => assertSchemaCompanionProjectionRoutes([]),
+    /Select the projected schema companion route/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes("unregistered-projection", source),
+    /Select a recognized schema companion projection/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes("constructor", source),
+    /Select a recognized schema companion projection/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes(
+      projection.pagesProjection,
+      Buffer.from(source.toString("utf8").replace("## Start here", "## Begin here")),
+    ),
+    /requires one authored marker/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionRoute(route, source, "unregistered-target"),
+    /Select a recognized schema companion projection target/u,
+  );
 });
 
 test("the public Narrative and Threadkeeping examples exercise their selected contracts", async () => {

@@ -17,6 +17,7 @@ import {
 } from "./attribution-contract.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
 import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "./schema-publication.mjs";
+import { assertSchemaCompanionProjectionRoutes, projectSchemaCompanionBytes, schemaCompanionProjections } from "./schema-companion-projections.mjs";
 import { pagesReleaseTag } from "./schema-site-release.mjs";
 import {
   assertExactFileInventory,
@@ -761,6 +762,7 @@ async function buildSkillsProjection() {
   await assertPublicationRevision(repositoryRoot, sourceRevision, [
     "schemas", ".agents/skills/publication-selection.json", ...publicSourcePaths,
     "tools/build-schema-pages.mjs", "tools/schema-publication.mjs", "tools/schema-publication-lock.json",
+    "tools/schema-companion-projections.mjs",
     "tools/schema-receiver-routes.mjs", "tools/schema-site-release.mjs", "tools/publication-boundary.mjs",
     "tools/attribution-contract.mjs", "package.json", "package-lock.json", ...publicCarrierPaths,
     "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
@@ -928,22 +930,13 @@ async function projectRegistryReadmeLinks() {
   await writeFile(readmePath, source);
 }
 
-async function projectCollaborationSkillsReadmeLinks() {
-  const readmePath = resolve(outputRoot, "collaboration-skills/0.1.0/README.md");
-  let source = await readFile(readmePath, "utf8");
-  source = source.replace(
-    "## Start here",
-    "## Start here\n\n[Browse the repository-local public skills catalog](../../skills/).",
-  );
-  source = source.replaceAll(
-    "(../../../.agents/skills/source-authority-mapping/SKILL.md)",
-    "(../../skills/source-authority-mapping/)",
-  );
-  source = source.replaceAll(
-    "(../../../threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
-    "(../../skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
-  );
-  await writeFile(readmePath, source);
+async function projectSchemaCompanions() {
+  assertSchemaCompanionProjectionRoutes(schemaCompanionRoutes);
+  for (const { receiverPath, pagesProjection } of schemaCompanionProjections) {
+    const companionPath = resolve(outputRoot, receiverPath);
+    const source = await readFile(companionPath);
+    await writeFile(companionPath, projectSchemaCompanionBytes(pagesProjection, source));
+  }
 }
 
 async function projectRegistryIndexLinks() {
@@ -1309,7 +1302,7 @@ for (const contract of schemaCatalog.contracts) {
 registry = registry.replace("<!-- schema-pages:release -->", `<p>Site release: <code>${releaseTag ?? "local build"}</code>. Source revision: <code>${publicSkillCatalog.sourceRevision}</code>.</p><p><a href="release.json">Release coordinates</a> · <a href="schema-catalog.json">Schema identities, downloads, and digests</a></p>`);
 await writeFile(registryPath, registry);
 await projectRegistryReadmeLinks();
-await projectCollaborationSkillsReadmeLinks();
+await projectSchemaCompanions();
 await projectRegistryIndexLinks();
 await projectCollaborationGuideLinks(publicSkillCatalog);
 const customDomain = await validateCustomDomain();

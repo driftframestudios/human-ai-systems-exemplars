@@ -7,6 +7,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { schemaReceiverRoutes } from "../../tools/schema-receiver-routes.mjs";
 import { schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "../../tools/schema-publication.mjs";
+import { assertSchemaCompanionProjectionRoutes, projectSchemaCompanionRoute } from "../../tools/schema-companion-projections.mjs";
 import { resolvePublicationFile } from "../../tools/publication-boundary.mjs";
 import { artifactAuthor, artifactAttribution, artifactLicense } from "../../tools/attribution-contract.mjs";
 
@@ -17,6 +18,7 @@ const base = "https://schemas.vik.guru";
 const carriers = ["LICENSE", "AUTHORS", "CITATION.cff", "attribution.yml", "AI-DATA-USE.md"];
 const mutableSchema = "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json";
 const routes = [...schemaReceiverRoutes, ...schemaCompanionRoutes];
+assertSchemaCompanionProjectionRoutes(schemaCompanionRoutes);
 const args = process.argv.slice(2);
 const checking = args.length === 1 && args[0] === "--check";
 const selecting = args.length === 4 && args[0] === "--source-revision" && args[2] === "--pages-release-tag";
@@ -136,12 +138,15 @@ const frozenSources = new Set(catalog.contracts.filter(({ path }) => path !== mu
 function assetPath(path) {
   return path.startsWith("schemas/") ? path : `schemas/${path}`;
 }
-for (const { source, frozenSource, receiverPath } of routes) {
+for (const route of routes) {
+  const { source, frozenSource, receiverPath } = route;
   const destination = assetPath(receiverPath);
   assert(!files.has(destination), `Unique publication asset: ${destination}`);
-  const bytes = await readFile(await resolvePublicationFile(root, frozenSource ?? source));
-  assert(bytes.equals(taggedBytes(receiverPath)), `${receiverPath} matches the accepted Pages release`);
-  files.set(destination, bytes);
+  const sourceBytes = await readFile(await resolvePublicationFile(root, frozenSource ?? source));
+  const pagesBytes = projectSchemaCompanionRoute(route, sourceBytes, "pages");
+  const acceptedBytes = taggedBytes(receiverPath);
+  assert(pagesBytes.equals(acceptedBytes), `${receiverPath} matches its deterministic accepted Pages projection`);
+  files.set(destination, projectSchemaCompanionRoute(route, acceptedBytes, "worker"));
   aliases[`/${receiverPath}`] = `/${destination}`;
   if (frozenSources.has(receiverPath)) {
     frozen.add(`/${receiverPath}`);

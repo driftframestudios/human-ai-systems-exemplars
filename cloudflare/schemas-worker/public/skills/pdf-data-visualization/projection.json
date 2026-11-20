@@ -5,7 +5,7 @@
   "name": "pdf-data-visualization",
   "description": "Produces reproducible data figures for final PDF placement with physical-size legibility, source context, and a usable evidence companion. Applies when a report, paper, handout, or exported page requires reliable vector or mixed vector/raster visualization.",
   "semanticAuthorityRef": "../source/.agents/skills/pdf-data-visualization/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/16",
+  "sourceRef": "../catalog.json#/skills/19",
   "contract": {
     "what": "A source-grounded figure whose final PDF placement preserves readable labels, quantitative geometry, context, and evidence access.",
     "when": [
