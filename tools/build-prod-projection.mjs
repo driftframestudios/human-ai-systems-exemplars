@@ -1,5 +1,6 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
+import { withGitBlobReader } from "./package-prod-carrier-transfer.mjs";
 import { execFile } from "node:child_process";
 import {
   lstat,
@@ -906,11 +907,17 @@ function parseJsonBytes(bytes, label) {
   }
 }
 
-export async function loadProductionProjectionInputs(
-  configurationPath,
-  options = {},
-) {
+function withProjectionBlobReader(options, run) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withGitBlobReader(root, { maxBlobBytes: 128 * 1024 * 1024 }, readBlob => run(root, readBlob));
+}
+
+export async function loadProductionProjectionInputs(configurationPath, options = {}) {
+  return withProjectionBlobReader(options,
+    (root, readBlob) => loadProjectionSelection(root, readBlob, configurationPath, options));
+}
+
+async function loadProjectionSelection(root, readBlob, configurationPath, options) {
   const currentSha = await readRepositorySourceSha(root, {
     allowCarrierOnlyDirty: options.allowCarrierOnlyDirty === true,
   });
@@ -949,6 +956,7 @@ export async function loadProductionProjectionInputs(
   const configurationInput = await readTrackedRepositoryInput(
     root,
     trackedBlobs,
+    readBlob,
     portableConfiguration,
     "Production projection configuration",
   );
@@ -958,6 +966,7 @@ export async function loadProductionProjectionInputs(
   const primaryManifestInput = await readTrackedRepositoryInput(
     root,
     trackedBlobs,
+    readBlob,
     configuration.primary_manifest,
     "Primary route manifest",
   );
@@ -970,6 +979,7 @@ export async function loadProductionProjectionInputs(
     assetInventoryInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       configuration.asset_inventory,
       "Production asset inventory",
     );
@@ -1145,6 +1155,7 @@ async function readTrackedBlobIndex(root, sourceSha) {
 async function readTrackedRepositoryInput(
   root,
   trackedBlobs,
+  readBlob,
   sourcePath,
   label,
 ) {
@@ -1159,18 +1170,7 @@ async function readTrackedRepositoryInput(
   }
   const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
   await assertRegularFileWithin(root, sourceFile, label);
-  const { stdout: trackedBytes } = await execFileAsync(
-    "git",
-    ["cat-file", "blob", entry.object],
-    {
-      cwd: root,
-      encoding: "buffer",
-      maxBuffer: 128 * 1024 * 1024,
-    },
-  );
-  if (!Buffer.isBuffer(trackedBytes)) {
-    fail(`${label} could not be read from its tracked blob: ${sourcePath}.`);
-  }
+  const trackedBytes = await readBlob(entry.object);
   return { bytes: trackedBytes, object: entry.object };
 }
 
@@ -1745,6 +1745,7 @@ export function inspectImageDimensions(bytes, mediaType, label = "Image asset") 
 async function resolveProductionAssetInventory({
   root,
   trackedBlobs,
+  readBlob,
   trackedInputs,
   primaryManifest,
   primaryInputs,
@@ -1800,6 +1801,7 @@ async function resolveProductionAssetInventory({
     const input = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       family.semantic_authority_path,
       "Production asset semantic authority",
     );
@@ -1816,6 +1818,7 @@ async function resolveProductionAssetInventory({
       const input = await readTrackedRepositoryInput(
         root,
         trackedBlobs,
+        readBlob,
         sourcePath,
         `Production asset relationship ${label}`,
       );
@@ -1861,6 +1864,7 @@ async function resolveProductionAssetInventory({
       sourceInput = await readTrackedRepositoryInput(
         root,
         trackedBlobs,
+        readBlob,
         sourcePath,
         "Production-selected iframe asset source",
       );
@@ -3872,6 +3876,7 @@ function carriesCompleteContextCanvasHeadPopulation(publication, primaryInputs) 
 async function readTrackedAuthorityInput(
   root,
   trackedBlobs,
+  readBlob,
   trackedInputs,
   sourcePath,
   label,
@@ -3884,6 +3889,7 @@ async function readTrackedAuthorityInput(
   const input = await readTrackedRepositoryInput(
     root,
     trackedBlobs,
+    readBlob,
     sourcePath,
     label,
   );
@@ -3896,6 +3902,7 @@ async function loadPublicationInput(
   publication,
   primaryInputs,
   trackedBlobs,
+  readBlob,
   trackedInputs,
 ) {
   const configPath = path.resolve(root, productionPublicReferenceConfig);
@@ -3980,6 +3987,7 @@ async function loadPublicationInput(
     registryInput = await readTrackedAuthorityInput(
       root,
       trackedBlobs,
+      readBlob,
       trackedInputs,
       productionRegistryReferenceBinding,
       "Production Registry binding",
@@ -3990,6 +3998,7 @@ async function loadPublicationInput(
     dataUseInput = await readTrackedAuthorityInput(
       root,
       trackedBlobs,
+      readBlob,
       trackedInputs,
       productionRegistryDataUseNotice,
       "Production Registry DATA-USE notice",
@@ -4004,6 +4013,7 @@ async function loadPublicationInput(
     routeBindingInput = await readTrackedAuthorityInput(
       root,
       trackedBlobs,
+      readBlob,
       trackedInputs,
       productionRouteReferenceBinding,
       "Production public-route binding",
@@ -4016,6 +4026,7 @@ async function loadPublicationInput(
         await readTrackedAuthorityInput(
           root,
           trackedBlobs,
+          readBlob,
           trackedInputs,
           sourcePath,
           `Production public-route ${name}`,
@@ -4042,7 +4053,7 @@ async function loadPublicationInput(
   let externalReferenceInput = null;
   if (externalReferenceKeys.length > 0) {
     externalReferenceInput = await readTrackedAuthorityInput(
-      root, trackedBlobs, trackedInputs, productionExternalReferenceBinding,
+      root, trackedBlobs, readBlob, trackedInputs, productionExternalReferenceBinding,
       "Production external-reference binding",
     );
     // Pages checks the complete authored inventory. The primary manifest selects a
@@ -4325,7 +4336,10 @@ async function assertCarrierReleaseRelationship(root, sourceSha, releaseSha) {
 }
 
 export async function createProductionProjectionPlan(options = {}) {
-  const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withProjectionBlobReader(options, (root, readBlob) => composeProductionProjection(root, readBlob, options));
+}
+
+async function composeProductionProjection(root, readBlob, options) {
   if (Object.hasOwn(options, "primaryManifest")) {
     fail("Production projection membership must come from its tracked configuration and manifest.");
   }
@@ -4366,7 +4380,7 @@ export async function createProductionProjectionPlan(options = {}) {
     root,
     "deployment/cpanel/production-projection.config.json",
   );
-  const selection = await loadProductionProjectionInputs(configurationPath, {
+  const selection = await loadProjectionSelection(root, readBlob, configurationPath, {
     repositoryRoot: root,
     sourceSha,
     trackedBlobs,
@@ -4389,6 +4403,7 @@ export async function createProductionProjectionPlan(options = {}) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       file.source_path,
       "Primary projection source",
     );
@@ -4400,6 +4415,7 @@ export async function createProductionProjectionPlan(options = {}) {
     iframeOriginRobotsInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       selection.configuration.iframe_origin_robots,
       "Iframe-origin robots source",
     );
@@ -4415,6 +4431,7 @@ export async function createProductionProjectionPlan(options = {}) {
         selection.configuration.publication,
         primaryInputs,
         trackedBlobs,
+        readBlob,
         trackedInputs,
       );
   const aggregatePlan = assertAggregatePlan(
@@ -4423,6 +4440,7 @@ export async function createProductionProjectionPlan(options = {}) {
   const assetInventoryResolution = await resolveProductionAssetInventory({
     root,
     trackedBlobs,
+    readBlob,
     trackedInputs,
     primaryManifest,
     primaryInputs,
@@ -5003,7 +5021,7 @@ export async function stageProductionCarrierFromRepository(options = {}) {
   return { projectionPlan, verification };
 }
 
-async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
+async function verifyTrackedCarrierPlan(root, readBlob, releaseSha, carrierPlan) {
   const trackedBlobs = await readTrackedBlobIndex(root, releaseSha);
   const expectedPaths = [...carrierPlan.outputFiles.keys()]
     .map((relativePath) => `${carrierRelativeRoot}/${relativePath}`)
@@ -5031,6 +5049,7 @@ async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       sourcePath,
       "Tracked production carrier output",
     );
@@ -5043,12 +5062,16 @@ async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
 }
 
 export async function checkProductionCarrier(options = {}) {
-  const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withProjectionBlobReader(options, (root, readBlob) => checkCarrier(root, readBlob, options));
+}
+
+async function checkCarrier(root, readBlob, options) {
   const releaseSha = await readRepositorySourceSha(root);
   const releaseBlobs = await readTrackedBlobIndex(root, releaseSha);
   const manifestInput = await readTrackedRepositoryInput(
     root,
     releaseBlobs,
+    readBlob,
     carrierManifestRelativePath,
     "Tracked production carrier manifest",
   );
@@ -5066,7 +5089,7 @@ export async function checkProductionCarrier(options = {}) {
   }
   const sourceSha = carriedManifest.source_sha;
   await assertCarrierReleaseRelationship(root, sourceSha, releaseSha);
-  const projectionPlan = await createProductionProjectionPlan({
+  const projectionPlan = await composeProductionProjection(root, readBlob, {
     repositoryRoot: root,
     sourceSha,
     carrierReleaseSha: releaseSha,
@@ -5078,7 +5101,7 @@ export async function checkProductionCarrier(options = {}) {
   });
   const carrierPlan = createProductionCarrierPlan(projectionPlan);
   const verification = await verifyTrackedCarrierPlan(
-    root,
+    root, readBlob,
     releaseSha,
     carrierPlan,
   );
