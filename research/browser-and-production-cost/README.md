@@ -45,6 +45,19 @@ The next run restored the matching previous-format entry, verified 186 of 186 ar
 
 [PR #984](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/984) split the manual all-browser selection at whole npm command boundaries. The source checks run once. Reading and media use three engines for ten commands. Production CSS and the prototypes use Chromium for seven. Each group has its own 30-minute limit and per-engine package proof. The prior attempt supplies the measured reason to purchase the second runner.
 
+### Full grouped run on accepted main
+
+The [four-job workflow on `063f741`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44755299355) passed in **14m28s** from creation to final update. The logs show one execution of each of the 17 original browser commands across the two groups. The reading group also ran the existing source selection. Public references passed in 36s and media preparation and delivery in 1m29s.
+
+| Browser group | Job wall | Resolve / restore / install | Browser commands | Package observation |
+| --- | ---: | --- | ---: | --- |
+| Showcase, reading and media, three engines | 11m05s | 18s / 4s / 42s | 10 commands in 9m22s | The previous-format entry supplied all 186 verified archives. APT needed 0 B of the 126 MB closure. |
+| Production CSS and prototypes, Chromium | 14m24s | 9s / 1s / 19s | 7 commands in 13m38s | The Chromium-only selection was cold. APT transferred 32.1 MB in 2s. |
+
+Both groups completed their trusted cache saves. Core browser took 6m31s and CSS parity 5m47s on the longer job. Showcase reading took 3m01s, AI Systems layout 2m04s and navigation 1m49s on the other job.
+
+Compared with the completed #971 workflow, elapsed time fell **18m57s (56.7%)** and summed job time fell **7m32s (21.5%)**, from 35m06s to 27m34s. Compared with the fastest completed sequential trial in this study, grouping returned the result **8m32s sooner** (23m00s to 14m28s) and used **1m41s more summed job time** (25m53s to 27m34s). These observations include runner, mirror and cache variation. They quantify the trade for this workload. The slower group finished 15m36s inside its 30-minute investigation boundary. A future boundary crossing reopens the group and command measurements.
+
 
 ## Local baseline and controlled comparisons
 
