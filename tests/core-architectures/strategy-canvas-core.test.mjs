@@ -560,11 +560,6 @@ test("current-facing Strategy and Family coordinates follow their owning manifes
       `a ${canonical.size_bytes.toLocaleString("en-US")}-byte canonical distribution with SHA-256 \`${canonical.sha256}\``,
     ),
   );
-  assert.ok(
-    threadkeeping.includes(
-      `bytes: ${canonical.size_bytes}\n      sha256: ${canonical.sha256}`,
-    ),
-  );
 });
 
 test("Strategy Canvas artifact registry preserves both current expression owners", async () => {

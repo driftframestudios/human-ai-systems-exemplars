@@ -143,7 +143,7 @@ export async function buildMaintenanceData({ check = false } = {}) {
     },
     population: 'Released AI4I 2020 records, grouped by the source Type field',
   };
-  const output = `${JSON.stringify(document, null, 2)}\n`;
+  const output = `${JSON.stringify(document)}\n`;
   const destination = new URL(SUMMARY_PATH, root);
   if (check) {
     if (await readFile(destination, 'utf8') !== output) throw new Error('Maintenance summary differs from its source-owned derivation.');

@@ -2119,9 +2119,15 @@ test("production binds the shared shell's Registry and repository links from the
   const plan = await createProductionProjectionPlan({ repositoryRoot: fixture.root, sourceSha,
     configurationPath: fixture.configurationPath, aggregatePlan: aggregateFixture() });
   const shell = plan.outputFiles.get("primary-public/canvas-shell.js").toString("utf8");
-  assert.ok(shell.includes(`kindlight.href = ${JSON.stringify(registryRecord.url)};`));
-  assert.ok(shell.includes(`github.href = ${JSON.stringify(external.bindings[0].url)};`));
-  assert.ok(shell.includes(`var professionalProfileRoute = ${JSON.stringify(publication.destinations[publication.profileKey])};`));
+  for (const [assignment, expected] of [
+    [/kindlight\.href\s*=\s*("(?:\\.|[^"\\])*")/u, registryRecord.url],
+    [/github\.href\s*=\s*("(?:\\.|[^"\\])*")/u, external.bindings[0].url],
+    [/var professionalProfileRoute\s*=\s*("(?:\\.|[^"\\])*")/u, publication.destinations[publication.profileKey]],
+  ]) {
+    const match = shell.match(assignment);
+    assert.ok(match);
+    assert.equal(JSON.parse(match[1]), expected);
+  }
 });
 
 test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {

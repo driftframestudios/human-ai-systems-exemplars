@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, symlink } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { readDocumentSpans } from "../../tools/html-document-spans.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 
 import {
@@ -125,18 +126,19 @@ test("the Canvas family plan follows the authored 16-route manifest", async () =
       assert.ok(projection.equals(Buffer.from(source)), `${route.id} remains byte-identical`);
       continue;
     }
-    assert.equal(occurrenceCount(html, artifactAuthor), 2, `${route.id} author metadata and notice`);
-    assert.equal(occurrenceCount(html, artifactLicense), 1, `${route.id} license relation`);
-    assert.equal(occurrenceCount(html, artifactAttribution), 1, `${route.id} attribution notice`);
-    assert.equal(occurrenceCount(html, "data-visitor-boundary aria-label="), 1);
-    assert.equal(occurrenceCount(html, visitorBoundaryContract.contextText), 1);
+    const markup = readDocumentSpans(html).outerMarkup();
+    assert.equal(occurrenceCount(markup, artifactAuthor), 2, `${route.id} author metadata and notice`);
+    assert.equal(occurrenceCount(markup, artifactLicense), 1, `${route.id} license relation`);
+    assert.equal(occurrenceCount(markup, artifactAttribution), 1, `${route.id} attribution notice`);
+    assert.equal(occurrenceCount(markup, "data-visitor-boundary aria-label="), 1);
+    assert.equal(occurrenceCount(markup, visitorBoundaryContract.contextText), 1);
     assert.ok(
-      html.indexOf("data-visitor-boundary-context") <
-        html.indexOf("data-visitor-boundary-marker"),
+      markup.indexOf("data-visitor-boundary-context") <
+        markup.indexOf("data-visitor-boundary-marker"),
       `${route.id} context before exact markers`,
     );
     assert.equal(
-      occurrenceCount(html, "<style data-iframe-route-projection>"),
+      occurrenceCount(markup, "<style data-iframe-route-projection>"),
       ["decorated_copy", "decorated_rewrite"].includes(route.projection_kind) ? 1 : 0,
       `${route.id} carries only its declared public decoration`,
     );

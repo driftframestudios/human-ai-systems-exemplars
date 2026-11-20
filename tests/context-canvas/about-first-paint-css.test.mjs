@@ -120,18 +120,18 @@ test("each extracted declaration family has one authored owner", async () => {
   ].map(canvasFile));
 
   assert.match(tokens, /:root\s*\{/u);
-  assert.match(foundation, /(?:^|\n)body,\s*\nhtml\s*\{/u);
+  assert.match(foundation, /(?:^|[}\s])body,\s*html\s*\{/u);
   assert.match(foundation, /@media screen and \(max-width: 770px\)[\s\S]*?\.txt-h1,\s+h1\s*\{\s*font-size: 2\.35em;/u);
-  assert.match(navigation, /(?:^|\n)\.nav__top--sticky\s*\{/u);
-  assert.match(navigation, /(?:^|\n)main \[id\]\s*\{/u);
-  assert.match(tables, /(?:^|\n)table\s*\{/u);
-  assert.match(routeCards, /(?:^|\n)\.about-route-grid\s*\{/u);
+  assert.match(navigation, /(?:^|[}\s])\.nav__top--sticky\s*\{/u);
+  assert.match(navigation, /(?:^|[}\s])main \[id\]\s*\{/u);
+  assert.match(tables, /(?:^|[}\s])table\s*\{/u);
+  assert.match(routeCards, /(?:^|[}\s])\.about-route-grid\s*\{/u);
 
-  assert.doesNotMatch(legacy, /(?:^|\n):root\s*\{/u);
-  assert.doesNotMatch(legacy, /(?:^|\n)\.nav__top--sticky\s*\{/u);
-  assert.doesNotMatch(legacy, /(?:^|\n)table\s*\{/u);
-  assert.doesNotMatch(legacy, /(?:^|\n)\.about-route-grid\s*\{/u);
-  assert.doesNotMatch(legacy, /(?:^|\n)main \[id\]\s*\{/u);
+  assert.doesNotMatch(legacy, /(?:^|[}\s]):root\s*\{/u);
+  assert.doesNotMatch(legacy, /(?:^|[}\s])\.nav__top--sticky\s*\{/u);
+  assert.doesNotMatch(legacy, /(?:^|[}\s])table\s*\{/u);
+  assert.doesNotMatch(legacy, /(?:^|[}\s])\.about-route-grid\s*\{/u);
+  assert.doesNotMatch(legacy, /(?:^|[}\s])main \[id\]\s*\{/u);
   assert.doesNotMatch(shell, /scroll-margin-block-start/u);
   assert.doesNotMatch(navigation, /\.txt-h1/u);
 

@@ -1,7 +1,7 @@
 import './node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { promisify } from "node:util";
+import { isDeepStrictEqual, promisify } from "node:util";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
@@ -89,6 +89,11 @@ export function assertPublicationReceiverPaths(routes) {
   }
 }
 
+export function schemaPublicationInputPaths() {
+  return [...schemaReceiverRoutes, ...schemaCompanionRoutes].flatMap(({ source, frozenSource }) =>
+    frozenSource ? [source, frozenSource] : [source]);
+}
+
 function selectedRoutes() {
   const routes = [...schemaReceiverRoutes, ...schemaCompanionRoutes];
   assertPublicationReceiverPaths(routes);
@@ -135,8 +140,14 @@ export async function schemaPublication(root, baseUrl, sourceRevision) {
   const known = new Set(schemaReceiverRoutes.map(({ id }) => id));
   const contracts = [];
   for (const route of schemaReceiverRoutes) {
-    const bytes = await readFile(await resolvePublicationFile(root, route.source));
+    const bytes = await readFile(await resolvePublicationFile(root, route.frozenSource ?? route.source));
     const schema = JSON.parse(bytes);
+    if (route.frozenSource) {
+      const workingSchema = JSON.parse(await readFile(await resolvePublicationFile(root, route.source)));
+      if (!isDeepStrictEqual(schema, workingSchema)) {
+        throw new Error(`Working schema differs from its published contract: ${route.source}. Publish a new version for changed fields.`);
+      }
+    }
     const sha256 = schemaDigest(bytes);
     if (schema.$id !== route.id || lock[route.receiverPath] !== sha256) {
       throw new Error(`Published identity and frozen bytes must agree: ${route.receiverPath}`);
@@ -163,7 +174,7 @@ export async function schemaPublication(root, baseUrl, sourceRevision) {
 export async function copySchemaPayload(root, outputRoot) {
   const output = resolve(outputRoot);
   for (const route of selectedRoutes()) {
-    const source = await resolvePublicationFile(root, route.source);
+    const source = await resolvePublicationFile(root, route.frozenSource ?? route.source);
     const target = resolve(output, route.receiverPath);
     const remainder = relative(output, target);
     if (

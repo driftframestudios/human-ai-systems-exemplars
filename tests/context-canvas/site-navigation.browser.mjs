@@ -292,6 +292,10 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
 
 test('the shared footer presents source labels and publishes three native links', async t => {
   const page = await open(t, 'chromium', 'debriefs.html');
+  const boundary = page.locator('footer.super-footer [data-visitor-boundary]');
+  assert.equal(await boundary.getAttribute('data-visitor-boundary-state'), 'verified');
+  assert.equal(await boundary.evaluate(node => node.nextElementSibling?.matches('.site-attribution:last-child')), true,
+    'enhancement preserves the verified visitor boundary and final attribution in order');
   const siteMap = page.getByRole('navigation', { name: 'Site map' });
   assert.deepEqual(await siteMap.getByRole('heading').allTextContents(), ['About', 'Case Studies & Articles', 'AI Systems']);
   const aboutLinks = await siteMap.locator('[data-footer-routes="about"] li a').evaluateAll(links => links.map(a => a.href));

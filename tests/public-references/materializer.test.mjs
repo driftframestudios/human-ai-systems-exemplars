@@ -274,7 +274,7 @@ test("materializes the exact shared professional-profile carrier without changin
   );
   assert.match(
     generated,
-    /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/,
+    /var professionalProfileRoute\s*=\s*"https:\/\/profiles\.example\/practitioner";/,
   );
   assert.match(
     generated,
@@ -305,6 +305,12 @@ test("preserves replacement-significant characters in a professional-profile des
   assert.equal(JSON.parse(assignment[1]), expected);
 });
 
+function footerHref(script, link) {
+  const match = script.match(new RegExp(link + '\\.href\\s*=\\s*("(?:\\\\.|[^"\\\\])*")', 'u'));
+  assert.ok(match, link + ' has a literal destination');
+  return JSON.parse(match[1]);
+}
+
 test("the shared shell accepts the two bound native footer hrefs and escapes their JavaScript values", async () => {
   const source = await readFile(join(PUBLIC_REFERENCE_SOURCE, "context-canvas/canvas-shell.js"), "utf8");
   const registryKey = "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY";
@@ -315,12 +321,12 @@ test("the shared shell accepts the two bound native footer hrefs and escapes the
   assert.deepEqual(result.keys, new Set(destinations.keys()));
   assert.equal(result.anchorCount, 3);
   const materialized = materializeSharedFooterScript(source, destinations);
-  assert.ok(materialized.includes(`github.href = ${JSON.stringify(destinations.get(repositoryKey))};`));
-  assert.ok(materialized.includes(`kindlight.href = ${JSON.stringify(destinations.get(registryKey))};`));
+  assert.equal(footerHref(materialized, "github"), destinations.get(repositoryKey));
+  assert.equal(footerHref(materialized, "kindlight"), destinations.get(registryKey));
   for (const changed of [
-    source.replace("github.href =", "github.title ="),
-    source.replace("appendFooterLink(network, github)", "appendFooterLink(registry, github)"),
-    source.replace('var github = element("a"', 'var github = element("span"'),
+    source.replace(/github\.href\s*=/u, "github.title ="),
+    source.replace(/appendFooterLink\(network,\s*github\)/u, "appendFooterLink(registry, github)"),
+    source.replace(/var github\s*=\s*element\("a"/u, 'var github = element("span"'),
     source + '\n// {{' + repositoryKey + '}}',
   ]) {
     assert.throws(() => materializeSharedFooterScript(changed, destinations), { code: "PUBLIC_REFERENCE_FOOTER_CARRIER" });
@@ -1377,9 +1383,9 @@ test("the repository source materializes from discovered keys without frozen rou
     join(outputRoot, "context-canvas/canvas-shell.js"),
     "utf8",
   );
-  assert.ok(generatedShell.includes(`kindlight.href = ${JSON.stringify(registryReference.destinations.get("PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY"))};`));
-  assert.ok(generatedShell.includes(`github.href = ${JSON.stringify(externalReference.destinations.get("PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS"))};`));
-  assert.match(generatedShell, /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/);
+  assert.equal(footerHref(generatedShell, "kindlight"), registryReference.destinations.get("PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY"));
+  assert.equal(footerHref(generatedShell, "github"), externalReference.destinations.get("PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS"));
+  assert.match(generatedShell, /var professionalProfileRoute\s*=\s*"https:\/\/profiles\.example\/practitioner";/);
   assert.match(generatedShell, /professionalProfileLink\.href\s*=\s*professionalProfileRoute/);
 
   const generatedCarrierSource = await readFile(

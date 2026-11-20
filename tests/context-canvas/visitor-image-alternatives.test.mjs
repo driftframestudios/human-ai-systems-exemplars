@@ -45,6 +45,7 @@ const debriefProxyContracts = [
   {
     route: "fmi-clinical-trial-coordination.html",
     directory: "boolean-building-blocks",
+    catalogUpfront: "cohort-rule-groups",
     publicSafePatterns: [/synthetic specimen scenarios/iu],
   },
   {
@@ -56,11 +57,13 @@ const debriefProxyContracts = [
   {
     route: "genomic-viewer-replatforming.html",
     directory: "queue-secretly-status-machine",
+    catalogUpfront: "plate-well-history",
     publicSafePatterns: [/original code and synthetic\s+specimen/iu],
   },
   {
     route: "fmi-lims-eln-replatforming.html",
     directory: "sample-noone-could-find",
+    catalogUpfront: "laboratory-process-lanes",
     publicSafePatterns: [/shared requirements, synthetic specimen workflows, and executable tests/iu],
     alternateReceivers: ["clinical-trial-coordination-upfront.webp"],
   },
@@ -261,7 +264,14 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
 });
 
 test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
-  for (const { route, directory, publicSafePatterns, alternateReceivers = [] } of debriefProxyContracts) {
+  const catalog = await readSourceContract(join(canvasRoot, "debriefs.html"), "utf8");
+  for (const { route, directory, publicSafePatterns, alternateReceivers = [], catalogUpfront } of debriefProxyContracts) {
+    if (catalogUpfront) {
+      const anchor = [...catalog.matchAll(/<a\b[^>]*>(\s*<img\b[^>]*class="project__upfront"[^>]*>)/gu)]
+        .find(([tag]) => attribute(tag, "href") === route);
+      assert.ok(anchor, route + " catalog card image link");
+      assert.equal(attribute(anchor[1], "src"), "../img/debriefs/" + directory + "/" + catalogUpfront + "-480.webp");
+    }
     const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
     assert.match(html, /working/iu, `${route}: working-system standing`);
     assert.match(html, /2026/iu, `${route}: contemporary standing`);
@@ -273,7 +283,7 @@ test("working Debrief systems preserve standing, figure identity, responsive sou
     ), match => match[0]);
     const originals = (await readdir(join(debriefImageRoot, directory)))
       .filter(name => name.endsWith(".webp") && !/-(?:480|960|1920)\.webp$/u.test(name))
-      .filter(name => !alternateReceivers.includes(name))
+      .filter(name => !alternateReceivers.includes(name) && name !== catalogUpfront + ".webp")
       .sort();
     assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);
 

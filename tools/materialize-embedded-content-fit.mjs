@@ -18,7 +18,7 @@ export function createEmbeddedContentFitProjection(source) {
   if (typeof source !== 'string' || source.trim().length === 0 || /<!--|<\/script\b/iu.test(source)) {
     throw new Error('The child adapter requires nonempty inline-safe JavaScript source.');
   }
-  return `${start}\n<script data-embedded-content-fit>\n${source.trimEnd()}\n</script>\n${end}`;
+  return `${start}<script data-embedded-content-fit>${source.trimEnd()}</script>${end}`;
 }
 
 export function replaceEmbeddedContentFitProjection(html, projection) {

@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { compactSource } from './cpanel-format.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 /** AI4I gallery derivation. Existing maintenance source ownership stays in atlas-maintenance-data.mjs. */
 import { createHash } from 'node:crypto';
@@ -110,10 +111,11 @@ export async function readVerifiedGalleryDocument() {
 /** O(CSV bytes + N + bounded cells + output bytes); writes only the five declared gallery artifacts. */
 export async function buildAtlasGallery({ check = false } = {}) {
   const document = await readVerifiedGalleryDocument();
-  const outputs = [[GALLERY_JSON_PATH, `${JSON.stringify(document, null, 2)}\n`],
+  const outputs = [[GALLERY_JSON_PATH, `${JSON.stringify(document)}\n`],
     ...GALLERY_VIEWS.map(view => [GALLERY_SVG_PATHS[view], renderGallerySvg(document,
       { ...DEFAULT_GALLERY_STATE, view }, `atlas-ai4i-${view}`)])];
-  for (const [path, content] of outputs) {
+  for (const [path, rendered] of outputs) {
+    const content = (await compactSource(path, rendered)).trimEnd() + '\n';
     const target = new URL(path, ROOT);
     if (check) {
       if (await readFile(target, 'utf8') !== content) throw new Error(`Regenerate the gallery artifact: ${path}`);

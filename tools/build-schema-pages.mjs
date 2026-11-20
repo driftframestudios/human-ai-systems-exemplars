@@ -16,7 +16,7 @@ import {
   publishingCompany,
 } from "./attribution-contract.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
-import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication } from "./schema-publication.mjs";
+import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "./schema-publication.mjs";
 import { pagesReleaseTag } from "./schema-site-release.mjs";
 import {
   assertExactFileInventory,
@@ -764,7 +764,7 @@ async function buildSkillsProjection() {
     "tools/schema-receiver-routes.mjs", "tools/schema-site-release.mjs", "tools/publication-boundary.mjs",
     "tools/attribution-contract.mjs", "package.json", "package-lock.json", ...publicCarrierPaths,
     "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
-    ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+    ...schemaPublicationInputPaths(),
   ]);
   const publicEntries = entries.filter((entry) => entry.publicationStanding === "public_ready");
   const possibleNames = entries
@@ -1285,37 +1285,6 @@ for (const carrierPath of publicCarrierPaths) {
   ]);
   if (!sourceBytes.equals(receiverBytes)) {
     throw new Error(`public carrier differs from its source: ${carrierPath}`);
-  }
-}
-
-const projectedReceiverPaths = new Set();
-for (const route of schemaReceiverRoutes) {
-  const identityPath = new URL(route.id).pathname.replace(/^\/+/, "");
-  if (identityPath !== route.receiverPath) {
-    throw new Error(
-      `schema identity path ${identityPath} differs from receiver path ${route.receiverPath}`
-    );
-  }
-  if (projectedReceiverPaths.has(route.receiverPath)) {
-    throw new Error(`schema receiver path is declared more than once: ${route.receiverPath}`);
-  }
-  projectedReceiverPaths.add(route.receiverPath);
-
-  const sourcePath = resolve(repositoryRoot, route.source);
-  const receiverPath = resolve(outputRoot, route.receiverPath);
-  if (!receiverPath.startsWith(`${outputRoot}${sep}`)) {
-    throw new Error(`schema receiver path leaves the Pages artifact: ${route.receiverPath}`);
-  }
-
-  await mkdir(dirname(receiverPath), { recursive: true });
-  await copyFile(sourcePath, receiverPath);
-
-  const [sourceBytes, receiverBytes] = await Promise.all([
-    readFile(sourcePath),
-    readFile(receiverPath)
-  ]);
-  if (!sourceBytes.equals(receiverBytes)) {
-    throw new Error(`schema receiver differs from its source: ${route.receiverPath}`);
   }
 }
 

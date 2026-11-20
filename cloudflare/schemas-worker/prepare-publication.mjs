@@ -6,7 +6,7 @@ import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { schemaReceiverRoutes } from "../../tools/schema-receiver-routes.mjs";
-import { schemaCompanionRoutes, schemaPublication } from "../../tools/schema-publication.mjs";
+import { schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "../../tools/schema-publication.mjs";
 import { resolvePublicationFile } from "../../tools/publication-boundary.mjs";
 import { artifactAuthor, artifactAttribution, artifactLicense } from "../../tools/attribution-contract.mjs";
 
@@ -110,7 +110,7 @@ const sourceInputs = [
   "tools/schema-publication.mjs", "tools/schema-publication-lock.json",
   "tools/publication-boundary.mjs", "tools/attribution-contract.mjs",
   ".agents/skills/publication-selection.json",
-  ...carriers, ...routes.map(({ source }) => source),
+  ...carriers, ...schemaPublicationInputPaths(),
   ...[...uniqueSkillSources.values()].map(({ sourcePath }) => sourcePath),
 ];
 // The schema-source pin stays stable across commits to the receiving Worker.
@@ -136,10 +136,10 @@ const frozenSources = new Set(catalog.contracts.filter(({ path }) => path !== mu
 function assetPath(path) {
   return path.startsWith("schemas/") ? path : `schemas/${path}`;
 }
-for (const { source, receiverPath } of routes) {
+for (const { source, frozenSource, receiverPath } of routes) {
   const destination = assetPath(receiverPath);
   assert(!files.has(destination), `Unique publication asset: ${destination}`);
-  const bytes = await readFile(await resolvePublicationFile(root, source));
+  const bytes = await readFile(await resolvePublicationFile(root, frozenSource ?? source));
   assert(bytes.equals(taggedBytes(receiverPath)), `${receiverPath} matches the accepted Pages release`);
   files.set(destination, bytes);
   aliases[`/${receiverPath}`] = `/${destination}`;

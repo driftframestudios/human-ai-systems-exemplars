@@ -528,6 +528,14 @@ class AdmissionContract(unittest.TestCase):
     def test_selected_nested_table_has_typed_outcome(self):
         self.assert_rejected(table("<table></table>"), Failure.NESTED)
 
+    def test_inline_svg_icon_survives_projection_with_its_exact_spelling(self):
+        graphic = '<svg viewBox="0 0 16 16"><g><path d="M0 0L16 16"/></g></svg>'
+        output, _ = project(table(graphic))
+        self.assertIn('<td data-label="Value (USD)">' + graphic + '</td>', output)
+        self.assert_rejected(table('<path/>'), Failure.MALFORMED)
+        self.assert_rejected(table('<svg><foreignObject><path/></foreignObject></svg>'),
+                             Failure.MALFORMED)
+
     def test_self_closing_raw_text_cannot_expose_table_looking_content(self):
         for tag, attributes, closing in itertools.product(
             ("script", "SCRIPT", "style", "textarea", "title"),

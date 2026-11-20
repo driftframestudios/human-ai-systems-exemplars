@@ -164,7 +164,7 @@ test("Catalog preview image selection falls back cleanly and clears stale respon
   for (const attributeName of ["src", "srcset", "sizes", "width", "height"]) {
     assert.match(
       script,
-      new RegExp(`hasPreviewImage \\? card\\.getAttribute\\("data-catalog-preview-${attributeName}"\\) : \\(image \\? image\\.getAttribute\\("${attributeName}"\\) : ""\\)`, "u"),
+      new RegExp(`hasPreviewImage \\? card\\.getAttribute\\("data-catalog-preview-${attributeName}"\\) : \\(?image \\? image\\.getAttribute\\("${attributeName}"\\) : ""\\)?`, "u"),
       `an explicit preview source should own ${attributeName} without inheriting primary-image metadata`,
     );
   }

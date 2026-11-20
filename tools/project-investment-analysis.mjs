@@ -56,7 +56,7 @@ export function projectInvestmentHtml(html, sources) {
       source.trimEnd(),
       "</" + owner.tag + ">",
       end
-    ].join("\n");
+    ].join("");
     projected = projected.slice(0, from) + block + projected.slice(to + end.length);
     previousEnd = from + block.length;
   }

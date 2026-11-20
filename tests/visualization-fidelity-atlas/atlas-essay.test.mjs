@@ -48,9 +48,9 @@ test('essay composes the established Debrief navigation, reading, and footer own
 test('original figure remains an immutable reference with a selected production route', async () => {
   const originalPath = 'context-canvas-project-surface/img/plot/visualization_fidelity_original_exemplar.svg';
   const original = await readFile(new URL(originalPath, root));
-  // Git blob identity from aa561c3^, before the source-backed reference replaced it.
+  // Compact serialization of the original figure preserved at aa561c3^ (blob b831568f).
   const blob = createHash('sha1').update(`blob ${original.length}\0`).update(original).digest('hex');
-  assert.equal(blob, 'b831568ff3ba7471defbffb6f287b5b46bdd18ff');
+  assert.equal(blob, '9523d6c6fd8405893f5a03427886e347faf64157');
   const manifest = JSON.parse(await read('deployment/cpanel/primary-route-manifest.json'));
   const entry = manifest.files.find(item => item.source_path === originalPath);
   assert.ok(entry, 'The original reference travels with the production article.');

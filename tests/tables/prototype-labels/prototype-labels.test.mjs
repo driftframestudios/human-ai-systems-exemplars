@@ -1,4 +1,5 @@
 import '../../../tools/node-runtime-admission.mjs';
+import { compactSource } from '../../../tools/cpanel-format.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -110,15 +111,15 @@ test("changed HTML script bodies and separate renderers parse without a browser"
 });
 
 test("declared Core copies preserve the same label-generating source", () => {
-  const signature = source => source.split("\n").filter(line => line.includes("data-label")).join("\n");
+  const signature = source => [...source.matchAll(/\bdata-label="[^"]*"/gu)].map(match => match[0]);
   for (const [id] of currentCore) {
-    if (id !== "strategy-canvas") assert.equal(signature(sources.get(corePaths[id])), signature(sources.get(canvasPaths[id])), id);
+    if (id !== "strategy-canvas") assert.deepEqual(signature(sources.get(corePaths[id])), signature(sources.get(canvasPaths[id])), id);
   }
-  assert.equal(signature(sources.get(familyCompanion)), signature(sources.get(corePaths["core-architecture-family-index"])));
+  assert.deepEqual(signature(sources.get(familyCompanion)), signature(sources.get(corePaths["core-architecture-family-index"])));
 });
 
-test("canonical Strategy distribution includes its exact current renderer and template table", () => {
-  assert(sources.get(corePaths["strategy-canvas"]).includes(sources.get(canonicalPath).trim()));
+test("canonical Strategy distribution includes its current renderer and template table", async () => {
+  assert(sources.get(corePaths["strategy-canvas"]).includes((await compactSource(canonicalPath, sources.get(canonicalPath))).trim().replace(/;$/u,"")));
   assert.deepEqual(parsedNative[native.get(corePaths["strategy-canvas"])].tables, parsedNative[native.get(templatePath)].tables);
 });
 
