@@ -256,7 +256,9 @@ npm run verify:iframe-routes:policy
 npm run verify:iframe-ancestry:live
 ```
 
-The first two commands retain all-route byte and header coverage. The ancestry
+For cPanel, pass `-- --tag "$PRODUCTION_TAG"` to the first two commands to
+verify the indexed iframe package in the reviewed carrier. Without that option
+the verifier builds the standalone package in memory. The ancestry
 check uses the fixed PODA carrier for a representative HTTP 200 and exact-policy
 preflight, a loopback-parent refusal, and an approved-production-parent positive
 control. Cache behavior and the remaining deployed-parent observations stay
