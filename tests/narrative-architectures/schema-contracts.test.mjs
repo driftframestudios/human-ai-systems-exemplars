@@ -8,6 +8,8 @@ import test from "node:test";
 import { parseExpressionAt } from "acorn";
 import Ajv2020 from "ajv/dist/2020.js";
 
+import { compactSource, prettySource } from "../../tools/cpanel-format.mjs";
+import { readPrototypeScript } from "../prototype-script.mjs";
 import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -96,6 +98,30 @@ async function threadkeepingExample() {
   );
   return jsonConstant(source, "INITIAL");
 }
+
+test("prototype state extraction follows executable HTML ownership across carrier formats", async () => {
+  const expected = {
+    artifactIdentity: { id: "real-owner" },
+    count: -2,
+    values: [true, null, "literal"],
+  };
+  const source = `<!doctype html><html><body>
+    <!-- <script>const INITIAL={"artifactIdentity":{"id":"comment"}}</script> -->
+    <template><script>const INITIAL={"artifactIdentity":{"id":"template"}}</script></template>
+    <script>const INITIAL={"artifactIdentity":{"id":"real-owner"},"count":-2,"values":[true,null,"literal"]};</script>
+  </body></html>`;
+  for (const candidate of [
+    source,
+    await prettySource("prototype.html", source),
+    await compactSource("prototype.html", source),
+  ]) {
+    assert.deepEqual(readPrototypeScript(candidate).initializerValue("INITIAL"), expected);
+  }
+  assert.throws(
+    () => readPrototypeScript("<script>const INITIAL={value:getState()}</script>").initializerValue("INITIAL"),
+    /executable CallExpression expression/u,
+  );
+});
 
 function familyIndexSeed(source) {
   return jsonConstant(source, "seed");
