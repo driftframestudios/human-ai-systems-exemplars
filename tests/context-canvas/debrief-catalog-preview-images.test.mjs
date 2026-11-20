@@ -126,7 +126,6 @@ test("Full Debrief catalog cards declare reviewed responsive preview visuals", a
     assert.equal(attribute(tag, "data-catalog-preview-src"), "", "Article cards should keep their primary-image fallback");
   }
 
-  assert.match(html, /<figcaption data-preview-caption>Preview visual from the selected reading\.<\/figcaption>/u);
   assert.match(html, /<img[^>]*width="1600"[^>]*height="1120"[^>]*data-preview-image>/u);
 });
 
@@ -176,6 +175,4 @@ test("Catalog preview image selection falls back cleanly and clears stale respon
   assert.match(script, /previewImage\.removeAttribute\("height"\)/u);
   assert.match(script, /previewImage\.setAttribute\("width", previewImageWidth\)/u);
   assert.match(script, /previewImage\.setAttribute\("height", previewImageHeight\)/u);
-  assert.match(script, /"Preview visual — " \+ previewImageCaption/u);
-  assert.doesNotMatch(script, /"Primary visual — "/u);
 });

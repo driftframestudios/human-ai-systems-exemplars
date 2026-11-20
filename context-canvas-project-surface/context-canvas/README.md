@@ -619,7 +619,10 @@ The [Showcase](debriefs.html) collects case studies and articles at the existing
 six-field accounts with related media and two independently expandable quick
 scans. Each summary covers Situation and stakes, Scope and role (with optional
 dates), Challenges, Key decision, Results, and What this enables. Case Study and
-Article link directly to their respective readings.
+Article link directly to their respective readings. In Collection at a glance,
+choose a format or topic to filter the catalog. Point to a card or focus one of
+its links to preview the reading. The image and reading button open the same
+destination. The return arrow restores the collection view with its filters intact.
 
 **Editing shared summaries.** In `debriefs.html`, find the
 `template[data-case-brief-projection]` for the case-study filename. Edit the

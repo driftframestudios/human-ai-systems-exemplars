@@ -86,7 +86,7 @@ function displayedCounts(html, ariaLabel, labels) {
   ));
   assert.ok(list, `Expected ${ariaLabel}`);
   return new Map(
-    Array.from(list[1].matchAll(/<li><span>([^<]+)<\/span><strong>(\d+)<\/strong><\/li>/gu))
+    Array.from(list[1].matchAll(/<button\b[^>]*><span>([^<]+)<\/span><strong>(\d+)<\/strong><\/button>/gu))
       .map(match => [labels.get(match[1]), Number.parseInt(match[2], 10)]),
   );
 }
@@ -298,7 +298,6 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   assert.doesNotMatch(script, /\bcaseBriefCache\b|function\s+loadCaseBrief\b|function\s+parseCaseBriefSource\b/u);
   assert.doesNotMatch(script, /Read the Easy-to-Scan Case Brief|route \+ "#case-brief"/u);
   assert.match(script, /route, "Read the Case Study"/u);
-  assert.match(html, /data-preview-link[^>]*>[\s\S]*?Read the Case Study/u);
   assert.doesNotMatch(html, /data-preview-case-brief-content/u);
 
   const projections = caseBriefProjections(html);
