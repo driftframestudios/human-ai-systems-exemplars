@@ -83,24 +83,24 @@ test("the publication media-type table uses the exact receiver literals", () => 
   assert.throws(() => expectedContentType("unknown.bin"), /No declared publication media type/u);
 });
 
-test("the v2 manifest is the exact 17-contract and 27-skill publication allowlist", async () => {
+test("the v2 manifest is the exact 33-contract and 31-skill publication allowlist", async () => {
   assert.equal(manifest.schemaVersion, "2");
-  assert.equal(manifest.sourceRevision, "c1e35fdd57c2193812c2b183955aca15a5020be8");
+  assert.equal(manifest.sourceRevision, "a5ed640bb0982044d46e6e874867eb8f0e760169");
   assert.deepEqual(manifest.peerRelease, {
-    releaseTag: "pages-v0.3.1",
-    tagObject: "15c9a0ced1a49f3f20797682282526a95afbef88",
-    projectionRevision: "fbf568496b90cf26cb0de5993189801d8a8c2be9",
-    closureSha256: "b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0",
+    releaseTag: "pages-v0.4.0",
+    tagObject: "2c253529e85f3b853e139a4c5fd6d83cd328037e",
+    projectionRevision: "4a4a37633e81a80f1ef45386ce22d3de4657384d",
+    closureSha256: "80cb2f1100adaedcda8179abbd4e1c84bcc8fbc5af60ce6eab4ec37cf587d2cb",
   });
   assert.equal(schemaCatalog.sourceRevision, manifest.sourceRevision);
   assert.equal(skillCatalog.sourceRevision, manifest.sourceRevision);
-  assert.equal(schemaCatalog.contracts.length, 17);
-  assert.equal(skillCatalog.skills.length, 27);
-  assert.equal(new Set(skillCatalog.skills.map(({ name }) => name)).size, 27);
+  assert.equal(schemaCatalog.contracts.length, 33);
+  assert.equal(skillCatalog.skills.length, 31);
+  assert.equal(new Set(skillCatalog.skills.map(({ name }) => name)).size, 31);
 
   const skillPaths = skillArtifactPaths(skillCatalog);
-  assert.equal(skillPaths.length, 86);
-  assert.equal(manifest.inventory.length, 127);
+  assert.equal(skillPaths.length, 102);
+  assert.equal(manifest.inventory.length, 163);
   assert.deepEqual(manifest.inventory, [...manifest.inventory].sort((left, right) => left.localeCompare(right)));
   assert.equal(new Set(manifest.inventory).size, manifest.inventory.length);
   assert.deepEqual(
@@ -125,8 +125,8 @@ test("the v2 manifest is the exact 17-contract and 27-skill publication allowlis
     assert.equal(manifest.resources[requestPath]?.asset, asset, requestPath);
   }
 
-  assert.equal(Object.keys(manifest.resources).length, 160);
-  assert.equal(manifest.frozen.length, 31);
+  assert.equal(Object.keys(manifest.resources).length, 216);
+  assert.equal(manifest.frozen.length, 63);
   assert.deepEqual(manifest.frozen, [...manifest.frozen].sort());
   assert.equal(new Set(manifest.frozen).size, manifest.frozen.length);
   const inventory = new Set(manifest.inventory.map((path) => `/${path}`));
@@ -192,7 +192,7 @@ test("every listed route has exact bytes, media type, cache policy, validators, 
   }
 });
 
-test("all 17 schema contracts retain canonical and direct-asset identities", async () => {
+test("all 33 schema contracts retain canonical and direct-asset identities", async () => {
   for (const contract of schemaCatalog.contracts) {
     const canonical = `/${contract.path}`;
     const asset = manifest.routes[canonical];
@@ -210,12 +210,12 @@ test("all 17 schema contracts retain canonical and direct-asset identities", asy
   }
 });
 
-test("the 27-skill machine/source closure is complete, linked, and revalidating", async () => {
+test("the 31-skill machine/source closure is complete, linked, and revalidating", async () => {
   const paths = skillArtifactPaths(skillCatalog);
-  assert.equal(paths.length, 86);
+  assert.equal(paths.length, 102);
   assert(paths.every((path) => !path.endsWith("/index.html")));
   assert(skillCatalog.skills.every(({ publicationStanding }) => publicationStanding === "public_ready"));
-  assert.equal(skillCatalog.skills.length, 27);
+  assert.equal(skillCatalog.skills.length, 31);
 
   const sourceRecords = new Map();
   const addSource = (path, digest) => {
@@ -237,7 +237,7 @@ test("the 27-skill machine/source closure is complete, linked, and revalidating"
     assert.equal(sourceRef.hash, `#/skills/${index}`, skill.name);
   }
   for (const source of skillCatalog.supportingSources) addSource(source.path, source.sha256);
-  assert.equal(sourceRecords.size, 58);
+  assert.equal(sourceRecords.size, 70);
   for (const [path, digest] of sourceRecords) {
     assert.equal(sha256(await publicationBytes(`/skills/${path}`)), digest, path);
   }

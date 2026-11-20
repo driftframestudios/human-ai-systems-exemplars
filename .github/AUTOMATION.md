@@ -117,13 +117,14 @@ equality before upload.
 Pages settings remain the custom-domain authority. The recorded Pages family
 is `schemas.radiantnull.com`; completed Issue #406 preserves the
 `schemas.vik.guru` v0.3.0 Worker activation and recovery lineage. Completed
-Issue #531 records the active v0.3.1 Worker publication and live parity. The
+Issue #531 records the active v0.3.1 Worker publication and live parity. Issues
+#1001 and #1008 coordinate the accepted v0.4.0 successor. The
 generated public
 `release.json`, accepted annotated tag, and matching workflow receipt identify
-the active Pages coordinate. The `pages-v0.3.1` tag at docs commit
-`fbf568496b90` with recorded source commit `c1e35fdd57c2` is active.
-`pages-v0.3.0`, `pages-v0.2.0`, and the earlier `pages-v0.1.0` observation
-remain historical evidence.
+the active Pages coordinate. The `pages-v0.4.0` tag at docs commit
+`4a4a37633e81` with recorded source commit `a5ed640bb098` is active.
+`pages-v0.3.1`, `pages-v0.3.0`, `pages-v0.2.0`, and the earlier
+`pages-v0.1.0` observation remain historical evidence.
 The recorded `docs:/` source setting remains the recovery coordinate: an
 authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
 and return the environment allowlist to its prior state when needed. Current
