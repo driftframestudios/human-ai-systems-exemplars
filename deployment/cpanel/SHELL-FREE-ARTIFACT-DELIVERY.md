@@ -285,8 +285,9 @@ satisfy this route.
    generation until both successors are present.
 4. Rename the current iframe root to its dated recovery name, then rename the
    iframe successor to the exact configured iframe document-root name.
-5. Observe the direct iframe routes and root `robots.txt` before changing the
-   primary root.
+5. Run `npm run verify:iframe-routes:policy -- --tag "$PRODUCTION_TAG"`
+   from the verifier checkout with the approved annotated tag available.
+   Check the iframe root's `robots.txt` separately before switching the primary root.
 6. Rename the current primary root to its dated recovery name, then rename the
    primary successor to the exact configured primary document-root name.
 7. Preserve each prior generation until the complete signed-out assessment
@@ -332,6 +333,21 @@ land:
 - keep delivery-layer HTML rewriting outside the byte-parity route; and
 - purge only the affected primary and iframe cache scopes after both roots
   reach the requested generation.
+
+The exercised `production-v0.4.0` receiver uses a Cloudflare Single Redirect
+for `www` canonicalization, scoped Standard response inspection for primary
+HTML, primary `nosniff` and `no-referrer` headers, and route-specific
+Markdown, web-manifest, and JSON Schema media types. Bot Preference Sync and
+Email Address Obfuscation stay active as explicit managed edge projections; AI
+Labyrinth stays off after the byte-preservation diagnostic. Live receipts
+classify managed crawler text and email-address rewrites separately from
+carrier-controlled byte drift.
+
+The primary-root `.htaccess` remains the fitting owner for
+`ErrorDocument 404 /404.html`. That internal mapping keeps the status at `404`
+and supplies the authored page. Cache classes, HSTS, and CSP receive separate
+review and signed-out verification. One layer owns each redirect or header
+decision so an edge rule and an origin rule do not compete.
 
 ## Verify and accept the live result
 

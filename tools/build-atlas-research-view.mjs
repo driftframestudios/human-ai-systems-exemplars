@@ -1,4 +1,7 @@
 import './node-runtime-admission.mjs';
+import { compactSource } from './cpanel-format.mjs';
+import { loadExternalReferenceBinding } from './external-reference-contract.mjs';
+import { loadRegistryReferenceBinding } from './registry-reference-contract.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 /** Public research extract projection. O(works + topic memberships + output bytes).
  * The admitted bibliography owns source selection; this owner supplies the view.
@@ -112,7 +115,7 @@ export function renderResearchFigure(document) {
   return figureFrom(viewData(document), suppliedProvenance);
 }
 
-function sectionFrom(derived, provenance) {
+function sectionFrom(derived, provenance, citationHref = uri => uri) {
   const { totals, records, topics } = derived;
   const citationText = provenance.verified
     ? `${counted(totals.works, 'work')} ${totals.works === 1 ? 'has' : 'have'} a recorded citation in the skill evidence map. That occurrence establishes a reference relationship.`
@@ -124,7 +127,7 @@ function sectionFrom(derived, provenance) {
     ? `The matrix and adjacent table preserve both membership and the ${totals.works}-work total directly.`
     : 'The table preserves the memberships directly.';
   const sources = records.map(record => `<li id="research-${escape(record.id)}">
-    <h4 class="txt-h4"><a href="${escape(record.sourceUri)}">${escape(record.title)}</a></h4>
+    <h4 class="txt-h4"><a href="${escape(citationHref(record.sourceUri))}">${escape(record.title)}</a></h4>
     <p class="table-note">${escape(record.creditedTo)}. ${escape(record.version)}. <strong>${escape(KIND_NAMES[record.evidenceKind])}.</strong> Topics: ${record.topics.map(topic => escape(TOPIC_NAMES[topic])).join('; ')}.</p>
     <p>${escape(record.supportedConsequence)}</p><p class="table-note">${escape(record.evidenceStanding)} ${escape(record.transferBoundary)}</p>
   </li>`).join('\n');
@@ -170,11 +173,19 @@ export async function readVerifiedResearchView() {
     selectionText: 'The extract is complete for its enumerated selection. Topic assignments are editorial judgments.',
     tableCaption: 'Selected public works by topic and evidence kind',
   };
-  return { document, svg: figureFrom(derived, provenance), section: sectionFrom(derived, provenance) };
+  const authorities = await Promise.all([loadExternalReferenceBinding(), loadRegistryReferenceBinding()]);
+  const tokenByUri = new Map(authorities.flatMap(({ routes }) => routes.map(({ token, url }) => [url, token])));
+  const citationHref = uri => {
+    const token = tokenByUri.get(uri);
+    if (!token) throw new Error('The selected Atlas research citation needs a public destination binding: ' + uri);
+    return '{{' + token + '}}';
+  };
+  return { document, svg: figureFrom(derived, provenance), section: sectionFrom(derived, provenance, citationHref) };
 }
 
 export async function buildResearchView({ check = false } = {}) {
-  const { document, svg, section } = await readVerifiedResearchView();
+  const { document, svg: renderedSvg, section } = await readVerifiedResearchView();
+  const svg = (await compactSource(RESEARCH_SVG, renderedSvg)).trimEnd() + '\n';
   const page = await readFile(resolve(ROOT, PAGE), 'utf8');
   const start = page.indexOf(START);
   const end = page.indexOf(END);
@@ -189,6 +200,7 @@ export async function buildResearchView({ check = false } = {}) {
   }
   if (!output.includes('href="#research-gallery-title"')) output = output.replace('<li><a href="#prototype-title">',
     '<li><a href="#research-gallery-title">Research example<br>Read source contributions</a></li>\n          <li><a href="#prototype-title">');
+  output = (await compactSource(PAGE, output)).trimEnd() + '\n';
   if (check) {
     assert.equal(page, output, 'The research section matches its admitted source.');
     assert.equal(await readFile(resolve(ROOT, RESEARCH_SVG), 'utf8'), svg, 'The research SVG matches its admitted source.');

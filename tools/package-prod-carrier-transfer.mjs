@@ -1,6 +1,6 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   mkdir,
@@ -142,22 +142,111 @@ function portablePathKey(value) {
   return value.normalize("NFC").toLowerCase();
 }
 
+function carrierGitEnvironment() {
+  return {
+    PATH: process.env.PATH,
+    LANG: "C",
+    LC_ALL: "C",
+    GIT_CONFIG_NOSYSTEM: "1",
+    GIT_TERMINAL_PROMPT: "0",
+    GIT_OPTIONAL_LOCKS: "0",
+    GIT_NO_REPLACE_OBJECTS: "1",
+  };
+}
+
 async function git(root, args, options = {}) {
   const { stdout } = await execFileAsync("git", args, {
     cwd: root,
     encoding: options.encoding ?? null,
     maxBuffer: options.maxBuffer ?? defaultLimits.maxArchiveBytes,
-    env: {
-      PATH: process.env.PATH,
-      LANG: "C",
-      LC_ALL: "C",
-      GIT_CONFIG_NOSYSTEM: "1",
-      GIT_TERMINAL_PROMPT: "0",
-      GIT_OPTIONAL_LOCKS: "0",
-      GIT_NO_REPLACE_OBJECTS: "1",
-    },
+    env: carrierGitEnvironment(),
   });
   return stdout;
+}
+
+// The transfer receipt identifies this file by Git revision and digest. Keep
+// the shared binary protocol here so those coordinates cover its implementation.
+export async function withGitBlobReader(root, { maxBlobBytes, env }, useReader) {
+  assertSafeInteger(maxBlobBytes, "Git blob byte limit");
+  const child = spawn("git", ["cat-file", "--batch"], {
+    cwd: root, env, stdio: ["pipe", "pipe", "ignore"],
+  });
+  let ioError;
+  child.on("error", error => { ioError = error; });
+  child.stdin.on("error", error => { ioError = error; });
+  const closed = new Promise(resolve => child.once("close", resolve));
+  const chunks = child.stdout[Symbol.asyncIterator]();
+  let pending = Buffer.alloc(0);
+  let reading = false;
+  let open = true;
+
+  async function needBytes() {
+    if (pending.length) return;
+    const next = await chunks.next();
+    if (next.done) throw ioError ?? new Error("Git batch reply ended before the complete blob frame.");
+    pending = next.value;
+  }
+
+  async function readBlob(oid, limit = maxBlobBytes) {
+    assertGitSha(oid, "Requested Git blob");
+    assertSafeInteger(limit, "Git blob byte limit", { maximum: maxBlobBytes });
+    if (reading || !open) fail("The Git batch reader accepts one request at a time within its operation.");
+    reading = true;
+    try {
+      await new Promise((resolve, reject) => {
+        child.stdin.write(oid + "\n", error => error ? reject(error) : resolve());
+      });
+      let header = "";
+      while (true) {
+        await needBytes();
+        const newline = pending.indexOf(0x0a);
+        const count = newline < 0 ? pending.length : newline;
+        if (header.length + count > 100) fail("Git batch header exceeds the bounded object record.");
+        header += pending.toString("latin1", 0, count);
+        pending = pending.subarray(count + (newline < 0 ? 0 : 1));
+        if (newline >= 0) break;
+      }
+      const record = /^([a-f0-9]+) blob (0|[1-9][0-9]*)$/u.exec(header);
+      if (!record || record[1] !== oid) fail("Git batch reply must identify the requested object as a blob.");
+      const size = assertSafeInteger(Number(record[2]), "Git batch blob size", { maximum: limit });
+      const bytes = Buffer.allocUnsafe(size);
+      let offset = 0;
+      while (offset < size) {
+        await needBytes();
+        const count = Math.min(pending.length, size - offset);
+        pending.copy(bytes, offset, 0, count);
+        pending = pending.subarray(count);
+        offset += count;
+      }
+      await needBytes();
+      if (pending[0] !== 0x0a) fail("Git batch reply has an invalid payload terminator.");
+      pending = pending.subarray(1);
+      return bytes;
+    } catch (error) {
+      open = false;
+      child.kill("SIGKILL");
+      throw error;
+    } finally {
+      reading = false;
+    }
+  }
+
+  try {
+    const result = await useReader(readBlob);
+    if (!open || reading) fail("Git batch operation ended with an incomplete request.");
+    open = false;
+    child.stdin.end();
+    if (pending.length || !(await chunks.next()).done) fail("Git batch reply contains unexpected trailing bytes.");
+    const code = await closed;
+    if (ioError || code !== 0) throw ioError ?? new Error("Git batch reader exited unsuccessfully.");
+    return result;
+  } finally {
+    open = false;
+    child.stdin.destroy();
+    child.stdout.destroy();
+    if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+    await closed;
+  }
 }
 
 function parseTreeRecords(bytes) {
@@ -400,33 +489,38 @@ export async function loadTaggedProductionCarrier({
     fail("Production carrier exceeds the entry-count boundary.");
   }
   const files = new Map();
+  const portableKeys = new Set();
   let totalBytes = 0;
-  for (const record of records) {
-    if (
-      record.mode !== "100644" ||
-      record.type !== "blob" ||
-      !record.sourcePath.startsWith(`${carrierRoot}/`)
-    ) {
-      fail(`Production carrier entry must be a regular non-executable blob: ${record.sourcePath}.`);
+  await withGitBlobReader(root, {
+    maxBlobBytes: defaultLimits.maxEntryBytes, env: carrierGitEnvironment(),
+  }, async readBlob => {
+    for (const record of records) {
+      if (
+        record.mode !== "100644" ||
+        record.type !== "blob" ||
+        !record.sourcePath.startsWith(`${carrierRoot}/`)
+      ) {
+        fail(`Production carrier entry must be a regular non-executable blob: ${record.sourcePath}.`);
+      }
+      const relativePath = assertPortableRelativePath(
+        record.sourcePath.slice(carrierRoot.length + 1),
+        "Production carrier path",
+      );
+      const key = portablePathKey(relativePath);
+      if (portableKeys.has(key)) {
+        fail(`Production carrier repeats a normalized path: ${relativePath}.`);
+      }
+      portableKeys.add(key);
+      const limit = Math.min(
+        defaultLimits.maxEntryBytes,
+        defaultLimits.maxExpandedBytes - totalBytes,
+        [manifestPath, indexPath].includes(relativePath) ? maxCarrierMetadataBytes : defaultLimits.maxEntryBytes,
+      );
+      const bytes = await readBlob(record.object, limit);
+      totalBytes += bytes.byteLength;
+      files.set(relativePath, bytes);
     }
-    const relativePath = assertPortableRelativePath(
-      record.sourcePath.slice(carrierRoot.length + 1),
-      "Production carrier path",
-    );
-    const key = portablePathKey(relativePath);
-    if ([...files.keys()].some((candidate) => portablePathKey(candidate) === key)) {
-      fail(`Production carrier repeats a normalized path: ${relativePath}.`);
-    }
-    const bytes = await git(root, ["cat-file", "blob", record.object]);
-    assertSafeInteger(bytes.byteLength, `Production carrier ${relativePath} bytes`, {
-      maximum: defaultLimits.maxEntryBytes,
-    });
-    totalBytes += bytes.byteLength;
-    if (totalBytes > defaultLimits.maxExpandedBytes) {
-      fail("Production carrier exceeds the expanded-byte boundary.");
-    }
-    files.set(relativePath, bytes);
-  }
+  });
   const manifestBytes = files.get(manifestPath);
   const indexBytes = files.get(indexPath);
   if (!Buffer.isBuffer(manifestBytes) || !Buffer.isBuffer(indexBytes)) {

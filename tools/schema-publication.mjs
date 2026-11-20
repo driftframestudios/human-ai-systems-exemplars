@@ -1,7 +1,7 @@
 import './node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { promisify } from "node:util";
+import { isDeepStrictEqual, promisify } from "node:util";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
@@ -28,6 +28,10 @@ export async function assertPublicationRevision(root, revision, paths) {
 export const schemaCompanionRoutes = Object.freeze([
   { source: "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json", receiverPath: "prototype-exemplars/1.0.0/prototype-exemplars.example.json" },
   { source: "schemas/context-canvas/1.0.0/context-canvas.context.jsonld", receiverPath: "context-canvas/1.0.0/context-canvas.context.jsonld" },
+  { source: "schemas/collaboration-skills/0.1.0/README.md", receiverPath: "collaboration-skills/0.1.0/README.md" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json", receiverPath: "collaboration-skills/0.1.0/examples/portable-skill.example.json" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json", receiverPath: "collaboration-skills/0.1.0/examples/retired-projection.example.json" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json", receiverPath: "collaboration-skills/0.1.0/examples/collaboration-account.example.json" },
   { source: "collaboration/investment-analysis/example.json", receiverPath: "investment-analysis/0.2.0/example.json" },
   { source: "schemas/investment-analysis/0.2.0/README.md", receiverPath: "investment-analysis/0.2.0/README.md" },
   { source: "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/a3-stacked-cube.context.jsonld", receiverPath: "a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld" },
@@ -85,6 +89,11 @@ export function assertPublicationReceiverPaths(routes) {
   }
 }
 
+export function schemaPublicationInputPaths() {
+  return [...schemaReceiverRoutes, ...schemaCompanionRoutes].flatMap(({ source, frozenSource }) =>
+    frozenSource ? [source, frozenSource] : [source]);
+}
+
 function selectedRoutes() {
   const routes = [...schemaReceiverRoutes, ...schemaCompanionRoutes];
   assertPublicationReceiverPaths(routes);
@@ -131,8 +140,14 @@ export async function schemaPublication(root, baseUrl, sourceRevision) {
   const known = new Set(schemaReceiverRoutes.map(({ id }) => id));
   const contracts = [];
   for (const route of schemaReceiverRoutes) {
-    const bytes = await readFile(await resolvePublicationFile(root, route.source));
+    const bytes = await readFile(await resolvePublicationFile(root, route.frozenSource ?? route.source));
     const schema = JSON.parse(bytes);
+    if (route.frozenSource) {
+      const workingSchema = JSON.parse(await readFile(await resolvePublicationFile(root, route.source)));
+      if (!isDeepStrictEqual(schema, workingSchema)) {
+        throw new Error(`Working schema differs from its published contract: ${route.source}. Publish a new version for changed fields.`);
+      }
+    }
     const sha256 = schemaDigest(bytes);
     if (schema.$id !== route.id || lock[route.receiverPath] !== sha256) {
       throw new Error(`Published identity and frozen bytes must agree: ${route.receiverPath}`);
@@ -159,7 +174,7 @@ export async function schemaPublication(root, baseUrl, sourceRevision) {
 export async function copySchemaPayload(root, outputRoot) {
   const output = resolve(outputRoot);
   for (const route of selectedRoutes()) {
-    const source = await resolvePublicationFile(root, route.source);
+    const source = await resolvePublicationFile(root, route.frozenSource ?? route.source);
     const target = resolve(output, route.receiverPath);
     const remainder = relative(output, target);
     if (

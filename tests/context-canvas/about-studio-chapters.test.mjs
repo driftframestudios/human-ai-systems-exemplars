@@ -1,0 +1,40 @@
+import '../../tools/node-runtime-admission.mjs';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { test } from 'node:test';
+import { readStudioChapterInputs, createStudioChapterProjection, assertStudioChapterProjection, studioChaptersPath } from '../../tools/materialize-about-studio-chapters.mjs';
+
+test('Studio chapter projection preserves the complete source and nested report document', async () => {
+  const inputs = await readStudioChapterInputs();
+  const projected = createStudioChapterProjection(inputs);
+  assert.equal(projected.replace(/<style data-about-studio-chapters>[\s\S]*?<\/style>/u, '')
+    .replace(/<script data-about-studio-chapters>[\s\S]*?<\/script>/u, '')
+    .replace(/<!-- embedded-content-fit:start -->[\s\S]*?<!-- embedded-content-fit:end -->/u, ''), inputs.source,
+  'removing the three added presentation blocks recovers every byte of the original instrument');
+  assert.ok(inputs.source.includes('</body></html>\''), 'the original report generator carries its own body closer');
+  assert.match(inputs.source, /<dt>Important now<\/dt>/u);
+  assert.doesNotMatch(inputs.source, /Load-bearing now/u);
+  assert.doesNotMatch(inputs.source, /Onward readings and source links continue/u);
+  assert.match(inputs.source,
+    /Plan the people, work, disruption, and learning an initiative actually asks for\. Complex, important initiatives are often cross-functional resource requests\.<\/p>/u);
+  assert.deepEqual([...inputs.adapter.matchAll(/\{\s*key:\s*"([a-z-]+)",\s*label:/gu)].map(match => match[1]),
+    ['coordination', 'plan', 'people', 'work', 'change-modeling', 'comparison'],
+    'the retained receiver opens with coordination and preserves its named chapter destinations');
+  assert.equal(projected.match(/<script data-about-studio-chapters>/gu).length, 1);
+  assert.equal(projected.match(/<style data-about-studio-chapters>/gu).length, 1);
+  assert.equal(await readFile(resolve(import.meta.dirname, '../..', studioChaptersPath), 'utf8'), projected);
+});
+
+test('Studio derivation rejects stale output and unsafe or ambiguous inputs', async () => {
+  const inputs = await readStudioChapterInputs();
+  const projected = createStudioChapterProjection(inputs);
+  assert.doesNotThrow(() => assertStudioChapterProjection(projected, inputs));
+  assert.throws(() => assertStudioChapterProjection(projected.replace('id="horizon"', 'id="stale-horizon"'), inputs), /stale/u);
+  for (const [key, value, reason] of [
+    ['source', inputs.source + '\n</body>\n', /closing tag "body"/iu],
+    ['source', projected, /original full Studio/u],
+    ['styles', 'section { color: red } </style>', /inline-safe CSS/u],
+    ['adapter', 'document.body.textContent = "</script>";', /inline-safe JavaScript/u],
+  ]) assert.throws(() => createStudioChapterProjection({ ...inputs, [key]: value }), reason);
+});

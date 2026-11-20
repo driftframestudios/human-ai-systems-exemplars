@@ -5,7 +5,7 @@
   "name": "conversation-data-visualization",
   "description": "Produces bounded exploratory data visuals with recoverable values and calibrated interpretation in a conversation. Applies when a human and AI are examining data together and a figure can change the next question or decision.",
   "semanticAuthorityRef": "../source/.agents/skills/conversation-data-visualization/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/8",
+  "sourceRef": "../catalog.json#/skills/10",
   "contract": {
     "what": "A compact exploratory visual and evidence companion suited to the current conversational question.",
     "when": [

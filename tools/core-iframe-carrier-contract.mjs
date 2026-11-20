@@ -10,8 +10,6 @@ import { chromium } from "@playwright/test";
 
 import {
   PUBLIC_AUTHOR_PROFILE_KEY,
-  PUBLIC_IFRAME_NAMESPACE,
-  inspectPublicReferenceSource,
   materializePublicReferences,
 } from "./materialize-public-references.mjs";
 import {
@@ -51,20 +49,6 @@ const strategySourceUrls = new Set([
   "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
   "../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
 ]);
-
-function configuredDestination(key) {
-  if (key === PUBLIC_AUTHOR_PROFILE_KEY) {
-    return "https://profile.example/author";
-  }
-  if (key.startsWith(PUBLIC_IFRAME_NAMESPACE)) {
-    const [family, ...route] = key
-      .slice(PUBLIC_IFRAME_NAMESPACE.length)
-      .toLowerCase()
-      .split("_");
-    return `https://iframes.vik.guru/v1/${family}/${route.join("-")}/`;
-  }
-  throw new Error(`Iframe carrier contract has no external fixture for ${key}.`);
-}
 
 function publicMediaFixtures(manifest) {
   const fixtures = new Map();
@@ -721,22 +705,11 @@ async function run() {
       await readFile(videoPublicationManifestPath, "utf8"),
     );
     const mediaFixturesByPublicUrl = publicMediaFixtures(videoPublicationManifest);
-    const inventory = await inspectPublicReferenceSource();
-    // The tracked Registry binding owns Registry routes. This fixture supplies
-    // only the external values needed to exercise the isolated browser carrier.
-    const externalEnvironment = Object.fromEntries(
-      [...inventory.keys]
-        .filter(
-          (key) => key === PUBLIC_AUTHOR_PROFILE_KEY ||
-            key.startsWith(PUBLIC_IFRAME_NAMESPACE),
-        )
-        .map((key) => [key, configuredDestination(key)]),
-    );
     await materializePublicReferences({
       outputRoot,
       outputBoundaryRoot: temporaryRoot,
       configPath: join(temporaryRoot, "no-config-file"),
-      environment: externalEnvironment,
+      environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: "https://profile.example/author" },
     });
 
     const generatedPages = await readdir(join(outputRoot, contextCanvasDirectory));

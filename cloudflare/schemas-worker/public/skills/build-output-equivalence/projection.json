@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/build-output-equivalence/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "build-output-equivalence",
+  "description": "Compares the artifacts a build or packaging change delivers at fixed inputs. Applies when a team replaces a reader, index, cache, compiler step, or packager and needs to establish which output bytes, metadata, and failure guarantees survive.",
+  "semanticAuthorityRef": "../source/.agents/skills/build-output-equivalence/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/3",
+  "contract": {
+    "what": "Compare two implementations of a build through the files, archives and verification records their consumers receive.",
+    "when": [
+      "A team changes how a build reads, selects, transforms or packages inputs and intends to preserve a published artifact contract."
+    ],
+    "boundaries": [
+      "The release owner defines which properties consumers rely on and authorizes publication. A local comparison can exercise the release verifier in temporary storage. Timing, rendered behavior and live delivery each have their own observation."
+    ],
+    "result": "A reviewer can identify the fixed inputs, the outputs compared, each expected difference, the first unexplained difference or verified match, and the revision that restores the accepted behavior."
+  },
+  "receivingUse": {
+    "job": "A team changes how a build reads, selects, transforms or packages inputs and intends to preserve a published artifact contract.",
+    "materialResult": "A reviewer can identify the fixed inputs, the outputs compared, each expected difference, the first unexplained difference or verified match, and the revision that restores the accepted behavior.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/build-output-equivalence/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

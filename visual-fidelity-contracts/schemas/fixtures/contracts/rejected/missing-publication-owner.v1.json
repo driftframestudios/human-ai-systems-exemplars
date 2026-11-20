@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:fixture-contract",
+  "title": "Rejected Fixture Contract",
+  "version": "1.0.0",
+  "standing": "review_candidate",
+  "kind": "art_direction_contract",
+  "reviewedOn": "2026-10-20",
+  "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract",
+  "sourceAuthority": {
+    "semanticOwner": "Fixture semantic owner",
+    "schemaOwner": "Fixture schema owner",
+    "sourcePath": "visual-fidelity-contracts/schemas/fixtures/contracts/rejected/missing-publication-owner.v1.json",
+    "relationship": "authored_source"
+  },
+  "purpose": {
+    "plainLanguage": "This fixture exercises rejection when publication authority is absent.",
+    "populations": ["Schema authors reviewing the authority boundary."],
+    "jobs": ["Confirm that publication authority is required."]
+  },
+  "fit": {
+    "fits": ["Focused rejection testing."],
+    "poorFits": ["Accepted contract examples use the accepted fixture family."],
+    "smallestUsefulDose": "The missing authority field carries the intended rejection."
+  },
+  "invariants": ["Publication authority remains a required contract fact."],
+  "permittedVariation": ["Other valid fields isolate the intended rejection."],
+  "tokens": {
+    "authority": "reference_mapping",
+    "path": "visual-fidelity-contracts/contracts/industrial-ink/tokens.css",
+    "paletteClosed": true,
+    "colorPairs": [
+      { "foreground": "#000000", "background": "#ffffff", "minimumRatio": 21, "uses": ["Primary text pair."] },
+      { "foreground": "#ffffff", "background": "#000000", "minimumRatio": 21, "uses": ["Inverse text pair."] },
+      { "foreground": "#111111", "background": "#eeeeee", "minimumRatio": 10, "uses": ["Secondary text pair."] },
+      { "foreground": "#222222", "background": "#dddddd", "minimumRatio": 7, "uses": ["State label pair."] }
+    ]
+  },
+  "typography": {
+    "families": ["System sans carries body text and controls."],
+    "bodyMinimumRem": 1,
+    "metadataMinimumRem": 0.75,
+    "readingMeasureCh": { "targetMin": 50, "targetMax": 66, "absoluteMax": 75 },
+    "uses": ["Body text and metadata retain distinct roles."]
+  },
+  "geometry": {
+    "cornerTreatment": "square",
+    "targetMinimumCssPx": 44,
+    "depth": "Solid borders carry the compact fixture depth.",
+    "spacing": "A regular spacing scale separates each contract group."
+  },
+  "behavior": {
+    "states": ["idle", "available", "focus", "selected", "loading", "error", "recovering", "accepted"],
+    "errorRecovery": ["Accepted work stays visible while retry runs."],
+    "focus": "A visible focus ring identifies the active control.",
+    "keyboard": "Native controls preserve their keyboard behavior.",
+    "motion": "State changes remain clear with motion enabled or reduced.",
+    "noJavaScript": "The base document preserves the useful reading."
+  },
+  "media": {
+    "reflow320CssPx": "Content follows source order at 320 CSS pixels.",
+    "textResize200Percent": "Containers grow with text at 200 percent resize.",
+    "print": "Print retains state labels and evidence boundaries.",
+    "forcedColors": "System colors carry text, borders, focus, and selection.",
+    "reducedMotion": "The final state appears directly when motion is reduced.",
+    "svg": "Informative SVGs receive a title, description, and semantic companion.",
+    "imagery": "Informative images receive alternatives, captions, and source standing."
+  },
+  "evidence": {
+    "standing": "repository_observation",
+    "establishes": ["Schema rejection establishes the missing authority boundary."],
+    "boundaries": ["Material design quality receives its own implementation review."],
+    "reentry": ["A schema change reopens fixture validation."]
+  },
+  "references": {
+    "canonicalExamples": [
+      { "label": "Industrial Ink specimen", "path": "visual-fidelity-contracts/contracts/industrial-ink/specimen.html", "standing": "reference" }
+    ],
+    "codeSamples": ["visual-fidelity-contracts/contracts/industrial-ink/tokens.css"],
+    "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"]
+  }
+}

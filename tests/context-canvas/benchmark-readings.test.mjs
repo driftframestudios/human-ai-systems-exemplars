@@ -1,17 +1,29 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+
 import { resolve } from "node:path";
 import test from "node:test";
+
+import {
+  resolveSourceExternalAnchors, loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
+  return resolveSourceExternalAnchors(source, routeAuthority);
 }
 
 function countMatches(source, pattern) {
@@ -47,7 +59,8 @@ test("benchmark readings expose source-grounded coordinates and shared visitor c
     ["maps-evaluations.html", maps],
   ]) {
     assert.match(html, /<meta name="author" content="Vikrant Varun Kudesia">/u, route);
-    assert.match(html, /<link rel="license" href="https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0">/u, route);
+    const license = html.match(/<link rel="license" href="([^"]+)">/u)?.[1];
+    assert.equal(publicValue(license), 'https://www.apache.org/licenses/LICENSE-2.0', route);
     assert.match(html, /styles\/routes\/benchmark-readings\.css/u, route);
     assert.match(html, /<script src="canvas-shell\.js" defer><\/script>/u, route);
     assert.match(html, /© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company/u, route);
@@ -96,8 +109,16 @@ test("shared navigation and neighboring readings carry the two-route continuatio
     readCanvasFile("prompt-side-conditions-practice.html"),
   ]);
 
-  const orderedRoutes = /\["Prompt-Side (?:Practice|Conditions Practice)", "prompt-side-conditions-practice\.html"\],\s*\["Benchmark Orientation", "benchmark-orientation\.html"\],\s*\["MAPS Evaluations", "maps-evaluations\.html"\]/gu;
-  assert.equal(countMatches(shell, orderedRoutes), 2);
+  const showcase = shell.slice(shell.indexOf("showcase:"));
+  const routePairs = [...shell.matchAll(/\[\s*"([^"]+)",\s*"([^"]+\.html)"\s*\]/gu)];
+  const routes = routePairs.map(pair => pair[2]);
+  assert.match(showcase, /"benchmark-orientation\.html"\s*\],\s*\[\s*"MAPS Evaluations"/u);
+  assert.match(showcase, /"prompt-side-conditions-practice\.html"/u);
+  const start = routes.indexOf("prompt-side-conditions-practice.html");
+  assert.ok(start >= 0);
+  assert.deepEqual(routes.slice(start, start + 3), [
+    "prompt-side-conditions-practice.html", "benchmark-orientation.html", "maps-evaluations.html",
+  ]);
 
   const pair = aiSystems.match(/<section id="benchmark-reading-entry"[\s\S]*?<\/section>/u);
   assert.ok(pair, "AI Systems should contain one benchmark reading pair");
@@ -121,7 +142,7 @@ test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => 
     Array.from({ length: 23 }, (_, index) => index + 1),
   );
 
-  const itemUrls = itemList.itemListElement.map(item => item.url);
+  const itemUrls = itemList.itemListElement.map(item => publicValue(item.url));
   assert.ok(itemUrls.some(url => url.endsWith("/benchmark-orientation.html")));
   assert.ok(itemUrls.some(url => url.endsWith("/maps-evaluations.html")));
 
@@ -140,7 +161,10 @@ test("sitemap and local route inventory expose both readings", async () => {
   ]);
 
   for (const route of ["benchmark-orientation.html", "maps-evaluations.html"]) {
-    assert.equal(countMatches(sitemap, new RegExp(route.replace(".", "\\."), "gu")), 1);
+    const token = [...routeAuthority.entries()]
+      .find(([, destination]) => destination === `https://vik.guru/${route}`)?.[0];
+    assert.ok(token, `${route}: manifest-derived public token`);
+    assert.equal(countMatches(sitemap, new RegExp(`\\{\\{${token}\\}\\}`, "gu")), 1);
     assert.ok(readme.includes(`[\`${route}\`]`));
   }
 });

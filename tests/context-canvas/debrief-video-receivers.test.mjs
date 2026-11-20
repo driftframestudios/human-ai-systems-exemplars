@@ -1,8 +1,11 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+
 import { resolve } from "node:path";
 import test from "node:test";
+
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
@@ -37,6 +40,18 @@ const receivers = [
   },
   {
     page: "genomic-viewer-replatforming.html",
+    family: "genomics-plate-history",
+    width: "1920",
+    height: "990",
+    accessibleName: "Genomic plate history and laboratory process demonstration",
+    standingId: "genomics-plate-history-standing",
+    captionId: "genomics-plate-history-caption",
+    transcriptId: "genomics-plate-history-transcript",
+    before: 'id="genomics-plate-history-walkthrough-title"',
+    after: '<nav aria-labelledby="track-index-title">',
+  },
+  {
+    page: "genomic-viewer-replatforming.html",
     family: "genomics-specimen-qa-biomarker",
     width: "1920",
     height: "1010",
@@ -44,8 +59,8 @@ const receivers = [
     standingId: "genomics-specimen-qa-biomarker-standing",
     captionId: "genomics-specimen-qa-biomarker-caption",
     transcriptId: "genomics-specimen-qa-biomarker-transcript",
-    before: 'id="genomics-specimen-qa-biomarker-walkthrough-title"',
-    after: '<nav aria-labelledby="track-index-title">',
+    before: 'id="solution-outcome-title"',
+    after: 'id="solution-repeatability-title"',
   },
   {
     page: "genomic-viewer-replatforming.html",
@@ -82,11 +97,14 @@ function escapeRegularExpression(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
 
-test("five Debrief receivers present accepted demonstrations at their reading coordinates", async () => {
+test("six Debrief receivers present accepted demonstrations at their reading coordinates", async () => {
   const pages = new Map();
   for (const receiver of receivers) {
     if (!pages.has(receiver.page)) {
-      pages.set(receiver.page, await readFile(resolve(canvasRoot, receiver.page), "utf8"));
+      const source = await readSourceContract(resolve(canvasRoot, receiver.page), "utf8");
+      const authority = await loadSourceRouteAuthority();
+      pages.set(receiver.page, source.replace(/\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\}/gu,
+        token => resolveSourceRouteValue(token, authority)));
     }
   }
 
@@ -142,11 +160,11 @@ test("five Debrief receivers present accepted demonstrations at their reading co
 
     const transcript = html.match(
       new RegExp(
-        `<aside\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/aside>`,
+        `<details\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/details>`,
         "u",
       ),
     )?.[0];
-    assert.ok(transcript, `${receiver.family} keeps the visual description in an aside`);
+    assert.ok(transcript, `${receiver.family} carries its visual description in a disclosure`);
     assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,
@@ -174,7 +192,7 @@ test("five Debrief receivers present accepted demonstrations at their reading co
   );
   assert.equal(
     Array.from(pages.get("genomic-viewer-replatforming.html").matchAll(/<video\b/gu)).length,
-    3,
-    "the genomic-viewer Debrief carries three selected video receivers",
+    4,
+    "the genomic-viewer Debrief carries four selected video receivers",
   );
 });

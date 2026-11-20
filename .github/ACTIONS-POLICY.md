@@ -36,6 +36,7 @@ GitHub-owned action revisions:
 | `actions/checkout` | `v7.0.1` | `3d3c42e5aac5ba805825da76410c181273ba90b1` |
 | `actions/setup-node` | `v7.0.0` | `820762786026740c76f36085b0efc47a31fe5020` |
 | `actions/setup-python` | `v7.0.0` | `5fda3b95a4ea91299a34e894583c3862153e4b97` |
+| `actions/cache` | `v6.1.0` | `55cc8345863c7cc4c66a329aec7e433d2d1c52a9` |
 | `actions/configure-pages` | `v6.0.0` | `45bfe0192ca1faeb007ade9deae92b16b8254a0d` |
 | `actions/upload-pages-artifact` | `v5.0.0` | `fc324d3547104276b827a68afc52ff2a11cc49c9` |
 | `actions/deploy-pages` | `v5.0.0` | `cd2ce8fcbc39b97be8ca5fce6e763baed58fa128` |
@@ -56,20 +57,39 @@ Its schema receiver-route job has a six-minute ceiling, runs
 advisory summary for matching changes while preserving the review path.
 The prototype-unit job has its own resting switch:
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=false` keeps matching pull-request execution at
-rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
-`narrative`, and `all` selections share one thirty-minute job; manual browser
-coverage requires `include_browser=true`, while an enabled PR receiver includes
-the selected browser contracts. Chromium supports every browser-enabled
+rest while confirmed manual dispatch remains available. Focused selections and the enabled PR baseline each use one thirty-minute prototype
+job. A confirmed manual `all` selection with `include_browser=true` runs the reading
+and production groups in parallel, each with the same thirty-minute investigation
+boundary. Manual browser coverage requires `include_browser=true`. An enabled
+PR receiver includes the selected browser contracts. Chromium supports every browser-enabled
 selection, WebKit joins `iframe` and `all`, and Firefox joins `all`. The
-workflow's separate ten-minute media job
-runs for matching pull requests and for confirmed `media` or `all` dispatches.
-That job installs the locked Node toolchain, Chromium, and FFmpeg; exercises
-media preparation, manifest, delivery, and native-video receiver contracts;
-and dry-runs the Worker package. Same-ref manual suites can supersede one
-another. The LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a
-selected confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise
-offline and database matrix jobs have fifteen- and thirty-minute ceilings
-respectively. Those ceilings remain distinct from approved allocations.
+workflow's separate thirty-minute media job runs for matching pull requests
+and for confirmed `media` or `all` dispatches. That job installs the locked
+Node toolchain, selects the Google Chrome channel provided by the reviewed
+Ubuntu runner for its native-video receiver contract, and installs FFmpeg from
+a verified APT archive closure. The GitHub-owned cache action restores that
+closure by operating system, architecture, resolved package-plan digest, and
+runner-image coordinate. A trusted `main` dispatch saves a newly verified
+closure after every media test and the Worker dry run passes. Pull-request jobs
+consume an accessible default-branch closure and leave publication ownership
+with the trusted dispatch.
+
+Cache standing changes preparation time while APT retains package-integrity
+authority and every behavioral check still runs. An exact hit, compatible
+restore, miss, or unavailable standing appears in the job summary with the
+runner image, tool versions, phase timings, test outcome, and Worker
+compilation outcome.
+GitHub owns cache retention and eviction. A confirmed `main` dispatch can
+re-warm an evicted entry after the complete proof passes. The focused rollback
+removes the restore and save steps and returns the same manifest to direct APT
+installation.
+The cache path contains APT package archives; credentials, browser profiles,
+generated receipts, logs, and installed dependency trees remain with their
+existing owners. Same-ref manual suites can supersede one another. The
+LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a selected
+confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise offline
+and database matrix jobs have fifteen- and thirty-minute ceilings respectively.
+Those ceilings remain distinct from approved allocations.
 
 The production-carrier lane accepted in PR #255 receives matching `main` pull
 requests, including drafts, and manual dispatch. Its read-only ten-minute job
@@ -100,8 +120,9 @@ eight-minute ceiling, single production concurrency group, branch-restricted
 `prod` environment, credential check, active-receiver condition, and repository
 variable `SCHEMA_WORKER_DEPENDENCY_GATE=open` keep the accepted
 `cloudflare/schemas-worker` bundle aligned with the existing Custom Domain. The
-reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` chain satisfies the
-dependency floor owned by Issue #402. The dependency gate remains a human-held
+reviewed Wrangler `4.155.0` / Miniflare `5.20261023.2-beta` / Undici
+`7.30.1` / Sharp `0.35.5` chain satisfies the dependency floor owned by
+Issue #659. The dependency gate remains a human-held
 activation control. Each admitted job finishes the selected deployment and
 records the accepted repository coordinate. Its deployment log names the new
 Worker version; Cloudflare deployment history and the linked Issue receipt
@@ -134,8 +155,9 @@ are job-level, and the `schema-pages` concurrency group serializes runs with
 `cancel-in-progress: false`. PRs #308/#309 record the accepted tagged-release
 transition. The generated public `release.json`, its annotated tag, and the
 matching workflow receipt identify the active Pages coordinate. The accepted
-`pages-v0.3.1` coordinate is active; `pages-v0.3.0`, `pages-v0.2.0`, and the
-2026-10-01 `pages-v0.1.0` observations remain historical evidence.
+`pages-v0.4.0` coordinate is active; `pages-v0.3.1`, `pages-v0.3.0`,
+`pages-v0.2.0`, and the 2026-10-01 `pages-v0.1.0` observations remain
+historical evidence.
 Each selected pair starts after its source reaches `main` and its projection
 reaches `docs`; the documented `github-pages` environment admits both branches.
 The recorded legacy `docs:/` source remains the recovery route.
@@ -167,3 +189,5 @@ and approved budget can introduce the smallest fitting addition.
 - [Secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
 - [Using custom workflows with GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 - [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+
+The prototype job can reuse Playwright system packages across runner images when the OS, architecture, engine set, Playwright version and resolved package plan agree. The installer validates each restored archive against fresh APT metadata. The resolved package versions, engine selection, Playwright version, runner image, OS and architecture identify each entry. A group on a confirmed browser dispatch on `main` can publish its engine closure after its assigned proof succeeds. The full run requires both browser groups. [Automation guide](AUTOMATION.md)

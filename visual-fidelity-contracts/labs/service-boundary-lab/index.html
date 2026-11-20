@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Service Boundary Lab — Visual Fidelity Contracts</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./service-boundary-lab.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#lab">Skip to the service-boundary lab</a>
+  <header class="hero">
+    <p class="eyebrow">Visual Fidelity Contracts · executable lab</p>
+    <h1>See when a service result becomes safe to trust</h1>
+    <p class="lead">One synthetic task travels through authorization, a transaction, a durable receipt, interruption and resume, a bounded generated claim, and a human-held decision. Every visual card and table row reads from the same state.</p>
+    <dl class="receipt" aria-label="Lab receipt">
+      <div><dt>Model</dt><dd>Service boundary v1.2.0</dd></div>
+      <div><dt>Runtime</dt><dd data-runtime-receipt>Browser details become available after enhancement.</dd></div>
+      <div><dt>Observed</dt><dd>2026-10-20</dd></div>
+      <div><dt>Fixtures</dt><dd>Synthetic and public-safe</dd></div>
+    </dl>
+  </header>
+
+  <main id="lab" class="lab" data-service-boundary-lab>
+    <section class="static-reading" aria-labelledby="static-title" data-static-reading>
+      <h2 id="static-title">The static reading carries the accepted path</h2>
+      <p>The accepted record is revision 7. A candidate becomes durable after policy allows its task-specific projection, the transaction commits, the connection returns to its owner, and the service issues a receipt. A generated claim waits with its evidence standing for a named human decision and a separate publication authority.</p>
+    </section>
+
+    <section class="controls" aria-labelledby="controls-title">
+      <div>
+        <p class="eyebrow">Choose one bounded scenario</p>
+        <h2 id="controls-title">Exercise the boundary</h2>
+        <p>Each run starts from the same accepted revision. A later scenario cancels an in-flight run before it starts its own.</p>
+      </div>
+      <div class="control-grid" role="group" aria-label="Service boundary scenarios">
+        <button type="button" data-scenario="success" data-enhance-control disabled>Commit and replay</button>
+        <button type="button" data-scenario="resume" data-enhance-control disabled>Interrupt and resume</button>
+        <button type="button" data-scenario="rollback" data-enhance-control disabled>Roll back safely</button>
+        <button type="button" data-scenario="ai" data-enhance-control disabled>Run bounded caller</button>
+        <button type="button" data-scenario="late" data-enhance-control disabled>Test a late result</button>
+        <button type="button" data-scenario="held" data-enhance-control disabled>Apply a policy hold</button>
+        <button type="button" data-action="accept-decision" disabled>Accept human-held decision</button>
+        <button type="button" data-action="publish-decision" disabled>Approve publication</button>
+        <button type="button" data-action="disclosure" data-enhance-control aria-expanded="false" aria-controls="bounded-call-disclosure" disabled>Expand disclosure</button>
+        <button type="button" data-action="reset" data-enhance-control disabled>Reset accepted state</button>
+      </div>
+      <p class="live-status" role="status" aria-live="polite" data-live-status>Ready. Accepted revision 7 is available.</p>
+    </section>
+
+    <section class="accepted-field" aria-labelledby="accepted-title">
+      <div class="section-heading">
+        <p class="eyebrow">Accepted state</p>
+        <h2 id="accepted-title">Durable work stays visible while candidates change</h2>
+      </div>
+      <dl class="accepted-record" data-accepted-record></dl>
+      <div class="issue" data-issue hidden>
+        <p class="issue__label">Active recovery routes</p>
+        <div class="issue__list" data-issue-list></div>
+      </div>
+      <dl class="expanded-disclosure" id="bounded-call-disclosure" data-expanded-disclosure hidden>
+        <div><dt>Source authority</dt><dd data-disclosure-source>Available after a bounded call begins.</dd></div>
+        <div><dt>Allowed tools</dt><dd data-disclosure-tools>Available after a bounded call begins.</dd></div>
+        <div><dt>Input projection</dt><dd data-disclosure-input>Available after a bounded call begins.</dd></div>
+        <div><dt>Stopping event</dt><dd data-disclosure-stop>Available after a bounded call begins.</dd></div>
+        <div><dt>Human receiver</dt><dd data-disclosure-receiver>Available after a bounded call begins.</dd></div>
+        <div><dt>Publication authority</dt><dd data-disclosure-publication>Available after a bounded call begins.</dd></div>
+        <div><dt>Generated claim</dt><dd data-disclosure-claim>Available after a bounded call begins.</dd></div>
+        <div><dt>Supporting evidence</dt><dd data-disclosure-support>Available after a bounded call begins.</dd></div>
+        <div><dt>Evidence standing</dt><dd data-disclosure-evidence>undetermined</dd></div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="dimensions-title">
+      <div class="section-heading">
+        <p class="eyebrow">Independent dimensions</p>
+        <h2 id="dimensions-title">One panel keeps separate owners separate</h2>
+      </div>
+      <div class="dimension-grid" data-dimension-grid></div>
+    </section>
+
+    <section class="semantic-field" aria-labelledby="semantic-title">
+      <div class="section-heading">
+        <p class="eyebrow">Semantic companion</p>
+        <h2 id="semantic-title">The same model remains available as a table</h2>
+      </div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Service state table; scroll horizontally when needed">
+        <table>
+          <caption>Current state, owner, and release event for every dimension</caption>
+          <thead><tr><th scope="col">Dimension</th><th scope="col">State</th><th scope="col">Owner</th><th scope="col">Release event</th></tr></thead>
+          <tbody data-semantic-rows>
+            <tr><th scope="row">Request</th><td data-label="State">idle</td><td data-label="Owner">Task transport</td><td data-label="Release event">Typed completion, timeout, or cancellation</td></tr>
+            <tr><th scope="row">Authorization</th><td data-label="State">unknown</td><td data-label="Owner">Policy decision</td><td data-label="Release event">Authorized projection or explicit hold</td></tr>
+            <tr><th scope="row">Transaction</th><td data-label="State">unstarted</td><td data-label="Owner">Persistence adapter</td><td data-label="Release event">Commit or rollback, then connection return</td></tr>
+            <tr><th scope="row">Receipt</th><td data-label="State">absent</td><td data-label="Owner">Service boundary</td><td data-label="Release event">Accepted or rejected durable receipt</td></tr>
+            <tr><th scope="row">Cache</th><td data-label="State">absent</td><td data-label="Owner">Projection adapter</td><td data-label="Release event">Scoped refresh or invalidation</td></tr>
+            <tr><th scope="row">AI call</th><td data-label="State">unstarted</td><td data-label="Owner">Bounded caller</td><td data-label="Release event">Budget stop, typed cancellation, and labeled result</td></tr>
+            <tr><th scope="row">Disclosure</th><td data-label="State">compact</td><td data-label="Owner">Visitor control</td><td data-label="Release event">Compact or expanded view</td></tr>
+            <tr><th scope="row">Decision</th><td data-label="State">open</td><td data-label="Owner">Named human receiver</td><td data-label="Release event">Accepted or revised decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="timeline-field" aria-labelledby="timeline-title">
+      <div class="section-heading">
+        <p class="eyebrow">Observable receipt</p>
+        <h2 id="timeline-title">Follow the transition history</h2>
+      </div>
+      <ol class="timeline" data-timeline></ol>
+      <details class="machine-reading">
+        <summary>Inspect the current machine-readable projection</summary>
+        <pre><code data-machine-reading></code></pre>
+      </details>
+    </section>
+
+    <section class="boundary" aria-labelledby="boundary-title">
+      <h2 id="boundary-title">What this lab establishes</h2>
+      <p>The deterministic fixtures establish the relationship between accepted state, candidate state, release ownership, and visitor-visible recovery in this implementation. Production authorization, database correctness, model quality, and service reliability retain their own runtime owners and evidence.</p>
+    </section>
+
+    <template id="service-boundary-fixture">
+      {
+        "accepted": {
+          "id": "synthetic-case-0142",
+          "revision": 7,
+          "status": "assembled",
+          "owner": "Example review team",
+          "nextAction": "Prepare the review-ready candidate",
+          "sourceId": "synthetic-case-0142"
+        },
+        "command": {
+          "id": "command-review-0142",
+          "task": "Prepare one review-ready synthetic case",
+          "actor": "review-coordinator",
+          "role": "authorized-reviewer",
+          "tenant": "example-research-team",
+          "policyScope": "case-review",
+          "policyRevision": "policy-2026-10",
+          "representation": "operational-summary",
+          "sourceId": "synthetic-case-0142",
+          "baseRevision": 7,
+          "idempotencyKey": "review-0142-r7",
+          "proposedStatus": "review-ready"
+        }
+      }
+    </template>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import test from "node:test";
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
+
+const routeAuthority = await loadSourceRouteAuthority();
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const visitorSurfaceRoot = join(
@@ -104,24 +107,6 @@ const expectedCarrierInventory = [
   ],
   [
     primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/",
-    "Interactive Cross-Functional Investment Studio",
-    "eager",
-  ],
-  [
-    primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/prompt-conditions-explorer/",
-    "Prompt Conditions Routing Explorer",
-    "lazy",
-  ],
-  [
-    primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/heatmap-comparison/",
-    "Interactive before and after heatmap comparison",
-    "lazy",
-  ],
-  [
-    primaryIndexOwner,
     "https://iframes.vik.guru/v1/canvas/ai-method-gallery/",
     "Interactive AI and ML method gallery",
     "lazy",
@@ -177,7 +162,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     "https://iframes.vik.guru/v1/canvas/who-to-believe-context-tree/",
-    "Interactive Who To Believe Context Tree",
+    "Interactive Reviews Generation Platform Context Tree",
     "lazy",
   ],
   [
@@ -202,8 +187,6 @@ const expectedCarrierInventory = [
 
 const expectedDuplicateRouteCounts = [
   ["https://iframes.vik.guru/v1/canvas/ai-method-gallery/", 2],
-  ["https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/", 2],
-  ["https://iframes.vik.guru/v1/canvas/heatmap-comparison/", 2],
   ["https://iframes.vik.guru/v1/canvas/registry-goal-fidelity/", 2],
   ["https://iframes.vik.guru/v1/core/strategy-canvas/", 2],
 ];
@@ -295,11 +278,9 @@ async function discoverVisitorCarriers() {
   const htmlPaths = await filesWithin(visitorSurfaceRoot, (path) => path.endsWith(".html"));
   for (const path of htmlPaths) {
     const html = await readFile(path, "utf8");
-    assert.doesNotMatch(
-      html,
-      /<!--[\s\S]*?<iframe\b[\s\S]*?-->/iu,
-      `${repositoryPath(path)} does not hide a carrier in an HTML comment`,
-    );
+    for (const [comment] of html.matchAll(/<!--[\s\S]*?-->/gu)) {
+      assert.doesNotMatch(comment, /<iframe\b/iu, `${repositoryPath(path)} has a commented iframe`);
+    }
     const openingTags = [...html.matchAll(/<iframe\b[^>]*>/giu)];
     const completeTags = [...html.matchAll(/(<iframe\b[^>]*>)([\s\S]*?)<\/iframe>/giu)];
     assert.equal(
@@ -317,12 +298,12 @@ async function discoverVisitorCarriers() {
       carriers.push({
         allow: attributeValue(tag, "allow"),
         blocks: enclosingSemanticBlocks(html, opening.index),
-        loading: attributeValue(tag, "loading"),
+        loading: attributeValue(tag, "loading") ?? "eager",
         owner: repositoryPath(path),
         ownerPath: path,
         referrerpolicy: attributeValue(tag, "referrerpolicy"),
         sandbox: attributeValue(tag, "sandbox"),
-        src: attributeValue(tag, "src"),
+        src: resolveSourceRouteValue(attributeValue(tag, "src"), routeAuthority),
         tag,
         title: attributeValue(tag, "title"),
       });
@@ -360,17 +341,17 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
     expectedCarrierInventory,
     "the authored owner, route, title, loading, and source order stay explicit",
   );
-  assert.equal(carriers.length, 28, "the visitor source owns 28 iframe occurrences");
-  assert.equal(new Set(carriers.map(({ src }) => src)).size, 23, "the carriers use 23 routes");
+  assert.equal(carriers.length, 25, "the visitor source owns 25 iframe occurrences");
+  assert.equal(new Set(carriers.map(({ src }) => src)).size, 22, "the carriers use 22 routes");
   assert.equal(new Set(carriers.map(({ owner }) => owner)).size, 18, "18 visitor files own carriers");
   const canvasCarriers = carriers.filter(({ src }) =>
     src.startsWith("https://iframes.vik.guru/v1/canvas/"));
-  assert.equal(canvasCarriers.length, 19, "the Canvas manifest owns 19 carrier occurrences");
-  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 15, "the Canvas carriers use 15 routes");
+  assert.equal(canvasCarriers.length, 16, "the Canvas manifest owns 16 carrier occurrences");
+  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 14, "the Canvas carriers use 14 routes");
   assert.deepEqual(
     routeCountEntries(carriers).filter(([, count]) => count > 1),
     expectedDuplicateRouteCounts,
-    "only the five declared routes have duplicate carriers",
+    "the three declared routes have duplicate carriers",
   );
 
   for (const carrier of carriers) {
@@ -422,7 +403,11 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
         .filter((identity) => identity !== null),
     );
     assert.ok(
-      localAnchorIdentities.some((identities) => identities.includes(sourceIdentity)),
+      localAnchorIdentities.some((identities) => identities.includes(
+        profile.route.id === "investment-studio-chapters"
+          ? "collaboration/initiative-costing-calculator/index.html"
+          : sourceIdentity,
+      )),
       `${label} retains a repository-local full-view source identity in a containing semantic block`,
     );
   }
@@ -452,17 +437,17 @@ test("the Who To Believe Context Tree sits beside outcomes in an expanded viewin
   assert.ok(contextTree < outcomes, "the Context Tree prepares the outcome reading");
   assert.match(
     html,
-    /\.wtb-context-embed iframe\s*\{[^}]*block-size:\s*clamp\(58rem,\s*calc\(78vh \+ 16rem\),\s*78rem\)/u,
+    /\.wtb-context-embed iframe\s*\{[^}]*block-size:\s*clamp\(58rem,\s*(?:calc\(78vh \+ 16rem\)|78vh \+ 16rem),\s*78rem\)/u,
     "the default iframe frame adds 256px to its visible range",
   );
   assert.match(
     html,
-    /@media screen and \(max-width: 42rem\)[\s\S]*?\.wtb-context-embed iframe\s*\{\s*block-size:\s*76rem;/u,
+    /@media screen and \((?:max-width:\s*42rem|width\s*<=\s*42rem)\)[\s\S]*?\.wtb-context-embed iframe\s*\{\s*block-size:\s*76rem\s*[;}]/u,
     "the narrow frame carries the complete first role card into view",
   );
 });
 
-test("the retained cobalt exemplar keeps exact carrier parity with the primary index", async () => {
+test("the retained cobalt exemplar keeps its heatmap and parity for shared primary-index carriers", async () => {
   const carriers = await discoverVisitorCarriers();
   const exemplars = carriers.filter(({ owner }) => owner === exemplarOwner);
   const primary = carriers.filter(({ owner }) => owner === primaryIndexOwner);
@@ -475,7 +460,23 @@ test("the retained cobalt exemplar keeps exact carrier parity with the primary i
       "https://iframes.vik.guru/v1/canvas/ai-method-gallery/",
     ],
   );
-  for (const exemplar of exemplars) {
+  const shared = exemplars.filter(({ src }) => src.endsWith('/ai-method-gallery/'));
+  assert.equal(shared.length, 1, "Gallery retains its shared carrier boundary");
+  assert.equal(primary.some(({ src }) => src.endsWith('/investment-studio-chapters/')), false,
+    "About receives the native Studio while the exemplar keeps the complete original");
+  const about = await readFile(join(repositoryRoot, primaryIndexOwner), "utf8");
+  assert.match(about, /<div\b[^>]*\bdata-native-coordination(?:\s|>)/u,
+    "the About receiver mounts the native plan in its ordinary document flow");
+  const canvasManifest = JSON.parse(await readFile(canvasRouteManifestPath, "utf8"));
+  assert.deepEqual(canvasManifest.routes.filter(({ id }) =>
+    ["cross-functional-investment-studio", "investment-studio-chapters"].includes(id))
+    .map(({ id, source_file }) => [id, source_file]), [
+      ["cross-functional-investment-studio", "collaboration/initiative-costing-calculator/index.html"],
+      ["investment-studio-chapters", "collaboration/about-investment-studio-chapters/index.html"],
+    ], "both established standalone Studio route owners remain available");
+  assert.equal(primary.some(({ src }) => src.endsWith('/heatmap-comparison/')), false,
+    "the concise About leaves the heatmap with its standalone owner");
+  for (const exemplar of shared) {
     const twin = primary.find(({ src }) => src === exemplar.src);
     assert.ok(twin, `${exemplar.src} has a primary-index twin`);
     assert.deepEqual(

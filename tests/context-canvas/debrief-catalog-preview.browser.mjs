@@ -20,10 +20,10 @@ const localRoute = resolve(
 const expectedCaseBriefFields = [
   "Situation and stakes",
   "Scope and role",
-  "Core constraint",
+  "Challenges",
   "Key decision",
-  "Outcome and evidence",
-  "Relevance now",
+  "Results",
+  "What this enables",
 ];
 const expectedEhrRoutes = [
   "ehr-discrete-genomic-result.html",
@@ -92,10 +92,10 @@ async function focusPreview(page, cardSelector) {
         width: preferred("width"),
         height: preferred("height"),
         alt: expectedAlt,
-        caption: `Preview visual — ${expectedCaption}`,
+        caption: expectedCaption,
         linkLabel: card?.getAttribute("data-formats") === "article"
-          ? "Open the Article"
-          : "Read the Full Debrief",
+          ? "Read Article"
+          : "Read Case Study",
       },
       actual: {
         src: attr(previewImage, "src"),
@@ -241,6 +241,8 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   assert.equal(await second.evaluate(node => node.open), false);
   assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
 
+  const closedFirstHeight = (await first.boundingBox()).height;
+  const closedSecondHeight = (await second.boundingBox()).height;
   await firstSummary.focus();
   await firstSummary.press("Tab");
   await page.keyboard.press("Shift+Tab");
@@ -263,6 +265,7 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   assert.equal(await second.evaluate(node => node.open), false);
   assert.deepEqual(await visibleState(first), { expand: false, collapse: true });
 
+  assert.equal((await second.boundingBox()).height, closedSecondHeight, "Opening Solution preserves the closed Implementation height");
   await secondSummary.click();
   assert.equal(await first.evaluate(node => node.open), true, `${articleSelector} disclosures should remain independent`);
   assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} second disclosure should open independently`);
@@ -270,6 +273,7 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   await firstSummary.click();
   assert.equal(await first.evaluate(node => node.open), false);
   assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} closing one disclosure should preserve the other`);
+  assert.equal((await first.boundingBox()).height, closedFirstHeight, "An open Implementation preserves the closed Solution height");
   assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
 }
 
@@ -288,6 +292,10 @@ for (const width of [390, 1440]) {
 
     const responsive = await focusPreview(page, "#catalog-genomic-viewer");
     assert.deepEqual(responsive.actual, responsive.expected);
+    const facts = page.locator("[data-preview-entry] .debrief-preview-facts");
+    assert.equal(await facts.isVisible(), true);
+    assert.equal(await facts.getByText("Available formats", { exact: true }).count(), 0);
+    assert.equal(await page.locator("[data-preview-formats]").count(), 0);
     assert.ok(responsive.actual.srcset, "the WebP preview exposes responsive candidates");
     assert.ok(responsive.actual.sizes, "the WebP preview exposes its rendered-size hint");
 
@@ -327,6 +335,56 @@ for (const width of [390, 1440]) {
   });
 }
 
+test("laptop previews fit and return to the filtered collection", async t => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  t.after(() => page.close());
+  await page.goto(server.origin + route);
+  await page.evaluate(() => document.fonts.ready);
+
+  const panel = page.locator("[data-debrief-preview]");
+  const overview = panel.locator("[data-preview-default]");
+  const back = panel.getByRole("button", { name: "Collection at a glance" });
+  const cards = page.locator("[data-debrief-list] > [data-formats]");
+  const scroller = panel.locator(".debrief-catalog__preview-inner");
+
+  for (const card of await cards.all()) {
+    const link = card.locator("a[href]").first();
+    await link.focus();
+    await settlePreviewImage(page);
+    assert.equal(await panel.locator("[data-preview-image-link]").getAttribute("href"), await link.getAttribute("href"));
+    assert.equal(await panel.locator("[data-preview-link]").getAttribute("href"), await link.getAttribute("href"));
+    assert.ok(await scroller.evaluate(el => el.scrollHeight <= el.clientHeight + 1), await card.getAttribute("id"));
+  }
+
+  await back.press("Enter");
+  assert.equal(await overview.getByRole("heading", { name: "Collection at a glance" }).evaluate(el => el === document.activeElement), true);
+  const article = overview.getByRole("button", { name: /Article/ });
+  await article.click();
+  const research = overview.getByRole("button", { name: /Research/ });
+  await research.press("Space");
+  const filteredUrl = page.url();
+  assert.equal(new URL(filteredUrl).searchParams.get("topic"), "research");
+  await cards.filter({ visible: true }).first().hover();
+  assert.equal(await panel.getByRole("link", { name: "Read Article", exact: true }).isVisible(), true);
+  await back.click();
+  assert.equal(page.url(), filteredUrl);
+  assert.equal(await article.getAttribute("aria-pressed"), "true");
+  assert.equal(await research.getAttribute("aria-pressed"), "true");
+
+  await overview.getByRole("button", { name: "Clear filters" }).click();
+  await overview.getByRole("button", { name: /Case Study/ }).click();
+  const ehrLink = page.locator(".debrief-card__full-index-list a").last();
+  await ehrLink.focus();
+  for (const selector of ["[data-preview-image-link]", "[data-preview-link]"]) {
+    assert.equal(await panel.locator(selector).getAttribute("href"), expectedEhrRoutes.at(-1));
+  }
+  assert.equal(await panel.locator("h4[data-preview-slug]").innerText(), await ehrLink.innerText());
+  await back.press("Enter");
+  await overview.getByRole("button", { name: /Summary/ }).press("Enter");
+  assert.equal(await panel.isVisible(), false);
+  assert.equal(await page.locator("#debrief-filter-case-brief").evaluate(el => el === document.activeElement), true);
+});
+
 for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
   test(`Case Brief mode reveals static source-owned scans with stable badge geometry at ${width}px`, async t => {
     const context = await browser.newContext({
@@ -350,7 +408,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
 
     for (const article of projection.articles) {
       assert.deepEqual(
-        article.fieldLabels,
+        article.fieldLabels.map((label, index) => index === 1 ? label.split(" · ")[0] : label),
         expectedCaseBriefFields,
         `${article.route} should project the ordered six-field scan`,
       );
@@ -383,28 +441,10 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       );
       assert.deepEqual(
         article.actions,
-        [{ label: "Read the Full Debrief", href: article.route }],
+        [{ label: "Read the Case Study", href: article.route }],
         `${article.route} should continue into its fragment-free complete reading`,
       );
-      if (article.route === "choose-your-player-humatics.html") {
-        assert.match(
-          article.trackIntro?.text || "",
-          /client meeting, field inquiry, and two-day reframe/u,
-          `${article.route} should retain its source-owned narrative orientation`,
-        );
-        assert.deepEqual(
-          article.trackIntro?.links,
-          ["choose-your-player-humatics.html#narrative-architecture-title"],
-          `${article.route} should qualify its narrative-track link for HTTP and direct-file viewing`,
-        );
-        assert.deepEqual(
-          article.trackIntro?.gridColumn,
-          ["1", "-1"],
-          `${article.route} should keep its introduction above both independent quick scans`,
-        );
-      } else {
-        assert.equal(article.trackIntro, null, `${article.route} should add no unowned track introduction`);
-      }
+      assert.equal(article.trackIntro, null, `${article.route} presents its quick scans directly`);
     }
 
     assert.equal(projection.eras.length, 12);
@@ -424,7 +464,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       .sort();
     assert.deepEqual(ehrRoutes, expectedEhrRoutes.slice().sort(), "the EHR series remains five distinct Case Brief panels");
 
-    if (width === 390 || width === 1440) {
+    if ([390, 1024, 1440].includes(width)) {
       await exerciseIndependentDisclosures(
         page,
         '[data-card-case-briefs] > .debrief-card__case-brief[data-case-brief-route="genomic-viewer-replatforming.html"]',
@@ -441,7 +481,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
     const repeated = await inspectCaseBriefProjection(page);
     assert.equal(repeated.articles.length, 16, "repeated mode changes should clone each projection once");
     assert.equal(new Set(repeated.articles.map(article => article.route)).size, 16);
-    if (width === 390 || width === 1440) {
+    if ([390, 1024, 1440].includes(width)) {
       const retained = page.locator(
         '[data-case-brief-route="genomic-viewer-replatforming.html"] details[data-case-brief-track="implementation"]',
       );
@@ -455,12 +495,32 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       await retained.evaluate(node => node.removeAttribute("data-test-cycle-identity"));
     }
 
-    assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 Case Briefs across 12 catalog cases/u);
+    assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 summaries across 12 catalog cases/u);
     assertTelemetry(telemetry);
   });
 }
 
-test("the Humatics quick-scan introduction carries visitors to its qualified narrative track", async t => {
+test("the catalog shows the shared introduction and the case study opens with its fields", async t => {
+  const page = await browser.newPage();
+  t.after(() => page.close());
+  await page.goto(server.origin + route);
+  await chooseCaseBriefMode(page);
+  const study = "genomic-viewer-replatforming.html";
+  const summary = page.locator(`[data-case-brief-route="${study}"] > .debrief-preview-slug`);
+  assert.ok(await summary.isVisible());
+  const wording = (await summary.textContent()).replace(/\s+/gu, " ").trim();
+  assert.ok(wording.length > 0);
+
+  await page.goto(new URL(study, page.url()).href);
+  const glance = page.locator("#case-brief");
+  const introduction = glance.locator("h2 + p");
+  assert.equal((await introduction.textContent()).replace(/\s+/gu, " ").trim(), wording);
+  assert.equal(await introduction.isVisible(), false);
+  assert.ok(await glance.locator("dl").isVisible());
+  assert.ok(await glance.locator("dl + p").isVisible());
+});
+
+test("an optional quick-scan introduction carries visitors to its qualified narrative track", async t => {
   const context = await browser.newContext({
     viewport: { width: 736, height: 1000 },
     reducedMotion: "reduce",
@@ -471,6 +531,10 @@ test("the Humatics quick-scan introduction carries visitors to its qualified nar
   const telemetry = monitor(page);
 
   await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await page.locator('template[data-case-brief-projection="choose-your-player-humatics.html"]').evaluate(template => {
+    const heading = template.content.querySelector(".debrief-case-brief__track-group-title");
+    heading.insertAdjacentHTML("afterend", '<p class="debrief-case-brief__track-intro">Read the <a href="choose-your-player-humatics.html#narrative-architecture-title">narrative track</a>.</p>');
+  });
   await chooseCaseBriefMode(page);
   await waitForCaseBriefProjection(page);
 
@@ -481,6 +545,10 @@ test("the Humatics quick-scan introduction carries visitors to its qualified nar
   assert.equal(
     await link.getAttribute("href"),
     "choose-your-player-humatics.html#narrative-architecture-title",
+  );
+  assert.deepEqual(
+    await link.evaluate(node => [getComputedStyle(node.parentElement).gridColumnStart, getComputedStyle(node.parentElement).gridColumnEnd]),
+    ["1", "-1"],
   );
   assertTelemetry(telemetry);
   await link.click();
@@ -502,7 +570,7 @@ test("an unknown track-group child rejects one projection as an atomic fallback"
     const response = await intercepted.fetch();
     const body = await response.text();
     const malformed = body.replace(
-      /(<template\b(?=[^>]*\bdata-case-brief-projection="choose-your-player-humatics\.html")[^>]*>[\s\S]*?<h4 class="txt-h4 debrief-case-brief__track-group-title">[^<]+<\/h4>)/u,
+      /(<template\b(?=[^>]*\bdata-case-brief-projection="choose-your-player-humatics\.html")[^>]*>[\s\S]*?<h4\s+class="txt-h4 debrief-case-brief__track-group-title"\s*>[^<]+<\/h4>)/u,
       '$1\n      <div data-unexpected-track-child="">Unowned projection content</div>',
     );
     assert.notEqual(malformed, body, "the fixture should alter the intended Humatics projection");
@@ -595,12 +663,12 @@ test("a missing EHR projection retains its complete ordinary card as one atomic 
     ordinaryTextVisible: true,
     compactHidden: true,
     compactArticles: 0,
-    fullRouteLabel: "Read the Full Debrief for the first EHR Integration Series reading...",
+    fullRouteLabel: "Read the Case Study for the first EHR Integration Series reading...",
     fullRouteHref: "ehr-discrete-genomic-result.html",
   });
   assert.equal(
     (await page.locator("[data-filter-status]").textContent()).trim(),
-    "11 of 16 Case Briefs are displayed in the catalog. 5 Full Debrief routes remain available in their catalog cards.",
+    "11 of 16 summaries are displayed in the catalog. 5 case studies remain available in their catalog cards.",
   );
 
   assertTelemetry(telemetry);
@@ -778,11 +846,11 @@ test("the Full Debrief index names every EHR reading from its route-specific nav
     links.map(link => link.textContent.replace(/\s+/g, " ").trim())
   ));
   assert.deepEqual(labels, [
-    "SR1 · Partial The Discrete Result That Kept Arriving as a PDF",
-    "SR2 · Pivoted Two Charts, One Result",
-    "SR3 · Successful Three Front Doors",
-    "SR4 · Failed The Alert Nobody Clicked",
-    "SR5 · Partial Re-platforming the Backbone",
+    "SR1 · Partial How to Deliver Discrete Genomics Data in Epic",
+    "SR2 · Pivoted How to Normalize EHR Results Once Before Emitting",
+    "SR3 · Successful How to Keep Patient Records Consistent Across Three EHRs",
+    "SR4 · Failed I Designed an Alert that Nobody Clicked",
+    "SR5 · Partial How to Migrate Without Dropping Results",
   ]);
   assertTelemetry(telemetry);
 });

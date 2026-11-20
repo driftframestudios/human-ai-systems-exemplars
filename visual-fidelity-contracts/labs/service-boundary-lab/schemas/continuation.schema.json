@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-continuation.v1.schema.json",
+  "title": "Visual Fidelity stable continuation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["snapshotRevision", "sortKey", "id"],
+  "properties": {
+    "snapshotRevision": { "type": "integer", "minimum": 1 },
+    "sortKey": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "id": { "type": "string", "minLength": 1, "maxLength": 160 }
+  }
+}

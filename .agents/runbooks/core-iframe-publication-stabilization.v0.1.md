@@ -1,6 +1,6 @@
 ---
 title: Iframe and production publication stabilization
-version: 0.1.8
+version: 0.1.9
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -28,6 +28,27 @@ historical receipts; they supply precedent while #540 carries the current
 release coordinate. #464 preserves the immutable v0.3.0 receipt. #72 and #102
 continue to own iframe activation and parent-carrier response observations,
 and #531 records the accepted current schema delivery.
+
+The latest exercised receiver is `production-v0.4.0`. Its iframe closure
+passes exact bytes and policy for 68/68 files. Its primary closure passes all
+435 declared media types and every baseline header check. Carrier-controlled
+bytes remain bound to the release; live receipts classify Cloudflare's
+intentional Bot Preference Sync preamble and Email Address Obfuscation rewrite
+as managed edge projections. The apex redirect, nine primary media-type
+corrections, and scoped primary-HTML response inspection are settled receiver
+behavior. The origin-owned authored 404 mapping, cache classes, HSTS, CSP, and
+private prior-root recovery record remain explicit follow-up owners in Issue
+#540.
+
+The 2026-10-19 primary acceptance pass observed 435/435 routes with the
+expected status, media type, `nosniff`, and referrer policy. All 84 transformed
+HTML responses recovered the exact authored bytes after reversing only the
+declared Cloudflare email rewrite and JavaScript Detections injection. Direct
+comparison found 350/351 non-HTML routes byte-exact; `robots.txt` carried the
+intentional managed preamble.
+Representative Chromium and WebKit checks kept the public contact address
+visible to the accessibility tree. Treat email-shaped technical coordinates
+and CSP-restricted prototypes as a bounded parser-compatibility follow-up.
 
 Completion is one accepted `main` coordinate whose source, exact aggregate iframe
 package, primary and iframe cPanel closures, reviewed promotion, observed-live
@@ -446,8 +467,10 @@ threshold.
 route status, media type, intended response posture, and byte parity for the
 complete manifest closure. Phase 6 establishes the parent-child framing
 relationships. #540 separately owns the primary site's signed-out status,
-media type, response, 404, and manifest-byte observations; that acceptance
-remains open until its bounded live packet is recorded.
+media type, response, 404, and manifest-byte observations. Its v0.4.0 bounded
+live packet records zero unexplained carrier-controlled drift; managed edge
+projections receive their own expected-difference classification. The
+origin-owned host-policy follow-ups remain visible there.
 
 **Recovery and stop:** A byte mismatch, unexpected Cloudflare mutation,
 incorrect media type, blocked frame, wider permission need, or protected-origin

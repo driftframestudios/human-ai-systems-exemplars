@@ -1,0 +1,10 @@
+{
+  "collapseWhitespace": true,
+  "conservativeCollapse": true,
+  "removeRedundantAttributes": true,
+  "removeDefaultTypeAttributes": true,
+  "useShortDoctype": true,
+  "minifyCSS": true,
+  "minifySVG": true,
+  "removeAttributeQuotes": false
+}

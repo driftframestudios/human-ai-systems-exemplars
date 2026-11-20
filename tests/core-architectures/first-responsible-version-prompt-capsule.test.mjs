@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -67,13 +68,13 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
   assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
 
   assert.doesNotMatch(html, /PROMPT_CAPSULE_STATIC_BASELINE/u);
-  assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
-  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT = 'first-responsible-version-matrix-state\.v0\.1';/u);
+  assert.match(html, /const PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0';/u);
+  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT\s*=\s*'first-responsible-version-matrix-state\.v0\.1';/u);
   assert.match(html, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
   assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
   assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
   assert.match(html, /<noscript>[\s\S]*?complete default plain Markdown remains available/u);
-  assert.match(html, /window\.firstResponsibleVersionMatrix = Object\.freeze\(/u);
+  assert.match(html, /window\.firstResponsibleVersionMatrix\s*=\s*Object\.freeze\(/u);
 
   const orderedSections = [
     "## Purpose and target",
@@ -132,10 +133,10 @@ test("First Responsible Version Matrix pins the exact public skills it offers", 
     [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
   ];
 
-  assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}';`, "u"));
+  const script = readPrototypeScript(html);
+  assert.equal(script.initializer('PROMPT_CAPSULE_SKILL_REVISION').slice(1, -1), skillRevision);
   for (const [path, expectedDigest] of skills) {
     assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
-    assert.ok(html.includes(`path: '${path}'`));
-    assert.ok(html.includes(`sha256: '${expectedDigest}'`));
+    assert.ok(script.hasSkillCoordinate(path, expectedDigest));
   }
 });

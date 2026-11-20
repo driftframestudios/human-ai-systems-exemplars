@@ -411,6 +411,19 @@ class _TableParser(HTMLParser):
             self._push(tag)
 
     def handle_startendtag(self, tag, attrs):
+        # An SVG icon can use an empty-element tag in a caption or a cell.
+        # foreignObject, desc and title return child elements to HTML parsing.
+        if self.table is not None:
+            parent_namespace = next((
+                parent for parent in reversed(self.stack)
+                if parent in ("svg", "foreignobject", "desc", "title")
+            ), None)
+            if tag == "svg" or (parent_namespace == "svg" and tag in (
+                "path", "circle", "ellipse", "line", "polygon", "polyline", "rect", "use",
+            )):
+                self.handle_starttag(tag, attrs)
+                self.handle_endtag(tag)
+                return
         if tag == "table" or (self.table is not None and tag not in VOID):
             raise ProjectionError(Failure.MALFORMED, "Table content requires explicit paired source tags")
         self.handle_starttag(tag, attrs)

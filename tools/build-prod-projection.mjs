@@ -1,5 +1,8 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
+import { compactDeliveryBytes } from "./cpanel-format.mjs";
+import { createDirectoryRoutes, mapImageCandidates, projectScriptUrls } from "./cpanel-directory-routes.mjs";
+import { withGitBlobReader } from "./package-prod-carrier-transfer.mjs";
 import { execFile } from "node:child_process";
 import {
   lstat,
@@ -32,9 +35,11 @@ import {
   decorateCanvasPublicDocument,
 } from "./package-canvas-iframe-routes.mjs";
 import {
-  inspectProfessionalProfileScript,
+  inspectPublicReferenceSitemap,
+  inspectSharedFooterScript,
   inspectPublicReferenceHtml,
-  materializeProfessionalProfileScript,
+  materializePublicReferenceSitemap,
+  materializeSharedFooterScript,
   materializePublicReferenceHtml,
   PUBLIC_REFERENCE_NAMESPACE,
   resolvePublicReferenceDestinations,
@@ -45,6 +50,23 @@ import {
   parseRegistryReferenceBinding,
   verifyRegistryAtlasDataUse,
 } from "./registry-reference-contract.mjs";
+import {
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_AUTHORITY_PATHS,
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+  parsePublicRouteReferenceBinding,
+} from "./public-route-reference-contract.mjs";
+import {
+  DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH,
+  parseExternalReferenceBinding,
+} from "./external-reference-contract.mjs";
+import {
+  CONTEXT_CANVAS_SOURCE_ROOT,
+  formatContextCanvasHeadRouteDiagnostics,
+  validateContextCanvasHeadRoutes,
+} from "./context-canvas-head-route-validator.mjs";
+import {
+  createContextCanvasHeadAuthority,
+} from "./check-context-canvas-head-routes.mjs";
 
 const execFileAsync = promisify(execFile);
 const toolPath = fileURLToPath(import.meta.url);
@@ -80,6 +102,22 @@ const productionRegistryReferenceBinding = path
 const productionPublicReferenceCoordinationRoot =
   path.posix.dirname(productionRegistryReferenceBinding);
 const productionRegistryDataUseNotice = REGISTRY_ATLAS_DATA_USE_NOTICE;
+const productionExternalReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
+const productionRouteReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
+const productionRouteReferenceAuthorityPaths = Object.freeze(Object.fromEntries(
+  Object.entries(DEFAULT_PUBLIC_ROUTE_REFERENCE_AUTHORITY_PATHS).map(
+    ([key, absolutePath]) => [
+      key,
+      path.relative(repositoryRoot, absolutePath).split(path.sep).join(path.posix.sep),
+    ],
+  ),
+));
 const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
 const contextCoreManifestPath =
   "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json";
@@ -407,6 +445,18 @@ function validateCssProjectionConfiguration(cssProjection) {
 
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
+  if (Object.hasOwn(configuration ?? {}, "directory_index_names")) {
+    keys.push("directory_index_names");
+    if (!isPlainObject(configuration.directory_index_names) || !configuration.delivery_profile) {
+      fail("Directory index names require a folder-index delivery profile and an object of names.");
+    }
+  }
+  if (Object.hasOwn(configuration ?? {}, "delivery_profile")) {
+    keys.push("delivery_profile");
+    if (configuration.delivery_profile !== "folder-index-v1" || !configuration.publication) {
+      fail("The folder-index-v1 delivery profile requires publication configuration.");
+    }
+  }
   if (Object.hasOwn(configuration ?? {}, "asset_inventory")) {
     keys.push("asset_inventory");
   }
@@ -871,11 +921,17 @@ function parseJsonBytes(bytes, label) {
   }
 }
 
-export async function loadProductionProjectionInputs(
-  configurationPath,
-  options = {},
-) {
+function withProjectionBlobReader(options, run) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withGitBlobReader(root, { maxBlobBytes: 128 * 1024 * 1024 }, readBlob => run(root, readBlob));
+}
+
+export async function loadProductionProjectionInputs(configurationPath, options = {}) {
+  return withProjectionBlobReader(options,
+    (root, readBlob) => loadProjectionSelection(root, readBlob, configurationPath, options));
+}
+
+async function loadProjectionSelection(root, readBlob, configurationPath, options) {
   const currentSha = await readRepositorySourceSha(root, {
     allowCarrierOnlyDirty: options.allowCarrierOnlyDirty === true,
   });
@@ -914,6 +970,7 @@ export async function loadProductionProjectionInputs(
   const configurationInput = await readTrackedRepositoryInput(
     root,
     trackedBlobs,
+    readBlob,
     portableConfiguration,
     "Production projection configuration",
   );
@@ -923,6 +980,7 @@ export async function loadProductionProjectionInputs(
   const primaryManifestInput = await readTrackedRepositoryInput(
     root,
     trackedBlobs,
+    readBlob,
     configuration.primary_manifest,
     "Primary route manifest",
   );
@@ -935,6 +993,7 @@ export async function loadProductionProjectionInputs(
     assetInventoryInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       configuration.asset_inventory,
       "Production asset inventory",
     );
@@ -1110,6 +1169,7 @@ async function readTrackedBlobIndex(root, sourceSha) {
 async function readTrackedRepositoryInput(
   root,
   trackedBlobs,
+  readBlob,
   sourcePath,
   label,
 ) {
@@ -1124,18 +1184,7 @@ async function readTrackedRepositoryInput(
   }
   const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
   await assertRegularFileWithin(root, sourceFile, label);
-  const { stdout: trackedBytes } = await execFileAsync(
-    "git",
-    ["cat-file", "blob", entry.object],
-    {
-      cwd: root,
-      encoding: "buffer",
-      maxBuffer: 128 * 1024 * 1024,
-    },
-  );
-  if (!Buffer.isBuffer(trackedBytes)) {
-    fail(`${label} could not be read from its tracked blob: ${sourcePath}.`);
-  }
+  const trackedBytes = await readBlob(entry.object);
   return { bytes: trackedBytes, object: entry.object };
 }
 
@@ -1710,10 +1759,12 @@ export function inspectImageDimensions(bytes, mediaType, label = "Image asset") 
 async function resolveProductionAssetInventory({
   root,
   trackedBlobs,
+  readBlob,
   trackedInputs,
   primaryManifest,
   primaryInputs,
   aggregatePlan,
+  compact,
   inventory,
 }) {
   if (inventory === null) return null;
@@ -1765,6 +1816,7 @@ async function resolveProductionAssetInventory({
     const input = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       family.semantic_authority_path,
       "Production asset semantic authority",
     );
@@ -1781,6 +1833,7 @@ async function resolveProductionAssetInventory({
       const input = await readTrackedRepositoryInput(
         root,
         trackedBlobs,
+        readBlob,
         sourcePath,
         `Production asset relationship ${label}`,
       );
@@ -1826,14 +1879,17 @@ async function resolveProductionAssetInventory({
       sourceInput = await readTrackedRepositoryInput(
         root,
         trackedBlobs,
+        readBlob,
         sourcePath,
         "Production-selected iframe asset source",
       );
       trackedInputs.set(sourcePath, sourceInput);
     }
+    const expectedBytes = compact && selection.iframe_paths.size
+      ? await compact(sourcePath, sourceInput.bytes) : sourceInput.bytes;
     for (const iframePath of selection.iframe_paths) {
       const iframeBytes = aggregatePlan.outputFiles.get(iframePath);
-      if (!Buffer.isBuffer(iframeBytes) || !iframeBytes.equals(sourceInput.bytes)) {
+      if (!Buffer.isBuffer(iframeBytes) || !iframeBytes.equals(expectedBytes)) {
         fail(
           `Iframe production asset bytes differ from canonical source ${sourcePath} at ` +
           `${iframePath}.`,
@@ -2162,18 +2218,9 @@ function rewriteSrcset(
   projectedPaths,
   options,
 ) {
-  return value.replace(/(^|,\s*)([^\s,]+)(?=\s|,|$)/g, (
-    carrier,
-    prefix,
-    reference,
-  ) => `${prefix}${projectedReference(
-    reference,
-    sourcePath,
-    sourceRoot,
-    trackedBlobs,
-    projectedPaths,
-    options,
-  )}`);
+  return mapImageCandidates(value, reference => projectedReference(
+    reference, sourcePath, sourceRoot, trackedBlobs, projectedPaths, options,
+  ));
 }
 
 function htmlAttributeValue(element, attribute) {
@@ -2605,14 +2652,13 @@ function aboutStylesheetGraph(html, label) {
         span.start >= noscript.contentStart && span.end <= noscript.contentEnd,
     });
   }
-  if (links.length !== 8) {
-    fail(`${label} must contain the exact eight-owner About stylesheet graph.`);
+  if (links.length !== 8 && links.length !== 17) {
+    fail(`${label} requires the eight-owner or seventeen-owner About stylesheet graph.`);
   }
-  const base = links.slice(0, 6);
-  const noscriptLink = links[6];
-  const shell = links[7];
+  const base = links.slice(0, -2);
+  const [noscriptLink, shell] = links.slice(-2);
   for (const [index, link] of base.entries()) {
-    if (link.inNoscript || link.media?.toLowerCase() !== "all") {
+    if (link.inNoscript || (link.media ?? "all").toLowerCase() !== "all") {
       fail(`${label} base stylesheet owner ${index + 1} must remain media=all in the document context.`);
     }
     if (
@@ -2627,8 +2673,8 @@ function aboutStylesheetGraph(html, label) {
       fail(`${label} base stylesheet owners must remain one contiguous loading run.`);
     }
   }
-  if (!noscriptLink.inNoscript || noscriptLink.media?.toLowerCase() !== "all") {
-    fail(`${label} seventh stylesheet must remain the media=all noscript owner.`);
+  if (!noscriptLink.inNoscript || (noscriptLink.media ?? "all").toLowerCase() !== "all") {
+    fail(`${label} penultimate stylesheet must remain the media=all noscript owner.`);
   }
   if (
     !ignorableHtmlRange(
@@ -2647,9 +2693,9 @@ function aboutStylesheetGraph(html, label) {
     fail(`${label} noscript owner must contain only its stylesheet link.`);
   }
   if (shell.inNoscript || shell.media !== undefined) {
-    fail(`${label} eighth stylesheet must remain the unqualified document shell owner.`);
+    fail(`${label} final stylesheet must remain the unqualified document shell owner.`);
   }
-  if (!(base[5].end <= noscript.start && noscript.end <= shell.start)) {
+  if (!(base.at(-1).end <= noscript.start && noscript.end <= shell.start)) {
     fail(`${label} stylesheet loading-context order has changed.`);
   }
   return {
@@ -2925,15 +2971,28 @@ function projectedCssSource(
       `${error instanceof Error ? error.message : error}`,
     );
   }
+  // CSSO's pinned parser retains these modern, bounded forms as raw syntax.
+  // Only the exact argument owned by ::picker(select) receives this exception.
+  const pickerArguments = new WeakSet();
   cssSyntax.walk(ast, function inspectCssNode(node) {
+    if (
+      node.type === "PseudoElementSelector" &&
+      node.name === "picker" &&
+      node.children?.head === node.children?.tail
+    ) {
+      const argument = node.children?.head?.data;
+      if (argument?.type === "Raw" && argument.value === "select") {
+        pickerArguments.add(argument);
+      }
+    }
     const boundedContainerPrelude =
       node.type === "Raw" &&
       this.atrule?.name?.toLowerCase() === "container" &&
       this.atrule.prelude === node &&
-      /^[a-z_][a-z0-9_-]*\s+\(\s*(?:min-|max-)?(?:width|height|inline-size|block-size)\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ch|vw|vh|vmin|vmax)\s*\)$/i.test(
+      /^(?:[a-z_][a-z0-9_-]*\s+)?\(\s*(?:min-|max-)?(?:width|height|inline-size|block-size)\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ch|vw|vh|vmin|vmax)\s*\)$/i.test(
         node.value,
       );
-    if (node.type === "Raw" && !boundedContainerPrelude) {
+    if (node.type === "Raw" && !boundedContainerPrelude && !pickerArguments.has(node)) {
       fail(
         `Production CSS projection rejects invalid or unsupported raw CSS in ${sourcePath}.`,
       );
@@ -3062,6 +3121,9 @@ export function projectAboutCssProfile({
     renderedConsumerBytes.toString("utf8"),
     "Rendered About consumer",
   );
+  if (renderedGraph.links.length !== sourceGraph.links.length) {
+    fail("Rendered About stylesheet graph differs in size from the tracked stylesheet graph.");
+  }
   for (const [index, sourceLink] of sourceGraph.links.entries()) {
     const expected = renderedAboutStylesheetHref(
       sourceLink.href,
@@ -3243,12 +3305,12 @@ function rewritePrimaryLocalReferences(
     ? rewriteOpeningTags(text, (element) => {
         let tag = rewritePublicationMetadataReferences(element, rewrite);
         tag = tag.replace(
-          /(^|\s)((?:href|src|poster|data|data-motion-src|data-still-src|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          /(^|\s)((?:href|src|poster|data|data-motion-src|data-still-src|data-catalog-preview-src|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
           (carrier, boundary, prefix, quote, reference) =>
             `${boundary}${prefix}${quote}${rewrite(reference)}${quote}`,
         );
         tag = tag.replace(
-          /(^|\s)((?:srcset|imagesrcset)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          /(^|\s)((?:srcset|imagesrcset|data-catalog-preview-srcset)\s*=\s*)(["'])([\s\S]*?)\3/gi,
           (carrier, boundary, prefix, quote, value) =>
             `${boundary}${prefix}${quote}${rewriteSrcset(
               value,
@@ -3657,6 +3719,8 @@ function transformPrimaryBytes(
   trackedBlobs,
   projectedPaths,
   destinations,
+  routeDestinations,
+  externalDestinations,
   absoluteProjectionUrls,
   onResolvedReference,
 ) {
@@ -3701,15 +3765,37 @@ function transformPrimaryBytes(
           text,
           destinations,
           materializerPath,
+          null,
+          routeDestinations,
+          externalDestinations,
         );
       }
-    } else if (extension === ".js" && text.includes("{{PUBLIC_URL")) {
-      const inspection = inspectProfessionalProfileScript(text, materializerPath);
+    } else if (
+      extension === ".xml" &&
+      path.posix.basename(file.source_path).toLowerCase() === "sitemap.xml" &&
+      text.includes("{{PUBLIC_URL")
+    ) {
+      const inspection = inspectPublicReferenceSitemap(
+        text,
+        materializerPath,
+        routeDestinations,
+      );
       if (inspection.occurrenceCount > 0) {
-        text = materializeProfessionalProfileScript(
+        text = materializePublicReferenceSitemap(
           text,
           destinations,
           materializerPath,
+          routeDestinations,
+        );
+      }
+    } else if (extension === ".js" && text.includes("{{PUBLIC_URL")) {
+      const inspection = inspectSharedFooterScript(text, materializerPath);
+      if (inspection.occurrenceCount > 0) {
+        text = materializeSharedFooterScript(
+          text,
+          destinations,
+          materializerPath,
+          externalDestinations,
         );
       }
     }
@@ -3774,11 +3860,57 @@ function publicReferenceMaterializerPath(sourcePath, sourceRoot) {
   return path.posix.relative(path.posix.dirname(sourceRoot), sourcePath);
 }
 
+function usesTrackedPublicRouteAuthority(key) {
+  return [
+    "PUBLIC_URL_PAGE_",
+    "PUBLIC_URL_ASSET_",
+    "PUBLIC_URL_IFRAME_",
+    "PUBLIC_URL_SCHEMA_",
+    "PUBLIC_URL_SKILL_",
+  ].some((prefix) => key.startsWith(prefix));
+}
+
+function carriesCompleteContextCanvasHeadPopulation(publication, primaryInputs) {
+  if (publication.source_root !== CONTEXT_CANVAS_SOURCE_ROOT) return false;
+  const indexedTopLevelPages = [...primaryInputs.keys()].filter((sourcePath) => {
+    if (!sourcePath.startsWith(`${CONTEXT_CANVAS_SOURCE_ROOT}/`)) return false;
+    const relative = path.posix.relative(CONTEXT_CANVAS_SOURCE_ROOT, sourcePath);
+    return !relative.includes("/") && relative.endsWith(".html") && relative !== "404.html";
+  });
+  return indexedTopLevelPages.length === 40 &&
+    primaryInputs.has(`${CONTEXT_CANVAS_SOURCE_ROOT}/sitemap.xml`);
+}
+
+async function readTrackedAuthorityInput(
+  root,
+  trackedBlobs,
+  readBlob,
+  trackedInputs,
+  sourcePath,
+  label,
+) {
+  if (trackedBlobs.get(sourcePath)?.mode !== "100644") {
+    fail(`${label} must be a tracked non-executable blob: ${sourcePath}.`);
+  }
+  const existing = trackedInputs.get(sourcePath);
+  if (existing !== undefined) return existing;
+  const input = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    readBlob,
+    sourcePath,
+    label,
+  );
+  trackedInputs.set(sourcePath, input);
+  return input;
+}
+
 async function loadPublicationInput(
   root,
   publication,
   primaryInputs,
   trackedBlobs,
+  readBlob,
   trackedInputs,
 ) {
   const configPath = path.resolve(root, productionPublicReferenceConfig);
@@ -3810,8 +3942,14 @@ async function loadPublicationInput(
     let inspection = null;
     if (extension === ".html") {
       inspection = inspectPublicReferenceHtml(source, safePath);
+    } else if (
+      extension === ".xml" &&
+      path.posix.basename(sourcePath).toLowerCase() === "sitemap.xml" &&
+      source.includes("{{PUBLIC_URL")
+    ) {
+      inspection = inspectPublicReferenceSitemap(source, safePath);
     } else if (extension === ".js" && source.includes("{{PUBLIC_URL")) {
-      inspection = inspectProfessionalProfileScript(source, safePath);
+      inspection = inspectSharedFooterScript(source, safePath);
     }
     for (const key of inspection?.keys ?? []) keys.add(key);
   }
@@ -3819,26 +3957,136 @@ async function loadPublicationInput(
   const registryKeys = sortedKeys.filter((key) =>
     key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
   );
+  const routeKeys = sortedKeys.filter(usesTrackedPublicRouteAuthority);
   const externalKeys = sortedKeys.filter((key) =>
-    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE) &&
+    !usesTrackedPublicRouteAuthority(key) &&
+    !key.startsWith("PUBLIC_URL_EXTERNAL_"),
+  );
+  const externalReferenceKeys = sortedKeys.filter((key) =>
+    key.startsWith("PUBLIC_URL_EXTERNAL_"),
   );
   const hasTrackedRegistryBinding = trackedBlobs.has(
     productionRegistryReferenceBinding,
   );
+  const hasTrackedRouteBinding = trackedBlobs.has(
+    productionRouteReferenceBinding,
+  );
+  const requiresRouteAuthority = routeKeys.length > 0 ||
+    carriesCompleteContextCanvasHeadPopulation(publication, primaryInputs);
+  if (registryKeys.length > 0 && !hasTrackedRegistryBinding) {
+    fail(
+      `Production Registry tokens require the tracked binding: ` +
+      `${productionRegistryReferenceBinding}.`,
+    );
+  }
+  if (requiresRouteAuthority && !hasTrackedRouteBinding) {
+    fail(
+      `Production public-route tokens require the tracked binding: ` +
+      `${productionRouteReferenceBinding}.`,
+    );
+  }
 
-  if (!hasTrackedRegistryBinding) {
-    if (registryKeys.length > 0) {
-      fail(
-        `Production Registry tokens require the tracked binding: ` +
-        `${productionRegistryReferenceBinding}.`,
+  let registryReference = null;
+  let registryInput = null;
+  let dataUseInput = null;
+  let dataUseReceipt = null;
+  if (registryKeys.length > 0) {
+    registryInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      readBlob,
+      trackedInputs,
+      productionRegistryReferenceBinding,
+      "Production Registry binding",
+    );
+    registryReference = parseRegistryReferenceBinding(registryInput.bytes, {
+      requiredKeys: registryKeys,
+    });
+    dataUseInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      readBlob,
+      trackedInputs,
+      productionRegistryDataUseNotice,
+      "Production Registry DATA-USE notice",
+    );
+    dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
+  }
+
+  let routeReference = null;
+  let routeBindingInput = null;
+  const routeAuthorityInputs = new Map();
+  if (requiresRouteAuthority) {
+    routeBindingInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      readBlob,
+      trackedInputs,
+      productionRouteReferenceBinding,
+      "Production public-route binding",
+    );
+    for (const [name, sourcePath] of Object.entries(
+      productionRouteReferenceAuthorityPaths,
+    )) {
+      routeAuthorityInputs.set(
+        name,
+        await readTrackedAuthorityInput(
+          root,
+          trackedBlobs,
+          readBlob,
+          trackedInputs,
+          sourcePath,
+          `Production public-route ${name}`,
+        ),
       );
     }
-    const destinations = await resolvePublicReferenceDestinations(keys, {
-      configurationSource: configurationBytes.toString("utf8"),
-      environment: {},
+    routeReference = parsePublicRouteReferenceBinding(routeBindingInput.bytes, {
+      requiredKeys: routeKeys,
+      bindingPath: productionRouteReferenceBinding,
+      primaryManifestBytes: routeAuthorityInputs.get("primaryManifest").bytes,
+      productionConfigBytes: routeAuthorityInputs.get("productionConfig").bytes,
+      canvasIframeManifestBytes: routeAuthorityInputs.get("canvasIframeManifest").bytes,
+      coreIframeManifestBytes: routeAuthorityInputs.get("coreIframeManifest").bytes,
+      schemaPublicationManifestBytes:
+        routeAuthorityInputs.get("schemaPublicationManifest").bytes,
+      schemaCompanionSelectionBytes:
+        routeAuthorityInputs.get("schemaCompanionSelection").bytes,
+      skillPublicationSelectionBytes:
+        routeAuthorityInputs.get("skillPublicationSelection").bytes,
     });
+  }
+
+  let externalReference = null;
+  let externalReferenceInput = null;
+  if (externalReferenceKeys.length > 0) {
+    externalReferenceInput = await readTrackedAuthorityInput(
+      root, trackedBlobs, readBlob, trackedInputs, productionExternalReferenceBinding,
+      "Production external-reference binding",
+    );
+    // Pages checks the complete authored inventory. The primary manifest selects a
+    // subset of those pages; resolvePublicReferenceDestinations checks each selected key.
+    externalReference = parseExternalReferenceBinding(externalReferenceInput.bytes);
+  }
+  const destinations = await resolvePublicReferenceDestinations(keys, {
+    configurationSource: configurationBytes.toString("utf8"),
+    environment: {},
+    ...(registryReference === null
+      ? {}
+      : { registryDestinations: registryReference.destinations }),
+    ...(routeReference === null
+      ? {}
+      : { routeDestinations: routeReference.destinations }),
+    ...(externalReference === null
+      ? {}
+      : { externalDestinations: externalReference.destinations }),
+  });
+  if (registryReference === null && routeReference === null && externalReference === null) {
     return {
       destinations,
+      registryReference,
+      routeReference,
+      externalReference,
       input: {
         source_relationship: "external_digest_bound_input",
         configuration_path: productionPublicReferenceConfig,
@@ -3852,82 +4100,105 @@ async function loadPublicationInput(
     };
   }
 
-  if (trackedBlobs.get(productionRegistryReferenceBinding)?.mode !== "100644") {
-    fail(
-      `Production Registry binding must be a tracked non-executable blob: ` +
-      `${productionRegistryReferenceBinding}.`,
-    );
-  }
-  const bindingInput = await readTrackedRepositoryInput(
-    root,
-    trackedBlobs,
-    productionRegistryReferenceBinding,
-    "Production Registry binding",
-  );
-  const registryReference = parseRegistryReferenceBinding(bindingInput.bytes, {
-    requiredKeys: registryKeys,
-  });
-  trackedInputs.set(productionRegistryReferenceBinding, bindingInput);
-  if (trackedBlobs.get(productionRegistryDataUseNotice)?.mode !== "100644") {
-    fail(
-      `Production Registry DATA-USE notice must be a tracked non-executable blob: ` +
-      `${productionRegistryDataUseNotice}.`,
-    );
-  }
-  const dataUseInput = await readTrackedRepositoryInput(
-    root,
-    trackedBlobs,
-    productionRegistryDataUseNotice,
-    "Production Registry DATA-USE notice",
-  );
-  const dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
-  trackedInputs.set(productionRegistryDataUseNotice, dataUseInput);
-  const destinations = await resolvePublicReferenceDestinations(keys, {
-    configurationSource: configurationBytes.toString("utf8"),
-    environment: {},
-    registryDestinations: registryReference.destinations,
-  });
-  const atlas = registryReference.receipt.atlas;
+  const atlas = registryReference?.receipt.atlas ?? null;
+  const sourceRelationship = registryReference !== null && routeReference !== null
+    ? "tracked_registry_and_route_bindings_with_external_digest_bound_input"
+    : registryReference !== null
+      ? "tracked_registry_binding_with_external_digest_bound_input"
+      : routeReference !== null
+        ? "tracked_route_binding_with_external_digest_bound_input"
+        : "tracked_external_binding_with_external_digest_bound_input";
   return {
     destinations,
+    registryReference,
+    routeReference,
+    externalReference,
     input: {
-      source_relationship:
-        "tracked_registry_binding_with_external_digest_bound_input",
+      source_relationship: sourceRelationship,
       keys: sortedKeys,
-      tracked_registry: {
-        keys: registryKeys,
-        binding: {
-          source_path: productionRegistryReferenceBinding,
-          git_blob_id: bindingInput.object,
-          sha256: registryReference.receipt.bindingSha256,
-          id: registryReference.receipt.id,
-          version: registryReference.receipt.version,
-          binding_count: registryReference.receipt.bindingCount,
+      ...(externalReference === null ? {} : {
+        tracked_external: {
+          keys: externalReferenceKeys,
+          binding: {
+            source_path: productionExternalReferenceBinding,
+            git_blob_id: externalReferenceInput.object,
+            sha256: externalReference.receipt.bindingSha256,
+            id: externalReference.receipt.id,
+            version: externalReference.receipt.version,
+            binding_count: externalReference.receipt.bindingCount,
+          },
         },
-        data_use: {
-          source_path: productionRegistryDataUseNotice,
-          git_blob_id: dataUseInput.object,
-          sha256: dataUseReceipt.sha256,
-          bytes: dataUseReceipt.bytes,
-        },
-        atlas_receipt: {
-          reference_version: atlas.referenceVersion,
-          guide_version: atlas.guideVersion,
-          data_schema_version: atlas.dataSchemaVersion,
-          snapshot_date: atlas.snapshotDate,
-          accepted_at: atlas.acceptedAt,
-          archive_sha256: atlas.archiveSha256,
-          registry_atlas_sha256: atlas.registryAtlasSha256,
-          manifest_sha256: atlas.manifestSha256,
-          current_route_map_sha256: atlas.currentRouteMapSha256,
-          license: atlas.license,
-          content_role: atlas.contentRole,
-          action_authority: atlas.actionAuthority,
-          data_use_notice: atlas.dataUseNotice,
-          data_use_sha256: atlas.dataUseSha256,
-          benchmark_scope: atlas.benchmarkScope,
-        },
-      },
+      }),
+      ...(registryReference === null
+        ? {}
+        : {
+            tracked_registry: {
+              keys: registryKeys,
+              binding: {
+                source_path: productionRegistryReferenceBinding,
+                git_blob_id: registryInput.object,
+                sha256: registryReference.receipt.bindingSha256,
+                id: registryReference.receipt.id,
+                version: registryReference.receipt.version,
+                binding_count: registryReference.receipt.bindingCount,
+              },
+              data_use: {
+                source_path: productionRegistryDataUseNotice,
+                git_blob_id: dataUseInput.object,
+                sha256: dataUseReceipt.sha256,
+                bytes: dataUseReceipt.bytes,
+              },
+              atlas_receipt: {
+                reference_version: atlas.referenceVersion,
+                guide_version: atlas.guideVersion,
+                data_schema_version: atlas.dataSchemaVersion,
+                snapshot_date: atlas.snapshotDate,
+                accepted_at: atlas.acceptedAt,
+                archive_sha256: atlas.archiveSha256,
+                registry_atlas_sha256: atlas.registryAtlasSha256,
+                manifest_sha256: atlas.manifestSha256,
+                current_route_map_sha256: atlas.currentRouteMapSha256,
+                license: atlas.license,
+                content_role: atlas.contentRole,
+                action_authority: atlas.actionAuthority,
+                data_use_notice: atlas.dataUseNotice,
+                data_use_sha256: atlas.dataUseSha256,
+                benchmark_scope: atlas.benchmarkScope,
+              },
+            },
+          }),
+      ...(routeReference === null
+        ? {}
+        : {
+            tracked_routes: {
+              keys: routeKeys,
+              binding: {
+                source_path: productionRouteReferenceBinding,
+                git_blob_id: routeBindingInput.object,
+                sha256: routeReference.receipt.sourceDigests.binding,
+                id: routeReference.receipt.id,
+                version: routeReference.receipt.version,
+                binding_count: routeReference.receipt.bindingCount,
+                authority_counts: routeReference.receipt.authorityCounts,
+              },
+              schema_companion_selection_sha256:
+                routeReference.receipt.sourceDigests.schema_companion_selection,
+              authorities: Object.fromEntries(
+                Object.entries(productionRouteReferenceAuthorityPaths).map(
+                  ([name, sourcePath]) => [
+                    name,
+                    {
+                      source_path: sourcePath,
+                      git_blob_id: routeAuthorityInputs.get(name).object,
+                      sha256: routeReference.receipt.sourceDigests[
+                        name.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
+                      ],
+                    },
+                  ],
+                ),
+              ),
+            },
+          }),
       external_configuration: {
         source_relationship: "external_digest_bound_input",
         configuration_path: productionPublicReferenceConfig,
@@ -3952,6 +4223,104 @@ async function verifyPublicationInputState(state) {
   if (sha256(await readFile(state.path)) !== state.sha256) {
     fail("Production public-reference configuration changed during composition.");
   }
+}
+
+// At this point references already describe the flat public projection. Rebase
+// them once so both spellings serve a complete page, including catalog data.
+function directoryDocument(text, file, routes) {
+  const resolve = value => routes.resolve(value, file);
+  const known = value => routes.resolve(value, file, true);
+  if (file.endsWith("canvas-shell.js")) return projectScriptUrls(text, known, { footer: true });
+  if (file.endsWith(".xml")) return rewriteSitemapReferences(text, resolve);
+  if (!file.endsWith(".html")) return text;
+  text = rewriteOpeningTags(text, element => {
+    let tag = rewritePublicationMetadataReferences(element, resolve);
+    for (const attribute of ["href","src","poster","action","formaction","xlink:href","data-motion-src","data-still-src","data-catalog-preview-src"]) {
+      tag = rewriteHtmlAttribute(tag, attribute, resolve);
+    }
+    if (/^<object\b/iu.test(tag)) tag = rewriteHtmlAttribute(tag, "data", resolve);
+    tag = rewriteHtmlAttribute(tag, "data-case-brief-routes", list => list.split(/\s+/u).map(resolve).join(" "));
+    for (const attribute of ["srcset","imagesrcset","data-catalog-preview-srcset"]) {
+      tag = rewriteHtmlAttribute(tag, attribute, list => mapImageCandidates(list, resolve));
+    }
+    return rewriteHtmlAttribute(tag, "style", value => rewriteCssReferences(value, resolve));
+  }, { skipBodies: new Set(["script","style","textarea","title"]) });
+  text = rewriteStyleBlocks(text, resolve);
+  return text.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script\s*>)/giu,
+    (all, open, body, close) => {
+      const type = htmlAttributeValue(open, "type")?.toLowerCase();
+      if (type === "application/ld+json") {
+        return open + body.replace(/"(?:\\[\s\S]|[^"\\])*"/gu, literal => {
+          const value = JSON.parse(literal);
+          if (!/^https?:\/\//iu.test(value)) return literal;
+          const url = known(value);
+          return url === value ? literal : JSON.stringify(url);
+        }) + close;
+      }
+      if (type && !["module","text/javascript","application/javascript"].includes(type)) return all;
+      return open + projectScriptUrls(body, known, { module: type === "module" }) + close;
+    });
+}
+
+function assertGeneratedContextCanvasHeadRoutes({
+  primaryManifest,
+  publication,
+  outputFiles,
+  routeReference,
+  registryReference,
+}) {
+  if (
+    routeReference === null ||
+    publication.source_root !== CONTEXT_CANVAS_SOURCE_ROOT
+  ) {
+    return null;
+  }
+  const documents = new Map();
+  let sitemapSource = null;
+  for (const file of primaryManifest.files) {
+    const projected = outputFiles.get(`primary-public/${file.projected_path}`);
+    if (!Buffer.isBuffer(projected)) continue;
+    if (file.media_type === "text/html") {
+      documents.set(file.source_path, projected.toString("utf8"));
+    }
+    if (
+      file.source_path === `${publication.source_root}/sitemap.xml` &&
+      file.media_type === "application/xml"
+    ) {
+      sitemapSource = projected.toString("utf8");
+    }
+  }
+  const result = validateContextCanvasHeadRoutes({
+    primaryManifest,
+    documents,
+    sitemapSource,
+    authority: createContextCanvasHeadAuthority({
+      routeReference,
+      registryReference,
+      materializedRoutes: true,
+    }),
+    expectedPageCount: 40,
+    // The retained exemplar belongs to source validation. It remains outside
+    // the production projection by design, so the generated carrier validates
+    // its complete indexed population and sitemap here.
+    requireStandingDocuments: false,
+  });
+  if (!result.accepted) {
+    fail(formatContextCanvasHeadRouteDiagnostics(result).trim());
+  }
+  const carrierReceipt = result.records.map((record) => ({
+    source: record.source,
+    locator: record.locator,
+    carrier: record.carrier,
+    property: record.property,
+    effective: record.effective,
+  }));
+  return {
+    id: result.id,
+    page_count: result.pageCount,
+    carrier_count: result.recordCount,
+    carrier_sha256: sha256(Buffer.from(JSON.stringify(carrierReceipt), "utf8")),
+  };
 }
 
 function serializeManifest(manifest) {
@@ -4013,7 +4382,10 @@ async function assertCarrierReleaseRelationship(root, sourceSha, releaseSha) {
 }
 
 export async function createProductionProjectionPlan(options = {}) {
-  const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withProjectionBlobReader(options, (root, readBlob) => composeProductionProjection(root, readBlob, options));
+}
+
+async function composeProductionProjection(root, readBlob, options) {
   if (Object.hasOwn(options, "primaryManifest")) {
     fail("Production projection membership must come from its tracked configuration and manifest.");
   }
@@ -4054,7 +4426,7 @@ export async function createProductionProjectionPlan(options = {}) {
     root,
     "deployment/cpanel/production-projection.config.json",
   );
-  const selection = await loadProductionProjectionInputs(configurationPath, {
+  const selection = await loadProjectionSelection(root, readBlob, configurationPath, {
     repositoryRoot: root,
     sourceSha,
     trackedBlobs,
@@ -4062,6 +4434,8 @@ export async function createProductionProjectionPlan(options = {}) {
     allowCarrierOnlyDirty,
   });
   const primaryManifest = selection.primaryManifest;
+  const directoryRoutes = selection.configuration.delivery_profile
+    ? createDirectoryRoutes(primaryManifest, selection.configuration.publication.base_url, selection.configuration.directory_index_names) : null;
   const trackedInputs = new Map(selection.trackedInputs);
   const primaryInputs = new Map();
   const projectedPaths = new Map(
@@ -4077,6 +4451,7 @@ export async function createProductionProjectionPlan(options = {}) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       file.source_path,
       "Primary projection source",
     );
@@ -4088,6 +4463,7 @@ export async function createProductionProjectionPlan(options = {}) {
     iframeOriginRobotsInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       selection.configuration.iframe_origin_robots,
       "Iframe-origin robots source",
     );
@@ -4103,18 +4479,21 @@ export async function createProductionProjectionPlan(options = {}) {
         selection.configuration.publication,
         primaryInputs,
         trackedBlobs,
+        readBlob,
         trackedInputs,
       );
   const aggregatePlan = assertAggregatePlan(
-    options.aggregatePlan ?? await createAggregatePackagePlan(),
+    options.aggregatePlan ?? await createAggregatePackagePlan(directoryRoutes ? { compact: compactDeliveryBytes } : {}),
   );
   const assetInventoryResolution = await resolveProductionAssetInventory({
     root,
     trackedBlobs,
+    readBlob,
     trackedInputs,
     primaryManifest,
     primaryInputs,
     aggregatePlan,
+    compact: directoryRoutes ? compactDeliveryBytes : null,
     inventory: selection.assetInventory,
   });
   const directAssetConsumers = new Map(
@@ -4153,6 +4532,8 @@ export async function createProductionProjectionPlan(options = {}) {
           trackedBlobs,
           projectedPaths,
           publicationInput.destinations,
+          publicationInput.routeReference?.destinations ?? null,
+          publicationInput.externalReference?.destinations ?? null,
           absoluteProjectionUrls,
           noteResolvedReference,
         );
@@ -4180,6 +4561,12 @@ export async function createProductionProjectionPlan(options = {}) {
         onResolvedReference: noteResolvedReference,
       });
       bytes = cssProjectionPlan.consumer_bytes;
+    }
+    if (directoryRoutes) {
+      if (/\.(?:html|xml)$|(?:^|\/)canvas-shell\.js$/u.test(file.projected_path)) {
+        bytes = Buffer.from(directoryDocument(bytes.toString("utf8"), file.projected_path, directoryRoutes));
+      }
+      bytes = await compactDeliveryBytes(file.projected_path, bytes);
     }
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
@@ -4209,6 +4596,13 @@ export async function createProductionProjectionPlan(options = {}) {
       });
     }
     outputs.push(output);
+    for (const directoryIndex of directoryRoutes?.entries.get(file.projected_path) ?? []) {
+      const name = "primary-public/" + directoryIndex;
+      assertPortableOutputCollision(name, outputFiles, portablePaths);
+      outputFiles.set(name, bytes);
+      outputs.push({ ...output, projected_path: name });
+      primaryBytes += bytes.byteLength;
+    }
   }
 
   if (
@@ -4233,6 +4627,22 @@ export async function createProductionProjectionPlan(options = {}) {
       css_projection_id: generated.id,
       generation: generated.lineage,
     });
+  }
+
+  const generatedHeadRouteValidation = publicationInput === null
+    ? null
+    : assertGeneratedContextCanvasHeadRoutes({
+        primaryManifest,
+        publication: selection.configuration.publication,
+        outputFiles,
+        routeReference: directoryRoutes && publicationInput.routeReference
+          ? { ...publicationInput.routeReference, routes: publicationInput.routeReference.routes.map(route =>
+              ({ ...route, url: directoryRoutes.resolve(route.url, "index.html", true) })) }
+          : publicationInput.routeReference,
+        registryReference: publicationInput.registryReference,
+      });
+  if (generatedHeadRouteValidation !== null) {
+    publicationInput.input.generated_head_routes = generatedHeadRouteValidation;
   }
 
   assertSettledProductionAuthority(outputFiles, aggregatePlan.outputFiles);
@@ -4676,21 +5086,25 @@ export async function stageProductionCarrierFromRepository(options = {}) {
   return { projectionPlan, verification };
 }
 
-async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
+async function verifyTrackedCarrierPlan(root, readBlob, releaseSha, carrierPlan) {
   const trackedBlobs = await readTrackedBlobIndex(root, releaseSha);
-  const expectedPaths = [...carrierPlan.outputFiles.keys()]
-    .map((relativePath) => `${carrierRelativeRoot}/${relativePath}`)
-    .sort();
-  const actualPaths = [...trackedBlobs.keys()]
-    .filter((sourcePath) => sourcePath.startsWith(`${carrierRelativeRoot}/`))
-    .sort();
-  const missing = expectedPaths.filter((sourcePath) => !actualPaths.includes(sourcePath));
-  const extra = actualPaths.filter((sourcePath) => !expectedPaths.includes(sourcePath));
+  const prefix = `${carrierRelativeRoot}/`;
+  const missing = [];
+  for (const relativePath of carrierPlan.outputFiles.keys()) {
+    const sourcePath = prefix + relativePath;
+    if (!trackedBlobs.has(sourcePath)) missing.push(sourcePath);
+  }
+  const extra = [];
+  for (const sourcePath of trackedBlobs.keys()) {
+    if (sourcePath.startsWith(prefix) && !carrierPlan.outputFiles.has(sourcePath.slice(prefix.length))) {
+      extra.push(sourcePath);
+    }
+  }
   if (missing.length || extra.length) {
     fail([
       "Tracked production carrier differs from its exact allowlist.",
-      missing.length ? `Missing: ${missing.join(", ")}` : "",
-      extra.length ? `Extra: ${extra.join(", ")}` : "",
+      missing.length ? `Missing: ${missing.sort().join(", ")}` : "",
+      extra.length ? `Extra: ${extra.sort().join(", ")}` : "",
     ].filter(Boolean).join("\n"));
   }
 
@@ -4704,6 +5118,7 @@ async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
       trackedBlobs,
+      readBlob,
       sourcePath,
       "Tracked production carrier output",
     );
@@ -4712,16 +5127,20 @@ async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
     }
     totalBytes += trackedInput.bytes.byteLength;
   }
-  return { files: actualPaths.length, bytes: totalBytes };
+  return { files: carrierPlan.outputFiles.size, bytes: totalBytes };
 }
 
 export async function checkProductionCarrier(options = {}) {
-  const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  return withProjectionBlobReader(options, (root, readBlob) => checkCarrier(root, readBlob, options));
+}
+
+async function checkCarrier(root, readBlob, options) {
   const releaseSha = await readRepositorySourceSha(root);
   const releaseBlobs = await readTrackedBlobIndex(root, releaseSha);
   const manifestInput = await readTrackedRepositoryInput(
     root,
     releaseBlobs,
+    readBlob,
     carrierManifestRelativePath,
     "Tracked production carrier manifest",
   );
@@ -4739,7 +5158,7 @@ export async function checkProductionCarrier(options = {}) {
   }
   const sourceSha = carriedManifest.source_sha;
   await assertCarrierReleaseRelationship(root, sourceSha, releaseSha);
-  const projectionPlan = await createProductionProjectionPlan({
+  const projectionPlan = await composeProductionProjection(root, readBlob, {
     repositoryRoot: root,
     sourceSha,
     carrierReleaseSha: releaseSha,
@@ -4751,7 +5170,7 @@ export async function checkProductionCarrier(options = {}) {
   });
   const carrierPlan = createProductionCarrierPlan(projectionPlan);
   const verification = await verifyTrackedCarrierPlan(
-    root,
+    root, readBlob,
     releaseSha,
     carrierPlan,
   );

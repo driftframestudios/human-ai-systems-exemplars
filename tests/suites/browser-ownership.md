@@ -72,7 +72,7 @@ their separate owners.
 
 | Owner | Disposition and reason |
 | --- | --- |
-| `tools/core-architecture-browser-helper.mjs` | Retain unchanged as the shared server and four-channel telemetry primitive. Its existing consumers remain in place. |
+| `tools/core-architecture-browser-helper.mjs` | Retain as the shared server, four-channel telemetry, and bounded launch-policy primitive. Existing consumers select bundled Playwright browsers by default; the media CI lane explicitly selects hosted Chrome. |
 | `tools/open-lesson-field-contract.mjs` | Retain this wave. Its static server is a plausible later reuse candidate, but direct/embedded route policy and timestamped screenshot/summary identity belong to its campaign. |
 | `tools/narrative-architecture-contract.mjs` | Retain. Its 14 verification journeys and projection semantics remain family-owned; a future lifecycle migration needs its own parity observation. |
 | `tools/strategy-canvas-contract.mjs` | Retain. Attribution, projection, story phases, and screenshot/summary production are a larger receiving boundary than this pilot. |
@@ -82,15 +82,39 @@ their separate owners.
 | `tests/investment-analysis/presentation.browser.test.mjs` | Retain. Its additional image MIME types, package-controlled iframe, 13-width campaign, print/forced-color/scriptless states, and investment-cohesion artifacts require separate evidence. |
 | `tests/investment-analysis/capsule.browser.test.mjs` | Reuse Core through the new family adapter. It needs ordinary repository-static delivery and has a small, exact state/transfer case with no custom carrier routes. |
 
+## About fitted-instrument mechanics
+
+`tests/context-canvas/about-content-fit-helper.mjs` serves the Gallery, Prompt
+Conditions Explorer, and Studio chapter cases. It reuses Core's static server and four-channel
+telemetry, packages the three children into a temporary second origin, and
+preserves their authored opaque sandbox. It owns session cleanup and the actual
+parent, child-document, and targeted-local-region geometry observations. Each
+browser file owns its independent content, selection, keyboard, failure, and
+static/print expectations. This bounded helper adds a direct Core consumer;
+the entry-point inventory below counts the three executable case files separately.
+
 ## Existing direct Core consumers
 
-These 41 current direct browser entry points retain their imports and case
+These 58 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
 
 | Entry | Retained receiving responsibility |
 | --- | --- |
+| `tests/native-investment-studio/controller.browser.mjs` | Native About coordination controls: independently calculated money/effort, hours/minutes entry, live preview isolation, draft and accepted-state recovery, exact target/base ownership, lifecycle release, focus through disclosures and responsive rearrangement, narrow/enlarged text, forced colors, reduced motion, ordinary page wheel movement, and the preserved full-Studio route in three engines. |
+| `tests/native-investment-studio/assembly.browser.mjs` | Native People and Teams: exact creation amounts, ordered memberships, referenced removal, stale draft and imported collision recovery, compact input geometry, callback ownership, and About scrolling in three engines. |
+| `tests/native-investment-studio/session.browser.mjs` | Complete working sessions: exact participant and funding arithmetic, selection and saved edits across chapters, stale recovery, reference-aware removal, empty-plan creation, compact controls, receiver retirement and successor focus, and ordinary About scrolling in three engines. |
+| `tests/native-investment-studio/connection.browser.mjs` | Connection form and diagram/list agreement, stable references, pause accounting, saved-edit recovery, focus, local horizontal inspection and ordinary vertical reading across three engines. |
+| `tests/native-investment-studio/connection-template.browser.mjs` | Bounded coordination template configuration, atomic preview and Apply, stale intent, cancellation, exact recovery-work accounting and cross-engine reading. |
+| `tests/native-investment-studio/responsibility.browser.mjs` | People role details and human review assignments: complete-field meaning, stable human/session references, unchanged money, saved and stale recovery, ordered supporting work, narrow reading, focus and synchronous lifecycle ownership in three engines. |
+| `tests/native-investment-studio/team-controller.browser.mjs` | Native About Team Assembly: person rates and funded time, independently calculated investment and capacity, draft and accepted-state isolation, stale recovery, focus and keyboard editing, responsive containment, ordinary page scrolling, and the preserved full-Studio route in three engines. |
+| `tests/native-investment-studio/shell.browser.mjs` | Native About chapters: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, descendant fragments and history, visible focus, reduced motion, parent scrolling, and scriptless fallback in three engines. |
+| `tests/context-canvas/about-heatmap.browser.mjs` | Retained heatmap adapter in an explicit local host fixture: comparison state, exact figure identity, scriptless and print reading, enlarged-text containment, keyboard focus, page wheel movement, and controlled state/layout faults in three engines. The current About page omits this exhibit. |
+| `tests/context-canvas/about-gallery-fit.browser.mjs` | About Gallery natural body/footer height, disclosure growth/shrinkage, retained selections, per-document channel and fallback, parent wheel movement, local package substitution, and restored bounded-height fault in three engines. |
+| `tests/context-canvas/about-prompt-fit.browser.mjs` | Five-condition Explorer state, parent/document/local-region scroll ownership, natural height, narrow/enlarged text, keyboard, two-frame isolation, fallback, and static/print readings in three engines. |
+| `tests/context-canvas/about-studio-chapters.browser.mjs` | About Studio live editing, retained chapter state, source/variant parity, independent staffing expectation, cross-chapter focus, active-document sizing and parent scroll, and controlled capture faults in three engines. |
+| `tests/context-canvas/about-disclosure-readings.browser.mjs` | About folio native disclosure reach, fixed thirteen-record and five-prompt-row print population, scripting enabled/disabled, keyboard focus and screen-state preservation, actual text containment, and restored hidden-summary/content faults in three engines. |
 | `tools/about-media-browser-contract.mjs` | About-media behavior and its own observations. |
 | `tests/context-canvas/visitor-image-delivery.browser.mjs` | Loopback delivery of every About, AI Systems, and Debriefs `img[src]` receiver in Chromium and Playwright WebKit, including browser-selected sources, image media types, route-appropriate eager or lazy loading, and intrinsic dimensions. The focused About media contract owns its native-video poster. |
 | `tests/context-canvas/video-receivers.browser.mjs` | Native-video receiver containment, passive poster requests, and accessible relationships across the selected Debrief and AI Systems pages. |
@@ -126,6 +150,12 @@ and does not claim a new execution of every assertion.
 | `tests/context-canvas/debrief-reference-figures.browser.mjs` | Thirty-five-figure cascade, local keyboard scrolling, portrait fit, scriptless width boundary, two opt-in bounded captions, painted-owner and text-fragment containment, unchanged media geometry, alternate media, and restored faults across three engines. |
 | `tests/context-canvas/ai-entry-cascade.browser.mjs` | Five entry bridges, accepted cascade, 30rem shadow seam, print and forced-color treatment, controlled faults and restoration across three engines. |
 | `tests/context-canvas/ai-systems-reading-layout.browser.mjs` | Twenty-six AI Systems and Shared Machinery readings plus the Debriefs parent across three engines and narrow, desktop, and wide dimensions; repaired reading owners, container seams, text containment, local overflow, alternate presentations, controlled faults, and restoration. |
+| `tests/context-canvas/debrief-architecture-cards.browser.mjs` | Eight comparison grids across seven Debriefs retain contiguous card fragments, local text, shadows, source order and useful full-width distribution across Chromium, Firefox and Playwright WebKit; grid/prose seams, alternate modes and a before-parse restoration of the original nesting. |
+| `tests/context-canvas/card-rail-clearance.browser.mjs` | Thirty generated-rail routes retain local-owner card width, complete text and hard-shadow paint, and the accepted rail/shadow adjacency; exact consumers, representative widths, enlarged text, narrow touch, control owners, and a rejected width-cap fault are observed in three engines. |
+| `tests/context-canvas/debrief-evidence-cards.browser.mjs` | Twenty-one evidence-boundary cards across ten Debriefs keep their label, heading, explanation and painted frame together across three engines, with enlarged/scriptless controls, individual-fragment observations, modeled split recovery and a WebKit paint check. |
+| `tests/context-canvas/debrief-callout-integrity.browser.mjs` | Eighteen prose-local callouts and quotations across seven Debriefs preserve complete frames, attribution and reachable references across three engines; opening definitions align with their reading columns, with modeled split and prior-margin recovery. |
+| `tests/context-canvas/ai-narrow-reading.browser.mjs` | AI Systems family reading at narrow widths with enlarged text: complete heading and navigation-card content, local scroll ownership, normal-size controls and fault restoration across Chromium, Firefox and Playwright WebKit. |
+| `tests/context-canvas/linked-reading-containment.browser.mjs` | Eight independently styled AI example readings preserve complete text at narrow widths with enlarged type; the independent control, ordinary desktop geometry, local evidence scrolling, keyboard access, alternate modes, and restored wrapping faults remain explicit across Chromium, Firefox, and Playwright WebKit. |
 | `tests/context-canvas/technology-fit-layout.browser.mjs` | Technology Fit Sampling Tableau header and comparison-toolbar layout across three engines and source-adjacent dimensions, including complete controls, local overflow, comparison state, enlarged text, and controlled historical faults. |
 | `tests/context-canvas/prompt-side-figure.browser.mjs` | The Prompt-Side article's linked SVG overview, keyboard and pointer journey, static reading, and print at narrow and desktop widths. |
 | `tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs` | Atlas CSS cascade, local table/SVG canvases, hidden states, closed print disclosures, forced colors, static reading, and restored faults across three engines. |

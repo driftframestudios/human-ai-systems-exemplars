@@ -1,7 +1,9 @@
 import './node-runtime-admission.mjs';
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { readDocumentSpans } from "./html-document-spans.mjs";
 import { INVESTMENT_HOSTS, readInvestmentSources, assertInvestmentProjection } from "./project-investment-analysis.mjs";
+import { studioChaptersPath, readStudioChapterInputs, assertStudioChapterProjection } from "./materialize-about-studio-chapters.mjs";
 import { fileURLToPath } from "node:url";
 import visitorBoundaryContract from "../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 import {
@@ -11,8 +13,11 @@ import {
 } from "./attribution-contract.mjs";
 import {
   assertRegularFileWithin,
+  iframeFaviconHref,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeFavicon,
+  requiresDataFavicon,
   projectIframeExitLinks,
   scanPackageClosure,
   sha256,
@@ -20,6 +25,7 @@ import {
 
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
+const embeddedFaviconPath = "context-canvas-project-surface/context-canvas/favicon-32x32.png";
 const canvasFamilyRoot = path.join(repositoryRoot, "iframe-route-families/canvas");
 const supportedReceiverStandings = new Set(["byte_identical", "context_adapted"]);
 const supportedActivationStandings = new Set(["eligible"]);
@@ -273,8 +279,8 @@ export function validateCanvasRouteContract(contract) {
     ["eligible"],
     "Canvas activation standings",
   );
-  if (!Array.isArray(contract.routes) || contract.routes.length !== 15) {
-    fail("Canvas route manifest must declare exactly 15 routes.");
+  if (!Array.isArray(contract.routes) || contract.routes.length !== 16) {
+    fail("Canvas route manifest must declare exactly 16 routes.");
   }
 
   const routeIds = new Set();
@@ -428,16 +434,6 @@ function escapeHtmlText(value) {
     .replaceAll(">", "&gt;");
 }
 
-function insertAtClosingTag(source, tagName, insertion, label, fromEnd = false) {
-  const normalized = source.toLowerCase();
-  const closingTag = `</${tagName}>`;
-  const index = fromEnd
-    ? normalized.lastIndexOf(closingTag)
-    : normalized.indexOf(closingTag);
-  if (index === -1) fail(`${label} is missing.`);
-  return `${source.slice(0, index)}${insertion}\n${source.slice(index)}`;
-}
-
 function visitorBoundaryMarkup() {
   const [maps, bigBench] = visitorBoundaryContract.markers;
   if (
@@ -478,6 +474,7 @@ export function assertCanvasPublicAttribution(
   route,
   expectedDecoration,
 ) {
+  html = readDocumentSpans(html).outerMarkup();
   const authorCount = [...html.matchAll(authorPattern)].length;
   const licenseCount = [...html.matchAll(licensePattern)].length;
   const boundaryCount = occurrenceCount(html, "data-visitor-boundary aria-label=");
@@ -512,12 +509,14 @@ export function assertCanvasPublicAttribution(
 }
 
 export function decorateCanvasPublicDocument(html, route) {
+  const spans = readDocumentSpans(html);
+  const markup = spans.outerMarkup();
   if (
-    /<meta\b[^>]*\bname=["']author["']/i.test(html) ||
-    /<link\b[^>]*\brel=["']license["']/i.test(html) ||
-    html.includes("data-visitor-boundary") ||
-    html.includes(artifactAttribution) ||
-    html.includes("data-iframe-route-projection")
+    /<meta\b[^>]*\bname=["']author["']/i.test(markup) ||
+    /<link\b[^>]*\brel=["']license["']/i.test(markup) ||
+    markup.includes("data-visitor-boundary") ||
+    markup.includes(artifactAttribution) ||
+    markup.includes("data-iframe-route-projection")
   ) {
     fail(`Canvas decorated route ${route.id} already carries projection-owned decoration.`);
   }
@@ -531,19 +530,10 @@ export function decorateCanvasPublicDocument(html, route) {
 ${visitorBoundaryMarkup()}
   <p class="artifact-attribution__notice">${artifactAttribution}</p>
 </footer>`;
-  let projected = insertAtClosingTag(
-    html,
-    "head",
-    head,
-    `Canvas route ${route.id} closing head`,
-  );
-  projected = insertAtClosingTag(
-    projected,
-    "body",
-    footer,
-    `Canvas route ${route.id} closing body`,
-    true,
-  );
+  const headEnd = spans.closingOffset("head");
+  const bodyEnd = spans.closingOffset("body");
+  const projected = html.slice(0, headEnd) + head + "\n" + html.slice(headEnd, bodyEnd)
+    + footer + "\n" + html.slice(bodyEnd);
   assertCanvasPublicAttribution(projected, route, 1);
   return projected;
 }
@@ -559,7 +549,7 @@ function rewriteReference(source, reference, replacement, label) {
   };
 }
 
-export function deriveCanvasProjection(html, route) {
+export function deriveCanvasProjection(html, route, embeddedFavicon = null) {
   if (typeof html !== "string") fail(`Canvas route ${route.id} requires HTML text.`);
   let projected = html;
   const rewriteReceipts = [];
@@ -601,7 +591,10 @@ export function deriveCanvasProjection(html, route) {
     assertCanvasPublicAttribution(projected, route, 0);
   }
   const exitProjection = projectIframeExitLinks(projected);
-  projected = exitProjection.html;
+  projected = projectIframeFavicon(exitProjection.html, embeddedFavicon);
+  if (embeddedFavicon) {
+    rewriteReceipts.push({ kind: "embedded_favicon", source_file: embeddedFaviconPath, sha256: sha256(embeddedFavicon) });
+  }
   rewriteReceipts.push({
     kind: "iframe_exit_behavior",
     exit_links: exitProjection.exit_links,
@@ -702,10 +695,15 @@ export async function createCanvasPackagePlan(options = {}) {
   const contract = routeManifestReading.value;
   validateCanvasRouteContract(contract);
   const investmentSources = await readInvestmentSources(paths.repositoryRoot);
+  const studioChapterInputs = contract.routes.some(route => route.source_file === studioChaptersPath)
+    ? await readStudioChapterInputs(paths.repositoryRoot) : null;
+  if (studioChapterInputs) assertInvestmentProjection(studioChapterInputs.source, investmentSources);
 
   const outputFiles = new Map();
   const portableOutputPaths = new Set(["route-manifest.json"]);
   const routeReadings = [];
+  let faviconBytes;
+  const embeddedFaviconRoutes = [];
   for (const route of contract.routes) {
     const sourceBytes = await readRepositoryFile(
       paths,
@@ -722,7 +720,14 @@ export async function createCanvasPackagePlan(options = {}) {
     }
     const sourceHtml = sourceBytes.toString("utf8");
     if (INVESTMENT_HOSTS.includes(route.source_file)) assertInvestmentProjection(sourceHtml, investmentSources);
-    const projection = deriveCanvasProjection(sourceHtml, route);
+    if (route.source_file === studioChaptersPath) assertStudioChapterProjection(sourceHtml, studioChapterInputs);
+    const embedded = requiresDataFavicon(sourceHtml);
+    if (embedded) {
+      faviconBytes ??= await readRepositoryFile(paths, embeddedFaviconPath, "Canvas embedded favicon");
+      embeddedFaviconRoutes.push(route.public_alias);
+    }
+    const projection = deriveCanvasProjection(sourceHtml, route, embedded ? faviconBytes : null);
+    if (options.compact && route.projection_kind !== "byte_identical") projection.html = (await options.compact("index.html", Buffer.from(projection.html))).toString("utf8");
     const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
@@ -741,11 +746,12 @@ export async function createCanvasPackagePlan(options = {}) {
     const fileReceipts = { package_files: [], navigation_files: [] };
     for (const field of ["package_files", "navigation_files"]) {
       for (const entry of filesFor(route, field)) {
-        const bytes = await readRepositoryFile(
+        const source = await readRepositoryFile(
           paths,
           entry.source_file,
           `Canvas ${field} source for route ${route.id}`,
         );
+        const bytes = options.compact ? await options.compact(entry.target_file, source) : source;
         const outputPath = path.posix.join(routeDirectory, entry.target_file);
         const portableOutputPath = outputPath.normalize("NFC").toLowerCase();
         if (portableOutputPaths.has(portableOutputPath)) {
@@ -769,7 +775,11 @@ export async function createCanvasPackagePlan(options = {}) {
       projection.html,
       packageReadings,
       `Canvas route ${route.id}`,
-      { scanMarkupContextsOnly: true, scanStyleContextsOnly: true },
+      {
+        allowedOutsideResources: new Set(embedded ? [] : [iframeFaviconHref]),
+        scanMarkupContextsOnly: true,
+        scanStyleContextsOnly: true,
+      },
     );
     routeReadings.push({
       route,
@@ -849,6 +859,8 @@ export async function createCanvasPackagePlan(options = {}) {
         ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: outputFiles.size + 1,
+      favicon_href: iframeFaviconHref,
+      embedded_favicon_routes: embeddedFaviconRoutes,
       live_cloudflare_mutation: false,
       closure_observation: "static_resource_graph",
       browser_request_observation_required: true,
@@ -858,7 +870,7 @@ export async function createCanvasPackagePlan(options = {}) {
   };
   outputFiles.set(
     "route-manifest.json",
-    Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8"),
+    Buffer.from(`${JSON.stringify(receipt, null, options.compact ? undefined : 2)}\n`, "utf8"),
   );
 
   return {

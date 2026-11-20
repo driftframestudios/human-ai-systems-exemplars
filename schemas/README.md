@@ -14,11 +14,12 @@ The [static discovery page](index.html) presents the same first-contact route wh
 | Evidence-Guided Capability Transfer Atlas 0.2 | Change records, rendered views, source registration, and coverage for the expanded atlas | [Change record](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-delta.schema.json) · [View model](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-view-model.schema.json) · [Source registry](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/source-registry.schema.json) · [Coverage record](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/coverage-ledger.schema.json) · [JSON-LD context](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/a3-stacked-cube.context.jsonld) |
 | Capability Transfer Model state 0.1 | Saved state for the Evidence-Guided Capability Transfer Model | [State schema](../a3-stacked-cube-visual-system-bundle-v0.1/schema/a3-stacked-cube-state-schema-v0.1.json) · [JSON-LD context](../a3-stacked-cube-visual-system-bundle-v0.1/schema/a3-stacked-cube-visual-system.context.v0.1.jsonld) |
 | Visualization Fidelity Atlas 0.1 | Visual treatments and the evidence used to compare or select them | [Atlas schema](../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas.schema.v0.1.json) · [JSON-LD context](../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas.context.v0.1.jsonld) |
+| Visual Fidelity Contracts 1.0.0 | Visual-system contracts, executable lab state, public lineage, inspectable examples, and service records for recovery | Shared: [contract](../visual-fidelity-contracts/schemas/visual-fidelity-contract.schema.json) · [lab state](../visual-fidelity-contracts/schemas/lab-state.schema.json) · [catalog](../visual-fidelity-contracts/schemas/catalog.schema.json) · [example catalog](../visual-fidelity-contracts/schemas/example-catalog.schema.json) · [public lineage](../visual-fidelity-contracts/schemas/public-lineage.schema.json). Interactive views: [component lab](../visual-fidelity-contracts/labs/component-lab/schemas/component-lab.schema.json) · [data-view lab](../visual-fidelity-contracts/labs/data-view-lab/schemas/data-view-lab.schema.json) · [component and data probes](../visual-fidelity-contracts/probes/components-and-data/probe-catalog.schema.json). Service journey: [command](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/command.schema.json) · [response](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/response.schema.json) · [receipt](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/receipt.schema.json) · [checkpoint](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/checkpoint.schema.json) · [continuation](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/continuation.schema.json) · [issue](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/issue.schema.json) · [projection](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/projection.schema.json) · [bounded AI call](../visual-fidelity-contracts/labs/service-boundary-lab/schemas/ai-call.schema.json) |
 | Strategy Canvas 0.2 | Factors, plotted offerings, weighting, comparison state, and exchange behavior | [Strategy Canvas schema](../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json) |
 | Local prototype manifest | Files and relationships needed to open a self-contained prototype locally | [Manifest schema](../context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json) |
 | Narrative Architecture and Threadkeeping 0.1 | Capsule composition, semantic and technology-fit sampling state, and durable continuity records | [Cohort orientation](narrative-threadkeeping/0.1/README.md) · schemas, contexts, and material examples retain their named Context Canvas source coordinates |
 
-The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
+The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A future publication candidate stays with the repository until its complete source package is ready for the same audience.
 
 The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. The first-contact view routes readers from the shared visualization foundation into conversation, web, or PDF production while keeping semantic-table and embedded-layout methods distinct. The complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
 
@@ -49,17 +50,18 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The accepted `pages-v0.3.1` release and active Worker receiver retain the
-17-contract schema cohort first assembled for `pages-v0.2.0` and the 27-package
-public-ready skill collection. Seven JSON-LD contexts, four examples, and one
-cohort orientation travel as revalidating companions and stay outside the
-contract count. On 2026-10-18, independently gated signed-out receiver and
-browser checks established live delivery for the active v0.3.1 Worker cohort:
-all 17 contracts, 27 skills, and shared public bytes passed. Issue #531 records
-the v0.3.1 activation and signed-out acceptance.
+The accepted `pages-v0.4.0` release carries 33 schema contracts and 31
+public-ready skill packages. Twenty examples, contexts, and guides travel as
+revalidating companions and stay outside the contract count. The active Worker
+continues to serve the separately accepted v0.3.1 cohort while the v0.4.0
+successor proceeds through review and promotion. On 2026-10-18, independently
+gated signed-out receiver and browser checks established the active v0.3.1
+Worker delivery: all 17 contracts, 27 skills, and shared public bytes passed.
+Issue #531 records that activation; Issues #1001 and #1008 coordinate its
+accepted successor.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
-31 immutable paths for 16 frozen contracts; the unversioned local-manifest
+63 immutable paths for 32 frozen contracts; the unversioned local-manifest
 schema and discovery resources revalidate. Each receiver keeps its own cache
 policy while preserving the same selected schema bytes. These are dated
 delivery observations rather than a continuous-availability guarantee.

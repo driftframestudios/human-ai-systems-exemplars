@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:catalog",
+  "reviewedOn": "2026-10-20",
+  "authority": {
+    "semanticOwner": "Visual Fidelity maintainers",
+    "schemaOwner": "Visual Fidelity schema maintainers",
+    "publicationOwner": "Named publication receiver"
+  },
+  "contracts": [
+    {
+      "id": "vfc:fixture-direction",
+      "title": "Fixture direction",
+      "kind": "art_direction_contract",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "profile": "art_direction_v1",
+      "sourcePath": "visual-fidelity-contracts/README.md",
+      "recordPath": "visual-fidelity-contracts/schemas/fixtures/contracts/accepted/minimum-art-direction.v1.json",
+      "tokensPath": "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css",
+      "specimenPath": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+      "examples": ["visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html"],
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"]
+    }
+  ],
+  "resources": [
+    {
+      "id": "vfc-resource:fixture-lab",
+      "title": "Fixture lab",
+      "kind": "executable_lab",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts",
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from '../public-references/source-route-authority.mjs';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
 
 const root = '/context-canvas-project-surface/context-canvas/';
@@ -49,6 +50,7 @@ async function open(t, engine, route = fmi, options = {}) {
     : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Embedded owner</title>' }));
   await page.goto(server.origin + root + route, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
+  for (const control of await page.locator('details.implementation-companion > summary').all()) await control.click();
   return page;
 }
 
@@ -66,7 +68,7 @@ async function observeBodies(page) {
     return {
       viewport: document.documentElement.clientWidth,
       bodies: [...document.querySelectorAll('.fmi-companion-reading')].map(body => {
-        const owner = body.closest('aside'), id = owner.getAttribute('aria-labelledby');
+        const owner = body.closest('aside, details'), id = owner.getAttribute('aria-labelledby');
         const heading = document.getElementById(id), css = getComputedStyle(body), ownerCss = getComputedStyle(owner);
         const nodes = document.createTreeWalker(body, NodeFilter.SHOW_TEXT);
         const fragments = [];
@@ -238,7 +240,8 @@ test('FMI method links expose their destination behavior and retain local produc
   const links = await page.locator('.fmi-method-link').evaluateAll(nodes => nodes.map(node => ({
     href: node.getAttribute('href'), target: node.target, rel: node.rel,
     text: node.textContent.trim(), cue: node.querySelector('.fmi-link-cue')?.textContent.trim(),
-    icon: Boolean(node.querySelector('svg[aria-hidden="true"][focusable="false"] path')),
+    icon: Boolean(node.querySelector('svg[aria-hidden="true"] path')),
+    iconTabIndex: node.querySelector("svg")?.tabIndex,
     iconWidth: node.querySelector('svg')?.getBoundingClientRect().width,
     iconHeight: node.querySelector('svg')?.getBoundingClientRect().height,
     fontSize: parseFloat(getComputedStyle(node).fontSize),
@@ -246,7 +249,8 @@ test('FMI method links expose their destination behavior and retain local produc
   assert.ok(links.length >= 15, 'The engagement shape exposes its applicable working companions.');
   for (const link of links) {
     assert.equal(link.target, '_blank');
-    assert.ok(link.rel.split(/\s+/u).includes('noopener') && link.rel.split(/\s+/u).includes('noreferrer'));
+    assert.ok(link.rel.split(/\s+/u).includes('noreferrer'), 'The link suppresses the referrer and opener.');
+    assert.equal(link.iconTabIndex, -1, 'The decorative icon stays outside the tab order.');
     assert.equal(link.cue, '(opens in a new tab)');
     assert.ok(link.icon && link.iconWidth > 0 && link.iconHeight > 0, `${link.text}: the separate-tab icon has rendered geometry`);
     assert.ok(link.iconWidth <= link.fontSize * 1.1 && link.iconHeight <= link.fontSize * 1.1, `${link.text}: the icon retains its text-sized role`);
@@ -256,13 +260,14 @@ test('FMI method links expose their destination behavior and retain local produc
   }
   const manifest = JSON.parse(await readFile(new URL('../../deployment/cpanel/primary-route-manifest.json', import.meta.url), 'utf8'));
   const sources = new Set(manifest.files.map(file => file.source_path));
-  const local = links.filter(link => !/^https:/u.test(link.href));
+  const authority = await loadSourceRouteAuthority();
+  const local = links.filter(link => !/^https:/u.test(resolveSourceRouteValue(link.href, authority)));
   for (const href of new Set(local.map(link => link.href))) {
     const source = 'context-canvas-project-surface/context-canvas/' + href;
     assert.ok((await stat(new URL('../../' + source, import.meta.url))).isFile(), `${href}: the linked prototype exists`);
     assert.ok(sources.has(source), `${href}: the production manifest carries the linked prototype`);
   }
-  const external = links.filter(link => /^https:/u.test(link.href));
+  const external = links.filter(link => /^https:/u.test(resolveSourceRouteValue(link.href, authority)));
   assert.equal(external.length, 1, 'The method source is the one external companion.');
   assert.equal(await page.locator('#source-goodwin a').getAttribute('href'), external[0].href, 'The scenario-method citation resolves to the same research source.');
   assert.match(await page.locator('#source-goodwin').textContent(), /Kim Goodwin/u);
