@@ -346,14 +346,37 @@ async function settle(page) {
   await page.waitForTimeout(300);
 }
 
-async function renderedSnapshot(page, projection, surface) {
-  return page.evaluate(async ({ routes, surface }) => {
+async function observeAboutPage(page, projection, surface, { structureOnly = false } = {}) {
+  return page.evaluate(async ({ routes, surface, structureOnly }) => {
     const round = value => Math.round(value * 64) / 64;
     const digest = async value => {
       const bytes = new TextEncoder().encode(value);
       const hash = await crypto.subtle.digest("SHA-256", bytes);
       return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
     };
+    const bodyStructureDigest = () => {
+      // Native onward links resolve against each surface's real base. Compare
+      // their exact manifest-owned destination while retaining every other byte.
+      const body = document.body.cloneNode(true);
+      const projectedPaths = new Map(routes);
+      const projectedOwners = new Set(projectedPaths.values());
+      const prefix = surface === "source" ? "/source/" : "/projected/";
+      for (const anchor of body.querySelectorAll("a[href]")) {
+        const authored = anchor.getAttribute("href");
+        if (!/^https?:\/\//iu.test(authored)) continue;
+        const url = new URL(authored);
+        if (url.username || url.password || url.origin !== location.origin || !url.pathname.startsWith(prefix)) continue;
+        const path = url.pathname.slice(prefix.length);
+        const projected = surface === "source" ? projectedPaths.get(path)
+          : projectedOwners.has(path) ? path : undefined;
+        if (projected !== undefined) {
+          anchor.setAttribute("href", `primary-route:${projected}${url.search}${url.hash}`);
+        }
+      }
+      return digest(body.outerHTML);
+    };
+    if (structureOnly) return { structureDigest: await bodyStructureDigest() };
+
     const canonicalValue = value => value.replace(
       /(^|[\s,(])-?(?:0+(?:\.0+)?|\.0+)(?:%|px|rem|em|ch|ex|vw|vh|vmin|vmax|cm|mm|in|pt|pc|deg|rad|grad|turn|s|ms)(?=$|[\s,)])/giu,
       (match, prefix) => `${prefix}0`,
@@ -401,28 +424,9 @@ async function renderedSnapshot(page, projection, surface) {
       records[index].styleDigest = styleDigest;
     }
     const root = document.documentElement;
-    // Native onward links resolve against each surface's real base. Compare
-    // their exact manifest-owned destination while retaining every other byte.
-    const body = document.body.cloneNode(true);
-    const projectedPaths = new Map(routes);
-    const projectedOwners = new Set(projectedPaths.values());
-    const prefix = surface === "source" ? "/source/" : "/projected/";
-    for (const anchor of body.querySelectorAll("a[href]")) {
-      const authored = anchor.getAttribute("href");
-      if (!/^https?:\/\//iu.test(authored)) continue;
-      const url = new URL(authored);
-      if (url.username || url.password || url.origin !== location.origin || !url.pathname.startsWith(prefix)) continue;
-      const path = url.pathname.slice(prefix.length);
-      const projected = surface === "source" ? projectedPaths.get(path)
-        : projectedOwners.has(path) ? path : undefined;
-      if (projected !== undefined) {
-        anchor.setAttribute("href", `primary-route:${projected}${url.search}${url.hash}`);
-      }
-    }
-    const bodyMarkup = body.outerHTML;
     const bodyText = document.body.textContent?.replace(/\s+/gu, " ").trim() ?? "";
     return {
-      structureDigest: await digest(bodyMarkup),
+      structureDigest: await bodyStructureDigest(),
       textDigest: await digest(bodyText),
       records,
       documentBox: {
@@ -443,7 +447,32 @@ async function renderedSnapshot(page, projection, surface) {
         onwardDestinations: document.querySelectorAll(".about-boundary a").length,
       },
     };
-  }, { routes: [...projection.projectedPaths], surface });
+  }, { routes: [...projection.projectedPaths], surface, structureOnly });
+}
+
+async function assertOnwardDestinationChange(page, projection, acceptedStructure, label) {
+  const onward = page.locator(".about-boundary a").first();
+  const acceptedHref = await onward.getAttribute("href");
+  assert.equal(acceptedHref, "debriefs.html", `${label}: the About hero leads to Showcase`);
+
+  const setHref = href => onward.evaluate((anchor, value) => anchor.setAttribute("href", value), href);
+  const observeStructure = async () => {
+    const snapshot = await observeAboutPage(page, projection, "projected", { structureOnly: true });
+    return snapshot.structureDigest;
+  };
+  try {
+    await setHref(new URL(acceptedHref, page.url()).href);
+    const showcase = await observeStructure();
+    await setHref(page.url());
+    const about = await observeStructure();
+    assert.notEqual(about, showcase, `${label}: a different manifest-owned path remains a structural change`);
+    await setHref(new URL("#studio-title", page.url()).href);
+    const studio = await observeStructure();
+    assert.notEqual(studio, about, `${label}: a different onward fragment remains a structural change`);
+  } finally {
+    await setHref(acceptedHref);
+  }
+  assert.equal(await observeStructure(), acceptedStructure, `${label}: restoring the authored href restores the About structure`);
 }
 
 function compactSnapshot(snapshot) {
@@ -698,8 +727,8 @@ async function runScenario(browser, server, projection, viewport, mode) {
     await Promise.all([settle(sourcePage), settle(projectedPage)]);
 
     const [sourceSnapshot, projectedSnapshot] = await Promise.all([
-      renderedSnapshot(sourcePage, projection, "source"),
-      renderedSnapshot(projectedPage, projection, "projected"),
+      observeAboutPage(sourcePage, projection, "source"),
+      observeAboutPage(projectedPage, projection, "projected"),
     ]);
     assertContained(sourceSnapshot, `${label}/source`);
     assertContained(projectedSnapshot, `${label}/projected`);
@@ -747,18 +776,7 @@ async function runScenario(browser, server, projection, viewport, mode) {
       mode.forcedColors === "none" &&
       mode.reducedMotion === "no-preference"
     ) {
-      const onward = projectedPage.locator(".about-boundary a").first();
-      const acceptedHref = await onward.getAttribute("href");
-      assert.equal(acceptedHref, "debriefs.html", `${label}: the About hero leads to Showcase`);
-      try {
-        await onward.evaluate((anchor, href) => { anchor.setAttribute("href", href); },
-          `${server.origin}/projected/index.html#studio-title`);
-        const changed = await renderedSnapshot(projectedPage, projection, "projected");
-        assert.notEqual(changed.structureDigest, projectedSnapshot.structureDigest,
-          `${label}: a different manifest-owned destination remains a structural change`);
-      } finally {
-        await onward.evaluate((anchor, href) => { anchor.setAttribute("href", href); }, acceptedHref);
-      }
+      await assertOnwardDestinationChange(projectedPage, projection, projectedSnapshot.structureDigest, label);
       const [sourceInteractions, projectedInteractions] = await Promise.all([
         interactionReceipt(sourcePage),
         interactionReceipt(projectedPage),
