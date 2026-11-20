@@ -23,6 +23,7 @@ import {
   loadTaggedProductionCarrier,
   verifyCarrierTransferEnvelope,
   writeCarrierTransferEnvelope,
+  withGitBlobReader,
 } from "../../tools/package-prod-carrier-transfer.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -367,4 +368,60 @@ test("archive mutation fails the external receipt before activation", async () =
       /digest or byte count differs from its receipt/,
     );
   });
+});
+
+test("the Git batch reader returns binary and empty blobs and rejects missing objects", async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "carrier-git-blobs-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  await git(root, ["init", "-q"]);
+  const binary = Buffer.alloc(256 * 1024 + 3);
+  for (let index = 0; index < binary.length; index++) binary[index] = index % 256;
+  await writeFile(path.join(root, "binary"), binary);
+  await writeFile(path.join(root, "empty"), "");
+  const binaryId = await git(root, ["hash-object", "-w", "binary"]);
+  const emptyId = await git(root, ["hash-object", "-w", "empty"]);
+  const bounds = { maxBlobBytes: binary.length };
+  await withGitBlobReader(root, bounds, async readBlob => {
+    assert.deepEqual(await readBlob(binaryId), binary);
+    assert.equal((await readBlob(emptyId, 0)).length, 0);
+    assert.deepEqual(await readBlob(binaryId), binary);
+  });
+  await assert.rejects(withGitBlobReader(root, bounds, readBlob => readBlob(binaryId, 3)), /Git batch blob size/);
+  await assert.rejects(withGitBlobReader(root, bounds, readBlob => readBlob("0".repeat(40))), /requested object as a blob/);
+});
+
+test("malformed Git batch replies release the owned child", async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "carrier-git-protocol-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const oid = "a".repeat(40);
+  const pidFile = path.join(root, "pid");
+  const command = `#!${process.execPath}
+const fs = require("node:fs");
+fs.writeFileSync("pid", String(process.pid));
+process.stdin.once("data", () => {
+  process.stdout.write(Buffer.from(process.env.REPLY, "base64"), () => {
+    if (process.env.TRUNCATED === "yes") process.exit(0);
+  });
+});
+`;
+  await writeFile(path.join(root, "git"), command, { mode: 0o755 });
+  for (const [reply, error, truncated] of [
+    [`${"b".repeat(40)} blob 1\nx\n`, /requested object as a blob/],
+    [`${oid} tree 1\nx\n`, /requested object as a blob/],
+    [`${oid} blob -1\n`, /requested object as a blob/],
+    [`${oid} blob 50\n`, /Git batch blob size/],
+    ["x".repeat(101), /header exceeds/],
+    [`${oid} blob 4\na`, /complete blob frame/, true],
+    [`${oid} blob 1\nx!`, /payload terminator/],
+    [`${oid} blob 1\nx\ny`, /trailing bytes/],
+  ]) {
+    const env = {
+      PATH: root,
+      REPLY: Buffer.from(reply).toString("base64"),
+      TRUNCATED: truncated ? "yes" : "no",
+    };
+    await assert.rejects(withGitBlobReader(root, { maxBlobBytes: 4, env }, readBlob => readBlob(oid)), error);
+    const pid = Number(await readFile(pidFile, "utf8"));
+    assert.throws(() => process.kill(pid, 0), { code: "ESRCH" });
+  }
 });

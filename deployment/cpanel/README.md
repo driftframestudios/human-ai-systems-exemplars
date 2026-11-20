@@ -214,6 +214,15 @@ The referenced manifest uses one explicit entry for every primary output:
 }
 ```
 
+Each projection or tagged-carrier read opens one Git process for its selected
+repository. It requests full object IDs one at a time, checks each returned ID,
+blob type and byte length, and reads the binary payload and its terminator.
+The projector admits up to 128 MiB per blob. The transfer reader enforces 256
+MiB per entry, 4 MiB per manifest or index, and 1 GiB across the carrier before
+allocating each payload. Truncated or malformed replies terminate the operation
+and its child. The release receipt pins the reader implementation with the
+packaging tool. [Git batch format](https://git-scm.com/docs/git-cat-file#_batch_output)
+
 The assembler reads selected files from regular Git blobs at the accepted
 source coordinate. It resolves Registry tokens through the tracked Registry
 binding in [`deployment/public-references/`](../public-references/README.md).
