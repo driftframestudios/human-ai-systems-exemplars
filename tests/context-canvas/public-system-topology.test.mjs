@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
 import { resolve } from "node:path";
 import test from "node:test";
 import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
@@ -29,7 +29,7 @@ const cometSurfaces = [
 ];
 
 async function canvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function jsonLd(source) {

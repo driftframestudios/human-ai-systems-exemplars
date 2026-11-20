@@ -5,6 +5,7 @@
     "node": ">=22.23.4 <23"
   },
   "scripts": {
+    "minify:html": "node tools/check-node-runtime.mjs --quiet && html-minifier --config-file html-minifier.config.json",
     "check:readme-routes": "node tools/check-node-runtime.mjs --quiet && node tools/check-readme-routes.mjs",
     "check:repository-handoff-foundation": "node tools/check-node-runtime.mjs --quiet && node tools/repository-handoff-foundation.mjs",
     "plan:repository-handoff-foundation": "node tools/check-node-runtime.mjs --quiet && node tools/repository-handoff-foundation.mjs --plan",

@@ -66,6 +66,7 @@ const catalogRoomContexts = [
     '"name": "Give the Comparison Room"',
   ].map(fragment => ["article title", fragment]),
   ["comparison space", "a useful comparison needs room"],
+  ["audience", "presentations that read the room."],
 ].map(([sense, fragment]) => ({
   sense,
   fragment: fragment.toLowerCase(),
@@ -87,11 +88,14 @@ const aiSystemsRoomContexts = [
 const reportedConsequenceColumnHeader =
   /<th scope="col"(?: data-label="Reported consequence")?>(?:Reported consequence|What changed)<\/th>/u;
 
-// The Review Routing graph retains this exact source node label across its
-// machine-readable contract and equivalent semantic reading. Each bounded
-// carrier earns an independent occurrence so new generic role language still
-// receives the corpus-wide review below.
+// The laboratory author identifies the repository instructions that guide coding work.
+// The Review Routing graph repeats one source label in its data and text equivalent.
+// Each exception admits its single reviewed occurrence.
 const sourceBearingRoleLanguageAllowlist = [
+  {
+    path: "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
+    fragment: "Repository-level instructions guide AI collaborators toward the relevant code, tests, and evidence.",
+  },
   {
     path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     fragment: "<strong>AI assistant.</strong> Symfony PHP monolith",
@@ -106,7 +110,7 @@ const sourceBearingRoleLanguageAllowlist = [
   },
   {
     path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
-    fragment: '\"id\":\"assistant\",\"label\":\"AI assistant\",\"col\":3',
+    fragment: /"id":\s*"assistant",\s*"label":\s*"AI assistant",\s*"col":\s*3\b/u,
   },
 ];
 
@@ -192,9 +196,13 @@ async function currentPublicRoleLanguageSources() {
 function sourceBearingRoleException(path, source, match) {
   return sourceBearingRoleLanguageAllowlist.find(entry => {
     if (entry.path !== path) return false;
-    const fragmentStart = source.indexOf(entry.fragment);
+    const fragment = entry.fragment instanceof RegExp
+      ? source.match(entry.fragment)?.[0]
+      : entry.fragment;
+    if (!fragment) return false;
+    const fragmentStart = source.indexOf(fragment);
     if (fragmentStart < 0) return false;
-    const fragmentEnd = fragmentStart + entry.fragment.length;
+    const fragmentEnd = fragmentStart + fragment.length;
     return match.index >= fragmentStart && match.index + match[0].length <= fragmentEnd;
   });
 }
@@ -232,7 +240,6 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\brooms?\b/iu),
     [
-      "ai-systems.html",
       "debriefs.html",
       "grammar-family.html",
       "hiring-surfaces-talent-agent-intake.html",
@@ -241,13 +248,12 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
     ],
   );
 
-  const [runtime, citation, classroom, tableReading, catalog, aiSystems] = await Promise.all([
+  const [runtime, citation, classroom, tableReading, catalog] = await Promise.all([
     readCanvasFile("grammar-family.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("prompt-side-conditions-practice.html"),
     readCanvasFile(tableReadingRoute),
     readCanvasFile("debriefs.html"),
-    readCanvasFile("ai-systems.html"),
   ]);
   assert.match(runtime, /shared room or document/u);
   assert.match(runtime, /per-room coordination/u);
@@ -258,7 +264,7 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.equal(senses.includes(null), false, "Each table-reading room use has a reviewed context");
   assert.deepEqual(
     [...new Set(senses)].sort(),
-    ["comparison space", "embedding space", "latitude"],
+    ["embedding space", "latitude"],
     "The article retains the independently reviewed space and latitude meanings",
   );
 
@@ -266,17 +272,10 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.equal(catalogSenses.includes(null), false, "Each catalog room use belongs to its reviewed article context");
   assert.deepEqual(
     [...new Set(catalogSenses)].sort(),
-    ["article title", "comparison space"],
-    "The catalog retains the accepted article title and its comparison-space description",
+    ["audience"],
+    "The catalog describes adapting presentations to their audience",
   );
 
-  const aiSystemsSenses = classifyRoomUses(aiSystems, aiSystemsRoomContexts);
-  assert.equal(aiSystemsSenses.includes(null), false, "Each AI Systems room use is an exact canonical-title carrier");
-  assert.deepEqual(
-    aiSystemsSenses,
-    ["linked article title", "linked article title", "linked article title"],
-    "AI Systems retains the linked article name, headline, and visible heading",
-  );
 });
 
 for (const { name, source, expected, contexts } of [
@@ -453,7 +452,9 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
-      /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
+      route === "ehr-discrete-genomic-result.html"
+        ? /<dt>Scope and role<\/dt>\s*<dd>I combined my years of EHR integration/u
+        : /<dt>Scope and role(?: · [^<]+)?<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
       route,
     );
   }
@@ -469,7 +470,7 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("three-way-comparative-return.html"),
   ]);
-  assert.match(aiSystems, /I design, build, test, and publish the open-source methods, software, and multi-agent collaboration environments shown here/u);
+  assert.match(aiSystems, /I design, build, test, and publish these open-source methods and software/u);
   assert.match(hiring, /hiring research with inspectable work in open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
   assert.match(
     compactAccountByRoute(compactSource, "three-way-comparative-return.html"),
@@ -481,7 +482,7 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
   }
 
   const debriefs = await readCanvasFile("debriefs.html");
-  assert.match(debriefs, /Each Debrief here separates business context, solution shaping, implementation mechanics, and what\s+remained unresolved/u);
+  assert.match(debriefs, /Each case study here separates business context, solution shaping, implementation mechanics, and what\s+remained unresolved/u);
   assert.match(debriefs, /how my judgment actually operated under constraint/u);
   assert.doesNotMatch(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
 });
@@ -502,7 +503,7 @@ test("curated visitor prose states findings directly while citations carry prove
     readCanvasFile("field-inspection-harness-replatform.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
   ]);
-  assert.match(about, /<title>Technology leadership portfolio \| Context Canvas<\/title>/u);
+  assert.match(about, /<title>Technology leadership portfolio \| Vikrant Varun Kudesia<\/title>/u);
   assert.match(about, /<dt>What Changed<\/dt>/u, "About keeps outcomes in its concise folio records");
   assert.match(fieldInspection, /Global invariants and candidate performance targets become testable against a bounded corpus/u);
   assert.match(hiring, /Vendor descriptions reviewed in public material from 2025–2026/u);

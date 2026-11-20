@@ -203,14 +203,6 @@ function assertExactArray(actual, expected, label) {
   }
 }
 
-function replaceExactOnce(source, search, replacement, label) {
-  const first = source.indexOf(search);
-  if (first === -1 || source.indexOf(search, first + search.length) !== -1) {
-    fail(`${label} must appear exactly once in the Conditioning Field source.`);
-  }
-  return `${source.slice(0, first)}${replacement}${source.slice(first + search.length)}`;
-}
-
 function replacePatternOnce(source, pattern, replacement, label) {
   let replacements = 0;
   const rewritten = source.replace(pattern, (...arguments_) => {
@@ -275,22 +267,17 @@ export function deriveConditioningFieldProjection(html, routeDestinations = null
   }
 
   let projected = html;
-  for (const dependency of [
-    '  <link rel="stylesheet" href="canvas-shell.css">\n',
-    '  <script src="visitor-boundary-contract.js" defer></script>\n',
-    '  <script src="canvas-shell.js" defer></script>\n',
+  for (const [dependency, pattern] of [
+    ["canvas-shell.css", /<link\s+rel="stylesheet"\s+href="canvas-shell\.css"\s*\/?>/gu],
+    ["visitor-boundary-contract.js", /<script\s+src="visitor-boundary-contract\.js"\s+defer\s*>\s*<\/script>/gu],
+    ["canvas-shell.js", /<script\s+src="canvas-shell\.js"\s+defer\s*>\s*<\/script>/gu],
   ]) {
-    projected = replaceExactOnce(
-      projected,
-      dependency,
-      "",
-      `Shared shell dependency ${dependency.trim()}`,
-    );
+    projected = replacePatternOnce(projected, pattern, "", `Shared shell dependency ${dependency}`);
   }
 
   projected = replacePatternOnce(
     projected,
-    /,\n\s*"isBasedOn":\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\n\s*\})/gu,
+    /,\s*"isBasedOn"\s*:\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\s*\})/gu,
     "",
     "Unresolved Conditioning Field JSON-LD public reference",
   );
@@ -301,10 +288,10 @@ export function deriveConditioningFieldProjection(html, routeDestinations = null
     null,
     routeDestinations,
   );
-  projected = replaceExactOnce(
+  projected = replacePatternOnce(
     projected,
-    "  <noscript><style>\n",
-    `${conditioningFieldProjectionStyle}  <noscript><style>\n`,
+    /<noscript\s*>\s*<style\s*>/gu,
+    (opening) => `${conditioningFieldProjectionStyle}${opening}`,
     "Projection-local visitor-boundary style insertion point",
   );
 

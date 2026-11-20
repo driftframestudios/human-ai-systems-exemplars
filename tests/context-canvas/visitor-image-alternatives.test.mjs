@@ -61,7 +61,7 @@ const debriefProxyContracts = [
   {
     route: "fmi-lims-eln-replatforming.html",
     directory: "sample-noone-could-find",
-    publicSafePatterns: [/generalized workflows and\s+synthetic content/iu],
+    publicSafePatterns: [/shared requirements, synthetic specimen workflows, and executable tests/iu],
     alternateReceivers: ["clinical-trial-coordination-upfront.webp"],
   },
   {

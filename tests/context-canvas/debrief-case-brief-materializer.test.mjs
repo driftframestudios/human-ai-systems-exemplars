@@ -1,22 +1,18 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { copyFile, mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { execFileSync } from "node:child_process";
+import { format } from "prettier";
+import { minify } from "html-minifier";
 import { test } from "node:test";
 
 import {
   formatMaterializationError,
   readAdmittedCaseBriefSource,
-  replaceGeneratedAtAGlance,
   writeAtomically,
 } from "../../tools/materialize-debrief-case-briefs.mjs";
-
-const generatedBlock = [
-  "          <!-- debrief-at-a-glance-projection:start -->",
-  "          <section id=\"case-brief\" aria-labelledby=\"case-brief-at-a-glance-title\"><h2 id=\"case-brief-at-a-glance-title\">At-a-Glance</h2></section>",
-  "          <!-- debrief-at-a-glance-projection:end -->",
-].join("\n");
 
 test("genomic compact accounts retain abbreviation expansions in both receiving readings", async () => {
   const root = new URL("../../context-canvas-project-surface/", import.meta.url);
@@ -64,86 +60,128 @@ test("Case Brief source admission rejects symlinks, directories, and resolved pa
   );
 });
 
-test("Full Debrief projection replaces the one legacy coordinate and preserves surrounding bytes", () => {
-  const source = [
-    "<main>",
-    "          <p>Before</p>",
-    "          <span id=\"case-brief\" aria-hidden=\"true\"></span>",
-    "          <p>After</p>",
-    "</main>",
-  ].join("\n");
+test("catalog, compact source and case study edits synchronize through the normal build and survive formatting", async t => {
+  const root = resolve(import.meta.dirname, "../..");
+  const fixture = await mkdtemp(join(tmpdir(), "case-brief-build-"));
+  t.after(() => rm(fixture, { recursive: true, force: true }));
+  const tools = join(fixture, "tools");
+  const surface = "context-canvas-project-surface";
+  const canvas = join(fixture, surface, "context-canvas");
+  const data = join(fixture, surface, "data");
+  await Promise.all([tools, canvas, data].map(dir => mkdir(dir, { recursive: true })));
+  await Promise.all(["materialize-debrief-case-briefs.mjs", "check-node-runtime.mjs", "node-runtime-admission.mjs"]
+    .map(file => copyFile(join(root, "tools", file), join(tools, file))));
+  await symlink(join(root, "node_modules"), join(fixture, "node_modules"), "dir");
 
-  assert.equal(
-    replaceGeneratedAtAGlance(source, generatedBlock, { fileLabel: "example.html" }),
-    source.replace("          <span id=\"case-brief\" aria-hidden=\"true\"></span>", generatedBlock),
-  );
-});
+  const route = "genomic-viewer-replatforming.html";
+  const routeSource = await readFile(join(root, surface, "context-canvas", route), "utf8");
+  const study = routeSource.replace(/(<section\b[^>]*\bid="case-brief"[^>]*>[\s\S]*?<p>)/u, "$1A new sentence by the author. ");
+  assert.notEqual(study, routeSource);
+  const page = join(canvas, route);
+  await writeFile(page, study);
 
-test("Full Debrief projection refreshes one stale bounded block idempotently", () => {
-  const staleBlock = generatedBlock.replace("At-a-Glance", "Stale heading");
-  const source = `<main>\n${staleBlock}\n<p>Route-owned narrative</p>\n</main>`;
-  const expected = `<main>\n${generatedBlock}\n<p>Route-owned narrative</p>\n</main>`;
+  const sourceName = "debrief-case-briefs.source.html";
+  const source = await readFile(join(root, surface, "data", sourceName), "utf8");
+  const entry = source.match(/<article data-case-brief-source="genomic-viewer-replatforming\.html">[\s\S]*?(?=\s*<article data-case-brief-source=)/u)[0];
+  await writeFile(join(data, sourceName), `<main data-debrief-case-brief-sources><h1>Summaries</h1>${entry}</main>`);
+  const catalog = join(canvas, "debriefs.html");
+  const emptyCatalog = await format(`<main><div data-case-brief-routes="${route}">Author’s catalog introduction.</div></main><!-- /content class on main -->`, { parser: "html" });
+  assert.match(emptyCatalog, /<\/main>\s+<!-- \/content class on main -->/u);
+  await writeFile(catalog, emptyCatalog);
+  const run = (...args) => execFileSync(process.execPath, [join(tools, "materialize-debrief-case-briefs.mjs"), ...args], { encoding: "utf8", stdio: "pipe" });
 
-  assert.equal(
-    replaceGeneratedAtAGlance(source, generatedBlock, { fileLabel: "example.html" }),
-    expected,
-  );
-  assert.equal(
-    replaceGeneratedAtAGlance(expected, generatedBlock, { fileLabel: "example.html", requireGeneratedBlock: true }),
-    expected,
-  );
-});
+  run();
+  const generated = await readFile(catalog, "utf8");
+  assert.ok(generated.includes(`data-case-brief-projection="${route}"`));
+  assert.ok(generated.includes("Author’s catalog introduction."));
+  assert.ok(generated.includes("A new sentence by the author."));
+  const formatted = await format(generated, { parser: "html" });
+  await writeFile(catalog, formatted);
+  run("--check");
+  run();
+  assert.equal(await readFile(catalog, "utf8"), formatted);
+  assert.equal(await readFile(page, "utf8"), study);
 
-test("Full Debrief projection reports missing, partial, and duplicate ownership boundaries", () => {
-  assert.throws(
-    () => replaceGeneratedAtAGlance("<main></main>", generatedBlock, {
-      fileLabel: "missing.html",
-      requireGeneratedBlock: true,
-    }),
-    /missing\.html is missing its generated At-a-Glance projection block/u,
-  );
-  assert.throws(
-    () => replaceGeneratedAtAGlance(
-      "          <!-- debrief-at-a-glance-projection:start -->",
-      generatedBlock,
-      { fileLabel: "partial.html" },
-    ),
-    /partial\.html must contain either zero or one complete generated At-a-Glance projection block/u,
-  );
-  assert.throws(
-    () => replaceGeneratedAtAGlance(
-      [
-        "          <span id=\"case-brief\" aria-hidden=\"true\"></span>",
-        "          <span id=\"case-brief\" aria-hidden=\"true\"></span>",
-      ].join("\n"),
-      generatedBlock,
-      { fileLabel: "duplicate.html" },
-    ),
-    /duplicate\.html must contain exactly one legacy #case-brief insertion coordinate/u,
-  );
-});
+  const minifier = JSON.parse(await readFile(join(root, "html-minifier.config.json"), "utf8"));
+  const minified = await minify(formatted, minifier);
+  assert.ok(minified.includes(`data-case-brief-projection="${route}"`), "Compact HTML keeps quotes on attribute values");
+  assert.equal(await format(minified, { parser: "html" }), formatted);
+  await writeFile(catalog, minified);
+  run("--check");
+  run();
+  assert.equal(await readFile(catalog, "utf8"), minified);
 
-test("Full Debrief projection keeps its published coordinate and heading identity inside the generated boundary", () => {
-  const staleBlock = generatedBlock
-    .replace('id="case-brief"', 'id="stale-case-brief"')
-    .replace('id="case-brief-at-a-glance-title"', 'id="stale-at-a-glance-title"');
+  for (const [invalid, message] of [
+    [minified.replace('data-case-brief-projection="' + route, 'data-case-brief-projection="foreign.html'), /declared case-study routes and order/u],
+    [minified.replace("<!-- debrief-case-brief-projections:end -->", "<p>New author copy.</p><!-- debrief-case-brief-projections:end -->"), /only direct case-study templates/u],
+    [minified.replace("<!-- debrief-case-brief-projections:end -->", "").replace("</main>", "</main><!-- debrief-case-brief-projections:end -->"), /only direct case-study templates|unmatched closing main/u],
+    [minified.replace("<!-- debrief-case-brief-projections:start -->", "").replace("<!-- debrief-case-brief-projections:end -->", "<!-- debrief-case-brief-projections:start --><!-- debrief-case-brief-projections:end -->"), /inside the catalog projection markers/u],
+  ]) {
+    await writeFile(catalog, invalid);
+    assert.throws(() => run(), message);
+    assert.equal(await readFile(catalog, "utf8"), invalid);
+  }
+  const extraEdit = minified.replace("Related figures and media", "Figures in this case study");
+  assert.notEqual(extraEdit, minified);
+  await writeFile(catalog, extraEdit);
+  run();
+  run("--check");
+  assert.ok((await readFile(join(data, sourceName), "utf8")).includes("Figures in this case study"));
+  assert.equal(await readFile(page, "utf8"), study);
+  await writeFile(catalog, minified);
+  run();
 
-  assert.throws(
-    () => replaceGeneratedAtAGlance(
-      `<main>\n${staleBlock}\n<section id="case-brief"></section>\n</main>`,
-      generatedBlock,
-      { fileLabel: "displaced-coordinate.html" },
-    ),
-    /displaced-coordinate\.html generated At-a-Glance projection must own exactly one #case-brief and keep that identifier out of route-owned markup; found 1 inside and 1 outside/u,
-  );
-  assert.throws(
-    () => replaceGeneratedAtAGlance(
-      `<main>\n${generatedBlock}\n<h2 id="case-brief-at-a-glance-title">Route-owned heading</h2>\n</main>`,
-      generatedBlock,
-      { fileLabel: "duplicate-heading.html" },
-    ),
-    /duplicate-heading\.html generated At-a-Glance projection must own exactly one #case-brief-at-a-glance-title and keep that identifier out of route-owned markup; found 1 inside and 1 outside/u,
-  );
+  const baseText = "A new sentence by the author.";
+  const catalogText = "Revised in the catalog with <em>inline emphasis</em>, &lt;sample&gt;, and &amp;lt;.";
+  const revisedCatalog = minified.replace(baseText, catalogText);
+  await writeFile(catalog, revisedCatalog);
+  assert.throws(() => run("--check"), /needs synchronized case summaries/u);
+  const oldCompact = await readFile(join(data, sourceName), "utf8");
+  run();
+  assert.equal(await readFile(catalog, "utf8"), revisedCatalog);
+  const revisedPage = await readFile(page, "utf8");
+  assert.ok(revisedPage.includes(catalogText));
+  assert.ok((await readFile(join(data, sourceName), "utf8")).includes(catalogText));
+
+  // Resume the state after the visible receivers were written and before the checkpoint advanced.
+  await writeFile(join(data, sourceName), oldCompact);
+  run();
+  run("--check");
+  assert.equal(await readFile(page, "utf8"), revisedPage);
+  assert.equal(await readFile(catalog, "utf8"), revisedCatalog);
+
+  const compact = await readFile(join(data, sourceName), "utf8");
+  const compactText = "Revised in the compact source.";
+  await writeFile(join(data, sourceName), compact.replace(catalogText, compactText));
+  run();
+  run("--check");
+  assert.ok((await readFile(page, "utf8")).includes(compactText));
+  const currentCatalog = await readFile(catalog, "utf8");
+  assert.ok(currentCatalog.includes(compactText));
+  const editedCatalog = currentCatalog.replace(compactText, "Concurrent catalog edit.");
+  const editedPage = revisedPage.replace(catalogText, "Concurrent page edit.");
+  const checkpoint = await readFile(join(data, sourceName), "utf8");
+  await writeFile(catalog, editedCatalog);
+  await writeFile(page, editedPage);
+  assert.throws(() => run(), /genomic-viewer-replatforming\.html At-a-Glance has different edits/u);
+  assert.equal(await readFile(catalog, "utf8"), editedCatalog);
+  assert.equal(await readFile(page, "utf8"), editedPage);
+  assert.equal(await readFile(join(data, sourceName), "utf8"), checkpoint);
+
+  await writeFile(page, editedPage.replace("</main>", '<span id="case-brief"></span></main>'));
+  assert.throws(() => run(), /exactly one #case-brief; found 2/u);
+  assert.equal(await readFile(catalog, "utf8"), editedCatalog);
+
+  // A newly declared study may still carry its original empty #case-brief anchor.
+  const legacy = routeSource.replace(/<!-- debrief-at-a-glance-projection:start -->[\s\S]*?<!-- debrief-at-a-glance-projection:end -->/u, '<span id="case-brief" aria-hidden="true"></span>');
+  assert.notEqual(legacy, routeSource);
+  await writeFile(page, legacy);
+  await writeFile(catalog, emptyCatalog);
+  await writeFile(join(data, sourceName), `<main data-debrief-case-brief-sources><h1>Summaries</h1>${entry.replace(/<!-- case-brief-sync [^>]+-->/u, "")}</main>`);
+  run();
+  run("--check");
+  assert.match(await readFile(page, "utf8"), /<section id="case-brief"/u);
+
 });
 
 test("Materializer errors retain operating-system context needed for recovery", () => {
@@ -168,15 +206,4 @@ test("Atomic replacement preserves a receiver changed after materialization plan
     /receiver\.html changed after materialization planning; preserve the newer edits and rerun the build/u,
   );
   assert.equal(await readFile(destination, "utf8"), "newer route-owned edit");
-});
-
-test("Malformed receiver markup reports the source file and tag offset", () => {
-  assert.throws(
-    () => replaceGeneratedAtAGlance(
-      `<main>\n${generatedBlock}\n<a aria-label="Unclosed>Read</a></main>`,
-      generatedBlock,
-      { fileLabel: "broken.html", requireGeneratedBlock: true },
-    ),
-    /broken\.html contains an unterminated tag at offset \d+/u,
-  );
 });

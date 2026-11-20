@@ -95,7 +95,7 @@ async function focusPreview(page, cardSelector) {
         caption: `Preview visual — ${expectedCaption}`,
         linkLabel: card?.getAttribute("data-formats") === "article"
           ? "Open the Article"
-          : "Read the Full Debrief",
+          : "Read the Case Study",
       },
       actual: {
         src: attr(previewImage, "src"),
@@ -383,28 +383,10 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       );
       assert.deepEqual(
         article.actions,
-        [{ label: "Read the Full Debrief", href: article.route }],
+        [{ label: "Read the Case Study", href: article.route }],
         `${article.route} should continue into its fragment-free complete reading`,
       );
-      if (article.route === "choose-your-player-humatics.html") {
-        assert.match(
-          article.trackIntro?.text || "",
-          /client meeting, field inquiry, and two-day reframe/u,
-          `${article.route} should retain its source-owned narrative orientation`,
-        );
-        assert.deepEqual(
-          article.trackIntro?.links,
-          ["choose-your-player-humatics.html#narrative-architecture-title"],
-          `${article.route} should qualify its narrative-track link for HTTP and direct-file viewing`,
-        );
-        assert.deepEqual(
-          article.trackIntro?.gridColumn,
-          ["1", "-1"],
-          `${article.route} should keep its introduction above both independent quick scans`,
-        );
-      } else {
-        assert.equal(article.trackIntro, null, `${article.route} should add no unowned track introduction`);
-      }
+      assert.equal(article.trackIntro, null, `${article.route} presents its quick scans directly`);
     }
 
     assert.equal(projection.eras.length, 12);
@@ -455,12 +437,12 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       await retained.evaluate(node => node.removeAttribute("data-test-cycle-identity"));
     }
 
-    assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 Case Briefs across 12 catalog cases/u);
+    assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 summaries across 12 catalog cases/u);
     assertTelemetry(telemetry);
   });
 }
 
-test("the Humatics quick-scan introduction carries visitors to its qualified narrative track", async t => {
+test("an optional quick-scan introduction carries visitors to its qualified narrative track", async t => {
   const context = await browser.newContext({
     viewport: { width: 736, height: 1000 },
     reducedMotion: "reduce",
@@ -471,6 +453,10 @@ test("the Humatics quick-scan introduction carries visitors to its qualified nar
   const telemetry = monitor(page);
 
   await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await page.locator('template[data-case-brief-projection="choose-your-player-humatics.html"]').evaluate(template => {
+    const heading = template.content.querySelector(".debrief-case-brief__track-group-title");
+    heading.insertAdjacentHTML("afterend", '<p class="debrief-case-brief__track-intro">Read the <a href="choose-your-player-humatics.html#narrative-architecture-title">narrative track</a>.</p>');
+  });
   await chooseCaseBriefMode(page);
   await waitForCaseBriefProjection(page);
 
@@ -481,6 +467,10 @@ test("the Humatics quick-scan introduction carries visitors to its qualified nar
   assert.equal(
     await link.getAttribute("href"),
     "choose-your-player-humatics.html#narrative-architecture-title",
+  );
+  assert.deepEqual(
+    await link.evaluate(node => [getComputedStyle(node.parentElement).gridColumnStart, getComputedStyle(node.parentElement).gridColumnEnd]),
+    ["1", "-1"],
   );
   assertTelemetry(telemetry);
   await link.click();
@@ -502,7 +492,7 @@ test("an unknown track-group child rejects one projection as an atomic fallback"
     const response = await intercepted.fetch();
     const body = await response.text();
     const malformed = body.replace(
-      /(<template\b(?=[^>]*\bdata-case-brief-projection="choose-your-player-humatics\.html")[^>]*>[\s\S]*?<h4 class="txt-h4 debrief-case-brief__track-group-title">[^<]+<\/h4>)/u,
+      /(<template\b(?=[^>]*\bdata-case-brief-projection="choose-your-player-humatics\.html")[^>]*>[\s\S]*?<h4\s+class="txt-h4 debrief-case-brief__track-group-title"\s*>[^<]+<\/h4>)/u,
       '$1\n      <div data-unexpected-track-child="">Unowned projection content</div>',
     );
     assert.notEqual(malformed, body, "the fixture should alter the intended Humatics projection");
@@ -595,12 +585,12 @@ test("a missing EHR projection retains its complete ordinary card as one atomic 
     ordinaryTextVisible: true,
     compactHidden: true,
     compactArticles: 0,
-    fullRouteLabel: "Read the Full Debrief for the first EHR Integration Series reading...",
+    fullRouteLabel: "Read the Case Study for the first EHR Integration Series reading...",
     fullRouteHref: "ehr-discrete-genomic-result.html",
   });
   assert.equal(
     (await page.locator("[data-filter-status]").textContent()).trim(),
-    "11 of 16 Case Briefs are displayed in the catalog. 5 Full Debrief routes remain available in their catalog cards.",
+    "11 of 16 summaries are displayed in the catalog. 5 case studies remain available in their catalog cards.",
   );
 
   assertTelemetry(telemetry);
@@ -778,11 +768,11 @@ test("the Full Debrief index names every EHR reading from its route-specific nav
     links.map(link => link.textContent.replace(/\s+/g, " ").trim())
   ));
   assert.deepEqual(labels, [
-    "SR1 · Partial The Discrete Result That Kept Arriving as a PDF",
-    "SR2 · Pivoted Two Charts, One Result",
-    "SR3 · Successful Three Portals",
-    "SR4 · Failed The Alert Nobody Clicked",
-    "SR5 · Partial Re-platforming the Backbone",
+    "SR1 · Partial How to Deliver Discrete Genomics Data in Epic",
+    "SR2 · Pivoted How to Normalize EHR Results Once Before Emitting",
+    "SR3 · Successful How to Keep Patient Records Consistent Across Three EHRs",
+    "SR4 · Failed I Designed an Alert that Nobody Clicked",
+    "SR5 · Partial How to Migrate Without Dropping Results",
   ]);
   assertTelemetry(telemetry);
 });

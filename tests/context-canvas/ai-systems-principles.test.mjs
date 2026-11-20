@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readSourceContract } from "./read-source-contract.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -223,7 +224,7 @@ const sourceSectionIds = new Map([
 ]);
 
 async function canvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function normalizedText(value) {
@@ -237,7 +238,7 @@ function normalizedText(value) {
 function normalizedMetadataTitle(value) {
   return value
     .replace(/&amp;/gu, "&")
-    .replace(/\s+\|\s+Context Canvas$/u, "")
+    .replace(/\s+\|\s+Vikrant (?:Varun )?Kudesia$/u, "")
     .replace(/\s+/gu, " ")
     .trim();
 }
@@ -365,7 +366,7 @@ test("the complete AI Systems family carries one principle at its earned body tr
     const anchorEnd = anchoredElementEnd(source, owner, expected.after);
     assert.ok(anchorEnd, route + ": missing route-specific content anchor");
     assert.ok(
-      principleStart > anchorEnd,
+      principleStart >= anchorEnd,
       route + ": principle precedes the content that earns it",
     );
 
@@ -529,7 +530,7 @@ test("the visual reference includes all seventeen AI Systems routes", async () =
 test("the AI Systems shelf exposes the complete family", async () => {
   const source = await canvasFile("canvas-shell.js");
   const aiShelf = source.match(
-    /\bai:\s*\[([\s\S]*?)\n\s*\],\n\s*debriefs:/u,
+    /\bai:\s*\[([\s\S]*?)\n\s*\],\n\s*showcase:/u,
   )?.[1] ?? "";
 
   for (const route of placements.keys()) {

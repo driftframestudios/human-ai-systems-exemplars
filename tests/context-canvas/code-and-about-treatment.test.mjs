@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readSourceContract } from "./read-source-contract.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -17,7 +18,7 @@ const canvasRoot = resolve(
 const sourceRouteAuthority = await loadSourceRouteAuthority();
 
 async function readCanvasFile(path) {
-  const source = await readFile(resolve(canvasRoot, path), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
   return path.endsWith(".html")
     ? source.replace(/\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\}/gu,
       (token) => resolveSourceRouteValue(token, sourceRouteAuthority))

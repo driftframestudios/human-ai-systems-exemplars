@@ -159,6 +159,7 @@
           "$ref": "#/$defs/text"
         },
         "object_name": {
+          "description": "Label from the authored page head, structured object, or sitemap occurrence. A display-name edit can change this label while its token and destination stay stable.",
           "$ref": "#/$defs/text"
         },
         "source_value": {

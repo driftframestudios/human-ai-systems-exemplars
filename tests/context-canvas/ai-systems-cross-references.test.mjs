@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 
@@ -27,7 +27,7 @@ function publicValue(value) {
   return resolveSourceRouteValue(value, routeAuthority);
 }
 async function source(relativePath) {
-  return readFile(resolve(repositoryRoot, relativePath), "utf8");
+  return readSourceContract(resolve(repositoryRoot, relativePath), "utf8");
 }
 
 function jsonLd(html) {
@@ -77,7 +77,7 @@ test("AI Systems and Shared Machinery publish one current title at every self-me
     const record = jsonLd(html);
 
     assert.equal(
-      html.match(/<title>([^<]+) \| Context Canvas<\/title>/u)?.[1],
+      html.match(/<title>([^<]+) \| Vikrant Varun Kudesia<\/title>/u)?.[1],
       expectedTitle,
       `${route}: document title`,
     );

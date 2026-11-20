@@ -4,6 +4,7 @@ import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/pr
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { format } from "prettier";
 
 import {
   artifactAuthor,
@@ -206,6 +207,17 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   assert.equal(receipt.navigation.exit_links, 2);
   assert.equal(receipt.navigation.new_tab_exit_links, 2);
   assert.equal(receipt.navigation.secure_new_tab_exit_links, 2);
+
+  const formattedSource = await format(source, { parser: "html" });
+  const formattedProjection = deriveConditioningFieldProjection(
+    formattedSource,
+    routeReference.destinations,
+  );
+  assert.equal(occurrenceCount(formattedProjection, /<style data-iframe-route-projection>/gu), 1);
+  assert.doesNotMatch(
+    formattedProjection,
+    /canvas-shell\.(?:css|js)|visitor-boundary-contract\.js|\{\{PUBLIC_URL_/u,
+  );
 
   const messagingSource = source.replace(
     "</body>",
@@ -495,7 +507,18 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2785412 });
+  const expectedBytes = [...plan.outputFiles.values()].reduce(
+    (total, file) => total + file.byteLength, 0,
+  );
+  assert.deepEqual(verification, { files: 27, bytes: expectedBytes });
+  const entry = "conditioning-field/index.html";
+  const entryPath = path.join(temporaryRoot, entry);
+  const original = plan.outputFiles.get(entry);
+  await writeFile(entryPath, Buffer.alloc(original.byteLength));
+  await assert.rejects(
+    verifyPackagePlan(plan, temporaryRoot), /differs from its plan: conditioning-field\/index\.html/,
+  );
+  await writeFile(entryPath, original);
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

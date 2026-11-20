@@ -11,6 +11,10 @@ export async function readSourceContract(path, encoding) {
   const source = await readFile(path, encoding);
   const filename = path instanceof URL ? fileURLToPath(path) : path;
   if (typeof source !== 'string' || extname(filename) !== '.html') return source;
+  return normalizeHtmlSourceContract(source);
+}
+
+export function normalizeHtmlSourceContract(source) {
   return minify(source, {
     collapseWhitespace: true,
     collapseInlineTagWhitespace: true,

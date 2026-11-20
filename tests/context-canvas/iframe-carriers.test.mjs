@@ -162,7 +162,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     "https://iframes.vik.guru/v1/canvas/who-to-believe-context-tree/",
-    "Interactive Who To Believe Context Tree",
+    "Interactive Reviews Generation Platform Context Tree",
     "lazy",
   ],
   [
@@ -278,11 +278,9 @@ async function discoverVisitorCarriers() {
   const htmlPaths = await filesWithin(visitorSurfaceRoot, (path) => path.endsWith(".html"));
   for (const path of htmlPaths) {
     const html = await readFile(path, "utf8");
-    assert.doesNotMatch(
-      html,
-      /<!--[\s\S]*?<iframe\b[\s\S]*?-->/iu,
-      `${repositoryPath(path)} does not hide a carrier in an HTML comment`,
-    );
+    for (const [comment] of html.matchAll(/<!--[\s\S]*?-->/gu)) {
+      assert.doesNotMatch(comment, /<iframe\b/iu, `${repositoryPath(path)} has a commented iframe`);
+    }
     const openingTags = [...html.matchAll(/<iframe\b[^>]*>/giu)];
     const completeTags = [...html.matchAll(/(<iframe\b[^>]*>)([\s\S]*?)<\/iframe>/giu)];
     assert.equal(
@@ -300,7 +298,7 @@ async function discoverVisitorCarriers() {
       carriers.push({
         allow: attributeValue(tag, "allow"),
         blocks: enclosingSemanticBlocks(html, opening.index),
-        loading: attributeValue(tag, "loading"),
+        loading: attributeValue(tag, "loading") ?? "eager",
         owner: repositoryPath(path),
         ownerPath: path,
         referrerpolicy: attributeValue(tag, "referrerpolicy"),
@@ -439,12 +437,12 @@ test("the Who To Believe Context Tree sits beside outcomes in an expanded viewin
   assert.ok(contextTree < outcomes, "the Context Tree prepares the outcome reading");
   assert.match(
     html,
-    /\.wtb-context-embed iframe\s*\{[^}]*block-size:\s*clamp\(58rem,\s*calc\(78vh \+ 16rem\),\s*78rem\)/u,
+    /\.wtb-context-embed iframe\s*\{[^}]*block-size:\s*clamp\(58rem,\s*(?:calc\(78vh \+ 16rem\)|78vh \+ 16rem),\s*78rem\)/u,
     "the default iframe frame adds 256px to its visible range",
   );
   assert.match(
     html,
-    /@media screen and \(max-width: 42rem\)[\s\S]*?\.wtb-context-embed iframe\s*\{\s*block-size:\s*76rem;/u,
+    /@media screen and \((?:max-width:\s*42rem|width\s*<=\s*42rem)\)[\s\S]*?\.wtb-context-embed iframe\s*\{\s*block-size:\s*76rem\s*[;}]/u,
     "the narrow frame carries the complete first role card into view",
   );
 });

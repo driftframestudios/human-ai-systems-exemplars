@@ -238,6 +238,22 @@ test('builds a deterministic occurrence matrix and reports tracked drift once', 
     tracked: structuredClone(expected),
   }), []);
 
+  const renamed = structuredClone(validation);
+  renamed.records[0].objectName = 'Technology leadership portfolio';
+  const revised = buildContextCanvasHeadAuthorityMatrix({
+    validation: renamed,
+    routeReference,
+    registryReference,
+  });
+  assert.deepEqual(revised.entries[0], {
+    ...expected.entries[0],
+    object_name: 'Technology leadership portfolio',
+  });
+  assert.notEqual(
+    revised.authority_receipts.occurrence_sha256,
+    expected.authority_receipts.occurrence_sha256,
+  );
+
   const tracked = structuredClone(expected);
   tracked.entries[0].relationship_role = 'jsonld';
   const diagnostics = compareContextCanvasHeadAuthorityMatrix({ expected, tracked });

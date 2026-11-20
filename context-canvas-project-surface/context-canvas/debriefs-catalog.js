@@ -351,7 +351,7 @@
   function appendCaseBriefActions(article, route) {
     var actions = document.createElement("div");
     actions.className = "debrief-preview-actions";
-    actions.append(createActionLink("debrief-preview-link", route, "Read the Full Debrief"));
+    actions.append(createActionLink("debrief-preview-link", route, "Read the Case Study"));
     article.append(actions);
   }
 
@@ -431,7 +431,7 @@
     existing.append(heading);
 
     if (routes.length === 1) {
-      existing.append(createActionLink("debrief-preview-link", routes[0], "Read the Full Debrief"));
+      existing.append(createActionLink("debrief-preview-link", routes[0], "Read the Case Study"));
     } else {
       var routeList = document.createElement("ul");
       routeList.className = "clean-list debrief-card__full-index-list";
@@ -481,10 +481,10 @@
       return "Showing " + visibleCount + " of " + cards.length + " catalog groups for " + selectionSummary() + ".";
     }
     if (mode === "case-brief") {
-      return "Showing " + routeCount(visibleCards) + " Case Briefs across " + visibleCount + " catalog cases" + selectedTopics + ".";
+      return "Showing " + routeCount(visibleCards) + " summaries across " + visibleCount + " catalog cases" + selectedTopics + ".";
     }
     if (mode === "full-debrief") {
-      return "Showing " + routeCount(visibleCards) + " Full Debrief routes across " + visibleCount + " catalog cases" + selectedTopics + ".";
+      return "Showing " + routeCount(visibleCards) + " case studies across " + visibleCount + " catalog cases" + selectedTopics + ".";
     }
     if (mode === "article") {
       return "Showing " + visibleCount + " Articles" + selectedTopics + ".";
@@ -492,7 +492,7 @@
     if (activeSelection.topic.length > 0) {
       return "Showing " + visibleCount + " of " + cards.length + " catalog entries for the selected topics and tools.";
     }
-    return "Showing all " + cards.length + " catalog entries. Catalog overview is active.";
+    return "Showing all " + cards.length + " catalog entries. Full Detail is active.";
   }
 
   function showCaseBriefCatalog(visibleCards) {
@@ -508,9 +508,9 @@
       status.textContent = statusForMode("case-brief", visibleCards);
     } else {
       var availableMessage = withheldRoutes === 1
-        ? "One Full Debrief route remains available in its catalog card."
-        : withheldRoutes + " Full Debrief routes remain available in their catalog cards.";
-      status.textContent = displayedRoutes + " of " + expectedRoutes + " Case Briefs are displayed in the catalog. " + availableMessage;
+        ? "One case study remains available in its catalog card."
+        : withheldRoutes + " case studies remain available in their catalog cards.";
+      status.textContent = displayedRoutes + " of " + expectedRoutes + " summaries are displayed in the catalog. " + availableMessage;
     }
     list.dispatchEvent(new CustomEvent("canvas:page-rail-source-change", { bubbles: true }));
   }
@@ -664,7 +664,7 @@
     }
 
     primaryLink.setAttribute("href", selectedRoute.route);
-    primaryLinkLabel.textContent = routes.length > 0 ? "Read the Full Debrief" : "Open the Article";
+    primaryLinkLabel.textContent = routes.length > 0 ? "Read the Case Study" : "Open the Article";
 
     if (cardChanged) {
       previewScroller.scrollTop = 0;

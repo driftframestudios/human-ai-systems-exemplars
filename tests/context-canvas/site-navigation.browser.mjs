@@ -10,8 +10,8 @@ const root = '/context-canvas-project-surface/context-canvas/';
 const directory = new URL('../../context-canvas-project-surface/context-canvas/', import.meta.url);
 const destinations = [
   { text: 'About', href: 'index.html' },
+  { text: 'Showcase', href: 'debriefs.html' },
   { text: 'AI Systems', href: 'ai-systems.html' },
-  { text: 'Debriefs', href: 'debriefs.html' },
 ];
 const representatives = ['index.html', 'ai-systems.html', 'debriefs.html',
   'genomic-viewer-replatforming.html', 'fmi-lims-eln-replatforming.html', 'exemplar-index-landing.html'];
@@ -210,7 +210,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       await settle(page, 320, 200);
       assertLabels(await observe(page), 'scriptless enlarged navigation');
       if (touch) {
-        await Promise.all([page.waitForURL(`${server.origin}${root}debriefs.html`), page.locator('.nav__container a').nth(2).tap()]);
+        await Promise.all([page.waitForURL(`${server.origin}${root}debriefs.html`), page.getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Showcase' }).tap()]);
         assert.equal(new URL(page.url()).pathname, `${root}debriefs.html`);
       } else {
         const links = page.locator('.nav__container a');
@@ -220,6 +220,8 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
           const focused = await links.nth(index).evaluate(link => ({ active: document.activeElement === link, outline: getComputedStyle(link).outlineStyle }));
           assert.ok(focused.active && focused.outline === 'solid', `keyboard order and visible inset focus stay on native links (${index}: ${JSON.stringify(focused)})`);
         }
+        await page.keyboard.press(engine === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab');
+        assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Showcase');
         await Promise.all([page.waitForURL(`${server.origin}${root}debriefs.html`), page.keyboard.press('Enter')]);
         assert.equal(new URL(page.url()).pathname, `${root}debriefs.html`);
       }
@@ -262,7 +264,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     const page = await open(t, engine, 'ai-systems.html');
     await settle(page, 320, 200);
     const links = page.locator('.nav__container a');
-    const current = await links.nth(1).evaluate(link => getComputedStyle(link).color);
+    const current = await page.locator('.nav__container a[aria-current="page"]').evaluate(link => getComputedStyle(link).color);
     await links.first().hover();
     assert.equal(await links.first().evaluate(link => getComputedStyle(link).color), current, 'hover and authored current page share the active foreground');
     await page.emulateMedia({ forcedColors: 'active' });

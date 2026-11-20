@@ -1145,7 +1145,7 @@
         "open_graph_url",
         "sitemap"
       ],
-      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+      "selection_basis": "The Showcase catalog uses the existing debriefs.html route selected by the primary route manifest."
     },
     {
       "token": "PUBLIC_URL_PAGE_DEBRIEFS_BREADCRUMB",
