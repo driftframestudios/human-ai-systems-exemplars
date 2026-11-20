@@ -92,26 +92,37 @@ async function formatHtml(source, pretty = false) {
   const format = html => pretty ? prettier.format(html, { parser: 'html' }) : minify(html, options);
   if (!/<(?:pre|textarea|svg)\b/iu.test(source)) return format(source);
   const ranges = [];
-  function compactInlineGraphic(node) {
+  function formatInlineGraphic(node) {
     const from = node.sourceSpan.start.offset;
     let cursor = from;
     const chunks = [];
-    function readChildren(parent) {
+    function readChildren(parent, depth) {
       if (!graphicContainers.has(parent.name) || parent.attrs.some(attr => attr.name === 'space')) return;
+      const indent = pretty && parent.children.some(child => child.kind === 'element') &&
+        parent.children.every(child => child.kind === 'element' ||
+          (child.kind === 'text' && /^[\t\n\r ]+$/u.test(child.value)));
+      const indentAt = (offset, level) => {
+        chunks.push(source.slice(cursor, offset), '\n', '  '.repeat(level));
+        cursor = offset;
+      };
       for (const child of parent.children) {
         if (child.kind === 'text' && /^[\t\n\r ]+$/u.test(child.value)) {
           chunks.push(source.slice(cursor, child.sourceSpan.start.offset));
           cursor = child.sourceSpan.end.offset;
-        } else if (child.kind === 'element') readChildren(child);
+        } else if (child.kind === 'element') {
+          if (indent) indentAt(child.sourceSpan.start.offset, depth + 1);
+          readChildren(child, depth + 1);
+        }
       }
+      if (indent && parent.endSourceSpan) indentAt(parent.endSourceSpan.start.offset, depth);
     }
-    readChildren(node);
+    readChildren(node, 0);
     return chunks.join('') + source.slice(cursor, node.sourceSpan.end.offset);
   }
   function visit(node) {
     if (node.name === 'svg') {
       const start = node.sourceSpan.start.offset, end = node.sourceSpan.end.offset;
-      ranges.push([start, end, pretty ? source.slice(start, end) : compactInlineGraphic(node)]);
+      ranges.push([start, end, formatInlineGraphic(node)]);
     } else if ((node.name === 'pre' || node.name === 'textarea') && node.endSourceSpan) {
       const start = node.startSourceSpan.end.offset, end = node.endSourceSpan.start.offset;
       ranges.push([start, end, source.slice(start, end)]);

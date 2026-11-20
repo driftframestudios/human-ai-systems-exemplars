@@ -27,7 +27,9 @@ test('compacting preserves verbatim HTML, meaningful SVG text, metadata, and JSO
   const verbatim = '<pre>  Copy this\n</pre><textarea>  Edit this\n</textarea>';
   const source = '<div title="short">' + graphic + verbatim + '<script>const sample = "<pre>example</pre>";</script></div>';
   const compact = await compactSource('page.html', source);
-  assert.ok((await prettySource('page.html', compact)).includes(graphic));
+  const expanded = await prettySource('page.html', compact);
+  assert.match(expanded, /<svg>\s*\n\s+<g>/u);
+  assert.ok((await compactSource('page.html', expanded)).includes(graphic));
   assert.ok(compact.includes(graphic));
   assert.ok(compact.includes(verbatim));
   assert.ok(compact.includes('title="short"'));
