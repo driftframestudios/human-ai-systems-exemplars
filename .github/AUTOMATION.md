@@ -297,8 +297,11 @@ and uses the same 30-minute investigation boundary as the other prototype select
 The public-reference job allows five minutes and the media job allows 30 minutes.
 
 The browser job resolves the system packages requested by the locked Playwright CLI
-on the current Ubuntu image. It restores an exact archive cache for the selected
-engines, architecture, runner image, CLI version and resolved package versions.
+on the current Ubuntu image. It first restores the exact runner-image entry. During an image rollout it can
+restore an entry for the same OS, architecture, engine set, CLI version and
+resolved package-plan digest. Existing v1 entries remain eligible for their
+exact image and plan during migration. The installer checks each selected
+archive’s SHA-256 against current APT metadata and reports the admitted count.
 APT installs the packages, then Playwright verifies the system closure and installs
 the selected engines. A successful confirmed `main` dispatch may save the archives.
 Use the individual plan, restore, install and contract step durations to investigate
