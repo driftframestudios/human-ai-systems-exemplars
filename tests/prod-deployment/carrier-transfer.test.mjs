@@ -62,15 +62,17 @@ async function createTaggedCarrier(options = {}) {
   const sourceSha = await commit(root, "Accept source");
 
   const outputs = new Map([
+    ...(options.iframeRootPaths ?? []).map(name => ["iframe-public/" + name, Buffer.from("User-agent: *\n")]),
     ["iframe-public/v1/core/demo/index.html", iframeBytes],
     ["primary-public/index.html", Buffer.from("<!doctype html><title>Primary</title>\n")],
   ]);
   const records = [...outputs].map(([projectedPath, bytes]) => ({
-    surface: projectedPath.startsWith("iframe-public/") ? "iframe" : "primary",
+    surface: options.surfaceOverrides?.[projectedPath] ??
+      (projectedPath.startsWith("iframe-public/") ? "iframe" : "primary"),
     projected_path: projectedPath,
     bytes: bytes.byteLength,
     sha256: sha256(bytes),
-    media_type: "text/html",
+    media_type: projectedPath.endsWith(".txt") ? "text/plain" : "text/html",
   }));
   const totals = (surface) => {
     const selected = records.filter((record) => record.surface === surface);
@@ -182,8 +184,8 @@ function appendMemberData(archive, extra) {
   return changed;
 }
 
-test("live iframe verification uses the selected carrier’s bytes and membership", async () => {
-  await withFixture({}, async (fixture) => {
+test("live iframe verification uses the selected carrier’s v1 bytes and leaves root robots to cutover", async () => {
+  await withFixture({ iframeRootPaths: ["robots.txt"] }, async (fixture) => {
     const path = "core/demo/index.html";
     const plan = await createTaggedIframePlan({ repository: fixture.root, productionTag: fixture.tag });
     assert.deepEqual([...plan.outputFiles.keys()], [path]);
@@ -205,6 +207,28 @@ test("live iframe verification uses the selected carrier’s bytes and membershi
     assert.equal(other.counts.status200, 1);
     assert.equal(other.counts.exactBytes, 0);
   });
+});
+
+test("the tagged iframe selector accounts for every indexed surface before live requests", async t => {
+  const robots = { iframeRootPaths: ["robots.txt"] };
+  for (const [label, options, expected] of [
+    ["additional iframe root", { iframeRootPaths: ["robots.txt", "undeclared.txt"] }, /outside v1: iframe-public\/undeclared\.txt/],
+    ["missing root robots file", {}, /missing iframe-public\/robots\.txt/],
+    [
+      "iframe entry classified as primary",
+      { ...robots, surfaceOverrides: { "iframe-public/v1/core/demo/index.html": "primary" } },
+      /disagrees with its primary surface/,
+    ],
+    [
+      "primary entry classified as iframe",
+      { ...robots, surfaceOverrides: { "primary-public/index.html": "iframe" } },
+      /disagrees with its iframe surface/,
+    ],
+  ]) {
+    await t.test(label, () => withFixture(options, fixture => assert.rejects(
+      createTaggedIframePlan({ repository: fixture.root, productionTag: fixture.tag }), expected,
+    )));
+  }
 });
 
 test("a tagged carrier forms a deterministic, self-verifying transfer envelope", async () => {

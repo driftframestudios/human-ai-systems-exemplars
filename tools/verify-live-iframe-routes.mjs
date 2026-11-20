@@ -207,10 +207,19 @@ export async function createTaggedIframePlan(options) {
   const outputFiles = new Map();
   const mediaTypes = new Map();
   for (const { surface, projectedPath, mediaType } of carrier.rows) {
-    if (surface !== "iframe" || !projectedPath.startsWith(prefix)) continue;
+    if (!projectedPath.startsWith(surface + "-public/")) {
+      throw new Error(`Carrier path ${projectedPath} disagrees with its ${surface} surface.`);
+    }
+    if (surface === "primary" || projectedPath === "iframe-public/robots.txt") continue;
+    if (!projectedPath.startsWith(prefix)) {
+      throw new Error(`Unexpected iframe carrier path outside v1: ${projectedPath}.`);
+    }
     const relativePath = projectedPath.slice(prefix.length);
     outputFiles.set(relativePath, carrier.files.get(projectedPath));
     mediaTypes.set(relativePath, mediaType);
+  }
+  if (!carrier.files.has("iframe-public/robots.txt")) {
+    throw new Error("The tagged iframe carrier is missing iframe-public/robots.txt.");
   }
   return {
     outputFiles,
