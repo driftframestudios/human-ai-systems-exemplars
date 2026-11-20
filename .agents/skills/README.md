@@ -51,6 +51,7 @@ completes the job.
 | Skill | Use it when | Result |
 | --- | --- | --- |
 | [`practitioner-probe`](practitioner-probe/README.md) · [contract](practitioner-probe/SKILL.md) | A plausible concern needs a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
+| [`build-output-equivalence`](build-output-equivalence/README.md) · [contract](build-output-equivalence/SKILL.md) | A build refactor should preserve the files or archive people receive | A fixed-input comparison of payloads, receipts and recovery |
 | [`cost-and-ownership-analysis`](cost-and-ownership-analysis/README.md) · [contract](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
 | [`relational-execution-review`](relational-execution-review/README.md) · [contract](relational-execution-review/SKILL.md) | SQL, relationships, roles, objects, query plans, or restart claims need source-bound review | Localized findings and independently reviewed repairs with exact execution and recovery evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/README.md) · [contract](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and a direct account of what the evidence changes |

@@ -2292,6 +2292,21 @@
       "selection_basis": "The repository skill publication selection includes this public-ready source package."
     },
     {
+      "token": "PUBLIC_URL_SKILL_BUILD_OUTPUT_EQUIVALENCE",
+      "authority_class": "skill",
+      "role": "skill_pages_html",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "build-output-equivalence"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.radiantnull.com/skills/build-output-equivalence/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "GitHub Pages generates a visitor-readable page for this selected public skill."
+    },
+    {
       "token": "PUBLIC_URL_SKILL_CATALOG",
       "authority_class": "skill",
       "role": "skill_catalog",
@@ -2740,17 +2755,17 @@
     {
       "token": "PUBLIC_URL_SKILL_TEST_SUITE_COMPOSITION",
       "authority_class": "skill",
-      "role": "skill_retrieval",
+      "role": "skill_pages_html",
       "owner": {
         "type": "skill_publication_selection",
         "skill_name": "test-suite-composition"
       },
       "fragment": null,
-      "expected_url": "https://schemas.vik.guru/skills/test-suite-composition/",
+      "expected_url": "https://schemas.radiantnull.com/skills/test-suite-composition/",
       "allowed_carriers": [
         "anchor"
       ],
-      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+      "selection_basis": "GitHub Pages generates a visitor-readable page for this selected public skill."
     },
     {
       "token": "PUBLIC_URL_SKILL_UV_BACKED_PYTHON_EXECUTION",

@@ -49,6 +49,13 @@
       ]
     },
     {
+      "name": "build-output-equivalence",
+      "sourcePath": ".agents/skills/build-output-equivalence/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
       "name": "citation-atlas-selection",
       "sourcePath": ".agents/skills/citation-atlas-selection/SKILL.md",
       "publicationStanding": "public_possible",
@@ -361,7 +368,8 @@
       "sourceAvailability": "included",
       "dependencies": [
         ".agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
-        ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md"
+        ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
+        ".agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md"
       ]
     },
     {

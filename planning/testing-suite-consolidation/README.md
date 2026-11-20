@@ -1,6 +1,6 @@
 # Repository test architecture and evidence coherence
 
-The [browser and production cost spike](browser-and-production-cost-spike.md) traces the full browser job and cPanel carrier build after PR #971. It compares five ways to shorten feedback and includes a measured Git batch-read experiment. [Spike #974](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/974) records the decision. [Implementation #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975) tracks the focused PRs and the research-branch timing record.
+The [browser and production cost spike](browser-and-production-cost-spike.md) traces the full browser job and cPanel carrier build after PR #971. It compares five ways to shorten feedback and includes a measured Git batch-read experiment. [Spike #974](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/974) records the decision. [Implementation #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975) tracks the focused PRs. The [research-branch timing record](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/research/research/browser-and-production-cost/README.md) preserves comparable before and after observations. Teams adapting the work can start with [build output equivalence](../../.agents/skills/build-output-equivalence/README.md) and [test suite composition](../../.agents/skills/test-suite-composition/README.md).
 
 ## Contract and current receiver
 
@@ -213,7 +213,7 @@ further revision. Resource-fault guidance stays with the stateful skill. Provisi
 and runner guidance stays a conditional reference under suite composition
 until a second independent receiver demonstrates a distinct reusable job.
 
-The reviewed publication selection now lists all 36 active skills, including
+The [publication selection](../../.agents/skills/publication-selection.json) classifies each repository skill, including
 the four visualization skills and their declared dependency closure. Accepted
 site and Worker release records own current publication status. Newly linked public-ready
 references receive explicit dependency entries; publication execution retains

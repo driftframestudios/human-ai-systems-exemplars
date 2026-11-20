@@ -60,12 +60,14 @@ const TOKEN_PREFIX_BY_AUTHORITY_CLASS = Object.freeze({
   schema: 'PUBLIC_URL_SCHEMA_',
   skill: 'PUBLIC_URL_SKILL_',
 });
+const pagesSkillOrigin = 'https://schemas.radiantnull.com';
 const ROLES = new Set([
   'primary_retrieval',
   'primary_asset',
   'hosted_instrument',
   'schema_retrieval',
   'skill_catalog',
+  'skill_pages_html',
   'skill_retrieval',
 ]);
 const ALLOWED_CARRIERS = new Set([
@@ -481,6 +483,9 @@ function validateBinding(binding, index, file, diagnostics) {
     (typeof binding.fragment === 'string' && /^[A-Za-z][A-Za-z0-9._~-]*$/u.test(binding.fragment))
     ? binding.fragment
     : undefined;
+  const skillPageAnchor = binding.role === 'skill_pages_html' &&
+    owner?.type === 'skill_publication_selection' && text(owner.skill_name) &&
+    carriers?.length === 1 && carriers[0] === 'anchor' && fragment === null;
   const roleMatches = authorityClass === 'page'
     ? binding.role === 'primary_retrieval'
     : authorityClass === 'asset'
@@ -491,7 +496,7 @@ function validateBinding(binding, index, file, diagnostics) {
           ? binding.role === 'schema_retrieval'
           : owner?.type === 'skill_publication_selection' && owner.skill_name === null
             ? binding.role === 'skill_catalog'
-            : binding.role === 'skill_retrieval';
+            : binding.role === 'skill_retrieval' || skillPageAnchor;
   const valid = token !== null &&
     authorityClass !== null &&
     token.startsWith(TOKEN_PREFIX_BY_AUTHORITY_CLASS[authorityClass]) &&
@@ -752,7 +757,8 @@ function deriveSkill(binding, skillPublicationSelection, file, diagnostics) {
       }));
       return null;
     }
-    url = new URL(`${binding.owner.skill_name}/`, base).href;
+    const retrievalBase = binding.role === 'skill_pages_html' ? `${pagesSkillOrigin}/skills/` : base;
+    url = new URL(`${binding.owner.skill_name}/`, retrievalBase).href;
   }
   if (binding.fragment !== null) {
     const parsed = new URL(url);
@@ -1080,7 +1086,7 @@ export function parsePublicRouteReferenceBinding(
       ? 'https://vik.guru'
       : binding.authorityClass === 'iframe'
         ? 'https://iframes.vik.guru'
-        : 'https://schemas.vik.guru';
+        : binding.role === 'skill_pages_html' ? pagesSkillOrigin : 'https://schemas.vik.guru';
     const normalizedExpected = normalizedHttpsUrl(binding.expectedUrl, origin);
     if (normalizedExpected === null || derived !== binding.expectedUrl) {
       diagnostics.push(diagnostic({

@@ -38,6 +38,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
+- `build-output-equivalence` compares fixed-input build artifacts, archive bytes, tool attestations and recovery through the receiving verifier.
 - `cost-and-ownership-analysis` maps scoped function cost, input boundaries, and mutation ownership to proportionate repairs and evidence.
 - `evidence-bearing-test-design` joins one owned behavior, one plausible fault, one independent expectation, and the smallest observation that can distinguish them.
 - `test-suite-composition` maps owned checks, dependencies, runners, environment preparation, phase cost, result meaning, expansion events, and recovery into proportionate execution routes.

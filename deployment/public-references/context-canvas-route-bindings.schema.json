@@ -47,6 +47,10 @@
     }
   },
   "$defs": {
+    "pagesSkillUrl": {
+      "type": "string",
+      "pattern": "^https://schemas\\.radiantnull\\.com/skills/[a-z0-9]+(?:-[a-z0-9]+)*/$"
+    },
     "nonemptyText": {
       "type": "string",
       "minLength": 1,
@@ -87,6 +91,7 @@
             "hosted_instrument",
             "schema_retrieval",
             "skill_catalog",
+            "skill_pages_html",
             "skill_retrieval"
           ]
         },
@@ -112,7 +117,10 @@
         "expected_url": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://(?:vik\\.guru|iframes\\.vik\\.guru|schemas\\.vik\\.guru)/(?!(?:[^#]*/)?(?:\\.|%2[eE]){1,2}(?:/|#|$))(?![^#]*//)(?:(?:[A-Za-z0-9._~!$&'()*+,;=:@/-]|%[0-9A-Fa-f]{2})*(?:#[A-Za-z][A-Za-z0-9._~-]*)?)?$"
+          "anyOf": [
+            { "pattern": "^https://(?:vik\\.guru|iframes\\.vik\\.guru|schemas\\.vik\\.guru)/(?!(?:[^#]*/)?(?:\\.|%2[eE]){1,2}(?:/|#|$))(?![^#]*//)(?:(?:[A-Za-z0-9._~!$&'()*+,;=:@/-]|%[0-9A-Fa-f]{2})*(?:#[A-Za-z][A-Za-z0-9._~-]*)?)?$" },
+            { "$ref": "#/$defs/pagesSkillUrl" }
+          ]
         },
         "allowed_carriers": {
           "type": "array",
@@ -137,6 +145,10 @@
         }
       },
       "allOf": [
+        {
+          "if": { "properties": { "expected_url": { "$ref": "#/$defs/pagesSkillUrl" } } },
+          "then": { "properties": { "role": { "const": "skill_pages_html" } } }
+        },
         {
           "if": {
             "properties": { "authority_class": { "const": "page" } },
@@ -220,6 +232,15 @@
                   "owner": { "$ref": "#/$defs/skillCatalogOwner" }
                 },
                 "required": ["role", "owner"]
+              },
+              {
+                "properties": {
+                  "role": { "const": "skill_pages_html" },
+                  "expected_url": { "$ref": "#/$defs/pagesSkillUrl" },
+                  "owner": { "$ref": "#/$defs/skillRetrievalOwner" },
+                  "fragment": { "type": "null" },
+                  "allowed_carriers": { "const": ["anchor"] }
+                }
               },
               {
                 "properties": {

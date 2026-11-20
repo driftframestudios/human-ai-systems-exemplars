@@ -63,6 +63,23 @@ Store dependency archives or another deliberately bounded closure. Keep
 credentials, browser profiles, logs, generated receipts, mutable working
 trees, and unrelated installed directories with their existing owners.
 
+## Admit restored bytes before installation
+
+Ask what the package manager actually verifies on its local reuse path. Some
+installers accept a previously downloaded archive by its filename and length.
+The runner can restore into a staging directory, obtain exact destination
+names and digests from authenticated package metadata, and copy matching
+regular files into a fresh installation directory. A same-length substitution
+is a useful fault here. A mismatch leaves the installer free to fetch the
+selected package through its ordinary authenticated route. Publish a fresh
+archive directory through the trusted writer after the required proof passes.
+
+Record the cache service’s hit and the installer’s admitted bytes separately.
+Time resolution, restore, verification and installation together when comparing
+with a cold download. Compare the same engine set and case list. A fast media
+job provides a precedent for preparation reuse. A full browser job supplies
+the measurement for its own workload.
+
 ## Required standings
 
 Name every route the receiver must interpret:

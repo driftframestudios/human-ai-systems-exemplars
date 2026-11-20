@@ -10,6 +10,7 @@ proof quickly and expand coverage for a clear reason.
 - [Read the authoritative skill contract](SKILL.md).
 - [Choose selective CI admission and check depth](references/selective-ci-admission-and-check-depth.md) when explicit run/skip, focused/full populations, browser choice or shared preparation changes a workflow.
 - [Follow the selective check delivery runbook](../../runbooks/selective-check-delivery.v0.1.md) to implement, exercise and hand back that bounded change.
+- [Use the cross-repository test-system stewardship runbook](../../runbooks/cross-repository-test-system-stewardship.v0.1.md) when a collection-wide change also affects oracle design or suite structure.
 - [Use the CI provisioning and runner guide](references/ci-provisioning-and-runner-efficiency.md) when setup time, dependency transfer, caching, or runner images dominate a lane.
 - [Choose a runtime provisioning card](references/runtime-provisioning-cards.md) when Node, Python, browser, system-package, container, database, or release-history coordinates shape reuse.
 - [Return to the repository skills catalog](../README.md).
@@ -19,7 +20,7 @@ proof quickly and expand coverage for a clear reason.
 Use this skill when several test commands overlap, the checks reopened by a
 change are unclear, optional workflows need predictable admission, a workflow
 repeats unaffected preparation, or a slow CI lane needs phase-level diagnosis
-before the team changes coverage.
+before the team changes coverage. The provisioning guide includes a same-length archive substitution and a cold-download recovery path for teams introducing package reuse.
 
 ## What it returns
 

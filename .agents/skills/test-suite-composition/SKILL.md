@@ -139,6 +139,15 @@ telemetry precede publication. The owned teardown handler remains callable
 after partial initialization; a hard cancellation records cleanup as
 `incomplete` when that handler cannot finish.
 
+### Rule: An investigation boundary leads to a phase decision
+
+When a full job reaches its agreed ceiling, the suite owner reads the last
+completed phase and the work still pending. Compare equivalent engine and
+case populations, then choose the smallest preparation or execution change
+that addresses the measured delay. A budget change goes back to its owner
+with cold recovery cost, wall time, total runner time and the behavior the
+extra time would establish.
+
 ### Rule: Results retain population and standing
 
 Return separate counts or identities for source files, runtime cases, browser
@@ -204,11 +213,7 @@ changes them.
 
 Load [selective CI admission, check depth, and preparation reuse](references/selective-ci-admission-and-check-depth.md)
 when run/skip controls, automatic activation, focused/full selection, combined
-jobs, or browser choice changes the execution route. Use the companion
-[selective check delivery runbook](../../runbooks/selective-check-delivery.v0.1.md)
-when implementing and exercising that known route; the broader
-[cross-repository test-system stewardship runbook](../../runbooks/cross-repository-test-system-stewardship.v0.1.md)
-retains oracle design and collection-wide test topology.
+jobs, or browser choice changes the execution route. The receiving team’s delivery procedure owns execution and recovery.
 
 Load [CI provisioning and runner efficiency](references/ci-provisioning-and-runner-efficiency.md)
 when environment preparation, dependency transfer, runner image selection,

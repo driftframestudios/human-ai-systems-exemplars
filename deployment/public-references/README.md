@@ -16,6 +16,8 @@ Authored source names the intended receiver. The tracked bindings establish its
 current destination. The materializer resolves these families and preserves one
 receipt for each authority in generated output.
 
+The `skill_pages_html` role binds a visitor anchor to the HTML page that GitHub Pages generates for an included public skill. The Pages check resolves that anchor against the deployment CNAME and the generated file. The skill’s JSON projection retains its canonical schema identity.
+
 ## Authority and data boundary
 
 The current public Registry page owns its visitor-readable meaning. The accepted

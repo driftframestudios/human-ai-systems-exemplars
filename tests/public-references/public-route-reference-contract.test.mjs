@@ -207,7 +207,6 @@ test('loads the complete source inventory as an immutable destination authority'
   const requiredKeys = await sourceTokens();
   const result = await loadPublicRouteReferenceBinding({ requiredKeys });
 
-  assert.equal(requiredKeys.length, 168);
   assert.equal(result.destinations.size, requiredKeys.length);
   assert.equal(isPublicRouteReferenceDestinationAuthority(result.destinations), true);
   assert.equal(result.destinations.set, undefined);
@@ -219,7 +218,7 @@ test('loads the complete source inventory as an immutable destination authority'
     asset: 39,
     iframe: 6,
     schema: 2,
-    skill: 35,
+    skill: 36,
   });
   assert.equal(result.receipt.bindingCount, requiredKeys.length);
   assert.deepEqual(Object.keys(result.receipt.sourceDigests), [
@@ -243,6 +242,7 @@ test('derives page, fragment, asset, iframe, schema, and skill destinations from
   });
 
   const expected = new Map([
+    ['PUBLIC_URL_SKILL_BUILD_OUTPUT_EQUIVALENCE', 'https://schemas.radiantnull.com/skills/build-output-equivalence/'],
     ['PUBLIC_URL_PAGE_ABOUT', 'https://vik.guru/'],
     ['PUBLIC_URL_PAGE_ABOUT_ABOUT', 'https://vik.guru/#about'],
     ['PUBLIC_URL_PAGE_ABOUT_STUDIO', 'https://vik.guru/#studio-title'],
