@@ -281,7 +281,7 @@ Matching pull requests into `main` run the public-reference and
 media-publication jobs for matching paths. On a non-draft pull request,
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the complete prototype-unit
 baseline; the unset or `false` value keeps that third job at rest while manual
-selection remains available. All three jobs install the locked root toolchain
+selection remains available. The three job definitions install the locked root toolchain
 with lifecycle scripts at rest. The media job additionally resolves and
 restores the verified FFmpeg APT archive closure, exercises preparation and
 delivery contracts, observes the native-video receivers through the hosted
@@ -291,7 +291,7 @@ variable is empty. Path
 filters cover the source families, iframe and carrier owners, collaboration
 and Context Canvas sources, media planning contracts, attribution, focused
 tests and tools, root package and lock files, and the workflow. The workflow
-file owns the exact filter list. All three jobs use standard Linux runners and cancel superseded runs. A confirmed
+file owns the exact filter list. Each job uses a standard Linux runner. The workflow cancels superseded runs. A confirmed
 manual `all` run with browsers splits its 17 commands across two standard runners.
 The reading and media group runs the four source commands and ten browser commands,
 using Chromium, Firefox, and WebKit. The production and prototype group runs
