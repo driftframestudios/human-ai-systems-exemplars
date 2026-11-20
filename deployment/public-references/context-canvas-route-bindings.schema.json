@@ -47,6 +47,10 @@
     }
   },
   "$defs": {
+    "pagesSkillUrl": {
+      "type": "string",
+      "pattern": "^https://schemas\\.radiantnull\\.com/skills/[a-z0-9]+(?:-[a-z0-9]+)*/$"
+    },
     "nonemptyText": {
       "type": "string",
       "minLength": 1,
@@ -115,7 +119,7 @@
           "format": "uri",
           "anyOf": [
             { "pattern": "^https://(?:vik\\.guru|iframes\\.vik\\.guru|schemas\\.vik\\.guru)/(?!(?:[^#]*/)?(?:\\.|%2[eE]){1,2}(?:/|#|$))(?![^#]*//)(?:(?:[A-Za-z0-9._~!$&'()*+,;=:@/-]|%[0-9A-Fa-f]{2})*(?:#[A-Za-z][A-Za-z0-9._~-]*)?)?$" },
-            { "pattern": "^https://schemas\\.radiantnull\\.com/skills/[a-z0-9]+(?:-[a-z0-9]+)*/$" }
+            { "$ref": "#/$defs/pagesSkillUrl" }
           ]
         },
         "allowed_carriers": {
@@ -142,7 +146,7 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "expected_url": { "pattern": "^https://schemas\\.radiantnull\\.com/skills/[a-z0-9]+(?:-[a-z0-9]+)*/$" } } },
+          "if": { "properties": { "expected_url": { "$ref": "#/$defs/pagesSkillUrl" } } },
           "then": { "properties": { "role": { "const": "skill_pages_html" } } }
         },
         {
@@ -232,7 +236,7 @@
               {
                 "properties": {
                   "role": { "const": "skill_pages_html" },
-                  "expected_url": { "pattern": "^https://schemas\\.radiantnull\\.com/skills/[a-z0-9]+(?:-[a-z0-9]+)*/$" },
+                  "expected_url": { "$ref": "#/$defs/pagesSkillUrl" },
                   "owner": { "$ref": "#/$defs/skillRetrievalOwner" },
                   "fragment": { "type": "null" },
                   "allowed_carriers": { "const": ["anchor"] }
