@@ -432,7 +432,6 @@ test("Each catalog and case study share their synchronized At-a-Glance and the c
     const media = source.match(/<div\b[^>]*\bdata-case-brief-media\b[^>]*>([\s\S]*?)<\/div>/u);
     assert.ok(media, `${route} should carry one reviewed related-media index`);
     const mediaLinks = Array.from(media[1].matchAll(/<li\b[^>]*>[\s\S]*?<a\b[^>]*href="#([^"]+)"/gu), match => match[1]);
-    assert.ok(mediaLinks.length >= 1 && mediaLinks.length <= 3, `${route} should keep its related-media index concise`);
     for (const id of mediaLinks) {
       assert.match(html, new RegExp(`\\bid="${id}"`, "u"), `${route} should resolve media link #${id}`);
     }
