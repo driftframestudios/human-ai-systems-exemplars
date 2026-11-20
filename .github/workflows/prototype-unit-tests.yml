@@ -148,8 +148,8 @@ jobs:
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
     runs-on: ubuntu-24.04
-    # Browser dependencies and the sequential three-engine suite share this runner.
-    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'all' && inputs.include_browser && 45 || 30 }}
+    # Investigate the last completed phase when the full job reaches this boundary.
+    timeout-minutes: 30
 
     steps:
       - name: Check out the candidate source
@@ -176,18 +176,27 @@ jobs:
           npm run visual:context-canvas-reference -- --list
           npm run check:debrief-image-derivatives
 
-      - name: Install the browser engines for the selected suite
+      - name: Resolve the browser system-package plan
+        id: browser-plan
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
         env:
           SELECTED_SUITE: ${{ inputs.suite || 'all' }}
-        shell: bash
-        run: |
-          engines=(chromium)
-          case "$SELECTED_SUITE" in
-            all) engines+=(firefox webkit) ;;
-            iframe) engines+=(webkit) ;;
-          esac
-          npm run playwright -- install --with-deps "${engines[@]}"
+        run: bash .github/dependencies/browser-apt.sh plan
+
+      - name: Restore the selected browser package archives
+        id: browser-cache
+        if: ${{ steps.browser-plan.outputs.packages && steps.browser-plan.outputs.packages != '0' }}
+        continue-on-error: true
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/browser-apt-archives
+          key: ${{ steps.browser-plan.outputs.key }}
+
+      - name: Install the selected system packages and browser engines
+        if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
+        env:
+          SELECTED_SUITE: ${{ inputs.suite || 'all' }}
+        run: bash .github/dependencies/browser-apt.sh install
 
       - name: Exercise the selected source contracts
         env:
@@ -253,6 +262,18 @@ jobs:
               exit 2
               ;;
           esac
+
+      - name: Save the verified browser package archives
+        if: >-
+          success() && github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/main' && inputs.include_browser &&
+          steps.browser-plan.outputs.packages != '0' &&
+          steps.browser-cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/browser-apt-archives
+          key: ${{ steps.browser-plan.outputs.key }}
 
   media-publication:
     name: Media preparation and delivery contracts

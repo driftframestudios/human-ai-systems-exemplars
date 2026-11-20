@@ -22,7 +22,7 @@ receiving job.
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, #406, and #531 schema delivery; #63 inventory |
-| `prototype-unit-tests.yml` | Confirmed manual suite; matching `main` PRs receive the public-reference and media jobs, while a matching non-draft PR also receives the prototype job when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | Public reference 5 minutes, prototype 30 minutes (45 for manual `all` with browsers), media 30 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, #434, #540, and #597 |
+| `prototype-unit-tests.yml` | Confirmed manual suite; matching `main` PRs receive the public-reference and media jobs, while a matching non-draft PR also receives the prototype job when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | Public reference 5 minutes, prototype 30 minutes, media 30 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, #434, #540, and #597 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #540 current release; #464, #253, and PR #255 precedents |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
 | `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
@@ -293,9 +293,17 @@ and Context Canvas sources, media planning contracts, attribution, focused
 tests and tools, root package and lock files, and the workflow. The workflow
 file owns the exact filter list. All three jobs use standard Linux runners and cancel superseded runs. A confirmed
 manual `all` run with browsers installs Chromium, Firefox, and WebKit together
-and allows 45 minutes for installation and the sequential prototype checks.
-Other prototype selections and the media job allow 30 minutes. The public-reference
-job allows five minutes.
+and uses the same 30-minute investigation boundary as the other prototype selections.
+The public-reference job allows five minutes and the media job allows 30 minutes.
+
+The browser job resolves the system packages requested by the locked Playwright CLI
+on the current Ubuntu image. It restores an exact archive cache for the selected
+engines, architecture, runner image, CLI version and resolved package versions.
+APT installs the packages, then Playwright verifies the system closure and installs
+the selected engines. A successful confirmed `main` dispatch may save the archives.
+Use the individual plan, restore, install and contract step durations to investigate
+any run reaching the boundary. [Issue #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975)
+tracks comparable full-run measurements.
 
 The media package cache uses a versioned identity composed from the operating
 system, architecture, resolved package-plan digest, and hosted runner-image

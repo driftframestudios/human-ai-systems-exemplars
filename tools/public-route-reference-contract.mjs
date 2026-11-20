@@ -583,11 +583,20 @@ function validateSchemaCompanionSelection(decoded, file, diagnostics) {
   return Object.freeze(routes);
 }
 
-function derivePrimary(binding, primaryManifest, productionConfig, file, diagnostics) {
+function indexPrimaryRoutes(manifest) {
+  const routes = new Map();
+  for (const entry of Array.isArray(manifest?.files) ? manifest.files : []) {
+    const key = entry?.source_path;
+    const matches = routes.get(key);
+    if (matches) matches.push(entry);
+    else routes.set(key, [entry]);
+  }
+  return routes;
+}
+
+function derivePrimary(binding, routesBySource, productionConfig, file, diagnostics) {
   const publicationBase = productionConfig?.publication?.base_url;
-  const selected = Array.isArray(primaryManifest?.files)
-    ? primaryManifest.files.filter((entry) => entry?.source_path === binding.owner.source_path)
-    : [];
+  const selected = routesBySource.get(binding.owner.source_path) ?? [];
   if (selected.length !== 1 || typeof publicationBase !== 'string') {
     diagnostics.push(diagnostic({
       code: selected.length > 1
@@ -803,7 +812,7 @@ function deriveUrl(binding, authorities, file, diagnostics) {
   if (binding.authorityClass === 'page' || binding.authorityClass === 'asset') {
     return derivePrimary(
       binding,
-      authorities.primaryManifest,
+      authorities.primaryRoutesBySource,
       authorities.productionConfig,
       file,
       diagnostics,
@@ -1054,7 +1063,7 @@ export function parsePublicRouteReferenceBinding(
     }
   }
   const authorities = {
-    primaryManifest: inputs.primaryManifest.document,
+    primaryRoutesBySource: indexPrimaryRoutes(inputs.primaryManifest.document),
     productionConfig: inputs.productionConfig.document,
     iframeManifests: {
       canvas: inputs.canvasIframeManifest.document,

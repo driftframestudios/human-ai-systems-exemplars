@@ -22,6 +22,8 @@ node tools/test-suite-plan.mjs --suite python.tables.table-context --json
 node tools/test-suite-plan.mjs --bundle source-unit --bundle carrier --json
 ```
 
+The [automation guide](../../.github/AUTOMATION.md) describes full browser dispatch, Linux package reuse and the 30-minute investigation boundary.
+
 Use `--suite` for a small receiver. A `--bundle` lists its broader composition.
 Both accept repetition with distinct IDs. Overlapping bundle membership appears
 once in canonical catalog order, with all selection reasons. Repeated selectors,

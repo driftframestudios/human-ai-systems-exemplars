@@ -489,6 +489,7 @@ export async function loadTaggedProductionCarrier({
     fail("Production carrier exceeds the entry-count boundary.");
   }
   const files = new Map();
+  const portableKeys = new Set();
   let totalBytes = 0;
   await withGitBlobReader(root, {
     maxBlobBytes: defaultLimits.maxEntryBytes, env: carrierGitEnvironment(),
@@ -506,9 +507,10 @@ export async function loadTaggedProductionCarrier({
         "Production carrier path",
       );
       const key = portablePathKey(relativePath);
-      if ([...files.keys()].some((candidate) => portablePathKey(candidate) === key)) {
+      if (portableKeys.has(key)) {
         fail(`Production carrier repeats a normalized path: ${relativePath}.`);
       }
+      portableKeys.add(key);
       const limit = Math.min(
         defaultLimits.maxEntryBytes,
         defaultLimits.maxExpandedBytes - totalBytes,

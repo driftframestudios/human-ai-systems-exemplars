@@ -754,16 +754,16 @@ export function inspectPublicReferenceHtml(
     );
   }
 
-  const embeddedIframeKeys = new Set(
-    iframeCarriers
-      .filter((carrier) => carrier.tagName === "iframe")
-      .map((carrier) => carrier.key),
-  );
-  const fullViewIframeKeys = new Set(
-    iframeCarriers
-      .filter((carrier) => carrier.tagName === "a")
-      .map((carrier) => carrier.key),
-  );
+  const embeddedIframeKeys = new Set();
+  const fullViewIframeKeys = new Set();
+  const firstFallback = new Map();
+  const conflictingFallbacks = new Set();
+  for (const { key, tagName, localFallback } of iframeCarriers) {
+    if (tagName === "iframe") embeddedIframeKeys.add(key);
+    if (tagName === "a") fullViewIframeKeys.add(key);
+    if (!firstFallback.has(key)) firstFallback.set(key, localFallback);
+    else if (firstFallback.get(key) !== localFallback) conflictingFallbacks.add(key);
+  }
   const iframeKeys = new Set([
     ...embeddedIframeKeys,
     ...fullViewIframeKeys,
@@ -775,12 +775,7 @@ export function inspectPublicReferenceHtml(
         `${key} must identify both the hosted iframe and its full-view anchor in ${safePath}`,
       );
     }
-    const localFallbacks = new Set(
-      iframeCarriers
-        .filter((carrier) => carrier.key === key)
-        .map((carrier) => carrier.localFallback),
-    );
-    if (localFallbacks.size !== 1) {
+    if (conflictingFallbacks.has(key)) {
       throw new PublicReferenceContractError(
         "PUBLIC_REFERENCE_IFRAME_FALLBACK",
         `${key} must use the same repository-local fallback for its iframe and full-view anchor in ${safePath}`,
