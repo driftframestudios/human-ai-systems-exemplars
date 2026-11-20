@@ -830,7 +830,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "Genomic Viewer Re-platforming Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
-      "visitor_placement": "inside the solution outcome section labelled by #solution-outcome-title",
+      "visitor_placement": "in its own section after #solution-outcome-title and before #solution-repeatability-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,

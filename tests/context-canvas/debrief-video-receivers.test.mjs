@@ -60,7 +60,7 @@ const receivers = [
     captionId: "genomics-specimen-qa-biomarker-caption",
     transcriptId: "genomics-specimen-qa-biomarker-transcript",
     before: 'id="solution-outcome-title"',
-    after: 'id="implementation-architecture-title"',
+    after: 'id="solution-repeatability-title"',
   },
   {
     page: "genomic-viewer-replatforming.html",
