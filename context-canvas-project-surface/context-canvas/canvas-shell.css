@@ -32,23 +32,26 @@
 }
 
 .super-footer {
-    background: var(--about-deep-forest-charcoal, #242a24);
-    border-block-start: .3rem solid var(--about-tiffany, #56d8c9);
+    background: #242a24;
+    border-block-start: .3rem solid #56d8c9;
     color: #fffaf2;
     display: block;
     inline-size: 100%;
-    /*margin-block-start: clamp(3rem, 0vw, 7rem);*/
+    box-sizing: border-box;
+    font: 400 1rem/1.5 Futura, Arial, sans-serif;
+    text-align: start;
     padding: clamp(1.5rem, 4vw, 3.5rem);
 }
 
 .super-footer__local {
-    /*border-block-end: .0625rem solid rgb(255 250 242 / .38);*/
-    margin: 0 auto 2rem;
+    margin: 0 auto 1.25rem;
     max-inline-size: 100rem;
-    padding-block-end: 1rem;
 }
 
-.super-footer__local :is(p, nav) {
+.super-footer__local p {
+    color: inherit;
+    font: inherit;
+    font-size: .875rem;
     margin-block: .35rem;
 }
 
@@ -57,12 +60,6 @@
     line-height: 1.5;
     max-inline-size: 100rem;
     overflow-wrap: anywhere;
-}
-
-.super-footer__local .site-attribution {
-    border-block-start: .0625rem solid rgb(255 250 242 / .38);
-    margin-block-start: 1rem;
-    padding-block-start: 1rem;
 }
 
 .super-footer__grid {
@@ -78,35 +75,47 @@
 }
 
 .super-footer__heading {
-    border-block-end: .125rem solid var(--about-teal, #009485);
+    border-block-end: .125rem solid #009485;
     color: #fffaf2;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    font-size: .78rem;
-    letter-spacing: .09em;
+    font: 700 1.0625rem/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    letter-spacing: normal;
     margin: 0 0 .8rem;
     padding-block-end: .55rem;
-    text-transform: uppercase;
+    text-transform: none;
 }
 
 .super-footer__list {
     display: grid;
     text-align: left;
-    gap: .42rem;
+    gap: .22rem;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
+.super-footer__list li {
+    font: inherit;
+    font-size: .875rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.super-footer .super-footer__heading a {
+    color: #56d8c9;
+    text-decoration-line: underline;
+    text-decoration-style: double;
+}
+
 .super-footer a,
 .super-footer a:visited {
     color: #fffaf2;
-    text-decoration-color: var(--about-tiffany, #56d8c9);
+    text-decoration-color: #56d8c9;
     text-decoration-thickness: .1em;
     text-underline-offset: .2em;
 }
 
 .super-footer a:is(:hover, :focus-visible) {
-    color: var(--about-tiffany, #56d8c9);
+    color: #56d8c9;
 }
 
 .super-footer__closing {
@@ -116,12 +125,14 @@
     flex-wrap: wrap;
     gap: 1rem 2rem;
     justify-content: space-between;
-    margin: 2rem auto 0;
+    margin: 1.25rem auto 0;
     max-inline-size: 100rem;
     padding-block-start: 1rem;
 }
 
 .super-footer__closing p {
+    font: inherit;
+    font-size: .875rem;
     margin: 0;
     max-inline-size: 65ch;
 }
@@ -138,7 +149,7 @@
     gap: .75rem;
     grid-column: 1 / -1;
     inline-size: 100%;
-    margin: 2rem auto 0;
+    margin: 1.25rem auto 0;
     max-inline-size: 100rem;
     overflow-wrap: anywhere;
     padding-block-start: 1rem;
@@ -164,11 +175,6 @@
     max-inline-size: 70ch;
 }
 
-.about-footer {
-    flex-wrap: wrap;
-}
-
-.about-footer > .site-attribution,
 .super-footer > .site-attribution {
     border-block-start: .0625rem solid rgb(255 250 242 / .38);
     inline-size: 100%;
@@ -239,7 +245,7 @@
 
 .page-section-rail__readout {
     --page-section-rail-readout-paint-reserve: .25rem;
-    background: var(--about-deep-forest-charcoal, #242a24);
+    background: #242a24;
     border: .0625rem solid #fffaf2;
     box-sizing: border-box;
     box-shadow: .2rem .2rem 0 rgb(23 52 95 / .28);
@@ -296,10 +302,6 @@
         margin-inline: 50%;
         transform: translateX(-50%);
     }
-}
-
-h2.super-footer__heading {
-    color: var(--about-tiffany, #56d8c9);
 }
 
 @media screen and (max-width: 56rem) {
@@ -447,7 +449,6 @@ h2.super-footer__heading {
     }
 
     .visitor-boundary,
-    .about-footer > .site-attribution,
     .super-footer > .site-attribution {
         border-color: CanvasText;
         color: CanvasText;
@@ -471,7 +472,6 @@ h2.super-footer__heading {
     }
 
     .visitor-boundary,
-    .about-footer > .site-attribution,
     .super-footer > .site-attribution {
         border-color: #000;
         color: #000;

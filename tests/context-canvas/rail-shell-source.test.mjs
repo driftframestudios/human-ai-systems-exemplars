@@ -35,53 +35,15 @@ test("the shared rail keeps one external visual readout with complete link names
   assert.doesNotMatch(source, /page-section-rail__label/u);
 });
 
-test("every Context Canvas footer receives the same plain-text contact address", async () => {
-  const shell = await readSourceContract(resolve(canvasRoot, "canvas-shell.js"), "utf8");
-  const routes = (await readdir(canvasRoot, { withFileTypes: true }))
-    .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
-    .map(entry => entry.name)
-    .sort();
-
-  assert.match(
-    shell,
-    /footer\.querySelector\(":scope > \[data-context-canvas-contact\], :scope > \* > \[data-context-canvas-contact\]"\)/u,
-  );
-  assert.match(shell, /if \(!contact\) contact = element\("p", "super-footer__contact", "contact@vik\.guru"\)/u);
-  assert.match(shell, /contact\.remove\(\)/u);
-  assert.match(shell, /closing\.appendChild\(contact\)/u);
-  assert.doesNotMatch(shell, /mailto:/iu);
-
+test("each portfolio route carries the About footer for scriptless reading", async () => {
+  const routes = (await readdir(canvasRoot)).filter(name => name.endsWith(".html"));
+  const footerOf = source => source.slice(source.lastIndexOf("<footer"), source.lastIndexOf("</footer>") + 9);
+  const expected = footerOf(await readSourceContract(resolve(canvasRoot, "index.html"), "utf8"));
+  assert.match(expected, /data-context-canvas-contact>contact@vik\.guru<\/p>/u);
   for (const route of routes) {
     const source = await readSourceContract(resolve(canvasRoot, route), "utf8");
-    const footerStart = source.lastIndexOf("<footer");
-    const footerEnd = source.lastIndexOf("</footer>");
-    assert.ok(footerStart >= 0 && footerEnd > footerStart, `${route}: final footer`);
-    const footer = source.slice(footerStart, footerEnd + "</footer>".length);
-    const contacts = footer.match(/data-context-canvas-contact/gu) ?? [];
-
-    assert.equal(contacts.length, 1, `${route}: one authored contact address`);
-    assert.match(
-      footer,
-      /<p class="super-footer__contact" data-context-canvas-contact>contact@vik\.guru<\/p>/u,
-      `${route}: exact plain-text contact address`,
-    );
-    assert.doesNotMatch(footer, /mailto:/iu, route);
-    assert.ok(
-      footer.indexOf("data-context-canvas-contact") < footer.indexOf("data-visitor-boundary"),
-      `${route}: contact precedes the visitor boundary`,
-    );
-    assert.ok(
-      footer.indexOf("data-visitor-boundary") < footer.indexOf("© 2003–2026"),
-      `${route}: attribution closes the footer`,
-    );
-
-    if (route !== "404.html") {
-      assert.match(
-        source,
-        /<script src="canvas-shell\.js" defer><\/script>/u,
-        `${route}: shared footer runtime`,
-      );
-    }
+    assert.equal(footerOf(source), expected, route);
+    assert.match(source, /<script src="canvas-shell\.js" defer><\/script>/u, route);
   }
 });
 

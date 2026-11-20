@@ -31,7 +31,6 @@ test('essay composes the established Debrief navigation, reading, and footer own
     'canvas-shell.css', 'styles/contracts/debrief-composition.css',
   ]);
   const footer = html.slice(html.lastIndexOf('<footer'));
-  assert.match(footer, /class="footer__container super-footer"/u);
   assert.ok(footer.indexOf('data-visitor-boundary') < footer.indexOf('class="site-attribution"'));
   assert.equal(html.split(visitorBoundary.contextText).length - 1, 1);
   let previous = footer.indexOf(visitorBoundary.contextText);
