@@ -552,7 +552,7 @@ or cross-engine observation.
 
 ### Branches adapt collaboration to a receiving job
 
-[Branch topology](BRANCHING.md) carries the complete contract.
+[Branch topology](BRANCHING.md) carries the complete contract. The [browser and production carrier timing study](research/browser-and-production-cost/README.md) records matched measurements for issue #975.
 
 | Branch or namespace | Primary job |
 | --- | --- |
