@@ -2315,12 +2315,12 @@
         "skill_name": null
       },
       "fragment": null,
-      "expected_url": "https://schemas.vik.guru/skills/",
+      "expected_url": "https://schemas.radiantnull.com/skills/",
       "allowed_carriers": [
         "anchor",
         "jsonld"
       ],
-      "selection_basis": "The repository skill publication selection declares the public catalog projection base used by structured data."
+      "selection_basis": "The repository skill publication selection declares the catalog contents; the GitHub Pages projection provides the human-readable catalog receiver."
     },
     {
       "token": "PUBLIC_URL_SKILL_COLLABORATION_ACCOUNTING",

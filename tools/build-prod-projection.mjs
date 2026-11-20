@@ -4297,6 +4297,7 @@ function assertGeneratedContextCanvasHeadRoutes({
     authority: createContextCanvasHeadAuthority({
       routeReference,
       registryReference,
+      materializedRoutes: true,
     }),
     expectedPageCount: 40,
     // The retained exemplar belongs to source validation. It remains outside
