@@ -1199,7 +1199,9 @@ function validateDestination(key, value) {
   if (typeof value !== "string" || value.trim() === "") {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_VALUE_MISSING",
-      `${key} needs an approved destination in .env.public or the process environment`,
+      key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)
+        ? `${key} needs an approved destination in the tracked external binding`
+        : `${key} needs an approved destination in .env.public or the process environment`,
     );
   }
   if (/[\x00-\x1F\x7F]/.test(value)) {

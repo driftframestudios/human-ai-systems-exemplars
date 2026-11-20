@@ -2640,14 +2640,13 @@ function aboutStylesheetGraph(html, label) {
         span.start >= noscript.contentStart && span.end <= noscript.contentEnd,
     });
   }
-  if (links.length !== 8) {
-    fail(`${label} must contain the exact eight-owner About stylesheet graph.`);
+  if (links.length !== 8 && links.length !== 17) {
+    fail(`${label} requires the eight-owner or seventeen-owner About stylesheet graph.`);
   }
-  const base = links.slice(0, 6);
-  const noscriptLink = links[6];
-  const shell = links[7];
+  const base = links.slice(0, -2);
+  const [noscriptLink, shell] = links.slice(-2);
   for (const [index, link] of base.entries()) {
-    if (link.inNoscript || link.media?.toLowerCase() !== "all") {
+    if (link.inNoscript || (link.media ?? "all").toLowerCase() !== "all") {
       fail(`${label} base stylesheet owner ${index + 1} must remain media=all in the document context.`);
     }
     if (
@@ -2662,8 +2661,8 @@ function aboutStylesheetGraph(html, label) {
       fail(`${label} base stylesheet owners must remain one contiguous loading run.`);
     }
   }
-  if (!noscriptLink.inNoscript || noscriptLink.media?.toLowerCase() !== "all") {
-    fail(`${label} seventh stylesheet must remain the media=all noscript owner.`);
+  if (!noscriptLink.inNoscript || (noscriptLink.media ?? "all").toLowerCase() !== "all") {
+    fail(`${label} penultimate stylesheet must remain the media=all noscript owner.`);
   }
   if (
     !ignorableHtmlRange(
@@ -2682,9 +2681,9 @@ function aboutStylesheetGraph(html, label) {
     fail(`${label} noscript owner must contain only its stylesheet link.`);
   }
   if (shell.inNoscript || shell.media !== undefined) {
-    fail(`${label} eighth stylesheet must remain the unqualified document shell owner.`);
+    fail(`${label} final stylesheet must remain the unqualified document shell owner.`);
   }
-  if (!(base[5].end <= noscript.start && noscript.end <= shell.start)) {
+  if (!(base.at(-1).end <= noscript.start && noscript.end <= shell.start)) {
     fail(`${label} stylesheet loading-context order has changed.`);
   }
   return {
@@ -3110,6 +3109,9 @@ export function projectAboutCssProfile({
     renderedConsumerBytes.toString("utf8"),
     "Rendered About consumer",
   );
+  if (renderedGraph.links.length !== sourceGraph.links.length) {
+    fail("Rendered About stylesheet graph differs in size from the tracked stylesheet graph.");
+  }
   for (const [index, sourceLink] of sourceGraph.links.entries()) {
     const expected = renderedAboutStylesheetHref(
       sourceLink.href,
@@ -4043,9 +4045,9 @@ async function loadPublicationInput(
       root, trackedBlobs, trackedInputs, productionExternalReferenceBinding,
       "Production external-reference binding",
     );
-    externalReference = parseExternalReferenceBinding(externalReferenceInput.bytes, {
-      requiredKeys: externalReferenceKeys,
-    });
+    // Pages checks the complete authored inventory. The primary manifest selects a
+    // subset of those pages; resolvePublicReferenceDestinations checks each selected key.
+    externalReference = parseExternalReferenceBinding(externalReferenceInput.bytes);
   }
   const destinations = await resolvePublicReferenceDestinations(keys, {
     configurationSource: configurationBytes.toString("utf8"),

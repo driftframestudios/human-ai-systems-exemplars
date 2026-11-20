@@ -131,12 +131,13 @@ selected source and its document-root destination explicitly.
 ```
 
 `css_projection` is one bounded production distribution profile. It discovers
-About's stylesheet order from the tracked consumer rather than restating that
-order in configuration. Six contiguous enhanced owners become one file, the
-stylesheet inside `<noscript>` remains its own execution context, and the later
-`canvas-shell.css` link remains a separate file. Each generated filename carries
-its full SHA-256 digest beneath `assets/css/`; the readable repository owners
-remain intact.
+About's stylesheet order from its tracked head. Fifteen contiguous base
+stylesheets, including the nine native Studio stylesheets, become one file.
+The stylesheet inside `<noscript>` loads when scripting is unavailable, and
+the later `canvas-shell.css` link keeps its own file. These three outputs carry
+their full SHA-256 digests beneath `assets/css/`. The same profile can replay
+the earlier six-base-stylesheet About page. Both versions accept the default
+all-media setting and explicit `media="all"` on their base and noscript links.
 
 Before CSSO runs, repository-local CSS references resolve from each original
 source location to the generated output location. Query strings and fragments
