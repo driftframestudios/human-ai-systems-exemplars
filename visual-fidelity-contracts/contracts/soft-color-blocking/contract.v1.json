@@ -1,0 +1,146 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:soft-color-blocking",
+  "title": "Soft Color Blocking",
+  "version": "1.0.0",
+  "standing": "review_candidate",
+  "kind": "art_direction_contract",
+  "reviewedOn": "2026-10-20",
+  "supersedes": [],
+  "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+  "sourceAuthority": {
+    "semanticOwner": "Visual Fidelity Contracts maintainers",
+    "schemaOwner": "Visual Fidelity Contracts schema maintainers",
+    "publicationOwner": "Vikrant Varun Kudesia — named human publication receiver",
+    "sourcePath": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+    "relationship": "authored_source"
+  },
+  "purpose": {
+    "plainLanguage": "An approachable visual system for guided workflows, operational applications, diagrams, and review experiences with explicit state.",
+    "populations": [
+      "Product and operations teams who inspect a shared workflow.",
+      "Reviewers who need explicit state and an approachable route into technical detail.",
+      "Cross-functional groups who point at a shared artifact and explain what fits or changes."
+    ],
+    "jobs": [
+      "Group workflow steps or system regions into broad semantic fields.",
+      "Make selected, pending, held, accepted, error, and recovery state explicit.",
+      "Connect an inviting product grammar with inspectable technical relationships."
+    ]
+  },
+  "fit": {
+    "fits": [
+      "Guided operational and review workflows.",
+      "Architecture diagrams that share a product visual grammar.",
+      "Context trees, impact maps, role boards, and route comparisons."
+    ],
+    "poorFits": [
+      "Dense scientific instruments benefit from Industrial Ink.",
+      "Relationship-heavy system cartography benefits from Cobalt Operating Field.",
+      "Long-form narrative benefits from Rose Quartz or another reading-first field."
+    ],
+    "smallestUsefulDose": "One large semantic field, one strong label, square geometry, and one explicit state relationship."
+  },
+  "invariants": [
+    "Large flat fields group related work and preserve a visible hierarchy.",
+    "Square or near-square geometry creates the characteristic rhythm.",
+    "Written labels and state relationships carry meaning while color reinforces the distinction.",
+    "Solid offset layers create depth that remains inspectable in source and print.",
+    "Accepted work and recovery routes remain visible during failure."
+  ],
+  "permittedVariation": [
+    "Field count, orientation, accent distribution, and domain vocabulary can follow the receiving workflow.",
+    "Authentic documentary imagery can keep source-native color inside a labeled figure.",
+    "Framework adapters can vary while state meaning, keyboard behavior, focus, and recovery stay stable."
+  ],
+  "tokens": {
+    "authority": "reference_mapping",
+    "path": "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css",
+    "paletteClosed": true,
+    "colorPairs": [
+      { "foreground": "#3157ed", "background": "#fff7f4", "minimumRatio": 5.34, "uses": ["Cobalt text and boundaries on warm white."] },
+      { "foreground": "#fff7f4", "background": "#3157ed", "minimumRatio": 5.34, "uses": ["Warm-white text on cobalt actions and structural fields."] },
+      { "foreground": "#14245b", "background": "#f8cbc7", "minimumRatio": 10.02, "uses": ["Body text on blush orientation fields."] },
+      { "foreground": "#14245b", "background": "#f9e8e5", "minimumRatio": 12.35, "uses": ["Body text on paper panels."] },
+      { "foreground": "#14245b", "background": "#ebff4f", "minimumRatio": 13.22, "uses": ["Selected-state and next-action labels."] },
+      { "foreground": "#14245b", "background": "#ff6b63", "minimumRatio": 5.26, "uses": ["Error and consequential-caveat text."] },
+      { "foreground": "#14245b", "background": "#ded575", "minimumRatio": 9.69, "uses": ["Pending and supporting-context labels."] }
+    ]
+  },
+  "typography": {
+    "families": [
+      "A rounded geometric system sans for display headings and major action labels.",
+      "A familiar system sans for body copy and native controls.",
+      "A system monospace for compact status, identifier, and route labels."
+    ],
+    "bodyMinimumRem": 1,
+    "metadataMinimumRem": 0.75,
+    "readingMeasureCh": { "targetMin": 50, "targetMax": 66, "absoluteMax": 75 },
+    "uses": [
+      "Display type stays compact enough to preserve block relationships at narrow widths.",
+      "Metadata stays short and high-contrast and receives a 200 percent text-resize observation."
+    ]
+  },
+  "geometry": {
+    "cornerTreatment": "square",
+    "targetMinimumCssPx": 44,
+    "depth": "Solid cobalt offsets and bordered fields create explicit, inspectable depth.",
+    "spacing": "Broad fields and whitespace establish hierarchy before additional accents appear."
+  },
+  "behavior": {
+    "states": ["idle", "available", "hover", "focus", "selected", "disabled", "loading", "empty", "partial", "stale", "invalid", "error", "recovering", "recovered", "accepted", "held"],
+    "errorRecovery": [
+      "Loading, stale, invalid, and error states preserve accepted content.",
+      "Recovery offers retry, restore accepted work, edit the draft, or contact the named owner according to local authority.",
+      "A held state names its responsible role and the evidence that can move the work forward."
+    ],
+    "focus": "A high-contrast double ring remains visible across blush, paper, cobalt, chartreuse, coral, and forced-color fields.",
+    "keyboard": "Native controls preserve tab order, grouped selection behavior, visible labels, and a polite selected-state announcement.",
+    "motion": "Block or route emphasis can support changed-state continuity; reduced-motion mode presents the final arrangement directly.",
+    "noJavaScript": "The main sequence, state labels, instructions, and semantic companion remain complete in document order."
+  },
+  "media": {
+    "reflow320CssPx": "Broad fields stack in source order; a named local inspection region carries a genuinely two-dimensional graph.",
+    "textResize200Percent": "Block height grows with content and labels wrap inside the field that owns them.",
+    "print": "White paper, black text, retained borders, written states, and the evidence boundary create the print record.",
+    "forcedColors": "Canvas, CanvasText, ButtonText, Highlight, and HighlightText carry field boundaries and selected state.",
+    "reducedMotion": "Travel resolves to the final state while focus, selection, recovery, and accepted state stay visible.",
+    "svg": "A useful title and description, semantic groups, written edge labels, stable IDs, and a nearby table carry the same reading.",
+    "imagery": "Images receive a figure number, concise caption, source standing, and a full-size route when detail matters."
+  },
+  "evidence": {
+    "standing": "repository_observation",
+    "establishes": [
+      "Established repository examples demonstrate broad field grouping, square geometry, explicit labels, and technical-diagram use.",
+      "Focused source tests validate schema shape, reference-token declaration, declared paths, and named contrast pairs."
+    ],
+    "boundaries": [
+      "Each established example retains its local behavior and CSS authority.",
+      "Authorization, scientific validity, durable transactions, and operational receipts remain with the receiving application."
+    ],
+    "reentry": [
+      "A palette, state-meaning, browser, accessibility, source-example, or authority change reopens review.",
+      "A receiving implementation that claims exact token parity earns a byte or value-level drift check."
+    ]
+  },
+  "references": {
+    "canonicalExamples": [
+      { "label": "Context Tree visual variants", "path": "collaboration/context-tree-visual-variants/index.html", "standing": "canonical" },
+      { "label": "Impact Map visual variants", "path": "collaboration/impact-map-visual-variants/index.html", "standing": "canonical" },
+      { "label": "Who To Believe system graph", "path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html", "standing": "reference" },
+      { "label": "Visualization Fidelity Atlas", "path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html", "standing": "reference" },
+      { "label": "Soft Color Blocking contract specimen", "path": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html", "standing": "adaptation" }
+    ],
+    "codeSamples": [
+      "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css",
+      "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+      "collaboration/context-tree-visual-variants/index.html",
+      "collaboration/impact-map-visual-variants/index.html"
+    ],
+    "tests": [
+      "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+      "tests/visual-fidelity-contracts/contract-art-directions.test.mjs"
+    ]
+  }
+}

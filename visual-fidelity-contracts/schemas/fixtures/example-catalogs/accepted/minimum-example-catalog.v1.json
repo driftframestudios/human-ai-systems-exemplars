@@ -1,0 +1,486 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+  "schemaVersion": "1.0.0",
+  "libraryId": "visual-fidelity-pattern-library",
+  "reviewedOn": "2026-10-20",
+  "publicCollection": "https://kindlight.systems/visual-fidelity-contracts",
+  "generation": {
+    "command": "npm run build:visual-fidelity-pattern-library",
+    "check": "npm run check:visual-fidelity-pattern-library",
+    "widths": [640, 1280, 1600]
+  },
+  "examples": [
+    {
+      "id": "vfp:fixture:industrial-ink",
+      "slug": "fixture-industrial-ink",
+      "ordinal": 1,
+      "category": "industrial-ink",
+      "title": "Industrial Ink fixture",
+      "description": "A compact accepted fixture for the Industrial Ink category.",
+      "alt": "A synthetic Industrial Ink fixture.",
+      "caption": "Figure 1. The fixture carries the minimum accepted metadata.",
+      "source": {
+        "path": "visual-fidelity-contracts/labs/service-boundary-lab/index.html",
+        "selector": "main",
+        "state": "accepted",
+        "type": "runnable-lab",
+        "identity": "fixture@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/labs/service-boundary-lab/index.html",
+          "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js"
+        ]
+      },
+      "contract": {
+        "id": "vfc:industrial-ink",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/industrial-ink/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts",
+      "semanticCompanion": {
+        "summary": "Four relationships carry the minimum accepted semantic companion.",
+        "relationships": [
+          ["Object", "Accepted fixture"],
+          ["State", "Accepted"],
+          ["Owner", "Repository source"],
+          ["Re-entry", "Changed source"]
+        ],
+        "path": "visual-fidelity-contracts/examples/figures/industrial-ink-service-boundary.v1.json"
+      },
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"],
+      "rights": {
+        "license": "Apache-2.0",
+        "copyrightHoldersSource": "AUTHORS",
+        "copyrightHolders": [
+          "Vikrant Varun Kudesia",
+          "Driftframe Studios, Limited Liability Company"
+        ],
+        "publisher": "Driftframe Studios, Limited Liability Company",
+        "standing": "Synthetic repository fixture"
+      },
+      "publicationReceipt": {
+        "sourceAuthority": "Declared repository source",
+        "publicationAuthority": {
+          "standing": "held",
+          "receiver": "Named publication receiver",
+          "activationEvent": "Explicit approval"
+        },
+        "method": "Deterministic fixture",
+        "reviewedOn": "2026-10-20",
+        "sourceClosure": {
+          "algorithm": "sha256",
+          "files": [
+            "visual-fidelity-contracts/labs/service-boundary-lab/index.html",
+            "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js"
+          ],
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "metadataInspection": {
+          "standing": "passed",
+          "derivativeCount": 3,
+          "fields": ["EXIF absent", "XMP absent", "IPTC absent", "orientation absent"]
+        },
+        "locatorInspection": { "standing": "passed", "scope": "Fixture fields" },
+        "secretInspection": {
+          "standing": "passed",
+          "method": "Bounded lexical scan",
+          "scope": "Fixture fields"
+        },
+        "pixelInspection": {
+          "standing": "reviewed",
+          "reviewedOn": "2026-10-20",
+          "derivativeSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "scope": "Fixture derivative"
+        }
+      },
+      "responsiveImage": {
+        "intrinsicWidth": 1600,
+        "intrinsicHeight": 900,
+        "sizes": "100vw",
+        "derivatives": [
+          {
+            "path": "visual-fidelity-contracts/examples/images/industrial-ink/industrial-ink-service-boundary-640.webp",
+            "width": 640,
+            "height": 360,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/industrial-ink/industrial-ink-service-boundary-1280.webp",
+            "width": 1280,
+            "height": 720,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/industrial-ink/industrial-ink-service-boundary-1600.webp",
+            "width": 1600,
+            "height": 900,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "vfp:fixture:soft-color-blocking",
+      "slug": "fixture-soft-color-blocking",
+      "ordinal": 2,
+      "category": "soft-color-blocking",
+      "title": "Soft Color Blocking fixture",
+      "description": "A compact accepted fixture for the Soft Color Blocking category.",
+      "alt": "A synthetic Soft Color Blocking fixture.",
+      "caption": "Figure 2. The fixture carries the minimum accepted metadata.",
+      "source": {
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+        "selector": "main",
+        "state": "accepted",
+        "type": "contract-specimen",
+        "identity": "fixture@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+          "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts",
+      "semanticCompanion": {
+        "summary": "Four relationships carry the minimum accepted semantic companion.",
+        "relationships": [
+          ["Object", "Accepted fixture"],
+          ["State", "Accepted"],
+          ["Owner", "Repository source"],
+          ["Re-entry", "Changed source"]
+        ],
+        "path": "visual-fidelity-contracts/examples/figures/soft-color-blocking-workflow.v1.json"
+      },
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"],
+      "rights": {
+        "license": "Apache-2.0",
+        "copyrightHoldersSource": "AUTHORS",
+        "copyrightHolders": [
+          "Vikrant Varun Kudesia",
+          "Driftframe Studios, Limited Liability Company"
+        ],
+        "publisher": "Driftframe Studios, Limited Liability Company",
+        "standing": "Synthetic repository fixture"
+      },
+      "publicationReceipt": {
+        "sourceAuthority": "Declared repository source",
+        "publicationAuthority": {
+          "standing": "held",
+          "receiver": "Named publication receiver",
+          "activationEvent": "Explicit approval"
+        },
+        "method": "Deterministic fixture",
+        "reviewedOn": "2026-10-20",
+        "sourceClosure": {
+          "algorithm": "sha256",
+          "files": [
+            "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+            "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
+          ],
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "metadataInspection": {
+          "standing": "passed",
+          "derivativeCount": 3,
+          "fields": ["EXIF absent", "XMP absent", "IPTC absent", "orientation absent"]
+        },
+        "locatorInspection": { "standing": "passed", "scope": "Fixture fields" },
+        "secretInspection": {
+          "standing": "passed",
+          "method": "Bounded lexical scan",
+          "scope": "Fixture fields"
+        },
+        "pixelInspection": {
+          "standing": "reviewed",
+          "reviewedOn": "2026-10-20",
+          "derivativeSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "scope": "Fixture derivative"
+        }
+      },
+      "responsiveImage": {
+        "intrinsicWidth": 1600,
+        "intrinsicHeight": 900,
+        "sizes": "100vw",
+        "derivatives": [
+          {
+            "path": "visual-fidelity-contracts/examples/images/soft-color-blocking/soft-color-blocking-workflow-640.webp",
+            "width": 640,
+            "height": 360,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/soft-color-blocking/soft-color-blocking-workflow-1280.webp",
+            "width": 1280,
+            "height": 720,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/soft-color-blocking/soft-color-blocking-workflow-1600.webp",
+            "width": 1600,
+            "height": 900,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "vfp:fixture:component-recovery",
+      "slug": "fixture-component-recovery",
+      "ordinal": 3,
+      "category": "component-and-recovery",
+      "title": "Component recovery fixture",
+      "description": "A compact accepted fixture for the component and recovery category.",
+      "alt": "A synthetic component recovery fixture.",
+      "caption": "Figure 3. The fixture carries the minimum accepted metadata.",
+      "source": {
+        "path": "visual-fidelity-contracts/labs/component-lab/index.html",
+        "selector": "main",
+        "state": "accepted",
+        "type": "runnable-lab",
+        "identity": "fixture@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/labs/component-lab/index.html",
+          "visual-fidelity-contracts/labs/component-lab/src/model.js"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts",
+      "semanticCompanion": {
+        "summary": "Four relationships carry the minimum accepted semantic companion.",
+        "relationships": [
+          ["Object", "Accepted fixture"],
+          ["State", "Accepted"],
+          ["Owner", "Repository source"],
+          ["Re-entry", "Changed source"]
+        ],
+        "path": "visual-fidelity-contracts/examples/figures/component-accepted-recovery.v1.json"
+      },
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"],
+      "rights": {
+        "license": "Apache-2.0",
+        "copyrightHoldersSource": "AUTHORS",
+        "copyrightHolders": [
+          "Vikrant Varun Kudesia",
+          "Driftframe Studios, Limited Liability Company"
+        ],
+        "publisher": "Driftframe Studios, Limited Liability Company",
+        "standing": "Synthetic repository fixture"
+      },
+      "publicationReceipt": {
+        "sourceAuthority": "Declared repository source",
+        "publicationAuthority": {
+          "standing": "held",
+          "receiver": "Named publication receiver",
+          "activationEvent": "Explicit approval"
+        },
+        "method": "Deterministic fixture",
+        "reviewedOn": "2026-10-20",
+        "sourceClosure": {
+          "algorithm": "sha256",
+          "files": [
+            "visual-fidelity-contracts/labs/component-lab/index.html",
+            "visual-fidelity-contracts/labs/component-lab/src/model.js"
+          ],
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "metadataInspection": {
+          "standing": "passed",
+          "derivativeCount": 3,
+          "fields": ["EXIF absent", "XMP absent", "IPTC absent", "orientation absent"]
+        },
+        "locatorInspection": { "standing": "passed", "scope": "Fixture fields" },
+        "secretInspection": {
+          "standing": "passed",
+          "method": "Bounded lexical scan",
+          "scope": "Fixture fields"
+        },
+        "pixelInspection": {
+          "standing": "reviewed",
+          "reviewedOn": "2026-10-20",
+          "derivativeSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "scope": "Fixture derivative"
+        }
+      },
+      "responsiveImage": {
+        "intrinsicWidth": 1600,
+        "intrinsicHeight": 900,
+        "sizes": "100vw",
+        "derivatives": [
+          {
+            "path": "visual-fidelity-contracts/examples/images/component-and-recovery/component-accepted-recovery-640.webp",
+            "width": 640,
+            "height": 360,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/component-and-recovery/component-accepted-recovery-1280.webp",
+            "width": 1280,
+            "height": 720,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/component-and-recovery/component-accepted-recovery-1600.webp",
+            "width": 1600,
+            "height": 900,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "vfp:fixture:data-view",
+      "slug": "fixture-data-view",
+      "ordinal": 4,
+      "category": "data-view-and-evidence",
+      "title": "Data view fixture",
+      "description": "A compact accepted fixture for the data view and evidence category.",
+      "alt": "A synthetic data view fixture.",
+      "caption": "Figure 4. The fixture carries the minimum accepted metadata.",
+      "source": {
+        "path": "visual-fidelity-contracts/labs/data-view-lab/index.html",
+        "selector": "main",
+        "state": "accepted",
+        "type": "runnable-lab",
+        "identity": "fixture@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/labs/data-view-lab/index.html",
+          "visual-fidelity-contracts/labs/data-view-lab/src/model.js"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts",
+      "semanticCompanion": {
+        "summary": "Four relationships carry the minimum accepted semantic companion.",
+        "relationships": [
+          ["Object", "Accepted fixture"],
+          ["State", "Accepted"],
+          ["Owner", "Repository source"],
+          ["Re-entry", "Changed source"]
+        ],
+        "path": "visual-fidelity-contracts/examples/figures/data-view-value-standing.v1.json"
+      },
+      "tests": ["tests/visual-fidelity-contracts/foundation-contracts.test.mjs"],
+      "rights": {
+        "license": "Apache-2.0",
+        "copyrightHoldersSource": "AUTHORS",
+        "copyrightHolders": [
+          "Vikrant Varun Kudesia",
+          "Driftframe Studios, Limited Liability Company"
+        ],
+        "publisher": "Driftframe Studios, Limited Liability Company",
+        "standing": "Synthetic repository fixture"
+      },
+      "publicationReceipt": {
+        "sourceAuthority": "Declared repository source",
+        "publicationAuthority": {
+          "standing": "held",
+          "receiver": "Named publication receiver",
+          "activationEvent": "Explicit approval"
+        },
+        "method": "Deterministic fixture",
+        "reviewedOn": "2026-10-20",
+        "sourceClosure": {
+          "algorithm": "sha256",
+          "files": [
+            "visual-fidelity-contracts/labs/data-view-lab/index.html",
+            "visual-fidelity-contracts/labs/data-view-lab/src/model.js"
+          ],
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "metadataInspection": {
+          "standing": "passed",
+          "derivativeCount": 3,
+          "fields": ["EXIF absent", "XMP absent", "IPTC absent", "orientation absent"]
+        },
+        "locatorInspection": { "standing": "passed", "scope": "Fixture fields" },
+        "secretInspection": {
+          "standing": "passed",
+          "method": "Bounded lexical scan",
+          "scope": "Fixture fields"
+        },
+        "pixelInspection": {
+          "standing": "reviewed",
+          "reviewedOn": "2026-10-20",
+          "derivativeSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "scope": "Fixture derivative"
+        }
+      },
+      "responsiveImage": {
+        "intrinsicWidth": 1600,
+        "intrinsicHeight": 900,
+        "sizes": "100vw",
+        "derivatives": [
+          {
+            "path": "visual-fidelity-contracts/examples/images/data-view-and-evidence/data-view-value-standing-640.webp",
+            "width": 640,
+            "height": 360,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/data-view-and-evidence/data-view-value-standing-1280.webp",
+            "width": 1280,
+            "height": 720,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          },
+          {
+            "path": "visual-fidelity-contracts/examples/images/data-view-and-evidence/data-view-value-standing-1600.webp",
+            "width": 1600,
+            "height": 900,
+            "format": "webp",
+            "bytes": 1,
+            "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "metadata": { "exif": false, "xmp": false, "iptc": false, "orientation": null, "colorProfile": "sRGB" }
+          }
+        ]
+      }
+    }
+  ]
+}

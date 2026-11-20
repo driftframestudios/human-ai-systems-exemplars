@@ -50,6 +50,55 @@ function attributeValue(tag, attributeName) {
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 }
 
+export const iframeFaviconHref = "/favicon.ico";
+
+export function requiresDataFavicon(html) {
+  const markup = markupResourceContext(html, { scanMarkupContextsOnly: true })
+    .replace(/<!--[\s\S]*?-->|<style\b[^>]*>[\s\S]*?<\/style\s*>/giu, "");
+  const head = markup.match(/<head\b[^>]*>([\s\S]*?)<\/head\s*>/iu)?.[1] ?? "";
+  for (const [meta] of head.matchAll(/<meta\b[^>]*>/giu)) {
+    if (attributeValue(meta, "http-equiv")?.toLowerCase() !== "content-security-policy") continue;
+    const directives = (attributeValue(meta, "content") ?? "").toLowerCase().split(";").map(value => value.trim().split(/\s+/u));
+    const images = directives.find(([name]) => name === "img-src") ?? directives.find(([name]) => name === "default-src");
+    if (images?.length === 2 && images[1] === "data:") return true;
+  }
+  return false;
+}
+
+export function projectIframeFavicon(html, embeddedPng = null) {
+  if (typeof html !== "string") {
+    fail("Iframe favicon projection requires HTML text.");
+  }
+  const headStart = html.search(/<head\b[^>]*>/iu);
+  if (headStart === -1) {
+    fail("Iframe favicon projection requires a head element.");
+  }
+  const headClosure = html.slice(headStart).match(/<\/head\s*>/iu);
+  if (!headClosure || headClosure.index === undefined) {
+    fail("Iframe favicon projection requires a closing head element.");
+  }
+  const headEnd = headStart + headClosure.index;
+  const head = html.slice(headStart, headEnd);
+  const withoutPriorIcons = head.replace(/<link\b[^>]*>/giu, (tag) => {
+    const relations = (attributeValue(tag, "rel") ?? "")
+      .trim()
+      .toLowerCase()
+      .split(/\s+/u)
+      .filter(Boolean);
+    return relations.some((relation) =>
+      ["apple-touch-icon", "icon", "mask-icon"].includes(relation)
+    ) ? "" : tag;
+  });
+  return [
+    html.slice(0, headStart),
+    withoutPriorIcons,
+    embeddedPng
+      ? `  <link rel="icon" type="image/png" href="data:image/png;base64,${embeddedPng.toString("base64")}" sizes="32x32">\n`
+      : `  <link rel="icon" href="${iframeFaviconHref}" sizes="any">\n`,
+    html.slice(headEnd),
+  ].join("");
+}
+
 function hasCharacterReference(value) {
   return /&(?:#[^\s;]*;?|[a-z][a-z0-9]+;)/i.test(value);
 }
@@ -260,14 +309,27 @@ function resolveResourceReferences(
   references,
   targets,
   label,
-  { baseDirectory = "", requireAllTargets = true } = {},
+  {
+    allowedOutsideResources = new Set(),
+    baseDirectory = "",
+    requireAllTargets = true,
+  } = {},
 ) {
+  if (!(allowedOutsideResources instanceof Set)) {
+    fail(`${label} allowed outside resources must be supplied as a Set.`);
+  }
   const usedPackageTargets = new Set();
   let inlineReferences = 0;
   for (const observation of references) {
     const classification = classifyResourceReference(observation.reference, baseDirectory);
     if (classification.kind === "inline") {
       inlineReferences += 1;
+      continue;
+    }
+    if (
+      classification.kind === "outside" &&
+      allowedOutsideResources.has(observation.reference)
+    ) {
       continue;
     }
     if (classification.kind !== "package") {

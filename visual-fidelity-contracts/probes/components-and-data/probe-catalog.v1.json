@@ -1,0 +1,89 @@
+{
+  "$schema": "./probe-catalog.schema.json",
+  "schemaVersion": 1,
+  "catalogId": "visual-fidelity-components-and-data-probes",
+  "revision": "1.1.0",
+  "claimBoundary": "Synthetic fixtures and focused tests establish the behavior they exercise. Receiving environments supply production performance, reliability, security, accessibility-conformance, and domain-validity evidence.",
+  "probes": [
+    {
+      "id": "ownership.release",
+      "decision": "Who owns and releases each external resource?",
+      "observable": "Every listener, timer, request, dialog, and generated URL has one owner generation and an idempotent release path.",
+      "evidence": ["source", "unit-transition", "browser-behavior"],
+      "sources": ["../../labs/component-lab/src/controller.js", "../../labs/data-view-lab/src/controller.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-browser.test.mjs"]
+    },
+    {
+      "id": "candidate.atomicity",
+      "decision": "May this complete candidate replace accepted state?",
+      "observable": "Validation precedes one commit, and rejected candidates preserve accepted identity, data standing, and useful state.",
+      "evidence": ["schema", "fixture", "unit-transition"],
+      "sources": ["../../labs/component-lab/src/model.js", "../../labs/data-view-lab/src/model.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-model.test.mjs"]
+    },
+    {
+      "id": "async.eligibility",
+      "decision": "Does this result still belong to the active request or intent?",
+      "observable": "A matching request or intent identity and owner generation make a result eligible to settle.",
+      "evidence": ["unit-transition"],
+      "sources": ["../../labs/component-lab/src/model.js", "../../labs/data-view-lab/src/model.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-model.test.mjs"]
+    },
+    {
+      "id": "component.focus",
+      "decision": "Can a person enter, use, and leave the modal task coherently?",
+      "observable": "Native dialog behavior establishes initial focus and restores focus to a connected invoker or stable fallback.",
+      "evidence": ["dom-contract", "browser-behavior"],
+      "sources": ["../../labs/component-lab/src/controller.js", "../../labs/component-lab/src/render.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component.browser.mjs"]
+    },
+    {
+      "id": "commerce.authority",
+      "decision": "Which state describes local intent and which state records authority acceptance?",
+      "observable": "Validation, authorization, payment, order, and receipt standings remain distinct; a frozen intent envelope binds each receipt to its context.",
+      "evidence": ["unit-transition", "semantic-twin"],
+      "sources": ["../../labs/component-lab/src/model.js", "../../labs/component-lab/src/semantics.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component-model.test.mjs"]
+    },
+    {
+      "id": "data.meaning",
+      "decision": "What does each value mean in this scope and revision?",
+      "observable": "Identity, unit, denominator, standing, revision, lineage, and renderer-specific geometry travel with the value.",
+      "evidence": ["schema", "fixture", "semantic-twin"],
+      "sources": ["../../labs/data-view-lab/schemas/data-view-lab.schema.json", "../../labs/data-view-lab/src/model.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/data-view-model.test.mjs"]
+    },
+    {
+      "id": "renderer.threshold",
+      "decision": "Which view supports this decision at this admitted scale?",
+      "observable": "A deterministic rule selects a renderer whose required data shape is present and whose global domain remains stable across pages.",
+      "evidence": ["unit-transition", "boundary-test"],
+      "sources": ["../../labs/data-view-lab/src/model.js", "../../labs/data-view-lab/src/render.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/data-view-model.test.mjs"]
+    },
+    {
+      "id": "twins.agreement",
+      "decision": "Do visible and machine-readable representations describe the same accepted records?",
+      "observable": "Table, SVG, prose, and export derive from one detached semantic twin and retain exact numeric values.",
+      "evidence": ["unit-transition", "dom-contract"],
+      "sources": ["../../labs/data-view-lab/src/render.js", "../../labs/data-view-lab/src/semantics.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/data-view-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-page.test.mjs"]
+    },
+    {
+      "id": "svg.namespace",
+      "decision": "Can multiple graphical instances coexist with distinct internal references?",
+      "observable": "Each rendered instance owns unique IDs, each internal reference resolves locally, and painter order keeps connectors behind nodes.",
+      "evidence": ["dom-contract", "browser-behavior"],
+      "sources": ["../../labs/data-view-lab/src/render.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/data-view-page.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-browser.test.mjs"]
+    },
+    {
+      "id": "recovery.continuity",
+      "decision": "What remains useful while the next step recovers?",
+      "observable": "Accepted data, selection, focus, and draft persist while their identity and authority context still apply.",
+      "evidence": ["unit-transition", "browser-behavior"],
+      "sources": ["../../labs/component-lab/src/model.js", "../../labs/data-view-lab/src/model.js"],
+      "tests": ["../../../tests/visual-fidelity-contracts/component-model.test.mjs", "../../../tests/visual-fidelity-contracts/data-view-model.test.mjs", "../../../tests/visual-fidelity-contracts/component.browser.mjs", "../../../tests/visual-fidelity-contracts/data-view-browser.test.mjs"]
+    }
+  ]
+}

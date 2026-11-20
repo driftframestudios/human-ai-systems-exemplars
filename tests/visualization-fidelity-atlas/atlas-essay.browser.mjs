@@ -46,7 +46,7 @@ for (const width of [390, 1440]) {
       await page.evaluate(() => document.fonts.ready);
       const name = `${width}-${javaScriptEnabled ? 'enhanced' : 'static'}`;
       const primary = page.getByRole('navigation', { name: 'Primary', exact: true });
-      assert.deepEqual(await primary.getByRole('link').allTextContents(), ['About', 'AI Systems', 'Debriefs']);
+      assert.deepEqual(await primary.getByRole('link').allTextContents(), ['About', 'Showcase', 'AI Systems']);
       await expect(primary).toBeVisible();
       const header = await primary.boundingBox();
       const hero = await page.locator('main > header').boundingBox();

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json",
+  "title": "Visual Fidelity service-boundary projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "revision", "status", "nextAction"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "status": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "owner": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "nextAction": { "type": "string", "minLength": 1, "maxLength": 160 }
+  }
+}

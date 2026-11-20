@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import Ajv2020 from "ajv/dist/2020.js";
 
+import { readPrototypeScript } from "./prototype-script-source.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -82,11 +83,7 @@ async function readJson(relativePath) {
 
 async function readThreadkeepingMaterial() {
   const source = await readFile(path.join(repositoryRoot, paths.threadkeepingPrototype), "utf8");
-  const match = source.match(/^const INITIAL = (.+);$/mu);
-  if (!match) {
-    throw new Error(`${paths.threadkeepingPrototype} should expose one adjacent INITIAL ledger.`);
-  }
-  return JSON.parse(match[1]);
+  return readPrototypeScript(source).initializerValue("INITIAL");
 }
 
 function assertExact(label, actual, expected) {

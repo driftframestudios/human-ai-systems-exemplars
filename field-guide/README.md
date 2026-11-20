@@ -6,11 +6,16 @@ recovery patterns, research atlases, and visual/data stabilizers.
 
 ## Current standing
 
-Version `0.1.0` is a public-possible orientation package with unevenly hydrated
-sections. The Semantic Attractors route carries a complete local guidance
+Version `0.1.0` is an orientation package prepared for public review, with
+sections at different levels of development. The Semantic Attractors route carries a complete local guidance
 document. Practitioner Probes has an active source-bound entry. Several other
 folders remain honest reader-entry stubs that point to checked-in material or
 name the source needed for later hydration.
+
+The public [Human–AI Collaboration Field
+Guide](https://kindlight.systems/human-ai-collaboration-field-guide) is the
+best everyday-language entrance. This package remains the repository-local
+route to checked-in source, package standing, and later hydration work.
 
 Driftframe Constellation retains package authority through the semantic source
 identity `urn:source-key:driftframe-constellation`. This repository projection
@@ -33,7 +38,7 @@ exact external coordinate when a source-changing task requires it.
 
 ## Package routes
 
-[`src/index.md`](src/index.md) is the compact reader-facing title surface.
+[`src/index.md`](src/index.md) is the compact reader-facing title page.
 [`VERSIONING.md`](VERSIONING.md) records the current package version, and
 [`package.json`](package.json) carries the machine-readable package identity.
 The [repository root](../README.md) remains the return route for the wider

@@ -48,6 +48,7 @@ on:
       - "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/**"
       - "a3-stacked-cube-visual-system-bundle-v0.1/schema/**"
       - "visualization-fidelity-atlas-bundle-v0.1/*.json*"
+      - "visual-fidelity-contracts/**"
       - "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/**"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json"
       - "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"

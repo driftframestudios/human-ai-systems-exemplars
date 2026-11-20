@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/evidence-bearing-test-design/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "evidence-bearing-test-design",
+  "description": "Designs a focused executable observation that distinguishes intended behavior from a consequential plausible fault. Applies when a test oracle, fixture, observation layer, failure meaning, or evidence boundary needs definition or repair.",
+  "semanticAuthorityRef": "../source/.agents/skills/evidence-bearing-test-design/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/15",
+  "contract": {
+    "what": "A method for joining one owned behavior, one plausible fault, one independent expectation, one observable signal, and one receiving consequence in the smallest fitting test.",
+    "when": [
+      "A new check is needed, an existing check can pass for the wrong reason, a production defect reveals a weak oracle, or a test result needs a precise account of what it establishes."
+    ],
+    "boundaries": [
+      "The accepted domain contract, specification, or named decision owner defines intended meaning. Runnable implementation source supplies the actual behavior and exact coordinate under observation. This skill designs and, when authorized, implements the observation. `test-suite-composition` owns selection across checks. Domain, security, accessibility, state, publication, and live-service owners retain their acceptance authority."
+    ],
+    "result": "A focused source observation or executable test with a discriminating fixture, an independently grounded expectation, useful failure meaning, and an explicit evidence limit."
+  },
+  "receivingUse": {
+    "job": "A new check is needed, an existing check can pass for the wrong reason, a production defect reveals a weak oracle, or a test result needs a precise account of what it establishes.",
+    "materialResult": "A focused source observation or executable test with a discriminating fixture, an independently grounded expectation, useful failure meaning, and an explicit evidence limit.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/evidence-bearing-test-design/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

@@ -36,7 +36,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
     historicalFile: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-    currentDigest: "1b9b716fdc04fae93194219a890bb82ff96fe9b922ada75d887607eddff91d2f",
+    currentDigest: "59fe05af22367b67b1b31f4d5919d2310e85b90432c7366533d6993c3e5ef284",
     historicalDigest: "eaabb4b4fdd0e8950f83b819b085a8f2e2f30c07020336cb2d35bc11c3ac844f",
     stateContract: "shared-surface-priority-map-state.v0.1",
     apiName: "sharedSurfacePriorityMap",
@@ -55,7 +55,7 @@ const artifacts = [
     version: "0.2.6",
     currentFile: "service-design-blueprint-chimeric-prototype-v0.2.6.html",
     historicalFile: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
-    currentDigest: "bdb1a46d62917e3ad217a273df492e378a96465c1f99dafd977b776af8fc6012",
+    currentDigest: "cb79cbe8461ec0e6b8a737ecf9d8bb3e4d339d3e466b6b97bd80fc965156eb3f",
     historicalDigest: "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
     stateContract: "service-design-blueprint-state.v0.2",
     apiName: "serviceDesignBlueprint",
@@ -77,7 +77,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
     historicalFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
-    currentDigest: "938433bc7167ecd83bf92836f84ab7683163f01908397fe0ddcfdf11aa37eeb0",
+    currentDigest: "1e0de8333468045e98730bfd3440d2bcf338a3974dc1727a34ef0c2d7f17de4c",
     historicalDigest: "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
     stateContract: "ai-systems-service-blueprint-state.v0.1",
     apiName: "aiSystemsServiceBlueprint",
@@ -96,7 +96,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "software-architecture-views-chimeric-prototype-v0.1.4.html",
     historicalFile: "software-architecture-views-chimeric-prototype-v0.1.3.html",
-    currentDigest: "ae639340af83d5522352854d1133ce1dace48934ba38e474b9c38bfd0120fb38",
+    currentDigest: "87470ae85414985e49b7c2527c374c0e9ced910e7d9d00f0ff22b9eca8f57435",
     historicalDigest: "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
     stateContract: "software-architecture-views-state.v0.1",
     apiName: "softwareArchitectureViews",
@@ -164,7 +164,7 @@ for (const artifact of artifacts) {
     ]);
     const plain = staticPrompt(html, artifact.promptId);
     const route = routeManifest.routes.find(({ id }) => id === artifact.id);
-    const api = html.match(new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(\\{([\\s\\S]*?)\\}\\);`, "u"));
+    const api = html.match(new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(\\{([\\s\\S]*?)\\}\\);?`, "u"));
 
     assert.equal(staticPrompt(projectionHtml, artifact.promptId), plain);
     assert.match(html, /Prompt Capsule · Markdown/u);

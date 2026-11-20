@@ -64,7 +64,7 @@ function assertSectionsInOrder(markdown) {
 }
 
 function stringArrayConstant(source, name) {
-  const match = source.match(new RegExp(`const ${name} = Object\\.freeze\\(\\[([\\s\\S]*?)\\]\\);`, "u"));
+  const match = source.match(new RegExp(`const\\s+${name}\\s*=\\s*Object\\.freeze\\(\\[([\\s\\S]*?)\\]\\);`, "u"));
   assert.ok(match, `${name} remains an inspectable frozen list`);
   return [...match[1].matchAll(/"([^"]+)"/gu)].map(([, value]) => value);
 }
@@ -100,7 +100,7 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
   assert.match(source, /text\/markdown;charset=utf-8/u);
   assert.match(
     source,
-    /link\.download = `\$\{PROMPT_CAPSULE_SOURCE_ID\}\.prompt-capsule\.r\$\{PROMPT_CAPSULE_SOURCE_VERSION\}\.\$\{promptCapsuleView\}\.md`/u,
+    /link\.download\s*=\s*`\$\{PROMPT_CAPSULE_SOURCE_ID\}\.prompt-capsule\.r\$\{PROMPT_CAPSULE_SOURCE_VERSION\}\.\$\{promptCapsuleView\}\.md`/u,
   );
   assert.match(source, /<noscript>[\s\S]*complete default plain Markdown remains available below/iu);
 
@@ -121,7 +121,7 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
     "promptCapsule",
     "promptCapsuleMarkdown",
     "getPromptCapsuleView",
-  ]) assert.match(source, new RegExp(`(?:^|,)\\s*${member}\\s*(?::|(?=,|$))`, "mu"));
+  ]) assert.match(source, new RegExp(`(?:^|[,{])\\s*${member}\\s*(?::|(?=[,}]|$))`, "mu"));
 
   assert.match(source, /fnv1a32-utf8:/u);
   const materialViewFields = [

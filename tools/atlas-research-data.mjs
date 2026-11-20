@@ -5,7 +5,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 
 export const SOURCE_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json';
 export const SUMMARY_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/summary.v1.json';
-export const SOURCE_SHA256 = 'f3f773b0c939d4c239379bbfd6275979df106da93d67de518e90737ea5d7df45';
+export const SOURCE_SHA256 = 'a084c733b7203fc1ce2a799ca0fe49f8609ed2fc342fb44b6bcdeaf072ba3ae2';
 export const EVIDENCE_KINDS = Object.freeze(['empirical-study', 'technical-guidance', 'practitioner-source']);
 export const TOPIC_KEYS = Object.freeze([
   'comparison', 'interpretation', 'distribution-and-uncertainty',
@@ -261,7 +261,7 @@ export async function buildResearchData({ check = false } = {}) {
       selectedOn: source.selectedOn, selection: source.selection,
     },
   };
-  const output = JSON.stringify(document, null, 2) + '\n';
+  const output = JSON.stringify(document) + '\n';
   const destination = new URL(SUMMARY_PATH, root);
   if (check) {
     if (await readFile(destination, 'utf8') !== output) {

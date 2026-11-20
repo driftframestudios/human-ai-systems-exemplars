@@ -4,7 +4,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { schemaReceiverRoutes } from "../../tools/schema-receiver-routes.mjs";
-import { assertPublicationRevision, schemaCompanionRoutes, schemaPublication } from "../../tools/schema-publication.mjs";
+import { assertPublicationRevision, schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "../../tools/schema-publication.mjs";
 import { assertExactFileInventory, resolvePublicationFile } from "../../tools/publication-boundary.mjs";
 import { artifactAuthor, artifactAttribution, artifactLicense } from "../../tools/attribution-contract.mjs";
 
@@ -21,12 +21,12 @@ await assertPublicationRevision(root, revision, [
   "tools/schema-publication.mjs", "tools/schema-publication-lock.json", "tools/schema-receiver-routes.mjs",
   "tools/publication-boundary.mjs", "tools/attribution-contract.mjs",
   "LICENSE", "AUTHORS", "CITATION.cff", "attribution.yml", "AI-DATA-USE.md",
-  ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+  ...schemaPublicationInputPaths(),
 ]);
 const catalog = await schemaPublication(root, base, revision);
 const files = new Map();
 for (const route of [...schemaReceiverRoutes, ...schemaCompanionRoutes]) {
-  files.set(route.receiverPath, await readFile(await resolvePublicationFile(root, route.source)));
+  files.set(route.receiverPath, await readFile(await resolvePublicationFile(root, route.frozenSource ?? route.source)));
 }
 for (const path of ["LICENSE", "AUTHORS", "CITATION.cff", "attribution.yml", "AI-DATA-USE.md"]) {
   files.set(path, await readFile(await resolvePublicationFile(root, path)));

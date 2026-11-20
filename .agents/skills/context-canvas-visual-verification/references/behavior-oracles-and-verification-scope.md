@@ -71,6 +71,14 @@ For a reading-order claim, locate the named heading and the actual continuation 
 
 Pair geometry with focused paint inspection when the mechanism includes multicolumn fragmentation, clipping, transforms, or a known engine-specific paint defect. A correctly placed Range rectangle can coexist with visible slicing, duplication, or overlap. Retain that disagreement as a finding and choose an observation that can establish the reader’s actual result.
 
+An intact card needs an individual-fragment observation. `getBoundingClientRect()`
+returns the enclosing union when multicolumn layout splits an element; that union
+can span the column gap and make text containment appear valid. Inspect the
+nonempty `getClientRects()` fragments first, then compare text with the intended
+card fragment and inspect its painted border and shadow. The operating-field
+card repair exercised this distinction by restoring the former grid nesting
+before parsing a fresh WebKit document, then reopening the accepted source.
+
 Keep local containment separate from document containment. A wide table can exceed its inner scroll region while the figure remains inside the page and clear of a fixed rail. Page `scrollWidth` helps observe positive overflow; directly inspect content hidden by clipping or negative positioning. Borders, outlines, shadows, focus rings, and other consequential painted extents receive their own reserve or focused view.
 
 Expected typography keeps a precise exception. A raised footnote reference may extend above its paragraph’s ordinary line box while remaining inside the enclosing reading region. The test can preserve paragraph inline containment and use the named outer region for that reference’s vertical bounds. Ordinary paragraph text retains its own full containment assertion. A discovered exception refines the owning relation and leaves neighboring assertions active.

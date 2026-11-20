@@ -22,7 +22,7 @@ const boundedCaptions = new Map([
   ['genomic-viewer-replatforming.html', {
     selector: '#genomics-situation-models',
     paintedOwner: '.genomic-context-tree-feature',
-    text: ['Figure 3. Genomics situation-model player cards.', 'Each account stays revisable'],
+    text: ['Figure 3. Genomics situation-model player cards.', 'different context as the decision setting changes'],
   }],
 ]);
 const browsers = new Map();

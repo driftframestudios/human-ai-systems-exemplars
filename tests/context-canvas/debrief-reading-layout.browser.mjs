@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 import { after, before, test } from "node:test";
 import { chromium, expect, firefox, webkit } from "@playwright/test";
+import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
 import { startStaticServer } from "../../tools/core-architecture-browser-helper.mjs";
 import {
   assertColumnActivation,
@@ -449,13 +450,15 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
     await t.test("the complete catalog has an explicit reading disposition", async () => {
       const session = await openPage(browser, "debriefs.html");
       try {
-        const routes = await session.page.locator('script[type="application/ld+json"]').evaluateAll(nodes =>
+        const routeValues = await session.page.locator('script[type="application/ld+json"]').evaluateAll(nodes =>
           nodes.flatMap(node => {
             const data = JSON.parse(node.textContent);
             const items = data["@graph"] || [data];
             return items.filter(item => item["@type"] === "ItemList").flatMap(item => item.itemListElement)
-              .map(item => new URL(item.url).pathname.split("/").at(-1));
+              .map(item => item.url);
           }));
+        const authority = await loadSourceRouteAuthority();
+        const routes = routeValues.map(value => new URL(resolveSourceRouteValue(value, authority)).pathname.split("/").at(-1));
         assert.deepEqual(routes.sort(), [...family, ...controls].sort(), "all 23 catalog routes have a consumer or control observation");
       } finally { await session.close(); }
     });
@@ -801,10 +804,11 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
         // WebKit reproduce its split; all engines check the repaired source.
         if (engine !== "firefox") {
           await lims.page.evaluate(() => {
-            const promise = document.querySelector(".reading-flow > .fmi-track-promise");
+            const promise = document.querySelector(".fmi-track-promise--implementation").cloneNode(true);
             const run = document.createElement("div");
             run.className = "prose-flow";
-            promise.before(run);
+            run.style.maxInlineSize = "40rem";
+            document.querySelector(".reading-flow").prepend(run);
             run.append(promise);
           });
           const fragmented = await observeReading(lims.page);
@@ -849,13 +853,16 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
     await t.test("painted-text observation distinguishes the declared accessible cue from changed hiding", async () => {
       const session = await openPage(browser, "fmi-lims-eln-replatforming.html", { viewport: { width: 390, height: 844 } });
       try {
-        const cue = session.page.locator(".reading-flow > .prose-flow p .fmi-link-cue").first();
+        // Put the current Blueprint link in the paragraph geometry this observer measures.
+        await session.page.locator('.fmi-method-link[href*="/service-design-blueprint-"]').evaluate(link => {
+          document.querySelector(".reading-flow > .prose-flow p").append(" ", link.cloneNode(true));
+        });
+        const link = session.page.locator('.reading-flow > .prose-flow p .fmi-method-link[href*="/service-design-blueprint-"]');
+        const cue = link.locator(".fmi-link-cue");
         const cueText = (await cue.textContent()).trim();
         const observedCues = reading => reading.flows.flatMap(flow => flow.paragraphs)
           .filter(part => part.text === cueText);
-        assert.equal(await session.page.getByRole("link", {
-          name: "Service Design Blueprint (opens in a new tab)", exact: true,
-        }).count(), 1, "The clipped cue remains part of the accessible link name.");
+        await expect(link).toHaveAccessibleName("Service Design Blueprint (opens in a new tab)");
         const accepted = await observeReading(session.page);
         assert.equal(observedCues(accepted).length, 0, "The declared fully clipped cue contributes no painted fragment.");
         assertReading(accepted, "fmi-lims-eln-replatforming.html");

@@ -1,8 +1,13 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
+
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
@@ -15,10 +20,14 @@ const aiSystemsTitle = "AI Systems — Accountable Decisions and Recoverable Wor
 const sharedMachineryName = "Shared Machinery";
 const sharedMachineryTitle =
   "Shared Machinery — Instruments for Work Across Tools and Teams";
-const publicSourceRoot =
-  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+const publicSourceRoot = "https://vik.guru/";
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 async function source(relativePath) {
-  return readFile(resolve(repositoryRoot, relativePath), "utf8");
+  return readSourceContract(resolve(repositoryRoot, relativePath), "utf8");
 }
 
 function jsonLd(html) {
@@ -68,14 +77,14 @@ test("AI Systems and Shared Machinery publish one current title at every self-me
     const record = jsonLd(html);
 
     assert.equal(
-      html.match(/<title>([^<]+) \| Context Canvas<\/title>/u)?.[1],
+      html.match(/<title>([^<]+) \| Vikrant Varun Kudesia<\/title>/u)?.[1],
       expectedTitle,
       `${route}: document title`,
     );
     assert.equal(metadataContent(html, "og:title"), expectedTitle, `${route}: Open Graph title`);
     assert.equal(metadataContent(html, "twitter:title"), expectedTitle, `${route}: Twitter title`);
     assert.equal(record.headline, expectedTitle, `${route}: structured headline`);
-    assert.equal(record.url, `${publicSourceRoot}${route}`, `${route}: stable structured URL`);
+    assert.equal(publicValue(record.url), `${publicSourceRoot}${route}`, `${route}: stable structured URL`);
   }
 });
 
@@ -89,22 +98,12 @@ test("the About and AI Systems structured references use the receiving pages' cu
   const aiSystems = jsonLd(aiHtml);
   const sharedMachinery = jsonLd(sharedHtml);
 
-  const aboutReferences = new Map(
-    allObjects(about.hasPart)
-      .filter((entry) => [aiSystemsRoute, sharedMachineryRoute]
-        .some((route) => entry.url === `${publicSourceRoot}${route}`))
-      .map((entry) => [entry.url, entry]),
-  );
-  assert.equal(
-    aboutReferences.get(`${publicSourceRoot}${aiSystemsRoute}`)?.name,
-    aiSystemsTitle,
-    "About identifies the current AI Systems collection",
-  );
-  assert.equal(
-    aboutReferences.get(`${publicSourceRoot}${sharedMachineryRoute}`)?.name,
-    sharedMachineryTitle,
-    "About identifies the current Shared Machinery collection",
-  );
+  const onwardRoutes = about.significantLink.map(publicValue);
+  for (const route of [aiSystemsRoute, sharedMachineryRoute, 'debriefs.html']) {
+    assert.ok(onwardRoutes.includes(`${publicSourceRoot}${route}`), `About leads to ${route}`);
+  }
+  assert.equal(allObjects(about.hasPart).some(entry => entry['@type'] === 'CollectionPage'), false,
+    'linked collections retain their separate page owners');
 
   const aiSystemReferences = allObjects(aiSystems.hasPart);
   for (const route of [
@@ -114,7 +113,7 @@ test("the About and AI Systems structured references use the receiving pages' cu
     sharedMachineryRoute,
   ]) {
     const reference = aiSystemReferences.find(
-      (entry) => entry.url === `${publicSourceRoot}${route}`,
+      (entry) => publicValue(entry.url) === `${publicSourceRoot}${route}`,
     );
     const target = jsonLd(await source(
       `context-canvas-project-surface/context-canvas/${route}`,
@@ -125,7 +124,7 @@ test("the About and AI Systems structured references use the receiving pages' cu
   }
 
   const sharedReference = aiSystemReferences.find(
-    (entry) => entry.url === `${publicSourceRoot}${sharedMachineryRoute}`,
+    (entry) => publicValue(entry.url) === `${publicSourceRoot}${sharedMachineryRoute}`,
   );
   assert.ok(sharedReference, "AI Systems names Shared Machinery as a collection member");
   assert.equal(sharedReference.name, sharedMachineryName);
@@ -157,12 +156,13 @@ test("current production HTML links resolve to the stable AI Systems and Shared 
   for (const entry of selectedHtml) {
     const html = await source(entry.source_path);
     for (const href of hrefs(html)) {
+      const resolvedHref = publicValue(href);
       const matchedRoute = [aiSystemsRoute, sharedMachineryRoute]
-        .find((route) => href.includes(route));
+        .find((route) => resolvedHref.includes(route));
       if (!matchedRoute) continue;
       referenceCount += 1;
 
-      const [pathPart, fragment = ""] = href.split("#", 2);
+      const [pathPart, fragment = ""] = resolvedHref.split("#", 2);
       if (/^https:\/\//u.test(pathPart)) {
         const url = new URL(pathPart);
         assert.equal(

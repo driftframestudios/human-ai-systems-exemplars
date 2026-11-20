@@ -1,4 +1,5 @@
 import '../../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../../prototype-script.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -72,31 +73,13 @@ test("all seven classic-script owners parse without mounting a page", () => {
   }
 });
 
-const functions = new Map();
-function declared(key, name) {
-  const id = key + ":" + name;
-  if (functions.has(id)) return functions.get(id);
-  const source = sources[key];
-  const start = new RegExp("\\bfunction\\s+" + name + "\\s*\\(").exec(source)?.index;
-  assert.notEqual(start, undefined, id);
-  for (let end = source.indexOf("}", start); end >= 0 && end - start < 100000; end = source.indexOf("}", end + 1)) {
-    const candidate = source.slice(start, end + 1);
-    try {
-      new vm.Script("(" + candidate + ")");
-      functions.set(id, candidate);
-      return candidate;
-    } catch (error) { if (!(error instanceof SyntaxError)) throw error; }
-  }
-  throw new Error("Could not isolate " + id);
-}
+const programs = new Map();
 function context(key, names, fixture = {}, constants = []) {
+  if (!programs.has(key)) programs.set(key, readPrototypeScript(sources[key]));
+  const program = programs.get(key);
   const ctx = vm.createContext(fixture);
-  for (const name of constants) {
-    const line = sources[key].split("\n").find(line => new RegExp("^\\s*const " + name + "\\s*=").test(line));
-    assert(line, key + ": " + name);
-    vm.runInContext(line, ctx);
-  }
-  for (const name of names) vm.runInContext(declared(key, name), ctx);
+  for (const name of constants) vm.runInContext('const ' + name + ' = ' + program.initializer(name), ctx);
+  for (const name of names) vm.runInContext(program.definition(name), ctx);
   return ctx;
 }
 class Element {
@@ -240,9 +223,7 @@ function lessonFixture() {
     state: { investigation: { alignmentDays: 1 }, sources: { quantitative: ["NOAA-shaped precipitation", "USGS-shaped streamflow"] } },
     elements, document: documentFor(new Map()),
   });
-  const fixture = /    var fixture = \{[\s\S]*?\n    \};/.exec(sources.lesson);
-  assert(fixture);
-  vm.runInContext(fixture[0], ctx);
+  vm.runInContext('var fixture = ' + readPrototypeScript(sources.lesson).initializer('fixture'), ctx);
   return { ctx, elements, result: () => table(shell("lesson", 1, "pair-rows", elements.pairRows)) };
 }
 test("Open Lesson retains missing-observation meaning, units, native fallback and three alignment states", () => {
@@ -290,9 +271,7 @@ test("Open Lesson readiness span, recovery and literal dates remain explicit", (
   assert(rows[0].attrs["data-label"].includes(literal));
 });
 
-const atlasLine = sources.atlas.split("\n").find(line => line.startsWith("const ATLAS = "));
-assert(atlasLine);
-const atlas = JSON.parse(atlasLine.slice("const ATLAS = ".length).replace(/;\s*$/, ""));
+const atlas = vm.runInNewContext('(' + readPrototypeScript(sources.atlas).initializer('ATLAS') + ')');
 const atlasIdentities = ["stage", "driver", "workflow", "week", "team", "role", "queue", "driver", "label"];
 assert.equal(atlas.exemplars.length, 9);
 const atlasContext = () => context("atlas", ["tableForDataset"], {}, ["esc", "fmt"]);

@@ -18,7 +18,7 @@ const routes = [
   "prompt-side-conditions-practice.html", "readable-tables-reusable-evidence.html",
   "registry-goal-fidelity-routing.html", "resting-concepts.html", "visualization-fidelity-atlas.html",
   "initiative-costing.html", "recoverable-enterprise-forms.html", "one-figure-several-readings.html",
-  "who-to-believe-reviews-platform.html",
+  "who-to-believe-reviews-platform.html", "debriefs.html",
 ];
 const repaired = new Map([
   ["ai-systems.html", 2], ["core-architectures-orientation-index.html", 1],
@@ -177,7 +177,7 @@ async function captureOpening(page, engine, route) {
 }
 
 test("AI Systems and Shared Machinery have an explicit reading-route population", async () => {
-  assert.equal(new Set(routes).size, 26);
+  assert.equal(new Set(routes).size, 27);
   const links = new Set();
   for (const route of routes) {
     const html = await readFile(new URL(`../../context-canvas-project-surface/context-canvas/${route}`, import.meta.url), "utf8");
@@ -185,7 +185,14 @@ test("AI Systems and Shared Machinery have an explicit reading-route population"
     if (["ai-systems.html", "shared-machinery.html"].includes(route)) {
       const main = html.match(/<main\b[\s\S]*?<\/main>/u)?.[0];
       assert.ok(main, `${route}: owns a primary reading route surface`);
+      // The native Studio is an About-page instrument with its own browser suite.
+      if (route === "ai-systems.html") {
+        assert.match(main, /href="index\.html#studio-title"/u);
+        const about = await readFile(new URL("../../context-canvas-project-surface/context-canvas/index.html", import.meta.url), "utf8");
+        assert.match(about, /id="studio-title"/u);
+      }
       const directReadings = [...new Set([...main.matchAll(/href="([^"#?]+\.html)(?:[?#][^"]*)?"/gu)]
+        .filter(match => route !== "ai-systems.html" || match[0] !== 'href="index.html#studio-title"')
         .map(match => match[1]).filter(href => !href.includes("/")))];
       assert.ok(directReadings.length >= 10, `${route}: primary collection supplies substantive route membership`);
       assert.deepEqual(directReadings.filter(href => !routes.includes(href)), [],
@@ -202,7 +209,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
   test(`${engine}: AI Systems and Shared Machinery retain complete reading orientation`, async t => {
     const browser = await browserType.launch({ headless: true });
     t.after(() => browser.close());
-    for (const route of [...routes, "debriefs.html"]) {
+    for (const route of routes) {
       for (const width of widths) {
         await t.test(`${route}: ${width}px reading`, async () => {
           const session = await openPage(browser, route, { viewport: { width, height: 1000 } });

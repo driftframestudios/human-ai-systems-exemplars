@@ -38,6 +38,7 @@ async function open(t, engine, route) {
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Media owner</title>' }));
   await page.goto(server.origin + root + route, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
+  for (const control of await page.locator('details.implementation-companion > summary').all()) await control.click();
   await page.locator('.page-section-rail__link').first().evaluate(link => { location.hash = link.hash; });
   await page.waitForSelector('.page-section-rail__link[aria-current="location"]');
   return page;
@@ -49,7 +50,7 @@ async function settle(page, width) {
 }
 
 async function observe(page, panel) {
-  return page.locator(`aside[aria-labelledby="${panel.id}"]`).evaluate(owner => {
+  return page.locator(`:is(aside, details)[aria-labelledby="${panel.id}"]`).evaluate(owner => {
     const rect = value => ({ left: value.left, right: value.right, top: value.top, bottom: value.bottom, width: value.width, height: value.height });
     const box = node => rect(node.getBoundingClientRect());
     const list = owner.querySelector(':scope > ol');
@@ -144,7 +145,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     test(`${engine}: ${route} ordered companions use available room and preserve sequence`, async t => {
       const page = await open(t, engine, route), selected = panels.filter(panel => panel.route === route);
       const names = new Map();
-      for (const panel of selected) names.set(panel.id, await page.locator(`aside[aria-labelledby="${panel.id}"] > ol`).ariaSnapshot());
+      for (const panel of selected) names.set(panel.id, await page.locator(`:is(aside, details)[aria-labelledby="${panel.id}"] > ol`).ariaSnapshot());
       // Five audit widths, a narrow receiver, and both shared shell seams.
       for (const width of [390, 768, 896, 897, 1024, 1025, 1199, 1200, 1201, 1440, 1920, 2560]) {
         await settle(page, width);
@@ -179,7 +180,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       await page.emulateMedia({ media: 'screen', forcedColors: 'active' }); await settle(page);
       for (const panel of selected) {
         assertPanel(await observe(page, panel), panel);
-        assert.equal(await page.locator(`aside[aria-labelledby="${panel.id}"] > ol`).ariaSnapshot(), names.get(panel.id), 'Responsive and alternate-media layout preserve the accessible sequence.');
+        assert.equal(await page.locator(`:is(aside, details)[aria-labelledby="${panel.id}"] > ol`).ariaSnapshot(), names.get(panel.id), 'Responsive and alternate-media layout preserve the accessible sequence.');
       }
     });
   }

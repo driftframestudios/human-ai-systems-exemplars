@@ -75,6 +75,9 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 
 ### Current v0.2.5 source receipt
 
+The folder-index carrier work reproduces a 145,185-byte canonical distribution with SHA-256 `33751eff7b58115cb550fea42451edbbd65fe393b6e2e0cff4367b23523f2b6b`. The earlier validation below records its original inputs.
+
+
 `npm run test:strategy-canvas` passes 47 of 47 browser contracts for the current source set at `.visual-runs/2026-10-08T01-01-03-767Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 167,650-byte canonical distribution with SHA-256 `bfabfe3c7d11a493d6fd6a193609c4683571655ac8bd6da168947ea7d579d040`. `npm run test:core-architectures` passes 132 of 132 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 29 of 29 checks, and `npm run test:iframe-routes` passes 39 of 39 checks. The aggregate check covers 38 routes, 68 files, and 4,853,271 bytes.
 
 [Issue #72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [Issue #102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) retain the accepted cross-family upload, signed-out route, and real-parent verification receipts. Closed Issue #137 preserves the historical route-family introduction. This record establishes the source-owned Strategy Canvas identities and build; the deployment receivers retain live delivery.

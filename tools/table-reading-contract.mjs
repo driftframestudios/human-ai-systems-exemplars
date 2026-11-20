@@ -19,6 +19,10 @@ export const harnessSources = [
   "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs",
   "tools/package-v1-iframe-routes.mjs", "tools/iframe-route-package-engine.mjs",
   "tools/package-iframe-routes.mjs", "tools/package-canvas-iframe-routes.mjs",
+  "tools/html-document-spans.mjs", "tools/materialize-about-studio-chapters.mjs",
+  "tools/materialize-embedded-content-fit.mjs", "tools/materialize-public-references.mjs",
+  "tools/public-route-reference-contract.mjs", "tools/registry-reference-contract.mjs",
+  "tools/external-reference-contract.mjs",
   "tools/project-investment-analysis.mjs", "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
 ];
 

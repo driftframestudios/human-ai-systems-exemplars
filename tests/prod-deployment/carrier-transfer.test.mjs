@@ -23,7 +23,10 @@ import {
   loadTaggedProductionCarrier,
   verifyCarrierTransferEnvelope,
   writeCarrierTransferEnvelope,
+  withGitBlobReader,
 } from "../../tools/package-prod-carrier-transfer.mjs";
+
+import { createTaggedIframePlan, verifyLiveIframeRoutes } from "../../tools/verify-live-iframe-routes.mjs";
 
 const execFileAsync = promisify(execFile);
 const carrierRoot = "deployment/cpanel/carrier";
@@ -59,15 +62,17 @@ async function createTaggedCarrier(options = {}) {
   const sourceSha = await commit(root, "Accept source");
 
   const outputs = new Map([
+    ...(options.iframeRootPaths ?? []).map(name => ["iframe-public/" + name, Buffer.from("User-agent: *\n")]),
     ["iframe-public/v1/core/demo/index.html", iframeBytes],
     ["primary-public/index.html", Buffer.from("<!doctype html><title>Primary</title>\n")],
   ]);
   const records = [...outputs].map(([projectedPath, bytes]) => ({
-    surface: projectedPath.startsWith("iframe-public/") ? "iframe" : "primary",
+    surface: options.surfaceOverrides?.[projectedPath] ??
+      (projectedPath.startsWith("iframe-public/") ? "iframe" : "primary"),
     projected_path: projectedPath,
     bytes: bytes.byteLength,
     sha256: sha256(bytes),
-    media_type: "text/html",
+    media_type: projectedPath.endsWith(".txt") ? "text/plain" : "text/html",
   }));
   const totals = (surface) => {
     const selected = records.filter((record) => record.surface === surface);
@@ -178,6 +183,53 @@ function appendMemberData(archive, extra) {
   changed.writeUInt32LE(newCentralOffset, endOffset(changed) + 16);
   return changed;
 }
+
+test("live iframe verification uses the selected carrier’s v1 bytes and leaves root robots to cutover", async () => {
+  await withFixture({ iframeRootPaths: ["robots.txt"] }, async (fixture) => {
+    const path = "core/demo/index.html";
+    const plan = await createTaggedIframePlan({ repository: fixture.root, productionTag: fixture.tag });
+    assert.deepEqual([...plan.outputFiles.keys()], [path]);
+    const fetchImplementation = async (url) => {
+      assert.equal(url.pathname, "/v1/core/demo/");
+      return new Response(fixture.outputs.get("iframe-public/v1/" + path), {
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
+    };
+    const tagged = await verifyLiveIframeRoutes({ plan, fetchImplementation });
+    assert.equal(tagged.ok, true);
+    assert.equal(tagged.counts.exactBytes, 1);
+    assert.equal(tagged.carrier.releaseSha, fixture.releaseSha);
+    assert.equal(tagged.carrier.sourceSha, fixture.sourceSha);
+
+    const standalone = { outputFiles: new Map([[path, Buffer.from("<!doctype html>\n<title>Iframe</title>\n")]]) };
+    const other = await verifyLiveIframeRoutes({ plan: standalone, fetchImplementation });
+    assert.equal(other.ok, false);
+    assert.equal(other.counts.status200, 1);
+    assert.equal(other.counts.exactBytes, 0);
+  });
+});
+
+test("the tagged iframe selector accounts for every indexed surface before live requests", async t => {
+  const robots = { iframeRootPaths: ["robots.txt"] };
+  for (const [label, options, expected] of [
+    ["additional iframe root", { iframeRootPaths: ["robots.txt", "undeclared.txt"] }, /outside v1: iframe-public\/undeclared\.txt/],
+    ["missing root robots file", {}, /missing iframe-public\/robots\.txt/],
+    [
+      "iframe entry classified as primary",
+      { ...robots, surfaceOverrides: { "iframe-public/v1/core/demo/index.html": "primary" } },
+      /disagrees with its primary surface/,
+    ],
+    [
+      "primary entry classified as iframe",
+      { ...robots, surfaceOverrides: { "primary-public/index.html": "iframe" } },
+      /disagrees with its iframe surface/,
+    ],
+  ]) {
+    await t.test(label, () => withFixture(options, fixture => assert.rejects(
+      createTaggedIframePlan({ repository: fixture.root, productionTag: fixture.tag }), expected,
+    )));
+  }
+});
 
 test("a tagged carrier forms a deterministic, self-verifying transfer envelope", async () => {
   await withFixture({}, async (fixture) => {
@@ -367,4 +419,60 @@ test("archive mutation fails the external receipt before activation", async () =
       /digest or byte count differs from its receipt/,
     );
   });
+});
+
+test("the Git batch reader returns binary and empty blobs and rejects missing objects", async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "carrier-git-blobs-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  await git(root, ["init", "-q"]);
+  const binary = Buffer.alloc(256 * 1024 + 3);
+  for (let index = 0; index < binary.length; index++) binary[index] = index % 256;
+  await writeFile(path.join(root, "binary"), binary);
+  await writeFile(path.join(root, "empty"), "");
+  const binaryId = await git(root, ["hash-object", "-w", "binary"]);
+  const emptyId = await git(root, ["hash-object", "-w", "empty"]);
+  const bounds = { maxBlobBytes: binary.length };
+  await withGitBlobReader(root, bounds, async readBlob => {
+    assert.deepEqual(await readBlob(binaryId), binary);
+    assert.equal((await readBlob(emptyId, 0)).length, 0);
+    assert.deepEqual(await readBlob(binaryId), binary);
+  });
+  await assert.rejects(withGitBlobReader(root, bounds, readBlob => readBlob(binaryId, 3)), /Git batch blob size/);
+  await assert.rejects(withGitBlobReader(root, bounds, readBlob => readBlob("0".repeat(40))), /requested object as a blob/);
+});
+
+test("malformed Git batch replies release the owned child", async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "carrier-git-protocol-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const oid = "a".repeat(40);
+  const pidFile = path.join(root, "pid");
+  const command = `#!${process.execPath}
+const fs = require("node:fs");
+fs.writeFileSync("pid", String(process.pid));
+process.stdin.once("data", () => {
+  process.stdout.write(Buffer.from(process.env.REPLY, "base64"), () => {
+    if (process.env.TRUNCATED === "yes") process.exit(0);
+  });
+});
+`;
+  await writeFile(path.join(root, "git"), command, { mode: 0o755 });
+  for (const [reply, error, truncated] of [
+    [`${"b".repeat(40)} blob 1\nx\n`, /requested object as a blob/],
+    [`${oid} tree 1\nx\n`, /requested object as a blob/],
+    [`${oid} blob -1\n`, /requested object as a blob/],
+    [`${oid} blob 50\n`, /Git batch blob size/],
+    ["x".repeat(101), /header exceeds/],
+    [`${oid} blob 4\na`, /complete blob frame/, true],
+    [`${oid} blob 1\nx!`, /payload terminator/],
+    [`${oid} blob 1\nx\ny`, /trailing bytes/],
+  ]) {
+    const env = {
+      PATH: root,
+      REPLY: Buffer.from(reply).toString("base64"),
+      TRUNCATED: truncated ? "yes" : "no",
+    };
+    await assert.rejects(withGitBlobReader(root, { maxBlobBytes: 4, env }, readBlob => readBlob(oid)), error);
+    const pid = Number(await readFile(pidFile, "utf8"));
+    assert.throws(() => process.kill(pid, 0), { code: "ESRCH" });
+  }
 });

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "snapshot_bytes",
+    "reader_question": "What physical source and supporting material make up this version?",
+    "unit": "file bytes at one revision",
+    "source": "history.2026-11-09.json: snapshot_files",
+    "form": "Treemap grouped by file family and authored/generated/test/document role",
+    "meaning": "Artifact footprint and containment",
+    "boundary": "Disk bytes are neither download payload nor labor; generated copies remain separately selectable."
+  },
+  {
+    "id": "textual_change",
+    "reader_question": "Where did recorded source changes concentrate?",
+    "unit": "added plus deleted text lines per unique nonmerge commit/file",
+    "source": "history.2026-11-09.json: file_changes",
+    "form": "Change treemap or date-by-family heatmap with additions/deletions available separately",
+    "meaning": "Recorded textual change distribution",
+    "boundary": "Formatting, generated copies and initial imports affect size; commit and PR diff weights are not additive. Distinct nonmerge commit records can repeat patches through squash promotions; SHA deduplication does not deduplicate implementation acts."
+  },
+  {
+    "id": "branch_movement",
+    "reader_question": "How did experiments, implementation and accepted references move between branches?",
+    "unit": "commit parent edge or merged pull-request event",
+    "source": "history.2026-11-09.json: all_dev_dag, dev_main_corridor; collaboration.2026-11-09.json: records[].pull_request",
+    "form": "Clickable topology and dated PR movement lanes, with selected chapter anchors",
+    "meaning": "Ancestry and recorded integration events",
+    "boundary": "Git parent edges and PR base/head relations are different edge types; current refs omit deleted branch lifetimes."
+  },
+  {
+    "id": "work_topics",
+    "reader_question": "Which kinds of questions occupied the selected collaboration records?",
+    "unit": "unique Issue or label membership within an explicit corpus",
+    "source": "collaboration.2026-11-09.json: records, coverage",
+    "form": "Rose chart for disjoint Issue categories or separate label-frequency panels; table companion",
+    "meaning": "Recorded work categorization at observation time",
+    "boundary": "Bug is a subset of Issues. Labels overlap; present label memberships separately. Equal-angle polar sector area proportional to count requires radius proportional to square root of count."
+  },
+  {
+    "id": "method_transitions",
+    "reader_question": "What changed in the way the team designed, tested and integrated the experience?",
+    "unit": "source-supported editorial episode",
+    "source": "narrative.2026-11-09.json: records; collaboration.2026-11-09.json: selected_evidence",
+    "form": "Clickable scenes connecting direction, alternatives, specimen, correction and receiver",
+    "meaning": "Documented methodological choices and their outcomes",
+    "boundary": "Editorial selection is explicit; absent comments do not mean absent review, and attribution requires source evidence."
+  },
+  {
+    "id": "system_structure",
+    "reader_question": "How do the Studio chapters share work while retaining their own controls?",
+    "unit": "named owner and explicit relationship",
+    "source": "collaboration/native-investment-studio/implementation-reference.md at the recorded source revision",
+    "form": "System graph with selectable concerns, typed edges and semantic companion",
+    "meaning": "Ownership and behavior relationships",
+    "boundary": "Reuse the Who to Believe interaction pattern with Studio-owned data; its current graph validator is case-specific."
+  },
+  {
+    "id": "visual_revision",
+    "reader_question": "How did a human design correction become a working interaction?",
+    "unit": "paired preserved artifact or recorded behavior",
+    "source": "narrative.2026-11-09.json: preserved workbench and dial-lighting records",
+    "form": "Before/after image, short loop or interactive specimen with a local explanation",
+    "meaning": "Visible design and implementation change",
+    "boundary": "Use comparable captured states; later supplied video and publication remain separate tasks."
+  }
+]

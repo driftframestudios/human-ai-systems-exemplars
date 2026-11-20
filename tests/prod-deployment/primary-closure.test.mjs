@@ -1,22 +1,32 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { lstat, readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { lstat, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
+import { NATIVE_STUDIO_ENTRY as nativeEntry, parseNativeModuleGraph, readNativeModuleClosure } from "../../tools/native-studio-module-closure.mjs";
 
 import {
+  createProductionProjectionPlan,
   inspectImageDimensions,
   validateAssetInventory,
   validatePrimaryManifest,
 } from "../../tools/build-prod-projection.mjs";
 import { createAggregatePackagePlan } from "../../tools/package-v1-iframe-routes.mjs";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../..",
 );
 const canvasRoot = "context-canvas-project-surface/context-canvas";
+const execFileAsync = promisify(execFile);
 const acceptedRoutes = [
   "index.html",
   "ai-systems.html",
@@ -137,16 +147,16 @@ function allJsonLdObjects(value) {
   return [value, ...Object.values(value).flatMap(allJsonLdObjects)];
 }
 
-function pageDateModified(html, location, label) {
+function pageDateModified(html, location, label, authority) {
   const document = firstJsonLd(html, label);
   if (typeof document.dateModified === "string") return document.dateModified;
   const dates = new Set(
     allJsonLdObjects(document)
-      .filter((entry) =>
-        entry.url === location ||
-        entry["@id"] === location ||
-        (typeof entry["@id"] === "string" && entry["@id"].startsWith(`${location}#`)),
-      )
+      .filter((entry) => {
+        const url = resolveSourceRouteValue(entry.url, authority);
+        const id = resolveSourceRouteValue(entry["@id"], authority);
+        return url === location || id === location || id?.startsWith(`${location}#`);
+      })
       .map((entry) => entry.dateModified)
       .filter((value) => typeof value === "string"),
   );
@@ -225,6 +235,35 @@ test("the production manifest carries the accepted 40-route primary collection a
   }
 });
 
+test("the ASCII family guide carries its complete source and working-example closure", async () => {
+  const manifest = await loadPrimaryManifest();
+  const byPath = new Map(manifest.files.map(file => [file.projected_path, file]));
+  const family = "visual-fidelity-contracts/";
+  const expected = new Map([
+    ["ascii-zine-field/index.html", "text/html"],
+    ["ascii-zine-field.specimen.html", "text/html"],
+    ["ascii-zine-field.tokens.css", "text/css"],
+    ["ascii-zine-field.md", "text/markdown"],
+    ["catalog.v1.json", "application/json"],
+  ]);
+  for (const [name, media] of expected) {
+    const route = family + name;
+    assert.equal(byPath.get(route)?.source_path, route, `${name} retains its repository source`);
+    assert.equal(byPath.get(route)?.media_type, media, `${name} has its declared receiving media`);
+  }
+  for (const name of ["ascii-zine-field/index.html", "ascii-zine-field.specimen.html"]) {
+    const html = await readFile(path.join(repositoryRoot, family + name), "utf8");
+    for (const [, reference] of html.matchAll(/(?:href|src)="([^"]+)"/gu)) {
+      if (/^(?:https?:|#)/u.test(reference)) continue;
+      const resolved = path.posix.normalize(path.posix.join(family, path.posix.dirname(name), reference.split("#")[0]));
+      assert.ok(byPath.has(resolved), `${name}: ${reference} has a selected receiver`);
+    }
+  }
+  const guide = await readFile(path.join(repositoryRoot, family, "ascii-zine-field/index.html"), "utf8");
+  assert.ok(guide.includes('href="../ascii-zine-field.md"'), "readers can retrieve the full family rather than only its summary");
+  assert.ok(guide.includes('href="../catalog.v1.json"'), "readers can retrieve the exact contract registration");
+});
+
 test("every local stylesheet linked by production-selected HTML belongs to the explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const selectedSources = new Set(manifest.files.map(({ source_path }) => source_path));
@@ -240,6 +279,69 @@ test("every local stylesheet linked by production-selected HTML belongs to the e
       );
     }
   }
+});
+
+test("native Studio modules retain exact static-import and media closure in the production artifact", async (t) => {
+  const manifest = await loadPrimaryManifest();
+  const { paths: nativeModules, sources } = await readNativeModuleClosure(repositoryRoot);
+
+  const about = await readFile(path.join(repositoryRoot, canvasRoot, "index.html"), "utf8");
+  const tags = [...about.matchAll(/<script\b[^>]*>/giu)].map(([tag]) => tag).filter((tag) => {
+    const source = quotedHtmlAttribute(tag, "src");
+    return source !== null && path.posix.normalize(path.posix.join(canvasRoot, source)) === nativeEntry;
+  });
+  assert.equal(tags.length, 1, "About starts the canonical native controller once");
+  assert.equal(quotedHtmlAttribute(tags[0], "type"), "module");
+
+  // An isolated committed fixture exercises the production builder with exact
+  // native bytes and About's real script tag, independently of private receivers.
+  const fixture = await mkdtemp(path.join(os.tmpdir(), "native-module-projection-"));
+  t.after(() => rm(fixture, { recursive: true, force: true }));
+  const git = (...args) => execFileAsync("git", args, { cwd: fixture, encoding: "utf8" });
+  const configPath = "deployment/cpanel/production-projection.config.json";
+  const manifestPath = "deployment/cpanel/primary-route-manifest.json";
+  const fixtureFiles = new Map([
+    ...sources,
+    [`${canvasRoot}/index.html`, Buffer.from(`<!doctype html><title>Native module delivery</title>${tags[0]}</script>\n`)],
+    [manifestPath, Buffer.from(JSON.stringify({
+      id: manifest.id, version: manifest.version,
+      files: manifest.files.filter(({ source_path }) =>
+        nativeModules.includes(source_path) || source_path === `${canvasRoot}/index.html`),
+    }))],
+    [configPath, Buffer.from(JSON.stringify({
+      id: "prod-projection.configuration.v1", version: "1", primary_manifest: manifestPath,
+      publication: { base_url: "https://vik.guru/", source_root: canvasRoot, public_reference_config: ".env.public" },
+    }))],
+    [".gitignore", Buffer.from(".env.public\n")],
+    [".env.public", Buffer.alloc(0)],
+  ]);
+  for (const [relative, bytes] of fixtureFiles) {
+    await mkdir(path.dirname(path.join(fixture, relative)), { recursive: true });
+    await writeFile(path.join(fixture, relative), bytes);
+  }
+  await git("init", "--quiet");
+  await git("add", ".");
+  await git("-c", "user.name=Projection Fixture", "-c", "user.email=projection@example.test",
+    "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "Accept native module fixture");
+  const plan = await createProductionProjectionPlan({
+    repositoryRoot: fixture, configurationPath: path.join(fixture, configPath),
+    aggregatePlan: await createAggregatePackagePlan(),
+  });
+  const finalSources = new Map();
+  for (const sourcePath of nativeModules) {
+    const projectedPath = `primary-public/${sourcePath}`;
+    const output = plan.manifest.outputs.find((row) => row.projected_path === projectedPath);
+    assert.equal(output?.media_type, "text/javascript", projectedPath);
+    const bytes = plan.outputFiles.get(projectedPath);
+    assert.ok(bytes?.equals(sources.get(sourcePath)), `${sourcePath} retains its exact imported bytes`);
+    finalSources.set(sourcePath, bytes);
+  }
+  const projectedAbout = plan.outputFiles.get("primary-public/index.html").toString("utf8");
+  const projectedTag = projectedAbout.match(/<script\b[^>]*>/iu)?.[0];
+  assert.ok(projectedTag, "the production About carrier keeps the module entry");
+  assert.equal(quotedHtmlAttribute(projectedTag, "src"), nativeEntry);
+  assert.equal(quotedHtmlAttribute(projectedTag, "type"), "module");
+  assert.deepEqual(await parseNativeModuleGraph(source => finalSources.get(source), nativeEntry), nativeModules);
 });
 
 test("the manufacturing gallery carries its exact primary closure and generated image provenance", async () => {
@@ -404,30 +506,32 @@ test("the semantic inventory resolves every selected image without becoming a me
 });
 
 test("the sitemap identifies exactly the 40 indexable production routes with page-owned dates", async () => {
+  const authority = await loadSourceRouteAuthority();
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",
   );
-  const legacyBase =
-    "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+  const publicBase = "https://vik.guru/";
   const entries = [...sitemap.matchAll(
     /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/gu,
   )].map(([, location, lastModified]) => ({ location, lastModified }));
   const routes = entries.map(({ location }) => {
-    assert.ok(location.startsWith(legacyBase), location);
-    return location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const resolved = resolveSourceRouteValue(location, authority);
+    assert.ok(resolved.startsWith(publicBase), resolved);
+    return resolved === publicBase ? "index.html" : resolved.slice(publicBase.length);
   });
   assert.deepEqual(routes.sort(), acceptedRoutes);
   assert.equal(routes.includes("404.html"), false);
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
   for (const { location, lastModified } of entries) {
-    const route = location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const resolved = resolveSourceRouteValue(location, authority);
+    const route = resolved === publicBase ? "index.html" : resolved.slice(publicBase.length);
     const html = await readFile(path.join(repositoryRoot, canvasRoot, route), "utf8");
     // Advance both owners for meaningful public content or structured-data changes.
     // Mechanical styling and footer-only edits keep the latest substantive date.
     assert.equal(
       lastModified,
-      pageDateModified(html, location, route),
+      pageDateModified(html, resolved, route, authority),
       `${route}: current modification date`,
     );
   }
