@@ -578,6 +578,25 @@
     gap: .65rem;
 }
 
+@media screen and (forced-colors: none) {
+    .debrief-card__full-index-list a:link {
+        color: var(--canvas-link-on-dark);
+    }
+
+    .debrief-card__full-index-list a:visited {
+        color: var(--canvas-link-visited-on-dark);
+    }
+
+    .debrief-card__full-index-list a:is(:hover, :active) {
+        color: #fff;
+    }
+
+    .debrief-card__full-index-list a:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: .15em;
+    }
+}
+
 .debrief-catalog__preview-inner {
     background: var(--debrief-cobalt-deep);
     border: 1px solid #0d329f;
