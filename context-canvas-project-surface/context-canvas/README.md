@@ -625,7 +625,9 @@ Article link directly to their respective readings.
 `template[data-case-brief-projection]` for the case-study filename. Edit the
 orientation, six fields, or basis and limits there. Run
 `npm run build:debrief-case-briefs` to carry your edit into the same case
-study’s At-a-Glance section at `#case-brief`. You can also start with an edit
+study’s At-a-Glance section at `#case-brief`. On screen, the case-study header
+introduces the work and At-a-Glance starts with the six fields. The catalog’s
+Summary mode displays the shared introductory paragraph. You can also start with an edit
 on the case-study page or in the [compact source](../data/debrief-case-briefs.source.html).
 Quick scans and related media belong to the catalog summary. Full Detail card
 descriptions belong to their individual cards.
@@ -720,7 +722,7 @@ extends the same selected `img/plot/` family.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` starts the About visual sequence on a local 1280×720 plate-view poster and leaves playback, pause, seeking, and replay with native video controls. The same-origin R2 route carries the high-quality 1280×720 H.264 sequence; the page retains a one-shot 960×540 GIF recovery link and a visible description of its silent visual changes. The script pauses playback for print, background tabs, and a newly selected reduced-motion preference, while the poster and description retain the baseline reading. Eleven digest-verified source frames and the versioned sequence manifest make both carriers rebuildable without recapturing live pages. `npm run capture:about-visual-sequence` intentionally refreshes the six repository-rendered problem-shaping frames and their digests; `npm run build:about-visual-sequence` rebuilds the local GIF and poster through a pinned Pillow runtime; the optional `--mp4-output <path>` argument adds the 25 fps progressive carrier through FFmpeg; `npm run refresh:about-visual-sequence` performs capture and local rebuild after an intentional source-page change. The plate-first sequence moves repeatedly among implementation, problem, and solution views. Its one-shot assembly-relay boundary adapts Codrops’ pixel-grid and slice-reveal studies to the existing cobalt, citron, and paper palette while every source view receives a stable hold.
 - `who-to-believe-system-graph.js` admits one finite, page-local graph contract, then coordinates architecture comparison, concern emphasis, direct node selection, and incoming or outgoing neighbor traversal. Its frozen classic-script/CommonJS API keeps the same controller available to direct local inspection and focused tests. Native controls own input semantics; the adjacent HTML reading carries every node and connection through scriptless, print, and recovery states.
-- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or video-only visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
+- Showcase movies use native playback controls, metadata preload, intrinsic geometry, and a reviewed poster. Each Visual description disclosure opens the written sequence beside its movie. The selected page owns the description and the same-origin R2 Worker delivers the media.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
@@ -904,11 +906,13 @@ and its hosted video and poster. The binding keeps those destinations separate
 from Registry Atlas selections and repository-owned route derivation while
 the materializer resolves all three families into the public build.
 
-The authored footer describes the professional profile as available in the
-public build. A materialized build changes that same shared carrier into an
-ordinary, same-tab “Professional profile” link with a descriptive accessible
-name. Its destination lives only in ignored `.env.public` or the delivery
-process environment.
+The shared footer shows Registry, GitHub, and professional-profile labels
+when you open the authored HTML directly. GitHub Pages and the production
+build turn them into native, same-tab links. The Registry Atlas binding owns
+the Registry root, and the external-reference binding owns the project
+repository URL. The professional profile takes its destination from ignored
+`.env.public` or the delivery environment. Open the materialized build to
+follow these footer links locally.
 
 Activated visible iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or

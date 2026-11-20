@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readSourceContract } from "./read-source-contract.mjs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
+import { resolveSourceExternalAnchors, loadSourceRouteAuthority, resolveSourceRouteValue } from "../public-references/source-route-authority.mjs";
 
 const routeAuthority = await loadSourceRouteAuthority();
 const publicValue = value => resolveSourceRouteValue(value, routeAuthority);
@@ -29,7 +29,8 @@ const cometSurfaces = [
 ];
 
 async function canvasFile(path) {
-  return readSourceContract(resolve(canvasRoot, path), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
+  return resolveSourceExternalAnchors(source, routeAuthority);
 }
 
 function jsonLd(source) {

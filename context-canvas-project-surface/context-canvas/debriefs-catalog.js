@@ -600,9 +600,6 @@
     var image = card.querySelector(".project__upfront");
     var route = card.querySelector(".img__anchor") || card.querySelector("a[href]");
     var routeHref = route ? route.getAttribute("href").split(/[?#]/)[0] : "";
-    var formats = Array.prototype.map.call(card.querySelectorAll(".debrief-card__types li"), function (item) {
-      return item.textContent.trim();
-    });
     var topics = Array.prototype.map.call(card.querySelectorAll(".debrief-card__topics li"), function (item) {
       return item.textContent.trim();
     });
@@ -637,7 +634,6 @@
 
     preview.querySelector("[data-preview-title]").textContent = selectedRoute.label;
     preview.querySelector("[data-preview-slug]").textContent = normalizedText(slug) || "Open the complete reading for its evidence and implementation route.";
-    preview.querySelector("[data-preview-formats]").textContent = formats.join(" · ");
     preview.querySelector("[data-preview-topics]").textContent = topics.join(" · ");
     preview.querySelector("[data-preview-surfaces]").textContent = surfacesText;
     preview.querySelector("[data-preview-useful]").textContent = usefulText;

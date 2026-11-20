@@ -143,11 +143,11 @@ test("five Debrief receivers present accepted demonstrations at their reading co
 
     const transcript = html.match(
       new RegExp(
-        `<aside\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/aside>`,
+        `<details\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/details>`,
         "u",
       ),
     )?.[0];
-    assert.ok(transcript, `${receiver.family} keeps the visual description in an aside`);
+    assert.ok(transcript, `${receiver.family} carries its visual description in a disclosure`);
     assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,

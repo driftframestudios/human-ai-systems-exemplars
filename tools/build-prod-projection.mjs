@@ -33,10 +33,10 @@ import {
 } from "./package-canvas-iframe-routes.mjs";
 import {
   inspectPublicReferenceSitemap,
-  inspectProfessionalProfileScript,
+  inspectSharedFooterScript,
   inspectPublicReferenceHtml,
   materializePublicReferenceSitemap,
-  materializeProfessionalProfileScript,
+  materializeSharedFooterScript,
   materializePublicReferenceHtml,
   PUBLIC_REFERENCE_NAMESPACE,
   resolvePublicReferenceDestinations,
@@ -3775,12 +3775,13 @@ function transformPrimaryBytes(
         );
       }
     } else if (extension === ".js" && text.includes("{{PUBLIC_URL")) {
-      const inspection = inspectProfessionalProfileScript(text, materializerPath);
+      const inspection = inspectSharedFooterScript(text, materializerPath);
       if (inspection.occurrenceCount > 0) {
-        text = materializeProfessionalProfileScript(
+        text = materializeSharedFooterScript(
           text,
           destinations,
           materializerPath,
+          externalDestinations,
         );
       }
     }
@@ -3931,7 +3932,7 @@ async function loadPublicationInput(
     ) {
       inspection = inspectPublicReferenceSitemap(source, safePath);
     } else if (extension === ".js" && source.includes("{{PUBLIC_URL")) {
-      inspection = inspectProfessionalProfileScript(source, safePath);
+      inspection = inspectSharedFooterScript(source, safePath);
     }
     for (const key of inspection?.keys ?? []) keys.add(key);
   }

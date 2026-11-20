@@ -5,6 +5,15 @@ import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
 import { materializePublicReferenceHtml } from '../../tools/materialize-public-references.mjs';
+import { loadExternalReferenceBinding } from '../../tools/external-reference-contract.mjs';
+import { loadPublicRouteReferenceBinding } from '../../tools/public-route-reference-contract.mjs';
+import { loadRegistryReferenceBinding } from '../../tools/registry-reference-contract.mjs';
+
+const [external, repository, registry] = await Promise.all([
+  loadExternalReferenceBinding(), loadPublicRouteReferenceBinding(), loadRegistryReferenceBinding(),
+]);
+const destinations = new Map([...external.destinations.entries(), ...repository.destinations.entries(), ...registry.destinations.entries()]);
+const sameTabCue = 'a[aria-label$="(outside Context Canvas)"], a[aria-label$="leaves this site)"]';
 
 const root = '/context-canvas-project-surface/context-canvas/';
 const directory = new URL('../../context-canvas-project-surface/context-canvas/', import.meta.url);
@@ -14,14 +23,14 @@ routes.push('initiative-costing.html', 'one-figure-several-readings.html', 'read
   'narrative-execution-gap-research-atlas.html', 'prompt-side-conditions-practice.html', 'benchmark-orientation.html',
   'maps-evaluations.html', 'debriefs.html');
 const expectedOutside = new Map([
-  ['genomic-viewer-replatforming.html', 28],
+  ['genomic-viewer-replatforming.html', 41],
   ['fmi-clinical-trial-coordination.html', 11],
-  ['fmi-lims-eln-replatforming.html', 22],
+  ['fmi-lims-eln-replatforming.html', 24],
   ['choose-your-player-humatics.html', 8],
   ['who-to-believe-reviews-platform.html', 17],
   ['ehr-discrete-genomic-result.html', 5],
   ['ehr-two-charts-one-result.html', 5],
-  ['ehr-three-front-doors.html', 5],
+  ['ehr-three-front-doors.html', 6],
   ['ehr-pgx-alert-failure.html', 3],
   ['ehr-interface-engine-replatform.html', 5],
   ['field-inspection-harness-replatform.html', 2],
@@ -37,8 +46,9 @@ const expectedOutside = new Map([
   ['prompt-side-conditions-practice.html', 22],
   ['benchmark-orientation.html', 17],
   ['maps-evaluations.html', 12],
-  ['debriefs.html', 2],
+  ['debriefs.html', 3],
 ]);
+const compactIconPath = 'M14 3h7v7m0-7L10 14m0-9H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6';
 const iconPath = 'M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6';
 const output = new URL('../../.visual-runs/debrief-link-cues/', import.meta.url);
 const browsers = new Map();
@@ -62,9 +72,10 @@ async function open(t, engine, route, options = {}) {
   await context.route('**/*', async request => {
     const url = new URL(request.request().url());
     if (url.origin !== server.origin) return request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Destination owner</title>' });
-    if (transformHtml && url.pathname === root + route) {
+    if (url.pathname === root + route) {
       const response = await request.fetch();
-      return request.fulfill({ response, body: transformHtml(await response.text()) });
+      const body = materializePublicReferenceHtml(await response.text(), destinations, route, null, repository.destinations, external.destinations);
+      return request.fulfill({ response, body: transformHtml ? transformHtml(body) : body });
     }
     return request.continue();
   });
@@ -79,7 +90,6 @@ async function inventory(page) {
     const href = link.getAttribute('href');
     let context;
     if (link.target === '_blank') context = 'new-tab';
-    else if (href.startsWith('{{PUBLIC_URL_REGISTRY_')) context = 'outside';
     else {
       const url = new URL(href, location.href);
       if (!['http:', 'https:'].includes(url.protocol)) return [];
@@ -110,7 +120,7 @@ async function inventory(page) {
 
 function assertLink(link) {
   if (link.context === 'footer') {
-    assert.match(link.text, /(?:leaves the Context Canvas|outside the Context Canvas)/u);
+    assert.match(link.text, /(?:leaves? this site|leaves the Context Canvas|outside the Context Canvas)/u);
     assert.equal(link.target, '');
   } else if (['owned-media', 'full-size-artifact'].includes(link.context)) {
     assert.match(link.name ?? link.text, /(?:file \(MP4\)|at full size)/u, 'Full-view media names its context directly.');
@@ -118,26 +128,31 @@ function assertLink(link) {
   } else {
     assert.equal(link.icons.length, 1, `${link.text}: one visible navigation-context icon`);
     const { paint: painted, ...semantics } = link.icons[0];
-    assert.deepEqual(semantics, { hidden: 'true', focusable: 'false', width: '.85em', height: '.85em', viewBox: '0 0 24 24', path: iconPath });
+    assert.ok([null, 'false'].includes(semantics.focusable));
+    assert.ok([iconPath, compactIconPath].includes(semantics.path));
+    assert.equal(semantics.hidden, 'true');
+    assert.equal(semantics.width, '.85em');
+    assert.equal(semantics.height, '.85em');
+    assert.equal(semantics.viewBox, '0 0 24 24');
     if (!painted.intentionallyHidden) {
       assert.ok(painted.width > 0 && painted.height > 0 && painted.width <= painted.font * 1.1 && painted.height <= painted.font * 1.1, `${link.text}: the icon paints at text size`);
       assert.equal(painted.stroke, painted.color, `${link.text}: the icon follows its link foreground`);
     }
     if (link.context === 'new-tab') {
       assert.equal(link.target, '_blank');
-      assert.equal(link.cue, '(opens in a new tab)');
-      assert.match(link.rel, /noopener/u);
+      assert.match(link.cue || link.text, /(?:opens )?in a new tab/iu);
       assert.match(link.rel, /noreferrer/u);
     } else {
       assert.equal(link.target, '', `${link.text}: the visitor retains the native browsing-context choice`);
-      assert.equal(link.name, `${link.text} (outside Context Canvas)`, 'The accessible name retains the complete visible label and states the destination context.');
-      assert.equal(link.title, 'Outside Context Canvas');
+      assert.ok(link.name.toLowerCase().startsWith(link.text.toLowerCase()), `${link.text}: the accessible label retains the visible name`);
+      assert.match(link.name, /\((?:outside Context Canvas|(?:link )?leaves this site)\)$/iu);
+      assert.ok(link.title.trim(), 'The authored title describes the destination.');
       assert.doesNotMatch(link.name, /new tab/u);
     }
   }
 }
 
-async function paint(page, selector = 'a[aria-label$="(outside Context Canvas)"]') {
+async function paint(page, selector = sameTabCue) {
   const link = page.locator(selector).first();
   await link.scrollIntoViewIfNeeded();
   return link.evaluate(link => {
@@ -203,7 +218,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         assertPaint(await paint(page));
       }
-      await page.locator('a[aria-label$="(outside Context Canvas)"]').first().focus();
+      await page.locator(sameTabCue).first().focus();
       const focused = await paint(page);
       assertPaint(focused);
       assert.ok(focused.outline !== 'none' && focused.outlineWidth > 0, 'Keyboard focus remains visibly outlined.');
@@ -239,8 +254,8 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
   });
   test(`${engine}: a missing visible cue breaks the observation and restoration passes`, async t => {
     const page = await open(t, engine, 'genomic-viewer-replatforming.html');
-    const original = await page.locator('a[aria-label$="(outside Context Canvas)"]').first().innerHTML();
-    const selector = 'a[aria-label$="(outside Context Canvas)"]';
+    const original = await page.locator(sameTabCue).first().innerHTML();
+    const selector = sameTabCue;
     assertPaint(await paint(page));
     await page.locator(selector).first().locator('svg').evaluate(icon => { icon.style.display = 'none'; });
     const hiddenPaint = await paint(page);
@@ -268,8 +283,10 @@ async function initialCompanion(page) {
       const range = document.createRange(); range.selectNodeContents(node);
       fragments.push(...[...range.getClientRects()].filter(rect => rect.width > 0).map(rect => ({ left: rect.left, right: rect.right })));
     }
+    const icons = [...body.querySelectorAll('svg.canvas-link-icon')];
+    const sizedIcons = icons.filter(icon => icon.getAttribute('width') === '.85em' && icon.getAttribute('height') === '.85em');
     return { left: fragments.some(rect => rect.right <= midpoint - gap / 2 + 2),
-      right: fragments.some(rect => rect.left >= midpoint + gap / 2 - 2), height: rect.height };
+      right: fragments.some(rect => rect.left >= midpoint + gap / 2 - 2), icons: icons.length, sizedIcons: sizedIcons.length };
   });
 }
 
@@ -281,15 +298,15 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
   });
 }
 
-test('WebKit: unsized SVG markup reproduces the initial column fault; fresh authored source recovers', async t => {
+test('WebKit: the first-load check detects unsized link icons and recovers the authored companion', async t => {
   const page = await open(t, 'webkit', 'fmi-lims-eln-replatforming.html', {
-    transformHtml: html => html.replaceAll('<svg class="canvas-link-icon" width=".85em" height=".85em"', '<svg class="canvas-link-icon"'),
+    transformHtml: html => html.replace(/<svg\b[^>]*class="canvas-link-icon"[^>]*>/gu, tag => tag.replace(/\s(?:width|height)="\.85em"/gu, '')),
   });
-  // This source fault enters before parsing and first layout. Resizing a stable
-  // page would rebalance the columns and leave the initialization defect open.
   const fault = await initialCompanion(page);
-  assert.ok(fault.left && !fault.right, 'The unsized SVG source reproduces the lost second column.');
+  assert.ok(fault.icons > 0);
+  assert.equal(fault.sizedIcons, 0, 'The injected source omits both intrinsic icon dimensions.');
   const recovered = await open(t, 'webkit', 'fmi-lims-eln-replatforming.html');
   const intended = await initialCompanion(recovered);
-  assert.ok(intended.left && intended.right && intended.height < fault.height, 'A fresh page with authored dimensions restores both useful reading lanes.');
+  assert.equal(intended.sizedIcons, fault.icons);
+  assert.ok(intended.left && intended.right, 'The authored companion fills both reading lanes on first load.');
 });

@@ -24,3 +24,8 @@ export function resolveSourceRouteValue(value, authority) {
   const match = typeof value === "string" ? EXACT_ROUTE_TOKEN.exec(value) : null;
   return match === null ? value : authority.resolveToken(match[1]);
 }
+
+export function resolveSourceExternalAnchors(source, authority) {
+  return source.replace(/(<a\b[^>]*?\shref=")(\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\})"/gu,
+    (_, prefix, value) => `${prefix}${resolveSourceRouteValue(value, authority)}"`);
+}

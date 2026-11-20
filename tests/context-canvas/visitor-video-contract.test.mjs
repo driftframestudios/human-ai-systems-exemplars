@@ -201,9 +201,9 @@ test("Who To Believe presents two bounded video receivers at their reading coord
     assert.ok(transcriptIndex > captionIndex, `${receiver.family} carries a visual sequence`);
 
     const transcript = html.match(
-      new RegExp(`<aside\\s+id="${receiver.transcriptId}"[\\s\\S]*?<\\/aside>`, "u"),
+      new RegExp(`<details\\s+id="${receiver.transcriptId}"[\\s\\S]*?<\\/details>`, "u"),
     )?.[0];
-    assert.ok(transcript, `${receiver.family} keeps its visual sequence in an aside`);
+    assert.ok(transcript, `${receiver.family} carries its visual sequence in a disclosure`);
     assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,

@@ -2096,6 +2096,33 @@ test("asset inventory grammar and image headers keep semantic and physical facts
   ]);
 });
 
+test("production binds the shared shell's Registry and repository links from the selected revision", async t => {
+  const fixture = await createFixtureRoot();
+  t.after(() => rm(fixture.root, { recursive: true, force: true }));
+  const publication = await enableTrackedRegistryPublicationFixture(fixture);
+  const registryKey = "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY";
+  const repositoryKey = "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS";
+  const readTracked = relative => readFile(new URL("../../" + relative, import.meta.url), "utf8");
+  const registry = JSON.parse(publication.bindingBytes);
+  const registryRecord = JSON.parse(await readTracked(registryBindingRelativePath)).bindings.find(row => row.token === registryKey);
+  registry.bindings.unshift(registryRecord);
+  const external = JSON.parse(await readTracked(externalBindingRelativePath));
+  external.bindings = external.bindings.filter(row => row.token === repositoryKey);
+  const shellPath = publication.canvasRoot + "/canvas-shell.js";
+  await Promise.all([
+    writeFile(path.join(fixture.root, shellPath), await readTracked(shellPath)),
+    writeFile(path.join(fixture.root, registryBindingRelativePath), JSON.stringify(registry)),
+    writeFile(path.join(fixture.root, externalBindingRelativePath), JSON.stringify(external)),
+  ]);
+  const sourceSha = await commitFixture(fixture.root, "Select shared footer carriers");
+  const plan = await createProductionProjectionPlan({ repositoryRoot: fixture.root, sourceSha,
+    configurationPath: fixture.configurationPath, aggregatePlan: aggregateFixture() });
+  const shell = plan.outputFiles.get("primary-public/canvas-shell.js").toString("utf8");
+  assert.ok(shell.includes(`kindlight.href = ${JSON.stringify(registryRecord.url)};`));
+  assert.ok(shell.includes(`github.href = ${JSON.stringify(external.bindings[0].url)};`));
+  assert.ok(shell.includes(`var professionalProfileRoute = ${JSON.stringify(publication.destinations[publication.profileKey])};`));
+});
+
 test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {
   const fixture = await createFixtureRoot();
   try {

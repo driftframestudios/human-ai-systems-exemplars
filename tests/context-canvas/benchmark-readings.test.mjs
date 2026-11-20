@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 import test from "node:test";
 
 import {
-  loadSourceRouteAuthority,
+  resolveSourceExternalAnchors, loadSourceRouteAuthority,
   resolveSourceRouteValue,
 } from "../public-references/source-route-authority.mjs";
 
@@ -22,7 +22,8 @@ function publicValue(value) {
 }
 
 async function readCanvasFile(path) {
-  return readSourceContract(resolve(canvasRoot, path), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
+  return resolveSourceExternalAnchors(source, routeAuthority);
 }
 
 function countMatches(source, pattern) {
@@ -58,7 +59,8 @@ test("benchmark readings expose source-grounded coordinates and shared visitor c
     ["maps-evaluations.html", maps],
   ]) {
     assert.match(html, /<meta name="author" content="Vikrant Varun Kudesia">/u, route);
-    assert.match(html, /<link rel="license" href="https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0">/u, route);
+    const license = html.match(/<link rel="license" href="([^"]+)">/u)?.[1];
+    assert.equal(publicValue(license), 'https://www.apache.org/licenses/LICENSE-2.0', route);
     assert.match(html, /styles\/routes\/benchmark-readings\.css/u, route);
     assert.match(html, /<script src="canvas-shell\.js" defer><\/script>/u, route);
     assert.match(html, /© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company/u, route);

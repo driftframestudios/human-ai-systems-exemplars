@@ -4,6 +4,9 @@ import { readFile, readdir } from 'node:fs/promises';
 import { after, before, test } from 'node:test';
 import { setTimeout as delay } from 'node:timers/promises';
 import { chromium, firefox, webkit } from '@playwright/test';
+import { PUBLIC_AUTHOR_PROFILE_KEY, materializeSharedFooterScript } from '../../tools/materialize-public-references.mjs';
+import { loadRegistryReferenceBinding } from '../../tools/registry-reference-contract.mjs';
+import { loadExternalReferenceBinding } from '../../tools/external-reference-contract.mjs';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
 
 const root = '/context-canvas-project-surface/context-canvas/';
@@ -286,3 +289,27 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     assertLabels(await observe(page), 'restored intrinsic layout');
   });
 }
+
+test('the shared footer presents source labels and publishes three native links', async t => {
+  const page = await open(t, 'chromium', 'debriefs.html');
+  const footer = page.locator('.super-footer__closing');
+  const labels = await footer.locator('.super-footer__reserved').allTextContents();
+  assert.deepEqual(labels, ['kindlight.systems', 'GitHub', 'Professional profile available in the public build']);
+  assert.equal(await footer.locator('a').count(), 0);
+
+  const [registry, external] = await Promise.all([loadRegistryReferenceBinding(), loadExternalReferenceBinding()]);
+  const registryKey = 'PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY';
+  const repoKey = 'PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS';
+  const urls = new Map([[registryKey, registry.destinations.get(registryKey)], [repoKey, external.destinations.get(repoKey)],
+    [PUBLIC_AUTHOR_PROFILE_KEY, 'https://profile.example/author']]);
+  const source = await readFile(new URL('canvas-shell.js', directory), 'utf8');
+  const published = materializeSharedFooterScript(source, urls, 'context-canvas/canvas-shell.js', external.destinations);
+  await page.route('**/canvas-shell.js', route => route.fulfill({ contentType: 'text/javascript', body: published }));
+  await page.reload({ waitUntil: 'load' });
+  const names = ['Visit kindlight.systems', 'View human-ai-systems-exemplars on GitHub', "View the author's professional profile"];
+  for (const [index, href] of [...urls.values()].entries()) {
+    const anchor = footer.getByRole('link', { name: names[index], exact: true });
+    assert.equal(await anchor.getAttribute('href'), href);
+    assert.equal(await anchor.getAttribute('target'), null);
+  }
+});

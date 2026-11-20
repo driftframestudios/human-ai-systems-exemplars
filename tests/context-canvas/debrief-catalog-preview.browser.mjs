@@ -241,6 +241,8 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   assert.equal(await second.evaluate(node => node.open), false);
   assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
 
+  const closedFirstHeight = (await first.boundingBox()).height;
+  const closedSecondHeight = (await second.boundingBox()).height;
   await firstSummary.focus();
   await firstSummary.press("Tab");
   await page.keyboard.press("Shift+Tab");
@@ -263,6 +265,7 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   assert.equal(await second.evaluate(node => node.open), false);
   assert.deepEqual(await visibleState(first), { expand: false, collapse: true });
 
+  assert.equal((await second.boundingBox()).height, closedSecondHeight, "Opening Solution preserves the closed Implementation height");
   await secondSummary.click();
   assert.equal(await first.evaluate(node => node.open), true, `${articleSelector} disclosures should remain independent`);
   assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} second disclosure should open independently`);
@@ -270,6 +273,7 @@ async function exerciseIndependentDisclosures(page, articleSelector) {
   await firstSummary.click();
   assert.equal(await first.evaluate(node => node.open), false);
   assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} closing one disclosure should preserve the other`);
+  assert.equal((await first.boundingBox()).height, closedFirstHeight, "An open Implementation preserves the closed Solution height");
   assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
 }
 
@@ -288,6 +292,10 @@ for (const width of [390, 1440]) {
 
     const responsive = await focusPreview(page, "#catalog-genomic-viewer");
     assert.deepEqual(responsive.actual, responsive.expected);
+    const facts = page.locator("[data-preview-entry] .debrief-preview-facts");
+    assert.equal(await facts.isVisible(), true);
+    assert.equal(await facts.getByText("Available formats", { exact: true }).count(), 0);
+    assert.equal(await page.locator("[data-preview-formats]").count(), 0);
     assert.ok(responsive.actual.srcset, "the WebP preview exposes responsive candidates");
     assert.ok(responsive.actual.sizes, "the WebP preview exposes its rendered-size hint");
 
@@ -406,7 +414,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
       .sort();
     assert.deepEqual(ehrRoutes, expectedEhrRoutes.slice().sort(), "the EHR series remains five distinct Case Brief panels");
 
-    if (width === 390 || width === 1440) {
+    if ([390, 1024, 1440].includes(width)) {
       await exerciseIndependentDisclosures(
         page,
         '[data-card-case-briefs] > .debrief-card__case-brief[data-case-brief-route="genomic-viewer-replatforming.html"]',
@@ -423,7 +431,7 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
     const repeated = await inspectCaseBriefProjection(page);
     assert.equal(repeated.articles.length, 16, "repeated mode changes should clone each projection once");
     assert.equal(new Set(repeated.articles.map(article => article.route)).size, 16);
-    if (width === 390 || width === 1440) {
+    if ([390, 1024, 1440].includes(width)) {
       const retained = page.locator(
         '[data-case-brief-route="genomic-viewer-replatforming.html"] details[data-case-brief-track="implementation"]',
       );
@@ -441,6 +449,26 @@ for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
     assertTelemetry(telemetry);
   });
 }
+
+test("the catalog shows the shared introduction and the case study opens with its fields", async t => {
+  const page = await browser.newPage();
+  t.after(() => page.close());
+  await page.goto(server.origin + route);
+  await chooseCaseBriefMode(page);
+  const study = "genomic-viewer-replatforming.html";
+  const summary = page.locator(`[data-case-brief-route="${study}"] > .debrief-preview-slug`);
+  assert.ok(await summary.isVisible());
+  const wording = (await summary.textContent()).replace(/\s+/gu, " ").trim();
+  assert.ok(wording.length > 0);
+
+  await page.goto(new URL(study, page.url()).href);
+  const glance = page.locator("#case-brief");
+  const introduction = glance.locator("h2 + p");
+  assert.equal((await introduction.textContent()).replace(/\s+/gu, " ").trim(), wording);
+  assert.equal(await introduction.isVisible(), false);
+  assert.ok(await glance.locator("dl").isVisible());
+  assert.ok(await glance.locator("dl + p").isVisible());
+});
 
 test("an optional quick-scan introduction carries visitors to its qualified narrative track", async t => {
   const context = await browser.newContext({

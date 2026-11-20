@@ -67,6 +67,14 @@
     return node;
   }
 
+  function appendFooterLink(parent, link) {
+    if (link.getAttribute("href").indexOf("{{PUBLIC_URL_") === 0) {
+      parent.appendChild(element("span", "super-footer__reserved", link.textContent));
+    } else {
+      parent.appendChild(link);
+    }
+  }
+
   function routeList(title, items) {
     var section = element("section", "super-footer__column");
     var heading = element("h2", "super-footer__heading", title);
@@ -128,16 +136,18 @@
     var registry = document.createElement("p");
     registry.appendChild(document.createTextNode("The Enterprise Human–AI Practitioner Registry continues at "));
     var kindlight = element("a", "", "kindlight.systems");
-    kindlight.href = "https://kindlight.systems/";
+    kindlight.href = "{{PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY}}";
     kindlight.setAttribute("aria-label", "Visit kindlight.systems");
-    registry.appendChild(kindlight);
-    registry.appendChild(document.createTextNode(". This link leaves this site."));
+    appendFooterLink(registry, kindlight);
+    registry.appendChild(document.createTextNode(
+      registry.querySelector("a") ? ". This link leaves this site." : " (link available in the public build).",
+    ));
 
     var network = document.createElement("p");
     var github = element("a", "", "GitHub");
-    github.href = "https://github.com/driftframestudios/human-ai-systems-exemplars";
+    github.href = "{{PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS}}";
     github.setAttribute("aria-label", "View human-ai-systems-exemplars on GitHub");
-    network.appendChild(github);
+    appendFooterLink(network, github);
     network.appendChild(document.createTextNode(" · "));
     if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {
       var professionalProfileLink = element("a", "", "Professional profile");
@@ -156,7 +166,7 @@
         ),
       );
     }
-    network.appendChild(document.createTextNode(" These links leave this site."));
+    if (network.querySelector("a")) network.appendChild(document.createTextNode(" These links leave this site."));
     if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
     contact.classList.add("super-footer__contact");
     contact.setAttribute("data-context-canvas-contact", "");

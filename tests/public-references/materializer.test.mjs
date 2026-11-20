@@ -25,6 +25,8 @@ import {
   PUBLIC_SCHEMA_NAMESPACE,
   PUBLIC_SKILL_NAMESPACE,
   inspectPublicReferenceSource,
+  inspectSharedFooterScript,
+  materializeSharedFooterScript,
   inspectPublicReferenceHtml,
   materializePublicReferenceHtml,
   isPublicReferencePathWithin,
@@ -301,6 +303,30 @@ test("preserves replacement-significant characters in a professional-profile des
   );
   assert.ok(assignment);
   assert.equal(JSON.parse(assignment[1]), expected);
+});
+
+test("the shared shell accepts the two bound native footer hrefs and escapes their JavaScript values", async () => {
+  const source = await readFile(join(PUBLIC_REFERENCE_SOURCE, "context-canvas/canvas-shell.js"), "utf8");
+  const registryKey = "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY";
+  const repositoryKey = "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS";
+  const destinations = new Map([[PUBLIC_AUTHOR_PROFILE_KEY, PROFILE_ROUTE], [registryKey, "https://registry.example/"],
+    [repositoryKey, 'https://repository.example/"quoted"?value=$&']]);
+  const result = inspectSharedFooterScript(source);
+  assert.deepEqual(result.keys, new Set(destinations.keys()));
+  assert.equal(result.anchorCount, 3);
+  const materialized = materializeSharedFooterScript(source, destinations);
+  assert.ok(materialized.includes(`github.href = ${JSON.stringify(destinations.get(repositoryKey))};`));
+  assert.ok(materialized.includes(`kindlight.href = ${JSON.stringify(destinations.get(registryKey))};`));
+  for (const changed of [
+    source.replace("github.href =", "github.title ="),
+    source.replace("appendFooterLink(network, github)", "appendFooterLink(registry, github)"),
+    source.replace('var github = element("a"', 'var github = element("span"'),
+    source + '\n// {{' + repositoryKey + '}}',
+  ]) {
+    assert.throws(() => materializeSharedFooterScript(changed, destinations), { code: "PUBLIC_REFERENCE_FOOTER_CARRIER" });
+  }
+  destinations.delete(repositoryKey);
+  assert.throws(() => materializeSharedFooterScript(source, destinations), { code: "PUBLIC_REFERENCE_VALUE_MISSING" });
 });
 
 test("keeps the professional-profile key within one exact script carrier", async (t) => {
@@ -1268,6 +1294,19 @@ test("the repository source materializes from discovered keys without frozen rou
   });
   assert.equal(routeReference.destinations.size, routeKeys.length);
 
+  const mediaManifest = JSON.parse(await readFile(
+    new URL('../../planning/media-publication/video-publication-manifest.v0.1.json', import.meta.url), 'utf8',
+  ));
+  const publishedMovies = new Set(mediaManifest.families.map(
+    family => new URL(family.carriers.movie.public_path, mediaManifest.public_origin).href,
+  ));
+  for (const record of inventory.htmlFiles) {
+    if (!/^context-canvas\/[^/]+\.html$/u.test(record.safePath)) continue;
+    for (const anchor of record.source.matchAll(/<a\b[^>]*?\shref\s*=\s*(["'])(https?:\/\/[^"']+)\1/giu)) {
+      assert.ok(publishedMovies.has(anchor[2]),
+        `${record.safePath}: bind external anchors through their reviewed destination owner`);
+    }
+  }
   const before = new Map();
   const materializedRecords = [
     ...inventory.htmlFiles,
@@ -1290,12 +1329,31 @@ test("the repository source materializes from discovered keys without frozen rou
     environment,
   });
 
+  const externalKeys = [...inventory.keys].filter((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE));
+  const externalReference = await loadExternalReferenceBinding({ requiredKeys: externalKeys });
   for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     assert.equal(await readFile(record.path, "utf8"), before.get(record.path));
     const generated = await readFile(join(outputRoot, record.safePath), "utf8");
     assert.doesNotMatch(generated, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/);
     assert.doesNotMatch(generated, /registry\.example|%7B%7BPUBLIC_URL_/i);
+    if (inventory.htmlFiles.includes(record)) {
+      const hrefs = source => [...source.matchAll(/<a\b[^>]*?\shref\s*=\s*(["'])([^"']*)\1/giu)].map(match => match[2]);
+      const original = hrefs(before.get(record.path));
+      const resolved = hrefs(generated);
+      assert.equal(resolved.length, original.length, `${record.safePath} retains its anchor population`);
+      for (const [index, href] of original.entries()) {
+        const key = /^\{\{(PUBLIC_URL_[A-Z0-9_]+)\}\}$/u.exec(href)?.[1];
+        if (!key) continue;
+        const url = externalReference.destinations.get(key) ?? registryReference.destinations.get(key) ?? routeReference.destinations.get(key);
+        assert.equal(resolved[index].replaceAll('&amp;', '&'), url, `${record.safePath} anchor ${index + 1}: ${key}`);
+      }
+    }
+    for (const key of record.inspection.keys) {
+      if (key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)) {
+        assert.ok(generated.includes(externalReference.destinations.get(key)), `${key} reaches ${record.safePath}`);
+      }
+    }
     for (const body of jsonLdBodies(generated)) {
       if (body.includes("https://kindlight.systems/")) JSON.parse(body);
     }
@@ -1310,13 +1368,8 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.equal(marker.registry_reference.bindingCount, registryKeys.length);
   assert.equal(marker.registry_reference.atlas.referenceVersion, "0.2.1");
   assert.equal(marker.route_reference.bindingCount, routeKeys.length);
-  const externalKeys = [...inventory.keys].filter((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE));
   assert.equal(marker.external_reference.bindingCount, externalKeys.length);
   const generatedAbout = await readFile(join(outputRoot, 'context-canvas/index.html'), 'utf8');
-  const externalReference = await loadExternalReferenceBinding({ requiredKeys: externalKeys });
-  for (const route of externalReference.routes) {
-    assert.ok(generatedAbout.includes(route.url), `${route.token} reaches the generated About page`);
-  }
   assert.match(generatedAbout, /data-video-poster="https:\/\/vik\.guru\/v1-cdn\/video\//);
   assert.match(generatedAbout, /<source src="https:\/\/vik\.guru\/v1-cdn\/video\//);
 
@@ -1324,6 +1377,8 @@ test("the repository source materializes from discovered keys without frozen rou
     join(outputRoot, "context-canvas/canvas-shell.js"),
     "utf8",
   );
+  assert.ok(generatedShell.includes(`kindlight.href = ${JSON.stringify(registryReference.destinations.get("PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY"))};`));
+  assert.ok(generatedShell.includes(`github.href = ${JSON.stringify(externalReference.destinations.get("PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS"))};`));
   assert.match(generatedShell, /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/);
   assert.match(generatedShell, /professionalProfileLink\.href\s*=\s*professionalProfileRoute/);
 
@@ -1383,7 +1438,17 @@ test('external binding requires exact keys, public destinations and distinct tok
     'https://example.org/reading');
   assert.throws(() => parse(binding, { requiredKeys: [] }), /covers the authored semantic tokens exactly/);
   assert.throws(() => parse({ ...binding, bindings: [...binding.bindings, ...binding.bindings] }), /unique semantic token/);
-  for (const url of ['http://example.org/', 'https://person:secret@example.org/', 'https://example.org/?token=value']) {
+  assert.throws(() => parse({ ...binding, bindings: [
+    ...binding.bindings, { ...binding.bindings[0], token: 'PUBLIC_URL_EXTERNAL_ANOTHER' },
+  ] }), /Reuse the existing semantic token/);
+  const view = 'https://kindlight.ai/?section=profile';
+  assert.equal(parse({ ...binding, bindings: [{ ...binding.bindings[0], url: view }] })
+    .destinations.get('PUBLIC_URL_EXTERNAL_EXAMPLE'), view);
+  for (const url of ['http://example.org/', 'https://person:secret@example.org/', 'https://example.org/?token=value',
+    'https://other.example/?section=profile', 'https://kindlight.ai/other?section=profile',
+    'https://kindlight.ai/?section=other', 'https://kindlight.ai/?section=profile&extra=value',
+    'https://kindlight.ai/?section=profile#private', 'https://tc39.es/ecma262/#unreviewed',
+    'https://fhir.epic.com/Specifications?api=anything', 'https://example.org/?', 'https://example.org/#']) {
     assert.throws(() => parse({ ...binding, bindings: [{ ...binding.bindings[0], url }] }), /normalized public HTTPS/);
   }
 });
