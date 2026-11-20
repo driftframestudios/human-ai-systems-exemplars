@@ -149,6 +149,7 @@ function assertPageIdentitySource(route, carrier, source) {
 export function createContextCanvasHeadAuthority({
   routeReference,
   registryReference = null,
+  materializedRoutes = false,
 }) {
   if (routeReference === null || routeReference === undefined) {
     throw new TypeError('Context Canvas head authority requires the public-route reference.');
@@ -172,6 +173,7 @@ export function createContextCanvasHeadAuthority({
     registryByDestination.set(route.url, selected);
   }
   return Object.freeze({
+    acceptsMaterializedRoutes: materializedRoutes === true,
     resolveToken(token) {
       return REGISTRY_TOKEN.test(token)
         ? destination(selectedRegistryReference, token)

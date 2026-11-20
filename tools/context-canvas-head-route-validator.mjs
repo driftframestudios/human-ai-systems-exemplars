@@ -167,6 +167,7 @@ function authorityAdapter(authority) {
       resolveToken: (token) => authority.get(token),
       assertTokenCarrier: null,
       assertResolvedCarrier: null,
+      acceptsMaterializedRoutes: false,
     };
   }
   if (authority === null || authority === undefined) {
@@ -174,6 +175,7 @@ function authorityAdapter(authority) {
       resolveToken: () => undefined,
       assertTokenCarrier: null,
       assertResolvedCarrier: null,
+      acceptsMaterializedRoutes: false,
     };
   }
   const resolve =
@@ -200,6 +202,7 @@ function authorityAdapter(authority) {
     resolveToken: resolve,
     assertTokenCarrier: assertCarrier,
     assertResolvedCarrier,
+    acceptsMaterializedRoutes: authority.acceptsMaterializedRoutes === true,
   };
 }
 
@@ -280,7 +283,9 @@ function resolvePublicValue(rawValue, carrier, source, locator, authority, diagn
   return destination;
 }
 
-function validateHttpsValue(value, source, locator, carrier, diagnostics) {
+function validateHttpsValue(value, source, locator, carrier, diagnostics, {
+  tokenizedReceiver = false,
+} = {}) {
   if (value === null) return null;
   let parsed;
   try {
@@ -314,7 +319,7 @@ function validateHttpsValue(value, source, locator, carrier, diagnostics) {
     }));
     return null;
   }
-  if (parsed.hostname === LEGACY_PUBLIC_HOST) {
+  if (parsed.hostname === LEGACY_PUBLIC_HOST && !tokenizedReceiver) {
     diagnostics.push(diagnostic({
       code: "HEAD_ROUTE_LEGACY_RECEIVER",
       source,
@@ -329,16 +334,21 @@ function validateHttpsValue(value, source, locator, carrier, diagnostics) {
 }
 
 function effectivePublicValue(rawValue, carrier, source, locator, authority, diagnostics) {
+  const tokenMatch = PUBLIC_TOKEN.exec(rawValue);
   const effective = validateHttpsValue(
     resolvePublicValue(rawValue, carrier, source, locator, authority, diagnostics),
     source,
     locator,
     carrier,
     diagnostics,
+    {
+      tokenizedReceiver:
+        tokenMatch !== null || authority.acceptsMaterializedRoutes,
+    },
   );
   if (
     effective !== null &&
-    PUBLIC_TOKEN.exec(rawValue) === null &&
+    tokenMatch === null &&
     authority.assertResolvedCarrier !== null
   ) {
     try {

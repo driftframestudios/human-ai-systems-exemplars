@@ -734,7 +734,11 @@ function deriveSkill(binding, skillPublicationSelection, file, diagnostics) {
     }));
     return null;
   }
-  let url = base;
+  // The Worker origin owns schema and source-package retrieval. The GitHub
+  // Pages origin owns the human-readable catalog and selected skill pages.
+  // Keeping those routes distinct lets one selection declare both receivers
+  // while semantic authority remains with the selected source package.
+  let url = binding.role === 'skill_catalog' ? `${pagesSkillOrigin}/skills/` : base;
   if (binding.owner.skill_name !== null) {
     const selected = Array.isArray(skillPublicationSelection.skills)
       ? skillPublicationSelection.skills.filter((skill) =>
@@ -1086,7 +1090,9 @@ export function parsePublicRouteReferenceBinding(
       ? 'https://vik.guru'
       : binding.authorityClass === 'iframe'
         ? 'https://iframes.vik.guru'
-        : binding.role === 'skill_pages_html' ? pagesSkillOrigin : 'https://schemas.vik.guru';
+        : binding.role === 'skill_pages_html' || binding.role === 'skill_catalog'
+          ? pagesSkillOrigin
+          : 'https://schemas.vik.guru';
     const normalizedExpected = normalizedHttpsUrl(binding.expectedUrl, origin);
     if (normalizedExpected === null || derived !== binding.expectedUrl) {
       diagnostics.push(diagnostic({

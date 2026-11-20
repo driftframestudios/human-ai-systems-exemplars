@@ -251,7 +251,7 @@ test('derives page, fragment, asset, iframe, schema, and skill destinations from
     ['PUBLIC_URL_ASSET_VISUALIZATION_FIDELITY_CLEAN_EXEMPLAR', 'https://vik.guru/img/plot/visualization_fidelity_clean_exemplar.svg'],
     ['PUBLIC_URL_IFRAME_CORE_ARCHITECTURES', 'https://iframes.vik.guru/v1/core/'],
     ['PUBLIC_URL_SCHEMA_CONTEXT_CANVAS_CONTEXT', 'https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.context.jsonld'],
-    ['PUBLIC_URL_SKILL_CATALOG', 'https://schemas.vik.guru/skills/'],
+    ['PUBLIC_URL_SKILL_CATALOG', 'https://schemas.radiantnull.com/skills/'],
     ['PUBLIC_URL_SKILL_COLLABORATION_SKILLS_README', 'https://schemas.vik.guru/collaboration-skills/0.1.0/README.md'],
     ['PUBLIC_URL_SKILL_PORTABLE_SKILL_EXAMPLE', 'https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json'],
     ['PUBLIC_URL_SKILL_RETIRED_PROJECTION_EXAMPLE', 'https://schemas.vik.guru/collaboration-skills/0.1.0/examples/retired-projection.example.json'],

@@ -9,9 +9,9 @@
     "indexed_page_count": 40
   },
   "authority_receipts": {
-    "public_route_binding_sha256": "59069a8d881bc727b2dd46269c221da37eafe896da2e15aaecc6abe9946abb5b",
+    "public_route_binding_sha256": "9b1b58e69da96ff3ffbf0126b498033e741e8d5147c809163f2632855a4a3de6",
     "registry_binding_sha256": "a713b963b32297bf7ade42b4158e4d7411fc2efee80eb2355e0d64f9dada0a6a",
-    "occurrence_sha256": "36059ae965ba7fcd2c0e34d952c07c42cac206964ba62a3c7aed28807d6e76d5"
+    "occurrence_sha256": "9d2bfae33b98453f8d243bda5cb30b9c8e0ddf02e8d0800f8fe12da4aa3cb2a0"
   },
   "counts": {
     "entries": 618,
@@ -588,7 +588,7 @@
       "object_name": "Human–AI Systems Exemplars public skills",
       "source_value": "{{PUBLIC_URL_SKILL_CATALOG}}",
       "token": "PUBLIC_URL_SKILL_CATALOG",
-      "effective_url": "https://schemas.vik.guru/skills/",
+      "effective_url": "https://schemas.radiantnull.com/skills/",
       "authority_class": "skill",
       "authority_role": "skill_catalog",
       "relationship_role": "jsonld",

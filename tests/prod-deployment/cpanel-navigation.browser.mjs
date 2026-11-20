@@ -73,5 +73,11 @@ test('printed links, Showcase previews and the About Studio work from the built 
   await footer.getByRole('link', { name: 'About', exact: true }).click();
   await expect(page).toHaveURL(server.origin + '/');
   await expect(page.locator('[data-native-coordination]')).toHaveAttribute('data-native-ready', 'true');
+  await expect(
+    page.locator('.about-route-grid a').filter({ hasText: 'Reusable agent skills · Driftframe Studios' }),
+  ).toHaveAttribute('href', 'https://schemas.radiantnull.com/skills/');
+  await expect(
+    page.locator('footer').getByRole('link', { name: "View the author's professional profile", exact: true }),
+  ).toHaveAttribute('href', 'https://github.com/driftframestudios');
   assert.deepEqual(errors, []);
 });

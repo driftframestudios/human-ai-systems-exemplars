@@ -22,6 +22,7 @@ const TOKENS = Object.freeze({
   sampleId: "PUBLIC_URL_PAGE_SAMPLE_ARTICLE",
   image: "PUBLIC_URL_ASSET_SAMPLE_CARD",
   imageAlternate: "PUBLIC_URL_ASSET_SAMPLE_CARD_ALTERNATE",
+  skillCatalog: "PUBLIC_URL_SKILL_CATALOG",
 });
 const ROUTES = new Map([
   [TOKENS.home, "https://vik.guru/"],
@@ -30,10 +31,12 @@ const ROUTES = new Map([
   [TOKENS.sampleId, "https://vik.guru/sample.html#article"],
   [TOKENS.image, "https://vik.guru/img/sample-card.webp"],
   [TOKENS.imageAlternate, "https://vik.guru/img/sample-card-alternate.webp"],
+  [TOKENS.skillCatalog, "https://schemas.radiantnull.com/skills/"],
 ]);
 
-function routeAuthority({ reject = new Map() } = {}) {
+function routeAuthority({ reject = new Map(), materializedRoutes = false } = {}) {
   return {
+    acceptsMaterializedRoutes: materializedRoutes,
     resolveToken(token) {
       return ROUTES.get(token);
     },
@@ -229,6 +232,42 @@ test("accepts source tokens, records their typed carriers, and preserves standin
     formatContextCanvasHeadRouteDiagnostics(result),
     /PASS \(2 pages;/u,
   );
+});
+
+test("accepts the materialized Pages skill catalog while preserving the legacy-literal guard", () => {
+  const input = fixture({
+    sample: page({
+      title: "Sample",
+      pageToken: TOKENS.sample,
+      idToken: TOKENS.sampleId,
+      extraJson: `, "significantLink": "${token(TOKENS.skillCatalog)}"`,
+    }),
+  });
+  const tokenized = validateContextCanvasHeadRoutes(input);
+  assert.equal(tokenized.accepted, true);
+  assert.deepEqual(tokenized.diagnostics, []);
+  assert.equal(
+    tokenized.records.some(({ token: key, effective }) =>
+      key === TOKENS.skillCatalog && effective === ROUTES.get(TOKENS.skillCatalog)),
+    true,
+  );
+
+  input.documents.set(
+    `${CONTEXT_CANVAS_SOURCE_ROOT}/sample.html`,
+    input.documents.get(`${CONTEXT_CANVAS_SOURCE_ROOT}/sample.html`)
+      .replace(token(TOKENS.skillCatalog), ROUTES.get(TOKENS.skillCatalog)),
+  );
+  const literal = validateContextCanvasHeadRoutes(input);
+  assert.equal(literal.accepted, false);
+  assert.equal(
+    literal.diagnostics.some(({ code }) => code === "HEAD_ROUTE_LEGACY_RECEIVER"),
+    true,
+  );
+
+  input.authority = routeAuthority({ materializedRoutes: true });
+  const materialized = validateContextCanvasHeadRoutes(input);
+  assert.equal(materialized.accepted, true);
+  assert.deepEqual(materialized.diagnostics, []);
 });
 
 test("accepts generated literal routes through the same identity contract", () => {
