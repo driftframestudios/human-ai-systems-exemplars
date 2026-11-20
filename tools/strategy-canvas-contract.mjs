@@ -2,7 +2,7 @@
 import './node-runtime-admission.mjs';
 
 import { loadExternalReferenceBinding } from "./external-reference-contract.mjs";
-import { readPrototypeScript } from "../tests/prototype-script.mjs";
+import { readPrototypeScript } from "./prototype-script-source.mjs";
 import { chromium } from "@playwright/test";
 import { createServer } from "node:http";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
