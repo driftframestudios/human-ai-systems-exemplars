@@ -49,7 +49,7 @@
     ],
     "declinedCandidateIds": [],
     "decisionRule": "Select two candidates whose combined spike set creates the most information gain across accessibility, SVG control, maintainability, and replacement seams while preserving materially different framework commitments.",
-    "rationale": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with explicit seams. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
+    "rationale": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with clear boundaries between components. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
     "dissentOrMinorityRead": "A platform-first Web Components spike may create stronger long-horizon evidence and should enter the next round when the initial two spikes leave swapability or operational-calm questions unresolved.",
     "evidenceRequiredBeforeCommitment": [
       "Semantic form and status-feedback verification",
@@ -104,8 +104,8 @@
   "files": [
     {
       "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
-      "bytes": 297562,
-      "sha256": "88de50de644f80583ef0a4d714a03930048f74071f4e5588a46384b352e3cba1",
+      "bytes": 291024,
+      "sha256": "10431b4ddde07ad1bbb2c42e47fff0b771cb7ebd8ce026fc7d2790b5039ad304",
       "role": "interactive_prototype"
     },
     {
@@ -146,14 +146,14 @@
     },
     {
       "name": "front-end-stack-selection.example.v0.1.json",
-      "bytes": 80716,
-      "sha256": "8ad38b4c33e9d6935829417b861eac237bd330fa12248e2aaa999d01075709e0",
+      "bytes": 80836,
+      "sha256": "0b3534cb5676d9e79cff0f9f2414d972a405b9c8071684132d4fd7219afcce70",
       "role": "example_state"
     },
     {
       "name": "front-end-stack-selection.example.v0.1.jsonld",
-      "bytes": 44207,
-      "sha256": "9f294cdc717f19cad0008a4567663f6a9223f0335e29b926a4965cdad61922af",
+      "bytes": 44228,
+      "sha256": "76965853b641841c719973fe0cddb6691b1b5e820bbdb909e7eb5506abd3e5a6",
       "role": "example_jsonld"
     },
     {

@@ -843,7 +843,7 @@
       "@id": "https://schemas.driftframestudios.org/na/examples/technology-decision-record-v0.1",
       "@type": "TechnologyDecisionRecord",
       "name": "Front-end stack spike decision",
-      "description": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with explicit seams. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
+      "description": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with clear boundaries between components. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
       "na:selectedCandidateRef": [
         {
           "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-css-modules-headless"
