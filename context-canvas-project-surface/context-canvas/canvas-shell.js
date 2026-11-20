@@ -6,15 +6,15 @@
 
   var routes = {
     about: [
-      ["About", "index.html#about-title"],
-      ["Career and quality", "index.html#career-title"],
-      ["AI Systems orientation", "index.html#ai-orientation-title"],
+      ["Background", "index.html#background-title"],
       ["Investment Studio", "index.html#studio-title"],
-      ["Changed work", "index.html#how-title"],
-      ["Methods and evidence", "index.html#deliver-title"]
+      ["Career at a glance", "index.html#career-title"],
+      ["Regulatory and quality practice", "index.html#quality-title"],
+      ["AI Systems orientation", "index.html#ai-orientation-title"],
+      ["AI and ML methods", "index.html#method-title"],
+      ["The stakes", "index.html#stakes-title"]
     ],
     ai: [
-      ["AI Systems", "ai-systems.html"],
       ["Shared Machinery", "shared-machinery.html"],
       ["PODA", "poda.html"],
       ["Metadata Blocks", "metadata-blocks.html"],
@@ -35,7 +35,6 @@
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
     showcase: [
-      ["Case Studies & Articles", "debriefs.html"],
       ["Rearchitecting a Genomic Viewer", "genomic-viewer-replatforming.html"],
       ["Clinical Trial Coordination", "fmi-clinical-trial-coordination.html"],
       ["Redesigning LIMS/ELN Platforms", "fmi-lims-eln-replatforming.html"],
@@ -75,11 +74,8 @@
     }
   }
 
-  function routeList(title, items) {
-    var section = element("section", "super-footer__column");
-    var heading = element("h2", "super-footer__heading", title);
+  function routeList(items) {
     var list = element("ul", "super-footer__list");
-    section.appendChild(heading);
     items.forEach(function (item) {
       var li = document.createElement("li");
       var link = element("a", "", item[0]);
@@ -87,26 +83,17 @@
       li.appendChild(link);
       list.appendChild(li);
     });
-    section.appendChild(list);
-    return section;
+    return list;
   }
 
   function installFooter() {
-    var footer = document.querySelector("body > footer[role='contentinfo'], body > footer.footer__container, body > footer.about-footer, body > footer, .page-shell > footer[role='contentinfo'], .page-shell > footer.footer__container, .page-shell > footer.about-footer, .page-shell > footer");
-    if (footer && footer.querySelector(".super-footer__grid")) return;
-    if (!footer) {
-      footer = element("footer", "");
-      footer.setAttribute("role", "contentinfo");
-      document.body.appendChild(footer);
-    }
-    if (footer.parentElement !== document.body) document.body.appendChild(footer);
-    footer.classList.add("super-footer");
-    footer.setAttribute("aria-label", "Context Canvas site map and page footer");
+    var footer = document.querySelector("footer.super-footer");
+    if (!footer || footer.querySelector(".super-footer__list")) return;
+    footer.querySelectorAll("[data-footer-routes]").forEach(function (column) {
+      column.appendChild(routeList(routes[column.dataset.footerRoutes]));
+    });
 
-    var boundarySelector = visitorBoundaryContract ? visitorBoundaryContract.rootSelector : "[data-visitor-boundary]";
-    var visitorBoundary = footer.querySelector(":scope > " + boundarySelector + ", :scope > * > " + boundarySelector);
-    var attribution = footer.querySelector(":scope > .site-attribution, :scope > * > .site-attribution");
-    var contact = footer.querySelector(":scope > [data-context-canvas-contact], :scope > * > [data-context-canvas-contact]");
+    var visitorBoundary = footer.querySelector("[data-visitor-boundary]");
     if (visitorBoundary && visitorBoundaryContract) {
       var boundaryContext = visitorBoundary.querySelector(visitorBoundaryContract.contextSelector);
       var markers = Array.prototype.slice.call(visitorBoundary.querySelectorAll(visitorBoundaryContract.markerSelector));
@@ -116,23 +103,7 @@
       });
       visitorBoundary.dataset.visitorBoundaryState = exact ? "verified" : "authored";
     }
-    if (visitorBoundary) visitorBoundary.remove();
-    if (attribution) attribution.remove();
-    if (contact) contact.remove();
-
-    if (footer.childNodes.length) {
-      var local = element("div", "super-footer__local");
-      while (footer.firstChild) local.appendChild(footer.firstChild);
-      footer.appendChild(local);
-    }
-
-    var grid = element("div", "super-footer__grid");
-    grid.appendChild(routeList("About", routes.about));
-    grid.appendChild(routeList("AI Systems", routes.ai));
-    grid.appendChild(routeList("Showcase", routes.showcase));
-    footer.appendChild(grid);
-
-    var closing = element("div", "super-footer__closing");
+    var closing = footer.querySelector(".super-footer__closing");
     var registry = document.createElement("p");
     registry.appendChild(document.createTextNode("The Enterprise Human–AI Practitioner Registry continues at "));
     var kindlight = element("a", "", "kindlight.systems");
@@ -167,16 +138,7 @@
       );
     }
     if (network.querySelector("a")) network.appendChild(document.createTextNode(" These links leave this site."));
-    if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
-    contact.classList.add("super-footer__contact");
-    contact.setAttribute("data-context-canvas-contact", "");
-    closing.appendChild(registry);
-    closing.appendChild(network);
-    closing.appendChild(contact);
-    footer.appendChild(closing);
-
-    if (visitorBoundary) footer.appendChild(visitorBoundary);
-    if (attribution) footer.appendChild(attribution);
+    closing.prepend(registry, network);
   }
 
   function uniqueMajorSections(main) {

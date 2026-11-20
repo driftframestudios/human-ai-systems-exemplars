@@ -292,6 +292,17 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
 
 test('the shared footer presents source labels and publishes three native links', async t => {
   const page = await open(t, 'chromium', 'debriefs.html');
+  const siteMap = page.getByRole('navigation', { name: 'Site map' });
+  assert.deepEqual(await siteMap.getByRole('heading').allTextContents(), ['About', 'Case Studies & Articles', 'AI Systems']);
+  const aboutLinks = await siteMap.locator('[data-footer-routes="about"] li a').evaluateAll(links => links.map(a => a.href));
+  const about = await page.context().newPage();
+  await about.goto(new URL('index.html', page.url()).href);
+  const positions = await about.evaluate(hrefs => {
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    return hrefs.map(href => headings.indexOf(document.getElementById(new URL(href).hash.slice(1))));
+  }, aboutLinks);
+  assert.ok(positions.length && positions.every((position, index) => position >= 0 && (index === 0 || position > positions[index - 1])), 'About jump links follow the page headings in reading order');
+  await about.close();
   const footer = page.locator('.super-footer__closing');
   const labels = await footer.locator('.super-footer__reserved').allTextContents();
   assert.deepEqual(labels, ['kindlight.systems', 'GitHub', 'Professional profile available in the public build']);

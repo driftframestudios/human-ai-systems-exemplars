@@ -275,6 +275,13 @@ export function deriveConditioningFieldProjection(html, routeDestinations = null
     projected = replacePatternOnce(projected, pattern, "", `Shared shell dependency ${dependency}`);
   }
 
+  // The host page supplies site navigation around this self-contained instrument.
+  projected = replacePatternOnce(
+    projected,
+    /<nav\b[^>]*\bclass="super-footer__grid"[^>]*>[\s\S]*?<\/nav>/gu,
+    "",
+    "Portfolio footer navigation",
+  );
   projected = replacePatternOnce(
     projected,
     /,\s*"isBasedOn"\s*:\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\s*\})/gu,

@@ -740,6 +740,13 @@ the footer. Maintained projections and iframe package digests are rebuilt from
 their owners after a source change. Exact marker text remains centralized in
 the shared contract and its tests.
 
+About owns the static portfolio footer. Edit the final footer in `index.html`
+and run `node tools/sync-context-canvas-footer.mjs` to copy it to the other
+top-level pages. All three primary links work before scripting. The shared
+`canvas-shell.js` adds the section links and publication destinations, and
+`canvas-shell.css` owns the footer layout and typography. Production uses
+these checked-in files directly. Embedded instruments carry their own attribution.
+
 Every top-level visitor route carries one source-authored ownership and
 Apache-2.0 notice in its static HTML, preserving the notice in the baseline
 reading. `AUTHORS` is the copyright-holder authority, and the repository-root
