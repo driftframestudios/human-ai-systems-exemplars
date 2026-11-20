@@ -86,9 +86,10 @@ decisions into the current release.
 
 The tagged GitHub Pages projection followed the cPanel release as a separate
 receiver. The visitor carrier operates independently of that Pages artifact.
-`pages-v0.3.1` supplies the accepted schema and skill publication coordinate.
-Completed Issue #531 records that closure's independently gated Worker review,
-promotion, activation, and signed-out receipt. Completed Issue #406
+`pages-v0.4.0` supplies the active schema and skill Pages coordinate. Issues
+#1001 and #1008 coordinate that closure's independently gated Worker review and
+promotion. Completed Issue #531 records the active v0.3.1 Worker publication,
+activation, and signed-out receipt. Completed Issue #406
 preserves the v0.3.0 activation lineage, whose accepted Worker now supplies the
 immediate platform recovery coordinate.
 

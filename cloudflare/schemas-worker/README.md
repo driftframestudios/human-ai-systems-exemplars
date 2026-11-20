@@ -2,7 +2,7 @@
 
 This Worker is the production owner for `https://schemas.vik.guru/`. The
 checked-in publication carries the schema cohort and public-ready skill closure
-accepted for `pages-v0.3.1` from one reviewed source revision while GitHub Pages
+accepted for `pages-v0.4.0` from one reviewed source revision while GitHub Pages
 provides the richer visitor and skill-reading surface. The production
 observation below identifies the active receiver and immediate recovery pair.
 
@@ -25,12 +25,12 @@ The selected publication is bound to the reviewed Pages release:
 
 | Role | Coordinate |
 | --- | --- |
-| Exact Worker publication | `554a2074327fb51a40255066d0c9b9ed5401a6f6` |
-| Semantic and schema source | `c1e35fdd57c2193812c2b183955aca15a5020be8` |
-| Pages release | `pages-v0.3.1` |
-| Annotated tag object | `15c9a0ced1a49f3f20797682282526a95afbef88` |
-| Reviewed Pages projection | `fbf568496b90cf26cb0de5993189801d8a8c2be9` |
-| Complete Pages closure | `b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0` |
+| Exact Worker publication | `a8f9c75244f72e9ec9bec195e6fc0c324ccf8424` |
+| Semantic and schema source | `a5ed640bb0982044d46e6e874867eb8f0e760169` |
+| Pages release | `pages-v0.4.0` |
+| Annotated tag object | `2c253529e85f3b853e139a4c5fd6d83cd328037e` |
+| Reviewed Pages projection | `4a4a37633e81a80f1ef45386ce22d3de4657384d` |
+| Complete Pages closure | `80cb2f1100adaedcda8179abbd4e1c84bcc8fbc5af60ce6eab4ec37cf587d2cb` |
 
 `accepted-publication-lock.json` records the exact Worker-tree coordinate.
 `publication-manifest.json` records the selected source and annotated Pages
@@ -39,10 +39,10 @@ files. The source revision remains the meaning and schema coordinate; the Pages
 projection remains the reviewed peer artifact used for exact cross-receiver
 comparison.
 
-Issue
-[#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
-records this publication's lock, promotion, activation, observation, and
-recovery receipts.
+Issues [#1001](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/1001)
+and [#1008](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/1008)
+record this successor publication's lock, promotion, activation, observation,
+and recovery receipts.
 
 ## Active production observation
 
@@ -68,35 +68,35 @@ records the activation, Worker-version, and recovery receipt.
 
 ## Publication boundary
 
-The accepted v0.3.1 source coordinate selected 17 schema contracts and 16
-examples, contexts, and guide companions. The current route ledger names the
-next candidate cohort; a reviewed activation will establish its production
+The accepted v0.4.0 source coordinate selects 33 schema contracts and 20
+examples, contexts, and guide companions. The checked-in route ledger names
+this successor cohort; a reviewed activation will establish its production
 membership. `tools/schema-publication-lock.json` binds every selected schema
 contract to its accepted digest. The Worker publishes each accepted contract
 through its established route and its `/schemas/` asset route while preserving
 its canonical `$id`.
 
-The accepted skill boundary contains 86 shared files under `/skills/`:
+The accepted skill boundary contains 102 shared files under `/skills/`:
 
 - `/skills/catalog.json` is the exact reviewed public-ready catalog.
-- `/skills/<name>/projection.json` carries each of the 27 machine-readable
+- `/skills/<name>/projection.json` carries each of the 31 machine-readable
   projections at its declared `https://schemas.vik.guru/skills/<name>/projection.json`
   identity.
-- `/skills/source/` carries 58 unique source files: all 27 exact `SKILL.md`
+- `/skills/source/` carries 70 unique source files: all 31 exact `SKILL.md`
   semantic authorities, their declared public dependencies, and the catalog's
   supporting source.
 
-GitHub Pages owns the 28 skill HTML discovery files: one Skills index and 27
+GitHub Pages owns the 32 skill HTML discovery files: one Skills index and 31
 readable skill pages. This Worker carries the shared catalog, projections, and
 source closure, so `/skills/index.html` and `/skills/<name>/index.html` stay with
-the Pages receiver. The six `public_possible` packages retain their
+the Pages receiver. The eight `public_possible` packages retain their
 repository-only standing and remain outside every Worker route and artifact
 manifest.
 
-The complete checked-in Worker publication contains 127 regular files:
+The complete checked-in Worker publication contains 163 regular files:
 
-- 17 schemas and 16 companions;
-- 86 skill catalog, projection, semantic-source, and dependency files;
+- 33 schemas and 20 companions;
+- 102 skill catalog, projection, semantic-source, and dependency files;
 - five attribution and data-use carriers; and
 - the root registry, schema catalog, and publication manifest.
 
@@ -136,9 +136,9 @@ successful responses use `public, max-age=0, must-revalidate`. The same policy
 applies to catalogs, examples, contexts, guides, orientation, attribution, and
 the publication manifest.
 
-Sixteen exact-version schemas use `public, max-age=31536000, immutable` through
-both their established and `/schemas/` routes. One route is already its own
-`/schemas/` asset path, producing 31 unique immutable request paths. The
+Thirty-two exact-version schemas use `public, max-age=31536000, immutable`
+through both their established and `/schemas/` routes. One route is already
+its own `/schemas/` asset path, producing 63 unique immutable request paths. The
 unversioned `prototype-local-manifest.schema.json` remains revalidatable.
 
 Missing resources, asset failures, redirects, preflight responses, and
@@ -157,8 +157,8 @@ boundary. The initial selection names both accepted coordinates:
 cd cloudflare/schemas-worker
 npm ci --ignore-scripts --no-audit --no-fund
 npm run prepare:publication -- \
-  --source-revision c1e35fdd57c2193812c2b183955aca15a5020be8 \
-  --pages-release-tag pages-v0.3.1
+  --source-revision a5ed640bb0982044d46e6e874867eb8f0e760169 \
+  --pages-release-tag pages-v0.4.0
 ```
 
 Validate the checked-in accepted release without consulting current source
@@ -173,7 +173,7 @@ The accepted-release check uses `accepted-publication-lock.json` to compare the
 entire checked-in Worker tree with the exact commit that formed the publication.
 It also validates the annotated Pages tag and complete closure digest, reads
 skill selection from the manifest's accepted source revision, and confirms the
-17-schema, 16-companion, and 86-file skill closure. The unit suite exercises the
+33-schema, 20-companion, and 102-file skill closure. The unit suite exercises the
 same manifest through the production handler.
 
 `npm run check:publication` retains a distinct job: it compares the prepared
