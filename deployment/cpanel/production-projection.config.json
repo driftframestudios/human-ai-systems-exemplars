@@ -1,6 +1,8 @@
 {
   "id": "prod-projection.configuration.v1",
   "version": "1",
+  "delivery_profile": "folder-index-v1",
+  "directory_index_names": { "debriefs.html": "showcase" },
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
   "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",

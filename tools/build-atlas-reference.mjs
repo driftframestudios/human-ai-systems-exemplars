@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { compactSource } from './cpanel-format.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 /** Static SECOM reference owner. Parse O(n); aggregate O(n + m log m); render O(m). */
 import { createHash } from 'node:crypto';
@@ -132,7 +133,7 @@ export function renderSection(groups) {
             <p>The visual carries the reader’s comparison burden; its companion carries exact values, uncertainty, provenance, and a recoverable interpretation.</p>
             <footer>Visual selection doctrine</footer>
           </aside>
-          <p class="table-note"><strong>Source and method:</strong> <a href="https://doi.org/10.24432/C54305">McCann and Johnston (2008), SECOM, UCI Machine Learning Repository</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Monthly aggregation uses all 1,567 released label records, including 104 failures; rates are 100 times failed tests divided by recorded tests, displayed to one decimal. The source timestamps retain their stated civil-time precision. These are descriptive rates for the released records. Inference about broader production would require a sampling and process model. <a href="../data/visualization-fidelity/README.md">Read the derivation and source boundary.</a></p>
+          <p class="table-note"><strong>Source and method:</strong> <a href="{{PUBLIC_URL_EXTERNAL_DOI_10_24432_C54305}}">McCann and Johnston (2008), SECOM, UCI Machine Learning Repository</a>, <a href="{{PUBLIC_URL_EXTERNAL_CREATIVECOMMONS_CC_BY_4_0}}">CC BY 4.0</a>. Monthly aggregation uses all 1,567 released label records, including 104 failures; rates are 100 times failed tests divided by recorded tests, displayed to one decimal. The source timestamps retain their stated civil-time precision. These are descriptive rates for the released records. Inference about broader production would require a sampling and process model. <a href="../data/visualization-fidelity/README.md">Read the derivation and source boundary.</a></p>
           <p><a href="one-figure-several-readings.html">One Figure, Several Readings</a> examines the design choices and the different representations a receiving reader or tool may encounter.</p>
         </section>`;
 }
@@ -150,8 +151,9 @@ export async function buildReference({ check = false } = {}) {
   const groups = aggregateLabels(parseLabels(raw.toString('utf8')));
   const derived = { source: SOURCE, sourceSha256: DATA_SHA256, sourceRows: 1567, failures: 104, measure: 'failed tests per 100 recorded tests', timestampBasis: 'Source civil time; timezone unspecified', derivation: '100 * failed / tested; calendar-month grouping; all released label rows retained', groups };
   const page = await readFile(resolve(ROOT, PAGE_PATH), 'utf8');
-  const outputs = [[SVG_PATH, renderSvg(groups)], [JSON_PATH, `${JSON.stringify(derived, null, 2)}\n`], [PAGE_PATH, replaceSection(page, renderSection(groups))]];
-  for (const [path, content] of outputs) {
+  const outputs = [[SVG_PATH, renderSvg(groups)], [JSON_PATH, `${JSON.stringify(derived)}\n`], [PAGE_PATH, replaceSection(page, renderSection(groups))]];
+  for (const [path, rendered] of outputs) {
+    const content = (await compactSource(path, rendered)).trimEnd() + '\n';
     if (check) {
       if (await readFile(resolve(ROOT, path), 'utf8') !== content) throw new Error(`Regenerate the reference output: ${path}`);
     } else await writeFile(resolve(ROOT, path), content);

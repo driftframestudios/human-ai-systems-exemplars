@@ -1,0 +1,6 @@
+{
+  "name": "@driftframe/visual-fidelity-service-boundary-lab",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module"
+}

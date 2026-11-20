@@ -102,7 +102,7 @@
       "sourceCapsuleVersionRef": "na:capsules/opportunity-modernization/v0.1",
       "inclusionState": "included",
       "role": "primary",
-      "summary": "Raise accessibility and evidence traceability, create clearer extension seams, reduce coupled workflows, and preserve security as a continuous constraint.",
+      "summary": "Raise accessibility and evidence traceability, make it clearer where to add features, reduce coupled workflows, and preserve security as a continuous constraint.",
       "freshnessState": "current",
       "valueOrigin": "human_declared",
       "sourceBand": [
@@ -282,7 +282,7 @@
       "anchors": {
         "low": "A local change requires broad coupled edits.",
         "middle": "Known variants use selected extension points.",
-        "high": "Documented seams support local variation with parity, ownership, and recovery checks."
+        "high": "Documented extension points support local variation with parity, ownership, and recovery checks."
       },
       "now": 3,
       "next": 7,

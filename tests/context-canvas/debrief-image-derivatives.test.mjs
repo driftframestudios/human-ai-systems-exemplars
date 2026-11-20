@@ -71,8 +71,8 @@ test("tracked Debrief derivatives preserve exact dimensions and source ratio", a
 
   const beforeCheck = await readFile(derivativeFixture);
   assert.deepEqual(await processDerivativeFamilies({ check: true }), {
-    processed: 82,
-    skipped: 1,
+    processed: 90,
+    skipped: 2,
     removed: 0,
   });
   assert.deepEqual(
@@ -91,6 +91,9 @@ test("catalog media profiles declare their responsive candidates independently",
     ]),
   );
   const expected = new Map([
+    ["queue-secretly-status-machine/plate-well-history.webp", "catalog-card"],
+    ["boolean-building-blocks/cohort-rule-groups.webp", "catalog-card"],
+    ["sample-noone-could-find/laboratory-process-lanes.webp", "catalog-card"],
     ["choose-your-player/robotics-upfront.webp", "catalog-card"],
     ["sample-noone-could-find/clinical-trial-coordination-upfront.webp", "catalog-preview"],
     ["spatial-capture/3d-modeling-scan.webp", "catalog-card"],
@@ -101,6 +104,31 @@ test("catalog media profiles declare their responsive candidates independently",
     assert.deepEqual(jobs.get(relativePath)?.widths, [480, 960, 1_920], relativePath);
   }
   assert.equal(derivativeProfiles.sources.length, 2);
+});
+
+test("the three Showcase cards retain the author’s copyright at every delivered size", async () => {
+  const root = join(repositoryRoot, "context-canvas-project-surface/img/debriefs");
+  const families = [
+    ["queue-secretly-status-machine/plate-well-history", ["", "-480", "-960"]],
+    ["boolean-building-blocks/cohort-rule-groups", ["", "-480", "-960", "-1920"]],
+    ["sample-noone-could-find/laboratory-process-lanes", ["", "-480", "-960", "-1920"]],
+  ];
+  const notice = "© 2026 Vikrant Varun Kudesia | Driftframe Studios, LLC";
+  for (const [family, suffixes] of families) {
+    for (const suffix of suffixes) {
+      const bytes = await readFile(join(root, `${family}${suffix}.webp`));
+      let xmp = "";
+      for (let offset = 12; offset + 8 <= bytes.length;) {
+        const size = bytes.readUInt32LE(offset + 4);
+        if (bytes.toString("ascii", offset, offset + 4) === "XMP ") {
+          xmp = bytes.toString("utf8", offset + 8, offset + 8 + size);
+          break;
+        }
+        offset += 8 + size + (size % 2);
+      }
+      assert.ok(xmp.includes(`<rdf:li xml:lang="x-default">${notice}</rdf:li>`), family + suffix);
+    }
+  }
 });
 
 test("catalog sources and responsive derivatives preserve exact accepted geometry", async () => {

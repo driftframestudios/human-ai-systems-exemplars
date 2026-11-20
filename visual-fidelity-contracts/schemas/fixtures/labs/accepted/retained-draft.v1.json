@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+  "schemaVersion": "1.0.0",
+  "artifactId": "component-lab:drawer-014",
+  "revision": 7,
+  "phase": "error",
+  "acceptedState": {
+    "fingerprint": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "acceptedAt": "2026-10-20T15:00:00Z",
+    "values": { "region": "North", "status": "accepted" }
+  },
+  "draftState": {
+    "dirty": true,
+    "values": { "region": "North and East", "status": "draft" }
+  },
+  "request": {
+    "id": "request-014",
+    "status": "failed",
+    "startedAt": "2026-10-20T15:02:00Z",
+    "completedAt": "2026-10-20T15:02:02Z"
+  },
+  "messages": [
+    {
+      "id": "save-failed",
+      "level": "error",
+      "text": "The save request failed; accepted revision 7 and the current draft remain available.",
+      "sourceId": "review-service"
+    }
+  ],
+  "recovery": {
+    "availableActions": ["retry", "restore_accepted", "edit_draft", "contact_owner"],
+    "nextAction": "retry"
+  },
+  "authority": {
+    "decisionOwner": "Review lead",
+    "dataOwner": "Program operations",
+    "serviceOwner": "Review service team",
+    "humanApprovalRequired": true
+  }
+}

@@ -1,8 +1,22 @@
-# Context Canvas Registry bindings
+# Context Canvas public-reference bindings
 
-This directory carries the reviewed relationship between Context Canvas semantic
-tokens and the public Enterprise Human-AI Practitioner Registry routes served by
-`kindlight.systems`.
+This directory carries three reviewed relationships from Context Canvas semantic
+tokens to public receivers:
+
+- Registry bindings select public Enterprise Human-AI Practitioner Registry
+  readings served by `kindlight.systems`.
+- Route bindings derive Context Canvas pages, assets, hosted instruments,
+  schemas, and published skills from their repository-owned manifests and
+  selections.
+- External bindings preserve author-selected public citations, source-code
+  destinations, the document license, and the accepted About video carriers.
+  These selections carry their own provenance separately from the dated Atlas.
+
+Authored source names the intended receiver. The tracked bindings establish its
+current destination. The materializer resolves these families and preserves one
+receipt for each authority in generated output.
+
+The `skill_pages_html` role binds a visitor anchor to the HTML page that GitHub Pages generates for an included public skill. The Pages check resolves that anchor against the deployment CNAME and the generated file. The skill’s JSON projection retains its canonical schema identity.
 
 ## Authority and data boundary
 
@@ -44,6 +58,64 @@ HTTPS routes on the exact public host. It rejects ambiguous title matching,
 archived records, example and local hosts, provider-local routes, URL credentials,
 query strings, fragments, and malformed or incomplete token coverage.
 
+## Repository route authority
+
+[`context-canvas-route-bindings.v1.json`](context-canvas-route-bindings.v1.json)
+binds semantic keys to repository-owned publication routes:
+
+| Authority class | Source authority |
+| --- | --- |
+| Page and fragment | cPanel primary route manifest and production origin configuration |
+| Asset | cPanel primary route manifest |
+| Hosted instrument | Canvas and Core iframe route manifests |
+| Schema | schema Worker publication manifest |
+| Skill | skill publication selection and schema companion selection |
+
+The adjacent
+[`context-canvas-route-bindings.schema.json`](context-canvas-route-bindings.schema.json)
+defines the binding shape. The contract loader verifies each expected URL from
+its named owner before returning an immutable destination authority. Carrier
+rules then keep page identities, images, iframe routes, schema routes, and skill
+routes in the HTML, JSON-LD, sitemap, or metadata roles selected for them.
+
+[`context-canvas-head-authority-matrix.v1.json`](context-canvas-head-authority-matrix.v1.json)
+records every structured-head and sitemap occurrence across the 40 indexed
+Context Canvas pages. Its schema and check route make source path, carrier,
+JSON pointer, semantic token, authority class, and relationship role directly
+inspectable. Update the route binding first when a receiver changes; then use
+the matrix writer to review the resulting occurrence change.
+
+The tracked
+[`schema-companion-selection.v1.json`](schema-companion-selection.v1.json)
+selects the Collaboration Skills README and three typed examples as schema
+Worker companion resources. Their receiver activation belongs to the next
+accepted Worker publication. The selection makes that handoff explicit while
+the currently accepted Worker manifest continues to describe its published
+closure.
+
+## Author-selected external references
+
+[`context-canvas-external-bindings.v1.json`](context-canvas-external-bindings.v1.json)
+owns the `PUBLIC_URL_EXTERNAL_*` selections used by About, Showcase, and the other Context Canvas pages. Each record names its
+destination, selection basis, and allowed HTML carrier. Registry articles chosen
+after the accepted Atlas snapshot use this independent selection record until a
+reviewed Atlas update supplies their current identities. The existing Registry
+entrance continues to use its Atlas-backed key.
+
+Reuse a destination’s existing token wherever another page cites it. External tokens carry complete anchor destinations, the license link, an MP4
+source, or the remote video poster setting. The local video poster and fallback
+remain authored assets. The contract accepts normalized public HTTPS routes and
+admits reviewed section, demo, API, language, and dataset selectors only on their
+specific public documents. All other query strings and fragments stay outside
+the contract, along with credentials, duplicate destinations, duplicate tokens,
+unsupported carriers, and build-setting overrides. The binding remains a build input outside the public
+artifact. Its digest accompanies the existing generation receipts.
+
+Hosted-instrument navigation can use an ordinary anchor token when its route
+binding allows `anchor`. The currently published Gallery iframe retains its
+manifest-owned `src` and permissions. The separate paired iframe/full-view
+protocol remains available for a future late-bound receiver.
+
 ## Data use and courteous retrieval
 
 The accepted package's exact notice is preserved in
@@ -58,16 +130,40 @@ Git history and static web delivery cannot control a scraper's behavior.
 
 ## Build route
 
-Authored source discovers the required `PUBLIC_URL_REGISTRY_*` tokens. The
-binding selects one exact current Atlas identity for each token. The materializer
-uses those routes for HTML and JSON-LD while the ignored `.env.public` receiver
-continues to carry only the separately approved professional-profile route.
+Authored source discovers the required `PUBLIC_URL_REGISTRY_*`,
+`PUBLIC_URL_PAGE_*`, `PUBLIC_URL_ASSET_*`, `PUBLIC_URL_IFRAME_*`,
+`PUBLIC_URL_SCHEMA_*`, `PUBLIC_URL_SKILL_*`, and `PUBLIC_URL_EXTERNAL_*` tokens. The Registry binding
+selects one exact current Atlas identity for each Registry key. The route
+binding verifies every repository-published destination against its current
+manifest or selection owner. The ignored `.env.public` receiver carries only
+the separately approved professional-profile route.
 
 ```sh
 npm run test:public-references
+npm run test:context-canvas-head-routes
 npm run build:public-references
 npm run verify:registry-public-references
 ```
+
+`test:context-canvas-head-routes` derives the indexed page set from the primary
+manifest and compares source canonical, Open Graph, Twitter, JSON-LD, sitemap,
+and retained-route standing with the tracked authority matrix. Maintainers can
+prepare a reviewed matrix update with:
+
+```sh
+node tools/check-context-canvas-head-routes.mjs --write-matrix
+git diff -- deployment/public-references/context-canvas-head-authority-matrix.v1.json
+npm run test:context-canvas-head-routes
+```
+
+`--json` emits machine-readable aggregate diagnostics. The ordinary check
+reports all discovered findings in one pass so a repair cycle can address the
+complete observed set.
+
+The generated `.public-reference-materialization.json` format 3 marker records
+separate `registry_reference`, `route_reference`, and `external_reference` receipts. Each receipt binds
+the tracked input digest and authority count while the generated HTML carries
+the resolved destinations.
 
 The live verifier performs signed-out `GET` requests with no stored browser
 state. It requires HTTP 200, the exact final route, HTML content, and a document
@@ -77,9 +173,11 @@ network observation rather than a build prerequisite; a network or Registry
 outage leaves the tracked binding and deterministic build checks available for
 re-entry.
 
-The production manifest records the binding and Atlas receipt digests without
-copying their route values. Production closure checks keep this coordination
-directory outside both the primary visitor carrier and the iframe carrier.
+The production manifest records binding and Atlas receipt digests without
+copying route values. Production closure checks keep this coordination
+directory outside both visitor carriers. Release-candidate formation remains a
+separate accepted promotion event; these source contracts can settle while a
+future release continues to gather changes.
 
 The first skill-use observations and the boundary between Atlas discovery,
 source selection, and materialization are recorded in

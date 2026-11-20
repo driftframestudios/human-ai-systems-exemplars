@@ -22,7 +22,7 @@ receiving job.
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, #406, and #531 schema delivery; #63 inventory |
-| `prototype-unit-tests.yml` | Confirmed manual suite; matching `main` PRs receive the public-reference and media jobs, while a matching non-draft PR also receives the prototype job when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | Public reference 5; prototype 30; media 10 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, #434, and #540 |
+| `prototype-unit-tests.yml` | Confirmed manual suite; matching `main` PRs receive the public-reference and media jobs, while a matching non-draft PR also receives the prototype job when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | Public reference 5 minutes, prototype 30 minutes, media 30 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, #434, #540, and #597 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #540 current release; #464, #253, and PR #255 precedents |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
 | `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
@@ -117,13 +117,14 @@ equality before upload.
 Pages settings remain the custom-domain authority. The recorded Pages family
 is `schemas.radiantnull.com`; completed Issue #406 preserves the
 `schemas.vik.guru` v0.3.0 Worker activation and recovery lineage. Completed
-Issue #531 records the active v0.3.1 Worker publication and live parity. The
+Issue #531 records the active v0.3.1 Worker publication and live parity. Issues
+#1001 and #1008 coordinate the accepted v0.4.0 successor. The
 generated public
 `release.json`, accepted annotated tag, and matching workflow receipt identify
-the active Pages coordinate. The `pages-v0.3.1` tag at docs commit
-`fbf568496b90` with recorded source commit `c1e35fdd57c2` is active.
-`pages-v0.3.0`, `pages-v0.2.0`, and the earlier `pages-v0.1.0` observation
-remain historical evidence.
+the active Pages coordinate. The `pages-v0.4.0` tag at docs commit
+`4a4a37633e81` with recorded source commit `a5ed640bb098` is active.
+`pages-v0.3.1`, `pages-v0.3.0`, `pages-v0.2.0`, and the earlier
+`pages-v0.1.0` observation remain historical evidence.
 The recorded `docs:/` source setting remains the recovery coordinate: an
 authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
 and return the environment allowlist to its prior state when needed. Current
@@ -149,8 +150,9 @@ an eight-minute ceiling, serializes in one production group, uses the
 branch-restricted `prod` GitHub environment, and also requires `prod` in
 `DEPLOYMENT_ACTIVE_RECEIVERS` plus the repository variable
 `SCHEMA_WORKER_DEPENDENCY_GATE=open`. The receiver's documented resting value is
-`[]`. The reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` locks satisfy
-the dependency floor owned by Issue #402; the dependency gate remains a separate
+`[]`. The reviewed Wrangler `4.155.0` / Miniflare `5.20261023.2-beta` /
+Undici `7.30.1` / Sharp `0.35.5` locks satisfy the dependency floor owned
+by Issue #659; the dependency gate remains a separate
 human-held activation control. Preserve that activation posture and the recorded 300-minute allocation for
 each branch per collaboration cycle. Current live variable values and remaining
 allocation require their own account observation.
@@ -280,17 +282,59 @@ Matching pull requests into `main` run the public-reference and
 media-publication jobs for matching paths. On a non-draft pull request,
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the complete prototype-unit
 baseline; the unset or `false` value keeps that third job at rest while manual
-selection remains available. All three jobs install the locked root toolchain
-with lifecycle scripts at rest.
-The media job additionally
-installs Chromium and FFmpeg, exercises preparation and delivery contracts,
-observes the native-video receivers, and dry-runs the Worker package. Path
+selection remains available. The three job definitions install the locked root toolchain
+with lifecycle scripts at rest. The media job additionally resolves and
+restores the verified FFmpeg APT archive closure, exercises preparation and
+delivery contracts, observes the native-video receivers through the hosted
+Google Chrome channel, and dry-runs the Worker package. Local receiver runs
+continue to select the locked Playwright Chromium browser when the channel
+variable is empty. Path
 filters cover the source families, iframe and carrier owners, collaboration
 and Context Canvas sources, media planning contracts, attribution, focused
 tests and tools, root package and lock files, and the workflow. The workflow
-file owns the exact filter list. Three read-only jobs, standard Linux runners,
-superseded-run cancellation, and the declared five-, thirty-, and ten-minute
-ceilings keep each receiver proportional to the protected behavior.
+file owns the exact filter list. Each job uses a standard Linux runner. The workflow cancels superseded runs. A confirmed
+manual `all` run with browsers splits its 17 commands across two standard runners.
+The reading and media group runs the four source commands and ten browser commands,
+using Chromium, Firefox, and WebKit. The production and prototype group runs
+seven Chromium commands, including the About CSS comparison and the Core aggregate.
+Each group has a 30-minute investigation boundary. The workflow wall time follows
+the slower group. Summed job durations include both groups and the two sibling jobs.
+The public-reference job allows five minutes and the media job allows 30 minutes.
+
+The browser job resolves the system packages requested by the locked Playwright CLI
+on the current Ubuntu image. It first restores the exact runner-image entry. During an image rollout it can
+restore an entry for the same OS, architecture, engine set, CLI version and
+resolved package-plan digest. Existing v1 entries remain eligible for their
+exact image and plan during migration. The installer checks each selected
+archive’s SHA-256 against current APT metadata and reports the admitted count.
+APT installs the packages, then Playwright verifies the system closure and installs
+the selected engines. On a confirmed `main` dispatch each group can save its own verified engine closure after every command assigned to that group succeeds.
+Use the individual plan, restore, install and contract step durations to investigate
+any run reaching the boundary. [Issue #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975)
+tracks comparable full-run measurements.
+
+The media package cache uses a versioned identity composed from the operating
+system, architecture, resolved package-plan digest, and hosted runner-image
+version. Pull-request jobs restore an accessible default-branch entry. A
+confirmed `main` dispatch saves a new entry after the complete media and Worker
+proof passes. Each job runs `apt-get update` and asks APT to validate the
+selected packages before installation. Exact hit, compatible restore, miss, or
+unavailable describes the preparation route; every route executes the same
+75 established media-behavior tests, four provisioning-contract tests, three
+native-video viewport tests, and Worker dry run.
+
+GitHub owns cache retention and eviction. A later miss remains an ordinary
+preparation route, and a confirmed `main` dispatch re-warms the entry after the
+complete proof passes. Removing the restore and save steps returns the lane to
+direct APT installation through the same reviewed manifest.
+
+Issue #597 records the baseline range and the optimization decision. In the
+long observation, dependency preparation consumed 28m52s of a 29m29s job while
+the behavior tests completed in 18s. A comparable recent job completed in
+1m08s. This variation assigns the first repair to dependency preparation. A
+browser execution phase that exceeds thirty minutes receives a segmented test
+route; a dependency phase approaching the ceiling receives cache or prebuilt
+toolchain recovery.
 
 | Selection | Source contract | Additional browser work when selected |
 | --- | --- | --- |

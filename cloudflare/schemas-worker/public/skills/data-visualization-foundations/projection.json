@@ -5,7 +5,7 @@
   "name": "data-visualization-foundations",
   "description": "Establishes source-grounded data meaning, reader operations, visual encodings, and evidence companions before rendering. Applies when creating or materially revising a visualization across conversation, web, scientific, or document destinations.",
   "semanticAuthorityRef": "../source/.agents/skills/data-visualization-foundations/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/10",
+  "sourceRef": "../catalog.json#/skills/12",
   "contract": {
     "what": "A visual contract connecting a reader's question to admitted records, transformations, encodings, interpretation, and recoverable evidence.",
     "when": [

@@ -5,7 +5,7 @@
   "name": "audit-anthropomorphic-cues",
   "description": "Audits bundled person-like cues in generative-system interfaces and work language, separating human-interpretation evidence, model-output hypotheses, local system functions, and accountable authority. Applies when names, pronouns, avatars, voice, emotional language, agency claims, role metaphors, or tool surfaces may change reliance, delegation, capability expectations, responsibility, or recovery.",
   "semanticAuthorityRef": "../source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/0",
+  "sourceRef": "../catalog.json#/skills/1",
   "contract": {
     "what": "A cue-bundle audit that makes relational value, technical referents, evidence standing, authority implications, and the smallest useful change visible together.",
     "when": [

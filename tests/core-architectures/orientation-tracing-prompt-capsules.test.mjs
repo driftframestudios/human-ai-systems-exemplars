@@ -36,8 +36,8 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "poda-chimeric-prototype-v0.1.5.html",
     historicalFile: "poda-chimeric-prototype-v0.1.4.html",
-    currentDigest: "2f7e09dbf18059644b10c77f31b167b2c85ea0716afc897d6c7429525512e261",
-    contextDigest: "cb97e9b5e7c05d5cca0ce339b754a7bb4a6c66652c8b201199f5841af0e0252e",
+    currentDigest: "715b9558b8eed86187a34500d1cf560de249babcef919a2943ad09e3a642ae89",
+    contextDigest: "44edf02b9a107e127a5101ca516a955b8982e5e0ea4cac5b132a4ac42fc866db",
     historicalDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
     historicalContextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
     stateContract: "poda-state.v0.1",
@@ -65,7 +65,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
     historicalFile: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-    currentDigest: "6c9ae958983899a288c0fbf2eaa869688f29b74fbf7b44364ebc1c76bd1d9805",
+    currentDigest: "4e0f322ff45c3196d6775f34753a3deaf0bd9b818ca137a4731ffd63a6b0658d",
     historicalDigest: "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
     stateContract: "alignment-worksheet-state.v0.1",
     apiName: "alignmentWorksheet",
@@ -89,7 +89,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "impact-map-chimeric-prototype-v0.1.5.html",
     historicalFile: "impact-map-chimeric-prototype-v0.1.4.html",
-    currentDigest: "5841ac539623bba1a9688ba036bf9aca11f154b1ab8e9fc11da38412cf0f61d8",
+    currentDigest: "de819ac3fa19d1c346c66b247189f3c874b898d763611e274bfe215596b3d886",
     historicalDigest: "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
     stateContract: "impact-map-state.v0.1",
     apiName: "impactMap",
@@ -113,7 +113,7 @@ const artifacts = [
     version: "0.1.7",
     currentFile: "context-tree-chimeric-prototype-v0.1.7.html",
     historicalFile: "context-tree-chimeric-prototype-v0.1.6.html",
-    currentDigest: "5bde5711a902673686104681b9852447a78431b45f75c1ae58109943a48a2fc1",
+    currentDigest: "4c20abebe1e6f0b0ae5f1d5c9c6d0c8f9dbe8bd14346f5dff126bc04fe4e2c4e",
     historicalDigest: "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
     stateContract: "context-tree-state.v0.1",
     apiName: "contextTree",
@@ -209,7 +209,7 @@ for (const artifact of artifacts) {
     const plain = staticPrompt(html, artifact.promptId);
     const projectedPlain = staticPrompt(projectionHtml, artifact.promptId);
     const route = routeManifest.routes.find(({ id }) => id === artifact.id);
-    const api = html.match(new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(\\{([\\s\\S]*?)\\}\\);`, "u"));
+    const api = html.match(new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(\\{([\\s\\S]*?)\\}\\);?`, "u"));
 
     assert.equal(projectedPlain, plain, "the static no-JavaScript fallback agrees across receiving copies");
     assert.match(html, /PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0'/u);

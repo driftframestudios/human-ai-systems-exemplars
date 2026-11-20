@@ -16,7 +16,8 @@ import {
   publishingCompany,
 } from "./attribution-contract.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
-import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication } from "./schema-publication.mjs";
+import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication, schemaPublicationInputPaths } from "./schema-publication.mjs";
+import { assertSchemaCompanionProjectionRoutes, projectSchemaCompanionBytes, schemaCompanionProjections } from "./schema-companion-projections.mjs";
 import { pagesReleaseTag } from "./schema-site-release.mjs";
 import {
   assertExactFileInventory,
@@ -29,6 +30,10 @@ import {
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const sourceRoot = resolve(repositoryRoot, "schemas");
 const outputRoot = resolve(repositoryRoot, ".schema-pages");
+const faviconSourcePath = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/favicon.ico",
+);
 const skillsOutputRoot = resolve(outputRoot, "skills");
 const collaborationGuidePath = resolve(outputRoot, "collaboration/index.html");
 const skillSelectionPath = resolve(
@@ -757,10 +762,11 @@ async function buildSkillsProjection() {
   await assertPublicationRevision(repositoryRoot, sourceRevision, [
     "schemas", ".agents/skills/publication-selection.json", ...publicSourcePaths,
     "tools/build-schema-pages.mjs", "tools/schema-publication.mjs", "tools/schema-publication-lock.json",
+    "tools/schema-companion-projections.mjs",
     "tools/schema-receiver-routes.mjs", "tools/schema-site-release.mjs", "tools/publication-boundary.mjs",
     "tools/attribution-contract.mjs", "package.json", "package-lock.json", ...publicCarrierPaths,
     "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
-    ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+    ...schemaPublicationInputPaths(),
   ]);
   const publicEntries = entries.filter((entry) => entry.publicationStanding === "public_ready");
   const possibleNames = entries
@@ -924,22 +930,13 @@ async function projectRegistryReadmeLinks() {
   await writeFile(readmePath, source);
 }
 
-async function projectCollaborationSkillsReadmeLinks() {
-  const readmePath = resolve(outputRoot, "collaboration-skills/0.1.0/README.md");
-  let source = await readFile(readmePath, "utf8");
-  source = source.replace(
-    "## Start here",
-    "## Start here\n\n[Browse the repository-local public skills catalog](../../skills/).",
-  );
-  source = source.replaceAll(
-    "(../../../.agents/skills/source-authority-mapping/SKILL.md)",
-    "(../../skills/source-authority-mapping/)",
-  );
-  source = source.replaceAll(
-    "(../../../threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
-    "(../../skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
-  );
-  await writeFile(readmePath, source);
+async function projectSchemaCompanions() {
+  assertSchemaCompanionProjectionRoutes(schemaCompanionRoutes);
+  for (const { receiverPath, pagesProjection } of schemaCompanionProjections) {
+    const companionPath = resolve(outputRoot, receiverPath);
+    const source = await readFile(companionPath);
+    await writeFile(companionPath, projectSchemaCompanionBytes(pagesProjection, source));
+  }
 }
 
 async function projectRegistryIndexLinks() {
@@ -1267,6 +1264,7 @@ function validateSkillPage(source, skill, sourceRevision, possibleNames, deploym
 await rm(outputRoot, { recursive: true, force: true });
 await mkdir(outputRoot, { recursive: true });
 await cp(sourceRoot, outputRoot, { recursive: true });
+await copyFile(faviconSourcePath, resolve(outputRoot, "favicon.ico"));
 await writeFile(resolve(outputRoot, ".nojekyll"), "");
 
 for (const carrierPath of publicCarrierPaths) {
@@ -1280,37 +1278,6 @@ for (const carrierPath of publicCarrierPaths) {
   ]);
   if (!sourceBytes.equals(receiverBytes)) {
     throw new Error(`public carrier differs from its source: ${carrierPath}`);
-  }
-}
-
-const projectedReceiverPaths = new Set();
-for (const route of schemaReceiverRoutes) {
-  const identityPath = new URL(route.id).pathname.replace(/^\/+/, "");
-  if (identityPath !== route.receiverPath) {
-    throw new Error(
-      `schema identity path ${identityPath} differs from receiver path ${route.receiverPath}`
-    );
-  }
-  if (projectedReceiverPaths.has(route.receiverPath)) {
-    throw new Error(`schema receiver path is declared more than once: ${route.receiverPath}`);
-  }
-  projectedReceiverPaths.add(route.receiverPath);
-
-  const sourcePath = resolve(repositoryRoot, route.source);
-  const receiverPath = resolve(outputRoot, route.receiverPath);
-  if (!receiverPath.startsWith(`${outputRoot}${sep}`)) {
-    throw new Error(`schema receiver path leaves the Pages artifact: ${route.receiverPath}`);
-  }
-
-  await mkdir(dirname(receiverPath), { recursive: true });
-  await copyFile(sourcePath, receiverPath);
-
-  const [sourceBytes, receiverBytes] = await Promise.all([
-    readFile(sourcePath),
-    readFile(receiverPath)
-  ]);
-  if (!sourceBytes.equals(receiverBytes)) {
-    throw new Error(`schema receiver differs from its source: ${route.receiverPath}`);
   }
 }
 
@@ -1335,7 +1302,7 @@ for (const contract of schemaCatalog.contracts) {
 registry = registry.replace("<!-- schema-pages:release -->", `<p>Site release: <code>${releaseTag ?? "local build"}</code>. Source revision: <code>${publicSkillCatalog.sourceRevision}</code>.</p><p><a href="release.json">Release coordinates</a> · <a href="schema-catalog.json">Schema identities, downloads, and digests</a></p>`);
 await writeFile(registryPath, registry);
 await projectRegistryReadmeLinks();
-await projectCollaborationSkillsReadmeLinks();
+await projectSchemaCompanions();
 await projectRegistryIndexLinks();
 await projectCollaborationGuideLinks(publicSkillCatalog);
 const customDomain = await validateCustomDomain();

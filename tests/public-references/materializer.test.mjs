@@ -15,11 +15,20 @@ import { dirname, join, win32 } from "node:path";
 import test from "node:test";
 
 import {
+  PUBLIC_ASSET_NAMESPACE,
   PUBLIC_AUTHOR_PROFILE_KEY,
+  PUBLIC_EXTERNAL_NAMESPACE,
   PUBLIC_IFRAME_NAMESPACE,
+  PUBLIC_PAGE_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_REFERENCE_SOURCE,
+  PUBLIC_SCHEMA_NAMESPACE,
+  PUBLIC_SKILL_NAMESPACE,
   inspectPublicReferenceSource,
+  inspectSharedFooterScript,
+  materializeSharedFooterScript,
+  inspectPublicReferenceHtml,
+  materializePublicReferenceHtml,
   isPublicReferencePathWithin,
   materializePublicReferences,
   resolvePublicReferenceDestinations,
@@ -28,6 +37,14 @@ import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
   loadRegistryReferenceBinding,
 } from "../../tools/registry-reference-contract.mjs";
+import {
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+  loadPublicRouteReferenceBinding,
+} from "../../tools/public-route-reference-contract.mjs";
+import {
+  loadExternalReferenceBinding,
+  parseExternalReferenceBinding,
+} from "../../tools/external-reference-contract.mjs";
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
@@ -257,7 +274,7 @@ test("materializes the exact shared professional-profile carrier without changin
   );
   assert.match(
     generated,
-    /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/,
+    /var professionalProfileRoute\s*=\s*"https:\/\/profiles\.example\/practitioner";/,
   );
   assert.match(
     generated,
@@ -286,6 +303,36 @@ test("preserves replacement-significant characters in a professional-profile des
   );
   assert.ok(assignment);
   assert.equal(JSON.parse(assignment[1]), expected);
+});
+
+function footerHref(script, link) {
+  const match = script.match(new RegExp(link + '\\.href\\s*=\\s*("(?:\\\\.|[^"\\\\])*")', 'u'));
+  assert.ok(match, link + ' has a literal destination');
+  return JSON.parse(match[1]);
+}
+
+test("the shared shell accepts the two bound native footer hrefs and escapes their JavaScript values", async () => {
+  const source = await readFile(join(PUBLIC_REFERENCE_SOURCE, "context-canvas/canvas-shell.js"), "utf8");
+  const registryKey = "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY";
+  const repositoryKey = "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS";
+  const destinations = new Map([[PUBLIC_AUTHOR_PROFILE_KEY, PROFILE_ROUTE], [registryKey, "https://registry.example/"],
+    [repositoryKey, 'https://repository.example/"quoted"?value=$&']]);
+  const result = inspectSharedFooterScript(source);
+  assert.deepEqual(result.keys, new Set(destinations.keys()));
+  assert.equal(result.anchorCount, 3);
+  const materialized = materializeSharedFooterScript(source, destinations);
+  assert.equal(footerHref(materialized, "github"), destinations.get(repositoryKey));
+  assert.equal(footerHref(materialized, "kindlight"), destinations.get(registryKey));
+  for (const changed of [
+    source.replace(/github\.href\s*=/u, "github.title ="),
+    source.replace(/appendFooterLink\(network,\s*github\)/u, "appendFooterLink(registry, github)"),
+    source.replace(/var github\s*=\s*element\("a"/u, 'var github = element("span"'),
+    source + '\n// {{' + repositoryKey + '}}',
+  ]) {
+    assert.throws(() => materializeSharedFooterScript(changed, destinations), { code: "PUBLIC_REFERENCE_FOOTER_CARRIER" });
+  }
+  destinations.delete(repositoryKey);
+  assert.throws(() => materializeSharedFooterScript(source, destinations), { code: "PUBLIC_REFERENCE_VALUE_MISSING" });
 });
 
 test("keeps the professional-profile key within one exact script carrier", async (t) => {
@@ -803,10 +850,6 @@ test("requires explicit hosted iframe carriers and complete local fallbacks", as
        <a href="prototypes/core/other-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
       "PUBLIC_REFERENCE_IFRAME_FALLBACK",
     ],
-    [
-      `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
-      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
-    ],
   ];
 
   for (const [html, code] of cases) {
@@ -821,6 +864,24 @@ test("requires explicit hosted iframe carriers and complete local fallbacks", as
       );
     });
   }
+});
+
+test("allows structured data to identify a hosted instrument without embedding it", async (t) => {
+  const paths = await fixture(
+    t,
+    `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
+  );
+  await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.deepEqual(jsonLdBodies(generated).map((body) => JSON.parse(body)), [
+    { contentUrl: IFRAME_ROUTE },
+  ]);
 });
 
 test("requires a minimal explicit policy on hosted iframe carriers", async (t) => {
@@ -1166,12 +1227,17 @@ test("the repository source materializes from discovered keys without frozen rou
   for (const key of inventory.keys) {
     assert.equal(
       key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
+        key.startsWith(PUBLIC_EXTERNAL_NAMESPACE) ||
         key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+        key.startsWith(PUBLIC_PAGE_NAMESPACE) ||
+        key.startsWith(PUBLIC_ASSET_NAMESPACE) ||
+        key.startsWith(PUBLIC_SCHEMA_NAMESPACE) ||
+        key.startsWith(PUBLIC_SKILL_NAMESPACE) ||
         key === PUBLIC_AUTHOR_PROFILE_KEY,
       true,
     );
   }
-  assert.equal(inventory.keys.has(IFRAME_KEY), false);
+  assert.equal(inventory.keys.has(IFRAME_KEY), true);
   assert.equal(inventory.iframeCount, 0);
 
   const expectedLocalFallback =
@@ -1220,10 +1286,37 @@ test("the repository source materializes from discovered keys without frozen rou
   });
   assert.equal(registryReference.destinations.size, registryKeys.length);
   assert.equal(registryReference.receipt.atlas.publicRoot, "https://kindlight.systems/");
+  const routeKeys = [...inventory.keys]
+    .filter((key) =>
+      key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+      key.startsWith(PUBLIC_PAGE_NAMESPACE) ||
+      key.startsWith(PUBLIC_ASSET_NAMESPACE) ||
+      key.startsWith(PUBLIC_SCHEMA_NAMESPACE) ||
+      key.startsWith(PUBLIC_SKILL_NAMESPACE))
+    .sort();
+  const routeReference = await loadPublicRouteReferenceBinding({
+    path: DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+    requiredKeys: routeKeys,
+  });
+  assert.equal(routeReference.destinations.size, routeKeys.length);
 
+  const mediaManifest = JSON.parse(await readFile(
+    new URL('../../planning/media-publication/video-publication-manifest.v0.1.json', import.meta.url), 'utf8',
+  ));
+  const publishedMovies = new Set(mediaManifest.families.map(
+    family => new URL(family.carriers.movie.public_path, mediaManifest.public_origin).href,
+  ));
+  for (const record of inventory.htmlFiles) {
+    if (!/^context-canvas\/[^/]+\.html$/u.test(record.safePath)) continue;
+    for (const anchor of record.source.matchAll(/<a\b[^>]*?\shref\s*=\s*(["'])(https?:\/\/[^"']+)\1/giu)) {
+      assert.ok(publishedMovies.has(anchor[2]),
+        `${record.safePath}: bind external anchors through their reviewed destination owner`);
+    }
+  }
   const before = new Map();
   const materializedRecords = [
     ...inventory.htmlFiles,
+    ...inventory.sitemapFiles,
     ...inventory.scriptFiles,
   ];
   for (const record of materializedRecords) {
@@ -1242,30 +1335,57 @@ test("the repository source materializes from discovered keys without frozen rou
     environment,
   });
 
+  const externalKeys = [...inventory.keys].filter((key) => key.startsWith(PUBLIC_EXTERNAL_NAMESPACE));
+  const externalReference = await loadExternalReferenceBinding({ requiredKeys: externalKeys });
   for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     assert.equal(await readFile(record.path, "utf8"), before.get(record.path));
     const generated = await readFile(join(outputRoot, record.safePath), "utf8");
     assert.doesNotMatch(generated, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/);
     assert.doesNotMatch(generated, /registry\.example|%7B%7BPUBLIC_URL_/i);
+    if (inventory.htmlFiles.includes(record)) {
+      const hrefs = source => [...source.matchAll(/<a\b[^>]*?\shref\s*=\s*(["'])([^"']*)\1/giu)].map(match => match[2]);
+      const original = hrefs(before.get(record.path));
+      const resolved = hrefs(generated);
+      assert.equal(resolved.length, original.length, `${record.safePath} retains its anchor population`);
+      for (const [index, href] of original.entries()) {
+        const key = /^\{\{(PUBLIC_URL_[A-Z0-9_]+)\}\}$/u.exec(href)?.[1];
+        if (!key) continue;
+        const url = externalReference.destinations.get(key) ?? registryReference.destinations.get(key) ?? routeReference.destinations.get(key);
+        assert.equal(resolved[index].replaceAll('&amp;', '&'), url, `${record.safePath} anchor ${index + 1}: ${key}`);
+      }
+    }
+    for (const key of record.inspection.keys) {
+      if (key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)) {
+        assert.ok(generated.includes(externalReference.destinations.get(key).replaceAll("&", "&amp;")), `${key} reaches ${record.safePath}`);
+      }
+    }
     for (const body of jsonLdBodies(generated)) {
       if (body.includes("https://kindlight.systems/")) JSON.parse(body);
     }
   }
 
   assert.equal(result.registryReference.bindingCount, registryKeys.length);
+  assert.equal(result.routeReference.bindingCount, routeKeys.length);
   const marker = JSON.parse(
     await readFile(join(outputRoot, ".public-reference-materialization.json"), "utf8"),
   );
-  assert.equal(marker.format, 2);
+  assert.equal(marker.format, 3);
   assert.equal(marker.registry_reference.bindingCount, registryKeys.length);
   assert.equal(marker.registry_reference.atlas.referenceVersion, "0.2.1");
+  assert.equal(marker.route_reference.bindingCount, routeKeys.length);
+  assert.equal(marker.external_reference.bindingCount, externalKeys.length);
+  const generatedAbout = await readFile(join(outputRoot, 'context-canvas/index.html'), 'utf8');
+  assert.match(generatedAbout, /data-video-poster="https:\/\/vik\.guru\/v1-cdn\/video\//);
+  assert.match(generatedAbout, /<source src="https:\/\/vik\.guru\/v1-cdn\/video\//);
 
   const generatedShell = await readFile(
     join(outputRoot, "context-canvas/canvas-shell.js"),
     "utf8",
   );
-  assert.match(generatedShell, /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/);
+  assert.equal(footerHref(generatedShell, "kindlight"), registryReference.destinations.get("PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY"));
+  assert.equal(footerHref(generatedShell, "github"), externalReference.destinations.get("PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS"));
+  assert.match(generatedShell, /var professionalProfileRoute\s*=\s*"https:\/\/profiles\.example\/practitioner";/);
   assert.match(generatedShell, /professionalProfileLink\.href\s*=\s*professionalProfileRoute/);
 
   const generatedCarrierSource = await readFile(
@@ -1285,4 +1405,56 @@ test("the repository source materializes from discovered keys without frozen rou
     new RegExp(`href=["']${escapedLocalFallback}["']`),
     "Registry-link materialization preserves the repository-local full view",
   );
+});
+
+test('external selections retain their declared carriers and reject build overrides', async () => {
+  const external = await loadExternalReferenceBinding();
+  const html = `<link rel="license" href="{{PUBLIC_URL_EXTERNAL_APACHE_LICENSE}}">
+    <a href="{{PUBLIC_URL_EXTERNAL_GITHUB_PROFILE}}">Source code</a>
+    <video poster="fallback.jpg" data-video-poster="{{PUBLIC_URL_EXTERNAL_ABOUT_SEQUENCE_POSTER}}">
+      <source type="video/mp4" src="{{PUBLIC_URL_EXTERNAL_ABOUT_SEQUENCE_VIDEO}}">
+    </video>`;
+  const inspection = inspectPublicReferenceHtml(html, 'about', null, null, external.destinations);
+  const destinations = await resolvePublicReferenceDestinations(inspection.keys, {
+    configurationSource: '', environment: {}, externalDestinations: external.destinations,
+  });
+  const result = materializePublicReferenceHtml(html, destinations, 'about', null, null, external.destinations);
+  assert.match(result, /href="https:\/\/github\.com\/driftframestudios"/);
+  assert.match(result, /poster="fallback.jpg"/);
+  assert.doesNotMatch(result, /\{\{PUBLIC_URL/);
+  assert.throws(() => inspectPublicReferenceHtml(
+    '<link rel="license" href="{{PUBLIC_URL_EXTERNAL_GITHUB_PROFILE}}">',
+    'about', null, null, external.destinations,
+  ), /not selected for license/);
+  await assert.rejects(resolvePublicReferenceDestinations(inspection.keys, {
+    configurationSource: '', environment: { PUBLIC_URL_EXTERNAL_GITHUB_PROFILE: 'https://other.example/' },
+    externalDestinations: external.destinations,
+  }), { code: 'PUBLIC_REFERENCE_EXTERNAL_OVERRIDE' });
+});
+
+test('external binding requires exact keys, public destinations and distinct tokens', () => {
+  const binding = {
+    $schema: './context-canvas-external-bindings.schema.json',
+    id: 'context-canvas.external-public-reference-bindings.v1', version: '1',
+    bindings: [{ token: 'PUBLIC_URL_EXTERNAL_EXAMPLE', url: 'https://example.org/reading',
+      allowed_carriers: ['anchor'], selection_basis: 'Reviewed public reading.' }],
+  };
+  const parse = (value = binding, options) => parseExternalReferenceBinding(Buffer.from(JSON.stringify(value)), options);
+  assert.equal(parse(binding, { requiredKeys: ['PUBLIC_URL_EXTERNAL_EXAMPLE'] }).destinations.get('PUBLIC_URL_EXTERNAL_EXAMPLE'),
+    'https://example.org/reading');
+  assert.throws(() => parse(binding, { requiredKeys: [] }), /covers the authored semantic tokens exactly/);
+  assert.throws(() => parse({ ...binding, bindings: [...binding.bindings, ...binding.bindings] }), /unique semantic token/);
+  assert.throws(() => parse({ ...binding, bindings: [
+    ...binding.bindings, { ...binding.bindings[0], token: 'PUBLIC_URL_EXTERNAL_ANOTHER' },
+  ] }), /Reuse the existing semantic token/);
+  const view = 'https://kindlight.ai/?section=profile';
+  assert.equal(parse({ ...binding, bindings: [{ ...binding.bindings[0], url: view }] })
+    .destinations.get('PUBLIC_URL_EXTERNAL_EXAMPLE'), view);
+  for (const url of ['http://example.org/', 'https://person:secret@example.org/', 'https://example.org/?token=value',
+    'https://other.example/?section=profile', 'https://kindlight.ai/other?section=profile',
+    'https://kindlight.ai/?section=other', 'https://kindlight.ai/?section=profile&extra=value',
+    'https://kindlight.ai/?section=profile#private', 'https://tc39.es/ecma262/#unreviewed',
+    'https://fhir.epic.com/Specifications?api=anything', 'https://example.org/?', 'https://example.org/#']) {
+    assert.throws(() => parse({ ...binding, bindings: [{ ...binding.bindings[0], url }] }), /normalized public HTTPS/);
+  }
 });

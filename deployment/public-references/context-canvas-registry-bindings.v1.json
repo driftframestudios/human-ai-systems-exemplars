@@ -838,18 +838,6 @@
       "selection_basis": "Exact current Atlas record selected for the authored reader job."
     },
     {
-      "token": "PUBLIC_URL_REGISTRY_THE_SAMPLE_NOBODY_COULD_FIND",
-      "atlas_record_key": "registry:site-readings/the-sample-nobody-could-find-naming-shared-objects-before-choosing-the-lims-eln-20212022",
-      "expected_public_title": "The Sample Nobody Could Find — Naming Shared Objects Before Choosing the LIMS/ELN (2021–2022)",
-      "expected_family": "Site Readings and Costing",
-      "expected_resource_role": "Participant account",
-      "expected_reader_job": "Inspect",
-      "expected_source_lifecycle": "Current",
-      "expected_route_state": "Identity verified",
-      "url": "https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/the-sample-nobody-could-find-naming-shared-objects-before-choosing-the-limseln-20212022",
-      "selection_basis": "Exact current Atlas record selected for the authored reader job."
-    },
-    {
       "token": "PUBLIC_URL_REGISTRY_THREADKEEPING_AND_COLLABORATION_MEMORY_LOGS_JOURNALS_AND_CONTINUITY_SURFACES",
       "atlas_record_key": "registry:collaboration/threadkeeping-collaboration-memory-logs-journals-continuity-surfaces",
       "expected_public_title": "Threadkeeping & Collaboration Memory — Logs, Journals & Continuity Surfaces",

@@ -1,6 +1,6 @@
 ---
 title: Cross-repository cold-session docket
-version: 0.1.2
+version: 0.1.3
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -329,8 +329,10 @@ Use this overlay when authored Context Canvas source carries
 `PUBLIC_URL_REGISTRY_*` identities.
 
 - Tracked source carries semantic identities and useful local explanation.
-- Human-confirmed, ignored `.env.public` configuration supplies approved
-  ordinary HTTPS destinations.
+- Tracked Registry and route bindings supply the approved destinations for
+  their semantic keys. Ignored `.env.public` configuration or the process
+  environment supplies only the separately approved professional-profile
+  destination.
 - [`tools/materialize-public-references.mjs`](../../tools/materialize-public-references.mjs)
   owns the transformation.
 - Ignored `.public-reference-build/` is inspectable generated input for later

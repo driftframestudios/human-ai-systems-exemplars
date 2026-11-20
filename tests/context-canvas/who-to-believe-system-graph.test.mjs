@@ -237,7 +237,10 @@ test("the static reading carries every accepted node and edge", async () => {
   const [html, source] = await Promise.all([readFile(pagePath, "utf8"), sourceContract()]);
   const reading = html.match(/<details class="wtb-system-graph__reading"[\s\S]*?<\/details>/u)?.[0] ?? "";
   assert.ok(reading);
-  const normalizedReading = reading.replaceAll("&amp;", "&");
+  const normalizedReading = reading
+    .replaceAll("&amp;", "&")
+    .replace(/\s+/gu, " ")
+    .replace(/(<li>)\s+|\s+(<\/li>)/gu, "$1$2");
   const statusWords = { ok: "Working", strained: "Degraded", broken: "Breaking" };
   const sentence = value => /[.!?]$/u.test(value) ? value : `${value}.`;
   for (const node of source.nodes) {

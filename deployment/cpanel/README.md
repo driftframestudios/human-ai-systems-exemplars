@@ -1,5 +1,7 @@
 # cPanel production projection
 
+[Clean URLs, local ZIP builds, and IntelliJ minify/prettify instructions](ROUTES-AND-FORMATTING.md)
+
 The production projection gives one accepted repository coordinate two
 disjoint, reviewable, production-shaped document-root closures:
 
@@ -23,11 +25,17 @@ confined to the carrier root, and exact agreement among the manifest, the
 Bash-readable index, and every carried file. This two-coordinate form avoids
 asking a commit to contain its own identifier.
 
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| An accepted production tag that needs a shell-free carrier | [Quick entry](#quick-entry-prepare-a-shell-free-cpanel-carrier) | A deterministic archive, external receipt, and verification route |
+| New source ready for promotion | [Accepted release sequence](#accepted-release-sequence) | Source and carrier coordinates, review boundaries, tags, and recovery |
+| A live receiver question | [Current exercised response posture](#current-exercised-response-posture) | The latest bounded production observation and its supersession relation |
+
 ## Quick entry: prepare a shell-free cPanel carrier
 
-Start with the receiving job and one approved production coordinate. An AI
-collaborator can prepare the local transfer envelope; the authorized host
-operator owns staging, root placement, and recovery.
+Start with the receiving job and one approved production coordinate. A
+tool-supported workflow can prepare the local transfer envelope; the authorized
+host operator owns staging, root placement, and recovery.
 
 | Receiving job | Source of payload bytes | Route |
 | --- | --- | --- |
@@ -78,9 +86,10 @@ decisions into the current release.
 
 The tagged GitHub Pages projection followed the cPanel release as a separate
 receiver. The visitor carrier operates independently of that Pages artifact.
-`pages-v0.3.1` supplies the accepted schema and skill publication coordinate.
-Completed Issue #531 records that closure's independently gated Worker review,
-promotion, activation, and signed-out receipt. Completed Issue #406
+`pages-v0.4.0` supplies the active schema and skill Pages coordinate. Issues
+#1001 and #1008 coordinate that closure's independently gated Worker review and
+promotion. Completed Issue #531 records the active v0.3.1 Worker publication,
+activation, and signed-out receipt. Completed Issue #406
 preserves the v0.3.0 activation lineage, whose accepted Worker now supplies the
 immediate platform recovery coordinate.
 
@@ -125,12 +134,13 @@ selected source and its document-root destination explicitly.
 ```
 
 `css_projection` is one bounded production distribution profile. It discovers
-About's stylesheet order from the tracked consumer rather than restating that
-order in configuration. Six contiguous enhanced owners become one file, the
-stylesheet inside `<noscript>` remains its own execution context, and the later
-`canvas-shell.css` link remains a separate file. Each generated filename carries
-its full SHA-256 digest beneath `assets/css/`; generated files never replace the
-readable repository owners.
+About's stylesheet order from its tracked head. Fifteen contiguous base
+stylesheets, including the nine native Studio stylesheets, become one file.
+The stylesheet inside `<noscript>` loads when scripting is unavailable, and
+the later `canvas-shell.css` link keeps its own file. These three outputs carry
+their full SHA-256 digests beneath `assets/css/`. The same profile can replay
+the earlier six-base-stylesheet About page. Both versions accept the default
+all-media setting and explicit `media="all"` on their base and noscript links.
 
 Before CSSO runs, repository-local CSS references resolve from each original
 source location to the generated output location. Query strings and fragments
@@ -207,15 +217,26 @@ The referenced manifest uses one explicit entry for every primary output:
 }
 ```
 
+Each projection or tagged-carrier read opens one Git process for its selected
+repository. It requests full object IDs one at a time, checks each returned ID,
+blob type and byte length, and reads the binary payload and its terminator.
+The projector admits up to 128 MiB per blob. The transfer reader enforces 256
+MiB per entry, 4 MiB per manifest or index, and 1 GiB across the carrier before
+allocating each payload. Truncated or malformed replies terminate the operation
+and its child. The release receipt pins the reader implementation with the
+packaging tool. [Git batch format](https://git-scm.com/docs/git-cat-file#_batch_output)
+
 The assembler reads selected files from regular Git blobs at the accepted
-source coordinate. It resolves Registry tokens through the tracked, reviewed
-binding in [`deployment/public-references/`](../public-references/README.md)
-and resolves the professional-profile token from ignored `.env.public` in
-memory. The plan records the tracked binding and accepted Atlas receipt plus
-the external receiver's digest and non-Registry key set, then rechecks both
-inputs before returning. It uses an empty process environment for this step,
-so `.env.public` is the complete external receiver for a production
-projection. Registry overrides in that receiver fail closed.
+source coordinate. It resolves Registry tokens through the tracked Registry
+binding in [`deployment/public-references/`](../public-references/README.md).
+The adjacent route binding derives page, asset, iframe, schema, and skill
+destinations from their repository-owned manifests and publication selections.
+Ignored `.env.public` supplies the professional-profile token in memory. The
+plan records both binding receipts, the accepted Atlas receipt, and the external
+receiver digest, then rechecks every input before returning. It uses an empty
+process environment for this step, so `.env.public` remains the complete
+external receiver for a production projection. A tracked-route setting in that
+file directs the operator to the corresponding binding owner.
 
 For the About CSS projection, the deployment manifest also records the exact
 profile, CSSO package/version/options, consumer and execution context, ordered
@@ -228,15 +249,24 @@ maps remain absent because repository source plus manifest lineage supplies the
 inspection path.
 
 Publication transforms then map the nested Context Canvas root to
-`https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
+`https://vik.guru/`. Canonical, social, JSON-LD, and sitemap identities arrive
+from the same tracked route authority; the generated candidate gate compares
+their relationships before accepting a projection plan. Local relative
 references follow their projected locations. Markdown links resolve through
 their complete selected-file closure, including fragments and directory
 README targets; repository-only continuations use their accepted public owner
-or remain ordinary prose. Schema identities and literal
-`https://iframes.vik.guru/v1/` routes retain their authored values. Generated
+or remain ordinary prose. Visible hosted iframe carriers continue to follow
+their exact route manifests. Generated
 rows record their source digest and projected digest; unchanged files retain
 byte-preserved standing. The ignored `.public-reference-build/` directory is
 not an input.
+
+Two Collaboration Skills companion resources are selected for the next schema
+Worker publication. Their receiver routes become active when that Worker
+publication is accepted; the current Worker manifest continues to describe the
+live closure. Source and projection checks can validate the selection while
+release-candidate formation remains with its separately authorized release
+event.
 
 When a selected primary HTML file is also owned by the Canvas iframe route
 manifest, the assembler applies that manifest's shared public metadata at the
@@ -256,6 +286,7 @@ complete iframe package have been regenerated together.
 ## Commands
 
 ```sh
+npm run test:context-canvas-head-routes
 npm run test:prod-deployment
 npm run test:prod-css-projection-browser
 npm run check:prod-projection
@@ -271,9 +302,13 @@ npm run verify:prod-carrier-transfer -- --tag "$PRODUCTION_TAG" --receipt ".cpan
 temporary storage; it does not attest an existing carried artifact.
 `test:prod-css-projection-browser` compares the tracked readable graph with the
 generated graph across narrow, desktop, and wide enhanced, scriptless, print,
-forced-color, and reduced-motion states. It also exercises interaction,
-request-closure, and the expected CSP iframe-refusal boundary. The focused
-browser contract uses tracked bytes and does not require `.env.public`.
+forced-color, and reduced-motion states. Each of the 15 pairs compares document
+structure, text, computed styles, pseudo-elements, and geometry. In desktop
+enhanced screen mode, the test also changes the onward link’s path and fragment
+independently. It reads the document structure after each change and restores
+the authored link before exercising keyboard interaction. The suite also checks
+stylesheet requests and the expected CSP iframe refusal. It uses tracked bytes
+and a local fixture for the professional-profile destination.
 `build:prod-projection` is the explicit mutation boundary and transactionally
 replaces only `.prod-projection-build/`. Both commands require the ignored
 `.env.public` receiver for the professional-profile destination; Registry
@@ -406,6 +441,56 @@ This repository contract establishes deterministic membership, carried bytes,
 and a fail-closed host installer for the two closures. Exact cPanel paths,
 credentials, the first legacy-site backup, activation, cache behavior, and live
 route observations remain with their separately authorized receiver.
+
+## Current exercised response posture
+
+The `production-v0.4.0` signed-out receipt supersedes the earlier v0.3.0
+primary-host assumptions while preserving that release as the immediate
+historical recovery identity. The active receiver establishes:
+
+- release-bound carrier bytes at the origin, with live HTML differences
+  classified against the active managed edge transformations;
+- the Cloudflare-managed `robots.txt` preamble as an intentional Bot Preference
+  Sync projection around the reviewed authored body;
+- `X-Content-Type-Options: nosniff` and `Referrer-Policy: no-referrer` on every
+  manifest route;
+- manifest-declared types for seven Markdown files, the root web manifest, and
+  the exact Strategy Canvas schema route;
+- a permanent edge redirect from `www.vik.guru` to the apex with path and query
+  preserved; and
+- Standard response-body inspection on root, `.html`, and canonical directory
+  responses so the selected edge protections can operate.
+
+Bot Preference Sync and Email Address Obfuscation remain active. The reviewed
+source keeps the public collaboration address readable; the edge rewrite adds
+proportionate friction for mechanical harvesting while preserving the visible
+address for human visitors. Capable search agents can still recover this
+intentionally public contact route. The 2026-10-19 acceptance pass recovered
+the exact authored bytes from all 84 HTML responses after reversing only the
+declared Cloudflare transformations. All 351 remaining primary routes were
+inspected directly: 350 matched byte for byte, while `robots.txt` carried the
+intentional managed preamble. Chromium and WebKit exposed the public address as
+visible accessibility text on representative About, AI Systems, and Debrief
+routes. AI Labyrinth remains off after the v0.4.0 byte-preservation diagnostic.
+These are named receiver decisions rather than source-file transformations,
+and live byte receipts classify both managed edge projections explicitly.
+
+Email Address Obfuscation also recognizes 26 `artifact@version` coordinates as
+email-shaped text. Chromium exposed all 26 inspected coordinates in the
+rendered document, while raw-HTML and script-free readers receive the
+edge-obfuscated form. Two self-contained prototypes retain content-security
+policies that decline the injected email decoder and JavaScript Detections
+scripts. Keep global public-address protection, then use Cloudflare's
+`email_off` boundary or a narrowly scoped configuration rule for technical
+coordinates and exercise raw-parser plus CSP behavior before claiming parser
+parity.
+
+The retained primary-root host policy owns the remaining authored 404 route.
+Configure Apache with `ErrorDocument 404 /404.html` so an unknown path keeps
+status `404` while serving the manifest-owned page. Use either the active edge
+canonical redirect or an origin redirect; one layer owns canonicalization at a
+time. Cache classes, HSTS, and CSP remain explicit follow-up decisions whose
+exercise and rollback evidence belong in the current release Issue.
 
 ## cPanel references
 

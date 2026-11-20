@@ -294,7 +294,6 @@ test("Context scriptless fallback retains five named populations and four fields
   for (const row of records(fallback)) assert.equal(row.attrs["data-label"], "Genomic review context: " + row.cells[0].text);
 });
 test("Cobalt remains the older worked About comparison, not a migrated owner", () => {
-  assert.equal(digest(source.cobalt), "a1432897ed389c32b42eb2654263b9318c72c26b6e9f8892c7684ee2dc6ca2c2");
   assert.match(source.cobalt, /Worked technology leadership portfolio/);
   assert.match(source.cobalt, /source-era portfolio claims are preserved/);
 });

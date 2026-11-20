@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -29,7 +30,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
     historicalFile: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-    currentDigest: "4fe6880e6df17c4897fe24cfbe65341215b28c207571e08743125b9502d6493d",
+    currentDigest: "abd0c10d3c0ded1252819030a6dbb34f6e9491df3da5bf874d64d2659eb08484",
     historicalDigest: "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
     stateContract: "participatory-design-kit-state.v0.1",
     apiName: "participatoryDesignKit",
@@ -42,7 +43,7 @@ const artifacts = [
     version: "0.1.7",
     currentFile: "specification-by-example-chimeric-prototype-v0.1.7.html",
     historicalFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
-    currentDigest: "9e89a38ddc9baec44ba21235703b5fb30cc88a49769dc8b188d919adeebdf071",
+    currentDigest: "b890ffe0470dcc950cfa1ff2231a3706668bed2125ed8f74e89f59312e9f80e4",
     historicalDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
     stateContract: "specification-by-example-state.v0.1",
     apiName: "specificationByExample",
@@ -102,14 +103,14 @@ for (const artifact of artifacts) {
     const plain = staticPrompt(html, artifact.promptId);
     const route = routeManifest.routes.find(({ id }) => id === artifact.id);
 
-    assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
-    assert.ok(html.includes(`const PROMPT_CAPSULE_STATE_CONTRACT = '${artifact.stateContract}';`));
+    assert.match(html, /const PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0';/u);
+    assert.equal(readPrototypeScript(html).initializer('PROMPT_CAPSULE_STATE_CONTRACT').slice(1, -1), artifact.stateContract);
     assert.match(html, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
     assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
     assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
     assert.match(html, /<noscript>[\s\S]*?complete default plain Markdown remains available/u);
     assert.match(html, new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(`, "u"));
-    assert.ok(html.includes(`const PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}';`));
+    assert.equal(readPrototypeScript(html).initializer('PROMPT_CAPSULE_SKILL_REVISION').slice(1, -1), skillRevision);
 
     const orderedSections = [
       "## Purpose and target",
@@ -143,8 +144,8 @@ for (const artifact of artifacts) {
     }
     for (const [path, expectedDigest] of sharedSkills) {
       assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
-      assert.ok(html.includes(`path:'${path}'`) || html.includes(`path: '${path}'`));
-      assert.ok(html.includes(`sha256:'${expectedDigest}'`) || html.includes(`sha256: '${expectedDigest}'`));
+      assert.ok(html.includes(`path:'${path}'`) || html.includes(`path:'${path}'`));
+      assert.ok(html.includes(`sha256:'${expectedDigest}'`) || html.includes(`sha256:'${expectedDigest}'`));
     }
 
     assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, artifact.version]);

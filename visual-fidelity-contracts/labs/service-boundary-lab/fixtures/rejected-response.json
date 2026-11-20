@@ -1,0 +1,18 @@
+{
+  "schema": "visual-fidelity.service-boundary-response.v1",
+  "standing": "rejected",
+  "projection": {
+    "id": "synthetic-case-0142",
+    "revision": 7,
+    "status": "assembled",
+    "owner": "Example review team",
+    "nextAction": "Begin a new candidate from the accepted revision"
+  },
+  "receipt": null,
+  "issue": {
+    "id": "ISSUE-TX-01",
+    "code": "WRITE_CONFLICT",
+    "message": "The durable write encountered a controlled conflict.",
+    "recovery": "Refresh the accepted revision and begin a new candidate."
+  }
+}

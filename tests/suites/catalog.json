@@ -151,6 +151,9 @@
       "kind": "node-test",
       "members": [
         "tests/context-canvas/about-first-paint-css.test.mjs",
+        "tests/context-canvas/about-content-fit.test.mjs",
+        "tests/context-canvas/about-heatmap.test.mjs",
+        "tests/context-canvas/about-studio-chapters.test.mjs",
         "tests/context-canvas/ai-systems-cross-references.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
@@ -170,12 +173,13 @@
         "tests/context-canvas/public-system-topology.test.mjs",
         "tests/context-canvas/rail-label-failures.test.mjs",
         "tests/context-canvas/rail-shell-source.test.mjs",
+        "tests/context-canvas/read-source-contract.test.mjs",
         "tests/context-canvas/retained-exemplar-standing.test.mjs",
-        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
         "tests/context-canvas/visitor-terminology.test.mjs",
         "tests/context-canvas/visitor-video-contract.test.mjs",
+        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/who-to-believe-system-graph.test.mjs"
       ],
       "profile": "node-source",
@@ -295,6 +299,91 @@
       "aliases": []
     },
     {
+      "id": "node.native-investment-studio",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/assurance-consequences.test.mjs",
+        "tests/native-investment-studio/assurance-contract.test.mjs",
+        "tests/native-investment-studio/assurance-draft.test.mjs",
+        "tests/native-investment-studio/assurance-models.test.mjs",
+        "tests/native-investment-studio/assurance-proposals.test.mjs",
+        "tests/native-investment-studio/browser-download.test.mjs",
+        "tests/native-investment-studio/browser-fixture-lifecycle.test.mjs",
+        "tests/native-investment-studio/cadence-occurrences.test.mjs",
+        "tests/native-investment-studio/cadence.test.mjs",
+        "tests/native-investment-studio/capabilities.test.mjs",
+        "tests/native-investment-studio/capability-draft.test.mjs",
+        "tests/native-investment-studio/capability-proposals.test.mjs",
+        "tests/native-investment-studio/change-contract.test.mjs",
+        "tests/native-investment-studio/change-draft.test.mjs",
+        "tests/native-investment-studio/change-methods.test.mjs",
+        "tests/native-investment-studio/change-models.test.mjs",
+        "tests/native-investment-studio/change-proposals.test.mjs",
+        "tests/native-investment-studio/change-showcase.test.mjs",
+        "tests/native-investment-studio/command-draft.test.mjs",
+        "tests/native-investment-studio/commands.test.mjs",
+        "tests/native-investment-studio/connection-draft.test.mjs",
+        "tests/native-investment-studio/connection-editing.test.mjs",
+        "tests/native-investment-studio/connection-templates.test.mjs",
+        "tests/native-investment-studio/connection-view.test.mjs",
+        "tests/native-investment-studio/contract.test.mjs",
+        "tests/native-investment-studio/contribution-view-model.test.mjs",
+        "tests/native-investment-studio/controller.test.mjs",
+        "tests/native-investment-studio/coordination-arrangements.test.mjs",
+        "tests/native-investment-studio/coordination-starters.test.mjs",
+        "tests/native-investment-studio/display.test.mjs",
+        "tests/native-investment-studio/draft.test.mjs",
+        "tests/native-investment-studio/editing.test.mjs",
+        "tests/native-investment-studio/exchange.test.mjs",
+        "tests/native-investment-studio/investment-deck-config.test.mjs",
+        "tests/native-investment-studio/investment-portrait.test.mjs",
+        "tests/native-investment-studio/investment-workbench.test.mjs",
+        "tests/native-investment-studio/module-closure.test.mjs",
+        "tests/native-investment-studio/navigation-policy.test.mjs",
+        "tests/native-investment-studio/people-capacity.test.mjs",
+        "tests/native-investment-studio/person-draft.test.mjs",
+        "tests/native-investment-studio/person-role-mixer.test.mjs",
+        "tests/native-investment-studio/person-state.test.mjs",
+        "tests/native-investment-studio/presets.test.mjs",
+        "tests/native-investment-studio/purpose-draft.test.mjs",
+        "tests/native-investment-studio/rack-record-creation.test.mjs",
+        "tests/native-investment-studio/relationships.test.mjs",
+        "tests/native-investment-studio/removal-references.test.mjs",
+        "tests/native-investment-studio/reports.test.mjs",
+        "tests/native-investment-studio/responsibility-draft.test.mjs",
+        "tests/native-investment-studio/responsibility-editing.test.mjs",
+        "tests/native-investment-studio/score-contract.test.mjs",
+        "tests/native-investment-studio/score-draft.test.mjs",
+        "tests/native-investment-studio/score-models.test.mjs",
+        "tests/native-investment-studio/score-time.test.mjs",
+        "tests/native-investment-studio/session-consumers.test.mjs",
+        "tests/native-investment-studio/session-creation.test.mjs",
+        "tests/native-investment-studio/session-draft.test.mjs",
+        "tests/native-investment-studio/session-editing.test.mjs",
+        "tests/native-investment-studio/shell.test.mjs",
+        "tests/native-investment-studio/state.test.mjs",
+        "tests/native-investment-studio/team-controller.test.mjs",
+        "tests/native-investment-studio/work-removal.test.mjs",
+        "tests/native-investment-studio/work-sessions.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, person and work edits, bounded drafts, scheduled work-commit recovery, chapter navigation and icon ownership, exchange, and the native About receiver's static and local module-delivery contracts.",
+      "aliases": [
+        "test:native-investment-studio:source"
+      ]
+    },
+    {
       "id": "node.narrative-architectures",
       "family": "narrative-architectures",
       "kind": "node-test",
@@ -349,8 +438,11 @@
       "family": "public-references",
       "kind": "node-test",
       "members": [
+        "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+        "tests/public-references/context-canvas-head-route-validator.test.mjs",
         "tests/public-references/live-route-verifier.test.mjs",
         "tests/public-references/materializer.test.mjs",
+        "tests/public-references/public-route-reference-contract.test.mjs",
         "tests/public-references/registry-reference-contract.test.mjs"
       ],
       "profile": "node-source",
@@ -363,8 +455,9 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "scope": "Registry and repository route authorities, source and generated structured-head relationships, sitemap parity, occurrence-matrix maintenance, deterministic materialization, and bounded synthetic receiver behavior.",
       "aliases": [
+        "test:context-canvas-head-routes",
         "test:public-references"
       ]
     },
@@ -511,6 +604,7 @@
       "family": "media-publication",
       "kind": "node-test",
       "members": [
+        "tests/media-publication/ci-provisioning.test.mjs",
         "tests/media-publication/prepare-r2-progressive-video.test.mjs",
         "tests/media-publication/r2-video-worker.test.mjs",
         "tests/media-publication/video-publication-manifest.test.mjs",
@@ -526,7 +620,7 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
+      "scope": "CI provisioning and cache identity, source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
       "aliases": [
         "test:media-publication"
       ]
@@ -551,6 +645,67 @@
       "scope": "Independent planner fixtures and source membership checks.",
       "aliases": [
         "test:suites:unit"
+      ]
+    },
+    {
+      "id": "node.visual-fidelity-contracts",
+      "family": "visual-fidelity-contracts",
+      "kind": "node-test",
+      "members": [
+        "tests/visual-fidelity-contracts/component-model.test.mjs",
+        "tests/visual-fidelity-contracts/component-page.test.mjs",
+        "tests/visual-fidelity-contracts/component-probes.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+        "tests/visual-fidelity-contracts/design-token-pipeline.test.mjs",
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-source.test.mjs",
+        "tests/visual-fidelity-contracts/pattern-library.test.mjs",
+        "tests/visual-fidelity-contracts/service-boundary-model.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "visual-fidelity-contracts/README.md",
+      "scope": "Versioned contracts, closed schemas, deterministic lab models, static semantic parity, public-safe routes, and responsive example metadata.",
+      "aliases": [
+        "test:visual-fidelity-contracts:source"
+      ]
+    },
+    {
+      "id": "browser.visual-fidelity-contracts",
+      "family": "visual-fidelity-contracts",
+      "kind": "node-test",
+      "members": [
+        "tests/visual-fidelity-contracts/component.browser.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+        "tests/visual-fidelity-contracts/data-view-browser.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-browser.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs",
+        "tests/visual-fidelity-contracts/pattern-library.browser.mjs",
+        "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "visual-fidelity-contracts/README.md",
+      "scope": "Chromium, Firefox, and WebKit interaction; narrow and wide reflow; focus and keyboard paths; teardown and re-entry; alternate media; SVG identity; CSP and sandbox boundaries; and responsive gallery rendering.",
+      "aliases": [
+        "test:visual-fidelity-contracts:browser"
       ]
     },
     {
@@ -2475,6 +2630,495 @@
       "aliases": [
         "test:debrief-caption-colors-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-architecture-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-architecture-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eight comparison grids across seven Debriefs retain contiguous card fragments, local text, shadows, source order and useful full-width distribution across Chromium, Firefox and Playwright WebKit; grid/prose seams, alternate modes and a before-parse restoration of the original nesting. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:debrief-architecture-cards-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.ai-narrow-reading",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-narrow-reading.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "AI Systems family reading at narrow widths with enlarged text: complete heading and navigation-card content, local scroll ownership, normal-size controls and fault restoration across Chromium, Firefox and Playwright WebKit. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:ai-narrow-reading-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.card-rail-clearance",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/card-rail-clearance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty generated-rail routes retain local-owner card width, complete text, borders and hard shadows, with the accepted rail/shadow adjacency. The family inventory, representative responsive widths, enlarged text, narrow touch, authored-rail and scriptless controls, and a rejected width-cap fault receive three-engine observations. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:card-rail-clearance-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.linked-reading-containment",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/linked-reading-containment.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eight independently styled AI example readings preserve complete text at narrow widths with enlarged type; the independent control, ordinary desktop geometry, local evidence scrolling, keyboard access, alternate modes, and restored wrapping faults remain explicit across Chromium, Firefox, and Playwright WebKit.",
+      "aliases": [
+        "test:linked-reading-containment-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-evidence-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-one evidence cards on ten Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, deterministic split canary and fresh-source recovery. Native browsers and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-evidence-cards-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-callout-integrity",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-callout-integrity.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eighteen callouts and quotations on seven Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, attributed quotation and keyboard checks, deterministic split-definition canaries and fresh-source recovery. Native browsers, paginated paper and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-callout-integrity-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.about-scroll",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-heatmap.browser.mjs",
+        "tests/context-canvas/about-gallery-fit.browser.mjs",
+        "tests/context-canvas/about-prompt-fit.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Retained heatmap adapter fixture selection, static/print reading and parent scroll; shared content-fit channel admission, independent Gallery and Prompt Conditions Explorer sizing, full-content growth/shrink, retained state, keyboard and wheel behavior against explicitly substituted local packaged children in Chromium, Firefox and Playwright WebKit. Native touch and live hosted release retain separate observations.",
+      "aliases": [
+        "test:about-scroll-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.about-disclosures",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-disclosure-readings.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "About Career and Quality native disclosure reach with scripting enabled or disabled, fixed record membership, state labels and keyboard focus, complete parent print readings for thirteen records and five Prompt Conditions rows, repeated screen/print state preservation, and restored hiding faults in Chromium, Firefox and Playwright WebKit. Native applications and physical pagination retain separate observations.",
+      "aliases": [
+        "test:about-disclosure-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.coordination",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/controller.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About coordination controls: independent money/effort, hours/minutes entry, pure live draft previews and accepted identity, explicit Apply/Cancel, stale recovery and teardown, focus/disclosure continuity, responsive and enlarged-text containment, forced colors, reduced motion, and ordinary page scrolling across Chromium, Firefox and Playwright WebKit. Native touch, assistive technology and comprehension retain separate observations.",
+      "aliases": [
+        "test:native-investment-studio:coordination-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.chapters",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/shell.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About chapter navigation: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, original descendant fragments and browser history, visible focus, reduced-motion behavior, parent scrolling and scriptless fallback across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:chapters-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.investment",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/investment.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native Purpose and Investment: purpose draft ownership, baseline and history, versioned preview and explicit replacement, FileReader races, byte and format recovery, captured downloads, responsive focus and page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:investment-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.sessions",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/session.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Complete working sessions: participant and funding arithmetic, creation and removal, selected and parked edits, stale recovery, empty-plan entry, compact controls and ordinary About scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:session-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.responsibility",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/responsibility.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "People role details and human review assignments: complete field meaning, stable references, saved/stale recovery, unchanged accounting, ordered sessions, focus, narrow reading and disposal across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:responsibility-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.assembly",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assembly.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native People and Teams: finite creation, ordered membership, referenced-removal recovery, saved and stale drafts, imported identity collisions, callback ownership, exact amounts, compact inputs and ordinary page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:assembly-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.team-assembly",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/team-controller.browser.mjs",
+        "tests/native-investment-studio/people-fit.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About Team Assembly: person rates and funded time, independently calculated investment and capacity, draft and accepted-state isolation, stale recovery, focus and keyboard editing, responsive containment, ordinary page scrolling, and the preserved full-Studio route across Chromium, Firefox and Playwright WebKit. Native application and reader observations retain their own receivers.",
+      "aliases": [
+        "test:native-investment-studio:team-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.about-studio-chapters",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-studio-chapters.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "About Studio chapter editing, independent staffing arithmetic, original/variant parity, retained state, cross-chapter focus, active-content height and parent-owned vertical scrolling in three engines. Full Studio and hosted publication retain their source owners.",
+      "aliases": [
+        "test:about-studio-chapters-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.connections",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Connection form and diagram/list agreement, stable references, pause accounting, saved-edit recovery, focus, local horizontal inspection and ordinary vertical reading across three engines.",
+      "aliases": [
+        "test:native-investment-studio:connection-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.connection-templates",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection-template.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Bounded coordination template configuration, atomic preview and Apply, stale intent, cancellation, exact recovery-work accounting and cross-engine reading.",
+      "aliases": [
+        "test:native-investment-studio:connection-template-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.capabilities",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/capability.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Ability and practice cards, shared supporting work, atomic proposals, reverse and beside reading, saved drafts, observation records and cross-engine recovery.",
+      "aliases": [
+        "test:native-investment-studio:capability-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.change",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/change.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Retained change-framework maps, interpretive lenses, relative attention, explicit supporting-work proposals, Apply and Undo, saved drafts and accessible cross-engine chapter operation.",
+      "aliases": [
+        "test:native-investment-studio:change-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.assurance",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Quality and recovery illustrations, explicit supporting-work proposals, learning routes, professional rehearsal records, Apply and Undo, saved drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:assurance-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.score",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/score.browser.mjs",
+        "tests/native-investment-studio/cadence-refresh.browser.mjs",
+        "tests/native-investment-studio/tape-library.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Authored timing and availability, score inspection, modeled decision gates, explicit proposal funding, Apply and Undo, retained drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:score-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2488,6 +3132,7 @@
         "node.documentation",
         "node.iframe-routes",
         "node.investment-analysis",
+        "node.native-investment-studio",
         "node.media-publication",
         "node.narrative-architectures",
         "node.prod-deployment",
@@ -2498,6 +3143,7 @@
         "node.tables",
         "node.visualization-fidelity-atlas",
         "node.suite-planner",
+        "node.visual-fidelity-contracts",
         "python.citation-atlas-selection",
         "python.tables.parser",
         "python.tables.hiring-table-media",
@@ -2516,6 +3162,8 @@
         "node.narrative-architectures",
         "node.tables",
         "node.visualization-fidelity-atlas",
+        "node.visual-fidelity-contracts",
+        "browser.visual-fidelity-contracts",
         "worker.source",
         "python.lims-eln-enterprise-reference-v0.1",
         "python.lims-eln-enterprise-implementation",
@@ -2532,6 +3180,7 @@
         "browser.investment-analysis.browser",
         "browser.investment-analysis.capsule.browser",
         "browser.investment-analysis.presentation.browser",
+        "browser.visual-fidelity-contracts",
         "browser.visualization-fidelity-atlas.atlas-essay.browser",
         "browser.visualization-fidelity-atlas.atlas-gallery.browser",
         "browser.visualization-fidelity-atlas.atlas-reference.browser",
@@ -2580,13 +3229,36 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.debrief-architecture-cards",
+        "browser.context-canvas.ai-narrow-reading",
+        "browser.context-canvas.card-rail-clearance",
+        "browser.context-canvas.linked-reading-containment",
+        "browser.context-canvas.debrief-evidence-cards",
+        "browser.context-canvas.debrief-callout-integrity",
+        "browser.context-canvas.about-scroll",
+        "browser.context-canvas.about-disclosures",
+        "browser.context-canvas.about-studio-chapters",
+        "browser.native-investment-studio.coordination",
+        "browser.native-investment-studio.chapters",
+        "browser.native-investment-studio.investment",
+        "browser.native-investment-studio.responsibility",
+        "browser.native-investment-studio.sessions",
+        "browser.native-investment-studio.assembly",
+        "browser.native-investment-studio.team-assembly",
+        "browser.native-investment-studio.connections",
+        "browser.native-investment-studio.connection-templates",
+        "browser.native-investment-studio.capabilities",
+        "browser.native-investment-studio.change",
+        "browser.native-investment-studio.assurance",
+        "browser.native-investment-studio.score"
       ]
     },
     {
       "id": "visual-media",
       "description": "Visual selection and existing print/media-owning modules; file selection retains the full file's scenarios.",
       "suites": [
+        "browser.visual-fidelity-contracts",
         "browser.visualization-fidelity-atlas.atlas-essay.browser",
         "browser.visualization-fidelity-atlas.atlas-gallery.browser",
         "browser.tables.hiring-schema-print",
@@ -2606,7 +3278,8 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.about-disclosures"
       ]
     },
     {
@@ -2621,6 +3294,7 @@
         "node.repository-handoff-foundation",
         "node.schema-pages",
         "node.security",
+        "node.visual-fidelity-contracts",
         "worker.source",
         "carrier.debrief-image-derivatives",
         "carrier.debrief-case-briefs",
@@ -2859,6 +3533,9 @@
       "tools/evidence-inputs.mjs",
       "tools/observation-checkpoint.mjs"
     ],
+    "publicReferenceSupport": [
+      "tests/public-references/source-route-authority.mjs"
+    ],
     "projector": "tools/project_table_context.py",
     "exclusions": [
       "Held untracked Atlas research files are outside the accepted baseline.",
@@ -2870,6 +3547,8 @@
     "npmRunEdges": {
       "test:public-reference-contracts": [
         "test:public-references",
+        "test:context-canvas-head-routes",
+        "test:public-reference-projections",
         "test:citation-atlas-selection",
         "test:suites:unit"
       ],
@@ -2888,6 +3567,11 @@
       "test:prototype-units": [
         "test:core-architectures",
         "test:narrative-architectures"
+      ],
+      "test:visual-fidelity-contracts": [
+        "test:visual-fidelity-contracts:source",
+        "check:visual-fidelity-pattern-library",
+        "test:visual-fidelity-contracts:browser"
       ],
       "dry-run:schema-delivery": [
         "build:schema-delivery"
@@ -2921,9 +3605,17 @@
           "tests/public-references/materializer.test.mjs"
         ],
         "test:public-references": [
+          "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+          "tests/public-references/context-canvas-head-route-validator.test.mjs",
+          "tests/public-references/live-route-verifier.test.mjs",
           "tests/public-references/materializer.test.mjs",
-          "tests/public-references/registry-reference-contract.test.mjs",
-          "tests/public-references/live-route-verifier.test.mjs"
+          "tests/public-references/public-route-reference-contract.test.mjs",
+          "tests/public-references/registry-reference-contract.test.mjs"
+        ],
+        "test:public-reference-projections": [
+          "tests/iframe-routes/packager.test.mjs",
+          "tests/prod-deployment/primary-closure.test.mjs",
+          "tests/prod-deployment/projection.test.mjs"
         ],
         "test:repository-handoff-foundation": [
           "tests/repository-handoff-foundation/foundation.test.mjs",
@@ -2932,6 +3624,31 @@
         ],
         "test:context-canvas": [
           "tests/context-canvas/*.test.mjs"
+        ],
+        "test:native-investment-studio:source": [
+          "tests/native-investment-studio/*.test.mjs"
+        ],
+        "test:native-investment-studio:coordination-browser": [
+          "tests/native-investment-studio/controller.browser.mjs"
+        ],
+        "test:native-investment-studio:team-browser": [
+          "tests/native-investment-studio/team-controller.browser.mjs",
+          "tests/native-investment-studio/people-fit.browser.mjs"
+        ],
+        "test:native-investment-studio:session-browser": [
+          "tests/native-investment-studio/session.browser.mjs"
+        ],
+        "test:native-investment-studio:responsibility-browser": [
+          "tests/native-investment-studio/responsibility.browser.mjs"
+        ],
+        "test:native-investment-studio:assembly-browser": [
+          "tests/native-investment-studio/assembly.browser.mjs"
+        ],
+        "test:native-investment-studio:investment-browser": [
+          "tests/native-investment-studio/investment.browser.mjs"
+        ],
+        "test:native-investment-studio:chapters-browser": [
+          "tests/native-investment-studio/shell.browser.mjs"
         ],
         "test:prototype-control-labels": [
           "tests/context-canvas/prototype-control-labels.test.mjs"
@@ -2961,9 +3678,60 @@
         "test:narrative-architectures": [
           "tests/narrative-architectures/*.test.mjs"
         ],
+        "test:visual-fidelity-contracts:source": [
+          "tests/visual-fidelity-contracts/component-model.test.mjs",
+          "tests/visual-fidelity-contracts/component-page.test.mjs",
+          "tests/visual-fidelity-contracts/component-probes.test.mjs",
+          "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+          "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+          "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+          "tests/visual-fidelity-contracts/design-token-pipeline.test.mjs",
+          "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-source.test.mjs",
+          "tests/visual-fidelity-contracts/pattern-library.test.mjs",
+          "tests/visual-fidelity-contracts/service-boundary-model.test.mjs"
+        ],
         "test:node-runtime": [
           "tests/security/node-runtime.test.mjs",
           "tests/security/node-route-inventory.test.mjs"
+        ],
+        "test:debrief-evidence-cards-browser": [
+          "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+        ],
+        "test:debrief-callout-integrity-browser": [
+          "tests/context-canvas/debrief-callout-integrity.browser.mjs"
+        ],
+        "test:about-scroll-browser": [
+          "tests/context-canvas/about-heatmap.browser.mjs",
+          "tests/context-canvas/about-gallery-fit.browser.mjs",
+          "tests/context-canvas/about-prompt-fit.browser.mjs"
+        ],
+        "test:about-disclosure-browser": [
+          "tests/context-canvas/about-disclosure-readings.browser.mjs"
+        ],
+        "test:about-studio-chapters-browser": [
+          "tests/context-canvas/about-studio-chapters.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-browser": [
+          "tests/native-investment-studio/connection.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-template-browser": [
+          "tests/native-investment-studio/connection-template.browser.mjs"
+        ],
+        "test:native-investment-studio:capability-browser": [
+          "tests/native-investment-studio/capability.browser.mjs"
+        ],
+        "test:native-investment-studio:change-browser": [
+          "tests/native-investment-studio/change.browser.mjs"
+        ],
+        "test:native-investment-studio:assurance-browser": [
+          "tests/native-investment-studio/assurance.browser.mjs"
+        ],
+        "test:native-investment-studio:score-browser": [
+          "tests/native-investment-studio/score.browser.mjs",
+          "tests/native-investment-studio/cadence-refresh.browser.mjs",
+          "tests/native-investment-studio/tape-library.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
@@ -3014,6 +3782,15 @@
         ],
         "test:prototype-exchanges": [
           "tools/cross-prototype-exchange-contract.mjs"
+        ],
+        "test:visual-fidelity-contracts:browser": [
+          "tests/visual-fidelity-contracts/component.browser.mjs",
+          "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+          "tests/visual-fidelity-contracts/data-view-browser.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-browser.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs",
+          "tests/visual-fidelity-contracts/pattern-library.browser.mjs",
+          "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
         ]
       },
       "orderedCompositeSteps": {

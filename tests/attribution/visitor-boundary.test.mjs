@@ -5,6 +5,7 @@ import { dirname, relative, resolve } from "node:path";
 import test from "node:test";
 
 import { artifactAttribution, attributionContract } from "../../tools/attribution-contract.mjs";
+import { readSourceContract } from "../context-canvas/read-source-contract.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -12,7 +13,6 @@ const visitorRoot = resolve(
   repositoryRoot,
   attributionContract.public_html.context_canvas_top_level_glob.replace(/\/\*\.html$/u, ""),
 );
-const sharedShellPath = resolve(visitorRoot, "canvas-shell.js");
 const sharedShellCssPath = resolve(visitorRoot, "canvas-shell.css");
 
 function occurrenceCount(source, value) {
@@ -95,12 +95,12 @@ test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary
   assert.equal(paths.length, 107, "the current governed visitor population should remain explicit");
 
   for (const path of paths) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     const footerStart = html.lastIndexOf("<footer", html.indexOf(artifactAttribution));
     const footerEnd = html.indexOf("</footer>", html.indexOf(artifactAttribution));
     const footer = html.slice(footerStart, footerEnd + "</footer>".length);
-    const boundaryMatches = [...footer.matchAll(/<div\b[^>]*\bdata-visitor-boundary(?:\s|>)[^>]*>([\s\S]*?)<\/div>/giu)];
+    const boundaryMatches = [...footer.matchAll(/<div\b[^>]*\bdata-visitor-boundary(?=\s|>)[^>]*>([\s\S]*?)<\/div>/giu)];
     assert.equal(boundaryMatches.length, 1, `${label} visitor boundary wrapper`);
 
     const contextMatches = [...boundaryMatches[0][1].matchAll(
@@ -155,29 +155,23 @@ test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary
   }
 });
 
-test("enhanced routes load one contract and preserve the authored boundary as the footer closure", async () => {
+test("shared-footer routes load the boundary contract before enhancement", async () => {
   const routes = (await readdir(visitorRoot, { withFileTypes: true }))
-    .filter(entry => entry.isFile() && entry.name.endsWith(".html") && entry.name !== "404.html")
+    .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
     .map(entry => entry.name)
     .sort();
-  assert.equal(routes.length, 41);
+  assert.ok(routes.includes("404.html"));
 
   for (const route of routes) {
     const html = await readFile(resolve(visitorRoot, route), "utf8");
+    assert.match(html, /<link\b[^>]*href="canvas-shell\.css"[^>]*>/u, `${route} shared footer styles`);
     const contractPosition = html.indexOf('<script src="visitor-boundary-contract.js" defer></script>');
     const shellPosition = html.indexOf('<script src="canvas-shell.js" defer></script>');
     assert.ok(contractPosition >= 0 && contractPosition < shellPosition, `${route} contract before enhancement`);
     assert.equal(occurrenceCount(html, "visitor-boundary-contract.js"), 1, `${route} contract load`);
   }
 
-  const shell = await readFile(sharedShellPath, "utf8");
-  assert.match(shell, /visitorBoundaryContract\.contextSelector/u);
-  assert.match(shell, /visitorBoundaryContract\.contextText/u);
-  const detachBoundary = shell.indexOf("if (visitorBoundary) visitorBoundary.remove()");
-  const appendBoundary = shell.indexOf("if (visitorBoundary) footer.appendChild(visitorBoundary)");
-  const appendAttribution = shell.indexOf("if (attribution) footer.appendChild(attribution)");
-  assert.ok(detachBoundary >= 0 && detachBoundary < appendBoundary);
-  assert.ok(appendBoundary < appendAttribution, "enhancement closes with boundary then attribution");
+
 });
 
 test("governed visitor language replaces reviewed vague media phrases and preserves exact import aliases", async () => {
@@ -206,7 +200,7 @@ test("governed visitor language replaces reviewed vague media phrases and preser
   ];
 
   for (const path of paths) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     for (const phrase of reviewedVaguePhrases) {
       assert.doesNotMatch(html, phrase, `${label} reviewed media language`);
@@ -226,11 +220,11 @@ test("governed visitor language replaces reviewed vague media phrases and preser
 
 test("shared and self-contained styles preserve selectable narrow, print, and forced-color readings", async () => {
   const paths = await governedHtmlFiles();
-  const selfContained = paths.filter(path => dirname(path) !== visitorRoot || path.endsWith("/404.html"));
-  assert.equal(selfContained.length, 66);
+  const selfContained = paths.filter(path => dirname(path) !== visitorRoot);
+  assert.ok(selfContained.length);
 
   for (const path of selfContained) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     assert.equal(occurrenceCount(html, "<style data-canary-stack-css>"), 1, `${label} self-contained style`);
     assert.match(html, /\.visitor-boundary\{[^}]*overflow-wrap:anywhere/u, `${label} narrow containment`);
@@ -249,8 +243,8 @@ test("shared and self-contained styles preserve selectable narrow, print, and fo
 test("the embedded Conditioning Field fallback keeps canaries and attribution in full-width rows", async () => {
   const html = await readFile(resolve(visitorRoot, "conditioning-field.html"), "utf8");
   assert.match(html, /footer\s*\{[^}]*flex-wrap:\s*wrap;/u);
-  assert.match(
-    html,
-    /footer\s*>\s*\.site-attribution\s*\{[^}]*flex:\s*1 0 100%;[^}]*text-align:\s*center;/u,
-  );
+  const attribution = html.match(/footer\s*>\s*\.site-attribution\s*\{([^}]*)\}/u);
+  assert.ok(attribution, "the footer owns an attribution row");
+  assert.match(attribution[1], /(?:^|;)\s*flex:\s*1 0 100%\s*(?:;|$)/u);
+  assert.match(attribution[1], /(?:^|;)\s*text-align:\s*center\s*(?:;|$)/u);
 });

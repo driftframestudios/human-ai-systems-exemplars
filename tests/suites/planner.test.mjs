@@ -8,9 +8,180 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/security/node-route-inventory.test.mjs', 'tests/security/node-runtime.test.mjs', 'tests/context-canvas/debrief-caption-colors.browser.mjs', 'tests/context-canvas/debrief-hero-wrapping.browser.mjs', 'tests/context-canvas/debrief-link-cues.browser.mjs', 'tests/context-canvas/debrief-hero-colors.browser.mjs', 'tests/context-canvas/debrief-card-measure.browser.mjs', 'tests/context-canvas/site-navigation.browser.mjs', 'tests/context-canvas/debrief-companion-spacing.browser.mjs', 'tests/context-canvas/debrief-ordered-room.browser.mjs', 'tests/context-canvas/debrief-evidence-room.browser.mjs', 'tests/context-canvas/debrief-prose-code-room.browser.mjs', 'tests/context-canvas/fmi-reading-room.browser.mjs', 'tests/context-canvas/fmi-reading-rail.browser.mjs', 'tests/context-canvas/debrief-reference-figures.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs', 'tests/context-canvas/ai-entry-cascade.browser.mjs', 'tests/context-canvas/ai-systems-reading-layout.browser.mjs', 'tests/context-canvas/technology-fit-layout.browser.mjs', 'tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/ai-systems-cross-references.test.mjs', 'tests/context-canvas/debrief-case-brief-materializer.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-reading-layout.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-image-delivery.browser.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/context-canvas/who-to-believe-system-graph.browser.mjs', 'tests/context-canvas/who-to-believe-system-graph.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/prod-deployment/promotion-topology.test.mjs', 'tests/public-references/live-route-verifier.test.mjs', 'tests/public-references/registry-reference-contract.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = [
+  'tests/context-canvas/read-source-contract.test.mjs',
+  'tests/native-investment-studio/cadence-occurrences.test.mjs',
+  'tests/native-investment-studio/coordination-starters.test.mjs',
+  'tests/native-investment-studio/display.test.mjs',
+  'tests/native-investment-studio/investment-deck-config.test.mjs',
+  'tests/native-investment-studio/investment-portrait.test.mjs',
+  'tests/native-investment-studio/investment-workbench.test.mjs',
+  'tests/native-investment-studio/people-capacity.test.mjs',
+  'tests/native-investment-studio/person-role-mixer.test.mjs',
+  'tests/native-investment-studio/removal-references.test.mjs',
+  'tests/native-investment-studio/session-consumers.test.mjs',
+  'tests/native-investment-studio/work-sessions.test.mjs',
+  'tests/native-investment-studio/people-fit.browser.mjs',
+  'tests/native-investment-studio/cadence-refresh.browser.mjs',
+  'tests/native-investment-studio/tape-library.browser.mjs',
+  'tests/native-investment-studio/assembly-editing.test.mjs',
+  'tests/native-investment-studio/assembly.browser.mjs',
+  'tests/native-investment-studio/assurance-consequences.test.mjs',
+  'tests/native-investment-studio/assurance-contract.test.mjs',
+  'tests/native-investment-studio/assurance-draft.test.mjs',
+  'tests/native-investment-studio/assurance-models.test.mjs',
+  'tests/native-investment-studio/assurance-proposals.test.mjs',
+  'tests/native-investment-studio/assurance.browser.mjs',
+  'tests/native-investment-studio/cadence.test.mjs',
+  'tests/native-investment-studio/score-contract.test.mjs',
+  'tests/native-investment-studio/score-draft.test.mjs',
+  'tests/native-investment-studio/score-models.test.mjs',
+  'tests/native-investment-studio/score-time.test.mjs',
+  'tests/native-investment-studio/score.browser.mjs',
+  'tests/native-investment-studio/capabilities.test.mjs',
+  'tests/native-investment-studio/capability-draft.test.mjs',
+  'tests/native-investment-studio/capability-proposals.test.mjs',
+  'tests/native-investment-studio/capability.browser.mjs',
+  'tests/native-investment-studio/change-contract.test.mjs',
+  'tests/native-investment-studio/change-draft.test.mjs',
+  'tests/native-investment-studio/change-methods.test.mjs',
+  'tests/native-investment-studio/change-models.test.mjs',
+  'tests/native-investment-studio/change-proposals.test.mjs',
+  'tests/native-investment-studio/change-showcase.test.mjs',
+  'tests/native-investment-studio/change.browser.mjs',
+  'tests/native-investment-studio/command-draft.test.mjs',
+  'tests/native-investment-studio/commands.test.mjs',
+  'tests/native-investment-studio/work-removal.test.mjs',
+  'tests/native-investment-studio/connection-draft.test.mjs',
+  'tests/native-investment-studio/connection-editing.test.mjs',
+  'tests/native-investment-studio/connection-template.browser.mjs',
+  'tests/native-investment-studio/connection-templates.test.mjs',
+  'tests/native-investment-studio/coordination-arrangements.test.mjs',
+  'tests/native-investment-studio/contribution-view-model.test.mjs',
+  'tests/native-investment-studio/connection-view.test.mjs',
+  'tests/native-investment-studio/connection.browser.mjs',
+  'tests/native-investment-studio/contract.test.mjs',
+  'tests/native-investment-studio/controller.test.mjs',
+  'tests/native-investment-studio/controller.browser.mjs',
+  'tests/native-investment-studio/draft.test.mjs',
+  'tests/native-investment-studio/editing.test.mjs',
+  'tests/native-investment-studio/exchange.test.mjs',
+  'tests/native-investment-studio/investment.browser.mjs',
+  'tests/native-investment-studio/navigation-policy.test.mjs',
+  'tests/native-investment-studio/module-closure.test.mjs',
+  'tests/native-investment-studio/person-draft.test.mjs',
+  'tests/native-investment-studio/person-state.test.mjs',
+  'tests/native-investment-studio/presets.test.mjs',
+  'tests/native-investment-studio/purpose-draft.test.mjs',
+  'tests/native-investment-studio/relationships.test.mjs',
+  'tests/native-investment-studio/browser-download.test.mjs',
+  'tests/native-investment-studio/browser-fixture-lifecycle.test.mjs',
+  'tests/native-investment-studio/rack-record-creation.test.mjs',
+  'tests/native-investment-studio/reports.test.mjs',
+  'tests/native-investment-studio/responsibility-draft.test.mjs',
+  'tests/native-investment-studio/responsibility-editing.test.mjs',
+  'tests/native-investment-studio/responsibility.browser.mjs',
+  'tests/native-investment-studio/session-creation.test.mjs',
+  'tests/native-investment-studio/session-draft.test.mjs',
+  'tests/native-investment-studio/session-editing.test.mjs',
+  'tests/native-investment-studio/session.browser.mjs',
+  'tests/native-investment-studio/shell.test.mjs',
+  'tests/native-investment-studio/shell.browser.mjs',
+  'tests/native-investment-studio/state.test.mjs',
+  'tests/native-investment-studio/team-controller.test.mjs',
+  'tests/native-investment-studio/team-controller.browser.mjs',
+  'tests/context-canvas/about-studio-chapters.test.mjs',
+  'tests/context-canvas/about-studio-chapters.browser.mjs',
+  'tests/context-canvas/about-disclosure-readings.browser.mjs',
+  'tests/context-canvas/about-heatmap.test.mjs',
+  'tests/context-canvas/about-prompt-fit.browser.mjs',
+  'tests/context-canvas/about-content-fit.test.mjs',
+  'tests/context-canvas/about-heatmap.browser.mjs',
+  'tests/context-canvas/about-gallery-fit.browser.mjs',
+
+  'tests/context-canvas/debrief-evidence-cards.browser.mjs',
+  'tests/context-canvas/debrief-callout-integrity.browser.mjs',
+  'tests/security/node-route-inventory.test.mjs',
+  'tests/security/node-runtime.test.mjs',
+  'tests/context-canvas/linked-reading-containment.browser.mjs',
+  'tests/context-canvas/card-rail-clearance.browser.mjs',
+  'tests/context-canvas/debrief-architecture-cards.browser.mjs',
+  'tests/context-canvas/ai-narrow-reading.browser.mjs',
+  'tests/context-canvas/debrief-caption-colors.browser.mjs',
+  'tests/context-canvas/debrief-hero-wrapping.browser.mjs',
+  'tests/context-canvas/debrief-link-cues.browser.mjs',
+  'tests/context-canvas/debrief-hero-colors.browser.mjs',
+  'tests/context-canvas/debrief-card-measure.browser.mjs',
+  'tests/context-canvas/site-navigation.browser.mjs',
+  'tests/context-canvas/debrief-companion-spacing.browser.mjs',
+  'tests/context-canvas/debrief-ordered-room.browser.mjs',
+  'tests/context-canvas/debrief-evidence-room.browser.mjs',
+  'tests/context-canvas/debrief-prose-code-room.browser.mjs',
+  'tests/context-canvas/fmi-reading-room.browser.mjs',
+  'tests/context-canvas/fmi-reading-rail.browser.mjs',
+  'tests/context-canvas/debrief-reference-figures.browser.mjs',
+  'tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs',
+  'tests/context-canvas/ai-entry-cascade.browser.mjs',
+  'tests/context-canvas/ai-systems-reading-layout.browser.mjs',
+  'tests/context-canvas/technology-fit-layout.browser.mjs',
+  'tests/suites/planner.test.mjs',
+  'tests/investment-analysis/browser-helper.test.mjs',
+  'tests/context-canvas/about-first-paint-css.test.mjs',
+  'tests/context-canvas/ai-systems-cross-references.test.mjs',
+  'tests/context-canvas/debrief-case-brief-materializer.test.mjs',
+  'tests/context-canvas/debrief-catalog-preview-images.test.mjs',
+  'tests/context-canvas/debrief-catalog-preview.browser.mjs',
+  'tests/context-canvas/debrief-reading-layout.browser.mjs',
+  'tests/context-canvas/debrief-image-derivatives.test.mjs',
+  'tests/context-canvas/debrief-video-receivers.test.mjs',
+  'tests/context-canvas/lims-capability-transfer-model.test.mjs',
+  'tests/context-canvas/prompt-side-figure.browser.mjs',
+  'tests/context-canvas/video-receivers.browser.mjs',
+  'tests/context-canvas/visual-reference-observations.test.mjs',
+  'tests/context-canvas/visitor-image-delivery.browser.mjs',
+  'tests/context-canvas/visitor-video-contract.test.mjs',
+  'tests/context-canvas/who-to-believe-system-graph.browser.mjs',
+  'tests/context-canvas/who-to-believe-system-graph.test.mjs',
+  'tests/media-publication/prepare-r2-progressive-video.test.mjs',
+  'tests/media-publication/r2-video-worker.test.mjs',
+  'tests/media-publication/video-publication-manifest.test.mjs',
+  'tests/media-publication/verify-r2-video-route.test.mjs',
+  'tests/prod-deployment/promotion-topology.test.mjs',
+  'tests/public-references/live-route-verifier.test.mjs',
+  'tests/public-references/registry-reference-contract.test.mjs',
+  'tests/repository-handoff-foundation/foundation.test.mjs',
+  'tests/repository-handoff-foundation/install.test.mjs',
+  'tests/repository-handoff-foundation/issue-route-materializer.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research.browser.mjs',
+  'tests/public-references/context-canvas-head-authority-matrix.test.mjs',
+  'tests/public-references/context-canvas-head-route-validator.test.mjs',
+  'tests/public-references/public-route-reference-contract.test.mjs',
+  'tests/media-publication/ci-provisioning.test.mjs',
+  'tests/visual-fidelity-contracts/component-model.test.mjs',
+  'tests/visual-fidelity-contracts/component-page.test.mjs',
+  'tests/visual-fidelity-contracts/component-probes.test.mjs',
+  'tests/visual-fidelity-contracts/component.browser.mjs',
+  'tests/visual-fidelity-contracts/contract-art-directions.browser.mjs',
+  'tests/visual-fidelity-contracts/contract-art-directions.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-browser.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-model.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-page.test.mjs',
+  'tests/visual-fidelity-contracts/design-token-pipeline.test.mjs',
+  'tests/visual-fidelity-contracts/foundation-contracts.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-browser.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-model.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-source.test.mjs',
+  'tests/visual-fidelity-contracts/pattern-library.browser.mjs',
+  'tests/visual-fidelity-contracts/pattern-library.test.mjs',
+  'tests/visual-fidelity-contracts/service-boundary-model.test.mjs',
+  'tests/visual-fidelity-contracts/service-boundary.browser.mjs',
+];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
+  'test:public-reference-contracts': 'npm run test:public-references && npm run test:context-canvas-head-routes && npm run test:public-reference-projections && npm run test:citation-atlas-selection && npm run test:suites:unit',
 };
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
@@ -152,6 +323,98 @@ test('Context Canvas source-suite membership follows every on-disk unit module',
   assert.deepEqual([...suite.members].sort(), onDisk);
 });
 
+test('Visual Fidelity source ownership stays identical in package and suite routes', async () => {
+  const [catalog, pkg] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+  ]);
+  const suite = catalog.suites.find(candidate => candidate.id === 'node.visual-fidelity-contracts');
+  const admission = 'node tools/check-node-runtime.mjs --quiet && ';
+  const prefix = 'node --test ';
+  const command = pkg.scripts['test:visual-fidelity-contracts:source'];
+  assert.ok(command.startsWith(admission), 'source alias admits the reviewed runtime before owned work');
+  const admittedCommand = command.slice(admission.length);
+  assert.ok(admittedCommand.startsWith(prefix), 'source alias retains a literal node --test boundary');
+  const aliasMembers = admittedCommand.slice(prefix.length).split(' ');
+  assert.deepEqual(suite.members, aliasMembers);
+  assert.deepEqual(
+    catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:visual-fidelity-contracts:source'],
+    aliasMembers,
+  );
+  for (const member of suite.members) await access(resolve(ROOT, member));
+});
+
+test('native Studio routes retain source and separate browser owners with executable alias parity', async () => {
+  const [catalog, pkg, files] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+    readdir(resolve(ROOT, 'tests/native-investment-studio')),
+  ]);
+  const sourceMembers = [
+    'assurance-consequences.test.mjs', 'assurance-contract.test.mjs', 'assurance-draft.test.mjs', 'assurance-models.test.mjs', 'assurance-proposals.test.mjs',
+    'cadence-occurrences.test.mjs', 'cadence.test.mjs', 'score-contract.test.mjs', 'score-draft.test.mjs', 'score-models.test.mjs', 'score-time.test.mjs',
+    'coordination-arrangements.test.mjs', 'coordination-starters.test.mjs', 'contribution-view-model.test.mjs', 'display.test.mjs',
+    'browser-download.test.mjs', 'browser-fixture-lifecycle.test.mjs', 'rack-record-creation.test.mjs', 'reports.test.mjs',
+    'work-removal.test.mjs', 'work-sessions.test.mjs',
+    'investment-deck-config.test.mjs', 'investment-portrait.test.mjs', 'investment-workbench.test.mjs',
+    'people-capacity.test.mjs', 'person-role-mixer.test.mjs', 'removal-references.test.mjs', 'session-consumers.test.mjs',
+    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'change-showcase.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'navigation-policy.test.mjs', 'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-creation.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
+    'team-controller.test.mjs',
+  ].sort().map(file => `tests/native-investment-studio/${file}`);
+  assert.deepEqual(
+    files.filter(file => file.endsWith('.test.mjs')).sort(),
+    sourceMembers.map(member => member.split('/').at(-1)).sort(),
+    'every native source module has an explicit execution route',
+  );
+  const routes = [
+    ['node.native-investment-studio', 'test:native-investment-studio:source', sourceMembers, 'source-unit'],
+    ['browser.native-investment-studio.coordination', 'test:native-investment-studio:coordination-browser',
+      ['tests/native-investment-studio/controller.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.team-assembly', 'test:native-investment-studio:team-browser',
+      ['tests/native-investment-studio/team-controller.browser.mjs', 'tests/native-investment-studio/people-fit.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.sessions', 'test:native-investment-studio:session-browser',
+      ['tests/native-investment-studio/session.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.assembly', 'test:native-investment-studio:assembly-browser',
+      ['tests/native-investment-studio/assembly.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connections', 'test:native-investment-studio:connection-browser',
+      ['tests/native-investment-studio/connection.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connection-templates', 'test:native-investment-studio:connection-template-browser',
+      ['tests/native-investment-studio/connection-template.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.capabilities', 'test:native-investment-studio:capability-browser',
+      ['tests/native-investment-studio/capability.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.change', 'test:native-investment-studio:change-browser',
+      ['tests/native-investment-studio/change.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.assurance', 'test:native-investment-studio:assurance-browser',
+      ['tests/native-investment-studio/assurance.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.score', 'test:native-investment-studio:score-browser',
+      ['tests/native-investment-studio/score.browser.mjs', 'tests/native-investment-studio/cadence-refresh.browser.mjs', 'tests/native-investment-studio/tape-library.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.responsibility', 'test:native-investment-studio:responsibility-browser',
+      ['tests/native-investment-studio/responsibility.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.investment', 'test:native-investment-studio:investment-browser',
+      ['tests/native-investment-studio/investment.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.chapters', 'test:native-investment-studio:chapters-browser',
+      ['tests/native-investment-studio/shell.browser.mjs'], 'focused-browser'],
+  ];
+  const admission = 'node tools/check-node-runtime.mjs --quiet && node --test ';
+  for (const [id, alias, members, bundle] of routes) {
+    const plan = createPlan(catalog, {suites: [id]});
+    assert.deepEqual(plan.suites[0].members, members, id);
+    assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', ...members], id);
+    const selectors = id === 'node.native-investment-studio' ? ['tests/native-investment-studio/*.test.mjs'] : members;
+    assert.equal(pkg.scripts[alias], admission + selectors.join(' '), alias);
+    assert.deepEqual(catalog.inventory.rootScriptSelection.directNodeTestSelectors[alias], selectors, alias);
+    assert.deepEqual(catalog.suites.find(suite => suite.id === id).aliases, [alias], id);
+    assert.ok(createPlan(catalog, {bundles: [bundle]}).suites.some(suite => suite.id === id), id);
+    for (const member of members) await access(resolve(ROOT, member));
+  }
+  const sourcePlan = createPlan(catalog, {bundles: ['source-unit']});
+  for (const [id] of routes.slice(1)) {
+    assert.equal(sourcePlan.suites.some(suite => suite.id === id), false,
+      `${id} retains its explicit browser selection`);
+  }
+});
+
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {
   const catalog = await catalogPromise;
   assert.deepEqual(catalog.bundles.map(b => b.id), ['source-unit', 'family-integration', 'focused-browser', 'visual-media', 'carrier', 'live', 'research']);
@@ -196,15 +459,34 @@ test('Python table membership stays explicit and distinct from nested project an
 });
 
 test('public-reference source routes include every Node contract and the portable Atlas selection check', async () => {
-  const catalog = await catalogPromise;
+  const [catalog, pkg] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+  ]);
   const plan = createPlan(catalog, {suites: ['node.public-references', 'python.citation-atlas-selection']});
   const byId = new Map(plan.suites.map(suite => [suite.id, suite]));
   assert.deepEqual(byId.get('node.public-references').members, [
+    'tests/public-references/context-canvas-head-authority-matrix.test.mjs',
+    'tests/public-references/context-canvas-head-route-validator.test.mjs',
     'tests/public-references/live-route-verifier.test.mjs',
     'tests/public-references/materializer.test.mjs',
+    'tests/public-references/public-route-reference-contract.test.mjs',
     'tests/public-references/registry-reference-contract.test.mjs',
   ]);
-  assert.deepEqual(byId.get('node.public-references').aliases, ['test:public-references']);
+  assert.deepEqual(byId.get('node.public-references').aliases, [
+    'test:context-canvas-head-routes',
+    'test:public-references',
+  ]);
+  const publicReferencePrefix = 'node tools/check-node-runtime.mjs --quiet && node --test ';
+  assert.ok(pkg.scripts['test:public-references'].startsWith(publicReferencePrefix));
+  assert.deepEqual(
+    pkg.scripts['test:public-references'].slice(publicReferencePrefix.length).split(' '),
+    byId.get('node.public-references').members,
+  );
+  assert.equal(
+    pkg.scripts['test:context-canvas-head-routes'],
+    'node tools/check-node-runtime.mjs --quiet && node tools/check-context-canvas-head-routes.mjs',
+  );
   assert.deepEqual(byId.get('python.citation-atlas-selection').members, [
     'tests/skills/citation_atlas_selection_test.py',
   ]);
@@ -220,9 +502,19 @@ test('public-reference source routes include every Node contract and the portabl
   ]);
   assert.deepEqual(catalog.inventory.npmRunEdges['test:public-reference-contracts'], [
     'test:public-references',
+    'test:context-canvas-head-routes',
+    'test:public-reference-projections',
     'test:citation-atlas-selection',
     'test:suites:unit',
   ]);
+  assert.deepEqual(
+    catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:public-reference-projections'],
+    [
+      'tests/iframe-routes/packager.test.mjs',
+      'tests/prod-deployment/primary-closure.test.mjs',
+      'tests/prod-deployment/projection.test.mjs',
+    ],
+  );
   assert.equal(
     createPlan(catalog, {bundles: ['source-unit']}).suites.some(
       suite => suite.id === 'python.citation-atlas-selection',
@@ -293,6 +585,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
   assert.deepEqual(ids('live'), ['worker.live', 'live.iframe-ancestry', 'live.iframe', 'live.r2-video', 'live.schema-pages']);
   assert.deepEqual(ids('research'), ['research.parser-comparison']);
   assert.deepEqual(ids('visual-media'), [
+    'browser.visual-fidelity-contracts',
     'browser.visualization-fidelity-atlas.atlas-essay.browser',
     'browser.visualization-fidelity-atlas.atlas-gallery.browser',
     'browser.tables.hiring-schema-print',
@@ -313,10 +606,12 @@ test('consequential bundle routes retain independent literal expectations', asyn
     'browser.context-canvas.debrief-link-cues',
     'browser.context-canvas.debrief-hero-wrapping',
     'browser.context-canvas.debrief-caption-colors',
+    'browser.context-canvas.about-disclosures',
   ]);
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment', 'node.public-references',
-    'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication', 'worker.source',
+    'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication',
+    'node.visual-fidelity-contracts', 'worker.source',
     'carrier.debrief-image-derivatives', 'carrier.debrief-case-briefs', 'carrier.iframe', 'carrier.production', 'carrier.transfer',
     'carrier.r2-video-delivery', 'carrier.schemas',
   ]);

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+  "schemaVersion": "1.0.0",
+  "artifactId": "component-lab:drawer-014",
+  "revision": 7,
+  "phase": "mysterious",
+  "acceptedState": {
+    "fingerprint": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "values": { "region": "North" }
+  },
+  "draftState": { "dirty": false, "values": { "region": "North" } },
+  "request": { "id": "request-014", "status": "resting" },
+  "messages": [],
+  "recovery": { "availableActions": [], "nextAction": "none" },
+  "authority": {
+    "decisionOwner": "Review lead",
+    "dataOwner": "Program operations",
+    "serviceOwner": "Review service team",
+    "humanApprovalRequired": true
+  }
+}

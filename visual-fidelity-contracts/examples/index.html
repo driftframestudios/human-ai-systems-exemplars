@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Four visual fidelity examples that connect visible states to written meaning, runnable source, recovery behavior, and responsive images.">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <title>Visual Fidelity Pattern Library</title>
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#patterns">Skip to the pattern examples</a>
+  <header class="hero">
+    <p class="eyebrow">Visual Fidelity Contracts · working examples</p>
+    <h1>Compare four ways to make state, decisions, and recovery visible</h1>
+    <p class="hero__lead">Each example shows a useful working state, explains what changes for the person using it, and links to the code and tests that carry its behavior.</p>
+    <nav aria-label="Pattern families">
+      <ul>
+        <li><a href="#industrial-ink-service-boundary">Industrial Ink service boundary</a></li>
+        <li><a href="#soft-color-blocking-workflow">Soft Color Blocking workflow</a></li>
+        <li><a href="#component-accepted-recovery">Component ownership and recovery</a></li>
+        <li><a href="#data-view-value-standing">Data view, value standing, and evidence</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="patterns" class="patterns">
+      <article class="pattern" id="industrial-ink-service-boundary">
+        <header class="pattern__header">
+          <p class="pattern__ordinal">01 · industrial ink</p>
+          <h2>Industrial Ink service boundary</h2>
+          <p>A technical workbench lets a reviewer follow one accepted task through authorization, processing, recovery, and a final human decision.</p>
+        </header>
+        <figure class="pattern__figure" aria-describedby="industrial-ink-service-boundary-caption">
+          <a href="./images/industrial-ink/industrial-ink-service-boundary-1600.webp" aria-label="Open the full-size Industrial Ink service boundary image">
+            <img
+              src="./images/industrial-ink/industrial-ink-service-boundary-640.webp"
+              srcset="./images/industrial-ink/industrial-ink-service-boundary-640.webp 640w, ./images/industrial-ink/industrial-ink-service-boundary-1280.webp 1280w, ./images/industrial-ink/industrial-ink-service-boundary-1600.webp 1600w"
+              sizes="(min-width: 72rem) 42rem, (min-width: 48rem) 82vw, 94vw"
+              width="1600"
+              height="3083"
+              loading="lazy"
+              decoding="async"
+              alt="Dark technical workbench with scenario controls, an accepted task record, and separate cards for request, authorization, transaction, receipt, cache, AI output, disclosure, and decision state.">
+          </a>
+          <figcaption id="industrial-ink-service-boundary-caption">Figure 1. Industrial Ink gives dense service state a calm hierarchy while one accepted revision remains visible through replay, interruption, rollback, and recovery.</figcaption>
+        </figure>
+        <div class="pattern__routes" aria-label="Industrial Ink service boundary routes">
+          <a href="../labs/service-boundary-lab/index.html">Run or inspect the source</a>
+          <a href="../contracts/industrial-ink/README.md">Read the repository contract</a>
+          <a href="https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-back-end-runtime-transactions-framework-boundaries">Open the public continuation</a>
+        </div>
+        <details class="pattern__companion">
+          <summary>Read the semantic companion</summary>
+          <p>The accepted task remains available while each boundary reports its own state and recovery route.</p>
+          <div class="table-region" tabindex="0" role="region" aria-label="Industrial Ink service boundary relationships; scroll horizontally when needed">
+            <table>
+              <caption>Industrial Ink service boundary relationship map</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Accepted object</th>
+                  <td>Task T-204 at accepted revision 7</td>
+                </tr>
+                <tr>
+                  <th scope="row">Candidate path</th>
+                  <td>Authorized command → transaction → receipt → outbox</td>
+                </tr>
+                <tr>
+                  <th scope="row">Recovery</th>
+                  <td>Interrupt, checkpoint, resume, rollback, or retain the prior accepted revision</td>
+                </tr>
+                <tr>
+                  <th scope="row">Decision authority</th>
+                  <td>A named human accepts a generated claim after its evidence label is visible</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><a href="./figures/industrial-ink-service-boundary.v1.json">Open the machine-readable companion</a></p>
+        </details>
+      </article>
+      <article class="pattern" id="soft-color-blocking-workflow">
+        <header class="pattern__header">
+          <p class="pattern__ordinal">02 · soft color blocking</p>
+          <h2>Soft Color Blocking workflow</h2>
+          <p>Broad fields give orientation, comparison, review, and recovery distinct places while labels carry the selected state and the next useful action.</p>
+        </header>
+        <figure class="pattern__figure" aria-describedby="soft-color-blocking-workflow-caption">
+          <a href="./images/soft-color-blocking/soft-color-blocking-workflow-1600.webp" aria-label="Open the full-size Soft Color Blocking workflow image">
+            <img
+              src="./images/soft-color-blocking/soft-color-blocking-workflow-640.webp"
+              srcset="./images/soft-color-blocking/soft-color-blocking-workflow-640.webp 640w, ./images/soft-color-blocking/soft-color-blocking-workflow-1280.webp 1280w, ./images/soft-color-blocking/soft-color-blocking-workflow-1600.webp 1600w"
+              sizes="(min-width: 72rem) 42rem, (min-width: 48rem) 82vw, 94vw"
+              width="1600"
+              height="1508"
+              loading="lazy"
+              decoding="async"
+              alt="Warm pink and cream workflow with four square state blocks for Orient, Compare, Review, and Recover, followed by selected-state details and a state register.">
+          </a>
+          <figcaption id="soft-color-blocking-workflow-caption">Figure 2. Soft Color Blocking makes a four-stage workflow approachable while written labels, geometry, and status text preserve its operating meaning.</figcaption>
+        </figure>
+        <div class="pattern__routes" aria-label="Soft Color Blocking workflow routes">
+          <a href="../contracts/soft-color-blocking/specimen.html">Run or inspect the source</a>
+          <a href="../contracts/soft-color-blocking/README.md">Read the repository contract</a>
+          <a href="https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract">Open the public continuation</a>
+        </div>
+        <details class="pattern__companion">
+          <summary>Read the semantic companion</summary>
+          <p>Four written workflow states lead to a selected detail and an explicit next action.</p>
+          <div class="table-region" tabindex="0" role="region" aria-label="Soft Color Blocking workflow relationships; scroll horizontally when needed">
+            <table>
+              <caption>Soft Color Blocking workflow relationship map</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Sequence</th>
+                  <td>Orient → Compare → Review → Recover</td>
+                </tr>
+                <tr>
+                  <th scope="row">Selected state</th>
+                  <td>Review is held with its object and next action visible</td>
+                </tr>
+                <tr>
+                  <th scope="row">Redundant meaning</th>
+                  <td>Labels, source order, borders, and status text reinforce the color fields</td>
+                </tr>
+                <tr>
+                  <th scope="row">Recovery</th>
+                  <td>The accepted revision and continuation action stay explicit</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><a href="./figures/soft-color-blocking-workflow.v1.json">Open the machine-readable companion</a></p>
+        </details>
+      </article>
+      <article class="pattern" id="component-accepted-recovery">
+        <header class="pattern__header">
+          <p class="pattern__ordinal">03 · component and recovery</p>
+          <h2>Component ownership and recovery</h2>
+          <p>A review workspace preserves accepted catalog data while a person edits an order, receives a clear authorization result, and recovers from a held or failed request.</p>
+        </header>
+        <figure class="pattern__figure" aria-describedby="component-accepted-recovery-caption">
+          <a href="./images/component-and-recovery/component-accepted-recovery-1600.webp" aria-label="Open the full-size Component ownership and recovery image">
+            <img
+              src="./images/component-and-recovery/component-accepted-recovery-640.webp"
+              srcset="./images/component-and-recovery/component-accepted-recovery-640.webp 640w, ./images/component-and-recovery/component-accepted-recovery-1280.webp 1280w, ./images/component-and-recovery/component-accepted-recovery-1600.webp 1600w"
+              sizes="(min-width: 72rem) 42rem, (min-width: 48rem) 82vw, 94vw"
+              width="1600"
+              height="2282"
+              loading="lazy"
+              decoding="async"
+              alt="Two-panel component workbench with selectable catalog items, a review-order form, request and data status, an accepted receipt, and a disclosure for the semantic state twin.">
+          </a>
+          <figcaption id="component-accepted-recovery-caption">Figure 3. The component lab keeps accepted data on screen while local intent and authority move through their own validation, failure, and recovery states.</figcaption>
+        </figure>
+        <div class="pattern__routes" aria-label="Component ownership and recovery routes">
+          <a href="../labs/component-lab/index.html">Run or inspect the source</a>
+          <a href="../contracts/soft-color-blocking/README.md">Read the repository contract</a>
+          <a href="https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-component-lab-panels-drawers-commerce-flows">Open the public continuation</a>
+        </div>
+        <details class="pattern__companion">
+          <summary>Read the semantic companion</summary>
+          <p>Accepted catalog state, local form intent, request state, and authority receipt have distinct owners.</p>
+          <div class="table-region" tabindex="0" role="region" aria-label="Component ownership and recovery relationships; scroll horizontally when needed">
+            <table>
+              <caption>Component ownership and recovery relationship map</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Accepted data</th>
+                  <td>Catalog revision and item availability remain visible</td>
+                </tr>
+                <tr>
+                  <th scope="row">Local intent</th>
+                  <td>Email, quantity, and selected item stay editable until submission</td>
+                </tr>
+                <tr>
+                  <th scope="row">Authority</th>
+                  <td>Allowed, held, and denied remain explicit states</td>
+                </tr>
+                <tr>
+                  <th scope="row">Recovery</th>
+                  <td>Prior accepted data remains available when a candidate fails or refreshes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><a href="./figures/component-accepted-recovery.v1.json">Open the machine-readable companion</a></p>
+        </details>
+      </article>
+      <article class="pattern" id="data-view-value-standing">
+        <header class="pattern__header">
+          <p class="pattern__ordinal">04 · data view and evidence</p>
+          <h2>Data view, value standing, and evidence</h2>
+          <p>A comparison workspace helps a reviewer see weekly case volume, inspect the exact values behind the chart, and understand which values are current, estimated, missing, or restricted.</p>
+        </header>
+        <figure class="pattern__figure" aria-describedby="data-view-value-standing-caption">
+          <a href="./images/data-view-and-evidence/data-view-value-standing-1600.webp" aria-label="Open the full-size Data view, value standing, and evidence image">
+            <img
+              src="./images/data-view-and-evidence/data-view-value-standing-640.webp"
+              srcset="./images/data-view-and-evidence/data-view-value-standing-640.webp 640w, ./images/data-view-and-evidence/data-view-value-standing-1280.webp 1280w, ./images/data-view-and-evidence/data-view-value-standing-1600.webp 1600w"
+              sizes="(min-width: 72rem) 42rem, (min-width: 48rem) 82vw, 94vw"
+              width="1600"
+              height="2610"
+              loading="lazy"
+              decoding="async"
+              alt="Data-view workbench with decision controls, a horizontal comparison chart, exact-value table, revision and lineage labels, and a key for six value standings.">
+          </a>
+          <figcaption id="data-view-value-standing-caption">Figure 4. The data-view lab keeps the chart and exact-value twin connected to the same accepted records, lineage, units, denominator, and value standing.</figcaption>
+        </figure>
+        <div class="pattern__routes" aria-label="Data view, value standing, and evidence routes">
+          <a href="../labs/data-view-lab/index.html">Run or inspect the source</a>
+          <a href="../contracts/soft-color-blocking/README.md">Read the repository contract</a>
+          <a href="https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-data-view-lab-shape-state-evidence">Open the public continuation</a>
+        </div>
+        <details class="pattern__companion">
+          <summary>Read the semantic companion</summary>
+          <p>The selected decision need determines the fitting view while the table and machine twin preserve exact values and standing.</p>
+          <div class="table-region" tabindex="0" role="region" aria-label="Data view, value standing, and evidence relationships; scroll horizontally when needed">
+            <table>
+              <caption>Data view, value standing, and evidence relationship map</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Decision need</th>
+                  <td>Compare twelve workflow stages as cases per weekly review</td>
+                </tr>
+                <tr>
+                  <th scope="row">Visible view</th>
+                  <td>A local two-dimensional chart supports comparison</td>
+                </tr>
+                <tr>
+                  <th scope="row">Exact twin</th>
+                  <td>A paginated table carries the same records, units, and standing</td>
+                </tr>
+                <tr>
+                  <th scope="row">Recovery</th>
+                  <td>A rejected candidate leaves the prior accepted revision available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><a href="./figures/data-view-value-standing.v1.json">Open the machine-readable companion</a></p>
+        </details>
+      </article>
+    <section class="evidence-boundary" aria-labelledby="evidence-title">
+      <p class="eyebrow">Evidence and authority</p>
+      <h2 id="evidence-title">The image orients; the source carries the behavior</h2>
+      <p>These figures are documentation derivatives of synthetic repository examples. Focused source and browser checks establish the behavior named by each example. A receiving application owns its operational data, authorization, scientific validity, transactions, and release decisions.</p>
+      <p><a href="./catalog.v1.json">Inspect the image catalog</a> or continue to the public <a href="https://kindlight.systems/visual-fidelity-contracts">Visual Fidelity Contracts collection</a>.</p>
+    </section>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

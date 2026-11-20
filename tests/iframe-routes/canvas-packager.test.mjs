@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, symlink } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { readDocumentSpans } from "../../tools/html-document-spans.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 
 import {
@@ -12,6 +13,7 @@ import {
   artifactLicense,
 } from "../../tools/attribution-contract.mjs";
 import {
+  iframeFaviconHref,
   sha256,
   verifyPackagePlan,
   writePackagePlan,
@@ -51,23 +53,30 @@ test("the shared package writer rejects paths outside its output root", async ()
   }
 });
 
-test("the Canvas family plan follows the authored 15-route manifest", async () => {
+const embeddedFaviconRoutes = [
+  "/v1/canvas/cross-functional-investment-model-studio/",
+  "/v1/canvas/open-lesson-field/",
+];
+
+test("the Canvas family plan follows the authored 16-route manifest", async () => {
   const first = await createCanvasPackagePlan();
   const second = await createCanvasPackagePlan();
 
   assert.equal(first.contract.base_path, "/v1/canvas/");
-  assert.equal(first.contract.routes.length, 15);
-  assert.equal(first.outputFiles.size, 40);
+  assert.equal(first.contract.routes.length, 16);
+  assert.equal(first.outputFiles.size, 41);
   assert.equal(
     first.receipt.route_contract.file,
     "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
   );
   assert.deepEqual(first.receipt.package_contract, {
-    primary_routes: 15,
-    decorated_routes: 15,
+    primary_routes: 16,
+    decorated_routes: 16,
     byte_identical_routes: 0,
     navigation_adapted_routes: 1,
-    generated_files: 40,
+    generated_files: 41,
+    favicon_href: iframeFaviconHref,
+    embedded_favicon_routes: embeddedFaviconRoutes,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
     browser_request_observation_required: true,
@@ -83,6 +92,19 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
     assert.ok(projection, `${route.id} has an index projection`);
     const html = projection.toString("utf8");
     const receipt = first.receipt.routes.find(({ id }) => id === route.id);
+    assert.equal((html.match(/<link rel="icon" /gu) ?? []).length, 1, `${route.id} declares one tab icon`);
+    if (embeddedFaviconRoutes.includes(route.public_alias)) {
+      const icon = /<link rel="icon" type="image\/png" href="data:image\/png;base64,([^"]+)" sizes="32x32">/u.exec(html);
+      assert.ok(icon, `${route.id} admits its branded tab icon under img-src data:`);
+      const bytes = Buffer.from(icon[1], "base64");
+      assert.deepEqual(bytes, await readFile(path.join(repositoryRoot, "context-canvas-project-surface/context-canvas/favicon-32x32.png")));
+      assert.deepEqual(receipt.projection_rewrites.find(row => row.kind === "embedded_favicon"), {
+        kind: "embedded_favicon", source_file: "context-canvas-project-surface/context-canvas/favicon-32x32.png", sha256: sha256(bytes),
+      });
+      assert.match(html, /<meta http-equiv="Content-Security-Policy" content="[^"]*img-src data:;/u);
+    } else {
+      assert.ok(html.includes(`<link rel="icon" href="${iframeFaviconHref}" sizes="any">`));
+    }
     assert.deepEqual(receipt.navigation.unresolved_local_links, []);
     assert.equal(
       receipt.navigation.exit_links,
@@ -104,18 +126,19 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
       assert.ok(projection.equals(Buffer.from(source)), `${route.id} remains byte-identical`);
       continue;
     }
-    assert.equal(occurrenceCount(html, artifactAuthor), 2, `${route.id} author metadata and notice`);
-    assert.equal(occurrenceCount(html, artifactLicense), 1, `${route.id} license relation`);
-    assert.equal(occurrenceCount(html, artifactAttribution), 1, `${route.id} attribution notice`);
-    assert.equal(occurrenceCount(html, "data-visitor-boundary aria-label="), 1);
-    assert.equal(occurrenceCount(html, visitorBoundaryContract.contextText), 1);
+    const markup = readDocumentSpans(html).outerMarkup();
+    assert.equal(occurrenceCount(markup, artifactAuthor), 2, `${route.id} author metadata and notice`);
+    assert.equal(occurrenceCount(markup, artifactLicense), 1, `${route.id} license relation`);
+    assert.equal(occurrenceCount(markup, artifactAttribution), 1, `${route.id} attribution notice`);
+    assert.equal(occurrenceCount(markup, "data-visitor-boundary aria-label="), 1);
+    assert.equal(occurrenceCount(markup, visitorBoundaryContract.contextText), 1);
     assert.ok(
-      html.indexOf("data-visitor-boundary-context") <
-        html.indexOf("data-visitor-boundary-marker"),
+      markup.indexOf("data-visitor-boundary-context") <
+        markup.indexOf("data-visitor-boundary-marker"),
       `${route.id} context before exact markers`,
     );
     assert.equal(
-      occurrenceCount(html, "<style data-iframe-route-projection>"),
+      occurrenceCount(markup, "<style data-iframe-route-projection>"),
       ["decorated_copy", "decorated_rewrite"].includes(route.projection_kind) ? 1 : 0,
       `${route.id} carries only its declared public decoration`,
     );
@@ -237,8 +260,10 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
     assert.ok(bytes.equals(aggregate.outputFiles.get(`canvas/${file}`)), `Canvas ${file}`);
   }
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
-  assert.equal(aggregate.receipt.package_contract.primary_routes, 38);
-  assert.equal(aggregate.receipt.package_contract.generated_files, 68);
+  assert.equal(aggregate.receipt.package_contract.primary_routes, 39);
+  assert.equal(aggregate.receipt.package_contract.favicon_href, iframeFaviconHref);
+  assert.deepEqual(aggregate.receipt.package_contract.embedded_favicon_routes, embeddedFaviconRoutes);
+  assert.equal(aggregate.receipt.package_contract.generated_files, 69);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,
     [...aggregate.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
@@ -252,7 +277,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
         bytes: [...core.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
       },
       {
-        routes: 15,
+        routes: 16,
         files: canvas.outputFiles.size,
         bytes: [...canvas.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
       },
@@ -280,7 +305,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   );
 
   const verification = await checkAggregatePackage(aggregate);
-  assert.equal(verification.files, 68);
+  assert.equal(verification.files, 69);
   assert.ok(verification.bytes > 1_740_871);
 });
 

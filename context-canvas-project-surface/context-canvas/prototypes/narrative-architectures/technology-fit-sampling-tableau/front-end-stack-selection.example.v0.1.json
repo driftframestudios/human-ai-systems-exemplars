@@ -234,7 +234,7 @@
           },
           "strengths": [
             "Readable local style ownership",
-            "Strong React ecosystem access with explicit component seams",
+            "Strong React ecosystem access with clear boundaries between components",
             "Straightforward semantic HTML and SVG control"
           ],
           "tradeoffs": [
@@ -506,7 +506,7 @@
           },
           "strengths": [
             "Strong platform-level component interoperability",
-            "Clear module and custom-element seams",
+            "Clear interfaces for modules and custom elements",
             "Direct control of HTML, CSS, and SVG"
           ],
           "tradeoffs": [
@@ -730,7 +730,7 @@
           },
           "strengths": [
             "Readable local style ownership",
-            "Strong React ecosystem access with explicit component seams",
+            "Strong React ecosystem access with clear boundaries between components",
             "Straightforward semantic HTML and SVG control"
           ],
           "tradeoffs": [
@@ -1002,7 +1002,7 @@
           },
           "strengths": [
             "Strong platform-level component interoperability",
-            "Clear module and custom-element seams",
+            "Clear interfaces for modules and custom elements",
             "Direct control of HTML, CSS, and SVG"
           ],
           "tradeoffs": [
@@ -1614,7 +1614,7 @@
       "evidence",
       "boundary"
     ],
-    "determination": "Technical gaps are first-class because framework fit depends on runtime, semantics, accessibility, SVG behavior, resource lifetimes, build boundaries, and replacement seams. Methodological gaps remain first-class for sampling, calibration, commensurability, and candidate coverage."
+    "determination": "Technical gaps are first-class because framework fit depends on runtime, semantics, accessibility, SVG behavior, resource lifetimes, build boundaries, and which components can be replaced. Methodological gaps remain first-class for sampling, calibration, commensurability, and candidate coverage."
   },
   "decision": {
     "id": "technology-decision-record/v0.1",
@@ -1631,8 +1631,8 @@
       "vanilla-ts-web-components-css-layers"
     ],
     "declinedCandidateIds": [],
-    "decisionRule": "Select two candidates whose combined spike set creates the most information gain across accessibility, SVG control, maintainability, and replacement seams while preserving materially different framework commitments.",
-    "rationale": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with explicit seams. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
+    "decisionRule": "Select two candidates whose combined spike set creates the most information gain across accessibility, SVG control, maintainability, and the ability to replace individual components while preserving materially different framework commitments.",
+    "rationale": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with clear boundaries between components. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
     "dissentOrMinorityRead": "A platform-first Web Components spike may create stronger long-horizon evidence and should enter the next round when the initial two spikes leave swapability or operational-calm questions unresolved.",
     "evidenceRequiredBeforeCommitment": [
       "Semantic form and status-feedback verification",
@@ -1688,10 +1688,10 @@
       "evidenceNeeded": "Repeat across models and prompts with the same candidate set."
     },
     {
-      "id": "shift-explicit-seams",
+      "id": "shift-layer-boundaries",
       "candidateId": "react-css-modules-headless",
       "direction": "raise",
-      "hypothesis": "Explicit layer seams and headless primitive requirements increase both recommendation likelihood and contextual fit.",
+      "hypothesis": "Clear boundaries between layers and headless primitive requirements increase both recommendation likelihood and contextual fit.",
       "status": "hypothesis",
       "evidenceNeeded": "Compare generated architectures and replacement-spike effort."
     },

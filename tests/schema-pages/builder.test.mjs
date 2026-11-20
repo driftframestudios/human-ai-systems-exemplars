@@ -33,6 +33,15 @@ import {
   schemaCompanionRoutes,
 } from "../../tools/schema-publication.mjs";
 import {
+  assertSchemaCompanionProjectionRoutes,
+  projectSchemaCompanionBytes,
+  projectSchemaCompanionRoute,
+  schemaCompanionProjections,
+} from "../../tools/schema-companion-projections.mjs";
+import {
+  loadPublicRouteReferenceBinding,
+} from "../../tools/public-route-reference-contract.mjs";
+import {
   assertExactFileInventory,
   assertPublicMaterial,
   assertTermsAbsent,
@@ -224,6 +233,10 @@ test("the built registry resolves current authorship, license, and deployment me
     1,
   );
   assert.ok(html.includes(`<link rel="license" href="${artifactLicense}">`));
+  assert.equal(
+    occurrenceCount(html, '<link rel="icon" href="favicon.ico" sizes="any">'),
+    1,
+  );
   assert.ok(html.includes(`<link rel="canonical" href="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta property="og:url" content="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
@@ -260,37 +273,117 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.equal(structuredData.license, artifactLicense);
 });
 
-test("every declared receiver is discoverable and byte-identical to its source", async () => {
+test("the built registry carries the repository favicon at its artifact root", async () => {
+  const sourcePath = resolve(
+    repositoryRoot,
+    "context-canvas-project-surface/context-canvas/favicon.ico",
+  );
+  const [sourceBytes, receiverBytes] = await Promise.all([
+    readFile(sourcePath),
+    readFile(resolve(outputRoot, "favicon.ico")),
+  ]);
+
+  assert.deepEqual(receiverBytes, sourceBytes);
+});
+
+test("every declared receiver is discoverable and delivers its frozen source bytes", async () => {
   const html = await readFile(resolve(outputRoot, "index.html"), "utf8");
 
   for (const route of schemaReceiverRoutes) {
     assert.ok(html.includes(`href="${route.receiverPath}"`), route.receiverPath);
-    const [sourceBytes, receiverBytes] = await Promise.all([
-      readFile(resolve(repositoryRoot, route.source)),
+    const [publicationBytes, receiverBytes] = await Promise.all([
+      readFile(resolve(repositoryRoot, route.frozenSource ?? route.source)),
       readFile(resolve(outputRoot, route.receiverPath)),
     ]);
-    assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    assert.deepEqual(receiverBytes, publicationBytes, route.receiverPath);
+    if (route.frozenSource) {
+      const workingSchema = JSON.parse(await readFile(resolve(repositoryRoot, route.source)));
+      assert.deepEqual(JSON.parse(receiverBytes), workingSchema, route.source);
+    }
   }
 });
 
-test("every selected companion is byte-identical, public-safe, and available at its receiver path", async () => {
+test("every selected companion is public-safe and available at its receiver path", async () => {
   const allReceiverPaths = [
     ...schemaReceiverRoutes.map(({ receiverPath }) => receiverPath),
     ...schemaCompanionRoutes.map(({ receiverPath }) => receiverPath),
   ];
   assert.equal(new Set(allReceiverPaths).size, allReceiverPaths.length);
+  const projectedCompanionPaths = new Set([
+    "collaboration-skills/0.1.0/README.md",
+  ]);
 
   for (const route of schemaCompanionRoutes) {
     const [sourceBytes, receiverBytes] = await Promise.all([
       readFile(resolve(repositoryRoot, route.source)),
       readFile(resolve(outputRoot, route.receiverPath)),
     ]);
-    assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    if (!projectedCompanionPaths.has(route.receiverPath)) {
+      assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    }
     assert.doesNotThrow(() => assertPublicMaterial(sourceBytes, route.source));
+    assert.doesNotThrow(() => assertPublicMaterial(receiverBytes, route.receiverPath));
     if (/\.json(?:ld)?$/u.test(route.receiverPath)) {
       assert.doesNotThrow(() => JSON.parse(sourceBytes.toString("utf8")), route.receiverPath);
     }
   }
+});
+
+test("the projected Collaboration Skills README localizes its repository routes", async () => {
+  const receiver = await readFile(
+    resolve(outputRoot, "collaboration-skills/0.1.0/README.md"),
+    "utf8",
+  );
+  assert.ok(receiver.includes(
+    "[Browse the repository-local public skills catalog](../../skills/).",
+  ));
+  assert.ok(receiver.includes("(../../skills/source-authority-mapping/)"));
+  assert.ok(receiver.includes(
+    "(../../skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
+  ));
+  assert.equal(receiver.includes("../../../.agents/skills/"), false);
+  assert.equal(receiver.includes("../../../threadkeeping/"), false);
+});
+
+test("schema companion projections are explicit and deterministic", async () => {
+  const route = schemaCompanionRoutes.find(
+    ({ receiverPath }) => receiverPath === "collaboration-skills/0.1.0/README.md",
+  );
+  const projection = schemaCompanionProjections.find(
+    ({ receiverPath }) => receiverPath === route.receiverPath,
+  );
+  const source = await readFile(resolve(repositoryRoot, route.source));
+  const receiver = await readFile(resolve(outputRoot, route.receiverPath));
+  assert.equal(projection.pagesProjection, "schema-pages-collaboration-readme-v1");
+  assert.equal(projection.workerProjection, "schema-worker-collaboration-readme-v1");
+  assert.deepEqual(projectSchemaCompanionRoute(route, source, "pages"), receiver);
+  const workerProjection = projectSchemaCompanionRoute(route, receiver, "worker").toString("utf8");
+  assert.match(workerProjection, /https:\/\/schemas\.radiantnull\.com\/skills\//u);
+  assert.equal(workerProjection.includes("(../../skills/"), false);
+  assert.doesNotThrow(() => assertSchemaCompanionProjectionRoutes(schemaCompanionRoutes));
+  assert.throws(
+    () => assertSchemaCompanionProjectionRoutes([]),
+    /Select the projected schema companion route/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes("unregistered-projection", source),
+    /Select a recognized schema companion projection/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes("constructor", source),
+    /Select a recognized schema companion projection/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionBytes(
+      projection.pagesProjection,
+      Buffer.from(source.toString("utf8").replace("## Start here", "## Begin here")),
+    ),
+    /requires one authored marker/u,
+  );
+  assert.throws(
+    () => projectSchemaCompanionRoute(route, source, "unregistered-target"),
+    /Select a recognized schema companion projection target/u,
+  );
 });
 
 test("the public Narrative and Threadkeeping examples exercise their selected contracts", async () => {
@@ -644,10 +737,11 @@ test("the private selection ledger classifies the complete repository skill fami
   const possibleNames = selection.skills
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
-  assert.equal(readyNames.length, 27);
+  assert.ok(readyNames.includes("ascii-zine-composition"), "the portable ASCII composition method is selected for public release");
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
+    "design-token-pipeline-stewardship",
     "relational-execution-review",
     "repository-collaboration-cycle",
     "repository-handoff-readiness",
@@ -924,14 +1018,39 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
     /<section\s+aria-labelledby="catalog-title">([\s\S]*?)<\/section>/u,
   )?.[1];
   assert.ok(table);
-  const catalogNames = [...table.matchAll(/schemas\.radiantnull\.com\/skills\/([^/]+)\//gu)]
-    .map((match) => match[1])
+  for (const [, row] of table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gu)) {
+    assert.equal([...row.matchAll(/<(?:th|td)\b/gu)].length, 3, "each skill catalog row supplies method, use, and result cells");
+  }
+  const routeContract = await loadPublicRouteReferenceBinding();
+  const skillBindings = new Map(routeContract.routes
+    .filter(({ owner }) =>
+      owner.type === "skill_publication_selection" &&
+      typeof owner.skill_name === "string")
+    .map(({ owner, token }) => [owner.skill_name, token]));
+  const pagesHost = (await readFile(resolve(repositoryRoot, "schemas/CNAME"), "utf8")).trim();
+  for (const route of routeContract.routes.filter(({ role }) => role === "skill_pages_html")) {
+    const url = new URL(route.url);
+    assert.equal(url.origin, `https://${pagesHost}`);
+    assert.equal(url.pathname, `/skills/${route.owner.skill_name}/`);
+    assert.ok((await stat(resolve(outputRoot, "." + url.pathname, "index.html"))).isFile());
+  }
+  const nameByToken = new Map(
+    [...skillBindings].map(([name, token]) => [token, name]),
+  );
+  const catalogNames = [...table.matchAll(
+    /href="\{\{(PUBLIC_URL_SKILL_[A-Z0-9_]+)\}\}"/gu,
+  )]
+    .map((match) => nameByToken.get(match[1]))
+    .filter(Boolean)
     .sort();
   assert.deepEqual(catalogNames, readyNames);
+  assert.equal(skillBindings.size, readyNames.length);
   assert.equal(new Set(catalogNames).size, catalogNames.length);
   for (const readyName of readyNames) {
+    const token = skillBindings.get(readyName);
+    assert.equal(typeof token, "string", readyName);
     assert.ok(table.includes(
-      `href="https://schemas.radiantnull.com/skills/${readyName}/"`,
+      `href="{{${token}}}"`,
     ));
   }
   for (const skillName of visualizationLadderNames) {

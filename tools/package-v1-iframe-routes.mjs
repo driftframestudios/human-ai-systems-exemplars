@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   assertRegularFile,
+  iframeFaviconHref,
   sha256,
   verifyPackagePlan,
   writePackagePlan,
@@ -48,7 +49,8 @@ function assertFamilyPlan(family, plan) {
   const expectedBasePath = `/v1/${family}/`;
   if (
     plan.receipt.host !== "iframes.vik.guru" ||
-    plan.receipt.base_path !== expectedBasePath
+    plan.receipt.base_path !== expectedBasePath ||
+    plan.receipt.package_contract?.favicon_href !== iframeFaviconHref
   ) {
     fail(
       `Iframe route family ${family} must own iframes.vik.guru${expectedBasePath}.`,
@@ -76,9 +78,9 @@ function packageBytesFor(plan) {
   );
 }
 
-function serializeAggregateReceipt(receipt, familyBytes) {
+function serializeAggregateReceipt(receipt, familyBytes, compact) {
   for (let attempt = 0; attempt < 10; attempt += 1) {
-    const bytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+    const bytes = Buffer.from(`${JSON.stringify(receipt, null, compact ? undefined : 2)}\n`, "utf8");
     const generatedBytes = familyBytes + bytes.byteLength;
     if (receipt.package_contract.generated_bytes === generatedBytes) return bytes;
     receipt.package_contract.generated_bytes = generatedBytes;
@@ -89,8 +91,8 @@ function serializeAggregateReceipt(receipt, familyBytes) {
 export async function createAggregatePackagePlan(options = {}) {
   const paths = { ...aggregateDefaultPaths, ...options };
   const [corePlan, canvasPlan] = await Promise.all([
-    createCorePackagePlan(options.core ?? {}),
-    createCanvasPackagePlan(options.canvas ?? {}),
+    createCorePackagePlan({ ...options.core, compact: options.compact }),
+    createCanvasPackagePlan({ ...options.canvas, compact: options.compact }),
   ]);
   const familyPlans = new Map([
     ["core", corePlan],
@@ -144,11 +146,13 @@ export async function createAggregatePackagePlan(options = {}) {
       primary_routes: aggregateRoutes,
       generated_files: outputFiles.size + 1,
       generated_bytes: 0,
+      favicon_href: iframeFaviconHref,
+      embedded_favicon_routes: [...familyPlans.values()].flatMap(plan => plan.receipt.package_contract.embedded_favicon_routes ?? []),
       live_cloudflare_mutation: false,
     },
     families,
   };
-  outputFiles.set("route-manifest.json", serializeAggregateReceipt(receipt, aggregateFamilyBytes));
+  outputFiles.set("route-manifest.json", serializeAggregateReceipt(receipt, aggregateFamilyBytes, options.compact));
 
   return {
     receipt,

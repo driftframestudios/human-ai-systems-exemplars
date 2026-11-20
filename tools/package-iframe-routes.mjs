@@ -14,9 +14,11 @@ import { fileURLToPath } from "node:url";
 import {
   assertRegularFile,
   assertRegularFileWithin,
+  iframeFaviconHref,
   listRegularFiles,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeFavicon,
   projectIframeExitLinks,
   scanHtmlClosure,
   scanPackageClosure,
@@ -24,6 +26,8 @@ import {
   verifyPackagePlan,
   writePackagePlan,
 } from "./iframe-route-package-engine.mjs";
+import { materializePublicReferenceHtml } from "./materialize-public-references.mjs";
+import { loadPublicRouteReferenceBinding } from "./public-route-reference-contract.mjs";
 
 export {
   assertRegularFile,
@@ -199,14 +203,6 @@ function assertExactArray(actual, expected, label) {
   }
 }
 
-function replaceExactOnce(source, search, replacement, label) {
-  const first = source.indexOf(search);
-  if (first === -1 || source.indexOf(search, first + search.length) !== -1) {
-    fail(`${label} must appear exactly once in the Conditioning Field source.`);
-  }
-  return `${source.slice(0, first)}${replacement}${source.slice(first + search.length)}`;
-}
-
 function replacePatternOnce(source, pattern, replacement, label) {
   let replacements = 0;
   const rewritten = source.replace(pattern, (...arguments_) => {
@@ -265,35 +261,44 @@ const conditioningFieldProjectionStyle = `  <style data-iframe-route-projection>
   </style>
 `;
 
-export function deriveConditioningFieldProjection(html) {
+export function deriveConditioningFieldProjection(html, routeDestinations = null) {
   if (typeof html !== "string") {
     fail("Conditioning Field projection requires HTML text.");
   }
 
   let projected = html;
-  for (const dependency of [
-    '  <link rel="stylesheet" href="canvas-shell.css">\n',
-    '  <script src="visitor-boundary-contract.js" defer></script>\n',
-    '  <script src="canvas-shell.js" defer></script>\n',
+  for (const [dependency, pattern] of [
+    ["canvas-shell.css", /<link\s+rel="stylesheet"\s+href="canvas-shell\.css"\s*\/?>/gu],
+    ["visitor-boundary-contract.js", /<script\s+src="visitor-boundary-contract\.js"\s+defer\s*>\s*<\/script>/gu],
+    ["canvas-shell.js", /<script\s+src="canvas-shell\.js"\s+defer\s*>\s*<\/script>/gu],
   ]) {
-    projected = replaceExactOnce(
-      projected,
-      dependency,
-      "",
-      `Shared shell dependency ${dependency.trim()}`,
-    );
+    projected = replacePatternOnce(projected, pattern, "", `Shared shell dependency ${dependency}`);
   }
 
+  // The host page supplies site navigation around this self-contained instrument.
   projected = replacePatternOnce(
     projected,
-    /,\n\s*"isBasedOn":\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\n\s*\})/gu,
+    /<nav\b[^>]*\bclass="super-footer__grid"[^>]*>[\s\S]*?<\/nav>/gu,
+    "",
+    "Portfolio footer navigation",
+  );
+  projected = replacePatternOnce(
+    projected,
+    /,\s*"isBasedOn"\s*:\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\s*\})/gu,
     "",
     "Unresolved Conditioning Field JSON-LD public reference",
   );
-  projected = replaceExactOnce(
+  projected = materializePublicReferenceHtml(
     projected,
-    "  <noscript><style>\n",
-    `${conditioningFieldProjectionStyle}  <noscript><style>\n`,
+    routeDestinations,
+    "Conditioning Field embedded projection",
+    null,
+    routeDestinations,
+  );
+  projected = replacePatternOnce(
+    projected,
+    /<noscript\s*>\s*<style\s*>/gu,
+    (opening) => `${conditioningFieldProjectionStyle}${opening}`,
     "Projection-local visitor-boundary style insertion point",
   );
 
@@ -931,11 +936,14 @@ function sourceRootForRoute(paths, route) {
 }
 
 export async function createPackagePlan(options = {}) {
-  const paths = { ...defaultPaths, ...options };
-  const [routeManifestReading, sourceManifestReading] = await Promise.all([
+  const { publicRouteReference = null, compact, ...pathOptions } = options;
+  const paths = { ...defaultPaths, ...pathOptions };
+  const [routeManifestReading, sourceManifestReading, routeReference] = await Promise.all([
     readJsonFile(paths.sourceRoot, paths.routeManifestPath, "Public iframe route manifest"),
     readJsonFile(paths.sourceRoot, paths.sourceManifestPath, "Core source manifest"),
+    publicRouteReference ?? loadPublicRouteReferenceBinding(),
   ]);
+  const routeDestinations = routeReference.destinations ?? routeReference;
   const contract = routeManifestReading.value;
   const sourceManifest = sourceManifestReading.value;
   validateRouteContract(contract, sourceManifest);
@@ -947,7 +955,8 @@ export async function createPackagePlan(options = {}) {
     );
   }
 
-  const outputFiles = new Map([["manifest.json", sourceManifestReading.bytes]]);
+  const manifestBytes = compact ? await compact("manifest.json", sourceManifestReading.bytes) : sourceManifestReading.bytes;
+  const outputFiles = new Map([["manifest.json", manifestBytes]]);
   const portablePlannedOutputPaths = new Set(["manifest.json", "route-manifest.json"]);
   const reservedOutputPaths = new Set(["manifest.json", "route-manifest.json"]);
   const sourceById = new Map(sourceManifest.prototypes.map((entry) => [entry.id, entry]));
@@ -965,7 +974,7 @@ export async function createPackagePlan(options = {}) {
     const baseProjectionText = route.kind === "hub"
       ? rewriteHub(sourceText, contract)
       : route.kind === "supplemental_instrument"
-        ? deriveConditioningFieldProjection(sourceText)
+        ? deriveConditioningFieldProjection(sourceText, routeDestinations)
         : sourceText;
     const navigationProjection = rewriteDeclaredNavigation(baseProjectionText, route);
     const exitProjection = route.kind === "hub"
@@ -977,7 +986,8 @@ export async function createPackagePlan(options = {}) {
           runtime_adapter: false,
         }
       : projectIframeExitLinks(navigationProjection.html);
-    const projectionText = exitProjection.html;
+    const rendered = projectIframeFavicon(exitProjection.html);
+    const projectionText = compact ? (await compact("index.html", Buffer.from(rendered))).toString("utf8") : rendered;
     const projectionBytes = projectionText === sourceText
       ? sourceBytes
       : Buffer.from(projectionText, "utf8");
@@ -1011,7 +1021,8 @@ export async function createPackagePlan(options = {}) {
         packageSourcePath,
         `Package source for route ${route.id}`,
       );
-      const packageBytes = await readFile(packageSourcePath);
+      const source = await readFile(packageSourcePath);
+      const packageBytes = compact ? await compact(packageFile.target_file, source) : source;
       const packageOutputPath = path.posix.join(routeOutputDirectory, packageFile.target_file);
       const portablePackageOutputPath = portablePathKey(packageOutputPath);
       if (
@@ -1035,7 +1046,12 @@ export async function createPackagePlan(options = {}) {
         sha256: sha256(packageBytes),
       });
     }
-    const closure = scanPackageClosure(projectionText, packageReadings, `Route ${route.id}`);
+    const closure = scanPackageClosure(
+      projectionText,
+      packageReadings,
+      `Route ${route.id}`,
+      { allowedOutsideResources: new Set([iframeFaviconHref]) },
+    );
 
     routeReadings.push({
       route,
@@ -1103,7 +1119,7 @@ export async function createPackagePlan(options = {}) {
           : reading.exitProjection.rewritten_links > 0 ||
               reading.projectionRewrites.some(({ kind }) => kind === "primary_site_navigation")
             ? "navigation_adapted"
-            : "source_identical",
+            : reading.projectionBytes.equals(reading.sourceBytes) ? "source_identical" : "formatted_copy",
       projection_rewrites: reading.projectionRewrites,
       source_bytes: reading.sourceBytes.byteLength,
       source_sha256: sha256(reading.sourceBytes),
@@ -1130,7 +1146,8 @@ export async function createPackagePlan(options = {}) {
     source_manifest: {
       file: "manifest.json",
       source_file: path.basename(paths.sourceManifestPath),
-      sha256: sha256(sourceManifestReading.bytes),
+      sha256: sha256(manifestBytes),
+      ...(compact ? { source_sha256: sha256(sourceManifestReading.bytes) } : {}),
     },
     package_contract: {
       primary_routes: routeReceipts.length,
@@ -1142,6 +1159,7 @@ export async function createPackagePlan(options = {}) {
         ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: generatedFileCount,
+      favicon_href: iframeFaviconHref,
       compatibility_aliases_generated: false,
       live_cloudflare_mutation: false,
       closure_observation: "static_resource_graph",
@@ -1151,7 +1169,7 @@ export async function createPackagePlan(options = {}) {
     routes: routeReceipts,
     resting_compatibility_aliases: contract.compatibility_aliases,
   };
-  const receiptBytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+  const receiptBytes = Buffer.from(`${JSON.stringify(receipt, null, compact ? undefined : 2)}\n`, "utf8");
   outputFiles.set("route-manifest.json", receiptBytes);
 
   return {

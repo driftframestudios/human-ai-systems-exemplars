@@ -1,0 +1,21 @@
+{
+  "kind": "native-investment-plan",
+  "schemaVersion": "0.1.0",
+  "modelVersion": "0.1.0",
+  "planId": "legacy-purpose-migration",
+  "revision": 7,
+  "currency": "USD",
+  "horizonWeeks": 6,
+  "people": [
+    { "id": "known", "label": "Known rate", "fundedMinutes": 0, "rateCentsPerHour": 10000 },
+    { "id": "unknown", "label": "Unknown rate", "fundedMinutes": 0, "rateCentsPerHour": null },
+    { "id": "zero", "label": "Zero rate", "fundedMinutes": 0, "rateCentsPerHour": 0 }
+  ],
+  "teams": [
+    { "id": "delivery", "label": "Delivery", "personIds": ["known", "unknown", "zero"] }
+  ],
+  "work": [
+    { "id": "review", "label": "Working session", "teamId": "delivery", "personIds": ["known", "unknown", "zero"], "minutesPerOccurrence": 30, "occurrences": 2, "funding": "additional", "status": "planned", "timing": null }
+  ],
+  "practices": []
+}

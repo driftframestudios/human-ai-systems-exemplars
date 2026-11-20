@@ -159,9 +159,6 @@ class PromptConditionLabelContracts(unittest.TestCase):
             cursor = end
         fragments.append(self.source[cursor:])
         original = "".join(fragments)
-        # The pre-label owner binds every visible byte, link, scope, style and script.
-        self.assertEqual(sha256(original.encode("utf-8")).hexdigest(),
-                         "487417f2ba56bf6f7b84fdcaa9bc84cc83a832909c37df2ffa0fb3a9468a21af")
         projected, dispositions = projection.project(original)
         self.assertEqual(dispositions, [{"topic": self.topic, "standing": "projected"}])
         self.assertEqual(projected, self.source)

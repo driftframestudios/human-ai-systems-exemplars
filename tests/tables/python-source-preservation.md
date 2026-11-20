@@ -56,6 +56,10 @@ HTMLParser after a bounded lexical scan, retaining original start-tag spans.
 Parser migration remains a separate adoption decision.
 
 A selected table has explicitly balanced source tags and one caption owner.
+Caption and cell content may include inline SVG icons. The projector preserves
+their empty `svg`, `path`, `circle`, `ellipse`, `line`, `polygon`, `polyline`,
+`rect`, and `use` elements byte for byte. Other non-void HTML elements use
+paired tags.
 The projection contract accepts one complete native column-header row. Every
 other row passes cell-count validation, including header-only and empty rows.
 Label derivation retains the existing policy of projecting records containing

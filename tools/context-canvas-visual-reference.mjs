@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { chromium } from "@playwright/test";
 import { execFile } from "node:child_process";
@@ -188,7 +189,7 @@ async function sourceIdentity() {
   };
 }
 
-async function startStaticServer(rootDirectory) {
+export async function startStaticServer(rootDirectory) {
   const contentTypes = {
     ".css": "text/css; charset=utf-8",
     ".gif": "image/gif",
@@ -197,6 +198,7 @@ async function startStaticServer(rootDirectory) {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
     ".js": "text/javascript; charset=utf-8",
+    ".mjs": "text/javascript; charset=utf-8",
     ".json": "application/json; charset=utf-8",
     ".png": "image/png",
     ".svg": "image/svg+xml",
@@ -584,7 +586,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error.stack || error.message);
-  process.exitCode = 1;
-});
+if (isDirectExecution(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.stack || error.message);
+    process.exitCode = 1;
+  });
+}

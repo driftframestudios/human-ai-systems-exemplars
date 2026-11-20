@@ -32,6 +32,7 @@ async function open(t, engine, route) {
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Embedded owner</title>' }));
   await page.goto(server.origin + root + route, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
+  for (const control of await page.locator('details.implementation-companion > summary').all()) await control.click();
   await page.locator('.page-section-rail__link').first().evaluate(link => { location.hash = link.hash; });
   await page.waitForSelector('.page-section-rail__link[aria-current="location"]');
   return page;
@@ -129,7 +130,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: native multi-digit markers and focused long links keep their space`, async t => {
     const page = await open(t, engine, 'genomic-viewer-replatforming.html');
     const id = 'genomics-specimen-qa-biomarker-transcript-title';
-    const owner = page.locator(`aside[aria-labelledby="${id}"]`), list = owner.locator(':scope > ol');
+    const owner = page.locator(`:is(aside, details)[aria-labelledby="${id}"]`), list = owner.locator(':scope > ol');
     const original = await list.innerHTML();
     await list.evaluate(list => {
       list.start = 9;
