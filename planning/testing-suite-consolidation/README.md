@@ -1,5 +1,7 @@
 # Repository test architecture and evidence coherence
 
+The [browser and production cost spike](browser-and-production-cost-spike.md) traces the full browser job and cPanel carrier build after PR #971. It compares five ways to shorten feedback and includes a measured Git batch-read experiment. [Spike #974](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/974) records the decision. [Implementation #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975) tracks the focused PRs and the research-branch timing record.
+
 ## Contract and current receiver
 
 A collaborator can find the owned suite for a change, select a proportionate
