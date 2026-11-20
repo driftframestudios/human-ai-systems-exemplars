@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "c5d6556d3036401fd62f3f402d4648e2c354e4d4",
+  "sourceRevision": "a5ed640bb0982044d46e6e874867eb8f0e760169",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
