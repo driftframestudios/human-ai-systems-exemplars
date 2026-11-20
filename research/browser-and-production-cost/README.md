@@ -24,18 +24,21 @@ At the recorded execution speed, preparation below 6m28s would put the job under
 | --- | ---: | ---: | ---: | --- | --- |
 | #971 comparison | 33m20s | 9m48s | 22m57s | Public references 41s, media 1m05s | 33m25s / 35m06s |
 | [Cold, `0993177`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44741179312) | 22m57s | 58s | 21m31s | Public references 48s, media 2m08s | 23m00s / 25m53s |
+| [Second cold, `78e1456`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44744681714) | 24m15s | 1m19s | 22m20s | Public references 38s, media 1m28s | 24m19s / 26m21s |
 
 The cold run queued for 3s. Package resolution took 9s, the restore lookup occupied less than one displayed second, installation took 49s, and saving the verified closure after the proof took 6s. The cache service reported a miss. APT downloaded the 126 MB package closure in 14s, compared with 8m46s on #971. Both runs needed the network. The 10m23s shorter job reflects mirror and runner variation alongside the implementation changes. The browser prerequisite interval contributed 8m50s of that difference.
 
-| Selected browser command | #971 | Cold |
-| --- | ---: | ---: |
-| Core browser aggregate | 6m27s | 6m38s |
-| About CSS parity | 5m24s | 4m22s |
-| Showcase reading | 3m00s | 2m49s |
-| AI Systems layout | 2m10s | 2m09s |
-| Navigation | 1m54s | 1m49s |
+| Selected browser command | #971 | First cold | Second cold |
+| --- | ---: | ---: | ---: |
+| Core browser aggregate | 6m27s | 6m38s | 6m23s |
+| About CSS parity | 5m24s | 4m22s | 5m00s |
+| Showcase reading | 3m00s | 2m49s | 2m57s |
+| AI Systems layout | 2m10s | 2m09s | 2m06s |
+| Navigation | 1m54s | 1m49s | 1m55s |
 
-The subsequent [warm comparison on merged main](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44744681714) exercises the accepted build changes and two updated skill entries as well as the browser changes. The engine selection and suite commands agree. Compare archive retrieval against the matched package plan. Interpret whole-job differences between revisions as descriptive observations.
+The second run queued for 3s and confirmed a cache miss. It needed the same 126 MB and identical package-plan digest. GitHub assigned Ubuntu image `20261116.133.1` after the first run used `20261116.376.1`. Exact-image selection explained the missed reuse. Resolution took 19s, restore lookup under 1s, installation 60s, and saving the new entry 4s. APT downloaded 126 MB in 18s. This run included the accepted build changes and updated skill entries. Its suite commands and engines matched the first run.
+
+[PR #983](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/983) moved the image revision to the end of the key. The restore action can now reuse a verified plan across images when OS, architecture, engines, Playwright version and all resolved package versions agree. Each archive still needs a fresh SHA-256 match. Independent review exercised those dimensions separately and verified migration against the original key generator. The two cold observations retain their original standing.
 
 
 ## Local baseline and controlled comparisons
