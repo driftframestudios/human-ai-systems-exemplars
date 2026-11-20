@@ -292,8 +292,12 @@ filters cover the source families, iframe and carrier owners, collaboration
 and Context Canvas sources, media planning contracts, attribution, focused
 tests and tools, root package and lock files, and the workflow. The workflow
 file owns the exact filter list. All three jobs use standard Linux runners and cancel superseded runs. A confirmed
-manual `all` run with browsers installs Chromium, Firefox, and WebKit together
-and uses the same 30-minute investigation boundary as the other prototype selections.
+manual `all` run with browsers splits its 17 commands across two standard runners.
+The reading and media group runs the four source commands and ten browser commands,
+using Chromium, Firefox, and WebKit. The production and prototype group runs
+seven Chromium commands, including the About CSS comparison and the Core aggregate.
+Each group has a 30-minute investigation boundary. The workflow wall time follows
+the slower group. Summed job durations include both groups and the two sibling jobs.
 The public-reference job allows five minutes and the media job allows 30 minutes.
 
 The browser job resolves the system packages requested by the locked Playwright CLI
@@ -303,7 +307,7 @@ resolved package-plan digest. Existing v1 entries remain eligible for their
 exact image and plan during migration. The installer checks each selected
 archive’s SHA-256 against current APT metadata and reports the admitted count.
 APT installs the packages, then Playwright verifies the system closure and installs
-the selected engines. A successful confirmed `main` dispatch may save the archives.
+the selected engines. On a confirmed `main` dispatch each group can save its own verified engine closure after every command assigned to that group succeeds.
 Use the individual plan, restore, install and contract step durations to investigate
 any run reaching the boundary. [Issue #975](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/975)
 tracks comparable full-run measurements.

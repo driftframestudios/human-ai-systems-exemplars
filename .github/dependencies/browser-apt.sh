@@ -3,7 +3,10 @@
 set -euo pipefail
 export LC_ALL=C
 case "${SELECTED_SUITE:?}" in
-  all) engines=(chromium firefox webkit) ;;
+  all)
+    engines=(chromium)
+    if [[ "${BROWSER_GROUP:-selected}" != production ]]; then engines+=(firefox webkit); fi
+    ;;
   iframe) engines=(chromium webkit) ;;
   core|narrative) engines=(chromium) ;;
   *) exit 2 ;;
