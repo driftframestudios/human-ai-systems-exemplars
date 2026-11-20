@@ -846,7 +846,7 @@
     }
 
     .debrief-preview-figure img {
-        max-height: clamp(7rem, calc(70dvh - 22rem), 17rem);
+        max-height: clamp(7rem, min(22dvh, 70dvh - 22rem), 17rem);
     }
 
     .debrief-catalog__preview-inner:focus-visible {
