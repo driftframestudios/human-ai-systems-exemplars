@@ -1,13 +1,28 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "90766e8c4dc1ff12572eff2832ec41cb194342e5",
+  "sourceRevision": "c5d6556d3036401fd62f3f402d4648e2c354e4d4",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "publicationStanding": "public_ready",
   "selectionRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
   "skills": [
+    {
+      "name": "ascii-zine-composition",
+      "title": "ASCII zine composition",
+      "description": "Composes ASCII-accented interfaces and publication artifacts with legible hierarchy, truthful state, accessible ornament, and recoverable interactions. Applies when a zine or print-shop visual language should enrich an existing working surface.",
+      "useWhen": "A studio, workshop, explanatory page, or editable artifact calls for zine character and has an identified visitor task and receiving style owner.",
+      "produces": "An expressive, source-owned composition with a complete semantic reading, recognizable controls, and focused evidence for the changed visitor behavior.",
+      "publicationStanding": "public_ready",
+      "pagePath": "ascii-zine-composition/",
+      "projectionPath": "ascii-zine-composition/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/ascii-zine-composition/projection.json",
+      "sourcePath": ".agents/skills/ascii-zine-composition/SKILL.md",
+      "sourceRoute": "source/.agents/skills/ascii-zine-composition/SKILL.md",
+      "sourceSha256": "a0822a3df6cb1be582f5187ce57fecfe5fb9b5530b392460ce2ad0a3c49ecbac",
+      "dependencies": []
+    },
     {
       "name": "audit-anthropomorphic-cues",
       "title": "Audit anthropomorphic cues",
@@ -50,9 +65,24 @@
         {
           "sourcePath": ".github/workflows/prototype-unit-tests.yml",
           "path": "source/github/workflows/prototype-unit-tests.yml",
-          "sha256": "af13f41274f6119d6a5a1ed06b21e82b210d89325f8f4801ab0c388185a5588e"
+          "sha256": "6ff06f7372e8547013677d66604c03c706bf82109d3673ea39fa16cd5770d736"
         }
       ]
+    },
+    {
+      "name": "build-output-equivalence",
+      "title": "Build output equivalence",
+      "description": "Compares the artifacts a build or packaging change delivers at fixed inputs. Applies when a team replaces a reader, index, cache, compiler step, or packager and needs to establish which output bytes, metadata, and failure guarantees survive.",
+      "useWhen": "A team changes how a build reads, selects, transforms or packages inputs and intends to preserve a published artifact contract.",
+      "produces": "A reviewer can identify the fixed inputs, the outputs compared, each expected difference, the first unexplained difference or verified match, and the revision that restores the accepted behavior.",
+      "publicationStanding": "public_ready",
+      "pagePath": "build-output-equivalence/",
+      "projectionPath": "build-output-equivalence/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/build-output-equivalence/projection.json",
+      "sourcePath": ".agents/skills/build-output-equivalence/SKILL.md",
+      "sourceRoute": "source/.agents/skills/build-output-equivalence/SKILL.md",
+      "sourceSha256": "425e71cea565c272537813cb1edaa7ad20016101cd61883249f4a3214c36d60a",
+      "dependencies": []
     },
     {
       "name": "collaboration-accounting",
@@ -153,7 +183,7 @@
         {
           "sourcePath": ".agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
           "path": "source/.agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
-          "sha256": "d64876c1326a646ccddcd784456b3896dad1c881fe705691a76406df665544a4"
+          "sha256": "6cc3837d69f2fe74be67696d7e31899c5ea1f2df404807510482b98bafcc4c8b"
         }
       ]
     },
@@ -413,8 +443,34 @@
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/embedded-prototype-layout/projection.json",
       "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
       "sourceRoute": "source/.agents/skills/embedded-prototype-layout/SKILL.md",
-      "sourceSha256": "9f0131fb35b55f717ba4c5af4b1a958bf28a22d90e53a34ac0edfe9e5942ec2a",
+      "sourceSha256": "110aeb650259febf3f412434f07dd69370190f50dbfa21e152da7af3f85ba727",
       "dependencies": []
+    },
+    {
+      "name": "evidence-bearing-test-design",
+      "title": "Evidence-bearing test design",
+      "description": "Designs a focused executable observation that distinguishes intended behavior from a consequential plausible fault. Applies when a test oracle, fixture, observation layer, failure meaning, or evidence boundary needs definition or repair.",
+      "useWhen": "A new check is needed, an existing check can pass for the wrong reason, a production defect reveals a weak oracle, or a test result needs a precise account of what it establishes.",
+      "produces": "A focused source observation or executable test with a discriminating fixture, an independently grounded expectation, useful failure meaning, and an explicit evidence limit.",
+      "publicationStanding": "public_ready",
+      "pagePath": "evidence-bearing-test-design/",
+      "projectionPath": "evidence-bearing-test-design/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/evidence-bearing-test-design/projection.json",
+      "sourcePath": ".agents/skills/evidence-bearing-test-design/SKILL.md",
+      "sourceRoute": "source/.agents/skills/evidence-bearing-test-design/SKILL.md",
+      "sourceSha256": "a36614a25ee3615935445e25354ccb3671b6b291305d0cfe2b53d2db9ef2214c",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+          "path": "source/.agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+          "sha256": "9965ea5338d6c2d6f8df7ef656bf86424a75e9226dc3037d825d8912943462c0"
+        },
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
+        }
+      ]
     },
     {
       "name": "evidence-grounded-research-spike",
@@ -640,12 +696,12 @@
         {
           "sourcePath": "threadkeeping/repository-secret-material-boundary.md",
           "path": "source/threadkeeping/repository-secret-material-boundary.md",
-          "sha256": "c88ba14ec39549c94c47b59f4d0c0dbf212729cc48e6d43b2fa0fe2fd819425c"
+          "sha256": "471d826445425a72e2694a394df52fbae5ee163642e2eb47b115faa6fa5b856b"
         },
         {
           "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
           "path": "source/threadkeeping/context-canvas-public-reference-materialization.md",
-          "sha256": "7695c905d0d75b6225097ac8a9e0c4e8de96af0ee8bd1d12780992f66d8ef6ed"
+          "sha256": "19dec0dcbc086057af4f6354ba078ce569b24f3f2f7b7a3aa19eb6c6ff725705"
         },
         {
           "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
@@ -717,7 +773,7 @@
         {
           "sourcePath": "context-canvas-project-surface/context-canvas/atlas-gallery.js",
           "path": "source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
-          "sha256": "1f353c93d47eff19a04fa179ef2c271959c94c4a9409c39ca47c05504e29e8a7"
+          "sha256": "53be613705850f3743d3bbccc27c318cb06d83d9ad5bf1d47102af323343ed8a"
         },
         {
           "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
@@ -743,6 +799,37 @@
           "sourcePath": "NODE-RUNTIME.md",
           "path": "source/NODE-RUNTIME.md",
           "sha256": "be2add729cefc3068d8de93740a653a04f5229ffd16b7474cf98a3a035e4c8dd"
+        }
+      ]
+    },
+    {
+      "name": "test-suite-composition",
+      "title": "Test suite composition",
+      "description": "Composes owned checks into explicit, proportionate execution bundles with clear admission, check depth, prerequisites, cost, result meaning, and recovery. Applies when test discovery, selective CI, change-impact routing, shared setup, selective reruns, or cross-runner coordination becomes difficult.",
+      "useWhen": "A repository has overlapping commands, several runners, hidden prerequisites, uncertain blast radius, repeated unaffected work, or a slow lane whose expensive phase remains unclear.",
+      "produces": "A discoverable route whose selected checks, inputs, environment, cost phases, side effects, outcomes, expansion events, and re-entry conditions are inspectable before execution.",
+      "publicationStanding": "public_ready",
+      "pagePath": "test-suite-composition/",
+      "projectionPath": "test-suite-composition/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/test-suite-composition/projection.json",
+      "sourcePath": ".agents/skills/test-suite-composition/SKILL.md",
+      "sourceRoute": "source/.agents/skills/test-suite-composition/SKILL.md",
+      "sourceSha256": "3294bc017695ec19aa212d696d7253a8793a20c4d7ba933585f5ac032344df11",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+          "path": "source/.agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+          "sha256": "a6f0067548b1f886bef4770b4ac4848c8b95e09c7c78b7aa8e9d9f03ed6edf51"
+        },
+        {
+          "sourcePath": ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
+          "path": "source/.agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
+          "sha256": "c17b2b8a59b7228d65f24ba90f6f03a21a0a2ae81ff56dd0115fee745ce6f259"
+        },
+        {
+          "sourcePath": ".agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md",
+          "path": "source/.agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md",
+          "sha256": "15de594d689b8abc52acedc99426bf1e20391017e30195c2f9d7a320ce527635"
         }
       ]
     },
