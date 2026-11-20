@@ -495,6 +495,8 @@ family membership, capabilities, packaging, and hosted comparison.
 | Full-view and embedded instruments | The primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` routes. Each iframe keeps its manifest-owned cross-origin `src`; its adjacent full-view link opens the matching primary-site artifact. |
 | Schema identity and retrieval | Each JSON Schema keeps its declared `$id`. `https://schemas.radiantnull.com/` is the **observed live** GitHub Pages mirror. `https://schemas.vik.guru/` is the **observed live** Worker receiver for the accepted `pages-v0.3.1` schema and public-ready skill closure; completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531) records the signed-out route, byte, media, cache, CORS, validator, method, and bounded-failure receipt. |
 
+For a résumé link, a local carrier ZIP, or an IntelliJ formatting watcher, see [portfolio URLs and source formatting](deployment/cpanel/ROUTES-AND-FORMATTING.md).
+
 The [cPanel deployment route](deployment/cpanel/README.md) owns assembly,
 tracked carrier staging, transfer archives, installation, rollback, and live
 observation. The compact local proof is:

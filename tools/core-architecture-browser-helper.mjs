@@ -51,8 +51,9 @@ export async function startStaticServer(contentRoot = repositoryRoot) {
     ".webp": "image/webp"
   };
   const server = createServer(async (request, response) => {
+    let requestUrl;
     try {
-      const requestUrl = new URL(request.url || "/", "http://127.0.0.1");
+      requestUrl = new URL(request.url || "/", "http://127.0.0.1");
       let pathname = decodeURIComponent(requestUrl.pathname);
       if (pathname.endsWith("/")) pathname += "index.html";
       const absolutePath = resolve(root, `.${pathname}`);
@@ -68,6 +69,11 @@ export async function startStaticServer(contentRoot = repositoryRoot) {
       });
       response.end(body);
     } catch (error) {
+      if (error?.code === "EISDIR" && !requestUrl.pathname.endsWith("/")) {
+        const directory = requestUrl.pathname.split("/").at(-1);
+        response.writeHead(301, { Location: `./${directory}/${requestUrl.search}` }).end();
+        return;
+      }
       response.writeHead(error?.code === "ENOENT" ? 404 : 500).end("Unavailable");
     }
   });

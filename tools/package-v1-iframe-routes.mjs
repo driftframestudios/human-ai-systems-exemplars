@@ -78,9 +78,9 @@ function packageBytesFor(plan) {
   );
 }
 
-function serializeAggregateReceipt(receipt, familyBytes) {
+function serializeAggregateReceipt(receipt, familyBytes, compact) {
   for (let attempt = 0; attempt < 10; attempt += 1) {
-    const bytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+    const bytes = Buffer.from(`${JSON.stringify(receipt, null, compact ? undefined : 2)}\n`, "utf8");
     const generatedBytes = familyBytes + bytes.byteLength;
     if (receipt.package_contract.generated_bytes === generatedBytes) return bytes;
     receipt.package_contract.generated_bytes = generatedBytes;
@@ -91,8 +91,8 @@ function serializeAggregateReceipt(receipt, familyBytes) {
 export async function createAggregatePackagePlan(options = {}) {
   const paths = { ...aggregateDefaultPaths, ...options };
   const [corePlan, canvasPlan] = await Promise.all([
-    createCorePackagePlan(options.core ?? {}),
-    createCanvasPackagePlan(options.canvas ?? {}),
+    createCorePackagePlan({ ...options.core, compact: options.compact }),
+    createCanvasPackagePlan({ ...options.canvas, compact: options.compact }),
   ]);
   const familyPlans = new Map([
     ["core", corePlan],
@@ -152,7 +152,7 @@ export async function createAggregatePackagePlan(options = {}) {
     },
     families,
   };
-  outputFiles.set("route-manifest.json", serializeAggregateReceipt(receipt, aggregateFamilyBytes));
+  outputFiles.set("route-manifest.json", serializeAggregateReceipt(receipt, aggregateFamilyBytes, options.compact));
 
   return {
     receipt,

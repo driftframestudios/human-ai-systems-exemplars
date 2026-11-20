@@ -5,6 +5,7 @@
     "node": ">=22.23.4 <23"
   },
   "scripts": {
+    "format:carrier": "node tools/check-node-runtime.mjs --quiet && node tools/cpanel-format.mjs",
     "minify:html": "node tools/check-node-runtime.mjs --quiet && html-minifier --config-file html-minifier.config.json",
     "check:readme-routes": "node tools/check-node-runtime.mjs --quiet && node tools/check-readme-routes.mjs",
     "check:repository-handoff-foundation": "node tools/check-node-runtime.mjs --quiet && node tools/repository-handoff-foundation.mjs",
@@ -33,6 +34,7 @@
     "verify:iframe-routes:live": "node tools/check-node-runtime.mjs --quiet && node tools/verify-live-iframe-routes.mjs",
     "verify:iframe-routes:policy": "node tools/check-node-runtime.mjs --quiet && node tools/verify-live-iframe-routes.mjs --require-policy",
     "verify:iframe-ancestry:live": "node tools/check-node-runtime.mjs --quiet && node tools/iframe-ancestry-browser-contract.mjs --live",
+    "build:cpanel-zip": "node tools/check-node-runtime.mjs --quiet && node tools/build-cpanel-review-zip.mjs",
     "build:prod-projection": "node tools/check-node-runtime.mjs --quiet && node tools/build-prod-projection.mjs --build",
     "check:prod-projection": "node tools/check-node-runtime.mjs --quiet && node tools/build-prod-projection.mjs --check",
     "stage:prod-carrier": "node tools/check-node-runtime.mjs --quiet && node tools/build-prod-projection.mjs --stage-carrier",
@@ -84,6 +86,7 @@
     "check:promotion-topology": "node tools/check-node-runtime.mjs --quiet && node tools/check-promotion-topology.mjs",
     "test:prod-deployment": "node tools/check-node-runtime.mjs --quiet && node --test tests/prod-deployment/*.test.mjs",
     "test:prod-css-projection-browser": "node tools/check-node-runtime.mjs --quiet && node tests/prod-deployment/about-css-projection.browser.mjs",
+    "test:cpanel-navigation-browser": "node tools/check-node-runtime.mjs --quiet && node tests/prod-deployment/cpanel-navigation.browser.mjs",
     "test:canvas-iframe-routes": "node tools/check-node-runtime.mjs --quiet && npm run build:iframe-routes && node tools/canvas-iframe-route-browser-contract.mjs",
     "test:iframe-visual-media-browser": "node tools/check-node-runtime.mjs --quiet && node tools/iframe-visual-media-browser-contract.mjs",
     "test:iframe-browser": "node tools/check-node-runtime.mjs --quiet && node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser",
@@ -185,6 +188,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
+    "@prettier/plugin-xml": "3.4.2",
     "acorn": "8.19.0",
     "ajv": "^8.20.0",
     "csso": "5.0.5",
@@ -194,6 +198,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "sharp": "^0.35.5",
+    "terser": "5.51.2",
     "wrangler": "4.155.0"
   }
 }
