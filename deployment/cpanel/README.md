@@ -1,5 +1,7 @@
 # cPanel production projection
 
+[Clean URLs, local ZIP builds, and IntelliJ minify/prettify instructions](ROUTES-AND-FORMATTING.md)
+
 The production projection gives one accepted repository coordinate two
 disjoint, reviewable, production-shaped document-root closures:
 

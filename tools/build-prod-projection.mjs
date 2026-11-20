@@ -1,7 +1,7 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 import { compactDeliveryBytes } from "./cpanel-format.mjs";
-import { createDirectoryRoutes } from "./cpanel-directory-routes.mjs";
+import { createDirectoryRoutes, mapImageCandidates, projectScriptUrls } from "./cpanel-directory-routes.mjs";
 import { withGitBlobReader } from "./package-prod-carrier-transfer.mjs";
 import { execFile } from "node:child_process";
 import {
@@ -445,6 +445,12 @@ function validateCssProjectionConfiguration(cssProjection) {
 
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
+  if (Object.hasOwn(configuration ?? {}, "directory_index_names")) {
+    keys.push("directory_index_names");
+    if (!isPlainObject(configuration.directory_index_names) || !configuration.delivery_profile) {
+      fail("Directory index names require a folder-index delivery profile and an object of names.");
+    }
+  }
   if (Object.hasOwn(configuration ?? {}, "delivery_profile")) {
     keys.push("delivery_profile");
     if (configuration.delivery_profile !== "folder-index-v1" || !configuration.publication) {
@@ -1879,7 +1885,7 @@ async function resolveProductionAssetInventory({
       );
       trackedInputs.set(sourcePath, sourceInput);
     }
-    const expectedBytes = compact && selection.iframe_paths.length
+    const expectedBytes = compact && selection.iframe_paths.size
       ? await compact(sourcePath, sourceInput.bytes) : sourceInput.bytes;
     for (const iframePath of selection.iframe_paths) {
       const iframeBytes = aggregatePlan.outputFiles.get(iframePath);
@@ -2212,18 +2218,9 @@ function rewriteSrcset(
   projectedPaths,
   options,
 ) {
-  return value.replace(/(^|,\s*)([^\s,]+)(?=\s|,|$)/g, (
-    carrier,
-    prefix,
-    reference,
-  ) => `${prefix}${projectedReference(
-    reference,
-    sourcePath,
-    sourceRoot,
-    trackedBlobs,
-    projectedPaths,
-    options,
-  )}`);
+  return mapImageCandidates(value, reference => projectedReference(
+    reference, sourcePath, sourceRoot, trackedBlobs, projectedPaths, options,
+  ));
 }
 
 function htmlAttributeValue(element, attribute) {
@@ -4232,11 +4229,8 @@ async function verifyPublicationInputState(state) {
 // them once so both spellings serve a complete page, including catalog data.
 function directoryDocument(text, file, routes) {
   const resolve = value => routes.resolve(value, file);
-  const scriptPaths = source => source.replace(
-    /(["'])([^"'\s<>\\]+\.(?:html|json|m?js|css|svg|webp|png)(?:[?#][^"'\s<>\\]*)?)\1/giu,
-    (match, quote, value) => quote + routes.resolve(value, file, true) + quote,
-  );
-  if (file.endsWith("canvas-shell.js")) return scriptPaths(text);
+  const known = value => routes.resolve(value, file, true);
+  if (file.endsWith("canvas-shell.js")) return projectScriptUrls(text, known, { footer: true });
   if (file.endsWith(".xml")) return rewriteSitemapReferences(text, resolve);
   if (!file.endsWith(".html")) return text;
   text = rewriteOpeningTags(text, element => {
@@ -4247,14 +4241,25 @@ function directoryDocument(text, file, routes) {
     if (/^<object\b/iu.test(tag)) tag = rewriteHtmlAttribute(tag, "data", resolve);
     tag = rewriteHtmlAttribute(tag, "data-case-brief-routes", list => list.split(/\s+/u).map(resolve).join(" "));
     for (const attribute of ["srcset","imagesrcset","data-catalog-preview-srcset"]) {
-      tag = rewriteHtmlAttribute(tag, attribute, list => list.replace(/(^|,\s*)([^,\s]+)/gu,
-        (match, prefix, url) => prefix + resolve(url)));
+      tag = rewriteHtmlAttribute(tag, attribute, list => mapImageCandidates(list, resolve));
     }
     return rewriteHtmlAttribute(tag, "style", value => rewriteCssReferences(value, resolve));
   }, { skipBodies: new Set(["script","style","textarea","title"]) });
   text = rewriteStyleBlocks(text, resolve);
   return text.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script\s*>)/giu,
-    (all, open, body, close) => open + scriptPaths(body) + close);
+    (all, open, body, close) => {
+      const type = htmlAttributeValue(open, "type")?.toLowerCase();
+      if (type === "application/ld+json") {
+        return open + body.replace(/"(?:\\[\s\S]|[^"\\])*"/gu, literal => {
+          const value = JSON.parse(literal);
+          if (!/^https?:\/\//iu.test(value)) return literal;
+          const url = known(value);
+          return url === value ? literal : JSON.stringify(url);
+        }) + close;
+      }
+      if (type && !["module","text/javascript","application/javascript"].includes(type)) return all;
+      return open + projectScriptUrls(body, known, { module: type === "module" }) + close;
+    });
 }
 
 function assertGeneratedContextCanvasHeadRoutes({
@@ -4429,7 +4434,7 @@ async function composeProductionProjection(root, readBlob, options) {
   });
   const primaryManifest = selection.primaryManifest;
   const directoryRoutes = selection.configuration.delivery_profile
-    ? createDirectoryRoutes(primaryManifest, selection.configuration.publication.base_url) : null;
+    ? createDirectoryRoutes(primaryManifest, selection.configuration.publication.base_url, selection.configuration.directory_index_names) : null;
   const trackedInputs = new Map(selection.trackedInputs);
   const primaryInputs = new Map();
   const projectedPaths = new Map(
@@ -4590,8 +4595,7 @@ async function composeProductionProjection(root, readBlob, options) {
       });
     }
     outputs.push(output);
-    const directoryIndex = directoryRoutes?.entries.get(file.projected_path);
-    if (directoryIndex) {
+    for (const directoryIndex of directoryRoutes?.entries.get(file.projected_path) ?? []) {
       const name = "primary-public/" + directoryIndex;
       assertPortableOutputCollision(name, outputFiles, portablePaths);
       outputFiles.set(name, bytes);

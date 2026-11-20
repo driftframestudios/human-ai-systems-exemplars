@@ -1,6 +1,7 @@
 import './node-runtime-admission.mjs';
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { readDocumentSpans } from "./html-document-spans.mjs";
 import { INVESTMENT_HOSTS, readInvestmentSources, assertInvestmentProjection } from "./project-investment-analysis.mjs";
 import { studioChaptersPath, readStudioChapterInputs, assertStudioChapterProjection } from "./materialize-about-studio-chapters.mjs";
 import { fileURLToPath } from "node:url";
@@ -433,16 +434,6 @@ function escapeHtmlText(value) {
     .replaceAll(">", "&gt;");
 }
 
-function insertAtClosingTag(source, tagName, insertion, label, fromEnd = false) {
-  const normalized = source.toLowerCase();
-  const closingTag = `</${tagName}>`;
-  const index = fromEnd
-    ? normalized.lastIndexOf(closingTag)
-    : normalized.indexOf(closingTag);
-  if (index === -1) fail(`${label} is missing.`);
-  return `${source.slice(0, index)}${insertion}\n${source.slice(index)}`;
-}
-
 function visitorBoundaryMarkup() {
   const [maps, bigBench] = visitorBoundaryContract.markers;
   if (
@@ -483,6 +474,7 @@ export function assertCanvasPublicAttribution(
   route,
   expectedDecoration,
 ) {
+  html = readDocumentSpans(html).outerMarkup();
   const authorCount = [...html.matchAll(authorPattern)].length;
   const licenseCount = [...html.matchAll(licensePattern)].length;
   const boundaryCount = occurrenceCount(html, "data-visitor-boundary aria-label=");
@@ -517,12 +509,14 @@ export function assertCanvasPublicAttribution(
 }
 
 export function decorateCanvasPublicDocument(html, route) {
+  const spans = readDocumentSpans(html);
+  const markup = spans.outerMarkup();
   if (
-    /<meta\b[^>]*\bname=["']author["']/i.test(html) ||
-    /<link\b[^>]*\brel=["']license["']/i.test(html) ||
-    html.includes("data-visitor-boundary") ||
-    html.includes(artifactAttribution) ||
-    html.includes("data-iframe-route-projection")
+    /<meta\b[^>]*\bname=["']author["']/i.test(markup) ||
+    /<link\b[^>]*\brel=["']license["']/i.test(markup) ||
+    markup.includes("data-visitor-boundary") ||
+    markup.includes(artifactAttribution) ||
+    markup.includes("data-iframe-route-projection")
   ) {
     fail(`Canvas decorated route ${route.id} already carries projection-owned decoration.`);
   }
@@ -536,19 +530,10 @@ export function decorateCanvasPublicDocument(html, route) {
 ${visitorBoundaryMarkup()}
   <p class="artifact-attribution__notice">${artifactAttribution}</p>
 </footer>`;
-  let projected = insertAtClosingTag(
-    html,
-    "head",
-    head,
-    `Canvas route ${route.id} closing head`,
-  );
-  projected = insertAtClosingTag(
-    projected,
-    "body",
-    footer,
-    `Canvas route ${route.id} closing body`,
-    true,
-  );
+  const headEnd = spans.closingOffset("head");
+  const bodyEnd = spans.closingOffset("body");
+  const projected = html.slice(0, headEnd) + head + "\n" + html.slice(headEnd, bodyEnd)
+    + footer + "\n" + html.slice(bodyEnd);
   assertCanvasPublicAttribution(projected, route, 1);
   return projected;
 }
@@ -742,8 +727,8 @@ export async function createCanvasPackagePlan(options = {}) {
       embeddedFaviconRoutes.push(route.public_alias);
     }
     const projection = deriveCanvasProjection(sourceHtml, route, embedded ? faviconBytes : null);
-    if (options.compact) projection.html = (await options.compact("index.html", Buffer.from(projection.html))).toString("utf8");
-    const projectionBytes = !options.compact && route.projection_kind === "byte_identical"
+    if (options.compact && route.projection_kind !== "byte_identical") projection.html = (await options.compact("index.html", Buffer.from(projection.html))).toString("utf8");
+    const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
     const carrierObservation = observedCarrierPolicy(projection.html);

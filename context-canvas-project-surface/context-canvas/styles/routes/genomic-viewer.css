@@ -1,7 +1,7 @@
 /* Context Canvas route: Genomic Viewer paired Debrief --------------------
    Consumer: genomic-viewer-replatforming.html under .genomic-viewer-page.
    Owns: warm solution fields, dark implementation fields,
-   Context Tree and strategy treatments, route modes, and late cascade overrides.
+   Context Tree and strategy treatments, route modes, and late cascade seams.
    Load order: shared core, expanded.css, debrief-reading.css, this route,
    canvas-shell.css.
    Contracts: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md,
@@ -431,7 +431,7 @@
     box-shadow: .5rem .5rem 0 var(--genomic-coral);
 }
 
-/* Shared-component rules retain the declarations that followed this route
+/* Shared-component seams retain the declarations that followed this route
    inside expanded.css before extraction. */
 .genomic-viewer-page .genomic-threadkeeping-aside {
     background: color-mix(in srgb, var(--canvas-field) 20%, var(--canvas-paper) 80%);

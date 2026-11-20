@@ -1119,7 +1119,7 @@ export async function createPackagePlan(options = {}) {
           : reading.exitProjection.rewritten_links > 0 ||
               reading.projectionRewrites.some(({ kind }) => kind === "primary_site_navigation")
             ? "navigation_adapted"
-            : "source_identical",
+            : reading.projectionBytes.equals(reading.sourceBytes) ? "source_identical" : "formatted_copy",
       projection_rewrites: reading.projectionRewrites,
       source_bytes: reading.sourceBytes.byteLength,
       source_sha256: sha256(reading.sourceBytes),
@@ -1146,7 +1146,8 @@ export async function createPackagePlan(options = {}) {
     source_manifest: {
       file: "manifest.json",
       source_file: path.basename(paths.sourceManifestPath),
-      sha256: sha256(sourceManifestReading.bytes),
+      sha256: sha256(manifestBytes),
+      ...(compact ? { source_sha256: sha256(sourceManifestReading.bytes) } : {}),
     },
     package_contract: {
       primary_routes: routeReceipts.length,

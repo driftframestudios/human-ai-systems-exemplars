@@ -1,5 +1,8 @@
 # Context Canvas
 
+Edit the Showcase catalog in [debriefs.html](debriefs.html). The cPanel build publishes that file at `/showcase/` and also serves the existing `/debriefs` links. [Production URL mapping](../../deployment/cpanel/ROUTES-AND-FORMATTING.md)
+
+
 Context Canvas is a static, progressively enhanced enterprise reading system. HTML, CSS, SVG, and semantic state carry the complete reading; small JavaScript modules add shared navigation and bounded instruments. The pages themselves are the primary design inputs: preserve their evidence boundaries, visual contracts, reading order, and role-specific agency as the system develops.
 
 ## Start with the visitor pages
