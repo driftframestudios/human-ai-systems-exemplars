@@ -15,7 +15,7 @@ test('About gives person settings a separate form with connected labels and fiel
   for (const [field, mode] of [['ratePerHour', 'decimal'], ['fundedHours', 'numeric'], ['fundedMinutes', 'numeric']]) {
     const input = team.match(new RegExp(`<input\\b(?=[^>]*\\bname="${field}")[^>]*>`, 'u'))?.[0];
     assert.ok(input, field);
-    assert.match(input, /\btype="text"/u, 'the adapter receives unfinished lexical drafts');
+    assert.equal(input.match(/\btype="([^"]*)"/u)?.[1] ?? 'text', 'text', 'the adapter receives unfinished lexical drafts');
     assert.match(input, new RegExp(`\\binputmode="${mode}"`, 'u'));
     const id = input.match(/\bid="([^"]+)"/u)?.[1];
     assert.ok(id && team.includes(`for="${id}"`), `${field} has a native label`);

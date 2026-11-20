@@ -4,7 +4,10 @@ See how staffing and working sessions shape a project's cost. Schedule work,
 assign people, and compare the resulting investment in the **Project Resourcing &
 Spend Studio**. The [About page source](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination) hosts a sample
 plan with cassette shelves, period boards, session tracks, reels and tactile
-quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experience.
+quantity controls.
+
+[Developer docs](development/architecture/README.md) cover the plan schema,
+a runnable session command, and GraphQL and React design options.
 
 ## Run the Studio locally
 
