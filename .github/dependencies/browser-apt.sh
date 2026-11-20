@@ -16,7 +16,7 @@ case "${1:?}" in
   plan)
     sudo apt-get update
     report="$RUNNER_TEMP/browser-apt-report"
-    if node_modules/.bin/playwright install-deps --dry-run "${engines[@]}" > "$report"; then
+    if npm run --silent playwright -- install-deps --dry-run "${engines[@]}" > "$report"; then
       grep -Fxq 'All system dependencies are installed.' "$report"
       : > "$plan"
     else
@@ -54,8 +54,8 @@ case "${1:?}" in
       cp "$archives"/*.deb "$cache/"
       "${apt[@]}" --no-download "${packages[@]}"
     fi
-    node_modules/.bin/playwright install-deps --dry-run "${engines[@]}"
-    node_modules/.bin/playwright install "${engines[@]}"
+    npm run --silent playwright -- install-deps --dry-run "${engines[@]}"
+    npm run --silent playwright -- install "${engines[@]}"
     ;;
   *) exit 2 ;;
 esac

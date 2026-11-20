@@ -132,18 +132,18 @@ test("the media package manifest and policy records carry one reviewable cache i
 test("the Linux preparation route verifies and installs the engines admitted for each suite", async (t) => {
   const directory = await mkdtemp(join(tmpdir(), "prototype-apt-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  await mkdir(join(directory, "node_modules/.bin"), { recursive: true });
-  await writeFile(join(directory, "node_modules/.bin/playwright"), '#!/bin/sh\necho "$*"\n', { mode: 0o755 });
+  await mkdir(join(directory, "bin"));
+  await writeFile(join(directory, "bin/npm"), '#!/bin/sh\necho "$*"\n', { mode: 0o755 });
   await writeFile(join(directory, "browser-apt-plan"), "");
   for (const [suite, engines] of Object.entries({
     all: "chromium firefox webkit", iframe: "chromium webkit", core: "chromium", narrative: "chromium",
   })) {
     const result = spawnSync("bash", [join(root, ".github/dependencies/browser-apt.sh"), "install"], {
-      cwd: directory, encoding: "utf8", env: { ...process.env, RUNNER_TEMP: directory, SELECTED_SUITE: suite },
+      cwd: directory, encoding: "utf8", env: { ...process.env, PATH: `${join(directory, "bin")}:${process.env.PATH}`, RUNNER_TEMP: directory, SELECTED_SUITE: suite },
     });
     assert.ifError(result.error);
     assert.equal(result.status, 0, result.stderr);
-    assert.equal(result.stdout.trim(), `install-deps --dry-run ${engines}\ninstall ${engines}`, suite);
+    assert.equal(result.stdout.trim(), `run --silent playwright -- install-deps --dry-run ${engines}\nrun --silent playwright -- install ${engines}`, suite);
   }
 });
 
