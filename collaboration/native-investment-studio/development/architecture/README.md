@@ -2,9 +2,10 @@
 
 The Studio is a browser-local planning engine with a DOM adapter. Reuse the
 engine when you want a bounded plan, exact investment arithmetic, and reversible
-commands. Start with the [Studio overview](../../README.md), try the [session edit below](#run-a-session-command-from-node),
-or use the [implementation reference](../../implementation-reference.md) for
-the full catalog of commands, limits, and host obligations.
+commands. [Read the plan schema](#the-data-contract), [run a session edit in Node](#run-a-session-command-from-node),
+or explore what a [GraphQL service](#what-a-graphql-service-would-own) or [React receiver](#how-a-react-receiver-would-work) would own.
+The [implementation reference](../../implementation-reference.md) lists the
+commands, limits, and host obligations.
 
 ## The data contract
 

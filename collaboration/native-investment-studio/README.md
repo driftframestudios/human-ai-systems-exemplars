@@ -4,7 +4,10 @@ Explore how people, shared work, review and investment fit together in the
 [About showcase](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination).
 The visitor-facing **Project Resourcing & Spend Studio** combines a populated
 plan with cassette shelves, period boards, session tracks, reels and tactile
-quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experience.
+quantity controls.
+
+[Developer docs](development/architecture/README.md) cover the plan schema,
+a runnable session command, and GraphQL and React design options.
 
 The amp's **Operating manual** pairs a short introduction with an action table:
 direct choices accept immediately; editors with Apply accept their proposal;
