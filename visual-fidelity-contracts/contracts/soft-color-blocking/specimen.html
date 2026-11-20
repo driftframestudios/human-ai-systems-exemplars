@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <title>Soft Color Blocking contract specimen</title>
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    * { box-sizing: border-box; }
+    html { background: var(--scb-canvas); }
+    body { margin: 0; background: var(--scb-canvas); color: var(--scb-text); font: var(--scb-text-body) / var(--scb-leading) var(--scb-font-body); }
+    a { color: var(--scb-cobalt); text-underline-offset: .2em; }
+    .skip-link { position: fixed; z-index: 100; inset: .5rem auto auto .5rem; max-inline-size: calc(100% - 1rem); translate: 0 -200%; padding: .65rem .8rem; background: var(--scb-chartreuse); color: var(--scb-ink); overflow-wrap: anywhere; }
+    .skip-link:focus { translate: 0; }
+    .shell { width: min(100% - 1rem, 86rem); margin-inline: auto; padding-block: clamp(1rem, 3vw, 3rem); }
+    .hero, .workflow, .detail, .state-register, .evidence-boundary { padding: clamp(1rem, 2.5vw, 2rem); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, .35fr); min-width: 0; gap: 1rem; background: var(--scb-cobalt); color: var(--scb-warm-white); box-shadow: .65rem .65rem 0 var(--scb-chartreuse); }
+    .hero > * { min-width: 0; }
+    .eyebrow { margin: 0 0 .5rem; color: var(--scb-chartreuse); font: 800 var(--scb-text-meta) / 1.3 var(--scb-font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-block-start: 0; }
+    h1 { margin-block-end: .5rem; font: 800 clamp(2.25rem, 7vw, 5.5rem) / .9 var(--scb-font-display); letter-spacing: -.05em; overflow-wrap: anywhere; }
+    .lede { max-width: var(--scb-measure); margin-block-end: 0; }
+    .hero-state { align-self: start; padding: 1rem; border: var(--scb-rule) solid var(--scb-warm-white); background: var(--scb-chartreuse); color: var(--scb-ink); font-weight: 800; }
+    .workflow { min-width: 0; margin-block-start: 1.5rem; }
+    fieldset { min-width: 0; max-width: 100%; margin: 0; border: 0; padding: 0; }
+    legend { max-width: 100%; padding: 0; font-size: 1.25rem; font-weight: 850; overflow-wrap: anywhere; }
+    .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-block-start: 1rem; }
+    .step { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; min-height: 13rem; padding: 1rem; border: var(--scb-rule) solid var(--scb-cobalt); background: var(--step-field); color: var(--scb-ink); cursor: pointer; box-shadow: .5rem .5rem 0 var(--scb-cobalt); }
+    .step:has(input:checked) { background: var(--scb-chartreuse); box-shadow: .5rem .5rem 0 var(--scb-ink); }
+    .step:has(input:focus-visible) { outline: .1875rem solid var(--scb-focus-outer); outline-offset: .25rem; }
+    .step input { position: absolute; inline-size: 1px; block-size: 1px; opacity: .001; }
+    .step-number { font: 800 .78rem / 1 var(--scb-font-mono); letter-spacing: .08em; overflow-wrap: anywhere; }
+    .step strong { align-self: end; font: 800 1.6rem / 1 var(--scb-font-display); overflow-wrap: anywhere; }
+    .step small { font-size: .9rem; }
+    .step--orient { --step-field: var(--scb-paper); }
+    .step--compare { --step-field: var(--scb-dusty-yellow); }
+    .step--review { --step-field: var(--scb-pale-rose); }
+    .step--recover { --step-field: var(--scb-coral); }
+    .reading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .48fr); gap: 1rem; margin-block-start: 1.5rem; }
+    .detail { background: var(--scb-chartreuse); }
+    .detail-grid { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1rem; margin: 0; }
+    .detail-grid dt { color: var(--scb-cobalt); font: 800 var(--scb-text-meta) / 1.4 var(--scb-font-mono); text-transform: uppercase; }
+    .detail-grid dd { margin: 0; }
+    .status-output { min-height: 1.5em; margin-block: 1rem 0; color: var(--scb-cobalt); font-weight: 850; }
+    .state-register { background: var(--scb-paper); }
+    .state-register ul { margin: 0; padding-inline-start: 1.1rem; }
+    .state-register li + li { margin-block-start: .5rem; }
+    .evidence-boundary { max-width: var(--scb-measure); margin-block-start: 1.5rem; border-inline-start: .75rem solid var(--scb-coral); background: var(--scb-warm-white); color: var(--scb-ink); }
+    noscript p { padding: .75rem; border: var(--scb-rule) solid var(--scb-cobalt); background: var(--scb-warm-white); }
+    @media (max-width: 58rem) {
+      .hero, .reading { grid-template-columns: minmax(0, 1fr); }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 32rem) {
+      .shell { width: 100%; padding: .5rem; }
+      .hero { box-shadow: .325rem .325rem 0 var(--scb-chartreuse); }
+      .steps { grid-template-columns: minmax(0, 1fr); }
+      .step { min-height: 9rem; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media (forced-colors: active) {
+      .hero, .hero-state, .step, .detail, .state-register, .evidence-boundary { border-color: CanvasText; background: Canvas; color: CanvasText; box-shadow: none; forced-color-adjust: auto; }
+      .step:has(input:checked) { border: .25rem solid Highlight; background: Highlight; color: HighlightText; forced-color-adjust: none; }
+    }
+    @media print {
+      body, .hero, .hero-state, .step, .detail, .state-register, .evidence-boundary { background: #fff; color: #000; box-shadow: none; }
+      .shell { width: 100%; }
+      .steps { grid-template-columns: repeat(4, 1fr); }
+      .workflow, .reading, .evidence-boundary { break-inside: avoid; }
+      .skip-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#workflow-title">Skip to the workflow</a>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Soft Color Blocking · contract adaptation</p>
+        <h1>Make the operating state easy to point at</h1>
+        <p class="lede">Broad fields separate orientation, comparison, review, and recovery while labels carry the decision.</p>
+      </div>
+      <p class="hero-state">Accepted selection stays visible through recovery.</p>
+    </header>
+
+    <section class="workflow scb-panel" aria-labelledby="workflow-title">
+      <fieldset>
+        <legend id="workflow-title">Choose a workflow state to inspect</legend>
+        <div class="steps">
+          <label class="step step--orient"><input type="radio" name="workflow-state" value="orient" data-title="Orient" data-object="Review request SCB-014" data-state="Available" data-next="Choose a comparison route" checked><span class="step-number">01 · AVAILABLE</span><strong>Orient</strong><small>Name the object, person, and decision.</small></label>
+          <label class="step step--compare"><input type="radio" name="workflow-state" value="compare" data-title="Compare" data-object="Two bounded alternatives" data-state="Selected" data-next="Open the evidence for the selected route"><span class="step-number">02 · SELECTED</span><strong>Compare</strong><small>Keep alternatives and their evidence together.</small></label>
+          <label class="step step--review"><input type="radio" name="workflow-state" value="review" data-title="Review" data-object="Draft with retained accepted state" data-state="Held" data-next="Return with the named approval evidence"><span class="step-number">03 · HELD</span><strong>Review</strong><small>Name authority, hold reason, and release evidence.</small></label>
+          <label class="step step--recover"><input type="radio" name="workflow-state" value="recover" data-title="Recover" data-object="Accepted revision SCB-A03" data-state="Recovered" data-next="Continue from the restored accepted revision"><span class="step-number">04 · RECOVERED</span><strong>Recover</strong><small>Restore orientation and state what returned.</small></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <div class="reading">
+      <section class="detail scb-panel" aria-labelledby="detail-title">
+        <p class="scb-label">Selected reading</p>
+        <h2 id="detail-title" data-detail-title>Orient</h2>
+        <dl class="detail-grid">
+          <dt>Object</dt><dd data-detail-object>Review request SCB-014</dd>
+          <dt>State</dt><dd data-detail-state>Available</dd>
+          <dt>Authority</dt><dd>Review lead accepts the route</dd>
+          <dt>Next action</dt><dd data-detail-next>Choose a comparison route</dd>
+        </dl>
+        <p class="status-output" aria-live="polite" aria-atomic="true" data-status-output>Orient state selected.</p>
+      </section>
+
+      <aside class="state-register scb-panel" aria-labelledby="register-title">
+        <p class="scb-label">State register</p>
+        <h2 id="register-title">What stays visible</h2>
+        <ul>
+          <li>Accepted revision and owner</li>
+          <li>Draft changes and validation messages</li>
+          <li>Pending or failed request</li>
+          <li>Recovery action and returned state</li>
+          <li>Evidence boundary and next receiver</li>
+        </ul>
+      </aside>
+    </div>
+
+    <aside class="evidence-boundary">
+      <p><strong>Evidence boundary.</strong> This adaptation demonstrates Soft Color Blocking tokens, broad semantic fields, explicit state labels, responsive source order, and accepted-state continuity. Established repository examples retain their own behavior and CSS authority. The receiving application owns authorization, durable transactions, and local fitness for use.</p>
+    </aside>
+
+    <noscript><p>The four workflow blocks and state register carry the complete reading. Selection detail stays on Orient while scripting is unavailable.</p></noscript>
+  </main>
+  <script>
+    (() => {
+      const controls = Array.from(document.querySelectorAll('input[name="workflow-state"]'));
+      const title = document.querySelector('[data-detail-title]');
+      const object = document.querySelector('[data-detail-object]');
+      const state = document.querySelector('[data-detail-state]');
+      const next = document.querySelector('[data-detail-next]');
+      const status = document.querySelector('[data-status-output]');
+
+      const render = (control, announce) => {
+        title.textContent = control.dataset.title;
+        object.textContent = control.dataset.object;
+        state.textContent = control.dataset.state;
+        next.textContent = control.dataset.next;
+        if (announce) status.textContent = `${control.dataset.title} state selected.`;
+      };
+
+      controls.forEach((control) => control.addEventListener('change', () => render(control, true)));
+      const initial = controls.find((control) => control.checked);
+      if (initial) render(initial, false);
+    })();
+  </script>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

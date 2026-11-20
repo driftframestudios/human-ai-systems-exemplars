@@ -1,0 +1,86 @@
+{
+  "id": "schemas-worker.schema-companion-selection.v1",
+  "version": "1",
+  "routes": [
+    {
+      "source": "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/a3-stacked-cube.context.jsonld",
+      "receiver_path": "a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld"
+    },
+    {
+      "source": "a3-stacked-cube-visual-system-bundle-v0.1/schema/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+      "receiver_path": "schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld"
+    },
+    {
+      "source": "collaboration/investment-analysis/example.json",
+      "receiver_path": "investment-analysis/0.2.0/example.json"
+    },
+    {
+      "source": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.context.v0.1.jsonld",
+      "receiver_path": "na/schema/narrative-capsule-composition.context.v0.1.jsonld"
+    },
+    {
+      "source": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau.context.v0.1.jsonld",
+      "receiver_path": "na/schema/narrative-sampling-tableau.context.v0.1.jsonld"
+    },
+    {
+      "source": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau.context.v0.1.jsonld",
+      "receiver_path": "na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld"
+    },
+    {
+      "source": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.context.v0.1.jsonld",
+      "receiver_path": "fg/schema/threadkeeping-ledger.context.v0.1.jsonld"
+    },
+    {
+      "source": "schemas/collaboration-skills/0.1.0/README.md",
+      "receiver_path": "collaboration-skills/0.1.0/README.md"
+    },
+    {
+      "source": "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+      "receiver_path": "collaboration-skills/0.1.0/examples/collaboration-account.example.json"
+    },
+    {
+      "source": "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+      "receiver_path": "collaboration-skills/0.1.0/examples/portable-skill.example.json"
+    },
+    {
+      "source": "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+      "receiver_path": "collaboration-skills/0.1.0/examples/retired-projection.example.json"
+    },
+    {
+      "source": "schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+      "receiver_path": "context-canvas/1.0.0/context-canvas.context.jsonld"
+    },
+    {
+      "source": "schemas/investment-analysis/0.2.0/README.md",
+      "receiver_path": "investment-analysis/0.2.0/README.md"
+    },
+    {
+      "source": "schemas/narrative-threadkeeping/0.1/README.md",
+      "receiver_path": "narrative-threadkeeping/0.1/README.md"
+    },
+    {
+      "source": "schemas/narrative-threadkeeping/0.1/examples/narrative-capsule-composition.public.example.v0.1.json",
+      "receiver_path": "na/schema/narrative-capsule-composition.example.public.v0.1.json"
+    },
+    {
+      "source": "schemas/narrative-threadkeeping/0.1/examples/narrative-sampling-tableau.public.example.v0.1.json",
+      "receiver_path": "na/schema/narrative-sampling-tableau-state.example.public.v0.1.json"
+    },
+    {
+      "source": "schemas/narrative-threadkeeping/0.1/examples/technology-fit-sampling-tableau.public.example.v0.1.json",
+      "receiver_path": "na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json"
+    },
+    {
+      "source": "schemas/narrative-threadkeeping/0.1/examples/threadkeeping-ledger.public.example.v0.1.json",
+      "receiver_path": "fg/schema/threadkeeping-ledger.example.public.v0.1.json"
+    },
+    {
+      "source": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+      "receiver_path": "prototype-exemplars/1.0.0/prototype-exemplars.example.json"
+    },
+    {
+      "source": "visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas.context.v0.1.jsonld",
+      "receiver_path": "visualization/visualization-fidelity-atlas.context.v0.1.jsonld"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/test-suite-composition/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "test-suite-composition",
+  "description": "Composes owned checks into explicit, proportionate execution bundles with clear admission, check depth, prerequisites, cost, result meaning, and recovery. Applies when test discovery, selective CI, change-impact routing, shared setup, selective reruns, or cross-runner coordination becomes difficult.",
+  "semanticAuthorityRef": "../source/.agents/skills/test-suite-composition/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/28",
+  "contract": {
+    "what": "A source-owned map and executable composition of existing checks for a named receiving decision.",
+    "when": [
+      "A repository has overlapping commands, several runners, hidden prerequisites, uncertain blast radius, repeated unaffected work, or a slow lane whose expensive phase remains unclear."
+    ],
+    "boundaries": [
+      "Domain owners retain expectations. Runner choice follows demonstrated capability. Required security, accessibility, integrity, publication, live-service, and budget gates remain explicit. Research predictions retain only the authority granted by their protocol."
+    ],
+    "result": "A discoverable route whose selected checks, inputs, environment, cost phases, side effects, outcomes, expansion events, and re-entry conditions are inspectable before execution."
+  },
+  "receivingUse": {
+    "job": "A repository has overlapping commands, several runners, hidden prerequisites, uncertain blast radius, repeated unaffected work, or a slow lane whose expensive phase remains unclear.",
+    "materialResult": "A discoverable route whose selected checks, inputs, environment, cost phases, side effects, outcomes, expansion events, and re-entry conditions are inspectable before execution.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/test-suite-composition/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

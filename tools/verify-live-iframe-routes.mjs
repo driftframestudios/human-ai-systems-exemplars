@@ -2,8 +2,9 @@ import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { MIMEType } from "node:util";
+import { MIMEType, parseArgs } from "node:util";
 
+import { loadTaggedProductionCarrier } from "./package-prod-carrier-transfer.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 
 const productionBaseUrl = "https://iframes.vik.guru/v1/";
@@ -200,6 +201,39 @@ async function readBoundedBody(response, expectedLength) {
   return { bytes: Buffer.concat(chunks, length), tooLarge: false, skipped: false };
 }
 
+export async function createTaggedIframePlan(options) {
+  const carrier = await loadTaggedProductionCarrier(options);
+  const prefix = "iframe-public/v1/";
+  const outputFiles = new Map();
+  const mediaTypes = new Map();
+  for (const { surface, projectedPath, mediaType } of carrier.rows) {
+    if (!projectedPath.startsWith(surface + "-public/")) {
+      throw new Error(`Carrier path ${projectedPath} disagrees with its ${surface} surface.`);
+    }
+    if (surface === "primary" || projectedPath === "iframe-public/robots.txt") continue;
+    if (!projectedPath.startsWith(prefix)) {
+      throw new Error(`Unexpected iframe carrier path outside v1: ${projectedPath}.`);
+    }
+    const relativePath = projectedPath.slice(prefix.length);
+    outputFiles.set(relativePath, carrier.files.get(projectedPath));
+    mediaTypes.set(relativePath, mediaType);
+  }
+  if (!carrier.files.has("iframe-public/robots.txt")) {
+    throw new Error("The tagged iframe carrier is missing iframe-public/robots.txt.");
+  }
+  return {
+    outputFiles,
+    mediaTypes,
+    carrier: {
+      tag: carrier.productionTag,
+      tagObject: carrier.tagObject,
+      releaseSha: carrier.releaseSha,
+      sourceSha: carrier.sourceSha,
+      manifestSha256: carrier.manifestDigest,
+    },
+  };
+}
+
 export async function verifyLiveIframeRoutes({
   plan,
   fetchImplementation = globalThis.fetch,
@@ -235,7 +269,7 @@ export async function verifyLiveIframeRoutes({
       const [relativePath, expectedBytes] = entries[index];
       const requestPath = publicRequestPath(relativePath);
       const requestUrl = publicRequestUrl(relativePath, baseUrl);
-      const expectedMediaType = expectedMediaTypeForPath(relativePath);
+      const expectedMediaType = plan.mediaTypes?.get(relativePath) ?? expectedMediaTypeForPath(relativePath);
       const expectedSha256 = sha256(expectedBytes);
       let response;
       try {
@@ -336,6 +370,7 @@ export async function verifyLiveIframeRoutes({
 
   return {
     baseUrl,
+    ...(plan.carrier && { carrier: plan.carrier }),
     disposition,
     requirePolicy,
     ok: deliveryPass && (!requirePolicy || policyPass),
@@ -362,6 +397,7 @@ function ratio({ passed, total }) {
 export function formatLiveIframeSummary(result) {
   const lines = [
     `Live iframe route verification: ${result.disposition.toUpperCase()}`,
+    ...(result.carrier ? [`Carrier: ${result.carrier.tag} at ${result.carrier.releaseSha}`] : []),
     `Delivery: ${result.counts.exactBytes}/${result.counts.declared} exact bytes; ` +
       `${result.counts.status200}/${result.counts.declared} HTTP 200; ` +
       `${result.counts.mediaTypes}/${result.counts.declared} media types`,
@@ -394,37 +430,35 @@ export function formatLiveIframeSummary(result) {
   return `${lines.join("\n")}\n`;
 }
 
-function parseArguments(argv) {
-  const options = { json: false, requirePolicy: false };
-  for (const argument of argv) {
-    if (argument === "--json") options.json = true;
-    else if (argument === "--require-policy") options.requirePolicy = true;
-    else if (argument === "--help") options.help = true;
-    else throw new Error(`Unknown live iframe verification argument: ${argument}.`);
-  }
-  return options;
-}
-
 function usage() {
   return [
-    "Usage: node tools/verify-live-iframe-routes.mjs [--json] [--require-policy]",
+    "Usage: node tools/verify-live-iframe-routes.mjs [--tag production-vMAJOR.MINOR.PATCH] [--json] [--require-policy]",
     "",
-    "Compares the in-memory aggregate package with https://iframes.vik.guru/v1/.",
+    "Compares the standalone package or the tagged cPanel carrier with https://iframes.vik.guru/v1/.",
     "Delivery mismatches fail by default. --require-policy also fails on the #102 header contract.",
     "",
   ].join("\n");
 }
 
 async function main() {
-  const options = parseArguments(process.argv.slice(2));
+  const { values: options } = parseArgs({
+    options: {
+      tag: { type: "string" },
+      json: { type: "boolean" },
+      "require-policy": { type: "boolean" },
+      help: { type: "boolean" },
+    },
+  });
   if (options.help) {
     process.stdout.write(usage());
     return;
   }
-  const plan = await createAggregatePackagePlan();
+  const plan = options.tag === undefined
+    ? await createAggregatePackagePlan()
+    : await createTaggedIframePlan({ productionTag: options.tag });
   const result = await verifyLiveIframeRoutes({
     plan,
-    requirePolicy: options.requirePolicy,
+    requirePolicy: options["require-policy"],
   });
   process.stdout.write(
     options.json ? `${JSON.stringify(result, null, 2)}\n` : formatLiveIframeSummary(result),

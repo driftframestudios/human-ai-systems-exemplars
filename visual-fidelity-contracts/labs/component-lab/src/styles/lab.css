@@ -1,0 +1,119 @@
+:root {
+  color-scheme: light;
+  --ink: #132f58;
+  --paper: #fffaf0;
+  --paper-blue: #eaf5fb;
+  --blue: #214bd5;
+  --teal: #78d9cd;
+  --yellow: #efff48;
+  --rose: #ff8fa8;
+  --line: #173e72;
+  --shadow: 0.55rem 0.55rem 0 #132f58;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: #dcecf5; line-height: 1.5; }
+button, input, select { font: inherit; }
+.skip-link { position: fixed; inset: 0 auto auto 0; max-inline-size: calc(100% - 1rem); transform: translateY(-120%); padding: .75rem; background: var(--yellow); color: var(--ink); overflow-wrap: anywhere; z-index: 9; }
+.skip-link:focus { transform: translateY(0); }
+main { width: min(76rem, calc(100% - 2rem)); margin: 2rem auto 4rem; }
+.lab-header, .panel, .receipt, .semantic-twin, .operating-state, .state-key { border: 2px solid var(--line); background: var(--paper); }
+.lab-header { padding: clamp(1.25rem, 3vw, 2.5rem); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); }
+.eyebrow { margin: 0 0 .4rem; font: 700 .78rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; overflow-wrap: anywhere; }
+h1, h2 { margin-block: .2rem .75rem; line-height: 1.05; overflow-wrap: anywhere; }
+h1 { max-width: 22ch; font-size: clamp(2rem, 5vw, 4.6rem); }
+.lede { max-width: 66ch; font-size: clamp(1.05rem, 2vw, 1.35rem); }
+.identity-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin: 2rem 0 0; }
+.identity-grid div { padding: .75rem; border: 1px solid var(--line); background: var(--paper-blue); }
+.identity-grid dt { font-size: .75rem; font-weight: 800; text-transform: uppercase; }
+.identity-grid dd { margin: .25rem 0 0; overflow-wrap: anywhere; }
+.live-status, .status-banner { margin: 2rem 0 1rem; padding: .85rem 1rem; border-left: .65rem solid var(--blue); background: var(--yellow); font-weight: 700; overflow-wrap: anywhere; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr); gap: 1rem; }
+/* A CSS-pixel minimum gutter preserves usable form width while text grows independently. */
+.panel { min-width: 0; padding: clamp(16px, 3vw, 2rem); }
+.panel--intent { background: #f7e6ee; }
+.panel__heading { display: flex; gap: 1rem; align-items: start; justify-content: space-between; }
+.component-catalog { display: grid; width: 100%; min-width: 0; max-width: 100%; gap: .65rem; padding: 0; border: 0; }
+.component-catalog legend { max-width: 100%; margin-bottom: .6rem; font-weight: 800; overflow-wrap: anywhere; }
+.component-catalog__item { display: grid; width: 100%; min-width: 0; grid-template-columns: auto minmax(0, 1fr); gap: 0 .75rem; padding: .9rem; border: 2px solid var(--line); background: white; cursor: pointer; }
+.component-catalog__item:has(input:checked) { background: var(--yellow); box-shadow: .3rem .3rem 0 var(--line); }
+.component-catalog__item input { grid-row: 1 / 3; align-self: center; width: 1.25rem; height: 1.25rem; }
+.component-catalog__item span { font-weight: 800; }
+.component-catalog__item span, .component-catalog__item small { min-width: 0; overflow-wrap: anywhere; }
+.component-catalog__item small { color: #34527b; }
+.panel--intent form { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: .65rem; }
+.form-field { display: grid; min-width: 0; gap: .35rem; }
+.panel--intent label { font-weight: 800; }
+/* Native controls contribute intrinsic sizes; explicit logical bounds keep enlarged text inside the local field. */
+.panel--intent input, .panel--intent select { width: 100%; min-width: 0; min-inline-size: 0; max-width: 100%; max-inline-size: 100%; min-height: 2.75rem; padding: .55rem .65rem; border: 2px solid var(--line); background: white; color: var(--ink); }
+.panel--intent select {
+  display: block;
+  inline-size: 100%;
+  contain: inline-size;
+  appearance: none;
+  padding-inline-end: 44px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='m2 2 6 6 6-6' fill='none' stroke='%23102b5b' stroke-width='2.5'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The authored indicator follows the logical inline end in either writing direction. */
+.panel--intent select:dir(rtl) { background-position: left 12px center; }
+[aria-invalid="true"] { outline: .25rem solid var(--rose); outline-offset: .1rem; }
+.issue-list { margin: 0; padding: .75rem .75rem .75rem 2rem; background: white; border-left: .5rem solid var(--rose); }
+.price-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: .5rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+.button-row { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+.button { max-width: 100%; min-height: 2.75rem; padding: .6rem .9rem; border: 2px solid var(--line); background: var(--blue); color: white; font-weight: 800; overflow-wrap: anywhere; cursor: pointer; }
+.button--quiet { background: white; color: var(--ink); }
+.button--risk { background: var(--rose); color: var(--ink); }
+.button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: .3rem solid var(--yellow); outline-offset: .15rem; }
+.button:disabled, input:disabled, select:disabled { cursor: not-allowed; opacity: .62; }
+.component-catalog__item:has(input:disabled) { cursor: default; }
+[data-component-js-state="enhanced"] [data-component-submit]:disabled { cursor: progress; }
+.receipt, .semantic-twin, .operating-state, .state-key { margin-top: 1rem; padding: 1rem 1.25rem; }
+.receipt[data-standing="accepted"] { background: #d4f3ec; }
+.receipt[data-standing="rejected"] { background: #ffe0e5; }
+.semantic-twin summary { cursor: pointer; font-size: 1.1rem; font-weight: 800; }
+.semantic-twin { min-width: 0; }
+.semantic-twin pre { min-width: 0; max-height: 28rem; overflow: auto; padding: 1rem; background: #07172d; color: #e7f4ff; white-space: pre-wrap; overflow-wrap: anywhere; }
+.state-key ul { columns: 2 18rem; padding-left: 1.2rem; }
+.operating-state__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; margin: 0; }
+.operating-state__grid div { min-width: 0; padding: .75rem; border: 1px solid var(--line); background: var(--paper-blue); }
+.operating-state__grid dt { font-size: .75rem; font-weight: 800; text-transform: uppercase; }
+.operating-state__grid dd { margin: .2rem 0 0; overflow-wrap: anywhere; }
+.drawer { width: min(34rem, calc(100% - 2rem)); margin: auto 0 auto auto; min-height: 100dvh; padding: 0; border: 0; background: var(--paper); color: var(--ink); }
+.drawer::backdrop { background: rgb(7 23 45 / .68); }
+.drawer__frame { display: grid; min-height: 100dvh; align-content: space-between; gap: 2rem; padding: 2rem; border-left: .75rem solid var(--teal); }
+
+@media (max-width: 48rem) {
+  main { width: min(100% - 1rem, 76rem); margin-top: .5rem; }
+  .identity-grid, .lab-grid, .operating-state__grid { grid-template-columns: 1fr; }
+  .panel__heading { display: grid; }
+}
+
+@media (forced-colors: active) {
+  .lab-header, .panel, .receipt, .semantic-twin, .operating-state, .state-key,
+  .component-catalog__item, .operating-state__grid div, .button, input, select {
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+  .button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline-color: Highlight; }
+  .panel--intent select { appearance: auto; padding-inline-end: .65rem; background-image: none; }
+}
+
+@media print {
+  body, main { background: white; }
+  main { width: 100%; margin: 0; }
+  .skip-link, .button-row, .panel__heading > .button, dialog { display: none; }
+  .lab-header, .panel, .receipt, .semantic-twin, .operating-state, .state-key { box-shadow: none; break-inside: avoid; }
+  details:not([open]) > :not(summary) { display: block; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .component-catalog__item, .button { transition: transform 130ms ease, box-shadow 130ms ease; }
+  .component-catalog__item:has(input:checked), .button:hover { transform: translate(-.1rem, -.1rem); }
+}

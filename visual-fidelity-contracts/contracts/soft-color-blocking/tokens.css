@@ -1,0 +1,125 @@
+/* Soft Color Blocking v1.0.0 reference mapping.
+   Established examples retain their local CSS ownership. */
+:root {
+  color-scheme: light;
+  --scb-blush: #f8cbc7;
+  --scb-paper: #f9e8e5;
+  --scb-cobalt: #3157ed;
+  --scb-ink: #14245b;
+  --scb-chartreuse: #ebff4f;
+  --scb-coral: #ff6b63;
+  --scb-dusty-yellow: #ded575;
+  --scb-pale-rose: #f7d7d4;
+  --scb-warm-white: #fff7f4;
+
+  --scb-canvas: var(--scb-blush);
+  --scb-panel: var(--scb-paper);
+  --scb-text: var(--scb-ink);
+  --scb-boundary: var(--scb-cobalt);
+  --scb-action: var(--scb-cobalt);
+  --scb-selected: var(--scb-chartreuse);
+  --scb-attention: var(--scb-dusty-yellow);
+  --scb-error: var(--scb-coral);
+  --scb-focus-inner: var(--scb-warm-white);
+  --scb-focus-outer: var(--scb-ink);
+  --scb-depth: var(--scb-cobalt);
+
+  --scb-font-display: "Arial Nova", "Avenir Next", Inter, ui-sans-serif, system-ui, sans-serif;
+  --scb-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --scb-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --scb-text-body: 1rem;
+  --scb-text-meta: 0.75rem;
+  --scb-leading: 1.5;
+  --scb-measure: 66ch;
+
+  --scb-space-1: 0.25rem;
+  --scb-space-2: 0.5rem;
+  --scb-space-3: 0.75rem;
+  --scb-space-4: 1rem;
+  --scb-space-5: 1.5rem;
+  --scb-space-6: 2rem;
+  --scb-corner: 0;
+  --scb-rule: 0.125rem;
+  --scb-target: 2.75rem;
+  --scb-offset-x: 0.5rem;
+  --scb-offset-y: 0.5rem;
+  --scb-layer-base: 0;
+  --scb-layer-controls: 10;
+  --scb-layer-status: 20;
+  --scb-duration: 160ms;
+  --scb-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scb-panel {
+  border: var(--scb-rule) solid var(--scb-boundary);
+  border-radius: var(--scb-corner);
+  background: var(--scb-panel);
+  color: var(--scb-text);
+  box-shadow: var(--scb-offset-x) var(--scb-offset-y) 0 var(--scb-depth);
+}
+
+.scb-label {
+  color: var(--scb-cobalt);
+  font: 800 var(--scb-text-meta) / 1.3 var(--scb-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scb-control {
+  min-block-size: var(--scb-target);
+  min-inline-size: var(--scb-target);
+  border: var(--scb-rule) solid var(--scb-boundary);
+  border-radius: var(--scb-corner);
+  background: var(--scb-warm-white);
+  color: var(--scb-text);
+  font: inherit;
+}
+
+.scb-control:focus-visible {
+  outline: 0.1875rem solid var(--scb-focus-outer);
+  outline-offset: 0.1875rem;
+  box-shadow: 0 0 0 0.0625rem var(--scb-focus-inner);
+}
+
+.scb-state--selected { background: var(--scb-selected); color: var(--scb-ink); }
+.scb-state--attention { background: var(--scb-attention); color: var(--scb-ink); }
+.scb-state--error { background: var(--scb-error); color: var(--scb-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --scb-duration: 0ms; }
+}
+
+@media (forced-colors: active) {
+  .scb-panel,
+  .scb-control {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    forced-color-adjust: auto;
+  }
+
+  .scb-control:focus-visible { outline-color: Highlight; box-shadow: none; }
+
+  .scb-state--selected,
+  .scb-state--attention,
+  .scb-state--error {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .scb-panel,
+  .scb-control,
+  .scb-state--selected,
+  .scb-state--attention,
+  .scb-state--error {
+    border-color: #000;
+    background: #fff;
+    color: #000;
+    box-shadow: none;
+  }
+}

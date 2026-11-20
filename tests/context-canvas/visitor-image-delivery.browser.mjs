@@ -10,7 +10,7 @@ const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const routes = [
   { label: "About", path: "index.html", imageCount: 1, expectsLazyImage: false },
   { label: "AI Systems", path: "ai-systems.html", imageCount: 15, expectsLazyImage: true },
-  { label: "Debriefs", path: "debriefs.html", imageCount: 20, expectsLazyImage: true },
+  { label: "Showcase", path: "debriefs.html", imageCount: 20, expectsLazyImage: true },
 ];
 const engines = [
   { label: "Chromium", browserType: chromium },
@@ -120,7 +120,7 @@ async function observeRoute(browser, route) {
       assert.equal(
         lazyImageCount,
         0,
-        `${route.label} keeps its sole above-the-fold image eager; the native-video poster has a focused contract`,
+        `${route.label} keeps its authored images eager; the native-video poster has a focused contract`,
       );
     }
 
@@ -131,7 +131,7 @@ async function observeRoute(browser, route) {
 }
 
 for (const engine of engines) {
-  test(`${engine.label} loads the reported About, AI Systems, and Debriefs image population through loopback HTTP`, async t => {
+  test(`${engine.label} loads the reported About, AI Systems, and Showcase image population through loopback HTTP`, async t => {
     let browser;
     try {
       browser = await engine.browserType.launch({ headless: true });
@@ -160,7 +160,7 @@ for (const engine of engines) {
 
       t.diagnostic(
         `${engine.label} ${browser.version()} received ${observations.length} images ` +
-          "across About, AI Systems, and Debriefs.",
+          "across About, AI Systems, and Showcase.",
       );
     } finally {
       await browser.close();

@@ -1,23 +1,33 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readSourceContract } from "./read-source-contract.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const sourceRouteAuthority = await loadSourceRouteAuthority();
 
 async function readCanvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, path), "utf8");
+  return path.endsWith(".html")
+    ? source.replace(/\{\{PUBLIC_URL_EXTERNAL_[A-Z0-9_]+\}\}/gu,
+      (token) => resolveSourceRouteValue(token, sourceRouteAuthority))
+    : source;
 }
 
 function cssRule(source, selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-  const match = source.match(new RegExp(`(?:^|\\n)${escapedSelector}\\s*\\{([^}]*)\\}`, "u"));
+  const match = source.match(new RegExp(`(?:^|[}\\s])${escapedSelector}\\s*\\{([^}]*)\\}`, "u"));
   assert.ok(match, `Expected ${selector} to have a CSS rule`);
   return match[1];
 }
@@ -141,10 +151,15 @@ test("the About hero keeps its initial composition with a local identity lockup"
     /<div class="about-hero__identity"><div class="about-hero__name"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><address class="about-contact">contact@vik\.guru<\/address><\/div><figure class="about-portrait"><img src="portrait-of-vvk-technology-leader\.jpg" width="300" height="300" alt="Vikrant Kudesia, smiling\."/u,
   );
   assert.doesNotMatch(html, /mailto:/u);
-  assert.match(html, /<nav class="about-boundary" aria-label="Explore projects">[\s\S]*href="ai-systems\.html"[\s\S]*href="https:\/\/github\.com\/driftframestudios" rel="me"/u);
+  const projects = html.match(/<nav class="about-boundary" aria-label="Explore projects">([\s\S]*?)<\/nav>/u)?.[1];
+  assert.ok(projects, "The hero offers named onward destinations");
+  assert.deepEqual([...projects.matchAll(/href="([^"]+)"/gu)].map(match => match[1]), [
+    "debriefs.html", "https://github.com/driftframestudios",
+  ]);
+  assert.match(projects, /href="https:\/\/github\.com\/driftframestudios" rel="me"/u);
 });
 
-test("the About folios keep organization records inside progressive disclosure", async () => {
+test("the About folios keep selected work in closed disclosures and retain role context", async () => {
   const [css, html] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
@@ -167,18 +182,28 @@ test("the About folios keep organization records inside progressive disclosure",
     qualityFolio.indexOf("</details>", qualityDetailsStart) + "</details>".length,
   );
 
-  assert.match(careerFolio, /data-source-id="career-role-1"><strong>Founder &amp; <abbr title="Chief Product and Technology Officer">CPTO<\/abbr> <span class="about-folio-role__organization">at Driftframe Studios, LLC<\/span><\/strong>/u);
-  assert.match(qualityFolio, /data-source-id="quality-role-1"><strong>Founder &amp; Director of Quality Engineering <span class="about-folio-role__organization">at Kindlight Charitable Trust Foundation<\/span><\/strong>/u);
-  assert.match(careerDisclosure, /^<details class="about-folio-disclosure"><summary>/u);
-  assert.match(qualityDisclosure, /^<details class="about-folio-disclosure"><summary>/u);
-  assert.doesNotMatch(careerDisclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
-  assert.doesNotMatch(qualityDisclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
-  assert.match(careerDisclosure, /Show 4 more career records/u);
-  assert.match(qualityDisclosure, /Show 5 more quality records/u);
-  assert.equal((careerDisclosure.match(/data-source-id="career-case-/gu) ?? []).length, 4);
-  assert.equal((qualityDisclosure.match(/data-source-id="quality-case-/gu) ?? []).length, 5);
-  assert.match(careerDisclosure, /data-source-id="career-case-6"[\s\S]*Founder &amp; <abbr title="Chief Product and Technology Officer">CPTO<\/abbr> at Driftframe Studios, LLC/u);
-  assert.match(qualityDisclosure, /data-source-id="quality-case-7"[\s\S]*Founder &amp; Director of Quality Engineering at Kindlight Charitable Trust Foundation/u);
+  assert.deepEqual([...careerFolio.matchAll(/data-source-id="(career-role-[^"]+)"/gu)].map(match => match[1]), ['career-role-2', 'career-role-3']);
+  assert.deepEqual([...qualityFolio.matchAll(/data-source-id="(quality-role-[^"]+)"/gu)].map(match => match[1]), ['quality-role-2', 'quality-role-3']);
+  for (const folio of [careerFolio, qualityFolio]) {
+    const roles = folio.match(/<ul class="about-folio-roles">([\s\S]*?)<\/ul>/u)?.[1];
+    assert.ok(roles, 'Each folio retains its roles');
+    for (const role of roles.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gu)) {
+      assert.match(role[1], /<strong>[^<]+/u, 'The role has a visible title');
+      assert.match(role[1], /class="about-folio-role__organization">[^<]+/u, 'The role names its organizational context');
+      assert.match(role[1], /<\/strong><span>[^<]+/u, 'The role explains the work');
+    }
+  }
+  for (const [disclosure, prefix, ids] of [
+    [careerDisclosure, 'career', ['5', '6', '4', '1']],
+    [qualityDisclosure, 'quality', ['5', '1', '7', '6', '4']],
+  ]) {
+    assert.match(disclosure, /^<details class="about-folio-disclosure"><summary>/u);
+    assert.doesNotMatch(disclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
+    assert.match(disclosure, new RegExp(`Show ${ids.length} more`, 'u'));
+    assert.deepEqual([...disclosure.matchAll(new RegExp(`data-source-id="${prefix}-case-([^"]+)"`, 'gu'))].map(match => match[1]), ids);
+  }
+  assert.match(careerDisclosure, /data-source-id="career-case-6"[\s\S]*Driftframe Studios, LLC/u);
+  assert.match(qualityDisclosure, /data-source-id="quality-case-7"[\s\S]*Kindlight Charitable Trust Foundation/u);
 
   const sourceIds = [...html.matchAll(/data-source-id="([^"]+)"/gu)].map(match => match[1]);
   assert.equal(new Set(sourceIds).size, sourceIds.length, "Expected unique About source IDs");
@@ -223,7 +248,7 @@ test("the About visual sequence begins on a local poster and leaves native playb
   const headingEnd = section.indexOf("</h2>");
   const figureStart = section.indexOf('<figure class="about-media"');
   const firstProse = section.indexOf("<p>Twenty years");
-  assert.ok(headingEnd < figureStart && figureStart < firstProse);
+  assert.ok(headingEnd < firstProse && firstProse < figureStart);
   const videoTag = section.match(/<video class="about-media__video"[^>]+>/u)?.[0];
   assert.ok(videoTag, "Expected one native About video receiver");
   assert.match(videoTag, /data-about-media-video/u);
@@ -249,7 +274,7 @@ test("the About visual sequence begins on a local poster and leaves native playb
   );
   assert.match(
     section,
-    /A finished genomics plate view opens the sequence\./u,
+    /genomics plate view opens the sequence/u,
   );
   assert.match(
     section,
@@ -396,88 +421,54 @@ test("the About visual sequence begins on a local poster and leaves native playb
   assert.match(css, /@media print[\s\S]*?\.about-media-sequence:not\(\[open\]\) > :not\(summary\)/su);
 });
 
-test("the About prose and role table state action and consequence directly", async () => {
+test("the concise About reading keeps role context in its folios", async () => {
   const html = await readCanvasFile("index.html");
-  assert.match(
-    html,
-    /Twenty years of shipping products into regulated, high-stakes, frequently changing environments have shaped how I work: find what is actually being measured, distinguish signal from noise, repair the control loop, and equip the team to do the same\./u,
-  );
-  assert.match(
-    html,
-    /<strong>The people who understand both the biology and the computation can explain what a system is doing - more than merely what it promises\.<\/strong>/u,
-  );
-  assert.match(
-    html,
-    /A boarding pass that fails to load at the gate and a bill-payment path buried in ambiguous links are all too common occurrences\./u,
-  );
-  assert.match(
-    html,
-    /That fit becomes clearer early when the team can state system and process maturity, evidence reach, and decision rights plainly\. <strong>I can help you figure this out\.<\/strong>/u,
-  );
-  assert.match(
-    html,
-    /Repairing channel coverage and ownership first gave the team a direct way to reduce time to response, recover missed sales conversations, and measure escalations against the channel customers actually used\./u,
-  );
-
-  const table = html.match(
-    /<table class="about-role-table" data-label="I’ve worked as…">[\s\S]*?<\/table>/u,
-  )?.[0];
-  assert.ok(table, "Expected the About role table");
-  const newestRow = table.match(
-    /<tbody>(<tr data-label="I’ve worked as…: Designer and Engineer">[\s\S]*?<\/tr>)/u,
-  )?.[1];
-  assert.ok(newestRow, "Expected the 2022–2025 work to be the first body row");
-  assert.match(newestRow, /<th scope="row" data-label="Role in the situation">Designer and Engineer<\/th>/u);
-  assert.match(newestRow, /<td data-label="Changed work">Fully redesigned and launched an <abbr[^>]+>FDA<\/abbr>-approved clinical-genomics medical device/u);
-  assert.match(newestRow, /<td data-label="Reported consequence">Eliminated an entire category of assignment errors,[\s\S]*saved about 25 minutes per person/u);
-  assert.match(newestRow, /<td data-label="Context">Genomics · 2022–2025<\/td>/u);
-
-  const productLeaderRow = table.match(
-    /(<tr data-label="I’ve worked as…: Product leader">[\s\S]*?<\/tr>)/u,
-  )?.[1];
-  assert.ok(productLeaderRow, "Expected the product-leadership row");
-  assert.match(
-    productLeaderRow,
-    /equipped designers to participate directly in technical discussions/u,
-  );
-
-  const designerEngineerRow = table.match(
-    /(<tr data-label="I’ve worked as…: Designer and engineer">[\s\S]*?<\/tr>)/u,
-  )?.[1];
-  assert.ok(designerEngineerRow, "Expected the robotics design-and-engineering row");
-  assert.match(
-    designerEngineerRow,
-    /A shared implementation model replaced design-to-engineering handoffs: API constraints shaped feasible features early, and the design system scaled beyond atomic components into production-connected prototypes\./u,
-  );
-  assert.doesNotMatch(designerEngineerRow, /into engineering handoff/u);
+  assert.doesNotMatch(html, /<table[^>]*data-label="I’ve worked as…"/u);
+  for (const id of ['career-title', 'quality-title', 'method-title']) {
+    assert.match(html, new RegExp(`id="${id}"`, 'u'));
+  }
+  assert.match(html, /href="ai-systems\.html"/u, 'the deeper collection stays reachable');
 });
 
-test("the About prompt-side readings resolve through public Registry bindings", async () => {
-  const [html, bindingSource] = await Promise.all([
+test("the Studio counterpart table starts collapsed inside a native disclosure", async () => {
+  const [html, css] = await Promise.all([
     readCanvasFile("index.html"),
-    readFile(resolve(
-      repositoryRoot,
-      "deployment/public-references/context-canvas-registry-bindings.v1.json",
-    ), "utf8"),
+    readCanvasFile("styles/routes/about.css"),
   ]);
-  const tokens = [
-    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_SHAPE_THE_COLLABORATION_BEFORE_THE_ANSWER",
-    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION",
-  ];
-  const promptReading = html.match(
-    /<p class="about-evidence-note">Registry reading:[\s\S]*?<\/p>/u,
-  )?.[0];
-  assert.ok(promptReading, "Expected the About prompt-side Registry reading");
+  const disclosure = html.match(
+    /(<details class="about-studio-counterpart">[\s\S]*?<\/details>)/u,
+  )?.[1];
+  assert.ok(disclosure, "Expected the Studio counterpart disclosure");
+  assert.doesNotMatch(
+    disclosure,
+    /<details class="about-studio-counterpart"\s+open/u,
+  );
+  assert.match(disclosure, />Show the static counterpart table<\/span>/u);
+  assert.match(disclosure, />Hide the static counterpart table<\/span>/u);
+  assert.match(
+    disclosure,
+    /<div class="about-table-wrap" tabindex="0" role="region" aria-label="Cross-Functional Investment Studio static counterpart; scroll horizontally">/u,
+  );
+  assert.match(
+    disclosure,
+    /<table class="about-role-table" data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis">/u,
+  );
+  const body = disclosure.match(/<tbody>([\s\S]*?)<\/tbody>/u)?.[1];
+  assert.ok(body, "Expected the complete Studio counterpart table body");
+  assert.equal(body.match(/<tr data-label=/gu)?.length, 5);
+  assert.match(
+    css,
+    /:is\(\.about-folio-disclosure, \.about-studio-counterpart, \.about-prompt-static\)::details-content\s*\{\s*content-visibility:\s*visible;/su,
+  );
+});
 
-  const bindings = JSON.parse(bindingSource).bindings;
-  for (const token of tokens) {
-    assert.match(promptReading, new RegExp(`href="\\{\\{${token}\\}\\}"`, "u"));
-    const binding = bindings.find(candidate => candidate.token === token);
-    assert.ok(binding, `Expected a binding for ${token}`);
-    const destination = new URL(binding.url);
-    assert.equal(destination.origin, "https://kindlight.systems");
-    assert.equal(binding.expected_source_lifecycle, "Current");
-    assert.equal(binding.expected_route_state, "Identity verified");
-    assert.doesNotMatch(binding.url, /notion\.(?:so|site)|notion\.com/iu);
-  }
+test("the concise About keeps the Gallery while the prompt explorer retains its own route", async () => {
+  const [html, manifestSource] = await Promise.all([
+    readCanvasFile("index.html"),
+    readFile(resolve(repositoryRoot, "iframe-route-families/canvas/public-iframe-route-manifest-v1.json"), "utf8"),
+  ]);
+  assert.match(html, /data-about-content-fit="gallery"/u);
+  assert.doesNotMatch(html, /data-about-content-fit="prompt-conditions"|aria-labelledby="prompt-conditions-title"/u);
+  const explorer = JSON.parse(manifestSource).routes.find(route => route.id === 'prompt-conditions-explorer');
+  assert.equal(explorer?.source_file, 'collaboration/about-prompt-conditions-explorer/index.html');
 });

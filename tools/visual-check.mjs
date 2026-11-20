@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { chromium } from "@playwright/test";
 import { createServer } from "node:http";
@@ -148,11 +149,12 @@ function targetToUrl(target) {
   return pathToFileURL(resolve(target)).href;
 }
 
-async function startStaticServer(rootDirectory) {
+export async function startStaticServer(rootDirectory) {
   const types = {
     ".css": "text/css; charset=utf-8",
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
+    ".mjs": "text/javascript; charset=utf-8",
     ".json": "application/json; charset=utf-8",
     ".svg": "image/svg+xml; charset=utf-8"
   };
@@ -473,7 +475,9 @@ async function main() {
   console.log(`Visual check passed. Artifacts: ${runDir}`);
 }
 
-main().catch((error) => {
-  console.error(error.stack || error.message);
-  process.exitCode = 1;
-});
+if (isDirectExecution(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.stack || error.message);
+    process.exitCode = 1;
+  });
+}

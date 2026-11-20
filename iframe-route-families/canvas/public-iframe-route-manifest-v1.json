@@ -156,6 +156,42 @@
       "reader_job": "Model a provisional cross-functional investment and open its report or primary-site continuation without changing the parent visitor surface."
     },
     {
+      "id": "investment-studio-chapters",
+      "display_name": "Cross-Functional Investment Studio \u00b7 About chapters",
+      "kind": "visitor_companion",
+      "source_file": "collaboration/about-investment-studio-chapters/index.html",
+      "public_alias": "/v1/canvas/investment-studio-chapters/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "projection_kind": "decorated_rewrite",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ]
+      },
+      "navigation_rewrites": [
+        {
+          "source_reference": "../../context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html",
+          "public_reference": "https://vik.guru/hiring-surfaces-talent-agent-intake.html"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/context-canvas/initiative-costing.html",
+          "public_reference": "https://vik.guru/initiative-costing.html"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/context-canvas/shared-machinery.html",
+          "public_reference": "https://vik.guru/shared-machinery.html"
+        }
+      ],
+      "reader_job": "Operate the Studio through retained planning chapters while vertical reading continues in About."
+    },
+    {
       "id": "prompt-conditions-explorer",
       "display_name": "Prompt Conditions Explorer",
       "kind": "visitor_companion",

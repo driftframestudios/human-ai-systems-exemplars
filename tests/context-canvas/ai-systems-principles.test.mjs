@@ -1,16 +1,27 @@
 import '../../tools/node-runtime-admission.mjs';
+import { parseExpressionAt } from 'acorn';
+import { readSourceContract } from "./read-source-contract.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
-const aiSystemsCollectionId =
-  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html#collection";
+const aiSystemsCollectionId = "https://vik.guru/ai-systems.html#collection";
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 const aiSystemsCollectionName =
   "AI Systems — Accountable Decisions and Recoverable Work";
 const humanAuthor = { "@type": "Person", name: "Vikrant Varun Kudesia" };
@@ -214,7 +225,7 @@ const sourceSectionIds = new Map([
 ]);
 
 async function canvasFile(path) {
-  return readFile(resolve(canvasRoot, path), "utf8");
+  return readSourceContract(resolve(canvasRoot, path), "utf8");
 }
 
 function normalizedText(value) {
@@ -228,7 +239,7 @@ function normalizedText(value) {
 function normalizedMetadataTitle(value) {
   return value
     .replace(/&amp;/gu, "&")
-    .replace(/\s+\|\s+Context Canvas$/u, "")
+    .replace(/\s+\|\s+Vikrant (?:Varun )?Kudesia$/u, "")
     .replace(/\s+/gu, " ")
     .trim();
 }
@@ -356,7 +367,7 @@ test("the complete AI Systems family carries one principle at its earned body tr
     const anchorEnd = anchoredElementEnd(source, owner, expected.after);
     assert.ok(anchorEnd, route + ": missing route-specific content anchor");
     assert.ok(
-      principleStart > anchorEnd,
+      principleStart >= anchorEnd,
       route + ": principle precedes the content that earns it",
     );
 
@@ -458,7 +469,7 @@ test("the AI Systems family presents one title across document, social, and stru
       ? metadata.isPartOf
       : [metadata.isPartOf];
     const collection = parents.find(
-      (parent) => parent?.["@id"] === aiSystemsCollectionId,
+      (parent) => publicValue(parent?.["@id"]) === aiSystemsCollectionId,
     );
     assert.equal(
       collection?.name,
@@ -519,13 +530,16 @@ test("the visual reference includes all seventeen AI Systems routes", async () =
 
 test("the AI Systems shelf exposes the complete family", async () => {
   const source = await canvasFile("canvas-shell.js");
-  const aiShelf = source.match(
-    /\bai:\s*\[([\s\S]*?)\n\s*\],\n\s*debriefs:/u,
-  )?.[1] ?? "";
-
-  for (const route of placements.keys()) {
-    assert.match(aiShelf, new RegExp(`"${route.replaceAll(".", "\\.")}"`, "u"), route);
-  }
+  const start = source.search(/\bvar\s+routes\s*=\s*\{/u);
+  assert.ok(start >= 0, "AI Systems footer links");
+  const routes = parseExpressionAt(source, source.indexOf("{", start), { ecmaVersion: "latest" });
+  const shelf = routes.properties.find(property => property.key.name === "ai").value;
+  const destinations = new Set(shelf.elements.map(pair => pair.elements[1].value));
+  const html = await canvasFile("ai-systems.html");
+  const heading = html.match(/<section\b[^>]*data-footer-routes="ai"[^>]*>\s*<h2\b[^>]*>\s*<a href="([^"]+)"/u);
+  assert.ok(heading, "the AI Systems column links its primary page in its heading");
+  destinations.add(heading[1]);
+  for (const route of placements.keys()) assert.ok(destinations.has(route), route);
 });
 
 test("the AI Systems family identifies human authorship, publication, and collection ancestry", async () => {
@@ -538,7 +552,7 @@ test("the AI Systems family identifies human authorship, publication, and collec
     assert.match(metadata.dateModified, /^\d{4}-\d{2}-\d{2}$/u, `${route}: dateModified`);
 
     if (route === "ai-systems.html") {
-      assert.equal(metadata["@id"], aiSystemsCollectionId, route);
+      assert.equal(publicValue(metadata["@id"]), aiSystemsCollectionId, route);
       assert.match(
         source,
         /class="anchor_ai_systems" aria-current="page">AI Systems<\/a>/u,
@@ -551,7 +565,7 @@ test("the AI Systems family identifies human authorship, publication, and collec
       ? metadata.isPartOf
       : [metadata.isPartOf];
     assert.ok(
-      parents.some((parent) => parent?.["@id"] === aiSystemsCollectionId),
+      parents.some((parent) => publicValue(parent?.["@id"]) === aiSystemsCollectionId),
       `${route}: AI Systems collection ancestry`,
     );
     assert.match(

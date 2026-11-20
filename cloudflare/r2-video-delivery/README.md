@@ -26,6 +26,12 @@ slicing; partial-response assembly stays outside the handler. Stored R2
 The publication policy treats every accepted key as immutable, so changed
 bytes or metadata require a new versioned key.
 
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| A browser seeking or loading accepted media | [Behavior boundary](#behavior-boundary) | Exact methods, path grammar, metadata, byte-range, cache, and failure behavior |
+| A reviewed object family ready for publication | [Activation boundary](#activation-boundary) | Operator decisions for R2, routes, neighboring rules, withdrawal, and recovery |
+| A resumable upload handoff | [Transport-only checkpoint](#transport-only-checkpoint) | A bounded pause before visitor-page activation |
+
 ## Behavior boundary
 
 - `GET` and `HEAD` are the complete read interface.

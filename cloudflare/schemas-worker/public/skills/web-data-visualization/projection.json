@@ -5,7 +5,7 @@
   "name": "web-data-visualization",
   "description": "Integrates source-grounded editorial or scientific visualizations into existing web surfaces with semantic companions and coherent view state. Applies to static charts, SVG galleries, and coordinated interactive views whose delivery, responsive behavior, or export affects interpretation.",
   "semanticAuthorityRef": "../source/.agents/skills/web-data-visualization/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/26",
+  "sourceRef": "../catalog.json#/skills/30",
   "contract": {
     "what": "A web visualization whose source, visual grammar, state, semantic companion, and portable output form one coherent reader surface.",
     "when": [

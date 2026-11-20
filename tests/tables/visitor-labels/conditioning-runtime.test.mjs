@@ -10,6 +10,8 @@ import {fileURLToPath} from 'node:url';
 import vm from 'node:vm';
 import test from 'node:test';
 
+import {readPrototypeScript} from '../../prototype-script.mjs';
+
 const directory = fileURLToPath(new URL('.', import.meta.url));
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const contractBytes = readFileSync(join(directory, 'coverage.json'));
@@ -17,11 +19,9 @@ const contract = JSON.parse(contractBytes);
 const source = readFileSync(join(root, contract.root, 'conditioning-field.html'), 'utf8');
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.replace(/\s+/gu, ' ').trim();
-const declarations = source.slice(source.indexOf('      const rungs = ['), source.indexOf('      const state = {'));
-const builders = source.slice(source.indexOf('      function createCell('), source.indexOf('      function selectedRung()'));
-assert.ok(declarations.includes('const failures = ['));
-assert.ok(builders.includes('function buildSemanticLadder()'));
-assert.ok(builders.includes('function buildFailureTable()'));
+const program = readPrototypeScript(source);
+const declarations = ['rungs', 'failures'].map(name => 'const ' + name + '=' + program.initializer(name) + ';').join('\n');
+const builders = ['createCell', 'buildSemanticLadder', 'buildFailureTable'].map(program.definition).join('\n');
 
 class Node {
   constructor(tagName) {

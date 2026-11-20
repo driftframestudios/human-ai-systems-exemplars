@@ -1,9 +1,22 @@
 # LIMS/ELN Functional Nucleus
 
-This directory brings five independently governed LIMS/ELN repositories into
-one integrated encounter. It places the shared contract, executable future,
-working implementation, comparison engine, and governance plane beside one
-another so a collaborator can follow behavior across repository boundaries.
+Laboratory teams need to know which specimen is in hand, what happened to it,
+which result belongs to it, and who can rely on that result. A laboratory
+information management system connects specimens, operations, and chain of
+custody. An electronic laboratory notebook records experimental work and its
+interpretation so teams can review and reproduce it.
+
+This directory lets a reader follow one synthetic specimen through both kinds
+of responsibility. It then brings five independently governed repositories
+into one integrated encounter: shared contracts, a simulated selected future,
+a working implementation, an independent comparison engine, and the governance
+rules that connect their evidence and authority.
+
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| A specimen-workflow or laboratory-operations question | [One useful vertical slice](#one-useful-vertical-slice) | One Golden Specimen journey across shared contracts, simulation, implementation, comparison, and governance |
+| A software or architecture question | [System shape](#system-shape) | Repository roles, release coordinates, runnable entry points, and source authority |
+| A need to run the integrated example | [Start with the workbench](#start-with-the-workbench) | A disposable local environment and the Golden Specimen Workbench |
 
 The standalone repositories remain the source histories for releases, issues,
 and durable ownership. This directory is a provenance-recorded exact-head
@@ -73,7 +86,7 @@ The nucleus members above retain their captured revisions; the example follows
 its own accepted source and evidence. Equal query results support comparison
 of the observed database work. Application authorization, full-response cost,
 deployment workload, and recovery acceptance stay with the receiving system.
-HASE's [relational execution review](../.agents/skills/relational-execution-review/SKILL.md)
+This repository's [relational execution review](../.agents/skills/relational-execution-review/README.md)
 provides the corresponding source-review route, and the
 [scientific skill ladder](../.agents/skills/README.md#continue-into-a-scientific-or-database-example)
 routes figure-specific questions to optional public packages.

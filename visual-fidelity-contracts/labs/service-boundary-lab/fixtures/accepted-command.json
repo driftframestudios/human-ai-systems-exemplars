@@ -1,0 +1,14 @@
+{
+  "id": "command-review-0142",
+  "task": "Prepare one review-ready synthetic case",
+  "actor": "review-coordinator",
+  "role": "authorized-reviewer",
+  "tenant": "example-research-team",
+  "policyScope": "case-review",
+  "policyRevision": "policy-2026-10",
+  "representation": "operational-summary",
+  "sourceId": "synthetic-case-0142",
+  "baseRevision": 7,
+  "idempotencyKey": "review-0142-r7",
+  "proposedStatus": "review-ready"
+}

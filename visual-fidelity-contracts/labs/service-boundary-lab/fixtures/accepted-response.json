@@ -1,0 +1,34 @@
+{
+  "schema": "visual-fidelity.service-boundary-response.v1",
+  "standing": "accepted",
+  "projection": {
+    "id": "synthetic-case-0142",
+    "revision": 8,
+    "status": "review-ready",
+    "owner": "Example review team",
+    "nextAction": "Review the durable service receipt"
+  },
+  "receipt": {
+    "id": "receipt-review-0142",
+    "commandId": "command-review-0142",
+    "idempotencyKey": "review-0142-r7",
+    "acceptedRevision": 8,
+    "requestFingerprint": "fnv1a32:43d2730f",
+    "requestMeaning": {
+      "id": "command-review-0142",
+      "task": "Prepare one review-ready synthetic case",
+      "actor": "review-coordinator",
+      "role": "authorized-reviewer",
+      "tenant": "example-research-team",
+      "policyScope": "case-review",
+      "policyRevision": "policy-2026-10",
+      "representation": "operational-summary",
+      "sourceId": "synthetic-case-0142",
+      "baseRevision": 7,
+      "idempotencyKey": "review-0142-r7",
+      "proposedStatus": "review-ready"
+    },
+    "outcome": "committed"
+  },
+  "issue": null
+}

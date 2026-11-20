@@ -1,4 +1,5 @@
 import '../../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../../prototype-script.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -79,27 +80,20 @@ test("unclassified Core commit events are rejected", () => {
 });
 
 test("JTBD source commits its label on blur before rerendering", () => {
-  assert.match(sources.get("jobs"), /const eventName = el\.tagName === 'SELECT' \|\| el\.type === 'number' \? 'change' : 'blur';/u);
-  assert.match(sources.get("jobs"), /el\.addEventListener\(eventName, \(\) => \{ updateJobField\(el\.dataset\.jobId, el\.dataset\.field, el\.value\); renderAll\(\); \}\)/u);
+  assert.match(sources.get("jobs"), /const eventName\s*=\s*el\.tagName\s*===\s*'SELECT'\s*\|\|\s*el\.type\s*===\s*'number'\s*\?\s*'change'\s*:\s*'blur';/u);
+  assert.match(sources.get("jobs"), /el\.addEventListener\(eventName,\s*\(\)\s*=>\s*\{\s*updateJobField\(el\.dataset\.jobId,\s*el\.dataset\.field,\s*el\.value\);\s*renderAll\(\);?\s*\}\)/u);
 });
 
 test("Recovery source commits inspector fields on blur", () => {
-  assert.match(sources.get("recovery"), /els\.inspector\.querySelectorAll\('input, textarea, select'\)[\s\S]*?el\.addEventListener\('blur', update\)/u);
+  assert.match(sources.get("recovery"), /els\.inspector\.querySelectorAll\('input, textarea, select'\)[\s\S]*?el\.addEventListener\('blur',\s*update\)/u);
 });
-
-function namedFunction(source, name) {
-  const start = source.indexOf("  function " + name + "(");
-  assert.notEqual(start, -1);
-  const end = source.indexOf("\n  function ", start + 1);
-  assert.notEqual(end, -1);
-  return source.slice(start, end);
-}
 
 for (const expanded of [true, false]) {
   test("Alignment name input updates identity and preserves focus with " + (expanded ? "open" : "closed") + " table disclosure", () => {
     const source = sources.get("alignment");
-    const handler = source.match(/bind\(ids\.name,'input', (e => \{[^\n]+\})\);/u)?.[1];
-    assert(handler);
+    const script = readPrototypeScript(source);
+    const handler = script.select(node => node.type === 'CallExpression' && node.callee.name === 'bind' &&
+      node.arguments[0]?.property?.name === 'name' && node.arguments[1]?.value === 'input', node => node.arguments[2]);
     const input = { value: literal, selectionStart: 2, selectionEnd: 7 };
     const opt = { id: "option-1", name: "Original" };
     const nameNode = { textContent: "Original" };
@@ -134,7 +128,7 @@ for (const expanded of [true, false]) {
       renderOptionInspector() { assert.fail("name input inspector must not be replaced"); },
       renderAll() { assert.fail("live name input must not trigger a full rerender"); },
     });
-    vm.runInContext(namedFunction(source, "refreshOptionTableName") + "\nvar handler = " + handler + ";", context);
+    vm.runInContext(script.definition("refreshOptionTableName") + "\nvar handler = " + handler + ";", context);
     for (const value of [literal, "Original"]) {
       input.value = value;
       vm.runInContext("handler({ target: input });", context);

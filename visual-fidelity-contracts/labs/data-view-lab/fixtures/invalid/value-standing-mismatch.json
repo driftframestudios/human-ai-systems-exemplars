@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "dataViewLabId": "visual-fidelity-data-view-lab",
+  "revision": "cohort-invalid",
+  "lineage": { "source": "bundled-fixture", "parentRevision": "cohort-r1" },
+  "decisionNeed": "compare",
+  "dataStanding": "partial",
+  "scope": "Cross-functional review stages",
+  "unit": "cases",
+  "denominator": "per weekly review",
+  "records": [
+    { "id": "intake", "label": "Intake", "order": 0, "value": null, "standing": "known", "group": "coordination", "observedAt": "2026-10-19", "position": { "x": 8, "y": 18 } }
+  ],
+  "relationships": []
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:public-lineage",
+  "reviewedOn": "2026-10-20",
+  "records": [
+    {
+      "contractId": "vfc:industrial-ink",
+      "repositorySource": "visual-fidelity-contracts/contracts/industrial-ink/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract",
+      "relationship": "projects",
+      "semanticOwner": "Visual Fidelity Contracts maintainers",
+      "publicationOwner": "Vikrant Varun Kudesia — named human publication receiver",
+      "standing": "verified_public_route",
+      "privateLineagePolicy": "Public records carry descriptions maintained in the repository and public routes. Private collaboration identities and locators stay with their private owner.",
+      "reentry": [
+        "A changed contract meaning or public route reopens source-to-public reconciliation.",
+        "A changed publication standing reopens review with the publication owner."
+      ]
+    },
+    {
+      "contractId": "vfc:soft-color-blocking",
+      "repositorySource": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+      "relationship": "projects",
+      "semanticOwner": "Visual Fidelity Contracts maintainers",
+      "publicationOwner": "Vikrant Varun Kudesia — named human publication receiver",
+      "standing": "verified_public_route",
+      "privateLineagePolicy": "Public records carry descriptions maintained in the repository and public routes. Private collaboration identities and locators stay with their private owner.",
+      "reentry": [
+        "A changed contract meaning, maintained example, or public route reopens source-to-public reconciliation.",
+        "A changed publication standing reopens review with the publication owner."
+      ]
+    }
+  ]
+}

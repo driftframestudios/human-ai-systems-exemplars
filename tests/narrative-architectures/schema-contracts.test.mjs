@@ -5,8 +5,11 @@ import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
+import { parseExpressionAt } from "acorn";
 import Ajv2020 from "ajv/dist/2020.js";
 
+import { compactSource, prettySource } from "../../tools/cpanel-format.mjs";
+import { readPrototypeScript } from "../prototype-script.mjs";
 import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -78,20 +81,50 @@ async function findNamedFiles(directory, fileName) {
   return matches.sort();
 }
 
+// Use the JavaScript expression boundary so either laid-out or compact source
+// yields exactly the embedded JSON, including strings containing semicolons.
+function jsonConstant(source, name) {
+  const declaration = new RegExp("\\bconst\\s+" + name + "\\s*=\\s*", "u").exec(source);
+  assert.ok(declaration, `The document declares ${name}`);
+  const start = declaration.index + declaration[0].length;
+  const expression = parseExpressionAt(source, start, { ecmaVersion: "latest" });
+  return JSON.parse(source.slice(start, expression.end));
+}
+
 async function threadkeepingExample() {
   const source = await readFile(
     resolve(threadkeepingRoot, "threadkeeping-ledger-chimeric-prototype-v0.1.html"),
     "utf8"
   );
-  const match = source.match(/^const INITIAL = (.+);$/m);
-  assert.ok(match, "Threadkeeping Ledger publishes one adjacent INITIAL example");
-  return JSON.parse(match[1]);
+  return jsonConstant(source, "INITIAL");
 }
 
+test("prototype state extraction follows executable HTML ownership across carrier formats", async () => {
+  const expected = {
+    artifactIdentity: { id: "real-owner" },
+    count: -2,
+    values: [true, null, "literal"],
+  };
+  const source = `<!doctype html><html><body>
+    <!-- <script>const INITIAL={"artifactIdentity":{"id":"comment"}}</script> -->
+    <template><script>const INITIAL={"artifactIdentity":{"id":"template"}}</script></template>
+    <script>const INITIAL={"artifactIdentity":{"id":"real-owner"},"count":-2,"values":[true,null,"literal"]};</script>
+  </body></html>`;
+  for (const candidate of [
+    source,
+    await prettySource("prototype.html", source),
+    await compactSource("prototype.html", source),
+  ]) {
+    assert.deepEqual(readPrototypeScript(candidate).initializerValue("INITIAL"), expected);
+  }
+  assert.throws(
+    () => readPrototypeScript("<script>const INITIAL={value:getState()}</script>").initializerValue("INITIAL"),
+    /executable CallExpression expression/u,
+  );
+});
+
 function familyIndexSeed(source) {
-  const match = source.match(/const seed = (\{[\s\S]+?\n\});\nlet state = structuredClone\(seed\);/u);
-  assert.ok(match, "the family index publishes one adjacent seed");
-  return JSON.parse(match[1]);
+  return jsonConstant(source, "seed");
 }
 
 function embeddedJsonScript(source, id) {
@@ -128,13 +161,9 @@ test("standalone Narrative contexts retain their source-owned runtime projection
     assert.deepEqual(definition, composerContext["@context"][term], term);
   }
 
-  const semanticMatch = semantic.match(/^const CONTEXT=(.+);$/mu);
-  assert.ok(semanticMatch, "Semantic Sampling publishes its standalone context projection");
-  assert.deepEqual(JSON.parse(semanticMatch[1]), semanticContext);
+  assert.deepEqual(jsonConstant(semantic, "CONTEXT"), semanticContext);
 
-  const technologyMatch = technology.match(/^const JSONLD_CONTEXT=(.+);$/mu);
-  assert.ok(technologyMatch, "Technology Fit publishes its standalone context projection");
-  assert.deepEqual(JSON.parse(technologyMatch[1]), technologyContext["@context"]);
+  assert.deepEqual(jsonConstant(technology, "JSONLD_CONTEXT"), technologyContext["@context"]);
 
   assert.deepEqual(
     embeddedJsonScript(threadkeeping, "jsonldGraph")["@context"],
@@ -447,9 +476,7 @@ test("Semantic Sampling publishes its canonical state and Prompt Capsule coordin
     resolve(semanticRoot, "narrative-sampling-tableau-chimeric-prototype-v0.1.html"),
     "utf8"
   );
-  const match = html.match(/^const SEED=(.+);$/mu);
-  assert.ok(match, "Semantic Sampling publishes one adjacent SEED projection");
-  assert.deepEqual(JSON.parse(match[1]), canonical);
+  assert.deepEqual(jsonConstant(html, "SEED"), canonical);
 
   assert.match(html, /const PROMPT_CAPSULE_CONTRACT="prompt-capsule\/0\.1\.0";/u);
   assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT="narrative-sampling-tableau-state\/0\.1";/u);
@@ -509,9 +536,7 @@ test("Technology Fit inline seed is an exact projection of its canonical example
     resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"),
     "utf8"
   );
-  const match = html.match(/^const SEED=(.+);$/mu);
-  assert.ok(match, "Technology Fit publishes one adjacent SEED projection");
-  assert.deepEqual(JSON.parse(match[1]), canonical);
+  assert.deepEqual(jsonConstant(html, "SEED"), canonical);
   assert.deepEqual(canonical.runs.map(({ status }) => status), ["sample_state", "sample_state"]);
 });
 

@@ -6,12 +6,27 @@ import { chromium } from "@playwright/test";
 
 import {
   assertTelemetry,
+  browserLaunchOptions,
   monitor,
   startStaticServer,
 } from "../../tools/core-architecture-browser-helper.mjs";
 
+import { materializePublicReferenceHtml } from '../../tools/materialize-public-references.mjs';
+import { loadExternalReferenceBinding } from '../../tools/external-reference-contract.mjs';
+import { loadPublicRouteReferenceBinding } from '../../tools/public-route-reference-contract.mjs';
+import { loadRegistryReferenceBinding } from '../../tools/registry-reference-contract.mjs';
+
+const [external, repository, registry] = await Promise.all([
+  loadExternalReferenceBinding(), loadPublicRouteReferenceBinding(), loadRegistryReferenceBinding(),
+]);
+const destinations = new Map([...external.destinations.entries(), ...repository.destinations.entries(), ...registry.destinations.entries()]);
+
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const receivers = [
+  {
+    route: "choose-your-player-humatics.html",
+    families: ["choose-your-player"],
+  },
   {
     route: "fmi-clinical-trial-coordination.html",
     families: ["clinical-trial-boolean-builder"],
@@ -23,6 +38,7 @@ const receivers = [
   {
     route: "genomic-viewer-replatforming.html",
     families: [
+      "genomics-plate-history",
       "genomics-specimen-qa-biomarker",
       "genomics-responsive-interface",
       "genomics-permissions",
@@ -66,7 +82,7 @@ let server;
 
 before(async () => {
   server = await startStaticServer();
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch(browserLaunchOptions());
 });
 
 after(async () => {
@@ -85,6 +101,12 @@ for (const viewport of viewports) {
     });
     t.after(() => context.close());
 
+    await context.route(`**${visitorRoot}genomic-viewer-replatforming.html`, async route => {
+      const response = await route.fetch();
+      const body = materializePublicReferenceHtml(await response.text(), destinations,
+        "genomic-viewer-replatforming.html", null, repository.destinations, external.destinations);
+      await route.fulfill({ response, body });
+    });
     const requestedPosters = new Set();
     await context.route("https://vik.guru/v1-cdn/video/**", async route => {
       const url = route.request().url();
@@ -193,6 +215,18 @@ for (const viewport of viewports) {
         assert.equal(video.describedIdsExist, true, `${video.family} descriptions resolve`);
         assert.equal(video.detailsExists, true, `${video.family} visual sequence resolves`);
         assert.equal(video.detailsVisible, true, `${video.family} visual sequence remains visible`);
+        if (video.detailsId.endsWith("-transcript")) {
+          const disclosure = page.locator(`details[id="${video.detailsId}"]`);
+          const summary = disclosure.locator(":scope > summary");
+          const sequence = disclosure.locator("ol");
+          assert.equal((await summary.textContent()).trim(), "Visual description");
+          assert.equal(await sequence.isVisible(), false, `${video.family} starts collapsed`);
+          await summary.focus();
+          await summary.press("Enter");
+          assert.equal(await sequence.isVisible(), true, `${video.family} opens from the keyboard`);
+          await summary.press("Enter");
+          assert.equal(await sequence.isVisible(), false, `${video.family} collapses again`);
+        }
         assert.match(video.poster, new RegExp(`/video/${video.family}/v0\\.1\\.0/poster\\.webp$`, "u"));
         assert.match(video.source, new RegExp(`/video/${video.family}/v0\\.1\\.0/movie\\.mp4$`, "u"));
         assert.ok(
@@ -201,6 +235,16 @@ for (const viewport of viewports) {
         );
       }
 
+      if (viewport.name === "wide") {
+        await page.emulateMedia({ media: "print" });
+        for (const video of observation.videos.filter(item => item.detailsId.endsWith("-transcript"))) {
+          const printed = await page.locator(`#${video.detailsId}`).evaluate(details => ({
+            open: details.open,
+            contentVisibility: getComputedStyle(details, "::details-content").contentVisibility,
+          }));
+          assert.deepEqual(printed, { open: false, contentVisibility: "visible" }, `${video.family} prints the closed description`);
+        }
+      }
       assertTelemetry(telemetry);
       await page.close();
     }
