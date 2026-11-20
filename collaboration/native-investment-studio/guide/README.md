@@ -9,7 +9,7 @@ and funding affect one another.
 | Chapter | Try this |
 | --- | --- |
 | **Coordination** | Select a plan cassette to see its sessions in the sprint board and tracks. Select **All plans** to see the complete arrangement. Open a sprint for its weeks or choose **Plan overview** to return. **Try a different example** loads another arrangement, including **AI Enablement** and **AI Experience**. One **Undo** restores the previous plan. |
-| **People** | Select a person to inspect their rate, funded time and role. Toggle a participation checkbox to change their assignment to a session. Open a contribution to find the person who receives the work and the person who owns the decision. |
+| **People** | Select a person to inspect their rate, funded time and role. Use a participation checkbox to add or remove them across all sessions of the selected plan. To change just one session, open its card in **Coordination**. Open a contribution to find the person who receives the work and the person who owns the decision. |
 | **Abilities** | Open a support cell to review the people, teams and sessions that help deliver an ability. **Apply** accepts the proposal. **Rename** edits the shared name of a referenced person or team. |
 | **Change** | Turn a method reel and open one of its actions to inspect the proposed work and the people who carry it. |
 | **Quality & recovery** | Open a quality or recovery action to inspect who helps, what they review and what the plan records. |
