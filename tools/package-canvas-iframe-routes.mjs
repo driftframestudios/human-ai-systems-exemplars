@@ -742,7 +742,8 @@ export async function createCanvasPackagePlan(options = {}) {
       embeddedFaviconRoutes.push(route.public_alias);
     }
     const projection = deriveCanvasProjection(sourceHtml, route, embedded ? faviconBytes : null);
-    const projectionBytes = route.projection_kind === "byte_identical"
+    if (options.compact) projection.html = (await options.compact("index.html", Buffer.from(projection.html))).toString("utf8");
+    const projectionBytes = !options.compact && route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
     const carrierObservation = observedCarrierPolicy(projection.html);
@@ -760,11 +761,12 @@ export async function createCanvasPackagePlan(options = {}) {
     const fileReceipts = { package_files: [], navigation_files: [] };
     for (const field of ["package_files", "navigation_files"]) {
       for (const entry of filesFor(route, field)) {
-        const bytes = await readRepositoryFile(
+        const source = await readRepositoryFile(
           paths,
           entry.source_file,
           `Canvas ${field} source for route ${route.id}`,
         );
+        const bytes = options.compact ? await options.compact(entry.target_file, source) : source;
         const outputPath = path.posix.join(routeDirectory, entry.target_file);
         const portableOutputPath = outputPath.normalize("NFC").toLowerCase();
         if (portableOutputPaths.has(portableOutputPath)) {
@@ -883,7 +885,7 @@ export async function createCanvasPackagePlan(options = {}) {
   };
   outputFiles.set(
     "route-manifest.json",
-    Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8"),
+    Buffer.from(`${JSON.stringify(receipt, null, options.compact ? undefined : 2)}\n`, "utf8"),
   );
 
   return {

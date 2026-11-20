@@ -1,5 +1,7 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
+import { compactDeliveryBytes } from "./cpanel-format.mjs";
+import { createDirectoryRoutes } from "./cpanel-directory-routes.mjs";
 import { withGitBlobReader } from "./package-prod-carrier-transfer.mjs";
 import { execFile } from "node:child_process";
 import {
@@ -443,6 +445,12 @@ function validateCssProjectionConfiguration(cssProjection) {
 
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
+  if (Object.hasOwn(configuration ?? {}, "delivery_profile")) {
+    keys.push("delivery_profile");
+    if (configuration.delivery_profile !== "folder-index-v1" || !configuration.publication) {
+      fail("The folder-index-v1 delivery profile requires publication configuration.");
+    }
+  }
   if (Object.hasOwn(configuration ?? {}, "asset_inventory")) {
     keys.push("asset_inventory");
   }
@@ -4217,6 +4225,35 @@ async function verifyPublicationInputState(state) {
   }
 }
 
+// At this point references already describe the flat public projection. Rebase
+// them once so both spellings serve a complete page, including catalog data.
+function directoryDocument(text, file, routes) {
+  const resolve = value => routes.resolve(value, file);
+  const scriptPaths = source => source.replace(
+    /(["'])([^"'\s<>\\]+\.(?:html|json|m?js|css|svg|webp|png)(?:[?#][^"'\s<>\\]*)?)\1/giu,
+    (match, quote, value) => quote + routes.resolve(value, file, true) + quote,
+  );
+  if (file.endsWith("canvas-shell.js")) return scriptPaths(text);
+  if (file.endsWith(".xml")) return rewriteSitemapReferences(text, resolve);
+  if (!file.endsWith(".html")) return text;
+  text = rewriteOpeningTags(text, element => {
+    let tag = rewritePublicationMetadataReferences(element, resolve);
+    for (const attribute of ["href","src","poster","action","formaction","xlink:href","data-motion-src","data-still-src","data-catalog-preview-src"]) {
+      tag = rewriteHtmlAttribute(tag, attribute, resolve);
+    }
+    if (/^<object\b/iu.test(tag)) tag = rewriteHtmlAttribute(tag, "data", resolve);
+    tag = rewriteHtmlAttribute(tag, "data-case-brief-routes", list => list.split(/\s+/u).map(resolve).join(" "));
+    for (const attribute of ["srcset","imagesrcset","data-catalog-preview-srcset"]) {
+      tag = rewriteHtmlAttribute(tag, attribute, list => list.replace(/(^|,\s*)([^,\s]+)/gu,
+        (match, prefix, url) => prefix + resolve(url)));
+    }
+    return rewriteHtmlAttribute(tag, "style", value => rewriteCssReferences(value, resolve));
+  }, { skipBodies: new Set(["script","style","textarea","title"]) });
+  text = rewriteStyleBlocks(text, resolve);
+  return text.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script\s*>)/giu,
+    (all, open, body, close) => open + scriptPaths(body) + close);
+}
+
 function assertGeneratedContextCanvasHeadRoutes({
   primaryManifest,
   publication,
@@ -4388,6 +4425,8 @@ async function composeProductionProjection(root, readBlob, options) {
     allowCarrierOnlyDirty,
   });
   const primaryManifest = selection.primaryManifest;
+  const directoryRoutes = selection.configuration.delivery_profile
+    ? createDirectoryRoutes(primaryManifest, selection.configuration.publication.base_url) : null;
   const trackedInputs = new Map(selection.trackedInputs);
   const primaryInputs = new Map();
   const projectedPaths = new Map(
@@ -4435,7 +4474,7 @@ async function composeProductionProjection(root, readBlob, options) {
         trackedInputs,
       );
   const aggregatePlan = assertAggregatePlan(
-    options.aggregatePlan ?? await createAggregatePackagePlan(),
+    options.aggregatePlan ?? await createAggregatePackagePlan(directoryRoutes ? { compact: compactDeliveryBytes } : {}),
   );
   const assetInventoryResolution = await resolveProductionAssetInventory({
     root,
@@ -4513,6 +4552,12 @@ async function composeProductionProjection(root, readBlob, options) {
       });
       bytes = cssProjectionPlan.consumer_bytes;
     }
+    if (directoryRoutes) {
+      if (/\.(?:html|xml)$|(?:^|\/)canvas-shell\.js$/u.test(file.projected_path)) {
+        bytes = Buffer.from(directoryDocument(bytes.toString("utf8"), file.projected_path, directoryRoutes));
+      }
+      bytes = await compactDeliveryBytes(file.projected_path, bytes);
+    }
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
     assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
@@ -4541,6 +4586,14 @@ async function composeProductionProjection(root, readBlob, options) {
       });
     }
     outputs.push(output);
+    const directoryIndex = directoryRoutes?.entries.get(file.projected_path);
+    if (directoryIndex) {
+      const name = "primary-public/" + directoryIndex;
+      assertPortableOutputCollision(name, outputFiles, portablePaths);
+      outputFiles.set(name, bytes);
+      outputs.push({ ...output, projected_path: name });
+      primaryBytes += bytes.byteLength;
+    }
   }
 
   if (
@@ -4573,7 +4626,10 @@ async function composeProductionProjection(root, readBlob, options) {
         primaryManifest,
         publication: selection.configuration.publication,
         outputFiles,
-        routeReference: publicationInput.routeReference,
+        routeReference: directoryRoutes && publicationInput.routeReference
+          ? { ...publicationInput.routeReference, routes: publicationInput.routeReference.routes.map(route =>
+              ({ ...route, url: directoryRoutes.resolve(route.url, "index.html", true) })) }
+          : publicationInput.routeReference,
         registryReference: publicationInput.registryReference,
       });
   if (generatedHeadRouteValidation !== null) {

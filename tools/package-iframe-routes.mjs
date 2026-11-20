@@ -936,7 +936,7 @@ function sourceRootForRoute(paths, route) {
 }
 
 export async function createPackagePlan(options = {}) {
-  const { publicRouteReference = null, ...pathOptions } = options;
+  const { publicRouteReference = null, compact, ...pathOptions } = options;
   const paths = { ...defaultPaths, ...pathOptions };
   const [routeManifestReading, sourceManifestReading, routeReference] = await Promise.all([
     readJsonFile(paths.sourceRoot, paths.routeManifestPath, "Public iframe route manifest"),
@@ -955,7 +955,8 @@ export async function createPackagePlan(options = {}) {
     );
   }
 
-  const outputFiles = new Map([["manifest.json", sourceManifestReading.bytes]]);
+  const manifestBytes = compact ? await compact("manifest.json", sourceManifestReading.bytes) : sourceManifestReading.bytes;
+  const outputFiles = new Map([["manifest.json", manifestBytes]]);
   const portablePlannedOutputPaths = new Set(["manifest.json", "route-manifest.json"]);
   const reservedOutputPaths = new Set(["manifest.json", "route-manifest.json"]);
   const sourceById = new Map(sourceManifest.prototypes.map((entry) => [entry.id, entry]));
@@ -985,7 +986,8 @@ export async function createPackagePlan(options = {}) {
           runtime_adapter: false,
         }
       : projectIframeExitLinks(navigationProjection.html);
-    const projectionText = projectIframeFavicon(exitProjection.html);
+    const rendered = projectIframeFavicon(exitProjection.html);
+    const projectionText = compact ? (await compact("index.html", Buffer.from(rendered))).toString("utf8") : rendered;
     const projectionBytes = projectionText === sourceText
       ? sourceBytes
       : Buffer.from(projectionText, "utf8");
@@ -1019,7 +1021,8 @@ export async function createPackagePlan(options = {}) {
         packageSourcePath,
         `Package source for route ${route.id}`,
       );
-      const packageBytes = await readFile(packageSourcePath);
+      const source = await readFile(packageSourcePath);
+      const packageBytes = compact ? await compact(packageFile.target_file, source) : source;
       const packageOutputPath = path.posix.join(routeOutputDirectory, packageFile.target_file);
       const portablePackageOutputPath = portablePathKey(packageOutputPath);
       if (
@@ -1165,7 +1168,7 @@ export async function createPackagePlan(options = {}) {
     routes: routeReceipts,
     resting_compatibility_aliases: contract.compatibility_aliases,
   };
-  const receiptBytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+  const receiptBytes = Buffer.from(`${JSON.stringify(receipt, null, compact ? undefined : 2)}\n`, "utf8");
   outputFiles.set("route-manifest.json", receiptBytes);
 
   return {

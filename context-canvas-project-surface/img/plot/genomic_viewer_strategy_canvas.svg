@@ -65,7 +65,7 @@
     <text x="24" y="67" class="sans column-title ink">Continuity + evidence</text>
     <rect x="22" y="126" width="286" height="126" rx="12" fill="#fff7f4" stroke="#141c5b" stroke-width="2"/>
     <text x="42" y="160" class="sans card-title ink">Clinical task continuity</text>
-    <text x="42" y="194" class="sans body blue-ink"><tspan x="42">Keep consequential work usable</tspan><tspan x="42" dy="25">while seams are bounded.</tspan></text>
+    <text x="42" y="194" class="sans body blue-ink"><tspan x="42">Keep daily work moving</tspan><tspan x="42" dy="25">as systems change.</tspan></text>
     <rect x="22" y="278" width="286" height="168" rx="12" fill="#feeae9" stroke="#141c5b" stroke-width="2"/>
     <text x="42" y="312" class="sans card-title ink">Validation evidence burden</text>
     <text x="42" y="346" class="sans body blue-ink"><tspan x="42">Name the gate, owner, parity</tspan><tspan x="42" dy="25">evidence, rollback, and retained</tspan><tspan x="42" dy="25">authority for each move.</tspan></text>
