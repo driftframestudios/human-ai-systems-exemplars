@@ -21,6 +21,9 @@ preserves source-grounded research, paired Solution/Implementation beat jobs,
 Prompt-Side lined-paper and triangular art direction, and an interactive
 repository/journaling map. Article drafting remains on a human cue.
 
+The [Native Investment Studio README research](native-studio-readme-research.md)
+compares four ways to help readers run the example and find the code that owns a change.
+
 1. [Cross-repository functional-nucleus assessment](../functional-nucleus-assessment-horizon.md) — the six repositories, their concrete affordances, maturity, and Hold / Extend / Durable Encounter tracks.
 2. [Principal engineering program](principal-engineering-program.md) — the complete architecture and implementation plan.
 3. [CSS modularization and visual reference plan](css-modularization-and-visual-reference-plan.md) — the approved core-plus-route direction, all-page capture inventory, probability model, extraction waves, contract/creative boundary, and purposeful deferrals.
