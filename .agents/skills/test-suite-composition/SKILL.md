@@ -213,11 +213,7 @@ changes them.
 
 Load [selective CI admission, check depth, and preparation reuse](references/selective-ci-admission-and-check-depth.md)
 when run/skip controls, automatic activation, focused/full selection, combined
-jobs, or browser choice changes the execution route. Use the companion
-[selective check delivery runbook](../../runbooks/selective-check-delivery.v0.1.md)
-when implementing and exercising that known route; the broader
-[cross-repository test-system stewardship runbook](../../runbooks/cross-repository-test-system-stewardship.v0.1.md)
-retains oracle design and collection-wide test topology.
+jobs, or browser choice changes the execution route. The receiving team’s delivery procedure owns execution and recovery.
 
 Load [CI provisioning and runner efficiency](references/ci-provisioning-and-runner-efficiency.md)
 when environment preparation, dependency transfer, runner image selection,

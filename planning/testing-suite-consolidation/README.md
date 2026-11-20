@@ -213,7 +213,7 @@ further revision. Resource-fault guidance stays with the stateful skill. Provisi
 and runner guidance stays a conditional reference under suite composition
 until a second independent receiver demonstrates a distinct reusable job.
 
-The reviewed publication selection now lists all 36 active skills, including
+The [publication selection](../../.agents/skills/publication-selection.json) classifies each repository skill, including
 the four visualization skills and their declared dependency closure. Accepted
 site and Worker release records own current publication status. Newly linked public-ready
 references receive explicit dependency entries; publication execution retains

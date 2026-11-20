@@ -369,9 +369,7 @@
       "dependencies": [
         ".agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
         ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md",
-        ".agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md",
-        ".agents/runbooks/selective-check-delivery.v0.1.md",
-        ".agents/runbooks/cross-repository-test-system-stewardship.v0.1.md"
+        ".agents/skills/test-suite-composition/references/selective-ci-admission-and-check-depth.md"
       ]
     },
     {

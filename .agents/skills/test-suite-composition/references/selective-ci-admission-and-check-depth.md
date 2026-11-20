@@ -3,9 +3,8 @@
 Load this reference when a repository needs explicit run/skip controls, a
 focused/full choice, shared preparation, or a browser route that fits its
 receiving claim. The [skill contract](../SKILL.md) owns composition. This
-reference supplies the conditional decisions; the
-[delivery runbook](../../../runbooks/selective-check-delivery.v0.1.md) orders
-implementation and verification. The repository's workflow, commands, policy,
+reference helps the suite owner select the checks and prerequisites. The receiving
+team’s delivery procedure orders implementation and verification. The repository's workflow, commands, policy,
 and current task grant retain operational authority.
 
 ## Separate the three decisions
@@ -251,10 +250,9 @@ phase denominators. A proposed reduction remains a design expectation.
 
 ## Evidence lineage and transfer
 
-The existing [HASE provisioning route](ci-provisioning-and-runner-efficiency.md)
-and [cross-repository stewardship record](../../../runbooks/cross-repository-test-system-stewardship.v0.1.md)
-already distinguish hosted-browser smoke from broader engine proof and bind
-cache claims to actual cold/warm observations. A separate portfolio-showcase
+The [provisioning guide](ci-provisioning-and-runner-efficiency.md) distinguishes
+a hosted-browser smoke check from broader engine proof and binds cache claims
+to observed cold and warm runs. A separate portfolio-showcase
 receiver exercised an admitted combined core/browser/package route and an
 explicit database skip with no assigned runner or executed steps. Independent
 review preceded delivery. Its access-controlled repository retains exact
@@ -266,4 +264,4 @@ establishes its own fit and results.
 Official platform/browser references above were consulted on 2026-11-17.
 Recheck them when platform, framework or action versions change. The
 illustrative excerpt and tables define intended choices; a future invocation
-of the companion runbook supplies its own exercise evidence.
+of a receiving team’s delivery procedure supplies its own exercise evidence.
