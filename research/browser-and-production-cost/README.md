@@ -7,7 +7,7 @@
 | Workload | Wall time | Preparation | Execution or other observation |
 | --- | ---: | ---: | --- |
 | October 23 full selected prototype job | 17m29s | 46s | Selected contracts 16m28s. CSS parity occupied 17s. |
-| First two PR #971 attempts | 30-minute ceiling reached | 18m32s and 15m44s | Both attempts ended before completing the selected proof. |
+| Two attempts at `175ce02` | 30m16s and 30m14s | 18m32s and 15m44s | The 30-minute ceiling interrupted both attempts. [Run and attempts](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44650028158) |
 | Completed PR #971 selected job, head `a8591a0` | 33m20s | 9m48s | Contracts 22m57s, other steps 35s. Ubuntu downloaded 126 MB in 8m46s. Browser binary transfers took about 18s. |
 | Parallel jobs at that head | 41s public references, 1m05s media | Included in individual job wall times | The selected prototype job determined workflow completion. |
 | Separate production carrier job | 43s | Included | Production tests took 9s. Forming and inspecting the tagged transfer took 5s. |
@@ -20,7 +20,23 @@ At the recorded execution speed, preparation below 6m28s would put the job under
 
 ## Hosted observations after the change
 
-The [first full run](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44741179312) on `0993177` reached contract execution after 9s of package resolution, a subsecond restore lookup, and 49s of system-package and browser installation. The completed job and the subsequent trusted-cache run supply the final comparisons below.
+| Run | Selected prototype job | Browser prerequisites | Selected contracts | Parallel siblings | Workflow wall / summed job time |
+| --- | ---: | ---: | ---: | --- | --- |
+| #971 comparison | 33m20s | 9m48s | 22m57s | Public references 41s, media 1m05s | 33m25s / 35m06s |
+| [Cold, `0993177`](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44741179312) | 22m57s | 58s | 21m31s | Public references 48s, media 2m08s | 23m00s / 25m53s |
+
+The cold run queued for 3s. Package resolution took 9s, the restore lookup occupied less than one displayed second, installation took 49s, and saving the verified closure after the proof took 6s. The cache service reported a miss. APT downloaded the 126 MB package closure in 14s, compared with 8m46s on #971. Both runs needed the network. The 10m23s shorter job reflects mirror and runner variation alongside the implementation changes. The browser prerequisite interval contributed 8m50s of that difference.
+
+| Selected browser command | #971 | Cold |
+| --- | ---: | ---: |
+| Core browser aggregate | 6m27s | 6m38s |
+| About CSS parity | 5m24s | 4m22s |
+| Showcase reading | 3m00s | 2m49s |
+| AI Systems layout | 2m10s | 2m09s |
+| Navigation | 1m54s | 1m49s |
+
+The subsequent [warm comparison on merged main](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44744681714) exercises the accepted build changes and two updated skill entries as well as the browser changes. The engine selection and suite commands agree. Compare archive retrieval against the matched package plan. Interpret whole-job differences between revisions as descriptive observations.
+
 
 ## Local baseline and controlled comparisons
 
@@ -30,11 +46,11 @@ The isolated read comparison covered 541 primary files totaling 45,197,517 bytes
 
 ### Chromium About CSS proof
 
-On the same fixture source and origin, a baseline run took 180.71s and the candidate took 169.36s, a difference of 11.35s (6.3%). All 15 scenario IDs, 30 full snapshots and emitted comparison results agreed. One enhanced desktop snapshot contained 10,929 elements. Navigation and settling took 0.55s for the baseline representative page. Property and geometry capture took 11.654s before and 11.537s after, and style digest creation took 0.175s and 0.170s respectively. The baseline mutation’s repeated render capture took 12.026s. The candidate’s path, fragment and restoration check took 0.091s. Removing path or fragment sensitivity produced the intended independent failures. One sequential pair establishes parity and illustrates the local cost. Hosted runner timings have their own row.
+On the same fixture source and origin, the CSS comparison used baseline `8b56400` and candidate `bb71c37`, Node 22.23.5 and Chromium 151.0.7922.34. A baseline run took 180.71s and the candidate took 169.36s, a difference of 11.35s (6.3%). All 15 scenario IDs, 30 full snapshots and emitted comparison results agreed. One enhanced desktop snapshot contained 10,929 elements. The baseline representative source and projected pages navigated and settled in parallel in 0.55s. Property and geometry capture took 11.654s before and 11.537s after, and style digest creation took 0.175s and 0.170s respectively. The baseline mutation’s repeated render capture took 12.026s. The candidate’s path, fragment and restoration check took 0.091s. Removing path or fragment sensitivity produced the intended independent failures. One sequential pair establishes parity and illustrates the local cost. Hosted runner timings have their own row.
 
 ### Production build and transfer
 
-The controlled comparison used the same clean `8b56400` payload, synthetic profile, reviewed Node 22 runtime, and fixed receipt timestamp. The transfer used the immutable `production-v0.2.0` tag, 322 files. Measurements below are seconds in execution order. The total sums these phases, including the separate historical transfer operation.
+The candidate tooling matched `9aad41a` before integration of the indexed path checks. Independent review repeated output comparisons on integrated head `e78858c`. Neither the build nor the browser comparison recorded a filesystem cache flush. The controlled build comparison used the same clean `8b56400` payload, synthetic profile, reviewed Node 22 runtime, and fixed receipt timestamp. The transfer used the immutable `production-v0.2.0` tag, 322 files. Measurements below are seconds in execution order. The total sums these phases, including the separate historical transfer operation.
 
 | Variant | Iframe plan | Production composition | Write and verify | Carrier index | Tagged ZIP and receipt | Sum |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -49,9 +65,13 @@ An initial pair measured aggregate construction at 0.267/0.240s, composition at 
 
 ### Browser population and retained tests
 
-October, November and the revised `all` workflow select the same four baseline and 17 browser-enabled commands within the selected-contract step. The October CSS proof covered eight stylesheet owners, increasing to 17 by November. Media moved its independent native-video observation to hosted Chrome. The iframe-only visual-media command remains separately selectable. A supplementary local Chromium check passed 39 routes, 93 rendered SVG instances and 33 zoomed fixed or sticky controls. The hosted comparisons below describe the named workflow.
+October, November and the revised `all` workflow select the same four baseline and 17 browser-enabled commands within the selected-contract step. The October CSS proof covered eight stylesheet owners, increasing to 17 by November. Media moved its independent native-video observation to hosted Chrome. The iframe-only visual-media command remains separately selectable. A supplementary local Chromium check passed 39 routes, 93 rendered SVG instances and 33 zoomed fixed or sticky controls. The hosted comparisons describe the named workflow. The separate [Visual Fidelity job on the skills PR](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/44743450364) passed in 2m25s, including 1m20s for engine setup and 41s for rendered checks across Chromium, Firefox and WebKit.
 
-The Core reference audit exercised 14/14 cases. For Core source and its Context Canvas projection, respectively, Context Tree took 28.89/26.13s, Practitioner Probes 23.96/20.97s and Family Index 23.89/20.63s. The rejection shapes, two copy buttons and native disclosure exercise distinct observable behavior. One immediate repeated state read in Practitioner Probes cost 1.84/2.07ms. The audit retained its surrounding recovery case and removed the consequential redundant CSS capture through [PR #979](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/979).
+The Core reference audit exercised 14/14 cases. For Core source and its Context Canvas projection, respectively, Context Tree took 28.89/26.13s, Practitioner Probes 23.96/20.97s and Family Index 23.89/20.63s. The rejection shapes, two copy buttons and native disclosure exercise distinct observable behavior. One immediate repeated state read and copy in Practitioner Probes cost 1.84/2.07ms. The audit retained its surrounding recovery case and removed the consequential redundant CSS capture through [PR #979](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/979).
+
+## Transfer to the next Pages projection
+
+The [skills PR](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/981) adds build output equivalence and updates test suite composition. A local Pages build selected 31 public-ready skills and 33 schema receiver routes. All 41 Pages checks passed, including the script-free browser check. A scratch production build on `78e1456` emitted 615 files. Both affected catalog anchors resolved to the same HTML destinations as the generated Pages artifact. These measurements cover local release preparation. The next Pages release can verify those destinations on the published site.
 
 ## Comparison method
 
