@@ -200,7 +200,7 @@ export async function carrierSourceFiles() {
 }
 
 async function main([mode, ...args]) {
-  if (!['compact','pretty','list'].includes(mode)) throw new Error('Choose compact, pretty, or list.');
+  if (!['compact', 'pretty', 'check', 'list'].includes(mode)) throw new Error('Choose compact, pretty, check, or list.');
   const files = args.length === 1 && args[0] === '--carrier' ? await carrierSourceFiles() : args;
   if (!files.length) throw new Error('Supply file paths or --carrier.');
   if (mode === 'list') { console.log(files.join('\n')); return; }
@@ -214,6 +214,15 @@ async function main([mode, ...args]) {
         : (await compactSource(file, source)).trimEnd() + '\n';
       if (source !== output) changes.set(file, output);
     } catch (cause) { throw new Error('Could not format ' + file, {cause}); }
+  }
+  if (mode === 'check') {
+    if (changes.size) {
+      console.error('Run compact on these sources before handing them back:\n' + [...changes.keys()].join('\n'));
+      process.exitCode = 1;
+    } else {
+      console.log('Verified compact formatting for ' + files.length + ' source files.');
+    }
+    return;
   }
   for (const [file, output] of changes) await writeFile(file, output);
 }

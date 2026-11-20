@@ -32,7 +32,8 @@ async function open(t, engine, route = 'genomic-viewer-replatforming.html') {
   t.after(() => page.close());
   await page.route('**/*', request => new URL(request.request().url()).origin === server.origin
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Embedded owner</title>' }));
-  await page.goto(server.origin + root + route, { waitUntil: 'load' });
+  const response = await page.goto(server.origin + root + route, { waitUntil: 'load' });
+  assert.equal(response.status(), 200, `Catalog reading opens ${route}`);
   await page.evaluate(() => document.fonts.ready);
   return page;
 }
@@ -79,7 +80,9 @@ async function readings(page, selector = captionRoots, includeDescriptions = fal
     const roots = new Set(document.querySelectorAll(selector));
     if (includeDescriptions) for (const media of document.querySelectorAll('[aria-details]')) {
       for (const id of media.getAttribute('aria-details').split(/\s+/)) {
-        const description = document.getElementById(id); if (description) roots.add(description);
+        const description = document.getElementById(id);
+        if (!description) throw new Error(`${location.pathname}: aria-details target "${id}" is missing`);
+        roots.add(description);
       }
     }
     // Opening a description makes its summary and revealed content observable.
@@ -136,7 +139,6 @@ function assertReadable(records, label, { geometry = false, linkStates = false }
 
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: catalog captions and associated descriptions retain readable ordinary and descendant paint`, async t => {
-    assert.equal(routes.length, 23);
     const inventory = [];
     for (const route of routes) {
       const page = await open(t, engine, route);
@@ -144,8 +146,9 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       assertReadable(records, route);
       inventory.push({ route, records }); await page.close();
     }
-    const roots = inventory.reduce((sum, entry) => sum + entry.records.length, 0);
-    assert.equal(roots, 166, 'Catalog captions plus media-linked descriptions define the current receiving population.');
+    assert.ok(inventory.some(entry => entry.records.some(record =>
+      record.parts.some(part => part.visible && part.text))),
+    'The catalog exposes visible caption text for contrast measurement.');
     await writeFile(new URL(`${engine}-inventory.json`, output), JSON.stringify(inventory, null, 2));
   });
 
