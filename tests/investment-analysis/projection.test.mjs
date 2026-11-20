@@ -1,5 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import test from "node:test";
+import { authoredFunction, expressionAt } from "./authored-expression.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { INVESTMENT_HOSTS, INLINE_OWNERS, readInvestmentSources, projectInvestmentHtml, assertInvestmentProjection } from "../../tools/project-investment-analysis.mjs";
@@ -17,7 +18,7 @@ test("both authored hosts retain source-exact readable inline owners in initiali
   }
   const model = await readFile(new URL(INVESTMENT_HOSTS[1], root), "utf8");
   assert.match(model, /default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'/);
-  assert.ok(model.indexOf("investment-analysis:ui:start") > model.indexOf("window.crossFunctionalInvestmentModelStudio ="));
+  assert.ok(model.indexOf("investment-analysis:ui:start") > model.search(/window\.crossFunctionalInvestmentModelStudio\s*=/u));
 });
 
 test("projection reports stale copies, malformed markers and HTML terminators before delivery", async () => {
@@ -35,7 +36,7 @@ test("projection reports stale copies, malformed markers and HTML terminators be
 test("method migration vocabulary matches the eight authored source records", async () => {
   const {default:C}=await import("../../collaboration/investment-analysis/core.js");
   const html=await readFile(new URL(INVESTMENT_HOSTS[1],root),"utf8");
-  const records=[...html.matchAll(/id: "(model\/[^"]+)"[\s\S]*?sourceId: "([^"]+)"/g)].map(match=>[match[1],match[2]]);
+  const records=[...html.matchAll(/\bid:\s*"(model\/[^"]+)"[\s\S]*?sourceId:\s*"([^"]+)"/g)].map(match=>[match[1],match[2]]);
   assert.equal(records.length,8);
   assert.deepEqual(Object.fromEntries(records),C.METHOD_SOURCE_KEYS);
 });
@@ -50,11 +51,9 @@ test("file recovery separates exact decoded text from normalized draft and accep
   const { runInNewContext } = await import("node:vm");
   const C = createRequire(import.meta.url)("../../collaboration/investment-analysis/core.js");
   const source = await readFile(new URL("collaboration/investment-analysis/studio.js", root), "utf8");
-  const helpers = source.slice(source.indexOf("  function setRejectedFileText("), source.indexOf("  function exportText("));
-  const listenerStart = source.indexOf('  host.addEventListener("change", async event => {');
-  const listener = source.slice(listenerStart, source.indexOf('  host.addEventListener("click",', listenerStart));
-  assert.ok(helpers.includes("setRejectedFileText(null)"));
-  assert.ok(listener.includes("request !== fileRequest || version !== interactionVersion"));
+  const helpers = ['setRejectedFileText', 'clearRejectedFileDraft', 'importText']
+    .map(name => authoredFunction(source, name)).join('\n');
+  const listener = expressionAt(source, source.search(/host\.addEventListener\(\s*["']change["']/u)) + ';';
   function fixture() {
     const details = { open: false }, clear = { hidden: true }, attributes = {};
     let value = "";
@@ -134,8 +133,7 @@ test("file recovery separates exact decoded text from normalized draft and accep
 test("the real calculator receipt forwards its clock and carries heuristic standing",async()=>{
   const {runInNewContext}=await import("node:vm"), {default:C}=await import("../../collaboration/investment-analysis/core.js");
   const html=await readFile(new URL(INVESTMENT_HOSTS[0],root),"utf8");
-  const source=html.match(/function leaveBehindSnapshot\(clock\)\{[\s\S]*?(?=\n  function reportTable)/)?.[0];
-  assert.ok(source,"source-owned receipt function");
+  const source = authoredFunction(html, 'leaveBehindSnapshot');
   const snapshot=runInNewContext("("+source+")",{
     InvestmentCore:C,state:{lastCalculation:{},framework:"example",preset:0,lens:"example",roles:[],activities:[],disruptions:[],frameworkStates:{example:[]},quality:[],aiReceivers:[]},
     frameworks:{example:{name:"Example",components:[]}},presets:[{name:"Example"}],lenses:{example:{name:"Example"}},

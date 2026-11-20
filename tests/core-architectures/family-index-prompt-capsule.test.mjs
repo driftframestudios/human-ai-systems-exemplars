@@ -1,4 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
+import vm from 'node:vm';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -21,9 +23,9 @@ const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
 const currentFile = "core-architecture-family-index-chimeric-prototype-v0.1.6.html";
 const historicalFile = "core-architecture-family-index-chimeric-prototype-v0.1.5.html";
 const currentDigests = {
-  canonical: "27e88170074498e609e01dfd2c240ad3eedc96d126ea01bcd58e058c690c1264",
-  context: "7b963ce14f42a91fb5d664b432b24c3447da58c1ed3114106d5b1abdb562f214",
-  narrative: "16fb306df3c7f72c77003755aa2e3a9019e6157fa6afa5d50001133883d0a994",
+  canonical: "658b59abc36a1ecc8f475804afc0fa06a919348fff181570c65295de1149655a",
+  context: "f0cf47a659b3f8eb3aa7929bc77848f631ce9fc29882f0cd196412d265700527",
+  narrative: "814d1359c291606510ba8ea5e7e26f6492634d7a7f004dd75f039636445a6662",
 };
 const historicalDigests = {
   canonical: "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
@@ -87,9 +89,8 @@ function staticPrompt(html) {
 }
 
 function seedFrom(html) {
-  const match = html.match(/const seed = (\{[\s\S]*?\n\});\nlet state =/u);
-  assert.ok(match, "the Family Index publishes its authored source state");
-  return JSON.parse(match[1]);
+  const seed = readPrototypeScript(html).initializer('seed');
+  return vm.runInNewContext('(' + seed + ')');
 }
 
 function applyExactReplacements(source, replacements) {

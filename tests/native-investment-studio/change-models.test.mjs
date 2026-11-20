@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
-import vm from 'node:vm';
+import { authoredLiteral } from '../investment-analysis/authored-expression.mjs';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
@@ -13,15 +13,8 @@ import {
 test('the native definitions retain the original authored explanations, suggestions, receivers and lens fields', async () => {
   const source = await readFile(new URL('../../collaboration/initiative-costing-calculator/index.html', import.meta.url), 'utf8');
   const { CHANGE_FRAMEWORKS } = await import('../../collaboration/native-investment-studio/roles.mjs');
-  function literal(name, end) {
-    const marker = '  var ' + name + '=', begin = source.indexOf(marker);
-    assert.ok(begin >= 0);
-    const start = begin + marker.length, finish = source.indexOf(end, start);
-    assert.ok(finish > start);
-    return JSON.parse(JSON.stringify(vm.runInNewContext('(' + source.slice(start, finish) + ')')));
-  }
-  const original = { frameworks: literal('frameworks', ';\n  function createDefaultFrameworkStates'),
-    lenses: literal('lenses', ';\n'), attention: literal('changeComponents', ';\n'),
+  const original = { frameworks: authoredLiteral(source, 'frameworks'),
+    lenses: authoredLiteral(source, 'lenses'), attention: authoredLiteral(source, 'changeComponents'),
     allocations: [12, 10, 12, 14, 14, 12, 13, 13], stableIds: CHANGE_FRAMEWORKS };
   assert.deepEqual(listChangeFrameworks().map(row => row.id), Object.keys(original.frameworks));
   for (const row of listChangeFrameworks()) {

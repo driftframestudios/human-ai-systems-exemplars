@@ -1,9 +1,1 @@
-/* About page · static readings and native disclosure when scripting is unavailable. */
-.about-page .about-prompt-explorer {
-  display: none;
-}
-
-/* The static Studio retains its example and full-view route. */
-.native-coordination :is(button, input, select, textarea) {
-  display: none !important;
-}
+/* About page · static readings and native disclosure when scripting is unavailable. */ .about-page .about-prompt-explorer { display: none; } /* The static Studio retains its example and full-view route. */ .native-coordination :is(button, input, select, textarea) { display: none !important; }

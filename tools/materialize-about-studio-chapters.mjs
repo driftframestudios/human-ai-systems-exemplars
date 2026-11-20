@@ -2,6 +2,7 @@ import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
+import { readDocumentSpans } from './html-document-spans.mjs';
 import { createEmbeddedContentFitProjection, embeddedContentFitSource } from './materialize-embedded-content-fit.mjs';
 
 export const studioSourcePath = 'collaboration/initiative-costing-calculator/index.html';
@@ -20,18 +21,17 @@ export async function readStudioChapterInputs(repositoryRoot = root) {
 }
 
 export function createStudioChapterProjection({ source, styles, adapter, fit }) {
-  for (const boundary of ['</head>', '</body>']) {
-    if ([...source.matchAll(new RegExp(`^${boundary}$`, 'gmu'))].length !== 1) {
-      throw new Error(`Studio source requires one line-owned ${boundary} boundary.`);
-    }
-  }
   if (source.includes('data-about-studio-chapters')) throw new Error('Studio chapter derivation requires the original full Studio.');
   if (!styles.trim() || /<\/style\b/iu.test(styles)) throw new Error('Chapter styles require inline-safe CSS.');
   if (!adapter.trim() || /<!--|<\/script\b/iu.test(adapter)) throw new Error('Chapter presentation requires inline-safe JavaScript.');
   // The original document remains an exact subsequence: this receiver adds a
   // presentation layer while retaining every original control and model script.
-  return source.replace(/^<\/head>$/mu, `<style data-about-studio-chapters>\n${styles.trimEnd()}\n</style>\n</head>`)
-    .replace(/^<\/body>$/mu, `<script data-about-studio-chapters>\n${adapter.trimEnd()}\n</script>\n${createEmbeddedContentFitProjection(fit)}\n</body>`);
+  const { closingOffset } = readDocumentSpans(source);
+  const head = closingOffset('head');
+  const body = closingOffset('body');
+  return source.slice(0, head) + '<style data-about-studio-chapters>' + styles.trimEnd() + '</style>'
+    + source.slice(head, body) + '<script data-about-studio-chapters>' + adapter.trimEnd() + '</script>'
+    + createEmbeddedContentFitProjection(fit) + source.slice(body);
 }
 
 export function assertStudioChapterProjection(html, inputs) {

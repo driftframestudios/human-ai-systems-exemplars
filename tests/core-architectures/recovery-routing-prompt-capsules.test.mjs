@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { readPrototypeScript } from '../prototype-script.mjs';
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -22,7 +23,7 @@ const artifacts = [
     currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
     historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
     historicalDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
-    currentDigest: "af79684032787d47655c8e01a162f1a34f405848f8d63b34502f93c4ffaa8d36",
+    currentDigest: "e879a18f4c3b705a94d5dd52a07a8673d4ef1e0af7d681c36481cffb2e56c8e0",
     stateContract: "upstream-revision-loop-state.v0.1",
     apiName: "upstreamRevisionLoop",
     promptId: "aiPromptOut",
@@ -39,7 +40,7 @@ const artifacts = [
     currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
     historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
     historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
-    currentDigest: "0c3bdc319ce5b8e830d8c1328c7ea3bedc246a3f407d6db7f9c64f60cd8d8475",
+    currentDigest: "99fa4305d0e80c6461584ffd2bf9803d31b87cee04548834b69cbc05e4910dc7",
     stateContract: "recovery-routing-atlas-state.v0.1",
     apiName: "recoveryRoutingAtlas",
     promptId: "promptBox",
@@ -103,13 +104,13 @@ for (const artifact of artifacts) {
     const plain = staticPrompt(html, artifact.promptId);
     const route = routeManifest.routes.find(({ id }) => id === artifact.id);
 
-    assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
-    assert.ok(html.includes(`const PROMPT_CAPSULE_STATE_CONTRACT = '${artifact.stateContract}';`));
+    assert.match(html, /const PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0';/u);
+    assert.equal(readPrototypeScript(html).initializer('PROMPT_CAPSULE_STATE_CONTRACT').slice(1, -1), artifact.stateContract);
     assert.match(html, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
     assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
     assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
     assert.match(html, /<noscript>[\s\S]*?complete default plain Markdown remains available/u);
-    assert.ok(html.includes(`window.${artifact.apiName} = Object.freeze(`));
+    assert.match(html, new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(`, "u"));
 
     const orderedSections = [
       "## Purpose and target",
@@ -136,8 +137,8 @@ for (const artifact of artifacts) {
         19,
         "the script-free Recovery Routing capsule carries all 19 geometries",
       );
-      assert.match(html, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?html \{ scroll-behavior: auto; \}/u);
-      assert.match(html, /els\.atlasSvg\.setAttribute\('viewBox', `0 0 \$\{w\} \$\{h\}`\);/u);
+      assert.match(html, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?html\s*\{\s*scroll-behavior:\s*auto;?\s*\}/u);
+      assert.match(html, /els\.atlasSvg\.setAttribute\('viewBox',\s*`0 0 \$\{w\} \$\{h\}`\);/u);
       assert.match(html, /The prototype’s diagrams and interface are local expressions of that recovery-routing model\./u);
       assert.match(html, /directs each strain cue toward a named restored state\./u);
       assert.doesNotMatch(html, /No external visual reference is used in this prototype\./u);
@@ -168,11 +169,11 @@ for (const artifact of artifacts) {
     const html = await readFile(resolve(coreRoot, artifact.currentFile), "utf8");
     const skillRevision = "efb94fcf70a80630d8edd289697341699b966f00";
 
-    assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}';`, "u"));
+    const script = readPrototypeScript(html);
+    assert.equal(script.initializer('PROMPT_CAPSULE_SKILL_REVISION').slice(1, -1), skillRevision);
     for (const [path, expectedDigest] of artifact.skills) {
       assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
-      assert.ok(html.includes(`path: '${path}'`));
-      assert.ok(html.includes(`sha256: '${expectedDigest}'`));
+      assert.ok(script.hasSkillCoordinate(path, expectedDigest));
     }
   });
 }

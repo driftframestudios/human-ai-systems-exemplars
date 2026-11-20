@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import vm from 'node:vm';
+import { authoredFunction, authoredLiteral } from '../investment-analysis/authored-expression.mjs';
 import test from 'node:test';
 import { createRequire } from 'node:module';
 import { createChangeSettings } from '../../collaboration/native-investment-studio/change-models.mjs';
@@ -52,11 +53,7 @@ test('authored pressure conditions keep relevant checks included and release the
 
 const core = createRequire(import.meta.url)('../../collaboration/investment-analysis/core.js');
 const original = await readFile(new URL('../../collaboration/initiative-costing-calculator/index.html', import.meta.url), 'utf8');
-function literal(name) {
-  const marker = '  var ' + name + '=', start = original.indexOf(marker) + marker.length;
-  assert.ok(start >= marker.length);
-  return JSON.parse(JSON.stringify(vm.runInNewContext('(' + original.slice(start, original.indexOf(';\n', start)) + ')')));
-}
+const literal = name => authoredLiteral(original, name);
 const originalPresets = literal('presets'), originalConcepts = literal('qualityConcepts');
 const close = (actual, expected, tolerance = 1e-9) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} ≈ ${expected}`);
 const plan = () => ({ people: [{ id: 'reviewer', rateCentsPerHour: 10000 }, { id: 'specialist', rateCentsPerHour: 20000 }], changeSettings: createChangeSettings() });
@@ -134,7 +131,7 @@ test('partial estimates preserve known effort and avoid assigning unprovided rat
 });
 
 test('normal reference and attention weights retain the original centered two-sided illustration', () => {
-  const definitions = ['erf', 'sigmaTail', 'curvePoint'].map(name => original.match(new RegExp('  function ' + name + '\\([^\\n]+'))[0]).join('\n');
+  const definitions = ['erf', 'sigmaTail', 'curvePoint'].map(name => authoredFunction(original, name)).join('\n');
   const reference = vm.runInNewContext(definitions + '\n({sigmaTail,curvePoint})');
   for (const halfSteps of [2, 5, 6, 9, 12]) {
     const result = projectSigmaReference(halfSteps, 15.84, 1.1);
@@ -150,7 +147,7 @@ test('normal reference and attention weights retain the original centered two-si
 });
 
 test('every scenario learning family preserves its original complete prompt and retained historical IDs', () => {
-  const functionSource = original.match(/  function learningRender\([^\n]+/u)[0];
+  const functionSource = authoredFunction(original, 'learningRender');
   const changeComponents = literal('changeComponents');
   for (const [index, preset] of listSourcePresets().entries()) {
     const settings = createAssuranceSettings(), change = createChangeSettings(), receiver = { innerHTML: '' };

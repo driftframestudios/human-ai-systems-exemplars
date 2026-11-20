@@ -109,11 +109,16 @@ test("shared navigation and neighboring readings carry the two-route continuatio
     readCanvasFile("prompt-side-conditions-practice.html"),
   ]);
 
-  const orderedRoutes = /\["Prompt-Side (?:Practice|Conditions Practice)", "prompt-side-conditions-practice\.html"\],\s*\["Benchmark Orientation", "benchmark-orientation\.html"\],\s*\["MAPS Evaluations", "maps-evaluations\.html"\]/gu;
-  assert.equal(countMatches(shell, orderedRoutes), 1);
-  const showcase = shell.slice(shell.indexOf("showcase: ["));
+  const showcase = shell.slice(shell.indexOf("showcase:"));
+  const routePairs = [...shell.matchAll(/\[\s*"([^"]+)",\s*"([^"]+\.html)"\s*\]/gu)];
+  const routes = routePairs.map(pair => pair[2]);
+  assert.match(showcase, /"benchmark-orientation\.html"\s*\],\s*\[\s*"MAPS Evaluations"/u);
   assert.match(showcase, /"prompt-side-conditions-practice\.html"/u);
-  assert.match(showcase, /"benchmark-orientation\.html"\],\s*\["MAPS Evaluations", "maps-evaluations\.html"/u);
+  const start = routes.indexOf("prompt-side-conditions-practice.html");
+  assert.ok(start >= 0);
+  assert.deepEqual(routes.slice(start, start + 3), [
+    "prompt-side-conditions-practice.html", "benchmark-orientation.html", "maps-evaluations.html",
+  ]);
 
   const pair = aiSystems.match(/<section id="benchmark-reading-entry"[\s\S]*?<\/section>/u);
   assert.ok(pair, "AI Systems should contain one benchmark reading pair");

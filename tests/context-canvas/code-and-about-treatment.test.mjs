@@ -27,7 +27,7 @@ async function readCanvasFile(path) {
 
 function cssRule(source, selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-  const match = source.match(new RegExp(`(?:^|\\n)${escapedSelector}\\s*\\{([^}]*)\\}`, "u"));
+  const match = source.match(new RegExp(`(?:^|[}\\s])${escapedSelector}\\s*\\{([^}]*)\\}`, "u"));
   assert.ok(match, `Expected ${selector} to have a CSS rule`);
   return match[1];
 }

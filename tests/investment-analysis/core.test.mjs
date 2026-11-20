@@ -135,7 +135,7 @@ test("staffing horizon, quality and uncertainty branches preserve source heurist
 test("public model provenance uses semantic keys with no workspace locators",async()=>{
   const html=await readFile(new URL("../../collaboration/cross-functional-investment-model-studio/index.html",import.meta.url),"utf8");
   assert.doesNotMatch(html,/notion\.(?:so|site)|sourceId:\s*"[0-9a-f-]{36}"/i);
-  assert.equal((html.match(/sourceId: "urn:source-key:investment-method:/g)||[]).length,8);
+  assert.equal((html.match(/sourceId:\s*"urn:source-key:investment-method:/g)||[]).length,8);
 });
 
 test("alternatives share a comparison horizon and lifecycle events preserve ordering",()=>{

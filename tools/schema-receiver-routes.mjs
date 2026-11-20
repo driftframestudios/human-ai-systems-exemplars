@@ -57,6 +57,7 @@ export const schemaReceiverRoutes = Object.freeze([
   },
   {
     source: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    frozenSource: "cloudflare/schemas-worker/public/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
     id: "https://schemas.radiantnull.com/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
     receiverPath: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json"
   },

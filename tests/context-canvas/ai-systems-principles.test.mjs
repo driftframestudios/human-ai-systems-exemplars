@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { parseExpressionAt } from 'acorn';
 import { readSourceContract } from "./read-source-contract.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
@@ -529,13 +530,16 @@ test("the visual reference includes all seventeen AI Systems routes", async () =
 
 test("the AI Systems shelf exposes the complete family", async () => {
   const source = await canvasFile("canvas-shell.js");
-  const aiShelf = source.match(
-    /\bai:\s*\[([\s\S]*?)\n\s*\],\n\s*showcase:/u,
-  )?.[1] ?? "";
-
-  for (const route of placements.keys()) {
-    assert.match(aiShelf, new RegExp(`"${route.replaceAll(".", "\\.")}"`, "u"), route);
-  }
+  const start = source.search(/\bvar\s+routes\s*=\s*\{/u);
+  assert.ok(start >= 0, "AI Systems footer links");
+  const routes = parseExpressionAt(source, source.indexOf("{", start), { ecmaVersion: "latest" });
+  const shelf = routes.properties.find(property => property.key.name === "ai").value;
+  const destinations = new Set(shelf.elements.map(pair => pair.elements[1].value));
+  const html = await canvasFile("ai-systems.html");
+  const heading = html.match(/<section\b[^>]*data-footer-routes="ai"[^>]*>\s*<h2\b[^>]*>\s*<a href="([^"]+)"/u);
+  assert.ok(heading, "the AI Systems column links its primary page in its heading");
+  destinations.add(heading[1]);
+  for (const route of placements.keys()) assert.ok(destinations.has(route), route);
 });
 
 test("the AI Systems family identifies human authorship, publication, and collection ancestry", async () => {

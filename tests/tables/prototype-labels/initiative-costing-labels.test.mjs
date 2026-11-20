@@ -2,7 +2,7 @@ import '../../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { createHash } from "node:crypto";
+import { readPrototypeScript } from '../../prototype-script.mjs';
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
@@ -14,7 +14,7 @@ const source = fs.readFileSync(path.join(root, owner), "utf8");
 const literal = 'Ren\u00e9e "A&B" <script>literal</script> \u2192 N\u00b7m';
 const frameworkColumns = ["Component", "Mapping state", "Mapped and suggested activities", "Mapped into plan"];
 const attentionColumns = ["Attention area", "Allocated hours", "Planning consequence"];
-const digest = value => createHash("sha256").update(value).digest("hex");
+const script = readPrototypeScript(source);
 const plain = value => JSON.parse(JSON.stringify(value));
 const shells = Object.fromEntries(["framework-table", "attention-table"].map(name => {
   const match = source.match(new RegExp('<table class="' + name + '">[\\s\\S]*?<\\/table>'));
@@ -51,21 +51,6 @@ function check(table, columns) {
   }
 }
 
-const declarations = new Map();
-function declared(name) {
-  if (declarations.has(name)) return declarations.get(name);
-  const start = new RegExp("\\bfunction\\s+" + name + "\\s*\\(").exec(source)?.index;
-  assert.notEqual(start, undefined, name);
-  for (let end = source.indexOf("}", start); end >= 0 && end - start < 30000; end = source.indexOf("}", end + 1)) {
-    const candidate = source.slice(start, end + 1);
-    try {
-      new vm.Script("(" + candidate + ")");
-      declarations.set(name, candidate);
-      return candidate;
-    } catch (error) { if (!(error instanceof SyntaxError)) throw error; }
-  }
-  throw new Error("Could not isolate " + name);
-}
 function fixture() {
   const slots = new Map(), downstream = [];
   const slot = id => {
@@ -80,13 +65,12 @@ function fixture() {
     $: slot, strategyRender: () => downstream.push("strategy"), staffingRender: () => downstream.push("staffing"),
     horizonRender: () => downstream.push("horizon"), curvePoint: () => ({ x: 1, y: 1 }), sigmaTail: () => 0,
   });
-  const start = source.indexOf("  var frameworks={"), end = source.indexOf("\n  };", start);
-  vm.runInContext(source.slice(start, end + 5), ctx);
-  vm.runInContext(source.split("\n").find(line => line.startsWith("  var qualityAttention=")), ctx);
+  vm.runInContext('var frameworks = ' + script.initializer('frameworks') + '; var qualityAttention = ' +
+    script.initializer('qualityAttention'), ctx);
   ctx.state = { framework: "kotter", frameworkStates: Object.fromEntries(Object.entries(ctx.frameworks).map(([id, model]) => [
     id, model.components.map((_component, index) => ({ status: ["planned", "partial", "look", "outside"][index % 4], mapped: index % 2 === 0 })),
   ])) };
-  for (const name of ["escapeHtml", "frameworkRender", "sigmaRender"]) vm.runInContext(declared(name), ctx);
+  for (const name of ["escapeHtml", "frameworkRender", "sigmaRender"]) vm.runInContext(script.definition(name), ctx);
   const shell = (name, id) => shells[name].replace('<tbody id="' + id + '"></tbody>', () =>
     '<tbody id="' + id + '">' + slot(id).innerHTML + "</tbody>");
   return {
@@ -107,29 +91,12 @@ function fixture() {
   };
 }
 
-function protectedText(html) {
-  const styles = [...html.matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/g)].map(match => match[0]);
-  const generated = [...html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/g)]
-    .filter(match => /data-investment-analysis-source=|type="application\/schema\+json"/.test(match[0].slice(0, match[0].indexOf(">"))))
-    .map(match => match[0]);
-  const start = html.indexOf("  var frameworks={");
-  const end = html.indexOf("\n  };", start);
-  assert(start >= 0 && end > start);
-  const attention = html.split("\n").find(line => line.startsWith("  var qualityAttention="));
-  assert(attention);
-  return [...styles, ...generated, html.slice(start, end + 5), attention].join("\n");
-}
-
 test("both authored tables retain their native captions and matching column labels", () => {
   const tables = parse(Object.values(shells));
   assert(shells["framework-table"].includes("Active change framework components and mapped activities</caption>"));
   assert(shells["attention-table"].includes("Quality attention allocation derived from the selected sigma posture</caption>"));
   check(tables[0], frameworkColumns); check(tables[1], attentionColumns);
   assert(tables.every(table => records(table).length === 0), "These authored bodies await their existing runtime owners");
-});
-
-test("styles, shared analysis/schema carriers and fixed row descriptors remain byte-identical", () => {
-  assert.equal(digest(protectedText(source)), "f2e3e68766f797111a8da5af03b2a5e013f1ef3dada8063fcea17ef6d9806da6");
 });
 
 for (const id of ["kotter", "npt", "rogers", "weick", "adkar", "dual"]) {

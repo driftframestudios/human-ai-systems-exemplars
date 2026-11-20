@@ -278,7 +278,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
     /every complete account remains available through an ordinary case study link\. The small catalog enhancement presents the scanning-friendly Summary mode when scripts run\./u,
     "The no-script path should lead with the ordinary complete-reading route and describe the bounded enhancement accurately",
   );
-  assert.match(script, /"executive-summary": \{ kind: "format", value: "case-brief" \}/u);
+  assert.match(script, /"executive-summary": \{\s*kind: "format",\s*value: "case-brief"\s*\}/u);
   assert.match(script, /legacyOrMode/u);
   assert.match(script, /unknownLegacyTypes/u);
   assert.match(script, /catalog\.setAttribute\("data-reading-mode", displayMode\)/u);

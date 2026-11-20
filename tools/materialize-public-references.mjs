@@ -1007,7 +1007,7 @@ export function inspectSharedFooterScript(
   const assignments = [...source.matchAll(assignmentPattern)];
   const routeUses = source.match(/\bprofessionalProfileRoute\b/g) ?? [];
   const linkUses = source.match(/\bprofessionalProfileLink\b/g) ?? [];
-  const guardedLinkPattern = /if\s*\(professionalProfileRoute\.indexOf\(["']\{\{PUBLIC_URL_["']\)\s*===\s*-1\)\s*\{[\s\S]*?\bvar\s+professionalProfileLink\s*=\s*element\(["']a["'],\s*["']["'],\s*["']Professional profile["']\)\s*;[\s\S]*?\bprofessionalProfileLink\.href\s*=\s*professionalProfileRoute\s*;[\s\S]*?\bnetwork\.appendChild\(professionalProfileLink\)\s*;\s*\}\s*else\s*\{[\s\S]*?\bnetwork\.appendChild\(\s*element\(\s*["']span["'],\s*["']super-footer__reserved["'],\s*["']Professional profile available in the public build["'],?\s*\)\s*,?\s*\)\s*;\s*\}/g;
+  const guardedLinkPattern = /if\s*\(professionalProfileRoute\.indexOf\(["']\{\{PUBLIC_URL_["']\)\s*===\s*-1\)\s*\{[\s\S]*?\bvar\s+professionalProfileLink\s*=\s*element\(["']a["'],\s*["']["'],\s*["']Professional profile["']\)\s*;[\s\S]*?\bprofessionalProfileLink\.href\s*=\s*professionalProfileRoute\s*;[\s\S]*?\bnetwork\.appendChild\(professionalProfileLink\)\s*;?\s*\}\s*else\s*\{[\s\S]*?\bnetwork\.appendChild\(\s*element\(\s*["']span["'],\s*["']super-footer__reserved["'],\s*["']Professional profile available in the public build["'],?\s*\)\s*,?\s*\)\s*;?\s*\}/g;
   const guardedLinks = [...source.matchAll(guardedLinkPattern)];
   if (
     assignments.length !== 1 ||

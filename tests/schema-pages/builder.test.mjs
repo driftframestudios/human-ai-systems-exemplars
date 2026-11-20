@@ -280,16 +280,20 @@ test("the built registry carries the repository favicon at its artifact root", a
   assert.deepEqual(receiverBytes, sourceBytes);
 });
 
-test("every declared receiver is discoverable and byte-identical to its source", async () => {
+test("every declared receiver is discoverable and delivers its frozen source bytes", async () => {
   const html = await readFile(resolve(outputRoot, "index.html"), "utf8");
 
   for (const route of schemaReceiverRoutes) {
     assert.ok(html.includes(`href="${route.receiverPath}"`), route.receiverPath);
-    const [sourceBytes, receiverBytes] = await Promise.all([
-      readFile(resolve(repositoryRoot, route.source)),
+    const [publicationBytes, receiverBytes] = await Promise.all([
+      readFile(resolve(repositoryRoot, route.frozenSource ?? route.source)),
       readFile(resolve(outputRoot, route.receiverPath)),
     ]);
-    assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    assert.deepEqual(receiverBytes, publicationBytes, route.receiverPath);
+    if (route.frozenSource) {
+      const workingSchema = JSON.parse(await readFile(resolve(repositoryRoot, route.source)));
+      assert.deepEqual(JSON.parse(receiverBytes), workingSchema, route.source);
+    }
   }
 });
 

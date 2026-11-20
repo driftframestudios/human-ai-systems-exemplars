@@ -54,7 +54,11 @@ Begin with the source owner's focused command. The sections below separate
 build boundaries, deployment assembly, source contracts, and rendered browser
 behavior so one passing result keeps a clear evidence scope.
 
-### About CSS projection
+### Production projection
+
+After `npm run build:prod-projection`, run `npm run test:cpanel-navigation-browser`
+to exercise the published Showcase URLs, preview images, footer and native Studio
+from the built document root. [Local carrier verification](../deployment/cpanel/ROUTES-AND-FORMATTING.md#build-from-a-working-branch)
 
 Run `npm run test:prod-css-projection-browser` when changing the production
 CSS profile or the About page’s stylesheet graph. Chromium compares the

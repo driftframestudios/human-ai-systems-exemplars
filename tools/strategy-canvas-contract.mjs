@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
 
+import { loadExternalReferenceBinding } from "./external-reference-contract.mjs";
+import { readPrototypeScript } from "../tests/prototype-script.mjs";
 import { chromium } from "@playwright/test";
 import { createServer } from "node:http";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -84,13 +86,6 @@ function assert(condition, message) {
 
 function same(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
-}
-
-function inlineJsonConstant(html, name) {
-  const prefix = `const ${name}=`;
-  const line = html.split("\n").find((candidate) => candidate.startsWith(prefix));
-  assert(line?.endsWith(";"), `Inline ${name} snapshot should be a single terminated JSON assignment.`);
-  return JSON.parse(line.slice(prefix.length, -1));
 }
 
 async function verify(label, callback) {
@@ -1728,8 +1723,9 @@ async function narrativeInlineParityContract() {
         readFile(resolve(directory, "core-architecture-target-pair-registry.v0.1.json"), "utf8"),
         readFile(resolve(directory, "expectation-opportunity-to-strategy-canvas.example.v0.1.json"), "utf8")
       ]);
-      const inlineRegistry = inlineJsonConstant(html, "TARGET_REGISTRY");
-      const inlineSeed = inlineJsonConstant(html, "SEED");
+      const script = readPrototypeScript(html);
+      const inlineRegistry = JSON.parse(script.initializer("TARGET_REGISTRY"));
+      const inlineSeed = JSON.parse(script.initializer("SEED"));
       assert(same(inlineRegistry, JSON.parse(registrySource)), "Inline TARGET_REGISTRY should match the adjacent registry exactly.");
       assert(same(inlineSeed, JSON.parse(seedSource)), "Inline SEED should match the adjacent example exactly.");
     });
@@ -1846,12 +1842,14 @@ async function strategyCanvasEvidenceContract() {
       for (const file of representation.receivers) {
         const source = await readFile(resolve(file), "utf8");
         const normalized = source.replace(/\s+/g, " ");
-        for (const field of ["sourceClaim", "adaptationClaim", "boundaryClaim"]) {
+        // The Genomic page places its interpretation and limits in its linked SVG.
+        const fields = id === "genomicViewer" ? ["sourceClaim"] : ["sourceClaim", "adaptationClaim", "boundaryClaim"];
+        for (const field of fields) {
           assert(normalized.includes(representation[field]), `${file} should carry the exact ${id} ${field} from the evidence registry.`);
         }
       }
     }
-    const strategyFiles = [CANONICAL, CONTEXT, ...NARRATIVE_COMPOSERS.map((composer) => composer.route), GENOMIC_REPRESENTATION];
+    const strategyFiles = [CANONICAL, CONTEXT, ...NARRATIVE_COMPOSERS.map((composer) => composer.route)];
     for (const file of strategyFiles) {
       const source = await readFile(resolve(file), "utf8");
       assert(source.includes('data-strategy-canvas-source="method-origin"'), `${file} should expose a visible method-origin marker.`);
@@ -1864,9 +1862,27 @@ async function strategyCanvasEvidenceContract() {
     assert(!initiativeSource.includes(`href="${fourActionsUrl}" target="_blank"`), "The Initiative Costing source should preserve the visitor's browsing-context choice; iframe projection owns separate-tab behavior.");
     assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
     const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
-    assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");
-    assert(!genomicSource.includes(`href="${methodUrl}" target="_blank"`), "The parent Genomic visitor page should keep ordinary in-place citation navigation.");
+    const figure = [...genomicSource.matchAll(/<figure\b[^>]*>[\s\S]*?<\/figure>/gi)]
+      .map(match => match[0]).find(html => html.includes('data-strategy-canvas-source="method-origin"'));
+    assert(figure && /<figcaption\b[^>]*data-strategy-canvas-source="method-origin"[^>]*>\s*This static representation adapts the Strategy Canvas/.test(figure),
+      "The Genomic figure caption should identify the method underlying its chart.");
+    const graphicPath = relative(resolve(GENOMIC_REPRESENTATION, ".."), resolve(GENOMIC_SVG));
+    assert(figure.includes('src="' + graphicPath + '"') && figure.includes('href="' + graphicPath + '"'),
+      "The Genomic figure should display and open the SVG that carries its interpretation.");
+    assert(figure.includes('href="#source-strategy-canvas-method"'), "The figure should link to its source citation.");
+    const citation = genomicSource.match(/<li\b[^>]*id="source-strategy-canvas-method"[^>]*>([\s\S]*?)<\/li>/)?.[1];
+    const anchor = citation?.match(/<a\b[^>]*>/)?.[0];
+    const token = anchor?.match(/\bhref="\{\{([A-Z0-9_]+)\}\}"/)?.[1];
+    const { destinations } = await loadExternalReferenceBinding();
+    assert(token && destinations.assertTokenCarrier(token, "anchor", GENOMIC_REPRESENTATION) === methodUrl,
+      "The Genomic citation should resolve to the authors' method description.");
+    assert(!/\btarget\s*=/.test(anchor), "The Genomic citation should retain ordinary in-place navigation.");
     const svg = await readFile(resolve(GENOMIC_SVG), "utf8");
+    const description = svg.match(/<desc\b[^>]*>([\s\S]*?)<\/desc>/)?.[1].replace(/\s+/g, " ");
+    assert(description?.includes("ten source-named strategy dimensions") &&
+      description.includes("2026 synthesis rather than measured historical scores") &&
+      description.includes("Operating cost remains an open question"),
+      "The linked graphic should distinguish its qualitative assessment and open cost question from measured results.");
     assert(svg.includes('<metadata id="strategy-method-source">'), "Static Strategy Canvas SVG should carry machine-readable method metadata.");
     assert(svg.includes(`<dc:source rdf:resource="${methodUrl}"/>`), "Static Strategy Canvas SVG metadata should link the primary method source.");
     assert(svg.includes("Strategy Canvas method developed by W. Chan Kim and Renée Mauborgne"), "Static Strategy Canvas SVG metadata should attribute the method without assigning the local artifact to its developers.");
