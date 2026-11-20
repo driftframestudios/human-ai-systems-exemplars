@@ -162,6 +162,7 @@ test("only selected archives with matching SHA-256 enter the install directory",
   await writeFile(join(cache, "second.deb"), "wrong");
   const result = spawnSync("bash", [join(root, ".github/dependencies/browser-apt-restore.sh"), plan, cache, install]);
   assert.equal(result.status, 0, result.stderr.toString());
+  assert.match(result.stdout.toString(), /Verified 1 of 2 selected package archives/u);
   assert.equal(await readFile(join(install, "first.deb"), "utf8"), "valid");
   await assert.rejects(readFile(join(install, "second.deb")), { code: "ENOENT" });
 });

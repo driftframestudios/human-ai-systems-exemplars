@@ -28,8 +28,15 @@ case "${1:?}" in
         awk -f .github/dependencies/apt-install-plan.awk | sort -u > "$plan"
       test -s "$plan"
     fi
-    key="browser-apt-v1-${RUNNER_OS}-${RUNNER_ARCH}-${ImageVersion:?}-${engines[*]}-$(node -p "require('playwright/package.json').version")-$(sha256sum "$plan" | cut -d' ' -f1)"
-    printf 'key=%s\n' "${key// /-}" >> "$GITHUB_OUTPUT"
+    version=$(node -p "require('playwright/package.json').version")
+    digest=$(sha256sum "$plan" | cut -d' ' -f1)
+    selection="${engines[*]}"
+    selection="${selection// /-}-$version-$digest"
+    prefix="browser-apt-v2-$RUNNER_OS-$RUNNER_ARCH-$selection-"
+    printf 'key=%s\n' "$prefix${ImageVersion:?}" >> "$GITHUB_OUTPUT"
+    printf 'compatible-prefix=%s\n' "$prefix" >> "$GITHUB_OUTPUT"
+    # Existing v1 entries can supply the exact current image during migration.
+    printf 'previous-key=%s\n' "browser-apt-v1-$RUNNER_OS-$RUNNER_ARCH-$ImageVersion-$selection" >> "$GITHUB_OUTPUT"
     printf 'packages=%s\n' "$(wc -l < "$plan" | tr -d ' ')" >> "$GITHUB_OUTPUT"
     ;;
   install)

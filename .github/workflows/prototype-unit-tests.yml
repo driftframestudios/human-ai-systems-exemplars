@@ -191,6 +191,9 @@ jobs:
         with:
           path: ${{ runner.temp }}/browser-apt-archives
           key: ${{ steps.browser-plan.outputs.key }}
+          restore-keys: |
+            ${{ steps.browser-plan.outputs.compatible-prefix }}
+            ${{ steps.browser-plan.outputs.previous-key }}
 
       - name: Install the selected system packages and browser engines
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
