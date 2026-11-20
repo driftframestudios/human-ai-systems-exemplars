@@ -800,7 +800,17 @@
         "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
       },
       "release": {
-        "transport": "pending",
+        "transport": {
+          "standing": "observed",
+          "observed_on": "2026-11-20",
+          "observation_owner": "human-authorized repository collaboration",
+          "evidence": "tools/verify-r2-video-route.mjs",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live",
+          "object_integrity": "Authenticated R2 readback and complete public downloads matched both declared sizes and SHA-256 digests.",
+          "range_observations": "The first two-byte range request on a cache miss returned 200. The subsequent HEAD-first verification received 206 for that range on a cache hit, 416 for an unsatisfiable range and 304 for conditional revalidation.",
+          "standalone_playback": "Chromium, Firefox and WebKit decoded the public poster and played the public movie after seeking to 50 seconds in a same-origin player."
+        },
         "visitor_source": "candidate",
         "local_browser": {
           "standing": "observed",
