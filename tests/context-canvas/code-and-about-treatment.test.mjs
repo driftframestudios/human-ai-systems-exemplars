@@ -248,7 +248,7 @@ test("the About visual sequence begins on a local poster and leaves native playb
   const headingEnd = section.indexOf("</h2>");
   const figureStart = section.indexOf('<figure class="about-media"');
   const firstProse = section.indexOf("<p>Twenty years");
-  assert.ok(headingEnd < figureStart && figureStart < firstProse);
+  assert.ok(headingEnd < firstProse && firstProse < figureStart);
   const videoTag = section.match(/<video class="about-media__video"[^>]+>/u)?.[0];
   assert.ok(videoTag, "Expected one native About video receiver");
   assert.match(videoTag, /data-about-media-video/u);
