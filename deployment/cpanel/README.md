@@ -290,9 +290,13 @@ npm run verify:prod-carrier-transfer -- --tag "$PRODUCTION_TAG" --receipt ".cpan
 temporary storage; it does not attest an existing carried artifact.
 `test:prod-css-projection-browser` compares the tracked readable graph with the
 generated graph across narrow, desktop, and wide enhanced, scriptless, print,
-forced-color, and reduced-motion states. It also exercises interaction,
-request-closure, and the expected CSP iframe-refusal boundary. The focused
-browser contract uses tracked bytes and does not require `.env.public`.
+forced-color, and reduced-motion states. Each of the 15 pairs compares document
+structure, text, computed styles, pseudo-elements, and geometry. In desktop
+enhanced screen mode, the test also changes the onward link’s path and fragment
+independently. It reads the document structure after each change and restores
+the authored link before exercising keyboard interaction. The suite also checks
+stylesheet requests and the expected CSP iframe refusal. It uses tracked bytes
+and a local fixture for the professional-profile destination.
 `build:prod-projection` is the explicit mutation boundary and transactionally
 replaces only `.prod-projection-build/`. Both commands require the ignored
 `.env.public` receiver for the professional-profile destination; Registry

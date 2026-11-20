@@ -54,6 +54,14 @@ Begin with the source owner's focused command. The sections below separate
 build boundaries, deployment assembly, source contracts, and rendered browser
 behavior so one passing result keeps a clear evidence scope.
 
+### About CSS projection
+
+Run `npm run test:prod-css-projection-browser` when changing the production
+CSS profile or the About page’s stylesheet graph. Chromium compares the
+readable and projected pages at three widths in five modes. The cPanel README
+describes the interaction and destination checks in the same run.
+[Production verification](../deployment/cpanel/README.md#commands)
+
 ### Visual Fidelity hub
 
 The Visual Fidelity source route validates shared schemas, contract records,
