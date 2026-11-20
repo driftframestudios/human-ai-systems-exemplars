@@ -41,12 +41,19 @@ text equivalents. They leave the persistent upload directory unchanged.
 ## Compare a hosted closure
 
 After an authorized receiver uploads the complete closure, compare the live
-host with a fresh in-memory build:
+host with the bytes selected for that upload. For an independently built standalone package, use:
 
 ```sh
 npm run verify:iframe-routes:live
 npm run verify:iframe-routes:policy
 ```
+
+For cPanel release acceptance, fetch the approved annotated tag and run
+`npm run verify:iframe-routes:policy -- --tag "$PRODUCTION_TAG"`. The verifier
+validates the Git carrier and its index, then uses the bytes and media types
+selected under `iframe-public/v1/`. Its report identifies the release commit
+and summarizes delivery and header checks. The iframe root's `robots.txt`
+has its own check in the cPanel cutover.
 
 The first command fails on a missing route, redirect, byte mismatch, or media
 type mismatch while reporting the current response-policy standing. The second

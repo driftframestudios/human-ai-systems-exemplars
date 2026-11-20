@@ -285,8 +285,9 @@ satisfy this route.
    generation until both successors are present.
 4. Rename the current iframe root to its dated recovery name, then rename the
    iframe successor to the exact configured iframe document-root name.
-5. Observe the direct iframe routes and root `robots.txt` before changing the
-   primary root.
+5. Run `npm run verify:iframe-routes:policy -- --tag "$PRODUCTION_TAG"`
+   from the verifier checkout with the approved annotated tag available.
+   Check the iframe root's `robots.txt` separately before switching the primary root.
 6. Rename the current primary root to its dated recovery name, then rename the
    primary successor to the exact configured primary document-root name.
 7. Preserve each prior generation until the complete signed-out assessment

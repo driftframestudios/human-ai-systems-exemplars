@@ -26,6 +26,8 @@ import {
   withGitBlobReader,
 } from "../../tools/package-prod-carrier-transfer.mjs";
 
+import { createTaggedIframePlan, verifyLiveIframeRoutes } from "../../tools/verify-live-iframe-routes.mjs";
+
 const execFileAsync = promisify(execFile);
 const carrierRoot = "deployment/cpanel/carrier";
 
@@ -179,6 +181,31 @@ function appendMemberData(archive, extra) {
   changed.writeUInt32LE(newCentralOffset, endOffset(changed) + 16);
   return changed;
 }
+
+test("live iframe verification uses the selected carrier’s bytes and membership", async () => {
+  await withFixture({}, async (fixture) => {
+    const path = "core/demo/index.html";
+    const plan = await createTaggedIframePlan({ repository: fixture.root, productionTag: fixture.tag });
+    assert.deepEqual([...plan.outputFiles.keys()], [path]);
+    const fetchImplementation = async (url) => {
+      assert.equal(url.pathname, "/v1/core/demo/");
+      return new Response(fixture.outputs.get("iframe-public/v1/" + path), {
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
+    };
+    const tagged = await verifyLiveIframeRoutes({ plan, fetchImplementation });
+    assert.equal(tagged.ok, true);
+    assert.equal(tagged.counts.exactBytes, 1);
+    assert.equal(tagged.carrier.releaseSha, fixture.releaseSha);
+    assert.equal(tagged.carrier.sourceSha, fixture.sourceSha);
+
+    const standalone = { outputFiles: new Map([[path, Buffer.from("<!doctype html>\n<title>Iframe</title>\n")]]) };
+    const other = await verifyLiveIframeRoutes({ plan: standalone, fetchImplementation });
+    assert.equal(other.ok, false);
+    assert.equal(other.counts.status200, 1);
+    assert.equal(other.counts.exactBytes, 0);
+  });
+});
 
 test("a tagged carrier forms a deterministic, self-verifying transfer envelope", async () => {
   await withFixture({}, async (fixture) => {
