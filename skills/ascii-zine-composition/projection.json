@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/ascii-zine-composition/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "ascii-zine-composition",
+  "description": "Composes ASCII-accented interfaces and publication artifacts with legible hierarchy, truthful state, accessible ornament, and recoverable interactions. Applies when a zine or print-shop visual language should enrich an existing working surface.",
+  "semanticAuthorityRef": "../source/.agents/skills/ascii-zine-composition/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/0",
+  "contract": {
+    "what": "A restrained ASCII and typographic composition that helps a person read, act, and recover within an existing artifact.",
+    "when": [
+      "A studio, workshop, explanatory page, or editable artifact calls for zine character and has an identified visitor task and receiving style owner."
+    ],
+    "boundaries": [
+      "The receiving application owns meaning, state, data, permissions, and interaction. The selected visual contract owns palette and tokens. This method selects and integrates ornament; it leaves scientific encodings and operational status with their source owners."
+    ],
+    "result": "An expressive, source-owned composition with a complete semantic reading, recognizable controls, and focused evidence for the changed visitor behavior."
+  },
+  "receivingUse": {
+    "job": "A studio, workshop, explanatory page, or editable artifact calls for zine character and has an identified visitor task and receiving style owner.",
+    "materialResult": "An expressive, source-owned composition with a complete semantic reading, recognizable controls, and focused evidence for the changed visitor behavior.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/ascii-zine-composition/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

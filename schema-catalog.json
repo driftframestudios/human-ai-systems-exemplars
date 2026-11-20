@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1",
-  "sourceRevision": "90766e8c4dc1ff12572eff2832ec41cb194342e5",
+  "sourceRevision": "a5ed640bb0982044d46e6e874867eb8f0e760169",
   "deliveryBase": "https://schemas.radiantnull.com",
   "identityRole": "canonicalId identifies the contract; retrievalUrl downloads this site's copy.",
   "contracts": [
@@ -156,6 +156,158 @@
       "sha256": "5bbd7261afb2540490822e5ae18f119e4d80bff2bffe0218471e65af62a27208",
       "sizeBytes": 9519,
       "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+      "path": "visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+      "sourcePath": "visual-fidelity-contracts/schemas/visual-fidelity-contract.schema.json",
+      "sha256": "a26780b2592cecae4847867c248ab11774cbc064a7b4610569eaf8a81de36b57",
+      "sizeBytes": 9360,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+      "path": "visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+      "sourcePath": "visual-fidelity-contracts/schemas/lab-state.schema.json",
+      "sha256": "87fd9057672bfaa681713344f22571bba2e8f3c1084adf926dca5860dc58de92",
+      "sizeBytes": 4406,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+      "path": "visual-fidelity-contracts/1.0.0/catalog.schema.json",
+      "sourcePath": "visual-fidelity-contracts/schemas/catalog.schema.json",
+      "sha256": "c4fdf1f0021582afa344e1af775bd70a3a7452e4ba5ad504ae063dcec0d0c468",
+      "sizeBytes": 4803,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+      "path": "visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+      "sourcePath": "visual-fidelity-contracts/schemas/example-catalog.schema.json",
+      "sha256": "985d8a8aedd6344c4f769d95f7497b582195b32c617c087dd97a1b4c15954458",
+      "sizeBytes": 9230,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+      "path": "visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+      "sourcePath": "visual-fidelity-contracts/schemas/public-lineage.schema.json",
+      "sha256": "ac0d77285c76aa082c3bec134ca5b677d5ae5e645098a8897386d473989dff62",
+      "sizeBytes": 2101,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/component-lab/v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/component-lab/v1.schema.json",
+      "path": "visual-fidelity/component-lab/v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/component-lab/schemas/component-lab.schema.json",
+      "sha256": "191b3bcd97b2faf590d3a2a60ec5940393833f09234a4380c4fd8d891609fb6d",
+      "sizeBytes": 1805,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/data-view-lab/v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/data-view-lab/v1.schema.json",
+      "path": "visual-fidelity/data-view-lab/v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/data-view-lab/schemas/data-view-lab.schema.json",
+      "sha256": "0f8521d6c31ceb8980538b11a7042be5a60c8ea34a70fe87e4679af8aa452b68",
+      "sizeBytes": 4920,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+      "path": "visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/probes/components-and-data/probe-catalog.schema.json",
+      "sha256": "f0830f70485c78728e6dd140d81080be4c825e58ee7c1fdfdfb868bfe7da86c0",
+      "sizeBytes": 1988,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-ai-call.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/ai-call.schema.json",
+      "sha256": "14abf3227ebd858622382556d2b7382df5dfa19d4e8650f8059e9c282fac0c53",
+      "sizeBytes": 1451,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/checkpoint.schema.json",
+      "sha256": "2b9a94d49be6065a337b8b14ccee388a4f74e9486b3411894ca11e87a836c8eb",
+      "sizeBytes": 971,
+      "dependencyIdentities": [
+        "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json"
+      ]
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-command.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-command.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/command.schema.json",
+      "sha256": "0d34306e86e5b491415c8529189003e1dba37603f0837a220baa8d16ffa467d4",
+      "sizeBytes": 1640,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-continuation.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-continuation.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-continuation.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/continuation.schema.json",
+      "sha256": "2df0a32ba1bf0e98c73ab4da0b9b5d3863f80f2b77fa95d5439e274a6b73c078",
+      "sizeBytes": 538,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-issue.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-issue.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/issue.schema.json",
+      "sha256": "7c5446f161893254a4ff803c8d86b840ad45bfeb43ab4bf6cde1d16c90a7071a",
+      "sizeBytes": 580,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-projection.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-projection.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/projection.schema.json",
+      "sha256": "4d1ac89d47a6565e763284f3b51ec269352ae3d2ee07a8f6121f3663380d86bf",
+      "sizeBytes": 683,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-receipt.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-receipt.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/receipt.schema.json",
+      "sha256": "377ceec3248ef296d2c7e6d933d04cf9b8fdb7be4b695b3cf66e07e88c668a84",
+      "sizeBytes": 956,
+      "dependencyIdentities": [
+        "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json"
+      ]
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/visual-fidelity/service-boundary-response.v1.schema.json",
+      "retrievalUrl": "https://schemas.radiantnull.com/visual-fidelity/service-boundary-response.v1.schema.json",
+      "path": "visual-fidelity/service-boundary-response.v1.schema.json",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/schemas/response.schema.json",
+      "sha256": "e7cfee0008ae71d50a891c0c2364edaad94371831b07915ea7e61ac87f1ee8a2",
+      "sizeBytes": 2602,
+      "dependencyIdentities": [
+        "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json",
+        "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json",
+        "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json"
+      ]
     }
   ]
 }
