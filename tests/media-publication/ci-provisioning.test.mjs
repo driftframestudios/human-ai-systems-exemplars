@@ -135,11 +135,13 @@ test("the Linux preparation route verifies and installs the engines admitted for
   await mkdir(join(directory, "bin"));
   await writeFile(join(directory, "bin/npm"), '#!/bin/sh\necho "$*"\n', { mode: 0o755 });
   await writeFile(join(directory, "browser-apt-plan"), "");
-  for (const [suite, engines] of Object.entries({
-    all: "chromium firefox webkit", iframe: "chromium webkit", core: "chromium", narrative: "chromium",
-  })) {
+  for (const [suite, group, engines] of [
+    ["all", "selected", "chromium firefox webkit"], ["all", "reading", "chromium firefox webkit"],
+    ["all", "production", "chromium"], ["iframe", "selected", "chromium webkit"],
+    ["core", "selected", "chromium"], ["narrative", "selected", "chromium"],
+  ]) {
     const result = spawnSync("bash", [join(root, ".github/dependencies/browser-apt.sh"), "install"], {
-      cwd: directory, encoding: "utf8", env: { ...process.env, PATH: `${join(directory, "bin")}:${process.env.PATH}`, RUNNER_TEMP: directory, SELECTED_SUITE: suite },
+      cwd: directory, encoding: "utf8", env: { ...process.env, PATH: `${join(directory, "bin")}:${process.env.PATH}`, RUNNER_TEMP: directory, SELECTED_SUITE: suite, BROWSER_GROUP: group },
     });
     assert.ifError(result.error);
     assert.equal(result.status, 0, result.stderr);

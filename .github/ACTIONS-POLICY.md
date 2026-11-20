@@ -57,10 +57,11 @@ Its schema receiver-route job has a six-minute ceiling, runs
 advisory summary for matching changes while preserving the review path.
 The prototype-unit job has its own resting switch:
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=false` keeps matching pull-request execution at
-rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
-`narrative`, and `all` selections share one thirty-minute job; manual browser
-coverage requires `include_browser=true`, while an enabled PR receiver includes
-the selected browser contracts. Chromium supports every browser-enabled
+rest while confirmed manual dispatch remains available. Focused selections and the enabled PR baseline each use one thirty-minute prototype
+job. A confirmed manual `all` selection with `include_browser=true` runs the reading
+and production groups in parallel, each with the same thirty-minute investigation
+boundary. Manual browser coverage requires `include_browser=true`. An enabled
+PR receiver includes the selected browser contracts. Chromium supports every browser-enabled
 selection, WebKit joins `iframe` and `all`, and Firefox joins `all`. The
 workflow's separate thirty-minute media job runs for matching pull requests
 and for confirmed `media` or `all` dispatches. That job installs the locked
@@ -188,4 +189,4 @@ and approved budget can introduce the smallest fitting addition.
 - [Using custom workflows with GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 - [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
 
-The prototype job can reuse Playwright system packages across runner images when the OS, architecture, engine set, Playwright version and resolved package plan agree. The installer validates each restored archive against fresh APT metadata. The resolved package versions, engine selection, Playwright version, runner image, OS and architecture identify each entry. The trusted writer is a successful confirmed browser dispatch on `main`. [Automation guide](AUTOMATION.md)
+The prototype job can reuse Playwright system packages across runner images when the OS, architecture, engine set, Playwright version and resolved package plan agree. The installer validates each restored archive against fresh APT metadata. The resolved package versions, engine selection, Playwright version, runner image, OS and architecture identify each entry. A group on a confirmed browser dispatch on `main` can publish its engine closure after its assigned proof succeeds. The full run requires both browser groups. [Automation guide](AUTOMATION.md)

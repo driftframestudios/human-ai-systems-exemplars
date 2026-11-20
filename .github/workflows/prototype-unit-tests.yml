@@ -138,7 +138,7 @@ jobs:
         run: npm run test:node-runtime && npm run test:public-reference-contracts
 
   prototype-units:
-    name: Selected prototype or iframe contract
+    name: ${{ matrix.group == 'reading' && 'Showcase, reading, and media contracts' || matrix.group == 'production' && 'Production CSS and prototype browser contracts' || 'Selected prototype or iframe contract' }}
     if: >-
       (github.event_name == 'workflow_dispatch' &&
        inputs.confirm_run &&
@@ -147,6 +147,12 @@ jobs:
       (github.event_name == 'pull_request' &&
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.confirm_run && inputs.suite == 'all' && inputs.include_browser && '["reading","production"]' || '["selected"]') }}
+    env:
+      BROWSER_GROUP: ${{ matrix.group }}
     runs-on: ubuntu-24.04
     # Investigate the last completed phase when the full job reaches this boundary.
     timeout-minutes: 30
@@ -169,6 +175,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Exercise Context Canvas source and inventory contracts
+        if: matrix.group != 'production'
         run: |
           npm run check:debrief-case-briefs
           npm run test:context-canvas
@@ -202,6 +209,7 @@ jobs:
         run: bash .github/dependencies/browser-apt.sh install
 
       - name: Exercise the selected source contracts
+        if: matrix.group != 'production'
         env:
           SELECTED_SUITE: ${{ inputs.suite || 'all' }}
           INCLUDE_BROWSER: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
@@ -240,31 +248,18 @@ jobs:
               npm run test:iframe-routes
               npm run check:iframe-routes
               npm run test:prototype-units
-              if [[ "$INCLUDE_BROWSER" == "true" ]]; then
-                npm run test:about-media-browser
-                npm run test:debrief-catalog-preview-browser
-                npm run test:debrief-reading-layout-browser
-                npm run test:debrief-reference-figures-browser
-                npm run test:debrief-caption-colors-browser
-                npm run test:ai-systems-reading-layout-browser
-                npm run test:site-navigation-browser
-                npm run test:debrief-link-cues-browser
-                npm run test:context-canvas-image-delivery-browser
-                npm run test:who-to-believe-system-graph-browser
-                npm run test:prod-css-projection-browser
-                npm run test:prototype-control-labels
-                npm run test:core-browser
-                npm run test:canvas-iframe-routes
-                npm run test:iframe-ancestry-browser
-                npm run test:narrative-browser
-                npm run test:prototype-exchanges
-              fi
               ;;
             *)
               echo "Choose core, iframe, narrative, or all."
               exit 2
               ;;
           esac
+
+      - name: Exercise the full selection’s assigned browser contracts
+        if: >-
+          github.event_name == 'pull_request' ||
+          (inputs.suite == 'all' && inputs.include_browser)
+        run: bash tests/suites/prototype-browser-group.sh "$BROWSER_GROUP"
 
       - name: Save the verified browser package archives
         if: >-
