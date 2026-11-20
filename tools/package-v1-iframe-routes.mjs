@@ -147,6 +147,7 @@ export async function createAggregatePackagePlan(options = {}) {
       generated_files: outputFiles.size + 1,
       generated_bytes: 0,
       favicon_href: iframeFaviconHref,
+      embedded_favicon_routes: [...familyPlans.values()].flatMap(plan => plan.receipt.package_contract.embedded_favicon_routes ?? []),
       live_cloudflare_mutation: false,
     },
     families,

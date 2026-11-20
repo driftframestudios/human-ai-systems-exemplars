@@ -31,32 +31,32 @@
       ["Prompt-Side Practice", "prompt-side-conditions-practice.html"],
       ["Benchmark Orientation", "benchmark-orientation.html"],
       ["MAPS Evaluations", "maps-evaluations.html"],
-      ["Give the Comparison Room", "readable-tables-reusable-evidence.html"],
+      ["Teaching AI When to Run Visual Regression Tests", "readable-tables-reusable-evidence.html"],
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
-    debriefs: [
-      ["All Debriefs", "debriefs.html"],
-      ["Genomic Viewer", "genomic-viewer-replatforming.html"],
+    showcase: [
+      ["Case Studies & Articles", "debriefs.html"],
+      ["Rearchitecting a Genomic Viewer", "genomic-viewer-replatforming.html"],
       ["Clinical Trial Coordination", "fmi-clinical-trial-coordination.html"],
-      ["EHR · Discrete Genomic Result", "ehr-discrete-genomic-result.html"],
-      ["EHR · Two Charts, One Result", "ehr-two-charts-one-result.html"],
-      ["EHR · Three Front Doors", "ehr-three-front-doors.html"],
-      ["EHR · PGx Alert Failure", "ehr-pgx-alert-failure.html"],
-      ["EHR · Interface Engine", "ehr-interface-engine-replatform.html"],
-      ["FMI LIMS / ELN", "fmi-lims-eln-replatforming.html"],
-      ["Who To Believe", "who-to-believe-reviews-platform.html"],
-      ["Humatics", "choose-your-player-humatics.html"],
-      ["Initiative Costing", "initiative-costing.html"],
+      ["Redesigning LIMS/ELN Platforms", "fmi-lims-eln-replatforming.html"],
+      ["Redesigning a Global Reviews Platform", "who-to-believe-reviews-platform.html"],
+      ["Designing a Physical AI Spatial Robotics Platform", "choose-your-player-humatics.html"],
+      ["AI/LLM Harnesses for Costing Initiatives", "initiative-costing.html"],
       ["Field Inspection Harness", "field-inspection-harness-replatform.html"],
-      ["Distributed Inspection Harness", "distributed-inspection-harness.html"],
-      ["Three-Way Comparative & The Return", "three-way-comparative-return.html"],
-      ["Narrative–Execution Gap Research Atlas", "narrative-execution-gap-research-atlas.html"],
-      ["Prompt-Side Conditions Practice", "prompt-side-conditions-practice.html"],
+      ["Designing Inspections That Work Offline", "distributed-inspection-harness.html"],
+      ["AI Workflows for Comparing Project Write-Ups", "three-way-comparative-return.html"],
+      ["AI/LLM Research Harnesses", "narrative-execution-gap-research-atlas.html"],
+      ["Better Prompting for Educators & Instructors", "prompt-side-conditions-practice.html"],
+      ["Finding Product-Market Fit for a Portable Spatial Capture System", "spatial-capture-collaborative-memory.html"],
+      ["Helping Nurses Bring Their Knowledge Across Languages", "multilingual-clinical-vocabulary-practice.html"],
+      ["Designing Forms That Help People Finish", "recoverable-enterprise-forms.html"],
+      ["EHR · Discrete Genomic Results in Epic", "ehr-discrete-genomic-result.html"],
+      ["EHR · Normalize Once Before Emitting", "ehr-two-charts-one-result.html"],
+      ["EHR · Keeping Patient Records Consistent Across Three EHRs", "ehr-three-front-doors.html"],
+      ["EHR · Designing an Alert Nobody Clicked", "ehr-pgx-alert-failure.html"],
+      ["EHR · Migrating Without Dropping Results", "ehr-interface-engine-replatform.html"],
       ["Benchmark Orientation", "benchmark-orientation.html"],
-      ["MAPS Evaluations", "maps-evaluations.html"],
-      ["The Photographs Were a Proxy", "spatial-capture-collaborative-memory.html"],
-      ["Language Control Belongs with the Learner", "multilingual-clinical-vocabulary-practice.html"],
-      ["The Form Is a Contract", "recoverable-enterprise-forms.html"]
+      ["MAPS Evaluations", "maps-evaluations.html"]
     ]
   };
 
@@ -65,6 +65,14 @@
     if (className) node.className = className;
     if (text) node.textContent = text;
     return node;
+  }
+
+  function appendFooterLink(parent, link) {
+    if (link.getAttribute("href").indexOf("{{PUBLIC_URL_") === 0) {
+      parent.appendChild(element("span", "super-footer__reserved", link.textContent));
+    } else {
+      parent.appendChild(link);
+    }
   }
 
   function routeList(title, items) {
@@ -121,23 +129,25 @@
     var grid = element("div", "super-footer__grid");
     grid.appendChild(routeList("About", routes.about));
     grid.appendChild(routeList("AI Systems", routes.ai));
-    grid.appendChild(routeList("Debriefs", routes.debriefs));
+    grid.appendChild(routeList("Showcase", routes.showcase));
     footer.appendChild(grid);
 
     var closing = element("div", "super-footer__closing");
     var registry = document.createElement("p");
     registry.appendChild(document.createTextNode("The Enterprise Human–AI Practitioner Registry continues at "));
     var kindlight = element("a", "", "kindlight.systems");
-    kindlight.href = "https://kindlight.systems/";
+    kindlight.href = "{{PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY}}";
     kindlight.setAttribute("aria-label", "Visit kindlight.systems");
-    registry.appendChild(kindlight);
-    registry.appendChild(document.createTextNode(". This link leaves this site."));
+    appendFooterLink(registry, kindlight);
+    registry.appendChild(document.createTextNode(
+      registry.querySelector("a") ? ". This link leaves this site." : " (link available in the public build).",
+    ));
 
     var network = document.createElement("p");
     var github = element("a", "", "GitHub");
-    github.href = "https://github.com/driftframestudios/human-ai-systems-exemplars";
+    github.href = "{{PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS}}";
     github.setAttribute("aria-label", "View human-ai-systems-exemplars on GitHub");
-    network.appendChild(github);
+    appendFooterLink(network, github);
     network.appendChild(document.createTextNode(" · "));
     if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {
       var professionalProfileLink = element("a", "", "Professional profile");
@@ -156,7 +166,7 @@
         ),
       );
     }
-    network.appendChild(document.createTextNode(" These links leave this site."));
+    if (network.querySelector("a")) network.appendChild(document.createTextNode(" These links leave this site."));
     if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
     contact.classList.add("super-footer__contact");
     contact.setAttribute("data-context-canvas-contact", "");

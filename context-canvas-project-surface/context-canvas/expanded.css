@@ -876,7 +876,7 @@ section>p:last-of-type {
     color: var(--blueprint-gold);
     font-size: clamp(1rem, .9rem + .55vw, 1.55rem);
     line-height: 1.45;
-    margin: 1.25rem auto 0;
+    margin: 1rem auto .5rem;
     max-inline-size: var(--canvas-lead-measure);
 }
 

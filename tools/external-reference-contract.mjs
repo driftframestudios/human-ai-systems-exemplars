@@ -9,6 +9,17 @@ export const DEFAULT_EXTERNAL_REFERENCE_BINDING_PATH = fileURLToPath(
 const CONTRACT_ID = 'context-canvas.external-public-reference-bindings.v1';
 const TOKEN = /^PUBLIC_URL_EXTERNAL_[A-Z0-9]+(?:_[A-Z0-9]+)*$/;
 const CARRIERS = new Set(['anchor', 'license', 'video_source', 'video_poster']);
+// Bound reviewed selectors to the public document or demonstration that owns them.
+const publicSelectors = new Map([
+  ['kindlight.ai/', ['?scene=plate', '?section=cohort', '?section=profile', '?section=qc', '?section=specimens']],
+  ['fhir.epic.com/Specifications', ['?api=10304']],
+  ['support.google.com/googleplay/android-developer/answer/12053285', ['?hl=en']],
+  ['www.ncei.noaa.gov/access/metadata/landing-page/bin/iso', ['?id=gov.noaa.ncdc%3AC00861']],
+  ['fetch.spec.whatwg.org/', ['#http-new-header-syntax']],
+  ['html.spec.whatwg.org/multipage/dom.html', ['#embedding-custom-non-visible-data-with-the-data-*-attributes']],
+  ['w3c.github.io/webappsec-csp/', ['#directive-frame-ancestors']],
+  ['tc39.es/ecma262/', ['#sec-number.max_safe_integer', '#sec-bigint-tostring', '#sec-json.stringify']],
+]);
 const authorities = new WeakSet();
 
 export class ExternalReferenceContractError extends Error {
@@ -48,6 +59,7 @@ export function parseExternalReferenceBinding(bytes, { requiredKeys } = {}) {
     throw new ExternalReferenceContractError('The external binding uses its declared version and schema.');
   }
   const byToken = new Map();
+  const selectedUrls = new Set();
   const routes = input.bindings.map((binding) => {
     requireShape(binding, ['token', 'url', 'allowed_carriers', 'selection_basis'], 'External route');
     for (const key of ['token', 'url', 'selection_basis']) requireText(binding[key], key);
@@ -58,10 +70,17 @@ export function parseExternalReferenceBinding(bytes, { requiredKeys } = {}) {
     try { url = new URL(binding.url); } catch {
       throw new ExternalReferenceContractError(`${binding.token} needs an absolute HTTPS destination.`);
     }
-    if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash ||
-        url.port || url.href !== binding.url || /(?:^|\.)(?:notion\.so|notion\.site|notion\.com)$/i.test(url.hostname)) {
-      throw new ExternalReferenceContractError(`${binding.token} needs a normalized public HTTPS destination without credentials or parameters.`);
+    const selector = url.href.slice((url.origin + url.pathname).length);
+    const acceptedSelectors = publicSelectors.get(url.hostname + url.pathname);
+    if (url.protocol !== 'https:' || url.username || url.password || url.port ||
+        (selector && !acceptedSelectors?.includes(selector)) || url.href !== binding.url ||
+        /(?:^|\.)(?:notion\.so|notion\.site|notion\.com)$/i.test(url.hostname)) {
+      throw new ExternalReferenceContractError(`${binding.token} needs a normalized public HTTPS destination with a reviewed selector when present.`);
     }
+    if (selectedUrls.has(url.href)) {
+      throw new ExternalReferenceContractError('Reuse the existing semantic token for this external destination.');
+    }
+    selectedUrls.add(url.href);
     if (!Array.isArray(binding.allowed_carriers) || binding.allowed_carriers.length === 0 ||
         new Set(binding.allowed_carriers).size !== binding.allowed_carriers.length ||
         binding.allowed_carriers.some((carrier) => !CARRIERS.has(carrier))) {

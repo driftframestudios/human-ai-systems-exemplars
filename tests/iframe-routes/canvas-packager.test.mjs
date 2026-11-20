@@ -52,6 +52,11 @@ test("the shared package writer rejects paths outside its output root", async ()
   }
 });
 
+const embeddedFaviconRoutes = [
+  "/v1/canvas/cross-functional-investment-model-studio/",
+  "/v1/canvas/open-lesson-field/",
+];
+
 test("the Canvas family plan follows the authored 16-route manifest", async () => {
   const first = await createCanvasPackagePlan();
   const second = await createCanvasPackagePlan();
@@ -70,6 +75,7 @@ test("the Canvas family plan follows the authored 16-route manifest", async () =
     navigation_adapted_routes: 1,
     generated_files: 41,
     favicon_href: iframeFaviconHref,
+    embedded_favicon_routes: embeddedFaviconRoutes,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
     browser_request_observation_required: true,
@@ -85,14 +91,19 @@ test("the Canvas family plan follows the authored 16-route manifest", async () =
     assert.ok(projection, `${route.id} has an index projection`);
     const html = projection.toString("utf8");
     const receipt = first.receipt.routes.find(({ id }) => id === route.id);
-    assert.equal(
-      occurrenceCount(
-        html,
-        `<link rel="icon" href="${iframeFaviconHref}" sizes="any">`,
-      ),
-      1,
-      `${route.id} declares the iframe origin favicon once`,
-    );
+    assert.equal((html.match(/<link rel="icon" /gu) ?? []).length, 1, `${route.id} declares one tab icon`);
+    if (embeddedFaviconRoutes.includes(route.public_alias)) {
+      const icon = /<link rel="icon" type="image\/png" href="data:image\/png;base64,([^"]+)" sizes="32x32">/u.exec(html);
+      assert.ok(icon, `${route.id} admits its branded tab icon under img-src data:`);
+      const bytes = Buffer.from(icon[1], "base64");
+      assert.deepEqual(bytes, await readFile(path.join(repositoryRoot, "context-canvas-project-surface/context-canvas/favicon-32x32.png")));
+      assert.deepEqual(receipt.projection_rewrites.find(row => row.kind === "embedded_favicon"), {
+        kind: "embedded_favicon", source_file: "context-canvas-project-surface/context-canvas/favicon-32x32.png", sha256: sha256(bytes),
+      });
+      assert.match(html, /<meta http-equiv="Content-Security-Policy" content="[^"]*img-src data:;/u);
+    } else {
+      assert.ok(html.includes(`<link rel="icon" href="${iframeFaviconHref}" sizes="any">`));
+    }
     assert.deepEqual(receipt.navigation.unresolved_local_links, []);
     assert.equal(
       receipt.navigation.exit_links,
@@ -249,6 +260,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
   assert.equal(aggregate.receipt.package_contract.primary_routes, 39);
   assert.equal(aggregate.receipt.package_contract.favicon_href, iframeFaviconHref);
+  assert.deepEqual(aggregate.receipt.package_contract.embedded_favicon_routes, embeddedFaviconRoutes);
   assert.equal(aggregate.receipt.package_contract.generated_files, 69);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,

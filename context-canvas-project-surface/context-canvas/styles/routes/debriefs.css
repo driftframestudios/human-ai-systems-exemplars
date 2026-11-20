@@ -445,6 +445,14 @@
     overflow-wrap: anywhere;
 }
 
+.debrief-catalog__card p strong {
+    font-weight: 500;
+}
+
+.debrief-catalog__card p em {
+    font-weight: inherit;
+}
+
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__types,
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__catalog-meta,
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .project__media--container,
@@ -668,7 +676,7 @@
 
 .debrief-preview-slug {
     color: #fff;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .debrief-preview-facts {
@@ -694,6 +702,7 @@
 .debrief-preview-facts dd {
     margin: .15rem 0 0;
     overflow-wrap: anywhere;
+    font-size: 1rem;
 }
 
 .debrief-preview-link {

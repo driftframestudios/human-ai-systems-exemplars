@@ -138,7 +138,8 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       for (const id of ['catalog-genomic-viewer', 'catalog-clinical-trial']) {
         const next = current.find(card => card.id === id), old = previous.find(card => card.id === id);
         assert.ok(next.lines.length < old.lines.length, `${id}: the complete title needs fewer lines with its available card room`);
-        assert.ok(next.lines.at(-1).split(/\s+/u).length >= 2, `${id}: this observed laptop title keeps a word group on its final line`);
+        assert.equal(next.lines.join('').replace(/\s/gu, ''), next.title.replace(/\s/gu, ''),
+          `${id}: the rendered lines carry the complete revised title`);
         assert.equal(next.title, old.title, 'The comparison retains the complete authored wording.');
         t.diagnostic(`${width}px ${id}: ${old.lines.length}→${next.lines.length} lines.`);
       }

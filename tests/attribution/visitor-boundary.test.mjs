@@ -5,6 +5,7 @@ import { dirname, relative, resolve } from "node:path";
 import test from "node:test";
 
 import { artifactAttribution, attributionContract } from "../../tools/attribution-contract.mjs";
+import { readSourceContract } from "../context-canvas/read-source-contract.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -95,12 +96,12 @@ test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary
   assert.equal(paths.length, 107, "the current governed visitor population should remain explicit");
 
   for (const path of paths) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     const footerStart = html.lastIndexOf("<footer", html.indexOf(artifactAttribution));
     const footerEnd = html.indexOf("</footer>", html.indexOf(artifactAttribution));
     const footer = html.slice(footerStart, footerEnd + "</footer>".length);
-    const boundaryMatches = [...footer.matchAll(/<div\b[^>]*\bdata-visitor-boundary(?:\s|>)[^>]*>([\s\S]*?)<\/div>/giu)];
+    const boundaryMatches = [...footer.matchAll(/<div\b[^>]*\bdata-visitor-boundary(?=\s|>)[^>]*>([\s\S]*?)<\/div>/giu)];
     assert.equal(boundaryMatches.length, 1, `${label} visitor boundary wrapper`);
 
     const contextMatches = [...boundaryMatches[0][1].matchAll(
@@ -206,7 +207,7 @@ test("governed visitor language replaces reviewed vague media phrases and preser
   ];
 
   for (const path of paths) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     for (const phrase of reviewedVaguePhrases) {
       assert.doesNotMatch(html, phrase, `${label} reviewed media language`);
@@ -230,7 +231,7 @@ test("shared and self-contained styles preserve selectable narrow, print, and fo
   assert.equal(selfContained.length, 66);
 
   for (const path of selfContained) {
-    const html = await readFile(path, "utf8");
+    const html = await readSourceContract(path, "utf8");
     const label = relative(repositoryRoot, path);
     assert.equal(occurrenceCount(html, "<style data-canary-stack-css>"), 1, `${label} self-contained style`);
     assert.match(html, /\.visitor-boundary\{[^}]*overflow-wrap:anywhere/u, `${label} narrow containment`);
@@ -249,8 +250,8 @@ test("shared and self-contained styles preserve selectable narrow, print, and fo
 test("the embedded Conditioning Field fallback keeps canaries and attribution in full-width rows", async () => {
   const html = await readFile(resolve(visitorRoot, "conditioning-field.html"), "utf8");
   assert.match(html, /footer\s*\{[^}]*flex-wrap:\s*wrap;/u);
-  assert.match(
-    html,
-    /footer\s*>\s*\.site-attribution\s*\{[^}]*flex:\s*1 0 100%;[^}]*text-align:\s*center;/u,
-  );
+  const attribution = html.match(/footer\s*>\s*\.site-attribution\s*\{([^}]*)\}/u);
+  assert.ok(attribution, "the footer owns an attribution row");
+  assert.match(attribution[1], /(?:^|;)\s*flex:\s*1 0 100%\s*(?:;|$)/u);
+  assert.match(attribution[1], /(?:^|;)\s*text-align:\s*center\s*(?:;|$)/u);
 });

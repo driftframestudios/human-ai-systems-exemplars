@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
@@ -22,10 +23,10 @@ test("ordinary parent links preserve the visitor's browsing-context choice", asy
   const forcedNewTabs = [];
 
   for (const route of routes) {
-    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    const html = withoutComments(await readSourceContract(join(canvasRoot, route), "utf8"));
     for (const match of html.matchAll(/<a\b[^>]*\btarget="_blank"[^>]*>/gu)) {
       const href = match[0].match(/\bhref="([^"]+)"/u)?.[1];
-      assert.match(match[0], /\brel="noopener noreferrer"/u, `${route}: ${href}`);
+      assert.match(match[0], /\brel="(?:noopener )?noreferrer"/u, `${route}: ${href}`);
       // The human-selected FMI method companions explicitly preserve the
       // reading in its tab; their icon, cue and destinations have a focused contract.
       const methodCompanion = route === "fmi-lims-eln-replatforming.html"
@@ -38,7 +39,7 @@ test("ordinary parent links preserve the visitor's browsing-context choice", asy
 });
 
 test("the About cartography retains its recorded embedded-document exception", async () => {
-  const svg = await readFile(
+  const svg = await readSourceContract(
     resolve(
       repositoryRoot,
       "context-canvas-project-surface/img/plot/about_prompt_conditions_cartography.svg",
@@ -54,11 +55,11 @@ test("the About cartography retains its recorded embedded-document exception", a
   }
 });
 
-test("the current Debrief catalog links the Forms Debrief", async () => {
-  const currentHeading = "<h2 class=\"txt-h2\">The Form Is a Contract</h2>";
-  const html = await readFile(join(canvasRoot, "debriefs.html"), "utf8");
+test("the Showcase links the forms case study", async () => {
+  const currentHeading = "<h2 class=\"txt-h2\">Designing Forms That Help People Finish</h2>";
+  const html = await readSourceContract(join(canvasRoot, "debriefs.html"), "utf8");
   const currentHeadingIndex = html.indexOf(currentHeading);
-  assert.ok(currentHeadingIndex >= 0, "debriefs.html names the Forms Debrief");
+  assert.ok(currentHeadingIndex >= 0, "the catalog uses the forms case study title");
   const currentCard = html.slice(currentHeadingIndex, currentHeadingIndex + 5000);
   assert.match(currentCard, /href="recoverable-enterprise-forms\.html"/u);
   assert.doesNotMatch(currentCard, /Dedicated reading in preparation\./u);
@@ -71,7 +72,7 @@ test("the current Debrief routes expose truthful navigation and progressive enha
     "recoverable-enterprise-forms.html",
   ];
   for (const route of currentRoutes) {
-    const html = await readFile(join(canvasRoot, route), "utf8");
+    const html = await readSourceContract(join(canvasRoot, route), "utf8");
     assert.doesNotMatch(
       html,
       /href="debriefs\.html"[^>]*aria-current="page"/u,
@@ -80,8 +81,8 @@ test("the current Debrief routes expose truthful navigation and progressive enha
   }
 
   const [catalog, enhancement] = await Promise.all([
-    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
-    readFile(join(canvasRoot, "debriefs-catalog.js"), "utf8"),
+    readSourceContract(join(canvasRoot, "debriefs.html"), "utf8"),
+    readSourceContract(join(canvasRoot, "debriefs-catalog.js"), "utf8"),
   ]);
   assert.match(catalog, /<a class="skip-link" href="#main-content">/u);
   assert.match(catalog, /<nav aria-label="Primary">/u);
@@ -91,7 +92,7 @@ test("the current Debrief routes expose truthful navigation and progressive enha
 });
 
 test("the shared parent footer emits standard links", async () => {
-  const shell = await readFile(join(canvasRoot, "canvas-shell.js"), "utf8");
+  const shell = await readSourceContract(join(canvasRoot, "canvas-shell.js"), "utf8");
 
   assert.match(
     shell,

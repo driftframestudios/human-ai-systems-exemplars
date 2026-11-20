@@ -15,7 +15,7 @@ practitioner, domain reviewer, executive evaluator, or maintainer.
 - [`shared-machinery.html`](shared-machinery.html) compares ten instruments for framing, shaping, staging, recovering, and handing off work across tools and teams.
 - [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
 - [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
-- [`debriefs.html`](debriefs.html) provides the catalog of completed and ongoing readings.
+- [Showcase](debriefs.html) collects case studies and articles.
 - [`grammar-family.html`](grammar-family.html) compares composable site readings and debriefs across portable assets, embedded instruments, and contextual delivery.
 - [`collaboration-skills.html`](collaboration-skills.html) explains portable skill contracts, bounded projections, candidacy, release, and cross-platform adoption.
 - [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) demonstrates an ongoing, implementation-gated enterprise program with proposed architecture, current planning estimates, and explicit pilot proof gates.
@@ -601,7 +601,7 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
-## Debrief reading modes
+## Showcase reading modes
 
 The nineteen catalog card slugs use their card's available width, owned by
 `.debrief-catalog__card .project--slug` in `styles/routes/debriefs.css`.
@@ -614,44 +614,46 @@ and a restored 32ch fault across three browser engines. The repair gives
 these short orientation headings the room their cards already provide;
 font choice and title wording continue to determine individual line breaks.
 
-[`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
-Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
-Case Brief mode projects the canonical compact source's orientation, ordered
-six-field scan,
-basis and limits, concise related-media index, and two independently operable
-quick scans directly into the catalog. Each quick scan begins collapsed and
-uses its truthful track names, including Comparison and Return where those
-names describe the reading more accurately than Solution and Implementation.
-One fragment-free action continues into the Full Debrief. The complete reading
-repeats the source-owned At-a-Glance orientation, ordered six-field scan, and
-basis-and-limits paragraph before the route-owned narrative. The paired quick
-scans, related-media index, and continuation action remain in Case Brief mode,
-so each reading context repeats only the orientation contract that serves its
-visitor job.
+The [Showcase](debriefs.html) collects case studies and articles at the existing
+`debriefs.html` address. Full Detail shows all catalog cards. Summary opens
+six-field accounts with related media and two independently expandable quick
+scans. Each summary covers Situation and stakes, Scope and role (with optional
+dates), Challenges, Key decision, Results, and What this enables. Case Study and
+Article link directly to their respective readings.
 
-The bounded
-[`debrief-case-briefs.source.html`](../data/debrief-case-briefs.source.html)
-file owns all compact accounts. Run `npm run build:debrief-case-briefs` after
-changing that source. The dependency-free materializer validates all declared
-routes, ordered six-field scans, paired track disclosures, basis-and-limits
-paragraphs, related-media links, and their source-fragment destinations, then
-refreshes one bounded template block in `debriefs.html` and one bounded
-At-a-Glance block in each declared Full Debrief;
-`npm run check:debrief-case-briefs` confirms exact parity across both receiver
-families.
-The build validates every declared receiver before writing. Each changed file
-is replaced atomically after a last-moment source comparison; a concurrent
-route edit stops the replacement and remains intact. Rerunning the build
-resumes an interrupted multi-file run, and check mode identifies any receiver
-that still needs projection.
-The generated carrier qualifies each source-local fragment with its Debrief
-route, so those destinations remain correct before JavaScript enhancement.
-Each Full Debrief carries one visible `#case-brief` coordinate whose
-At-a-Glance content comes from the same central source. The central source
-remains the sole owner of the repeated orientation, six-field wording, and
-basis-and-limits statement.
-`debriefs-catalog.js` reveals that authored projection as a bounded enhancement,
-so local file inspection and HTTP delivery use the same source-derived scan.
+**Editing shared summaries.** In `debriefs.html`, find the
+`template[data-case-brief-projection]` for the case-study filename. Edit the
+orientation, six fields, or basis and limits there. Run
+`npm run build:debrief-case-briefs` to carry your edit into the same case
+study’s At-a-Glance section at `#case-brief`. On screen, the case-study header
+introduces the work and At-a-Glance starts with the six fields. The catalog’s
+Summary mode displays the shared introductory paragraph. You can also start with an edit
+on the case-study page or in the [compact source](../data/debrief-case-briefs.source.html).
+Quick scans and related media belong to the catalog summary. Full Detail card
+descriptions belong to their individual cards.
+
+`npm run check:debrief-case-briefs` checks all sixteen routes without writing.
+The builder compares edits with the last synchronized version recorded in the
+compact source. If two copies contain different revisions of the same summary,
+it names the route and the edited files before writing. Combine the wording you
+want in those copies and rerun the build. A second build on synchronized files
+preserves their formatting.
+
+**Editing compact HTML.** Open the page with Prettier in your IDE, edit it,
+then run the pinned minifier from the repository root. This command returns
+the About page to compact form.
+
+```sh
+npm run minify:html -- -o context-canvas-project-surface/context-canvas/index.html context-canvas-project-surface/context-canvas/index.html
+```
+
+The [HTML Minifier configuration](../../html-minifier.config.json) preserves
+attribute quotes for the Prettier editing workflow. Leave
+`--remove-attribute-quotes` out of the command and keep
+`removeAttributeQuotes` set to `false`. The same configuration controls
+conservative whitespace collapse, redundant attributes, default type
+attributes, the short doctype, and inline CSS and SVG minification.
+
 The focused browser contract checks all sixteen compact accounts, thirty-two
 independent disclosure controls, closed initial state, state-aware labels,
 related media, grouped EHR behavior, accurate status counts, repeated mode
@@ -720,7 +722,7 @@ extends the same selected `img/plot/` family.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` starts the About visual sequence on a local 1280×720 plate-view poster and leaves playback, pause, seeking, and replay with native video controls. The same-origin R2 route carries the high-quality 1280×720 H.264 sequence; the page retains a one-shot 960×540 GIF recovery link and a visible description of its silent visual changes. The script pauses playback for print, background tabs, and a newly selected reduced-motion preference, while the poster and description retain the baseline reading. Eleven digest-verified source frames and the versioned sequence manifest make both carriers rebuildable without recapturing live pages. `npm run capture:about-visual-sequence` intentionally refreshes the six repository-rendered problem-shaping frames and their digests; `npm run build:about-visual-sequence` rebuilds the local GIF and poster through a pinned Pillow runtime; the optional `--mp4-output <path>` argument adds the 25 fps progressive carrier through FFmpeg; `npm run refresh:about-visual-sequence` performs capture and local rebuild after an intentional source-page change. The plate-first sequence moves repeatedly among implementation, problem, and solution views. Its one-shot assembly-relay boundary adapts Codrops’ pixel-grid and slice-reveal studies to the existing cobalt, citron, and paper palette while every source view receives a stable hold.
 - `who-to-believe-system-graph.js` admits one finite, page-local graph contract, then coordinates architecture comparison, concern emphasis, direct node selection, and incoming or outgoing neighbor traversal. Its frozen classic-script/CommonJS API keeps the same controller available to direct local inspection and focused tests. Native controls own input semantics; the adjacent HTML reading carries every node and connection through scriptless, print, and recovery states.
-- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or video-only visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
+- Showcase movies use native playback controls, metadata preload, intrinsic geometry, and a reviewed poster. Each Visual description disclosure opens the written sequence beside its movie. The selected page owns the description and the same-origin R2 Worker delivers the media.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
@@ -802,7 +804,7 @@ Current high-signal ownership:
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
-| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
+| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`Designing Forms That Help People Finish`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
@@ -904,11 +906,13 @@ and its hosted video and poster. The binding keeps those destinations separate
 from Registry Atlas selections and repository-owned route derivation while
 the materializer resolves all three families into the public build.
 
-The authored footer describes the professional profile as available in the
-public build. A materialized build changes that same shared carrier into an
-ordinary, same-tab “Professional profile” link with a descriptive accessible
-name. Its destination lives only in ignored `.env.public` or the delivery
-process environment.
+The shared footer shows Registry, GitHub, and professional-profile labels
+when you open the authored HTML directly. GitHub Pages and the production
+build turn them into native, same-tab links. The Registry Atlas binding owns
+the Registry root, and the external-reference binding owns the project
+repository URL. The professional profile takes its destination from ignored
+`.env.public` or the delivery environment. Open the materialized build to
+follow these footer links locally.
 
 Activated visible iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or

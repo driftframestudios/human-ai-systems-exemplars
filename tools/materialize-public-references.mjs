@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { parse } from 'acorn';
 import { isDirectExecution } from './check-node-runtime.mjs';
 import {
   cp,
@@ -99,7 +100,7 @@ const PUBLIC_IFRAME_LOCAL_ROOT =
   "context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
 const PUBLIC_IFRAME_CONTEXT_CANVAS_SOURCE_ROOT =
   "context-canvas-project-surface/context-canvas";
-const PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH = posix.join(
+const PUBLIC_FOOTER_SCRIPT_PATH = posix.join(
   "context-canvas",
   "canvas-shell.js",
 );
@@ -924,14 +925,49 @@ function normalizedSafePath(safePath) {
   return safePath.split(sep).join("/");
 }
 
-export function inspectProfessionalProfileScript(
+const footerAnchorOwners = new Map([
+  ["PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY", ["kindlight", "registry"]],
+  ["PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS", ["github", "network"]],
+]);
+
+function inspectFooterAnchorAssignments(source, tokens, safePath) {
+  let program;
+  try {
+    program = parse(source, { ecmaVersion: "latest" });
+  } catch {
+    throw new PublicReferenceContractError("PUBLIC_REFERENCE_FOOTER_CARRIER",
+      `${safePath} needs valid JavaScript to inspect its footer anchor assignments`);
+  }
+  const shell = program.body[0]?.expression?.callee?.body?.body;
+  const statements = shell?.find(node => node.type === "FunctionDeclaration" && node.id.name === "installFooter")?.body.body ?? [];
+  for (const [key, [link, parent]] of footerAnchorOwners) {
+    const occurrences = tokens.filter(token => token.key === key);
+    const assignment = statements.findIndex(({ expression }) =>
+      expression?.type === "AssignmentExpression" && expression.operator === "=" &&
+      expression.left.type === "MemberExpression" && !expression.left.computed &&
+      expression.left.object.name === link && expression.left.property.name === "href" &&
+      expression.right.type === "Literal" && expression.right.value === `{{${key}}}` &&
+      expression.right.start + 1 === occurrences[0]?.index);
+    const declaration = statements[assignment - 1]?.declarations?.[0];
+    const appended = statements.slice(assignment + 1).some(({ expression }) =>
+      expression?.type === "CallExpression" && expression.callee.name === "appendFooterLink" &&
+      expression.arguments[0]?.name === parent && expression.arguments[1]?.name === link);
+    if (occurrences.length !== 1 || assignment < 0 || declaration?.id?.name !== link ||
+        declaration.init?.callee?.name !== "element" || declaration.init.arguments[0]?.value !== "a" || !appended) {
+      throw new PublicReferenceContractError("PUBLIC_REFERENCE_FOOTER_CARRIER",
+        `${safePath} needs one ${key} token as the href of its ${link} footer anchor`);
+    }
+  }
+}
+
+export function inspectSharedFooterScript(
   source,
-  safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
+  safePath = PUBLIC_FOOTER_SCRIPT_PATH,
 ) {
-  if (normalizedSafePath(safePath) !== PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH) {
+  if (normalizedSafePath(safePath) !== PUBLIC_FOOTER_SCRIPT_PATH) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_SCOPE",
-      `${safePath} is outside the approved professional-profile script carrier`,
+      `${safePath} is outside the approved shared footer script carrier`,
     );
   }
   const tokens = tokenOccurrences(source);
@@ -951,13 +987,13 @@ export function inspectProfessionalProfileScript(
     };
   }
 
-  if (tokens.some((token) => token.key !== PUBLIC_AUTHOR_PROFILE_KEY)) {
+  if (tokens.some(({ key }) => key !== PUBLIC_AUTHOR_PROFILE_KEY && !footerAnchorOwners.has(key))) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_NAMESPACE",
-      `${safePath} may carry only the exact ${PUBLIC_AUTHOR_PROFILE_KEY} public-reference token`,
+      `${safePath} may carry only the approved footer anchor and professional-profile tokens`,
     );
   }
-  if (tokens.length !== 1) {
+  if (tokens.filter(({ key }) => key === PUBLIC_AUTHOR_PROFILE_KEY).length !== 1) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_PROFILE_CARRIER",
       `${safePath} needs exactly one professional-profile token carrier`,
@@ -985,21 +1021,19 @@ export function inspectProfessionalProfileScript(
     );
   }
 
-  const withoutExactToken = source.replace(
-    `{{${PUBLIC_AUTHOR_PROFILE_KEY}}}`,
-    "",
-  );
+  if (tokens.some(({ key }) => footerAnchorOwners.has(key))) inspectFooterAnchorAssignments(source, tokens, safePath);
+  const withoutExactToken = source.replace(TOKEN_OCCURRENCE, "");
   if (PUBLIC_KEY_LOOKALIKE.test(withoutExactToken)) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
-      `${safePath} contains a public-reference key outside its exact professional-profile carrier`,
+      `${safePath} contains a public-reference key outside its approved shared footer carriers`,
     );
   }
 
   return {
-    keys: new Set([PUBLIC_AUTHOR_PROFILE_KEY]),
-    occurrenceCount: 1,
-    anchorCount: 1,
+    keys: new Set(tokens.map(({ key }) => key)),
+    occurrenceCount: tokens.length,
+    anchorCount: tokens.length,
     iframeCount: 0,
     jsonLdCount: 0,
   };
@@ -1085,8 +1119,8 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
           for (const key of inspection.keys) keys.add(key);
           continue;
         }
-        if (normalizedSafePath(safePath) === PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH) {
-          const inspection = inspectProfessionalProfileScript(searchable, safePath);
+        if (normalizedSafePath(safePath) === PUBLIC_FOOTER_SCRIPT_PATH) {
+          const inspection = inspectSharedFooterScript(searchable, safePath);
           scriptFiles.push({ path, safePath, inspection, source: searchable });
           occurrenceCount += inspection.occurrenceCount;
           anchorCount += inspection.anchorCount;
@@ -1165,7 +1199,9 @@ function validateDestination(key, value) {
   if (typeof value !== "string" || value.trim() === "") {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_VALUE_MISSING",
-      `${key} needs an approved destination in .env.public or the process environment`,
+      key.startsWith(PUBLIC_EXTERNAL_NAMESPACE)
+        ? `${key} needs an approved destination in the tracked external binding`
+        : `${key} needs an approved destination in .env.public or the process environment`,
     );
   }
   if (/[\x00-\x1F\x7F]/.test(value)) {
@@ -1631,27 +1667,26 @@ export function materializePublicReferenceHtml(
   return materialized;
 }
 
-export function materializeProfessionalProfileScript(
+export function materializeSharedFooterScript(
   source,
   destinations,
-  safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
+  safePath = PUBLIC_FOOTER_SCRIPT_PATH,
+  externalAuthority = null,
 ) {
-  const expected = inspectProfessionalProfileScript(source, safePath);
+  const expected = inspectSharedFooterScript(source, safePath);
   if (expected.occurrenceCount === 0) return source;
 
-  const value = destinations.get(PUBLIC_AUTHOR_PROFILE_KEY);
-  if (value === undefined) {
-    throw new PublicReferenceContractError(
-      "PUBLIC_REFERENCE_VALUE_MISSING",
-      `${PUBLIC_AUTHOR_PROFILE_KEY} needs an approved destination before ${safePath} can materialize`,
-    );
-  }
-
   const materialized = source.replace(
-    new RegExp(
-      `(["'])\\{\\{${PUBLIC_AUTHOR_PROFILE_KEY}\\}\\}\\1`,
-    ),
-    () => jsonStringForJavaScript(value),
+    /(["'])\{\{(PUBLIC_URL_[A-Z0-9_]+)\}\}\1/g,
+    (_, quote, key) => {
+      assertExternalCarrier(externalAuthority, key, "anchor", safePath);
+      const value = destinations.get(key);
+      if (value === undefined) {
+        throw new PublicReferenceContractError("PUBLIC_REFERENCE_VALUE_MISSING",
+          `${key} needs an approved destination before ${safePath} can materialize`);
+      }
+      return jsonStringForJavaScript(value);
+    },
   );
   if (/\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/.test(materialized)) {
     throw new PublicReferenceContractError(
@@ -1661,6 +1696,12 @@ export function materializeProfessionalProfileScript(
   }
   return materialized;
 }
+
+// Callers with the original profile-only carrier use the same scoped materializer.
+export {
+  inspectSharedFooterScript as inspectProfessionalProfileScript,
+  materializeSharedFooterScript as materializeProfessionalProfileScript,
+};
 
 async function readOutputMarker(outputRoot) {
   let marker;
@@ -1942,10 +1983,11 @@ export async function materializePublicReferences({
 
     for (const record of inventory.scriptFiles) {
       if (record.inspection.occurrenceCount === 0) continue;
-      const materialized = materializeProfessionalProfileScript(
+      const materialized = materializeSharedFooterScript(
         record.source,
         destinations,
         record.safePath,
+        externalReference?.destinations ?? null,
       );
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }

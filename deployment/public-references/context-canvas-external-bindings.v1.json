@@ -7,7 +7,7 @@
       "token": "PUBLIC_URL_EXTERNAL_APACHE_LICENSE",
       "url": "https://www.apache.org/licenses/LICENSE-2.0",
       "allowed_carriers": ["license"],
-      "selection_basis": "Repository license destination used by the About document header."
+      "selection_basis": "Repository license destination used by Context Canvas visitor page headers."
     },
     {
       "token": "PUBLIC_URL_EXTERNAL_GITHUB_PROFILE",
@@ -52,10 +52,1498 @@
       "selection_basis": "Accepted movie route in planning/media-publication/exercises/about-problem-to-system-sequence-r2-publication.v0.1.md."
     },
     {
+      "token": "PUBLIC_URL_EXTERNAL_AAAI_PROCEEDINGS",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/40645",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
       "token": "PUBLIC_URL_EXTERNAL_ABOUT_SEQUENCE_POSTER",
       "url": "https://vik.guru/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/poster.webp",
       "allowed_carriers": ["video_poster"],
       "selection_basis": "Accepted remote-poster route in planning/media-publication/exercises/about-problem-to-system-sequence-r2-publication.v0.1.md; the authored local poster remains the fallback."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2023_FINDINGS_EACL_75",
+      "url": "https://aclanthology.org/2023.findings-eacl.75/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2024_EMNLP_MAIN_750",
+      "url": "https://aclanthology.org/2024.emnlp-main.750/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2024_FINDINGS_EMNLP_888",
+      "url": "https://aclanthology.org/2024.findings-emnlp.888/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2024_LREC_MAIN_145",
+      "url": "https://aclanthology.org/2024.lrec-main.145/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2024_TACL_1_9",
+      "url": "https://aclanthology.org/2024.tacl-1.9/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2024_TACL_1_95",
+      "url": "https://aclanthology.org/2024.tacl-1.95/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2025_NAACL_SHORT_64",
+      "url": "https://aclanthology.org/2025.naacl-short.64/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ACLANTHOLOGY_2026_FINDINGS_ACL_441",
+      "url": "https://aclanthology.org/2026.findings-acl.441/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ADOBE_UXP_NETWORK_REQUESTS",
+      "url": "https://developer.adobe.com/indesign/uxp/resources/recipes/network/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ALIGNMENT_ARCS_MARCH_2023_UPDATE",
+      "url": "https://evals.alignment.org/blog/2023-03-18-update-on-recent-evals/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in maps-evaluations.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ALIGNMENT_EVALUATING_LANGUAGE_MODEL_AGENTS_ON_REALISTIC_AUTONOMOUS_TASKS",
+      "url": "https://evals.alignment.org/Evaluating_LMAs_Realistic_Tasks.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in maps-evaluations.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ALIGNMENT_RESEARCH_CENTER_EVALUATIONS_CANARY",
+      "url": "https://www.alignment.org/canary/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_AMAZON_REDSHIFT_COPY_GUIDANCE",
+      "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Loading_tables_with_the_COPY_command.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ANTHROPIC_EVALUATION_GUIDE",
+      "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_APPLE_ROOMPLAN",
+      "url": "https://developer.apple.com/augmented-reality/roomplan/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2003_08934",
+      "url": "https://arxiv.org/abs/2003.08934",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2308_04079",
+      "url": "https://arxiv.org/abs/2308.04079",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2406_04452",
+      "url": "https://arxiv.org/abs/2406.04452",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in cross-platform-collaboration-cycle.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2407_20371",
+      "url": "https://arxiv.org/abs/2407.20371",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2507_21509",
+      "url": "https://arxiv.org/abs/2507.21509",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2510_01171",
+      "url": "https://arxiv.org/abs/2510.01171",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in cross-platform-collaboration-cycle.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_ABS_2605_13829",
+      "url": "https://arxiv.org/abs/2605.13829",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ARXIV_HTML_2503_22395V2",
+      "url": "https://arxiv.org/html/2503.22395v2",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ATHENAHEALTH_DEVELOPER_RESOURCES",
+      "url": "https://www.athenahealth.com/developer-portal",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-three-front-doors.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ATHENAHEALTH_MARKETPLACE_PARTNERS",
+      "url": "https://www.athenahealth.com/solutions/marketplace-partners",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-three-front-doors.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_BAYMARD_BAYMARDS_CHECKOUT_RESEARCH_SUMMARY",
+      "url": "https://baymard.com/research-articles/ecommerce-checkout-usability-report-and-benchmark",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_BAYMARD_INSTITUTE_PRODUCT_LISTS_FILTERING_UX",
+      "url": "https://baymard.com/research/ecommerce-product-lists",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_BLUEOCEANSTRATEGY_OFFICIAL_STRATEGY_CANVAS_DESCRIPTION",
+      "url": "https://www.blueoceanstrategy.com/tools/strategy-canvas/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_BROOKINGS_RETRIEVAL_STUDY",
+      "url": "https://www.brookings.edu/articles/gender-race-and-intersectional-bias-in-ai-resume-screening-via-language-model-retrieval/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLAUSWILKE_FUNDAMENTALS_OF_DATA_VISUALIZATION",
+      "url": "https://clauswilke.com/dataviz/coordinate-systems-axes.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLINICALGENOME_CLINGEN_STANDARDIZED_SUMMARY_TEXT_FOR_VARIANT_CURATION_EXPERT_PANELS",
+      "url": "https://www.clinicalgenome.org/docs/standardized-text-for-clingen-variant-curation-expert-panels/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_AGENTS_CONCEPTS_WORKFLOWS",
+      "url": "https://developers.cloudflare.com/agents/concepts/workflows/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_AI_GATEWAY",
+      "url": "https://developers.cloudflare.com/ai-gateway/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_CHANGELOG_POST_2025_02_25_JSON_MODE",
+      "url": "https://developers.cloudflare.com/changelog/post/2025-02-25-json-mode/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_CLOUDFLARE_FOR_PLATFORMS_WORKERS_FOR_PLATFORMS",
+      "url": "https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_CLOUDFLARE_FOR_PLATFORMS_WORKERS_FOR_PLATFORMS_CONFIGURATION_DYNAMIC_DISPATCH",
+      "url": "https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/dynamic-dispatch/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_CLOUDFLARE_FOR_PLATFORMS_WORKERS_FOR_PLATFORMS_CONFIGURATION_HOSTNAME_ROUTING",
+      "url": "https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/hostname-routing/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_DURABLE_OBJECTS_BEST_PRACTICES_WEBSOCKETS",
+      "url": "https://developers.cloudflare.com/durable-objects/best-practices/websockets/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_DURABLE_OBJECTS_PLATFORM_PRICING",
+      "url": "https://developers.cloudflare.com/durable-objects/platform/pricing/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_VECTORIZE",
+      "url": "https://developers.cloudflare.com/vectorize/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_CONFIGURATION_ROUTING_CUSTOM_DOMAINS",
+      "url": "https://developers.cloudflare.com/workers/configuration/routing/custom-domains/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_EXAMPLES_SPA_SHELL",
+      "url": "https://developers.cloudflare.com/workers/examples/spa-shell/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_FRAMEWORK_GUIDES_WEB_APPS_NEXTJS",
+      "url": "https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_FRAMEWORK_GUIDES_WEB_APPS_REACT_ROUTER",
+      "url": "https://developers.cloudflare.com/workers/framework-guides/web-apps/react-router/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_PLATFORM_PRICING",
+      "url": "https://developers.cloudflare.com/workers/platform/pricing/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_PLATFORM_STORAGE_OPTIONS",
+      "url": "https://developers.cloudflare.com/workers/platform/storage-options/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_RUNTIME_APIS_HTML_REWRITER",
+      "url": "https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_STATIC_ASSETS",
+      "url": "https://developers.cloudflare.com/workers/static-assets/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_STATIC_ASSETS_BILLING_AND_LIMITATIONS",
+      "url": "https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_STATIC_ASSETS_ROUTING_WORKER_SCRIPT",
+      "url": "https://developers.cloudflare.com/workers/static-assets/routing/worker-script/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_VERSIONS_AND_DEPLOYMENTS",
+      "url": "https://developers.cloudflare.com/workers/versions-and-deployments/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_VERSIONS_AND_DEPLOYMENTS_GRADUAL_DEPLOYMENTS_VERSION_AFFINITY",
+      "url": "https://developers.cloudflare.com/workers/versions-and-deployments/gradual-deployments/version-affinity/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_VERSIONS_AND_DEPLOYMENTS_ROLLBACKS",
+      "url": "https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKERS_VITE_PLUGIN",
+      "url": "https://developers.cloudflare.com/workers/vite-plugin/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CLOUDFLARE_WORKFLOWS",
+      "url": "https://developers.cloudflare.com/workflows/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_COMETSPECTRUM_AGENTIC_HARNESSES_FOR_LIFE_SCIENCES",
+      "url": "https://cometspectrum.org/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_COMETSPECTRUM_IMBUE_AI_WITH_DATA_GOVERNANCE",
+      "url": "https://cometspectrum.ai/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_COMETSPECTRUM_SIMULATION_CHASSIS_FOR_CODING_WITH_LLMS",
+      "url": "https://cometspectrum.io/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CORESTANDARDS_MATHEMATICS_STANDARDS",
+      "url": "https://corestandards.org/mathematics-standards/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CREATIVECOMMONS_CC_BY_4_0",
+      "url": "https://creativecommons.org/licenses/by/4.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_CSA_RESEARCH_CSA_RESEARCHS_2020_CONSUMER_LANGUAGE_SURVEY",
+      "url": "https://csa-research.com/l/media/Consumers-Prefer-their-Own-Language",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_D3JS_D3_DOCUMENTATION_SCALES_AND_DATA_JOINS",
+      "url": "https://d3js.org/d3-scale",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOCTRINE_PROJECT_DOCTRINE_ORM_TOOLS_REFERENCE",
+      "url": "https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/tools.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOI_10_1109_TVCG_2021_3068337",
+      "url": "https://doi.org/10.1109/TVCG.2021.3068337",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOI_10_1371_JOURNAL_PBIO_1002128",
+      "url": "https://doi.org/10.1371/journal.pbio.1002128",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOI_10_24432_C54305",
+      "url": "https://doi.org/10.24432/C54305",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOI_10_24432_C5HS5C",
+      "url": "https://doi.org/10.24432/C5HS5C",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DOI_10_6028_NIST_AI_800_3",
+      "url": "https://doi.org/10.6028/NIST.AI.800-3",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_DUNNHUMBY_DUNNHUMBYS_2015_CORPORATE_BACKGROUNDER",
+      "url": "https://www.dunnhumby.com/sites/default/files/filepicker/1/dunnhumby_CorporateBackgrounder_June2015.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ECMASCRIPT_BIGINT_TO_STRING",
+      "url": "https://tc39.es/ecma262/#sec-bigint-tostring",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ECMASCRIPT_JSON_STRINGIFY",
+      "url": "https://tc39.es/ecma262/#sec-json.stringify",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ECMASCRIPT_MAX_SAFE_INTEGER",
+      "url": "https://tc39.es/ecma262/#sec-number.max_safe_integer",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EEOC_EEOCS_ITUTORGROUP_SETTLEMENT_ANNOUNCEMENT",
+      "url": "https://www.eeoc.gov/newsroom/itutorgroup-pay-365000-settle-eeoc-discriminatory-hiring-suit",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EIGHTFOLD",
+      "url": "https://eightfold.ai/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EMVCO_PAYMENT_TOKENISATION",
+      "url": "https://www.emvco.com/emv-technologies/payment-tokenisation/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EPIC_FHIR_GENOMICS_OBSERVATION",
+      "url": "https://fhir.epic.com/Specifications?api=10304",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-two-charts-one-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EPIC_ON_FHIR_DOCUMENTATION",
+      "url": "https://fhir.epic.com/Documentation",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-discrete-genomic-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ESCHOLARSHIP_MOBILE_COMMERCE_LANGUAGE_EXPERIMENT",
+      "url": "https://escholarship.org/uc/item/098222kx",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EUROPA_EMA_GOOD_PHARMACOVIGILANCE_PRACTICES_MODULE_VI",
+      "url": "https://www.ema.europa.eu/en/documents/scientific-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports-suspected-adverse-reactions-medicinal-products-tracked-changes-rev-2-tracked-changes_en.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EUROPA_ENACTED_EU_AI_ACT",
+      "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EUROPA_GUIDANCE_FOR_HANDLING_INDIVIDUAL_DATA_REQUESTS",
+      "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/dealing-requests-individuals_en",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_EUROPA_LEGAL_GROUNDS_GUIDANCE",
+      "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/legal-grounds-processing-data_en",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FDA_GUARDANT360_LIQUID_CDX_P250027",
+      "url": "https://www.accessdata.fda.gov/cdrh_docs/pdf25/P250027A.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FDA_MASTER_PROTOCOLS_EFFICIENT_CLINICAL_TRIAL_DESIGN_STRATEGIES_TO_EXPEDITE",
+      "url": "https://www.fda.gov/media/120721/download",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FDA_SHIELD_S_FDA_INDICATION",
+      "url": "https://www.fda.gov/medical-devices/recently-approved-devices/shield-p230009",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FIELDFORMLAB_MULTI_REPO_HARNESS_PATTERNS",
+      "url": "https://fieldformlab.org/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATIONONE_LIQUID_CDX",
+      "url": "https://www.foundationmedicine.com/solution/foundationone-liquid-cdx",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATIONONE_MRD",
+      "url": "https://www.foundationmedicine.com/solution/foundationone-mrd",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATION_MEDICINE",
+      "url": "https://www.foundationmedicine.com/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in exemplar-index-landing.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATION_MEDICINE_S_CATALOG",
+      "url": "https://www.foundationmedicine.com/our-solutions",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATION_MEDICINE_S_ENROLLMENT_SERVICES",
+      "url": "https://www.foundationmedicine.com/biopharma/enrollment-solutions",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FOUNDATIONMEDICINE_FOUNDATION_MEDICINE_WHO_WE_ARE",
+      "url": "https://www.foundationmedicine.com/about",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_FTC_FEDERAL_TRADE_COMMISSIONS_2009_ENDORSEMENT_GUIDES_ANNOUNCEMENT",
+      "url": "https://www.ftc.gov/news-events/news/press-releases/2009/10/ftc-publishes-final-guides-governing-endorsements-testimonials",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GA4GH_VARIATION_REPRESENTATION_SPECIFICATION",
+      "url": "https://www.ga4gh.org/product/variation-representation/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GC_MOTOR_VEHICLE_SAFETY_REGULATIONS_SECTION_6",
+      "url": "https://laws-lois.justice.gc.ca/eng/regulations/C.R.C.%2C_c._1038/section-6.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in field-inspection-harness-replatform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GEEKWIRE_STRUCTURE_SENSOR_VISUAL_EFFECTS",
+      "url": "https://www.geekwire.com/2016/occipitals-structure-sensor-helps-transform-visual-effects-of-marvels-agents-of-s-h-i-e-l-d/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in debriefs.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GENOOX_FRANKLIN",
+      "url": "https://help.genoox.com/en/articles/4277712-working-in-the-workbench",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_COM_DRIFTFRAMESTUDIOS_HUMAN_AI_SYSTEMS_EXEMPLARS_BLOB_MAIN_AGENTS_SKILLS_SEMANTIC_TABLE_DESIGN_SKILL_MD",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/.agents/skills/semantic-table-design/SKILL.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_CONTEXT_TREE_CHIMERIC_PROTOTYPE_V0_1_7",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/core-architectures-chimeric-prototype-current-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_CONTEXT_TREE_VISUAL_VARIANTS_INDEX",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/collaboration/context-tree-visual-variants/index.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_CURRENT_WAVE_FEASIBILITY",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/74764930c37bbcd1bb48a8bdfe0ac247345c3e1f/research/table-verification-threshold/epochs/current-wave-feasibility.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_DISCUSSIONS_9143",
+      "url": "https://github.com/cloudflare/workers-sdk/discussions/9143",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_DOCS_DOC",
+      "url": "https://github.com/google/BIG-bench/blob/71ebc2eea2c7f1163e6d1b4d86f619050a1584d7/docs/doc.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in debriefs.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_ISSUES_320",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/320",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_ISSUES_330",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/330",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_ISSUES_331",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/331",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_PULL_324",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/324",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_PULL_327",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/327",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_PULL_341",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/341",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS_PULL_343",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/343",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_LIMS_ELN_CAPABILITY_TRANSFER_MODEL",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_LIMS_ELN_PROGRAM_SPECIFICATION",
+      "url": "https://github.com/driftframestudios/lims-eln-program-specification",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_MODEL",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/eb195762d206f65299cbcc91ed13c2fa1dbcb786/research/table-verification-threshold/model.mjs",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_OPENNEXTJS_CLOUDFLARE",
+      "url": "https://github.com/opennextjs/opennextjs-cloudflare",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_REFERENCE_CHECK",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/eb195762d206f65299cbcc91ed13c2fa1dbcb786/research/table-verification-threshold/reference_check.py",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_SCENARIOS",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/eb195762d206f65299cbcc91ed13c2fa1dbcb786/research/table-verification-threshold/scenarios.mjs",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_SHADOW_CAMPAIGN_PROTOCOL",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/74764930c37bbcd1bb48a8bdfe0ac247345c3e1f/research/table-verification-threshold/shadow-campaign-protocol.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_SKILL",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/.agents/skills/embedded-prototype-layout/SKILL.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_SUPPORTIVE_CHANGE_WRITING_EXEMPLARS_BUNDLE_V0",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/tree/main/supportive-change-writing-exemplars-bundle-v0.1",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_TABLE_AUDIT_README",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/c3ab6e3f5f4a84c373dfa040995de0d630c6a11f/planning/context-canvas/table-audit/README.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_TABLE_REPAIR_01_EVENTS",
+      "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/74764930c37bbcd1bb48a8bdfe0ac247345c3e1f/research/table-verification-threshold/epochs/table-repair-01-events.jsonl",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_TRAINING_ON_TEST_SET_README",
+      "url": "https://github.com/google/BIG-bench/blob/72534b4cc9f9dc4d9c14a01953f5dd204947c797/bigbench/benchmark_tasks/training_on_test_set/README.md",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_WORKERS_CHAT_DEMO",
+      "url": "https://github.com/cloudflare/workers-chat-demo",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GITHUB_WORKERS_FOR_PLATFORMS_EXAMPLE",
+      "url": "https://github.com/cloudflare/workers-for-platforms-example",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GOOGLE_DORA_2025_STATE_OF_AI_ASSISTED_SOFTWARE_DEVELOPMENT",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GOOGLE_PLAY_STORE_LISTING_EXPERIMENTS",
+      "url": "https://support.google.com/googleplay/android-developer/answer/12053285?hl=en",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GOV_DATA_OVER_TIME_LINE_CHART",
+      "url": "https://service-manual.ons.gov.uk/data-visualisation/chart-types/line-chart",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GOV_UK_ERROR_SUMMARY",
+      "url": "https://design-system.service.gov.uk/components/error-summary/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GUARDANTHEALTH_GUARDANT_S_CATALOG",
+      "url": "https://www.guardanthealth.com/products/tests-for-patients-with-early-and-advanced-stage-cancer/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GUARDANTHEALTH_GUARDANT_S_CLINICAL_DEVELOPMENT_SERVICES",
+      "url": "https://guardanthealth.com/precision-oncology/biopharma-solutions/clinical-development/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_GUARDANTHEALTH_GUARDANT_S_PHYSICIAN_NOTICE",
+      "url": "https://guardanthealth.com/annualnotice/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HBS_HARVARD_BUSINESS_SCHOOL_AND_BCG_NAVIGATING_THE_JAGGED_TECHNOLOGICAL_FRONTIER",
+      "url": "https://aiinstitute.hbs.edu/navigating-the-jagged-technological-frontier/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HIREEZ",
+      "url": "https://hireez.com/agentic-ai/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HL7_CDS_HOOKS_V2_0_1_HOOK_LIBRARY",
+      "url": "https://cds-hooks.hl7.org/STU2/toc.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-pgx-alert-failure.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HL7_EHR_OVERVIEW",
+      "url": "https://www.hl7.org/fhir/ehr-overview.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-three-front-doors.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HL7_FHIR_DIAGNOSTICREPORT",
+      "url": "https://www.hl7.org/fhir/diagnosticreport.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-discrete-genomic-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HL7_FHIR_SERVICEREQUEST",
+      "url": "https://www.hl7.org/fhir/servicerequest.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-three-front-doors.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HL7_OBSERVATION",
+      "url": "https://www.hl7.org/fhir/observation.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-discrete-genomic-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HUMATICS_HUMATICSS_MICROLOCATION_SOLUTIONS",
+      "url": "https://humatics.com/microlocation_solutions",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in choose-your-player-humatics.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_HUMATICS_PRESENT_PHYSICAL_AI_POSITIONING",
+      "url": "https://www.humatics.com/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ICH_E2B_R3_INDIVIDUAL_CASE_SAFETY_REPORT_SPECIFICATION",
+      "url": "https://www.ich.org/page/e2br3-individual-case-safety-report-icsr-specification-and-related-files",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_IEEEVIS_DECLUTTER_AND_FOCUS_2021",
+      "url": "https://content.ieeevis.org/year/2021/paper_v-tvcg-9385921.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ILLUMINA_CONNECTED_INSIGHTS",
+      "url": "https://help.connected.illumina.com/connected-insights",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_INFORMS_EBAY_MACHINE_TRANSLATION_STUDY",
+      "url": "https://pubsonline.informs.org/doi/10.1287/mnsc.2019.3388",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_INSEAD_BOOK_RECORD",
+      "url": "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_INSPIRE_S_PATIENT_AND_CAREGIVER_COMMUNITY",
+      "url": "https://www.inspire.com/about/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ISO_IEC_7812_1",
+      "url": "https://www.iso.org/standard/70484.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_COMPLETE_EXACT_VERSION_ARTIFACT",
+      "url": "https://kindlight.io/snippets/document-evidence-extraction/0.1.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in choose-your-player-humatics.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_ENTERPRISE_AI_WORKFLOWS",
+      "url": "https://kindlight.io/snippets/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_ENTERPRISE_LIMS_ELN_IMPLEMENTATION_EXEMPLAR",
+      "url": "https://kindlight.io/snippets/lims-eln-enterprise-implementation/0.3.2/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_INSPECT_INSTRUMENT_INGRESS_INTEGRITY_AND_REVIEWABLE_QUARANTINE",
+      "url": "https://kindlight.io/snippets/instrument-ingress-integrity/0.1.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_INSPECT_MIGRATION_RECONCILIATION_AND_APPROVAL_BOUND_CUTOVER",
+      "url": "https://kindlight.io/snippets/migration-reconciliation-cutover/0.1.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_INSPECT_SPECIMEN_CUSTODY_AND_TRANSACTIONAL_OUTBOX_BEHAVIOR",
+      "url": "https://kindlight.io/snippets/specimen-custody-outbox/0.1.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SCENE_PLATE",
+      "url": "https://kindlight.ai/?scene=plate",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_COHORT",
+      "url": "https://kindlight.ai/?section=cohort",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_PROFILE",
+      "url": "https://kindlight.ai/?section=profile",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_QC",
+      "url": "https://kindlight.ai/?section=qc",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SECTION_SPECIMENS",
+      "url": "https://kindlight.ai/?section=specimens",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_SOURCE_OF_TRUTH",
+      "url": "https://kindlight.ai/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINDLIGHT_TYPED_ABSENCE_AND_WIRE_SHAPE_0_1_0",
+      "url": "https://kindlight.io/snippets/typed-absence-and-wire-shape/0.1.0/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_KINEXON_S_INDUSTRIAL_LOCATION_PLATFORM",
+      "url": "https://kinexon.com/products/kinexon-os",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_LIMS_ELN_IMPLEMENTATION_REPOSITORY",
+      "url": "https://github.com/driftframestudios/lims-eln-enterprise-implementation",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_LINKEDIN_RECRUITER_AND_HIRING_ASSISTANT",
+      "url": "https://business.linkedin.com/hire/recruiter",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_LUCID_ADD_AND_CUSTOMIZE_SHAPES",
+      "url": "https://help.lucid.co/hc/en-us/articles/16390096079764-Add-and-customize-shapes-in-Lucidchart",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MANNING_ADZIC_G_2011_SPECIFICATION_BY_EXAMPLE",
+      "url": "https://www.manning.com/books/specification-by-example",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in cross-platform-collaboration-cycle.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MASTERCARD_SECURITY_RULES",
+      "url": "https://www.mastercard.com/content/dam/public/mastercardcom/lac/cl/home/Reglas_y_Procedimientos_de_Seguridad.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MATPLOTLIB_DOCUMENTATION_MATPLOTLIB_PYPLOT_SAVEFIG",
+      "url": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MC_STAN_BETA_BINOMIAL_FORMULATION",
+      "url": "https://mc-stan.org/docs/2_28/functions-reference/beta-binomial-distribution.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MC_STAN_POSTERIOR_PREDICTIVE_INTERPRETATION",
+      "url": "https://mc-stan.org/docs/2_38/stan-users-guide/posterior-prediction.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MEDIUM_RINGO_U_2025_USING_SPECIFICATION_BY_EXAMPLE_TO_DRIVE_AI",
+      "url": "https://urgo.medium.com/using-specification-by-example-to-drive-ai-95c19f0bb4ec",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in cross-platform-collaboration-cycle.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_METASNAKE_EFFECTIVE_VISUALIZATION",
+      "url": "https://store.metasnake.com/effective-viz",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_METR_2026_EXPERIMENT_DESIGN_UPDATE",
+      "url": "https://metr.org/blog/2026-02-24-uplift-update/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_METR_EARLY_2025_AI_AND_EXPERIENCED_OPEN_SOURCE_DEVELOPER_PRODUCTIVITY",
+      "url": "https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MICROSOFT_2026_WORK_TREND_INDEX",
+      "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MICROSOFT_THE_EFFECTS_OF_GENERATIVE_AI_ON_HIGH_SKILLED_WORK",
+      "url": "https://www.microsoft.com/en-us/research/publication/the-effects-of-generative-ai-on-high-skilled-work-evidence-from-three-field-experiments-with-software-developers/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MIT_DIFFUSION_EQUATION_DERIVATION",
+      "url": "https://math.mit.edu/classes/18.306/Notes/LectureTopics306.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_MOZILLA_SVG_AS_AN_IMAGE",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/SVG_as_an_image",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NATURE_GUILBEAULT_DELECOURT_AND_DESIKAN_2025_AGE_AND_GENDER_DISTORTION_IN",
+      "url": "https://www.nature.com/articles/s41586-025-09581-z",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NATURE_VICC_HARMONIZED_INTERPRETATION_OF_CANCER_VARIANTS_ACROSS_KNOWLEDGEBASES",
+      "url": "https://www.nature.com/articles/s41588-020-0603-8",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NCSBN_NURSE_LICENSURE_GUIDANCE",
+      "url": "https://www.ncsbn.org/nursing-regulation/licensure/nurse-licensure-guidance.page",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NEXTGEN_MIRTH_CONNECT_BY_NEXTGEN_HEALTHCARE",
+      "url": "https://www.nextgen.com/solutions/interoperability/mirth-integration-engine/mirth-connect-downloads",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-interface-engine-replatform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NIH_PEER_REVIEWED_IPAD_LIDAR_ACCURACY_STUDY",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9657006/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NIST_AGENT_EVALUATION_EXAMPLES",
+      "url": "https://www.nist.gov/caisi/cheating-ai-agent-evaluations",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NIST_INITIAL_PUBLIC_DRAFT_BENCHMARK_PRACTICE_GUIDANCE",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.800-2.ipd.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in benchmark-orientation.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NOAA_DATASET_C00861",
+      "url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc%3AC00861",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NOAA_PUB_DATA_CDO_DOCUMENTATION_GHCND_DOCUMENTATION_PDF",
+      "url": "https://www.ncei.noaa.gov/pub/data/cdo/documentation/GHCND_documentation.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_NYC_DEPARTMENT_OF_CONSUMER_AND_WORKER_PROTECTION_GUIDANCE",
+      "url": "https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_OPENSTREETMAP_COPYRIGHT",
+      "url": "https://www.openstreetmap.org/copyright",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_OPENUSD_INTRODUCTION",
+      "url": "https://openusd.org/release/intro.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_ORACLE_HEALTH_MILLENNIUM_PLATFORM_FHIR_R4_APIS",
+      "url": "https://docs.oracle.com/en/industries/health/millennium-platform-apis/mfrap/toc.htm",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-two-charts-one-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_OWASP_INPUT_VALIDATION_CHEAT_SHEET",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PARADOX",
+      "url": "https://www.paradox.ai/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PCISECURITYSTANDARDS_CARD_VERIFICATION_CODE_RETENTION",
+      "url": "https://www.pcisecuritystandards.org/faqs/1280/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PCISECURITYSTANDARDS_DISPLAY_MASKING",
+      "url": "https://www.pcisecuritystandards.org/faqs/1492/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PCISECURITYSTANDARDS_IFRAME_ELIGIBILITY",
+      "url": "https://www.pcisecuritystandards.org/faqs/1438/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PCISECURITYSTANDARDS_PCI_SSC_GLOSSARY",
+      "url": "https://www.pcisecuritystandards.org/glossary/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PCISECURITYSTANDARDS_STORED_PAN",
+      "url": "https://www.pcisecuritystandards.org/faqs/1222/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PERCEPTUALEDGE_BULLET_GRAPH_DESIGN_SPECIFICATION",
+      "url": "https://perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PERCEPTUALEDGE_MULTIVARIATE_ANALYSIS_USING_HEATMAPS",
+      "url": "https://www.perceptualedge.com/articles/b-eye/heatmaps.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PERCEPTUALEDGE_THE_ROLE_OF_SOFTWARE_AND_THE_IMPORTANCE_OF_THOUGHTFUL_DEFAULTS",
+      "url": "https://www.perceptualedge.com/articles/visual_business_intelligence/thoughtful_defaults.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PHENOM",
+      "url": "https://www.phenom.com/blog/recruiting-ai-guide",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PRNEWSWIRE_HUMATICSS_JANUARY_2019_ANNOUNCEMENT",
+      "url": "https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in choose-your-player-humatics.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PUBMED_39932457",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39932457/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PUBMED_40465838",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40465838/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PUBMED_41601436",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41601436/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_PWC_GLOBAL_WORKFORCE_HOPES_AND_FEARS_SURVEY_2025",
+      "url": "https://www.pwc.com/gx/en/issues/workforce/hopes-and-fears.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_QIAGEN_QCI_INTERPRET",
+      "url": "https://www.qiagen.com/us/knowledge-and-support/knowledge-hub/events-and-webinars/webinars/clinical-reporting-for-high-throughput-oncology-1",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_RED_GATE_FLYWAY_SCHEMA_HISTORY_REFERENCE",
+      "url": "https://documentation.red-gate.com/flyway/flyway-concepts/migrations/flyway-schema-history-table",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_RFC_EDITOR_RFC_9111_HTTP_CACHING",
+      "url": "https://www.rfc-editor.org/rfc/rfc9111",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_RHAPSODY_INTEGRATION_ENGINE",
+      "url": "https://rhapsody.health/solutions/rhapsody/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-interface-engine-replatform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SMARTHEALTHIT_SMART_HEALTH_IT_DOCUMENTATION",
+      "url": "https://docs.smarthealthit.org/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ehr-discrete-genomic-result.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SNOMED_CT_TRANSLATION_GUIDE",
+      "url": "https://docs.snomed.org/snomed-ct-practical-guides/snomed-ct-translation-guide/1-introduction",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SOPHIAGENETICS_SOPHIA_DDM",
+      "url": "https://www.sophiagenetics.com/sophia-ddm-for-genomics/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SOURCE_OF_TRUTH_SYSTEMS_REPOSITORY",
+      "url": "https://github.com/driftframestudios/source-of-truth-systems",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in index.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SOURCE_OF_TRUTH_THEME_SOURCE",
+      "url": "https://github.com/driftframestudios/source-of-truth-systems/tree/main/src/app/theme",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_SPRINGER_HEALTHCARE_EDUCATION_TRANSLANGUAGING_STUDY",
+      "url": "https://link.springer.com/article/10.1186/s12909-025-08271-8",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_STACKOVERFLOW_STACK_OVERFLOW_2025_DEVELOPER_SURVEY_AI",
+      "url": "https://survey.stackoverflow.co/2025/ai",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in ai-systems.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_STANFORD_RESEARCH",
+      "url": "https://news.stanford.edu/stories/2025/10/ai-llms-age-bias-older-working-women-research",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_STORYTELLINGWITHDATA_TWO_TIPS_FOR_BETTER_GRAPHS",
+      "url": "https://www.storytellingwithdata.com/blog/two-tips-for-better-graphs",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_STRUCTURE_MEDIA_RESOURCES",
+      "url": "https://structure.io/media-resources/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_STRUCTURE_SENSOR_3_PRODUCT_PAGE",
+      "url": "https://structure.io/structure-sensor-3-for-ipad/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in spatial-capture-collaborative-memory.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_TEMPUS_TIME",
+      "url": "https://www.tempus.com/solutions/clinical-trial-matching/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in three-way-comparative-return.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_TESCOPLC_TESCO_PLCS_2011_FIRST_QUARTER_MANAGEMENT_STATEMENT",
+      "url": "https://www.tescoplc.com/tesco-plc-first-quarter-management-statement/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_TESCOPLC_TESCO_PLCS_2012_INNOVATION_EXHIBITION",
+      "url": "https://www.tescoplc.com/media/4xdhvz0f/investor_and_analyst_innovation_exhibition_content.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in who-to-believe-reviews-platform.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_UBC_A_NESTED_MODEL_FOR_VISUALIZATION_DESIGN_AND_VALIDATION",
+      "url": "https://www.cs.ubc.ca/labs/imager/tr/2009/NestedModel/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_UCHICAGO_FINITE_STATE_KOLMOGOROV_EQUATIONS",
+      "url": "https://www.stat.uchicago.edu/~lalley/Courses/312/ContinuousTime.pdf",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_UIE_SITUATION_MODEL_STYLE_PERSONAS",
+      "url": "https://archive.uie.com/brainsparks/2014/08/08/kim-goodwin-silo-busting-scenario-driven-design/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-lims-eln-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_UNIPROT_UNIPROTS_SEARCH_SYSTEM",
+      "url": "https://www.uniprot.org/help/text-search",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in fmi-clinical-trial-coordination.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_USDA_RESEARCH_AND_SCIENCE_CROPLAND",
+      "url": "https://www.nass.usda.gov/Research_and_Science/Cropland/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_USGS_OGCAPI",
+      "url": "https://api.waterdata.usgs.gov/ogcapi/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in prompt-side-conditions-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_VELSERA_CLINICAL_GENOMICS_WORKSPACE",
+      "url": "https://velsera.com/products/clinical-genomics-workspace/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in genomic-viewer-replatforming.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_VISA_BIN_ATTRIBUTE_SHARING_SERVICE",
+      "url": "https://www.visa.com/en-us/products/visa-bin-attribute-service",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3C_CSP_FRAME_ANCESTORS",
+      "url": "https://w3c.github.io/webappsec-csp/#directive-frame-ancestors",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_COMPLEX_IMAGES",
+      "url": "https://www.w3.org/WAI/tutorials/images/complex/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in one-figure-several-readings.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_SCALABLE_VECTOR_GRAPHICS_SVG_2_CONFORMANCE",
+      "url": "https://www.w3.org/TR/SVG/conform.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in visualization-fidelity-atlas.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_W3C_INTERNATIONALIZATION_PERSONAL_NAMES_AROUND_THE_WORLD",
+      "url": "https://www.w3.org/International/questions/qa-personal-names",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_W3C_WAI_FORMS_TUTORIAL",
+      "url": "https://www.w3.org/WAI/tutorials/forms/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_WAI_S_REFLOW_EXPLANATION",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/reflow.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_WAI_TABLE_GUIDANCE",
+      "url": "https://www.w3.org/WAI/tutorials/tables/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_W3_WCAG_2_2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in multilingual-clinical-vocabulary-practice.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WASHINGTON_UNIVERSITY_OF_WASHINGTON_RESEARCH",
+      "url": "https://www.washington.edu/news/2024/10/31/ai-bias-resume-screening-race-gender/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WEFORUM_WORLD_ECONOMIC_FORUM_FUTURE_OF_JOBS_REPORT_2025",
+      "url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/digest/",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in hiring-surfaces-talent-agent-intake.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WHATWG_FETCH_HEADER_SYNTAX",
+      "url": "https://fetch.spec.whatwg.org/#http-new-header-syntax",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in grammar-family.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WHATWG_FORM_CONTROL_INFRASTRUCTURE",
+      "url": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WHATWG_HTML_CUSTOM_DATA_ATTRIBUTES",
+      "url": "https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in readable-tables-reusable-evidence.html."
+    },
+    {
+      "token": "PUBLIC_URL_EXTERNAL_WHATWG_INPUT_TYPES",
+      "url": "https://html.spec.whatwg.org/dev/input.html",
+      "allowed_carriers": ["anchor"],
+      "selection_basis": "Author-selected reference in recoverable-enterprise-forms.html."
     }
   ]
 }

@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { access } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -74,7 +75,7 @@ function cardBlock(html, cardId) {
 }
 
 test("Full Debrief catalog cards declare reviewed responsive preview visuals", async () => {
-  const html = await readFile(resolve(canvasRoot, "debriefs.html"), "utf8");
+  const html = await readSourceContract(resolve(canvasRoot, "debriefs.html"), "utf8");
 
   for (const [cardId, expectedSrc] of previewSources) {
     const block = cardBlock(html, cardId);
@@ -115,7 +116,7 @@ test("Full Debrief catalog cards declare reviewed responsive preview visuals", a
 });
 
 test("selected catalog cards use role-sized responsive image contracts", async () => {
-  const html = await readFile(resolve(canvasRoot, "debriefs.html"), "utf8");
+  const html = await readSourceContract(resolve(canvasRoot, "debriefs.html"), "utf8");
 
   for (const [cardId, expected] of catalogCardImages) {
     const block = cardBlock(html, cardId);
@@ -143,7 +144,7 @@ test("selected catalog cards use role-sized responsive image contracts", async (
 });
 
 test("Catalog preview image selection falls back cleanly and clears stale responsive metadata", async () => {
-  const script = await readFile(resolve(canvasRoot, "debriefs-catalog.js"), "utf8");
+  const script = await readSourceContract(resolve(canvasRoot, "debriefs-catalog.js"), "utf8");
 
   assert.match(script, /var hasPreviewImage = card\.hasAttribute\("data-catalog-preview-src"\)/u);
   for (const attributeName of ["src", "srcset", "sizes", "width", "height"]) {

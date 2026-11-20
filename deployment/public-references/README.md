@@ -94,17 +94,19 @@ closure.
 ## Author-selected external references
 
 [`context-canvas-external-bindings.v1.json`](context-canvas-external-bindings.v1.json)
-owns the `PUBLIC_URL_EXTERNAL_*` selections used by About. Each record names its
+owns the `PUBLIC_URL_EXTERNAL_*` selections used by About, Showcase, and the other Context Canvas pages. Each record names its
 destination, selection basis, and allowed HTML carrier. Registry articles chosen
 after the accepted Atlas snapshot use this independent selection record until a
 reviewed Atlas update supplies their current identities. The existing Registry
 entrance continues to use its Atlas-backed key.
 
-External tokens carry complete anchor destinations, the license link, an MP4
+Reuse a destination’s existing token wherever another page cites it. External tokens carry complete anchor destinations, the license link, an MP4
 source, or the remote video poster setting. The local video poster and fallback
 remain authored assets. The contract accepts normalized public HTTPS routes and
-rejects credentials, parameters, duplicate tokens, unsupported carriers and
-build-setting overrides. The binding remains a build input outside the public
+admits reviewed section, demo, API, language, and dataset selectors only on their
+specific public documents. All other query strings and fragments stay outside
+the contract, along with credentials, duplicate destinations, duplicate tokens,
+unsupported carriers, and build-setting overrides. The binding remains a build input outside the public
 artifact. Its digest accompanies the existing generation receipts.
 
 Hosted-instrument navigation can use an ordinary anchor token when its route

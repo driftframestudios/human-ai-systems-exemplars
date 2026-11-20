@@ -173,6 +173,7 @@
         "tests/context-canvas/public-system-topology.test.mjs",
         "tests/context-canvas/rail-label-failures.test.mjs",
         "tests/context-canvas/rail-shell-source.test.mjs",
+        "tests/context-canvas/read-source-contract.test.mjs",
         "tests/context-canvas/retained-exemplar-standing.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",

@@ -106,9 +106,18 @@ test("the media job reuses a verified package closure and preserves its behavior
   assert.ok(saveAt < receiptAt, "the final receipt records cache publication standing");
 
   const prototypeJob = workflow.slice(0, start);
-  assert.match(prototypeJob, /install --with-deps chromium/u);
-  assert.match(prototypeJob, /install --with-deps firefox/u);
-  assert.match(prototypeJob, /install --with-deps webkit/u);
+  const installScript = prototypeJob.match(/          (engines=\(chromium\)[\s\S]*?npm run playwright[^\n]+)/u)?.[1];
+  assert.ok(installScript, "the prototype job selects its Playwright engines before installing");
+  for (const [suite, engines] of Object.entries({
+    all: "chromium firefox webkit", iframe: "chromium webkit", core: "chromium", narrative: "chromium",
+  })) {
+    const result = spawnSync("bash", ["-eu", "-c", 'npm() { echo "$*"; }\n' + installScript], {
+      encoding: "utf8", env: { ...process.env, SELECTED_SUITE: suite },
+    });
+    assert.ifError(result.error);
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout.trim(), `run playwright -- install --with-deps ${engines}`, suite);
+  }
 });
 
 test("the media package manifest and policy records carry one reviewable cache identity", async () => {

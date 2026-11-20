@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+import { readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -23,7 +24,7 @@ function blockAt(source, marker, fromIndex = 0) {
 }
 
 test("the shared rail keeps one external visual readout with complete link names", async () => {
-  const source = await readFile(resolve(canvasRoot, "canvas-shell.js"), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, "canvas-shell.js"), "utf8");
   const appendList = source.indexOf("nav.appendChild(list)");
   const appendReadout = source.indexOf("nav.appendChild(readout)");
 
@@ -35,7 +36,7 @@ test("the shared rail keeps one external visual readout with complete link names
 });
 
 test("every Context Canvas footer receives the same plain-text contact address", async () => {
-  const shell = await readFile(resolve(canvasRoot, "canvas-shell.js"), "utf8");
+  const shell = await readSourceContract(resolve(canvasRoot, "canvas-shell.js"), "utf8");
   const routes = (await readdir(canvasRoot, { withFileTypes: true }))
     .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
     .map(entry => entry.name)
@@ -51,7 +52,7 @@ test("every Context Canvas footer receives the same plain-text contact address",
   assert.doesNotMatch(shell, /mailto:/iu);
 
   for (const route of routes) {
-    const source = await readFile(resolve(canvasRoot, route), "utf8");
+    const source = await readSourceContract(resolve(canvasRoot, route), "utf8");
     const footerStart = source.lastIndexOf("<footer");
     const footerEnd = source.lastIndexOf("</footer>");
     assert.ok(footerStart >= 0 && footerEnd > footerStart, `${route}: final footer`);
@@ -85,7 +86,7 @@ test("every Context Canvas footer receives the same plain-text contact address",
 });
 
 test("compact rail scrolling and transient readout paint retain separate owners", async () => {
-  const source = await readFile(resolve(canvasRoot, "canvas-shell.css"), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, "canvas-shell.css"), "utf8");
   const compact = blockAt(source, "@media screen and (max-width: 56rem)");
   const focusOwner = ".page-section-rail .page-section-rail__link:focus-visible";
   const compactList = blockAt(compact, ".page-section-rail ol");
@@ -113,7 +114,7 @@ test("compact rail scrolling and transient readout paint retain separate owners"
 });
 
 test("the readout keeps hover persistence, Escape dismissal, and edge clamping in one state owner", async () => {
-  const source = await readFile(resolve(canvasRoot, "canvas-shell.js"), "utf8");
+  const source = await readSourceContract(resolve(canvasRoot, "canvas-shell.js"), "utf8");
 
   assert.match(source, /readout\.contains\(event\.relatedTarget\)/u);
   assert.match(source, /schedulePointerDeparture\(null\)/u);

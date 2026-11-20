@@ -234,7 +234,6 @@
 @media screen {
     .prose-flow > :is(.interpretive-aside, .discovery-callout, .debrief-quote:not(.debrief-quote--orientation)) {
         break-inside: avoid;
-        display: inline-block;
         inline-size: 100%;
     }
 
@@ -311,9 +310,14 @@
     }
 }
 
-/* data/debrief-case-briefs.source.html owns this quick-scan layer. Its catalog
-   projection presents both canonical tracks as independent native disclosures;
-   Full Debrief routes keep their longer reading structure separate. */
+/* The full page introduces the study in its header. Summary cards show the
+   synchronized introduction alongside their six-field scan. */
+@media screen {
+    [data-content-form="case-brief"] > h2 + p {
+        display: none;
+    }
+}
+
 .debrief-case-brief__tracks {
     border-block-start: 1px solid var(--canvas-rule);
     display: grid;
@@ -419,6 +423,7 @@ details.debrief-case-brief__track--disclosure > ol {
 
 @media screen and (min-width: 46.0625rem) {
     .debrief-case-brief__tracks {
+        align-items: start;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -439,6 +444,11 @@ details.debrief-case-brief__track--disclosure > ol {
 
     details.debrief-case-brief__track--disclosure {
         break-inside: auto;
+    }
+
+    details.implementation-companion::details-content,
+    details.debrief-case-brief__track--disclosure::details-content {
+        content-visibility: visible;
     }
 
     details.debrief-case-brief__track--disclosure:not([open]) > :not(summary) {

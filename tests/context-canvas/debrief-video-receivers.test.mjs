@@ -1,6 +1,7 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readSourceContract } from "./read-source-contract.mjs";
+
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -86,7 +87,7 @@ test("five Debrief receivers present accepted demonstrations at their reading co
   const pages = new Map();
   for (const receiver of receivers) {
     if (!pages.has(receiver.page)) {
-      pages.set(receiver.page, await readFile(resolve(canvasRoot, receiver.page), "utf8"));
+      pages.set(receiver.page, await readSourceContract(resolve(canvasRoot, receiver.page), "utf8"));
     }
   }
 
@@ -142,11 +143,11 @@ test("five Debrief receivers present accepted demonstrations at their reading co
 
     const transcript = html.match(
       new RegExp(
-        `<aside\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/aside>`,
+        `<details\\s+id="${escapeRegularExpression(receiver.transcriptId)}"[\\s\\S]*?<\\/details>`,
         "u",
       ),
     )?.[0];
-    assert.ok(transcript, `${receiver.family} keeps the visual description in an aside`);
+    assert.ok(transcript, `${receiver.family} carries its visual description in a disclosure`);
     assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,

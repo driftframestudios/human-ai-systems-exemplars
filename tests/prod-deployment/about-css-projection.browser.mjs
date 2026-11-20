@@ -18,6 +18,11 @@ import {
   formatVisualRequestFailure,
 } from "../../tools/context-canvas-visual-observation-contract.mjs";
 
+import { materializePublicReferenceHtml } from "../../tools/materialize-public-references.mjs";
+import { loadExternalReferenceBinding } from "../../tools/external-reference-contract.mjs";
+import { loadPublicRouteReferenceBinding } from "../../tools/public-route-reference-contract.mjs";
+import { loadRegistryReferenceBinding } from "../../tools/registry-reference-contract.mjs";
+
 const execute = promisify(execFile);
 const ROOT = resolve(import.meta.dirname, "../..");
 const CONFIG_PATH = "deployment/cpanel/production-projection.config.json";
@@ -153,8 +158,8 @@ async function prepareProjection() {
     const pathname = reference.split(/[?#]/u, 1)[0];
     return posix.normalize(posix.join(posix.dirname(CONSUMER_PATH), pathname));
   });
-  assert.equal(stylesheetPaths.length, 8, "the tracked About source graph remains six base + noscript + shell");
-  assert.equal(new Set(stylesheetPaths).size, 8, "the tracked About CSS graph has distinct sources");
+  assert.equal(stylesheetPaths.length, 17, "the tracked About graph includes fifteen base owners, noscript and shell");
+  assert.equal(new Set(stylesheetPaths).size, 17, "the tracked About CSS graph has distinct sources");
 
   const cssSources = new Map();
   for (const sourcePath of stylesheetPaths) {
@@ -172,6 +177,23 @@ async function prepareProjection() {
 
   const consumerProjectedPath = projectedPaths.get(CONSUMER_PATH);
   assert.equal(consumerProjectedPath, "index.html", "the production About consumer remains the root index");
+  const [external, repository, registry] = await Promise.all([
+    loadExternalReferenceBinding(), loadPublicRouteReferenceBinding(), loadRegistryReferenceBinding(),
+  ]);
+  const destinations = new Map([...external.destinations.entries(), ...repository.destinations.entries(), ...registry.destinations.entries()]);
+  const publicHtml = materializePublicReferenceHtml(consumerBytes.toString("utf8"), destinations, CONSUMER_PATH,
+    null, repository.destinations, external.destinations);
+  // CSS projection receives links in their manifest-selected publication locations.
+  // The source-side fixture keeps its authored stylesheet paths for the comparison.
+  const projectedHtml = publicHtml.replace(/<link\b[^>]*>/giu, tag => {
+    const [href] = stylesheetReferences(tag);
+    if (!href) return tag;
+    const sourcePath = posix.join(posix.dirname(CONSUMER_PATH), href);
+    const projectedPath = projectedPaths.get(sourcePath);
+    assert.ok(projectedPath, `the production manifest owns ${href}`);
+    return tag.replace(`href="${href}"`, `href="${projectedPath}"`);
+  });
+  const renderedConsumerBytes = Buffer.from(projectedHtml, "utf8");
   const projection = projectAboutCssProfile({
     consumer: {
       source_path: CONSUMER_PATH,
@@ -180,7 +202,7 @@ async function prepareProjection() {
       git_blob_id: await gitBlobId(CONSUMER_PATH),
     },
     consumerSourceRoot: configuration.publication.source_root,
-    renderedConsumerBytes: consumerBytes,
+    renderedConsumerBytes,
     cssSources,
     projectedPaths,
     profile: configuration.css_projection,
@@ -195,7 +217,7 @@ async function prepareProjection() {
     projectedPaths,
     projectedSources,
     sourceSelected,
-    sourceConsumer: consumerBytes,
+    sourceConsumer: Buffer.from(publicHtml, "utf8"),
     sourceStylesheets: stylesheetPaths,
     ...projection,
   };
@@ -418,7 +440,7 @@ async function renderedSnapshot(page, projection, surface) {
         details: document.querySelectorAll("details").length,
         tables: document.querySelectorAll("table").length,
         iframes: document.querySelectorAll("iframe").length,
-        routeCards: document.querySelectorAll(".about-route-grid > a").length,
+        onwardDestinations: document.querySelectorAll(".about-boundary a").length,
       },
     };
   }, { routes: [...projection.projectedPaths], surface });
@@ -682,8 +704,8 @@ async function runScenario(browser, server, projection, viewport, mode) {
     assertContained(sourceSnapshot, `${label}/source`);
     assertContained(projectedSnapshot, `${label}/projected`);
     assert.ok(
-      sourceSnapshot.presence.routeCards > 0,
-      `${label}: the source About route-card landmark is present`,
+      sourceSnapshot.presence.onwardDestinations === 2,
+      `${label}: the About hero offers two onward destinations`,
     );
     if (
       sourceSnapshot.records.length !== projectedSnapshot.records.length ||
@@ -725,9 +747,9 @@ async function runScenario(browser, server, projection, viewport, mode) {
       mode.forcedColors === "none" &&
       mode.reducedMotion === "no-preference"
     ) {
-      const onward = projectedPage.locator(`a[href^="${server.origin}/projected/"]`).first();
+      const onward = projectedPage.locator(".about-boundary a").first();
       const acceptedHref = await onward.getAttribute("href");
-      assert.ok(acceptedHref, `${label}: native onward routing participates in structural parity`);
+      assert.equal(acceptedHref, "debriefs.html", `${label}: the About hero leads to Showcase`);
       try {
         await onward.evaluate((anchor, href) => { anchor.setAttribute("href", href); },
           `${server.origin}/projected/index.html#studio-title`);
@@ -783,7 +805,7 @@ async function runScenario(browser, server, projection, viewport, mode) {
     const projectedExpected = projection.outputs
       .filter(output => !mode.javaScriptEnabled || output.id !== "about-noscript")
       .map(output => `/projected/${output.projected_path}`);
-    assert.equal(sourceExpected.length, mode.javaScriptEnabled ? 7 : 8, `${label}: source request count`);
+    assert.equal(sourceExpected.length, mode.javaScriptEnabled ? 16 : 17, `${label}: source request count`);
     assert.equal(projectedExpected.length, mode.javaScriptEnabled ? 2 : 3, `${label}: projected request count`);
     assertStylesheetResponses(sourceObservation.stylesheets, sourceExpected, `${label}/source`);
     assertStylesheetResponses(projectedObservation.stylesheets, projectedExpected, `${label}/projected`);

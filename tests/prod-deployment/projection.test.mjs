@@ -2096,6 +2096,33 @@ test("asset inventory grammar and image headers keep semantic and physical facts
   ]);
 });
 
+test("production binds the shared shell's Registry and repository links from the selected revision", async t => {
+  const fixture = await createFixtureRoot();
+  t.after(() => rm(fixture.root, { recursive: true, force: true }));
+  const publication = await enableTrackedRegistryPublicationFixture(fixture);
+  const registryKey = "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY";
+  const repositoryKey = "PUBLIC_URL_EXTERNAL_GITHUB_HUMAN_AI_SYSTEMS_EXEMPLARS";
+  const readTracked = relative => readFile(new URL("../../" + relative, import.meta.url), "utf8");
+  const registry = JSON.parse(publication.bindingBytes);
+  const registryRecord = JSON.parse(await readTracked(registryBindingRelativePath)).bindings.find(row => row.token === registryKey);
+  registry.bindings.unshift(registryRecord);
+  const external = JSON.parse(await readTracked(externalBindingRelativePath));
+  external.bindings = external.bindings.filter(row => row.token === repositoryKey);
+  const shellPath = publication.canvasRoot + "/canvas-shell.js";
+  await Promise.all([
+    writeFile(path.join(fixture.root, shellPath), await readTracked(shellPath)),
+    writeFile(path.join(fixture.root, registryBindingRelativePath), JSON.stringify(registry)),
+    writeFile(path.join(fixture.root, externalBindingRelativePath), JSON.stringify(external)),
+  ]);
+  const sourceSha = await commitFixture(fixture.root, "Select shared footer carriers");
+  const plan = await createProductionProjectionPlan({ repositoryRoot: fixture.root, sourceSha,
+    configurationPath: fixture.configurationPath, aggregatePlan: aggregateFixture() });
+  const shell = plan.outputFiles.get("primary-public/canvas-shell.js").toString("utf8");
+  assert.ok(shell.includes(`kindlight.href = ${JSON.stringify(registryRecord.url)};`));
+  assert.ok(shell.includes(`github.href = ${JSON.stringify(external.bindings[0].url)};`));
+  assert.ok(shell.includes(`var professionalProfileRoute = ${JSON.stringify(publication.destinations[publication.profileKey])};`));
+});
+
 test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {
   const fixture = await createFixtureRoot();
   try {
@@ -2329,6 +2356,11 @@ test("tracked external references materialize their reviewed destination and pre
     const publication = await enableTrackedRegistryPublicationFixture(fixture);
     const token = "PUBLIC_URL_EXTERNAL_REFERENCE_GUIDE";
     const destination = "https://reference.example.test/guide";
+    const exemplarToken = "PUBLIC_URL_EXTERNAL_EXEMPLAR_GUIDE";
+    const exemplarDestination = "https://reference.example.test/exemplar";
+    const exemplarName = "exemplar-index-landing.html";
+    await writeFile(path.join(fixture.root, publication.canvasRoot, exemplarName),
+      `<a href="{{${exemplarToken}}}">Exemplar guide</a>\n`, "utf8");
     const bindingBytes = Buffer.from(`${JSON.stringify({
       $schema: "./context-canvas-external-bindings.schema.json",
       id: "context-canvas.external-public-reference-bindings.v1",
@@ -2338,6 +2370,11 @@ test("tracked external references materialize their reviewed destination and pre
         url: destination,
         allowed_carriers: ["anchor"],
         selection_basis: "The guide supports the visitor's next reading step.",
+      }, {
+        token: exemplarToken,
+        url: exemplarDestination,
+        allowed_carriers: ["anchor"],
+        selection_basis: "The exemplar has a separate publication route.",
       }],
     }, null, 2)}\n`);
     await writeFile(path.join(fixture.root, externalBindingRelativePath), bindingBytes);
@@ -2358,6 +2395,8 @@ test("tracked external references materialize their reviewed destination and pre
     const html = plan.outputFiles.get("primary-public/index.html").toString("utf8");
     assert.ok(html.includes(`<a href="${destination}">Reference guide</a>`));
     assert.ok(!html.includes(`{{${token}}}`));
+    assert.equal(plan.outputFiles.has(`primary-public/${exemplarName}`), false);
+    assert.ok(!html.includes(exemplarDestination));
     assert.deepEqual(plan.manifest.inputs.public_references.tracked_external, {
       keys: [token],
       binding: {
@@ -2366,7 +2405,7 @@ test("tracked external references materialize their reviewed destination and pre
         sha256: sha256(bindingBytes),
         id: "context-canvas.external-public-reference-bindings.v1",
         version: "1",
-        binding_count: 1,
+        binding_count: 2,
       },
     });
     assert.deepEqual(
@@ -2380,6 +2419,16 @@ test("tracked external references materialize their reviewed destination and pre
       "binding inputs remain outside visitor artifacts",
     );
 
+    const completeSource = await readFile(sourcePath, "utf8");
+    const unknownToken = "PUBLIC_URL_EXTERNAL_UNKNOWN";
+    await writeFile(sourcePath, completeSource.replace(token, unknownToken), "utf8");
+    const missingSha = await commitFixture(fixture.root, "Select an unbound external reference");
+    await assert.rejects(
+      createProductionProjectionPlan({ ...options, sourceSha: missingSha }),
+      /PUBLIC_URL_EXTERNAL_UNKNOWN needs an approved destination in the tracked external binding/u,
+    );
+    await writeFile(sourcePath, completeSource, "utf8");
+    options.sourceSha = await commitFixture(fixture.root, "Restore reviewed external reference");
     await writeFile(
       path.join(fixture.root, ".env.public"),
       `${publication.externalConfiguration}${token}=https://alternate.example.test/guide\n`,
@@ -3458,7 +3507,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
     [
       "an extra stylesheet owner",
       html.replace("</head>", '<link rel="stylesheet" href="extra.css">\n</head>'),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "a reordered loading context",
@@ -3476,7 +3525,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
         `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
         `<!-- <link rel="stylesheet" href="${cssSourceRelativePaths[7]}"> -->`,
       ),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "a stylesheet link that exists only inside a raw-text element",
@@ -3484,7 +3533,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
         `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
         `<script type="application/json">"<link rel='stylesheet' href='${cssSourceRelativePaths[7]}'>"</script>`,
       ),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "a stylesheet link that exists only inside inert template content",
@@ -3492,7 +3541,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
         `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
         `<template><link rel="stylesheet" href="${cssSourceRelativePaths[7]}"></template>`,
       ),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "stylesheet-looking text inside another element attribute",
@@ -3500,7 +3549,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
         `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
         `<meta content='<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">' >`,
       ),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "raw-text marker strings inside ordinary attributes cannot hide an active owner",
@@ -3508,7 +3557,7 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
         "</head>",
         '<meta content="<script>"><link rel="stylesheet" href="styles/core/tokens.css" media="all"><meta content="</script>"></head>',
       ),
-      /exact eight-owner About stylesheet graph/,
+      /eight-owner or seventeen-owner About stylesheet graph/,
     ],
     [
       "a browser-recognized bang comment close cannot hide an active owner",
@@ -3599,6 +3648,13 @@ test("the About CSS projection rejects graph drift and unsupported loading attri
   }
 
   const fixture = cssProjectionFixture();
+  const studioStyles = Array.from({ length: 9 }, (_, i) => `<link rel="stylesheet" href="studio-${i}.css">`).join("\n");
+  const expanded = html.replace("<noscript>", `${studioStyles}\n<noscript>`);
+  assert.throws(
+    () => runCssProjection(fixture, { renderedConsumerBytes: Buffer.from(expanded) }),
+    /Rendered About stylesheet graph differs in size/,
+    "the rendered page must retain the tracked base-owner population",
+  );
   const renderedConsumerHtml = html.replace(
     `${firstLink}\n${secondLink}`,
     `${firstLink}\n<meta charset="utf-8">\n${secondLink}`,

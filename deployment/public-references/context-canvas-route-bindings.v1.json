@@ -764,7 +764,24 @@
       "fragment": null,
       "expected_url": "https://iframes.vik.guru/v1/core/heart-chart/",
       "allowed_carriers": [
+        "anchor",
         "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_CORE_STRATEGY_CANVAS",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "core",
+        "route_id": "strategy-canvas"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/core/strategy-canvas/",
+      "allowed_carriers": [
+        "anchor"
       ],
       "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
     },
@@ -1145,7 +1162,7 @@
         "open_graph_url",
         "sitemap"
       ],
-      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+      "selection_basis": "The Showcase catalog uses the existing debriefs.html route selected by the primary route manifest."
     },
     {
       "token": "PUBLIC_URL_PAGE_DEBRIEFS_BREADCRUMB",

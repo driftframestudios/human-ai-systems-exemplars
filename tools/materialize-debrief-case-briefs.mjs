@@ -1,5 +1,7 @@
 import './node-runtime-admission.mjs';
 import { isDirectExecution } from './check-node-runtime.mjs';
+import { createHash } from "node:crypto";
+import { minify } from "html-minifier";
 import { constants as fsConstants } from "node:fs";
 import { access, lstat, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -13,21 +15,18 @@ const caseBriefSourcePath = path.join(dataDirectory, "debrief-case-briefs.source
 const caseBriefSourceRelativePath = path.relative(repositoryRoot, caseBriefSourcePath);
 const catalogPath = path.join(canvasDirectory, "debriefs.html");
 const catalogRelativePath = path.relative(repositoryRoot, catalogPath);
-const startMarker = "  <!-- debrief-case-brief-projections:start -->";
-const endMarker = "  <!-- debrief-case-brief-projections:end -->";
-const insertionSentinel = "</main><!-- /content class on main -->";
-const fullDebriefStartMarker = "          <!-- debrief-at-a-glance-projection:start -->";
-const fullDebriefEndMarker = "          <!-- debrief-at-a-glance-projection:end -->";
-const fullDebriefInsertionSentinel = "          <span id=\"case-brief\" aria-hidden=\"true\"></span>";
+const startMarker = "<!-- debrief-case-brief-projections:start -->";
+const endMarker = "<!-- debrief-case-brief-projections:end -->";
+const insertionSentinel = /<\/main\s*>\s*<!-- \/content class on main -->/giu;
 const routePattern = /^[a-z0-9][a-z0-9-]*\.html$/;
 const fragmentPattern = /^#[A-Za-z][A-Za-z0-9_.:-]*$/;
 const expectedFieldLabels = [
   "Situation and stakes",
   "Scope and role",
-  "Core constraint",
+  "Challenges",
   "Key decision",
-  "Outcome and evidence",
-  "Relevance now"
+  "Results",
+  "What this enables"
 ];
 const expectedTrackKinds = Object.freeze({
   default: ["solution", "implementation"],
@@ -101,7 +100,7 @@ function normalizedText(node) {
   return decodeTextEntities(value).replace(/\s+/g, " ").trim();
 }
 
-function findTagEnd(source, offset) {
+function findTagEnd(source, offset, fileLabel) {
   let quote = "";
   for (let index = offset; index < source.length; index += 1) {
     const character = source[index];
@@ -113,7 +112,7 @@ function findTagEnd(source, offset) {
       return index;
     }
   }
-  fail("HTML contains an unterminated tag");
+  fail(`${fileLabel} contains an unterminated tag at offset ${offset}`);
 }
 
 function parseAttributes(source, fileLabel) {
@@ -170,10 +169,10 @@ function parseHtml(source, fileLabel) {
       continue;
     }
     if (/^<!doctype\b/i.test(source.slice(offset))) {
-      offset = findTagEnd(source, offset + 2) + 1;
+      offset = findTagEnd(source, offset + 2, fileLabel) + 1;
       continue;
     }
-    const tagEnd = findTagEnd(source, offset + 1);
+    const tagEnd = findTagEnd(source, offset + 1, fileLabel);
     let token = source.slice(offset + 1, tagEnd).trim();
     if (token.startsWith("!")) {
       offset = tagEnd + 1;
@@ -184,7 +183,9 @@ function parseHtml(source, fileLabel) {
       if (!/^[a-z][a-z0-9:-]*$/.test(tag) || stack.length === 1 || stack.at(-1).tag !== tag) {
         fail(`${fileLabel} contains an unmatched closing ${tag || "tag"}`);
       }
-      stack.pop();
+      const element = stack.pop();
+      element.closeStart = offset;
+      element.end = tagEnd + 1;
       offset = tagEnd + 1;
       continue;
     }
@@ -196,6 +197,8 @@ function parseHtml(source, fileLabel) {
     const tag = nameMatch[1].toLowerCase();
     const node = {
       type: "element",
+      start: offset,
+      openEnd: tagEnd + 1,
       tag,
       attributes: parseAttributes(token.slice(nameMatch[0].length), fileLabel),
       children: []
@@ -293,23 +296,23 @@ function validateSafeAttributes(node, route) {
   }
 }
 
-function renderSafeNode(node, route, fragmentPrefix = route) {
+function renderSafeNode(node, route, prefix = route) {
   if (node.type === "text") return node.value.replace(/\s+/g, " ");
   if (!allowedElements.has(node.tag)) fail(`${route} contains the unsupported <${node.tag}> element in its Case Brief projection`);
   validateSafeAttributes(node, route);
   const attributes = [];
   for (const [name, value] of node.attributes) {
-    if (name === "href") attributes.push(`href="${escapeAttribute(fragmentPrefix + value)}"`);
+    if (name === "href") attributes.push(`href="${escapeAttribute(prefix + value)}"`);
     if (name === "class") attributes.push(`class="${escapeAttribute(value)}"`);
     if (name === "title") attributes.push(`title="${escapeAttribute(decodeTextEntities(value))}"`);
   }
   const open = attributes.length > 0 ? `<${node.tag} ${attributes.join(" ")}>` : `<${node.tag}>`;
   if (voidElements.has(node.tag)) return open;
-  return `${open}${node.children.map((child) => renderSafeNode(child, route, fragmentPrefix)).join("")}</${node.tag}>`;
+  return `${open}${node.children.map((child) => renderSafeNode(child, route, prefix)).join("")}</${node.tag}>`;
 }
 
-function renderChildren(node, route, fragmentPrefix = route) {
-  return node.children.map((child) => renderSafeNode(child, route, fragmentPrefix)).join("").trim();
+function renderChildren(node, route, prefix = route) {
+  return node.children.map((child) => renderSafeNode(child, route, prefix)).join("").trim();
 }
 
 function assertAttributes(node, expected, fileLabel) {
@@ -342,7 +345,8 @@ function validateFieldGroups(fields, fileLabel) {
     assertAttributes(terms[0], new Map(), fileLabel);
     assertAttributes(terms[1], new Map(), fileLabel);
     const label = normalizedText(terms[0]);
-    if (label !== expectedFieldLabels[index]) {
+    const baseLabel = index === 1 ? label.split(" · ")[0] : label;
+    if (baseLabel !== expectedFieldLabels[index]) {
       fail(`${fileLabel} field ${index + 1} must be ${JSON.stringify(expectedFieldLabels[index])}; found ${JSON.stringify(label)}`);
     }
   });
@@ -411,7 +415,7 @@ function validateSourceEntry(entry, route) {
   // attribute, and fragment-only link vocabulary before any bytes are emitted.
   [title, orientationHeading, orientation, ...fieldGroups, basis, tracksHeading, ...(tracksIntro ? [tracksIntro] : []), ...tracks.flatMap(({ title: trackTitle, list }) => [trackTitle, list]), mediaHeading, mediaList]
     .forEach((node) => renderChildren(node, route));
-  return { route, title, orientationHeading, orientation, fields, fieldGroups, basis, tracksHeading, tracksIntro, tracks, mediaHeading, mediaList, entry };
+  return { route, title, orientationHeading, orientation, fieldGroups, basis, tracksHeading, tracksIntro, tracks, mediaHeading, mediaList, entry };
 }
 
 function extractSourceEntries(source, expectedRoutes) {
@@ -442,20 +446,13 @@ function extractSourceEntries(source, expectedRoutes) {
   return entries.map((entry, index) => validateSourceEntry(entry, expectedRoutes[index]));
 }
 
-function validateEntryAgainstRoute(sourceEntry, routeSource) {
+function validateEntryAgainstRoute(sourceEntry, routeTree, main) {
   const route = sourceEntry.route;
   const fileLabel = path.relative(repositoryRoot, path.join(canvasDirectory, route));
-  const routeTree = parseHtml(routeSource, fileLabel);
-  const main = one(descendants(routeTree, (node) => node.tag === "main"), "main element", fileLabel);
   const heading = one(descendants(main, (node) => node.tag === "h1"), "main h1", fileLabel);
   if (normalizedText(heading) !== normalizedText(sourceEntry.title)) {
     fail(`${caseBriefSourceRelativePath} title for ${route} must match its Full Debrief h1`);
   }
-  one(
-    descendants(main, (node) => node.attributes.get("id") === "case-brief"),
-    "published #case-brief coordinate",
-    fileLabel,
-  );
   const identifiers = new Set();
   descendants(routeTree, (node) => {
     const identifier = node.attributes.get("id");
@@ -474,7 +471,24 @@ function validateEntryAgainstRoute(sourceEntry, routeSource) {
   }
 }
 
-function renderFullDebriefAtAGlance(sourceEntry) {
+function validateAtAGlance(routeTree, main, fileLabel) {
+  const section = one(descendants(routeTree, (node) => node.attributes.get("id") === "case-brief"), "#case-brief", fileLabel);
+  const heading = one(descendants(routeTree, (node) => node.attributes.get("id") === "case-brief-at-a-glance-title"), "At-a-Glance heading", fileLabel);
+  if (section.tag !== "section" || !descendants(main, (node) => node === section).length ||
+      !hasAttribute(section, "data-content-form", "case-brief") ||
+      !hasAttribute(section, "aria-labelledby", "case-brief-at-a-glance-title")) {
+    fail(`${fileLabel} must publish a labelled At-a-Glance section at #case-brief in main`);
+  }
+  const [title, orientation, fields, basis] = directElements(section);
+  if (title !== heading || title.tag !== "h2" || !normalizedText(title) ||
+      orientation?.tag !== "p" || !normalizedText(orientation) ||
+      fields?.tag !== "dl" || basis?.tag !== "p" || !normalizedText(basis)) {
+    fail(`${fileLabel} At-a-Glance must include its heading, orientation, six-field scan, and basis`);
+  }
+  return { orientation, fieldGroups: validateFieldGroups(fields, fileLabel), basis };
+}
+
+function initialAtAGlance(sourceEntry) {
   const { route } = sourceEntry;
   const fieldMarkup = sourceEntry.fieldGroups.map((group) => {
     const [term, description] = directElements(group);
@@ -486,7 +500,7 @@ function renderFullDebriefAtAGlance(sourceEntry) {
     ].join("\n");
   }).join("\n");
   return [
-    fullDebriefStartMarker,
+    "<!-- debrief-at-a-glance-projection:start -->",
     "          <section id=\"case-brief\" data-content-form=\"case-brief\" aria-labelledby=\"case-brief-at-a-glance-title\">",
     `            <h2 id="case-brief-at-a-glance-title" class="txt-h2">${renderChildren(sourceEntry.orientationHeading, route, "")}</h2>`,
     `            <p>${renderChildren(sourceEntry.orientation, route, "")}</p>`,
@@ -495,7 +509,7 @@ function renderFullDebriefAtAGlance(sourceEntry) {
     "            </dl>",
     `            <p>${renderChildren(sourceEntry.basis, route, "")}</p>`,
     "          </section>",
-    fullDebriefEndMarker,
+    "<!-- debrief-at-a-glance-projection:end -->",
   ].join("\n");
 }
 
@@ -542,80 +556,39 @@ function markerOffsets(source) {
   return { start: starts[0], end: ends[0] + endMarker.length };
 }
 
-function fullDebriefMarkerOffsets(source, fileLabel) {
-  const starts = Array.from(source.matchAll(new RegExp(fullDebriefStartMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
-  const ends = Array.from(source.matchAll(new RegExp(fullDebriefEndMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
-  if (starts.length > 1 || ends.length > 1 || starts.length !== ends.length) {
-    fail(`${fileLabel} must contain either zero or one complete generated At-a-Glance projection block`);
+function readCatalogTemplates(source, tree, offsets, expectedRoutes) {
+  const templates = descendants(tree, node => node.tag === "template" && hasAttribute(node, "data-case-brief-projection"));
+  if (templates.some(node => !offsets || node.start < offsets.start + startMarker.length || node.end > offsets.end - endMarker.length)) {
+    fail(`${catalogRelativePath} must keep its summary templates inside the catalog projection markers`);
   }
-  if (starts.length === 0) return null;
-  if (starts[0] >= ends[0]) fail(`${fileLabel} contains At-a-Glance projection markers in the wrong order`);
-  return { start: starts[0], end: ends[0] + fullDebriefEndMarker.length };
-}
-
-function assertFullDebriefProjectionOwnership(source, offsets, fileLabel) {
-  const routeTree = parseHtml(source, fileLabel);
-  const projectionTree = parseHtml(
-    source.slice(offsets.start, offsets.end),
-    `${fileLabel} generated At-a-Glance projection`,
-  );
-  for (const identifier of ["case-brief", "case-brief-at-a-glance-title"]) {
-    const owned = descendants(projectionTree, (node) => node.attributes.get("id") === identifier).length;
-    const total = descendants(routeTree, (node) => node.attributes.get("id") === identifier).length;
-    const outside = total - owned;
-    if (owned !== 1 || outside !== 0) {
-      fail(`${fileLabel} generated At-a-Glance projection must own exactly one #${identifier} and keep that identifier out of route-owned markup; found ${owned} inside and ${outside} outside`);
-    }
-  }
-}
-
-export function replaceGeneratedAtAGlance(source, generatedBlock, {
-  fileLabel = "Full Debrief",
-  requireGeneratedBlock = false,
-} = {}) {
-  const offsets = fullDebriefMarkerOffsets(source, fileLabel);
   if (offsets) {
-    const expected = source.slice(0, offsets.start) + generatedBlock + source.slice(offsets.end);
-    assertFullDebriefProjectionOwnership(expected, fullDebriefMarkerOffsets(expected, fileLabel), fileLabel);
-    return expected;
+    let cursor = offsets.start + startMarker.length;
+    for (const template of templates) {
+      if (source.slice(cursor, template.start).trim()) fail(`${catalogRelativePath} summary markers must contain only direct case-study templates`);
+      cursor = template.end;
+    }
+    if (source.slice(cursor, offsets.end - endMarker.length).trim()) fail(`${catalogRelativePath} summary markers must contain only direct case-study templates`);
   }
-  if (requireGeneratedBlock) fail(`${fileLabel} is missing its generated At-a-Glance projection block`);
-  const sentinels = Array.from(source.matchAll(new RegExp(fullDebriefInsertionSentinel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
-  if (sentinels.length !== 1) {
-    fail(`${fileLabel} must contain exactly one legacy #case-brief insertion coordinate before its first At-a-Glance build`);
+  const byRoute = new Map(templates.map(node => [node.attributes.get("data-case-brief-projection"), node]));
+  const observedRoutes = templates.map(node => node.attributes.get("data-case-brief-projection"));
+  const admittedRoutes = expectedRoutes.filter(route => byRoute.has(route));
+  if (observedRoutes.length !== admittedRoutes.length || observedRoutes.some((route, index) => route !== admittedRoutes[index])) {
+    fail(`${catalogRelativePath} summary templates must follow the declared case-study routes and order`);
   }
-  const offset = sentinels[0];
-  const expected = source.slice(0, offset) + generatedBlock + source.slice(offset + fullDebriefInsertionSentinel.length);
-  assertFullDebriefProjectionOwnership(expected, fullDebriefMarkerOffsets(expected, fileLabel), fileLabel);
-  return expected;
+  return byRoute;
 }
 
-function validateExistingTemplates(source, offsets, expectedRoutes, exact) {
-  if (!offsets) {
-    if (exact) fail(`${catalogRelativePath} is missing its generated Case Brief projection block`);
-    return;
-  }
-  const blockTree = parseHtml(source.slice(offsets.start + startMarker.length, offsets.end - endMarker.length), `${catalogRelativePath} generated projection block`);
-  const templates = descendants(blockTree, (node) => node.tag === "template" && hasAttribute(node, "data-case-brief-projection"));
-  const routes = templates.map((template) => template.attributes.get("data-case-brief-projection"));
-  const seen = new Set();
-  routes.forEach((route) => {
-    validateRoute(route, `${catalogRelativePath} generated projection block`);
-    if (seen.has(route)) fail(`${catalogRelativePath} generated projection block contains duplicate template route ${route}`);
-    seen.add(route);
-  });
-  if (exact && (routes.length !== expectedRoutes.length || routes.some((route, index) => route !== expectedRoutes[index]))) {
-    fail(`${catalogRelativePath} generated projection routes differ from the authored Case Brief route order`);
-  }
-}
-
-function materializedCatalog(source, block) {
+async function materializedCatalog(source, block) {
   const offsets = markerOffsets(source);
-  if (offsets) return source.slice(0, offsets.start) + block + source.slice(offsets.end);
-  const sentinelIndex = source.indexOf(insertionSentinel);
-  if (sentinelIndex === -1 || source.indexOf(insertionSentinel, sentinelIndex + 1) !== -1) {
-    fail(`${catalogRelativePath} must contain exactly one materializer insertion sentinel`);
+  if (offsets) {
+    const current = source.slice(offsets.start, offsets.end);
+    const options = { collapseWhitespace: true };
+    if (current === block || await minify(current, options) === await minify(block, options)) return source;
+    return source.slice(0, offsets.start) + block + source.slice(offsets.end);
   }
+  const matches = [...source.matchAll(insertionSentinel)];
+  if (matches.length !== 1) fail(`${catalogRelativePath} must contain exactly one materializer insertion sentinel`);
+  const sentinelIndex = matches[0].index;
   return source.slice(0, sentinelIndex) + block + "\n" + source.slice(sentinelIndex);
 }
 
@@ -661,6 +634,113 @@ export async function readAdmittedCaseBriefSource(sourcePath, {
   return readFile(sourcePath, "utf8");
 }
 
+function glanceNodes({ orientation, fieldGroups, basis }) {
+  return [orientation, ...fieldGroups.flatMap(directElements), basis];
+}
+
+async function compactContents(node, route, prefix = "", decodeEntities = true) {
+  const html = await minify(`<div>${renderChildren(node, route, prefix)}</div>`, { collapseWhitespace: true, decodeEntities });
+  return html.slice(5, -6);
+}
+
+async function glanceValues(entry, route, prefix = "", decodeEntities = true) {
+  return Promise.all(glanceNodes(entry).map(node => compactContents(node, route, prefix, decodeEntities)));
+}
+
+function fingerprint(value) {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
+function resolveChanges(candidates, baseline, label) {
+  const changed = candidates.filter(candidate => candidate.digest !== baseline);
+  if (new Set(changed.map(candidate => candidate.digest)).size > 1) {
+    fail(`${label} has different edits in ${changed.map(candidate => candidate.name).join(" and ")}. Reconcile those readings, then rerun the build. All files retain their current edits.`);
+  }
+  return changed[0] || candidates[0];
+}
+
+function applyReplacements(source, replacements) {
+  for (const { start, end, text } of replacements.sort((a, b) => b.start - a.start)) {
+    source = source.slice(0, start) + text + source.slice(end);
+  }
+  return source;
+}
+
+function replaceContents(nodes, before, after, html) {
+  return nodes.flatMap((node, index) => before[index] === after[index] ? [] : [{
+    start: node.openEnd, end: node.closeStart, text: html[index],
+  }]);
+}
+
+function readCheckpoint(source, entry) {
+  const prefix = source.slice(entry.openEnd, directElements(entry)[0].start);
+  const match = /^\s*<!-- case-brief-sync ([a-f0-9]{64}) ([a-f0-9]{64}) -->\s*$/u.exec(prefix);
+  if (prefix.trim() && !match) fail("Invalid case-brief-sync checkpoint before the compact title");
+  return match ? match.slice(1) : [];
+}
+
+function catalogEntry(template, route) {
+  for (const link of descendants(template, node => node.tag === "a")) {
+    const href = link.attributes.get("href");
+    if (typeof href !== "string" || !href.startsWith(route + "#")) {
+      fail(`${route} catalog summary must link to a fragment of its own case study`);
+    }
+    link.attributes.set("href", href.slice(route.length));
+  }
+  const [orientation, fields, basis, details, media] = directElements(template);
+  if (!orientation || !fields || !basis || !details || !media) fail(`${route} has an incomplete catalog template`);
+  const trackGroup = directElements(details);
+  const [tracksHeading, ...afterHeading] = trackGroup;
+  const tracksIntro = afterHeading[0]?.tag === "p" ? afterHeading.shift() : null;
+  const tracks = afterHeading.map(track => {
+    const [summary, list] = directElements(track);
+    const title = summary && directElements(summary)[0];
+    if (!title || !list) fail(`${route} catalog track needs its title and ordered list`);
+    return { kind: track.attributes.get("data-case-brief-track"), title, list };
+  });
+  const [mediaHeading, mediaList] = directElements(media);
+  if (!tracksHeading || tracks.length !== 2 || !mediaHeading || !mediaList) fail(`${route} has an incomplete catalog scan or media list`);
+  const attributeText = name => ({ children: [{ type: "text", value: template.attributes.get(name) || "" }] });
+  return {
+    route, orientation, basis, fieldGroups: validateFieldGroups(fields, route),
+    title: attributeText("data-case-brief-title"), orientationHeading: attributeText("data-case-brief-orientation-heading"),
+    tracksHeading, tracksIntro, tracks, mediaHeading, mediaList,
+  };
+}
+
+// The compact record keeps local fragments. Catalog templates qualify them for navigation.
+function renderCompactEntry(entry, checkpoint) {
+  const { route } = entry;
+  const inner = node => renderChildren(node, route, "");
+  const lines = [
+    `<article data-case-brief-source="${route}">`, `    ${checkpoint}`,
+    `    <h2 data-case-brief-title>${inner(entry.title)}</h2>`,
+    `    <h3 data-case-brief-orientation-heading>${inner(entry.orientationHeading)}</h3>`,
+    `    <p data-case-brief-orientation>${inner(entry.orientation)}</p>`, "    <dl data-case-brief-fields>",
+  ];
+  for (const group of entry.fieldGroups) {
+    const [term, value] = directElements(group);
+    lines.push("      <div>", `        <dt>${inner(term)}</dt>`, `        <dd>${inner(value)}</dd>`, "      </div>");
+  }
+  lines.push("    </dl>", `    <p data-case-brief-basis>${inner(entry.basis)}</p>`, "    <div data-case-brief-detail>",
+    `      <h3 data-case-brief-tracks-heading>${inner(entry.tracksHeading)}</h3>`);
+  if (entry.tracksIntro) lines.push(`      <p data-case-brief-tracks-intro>${inner(entry.tracksIntro)}</p>`);
+  for (const track of entry.tracks) {
+    lines.push(`      <article data-case-brief-track="${escapeAttribute(track.kind)}">`,
+      `        <h4 data-case-brief-track-title>${inner(track.title)}</h4>`, "        <ol>",
+      ...directElements(track.list).map(item => `          <li>${inner(item)}</li>`), "        </ol>", "      </article>");
+  }
+  lines.push("    </div>", "    <div data-case-brief-media>", `      <h3 data-case-brief-media-heading>${inner(entry.mediaHeading)}</h3>`,
+    "      <ul>", ...directElements(entry.mediaList).map(item => `        <li>${inner(item)}</li>`), "      </ul>", "    </div>", "  </article>");
+  return lines.join("\n");
+}
+
+async function catalogOnlyDigest(entry) {
+  const contents = [entry.title, entry.orientationHeading, entry.tracksHeading, entry.tracksIntro,
+    ...entry.tracks.flatMap(track => [track.title, track.list]), entry.mediaHeading, entry.mediaList];
+  return fingerprint([entry.tracks.map(track => track.kind), ...await Promise.all(contents.map(node => node ? compactContents(node, entry.route) : null))]);
+}
+
 async function main() {
   const argumentsList = process.argv.slice(2);
   if (argumentsList.some((argument) => argument !== "--check") || argumentsList.filter((argument) => argument === "--check").length > 1) {
@@ -671,55 +751,93 @@ async function main() {
   const catalogTree = parseHtml(catalog, catalogRelativePath);
   const routes = extractRoutes(catalogTree);
   const offsets = markerOffsets(catalog);
-  validateExistingTemplates(catalog, offsets, routes, check);
+  const byRoute = readCatalogTemplates(catalog, catalogTree, offsets, routes);
 
   const caseBriefSource = await readAdmittedCaseBriefSource(caseBriefSourcePath, {
     baseDirectory: dataDirectory,
     fileLabel: caseBriefSourceRelativePath
   });
   const sourceEntries = extractSourceEntries(caseBriefSource, routes);
-  const templates = [];
-  const fullDebriefProjections = [];
-  for (const sourceEntry of sourceEntries) {
-    const routeSourcePath = validateRoute(sourceEntry.route);
-    const routeSource = await readAdmittedCaseBriefSource(routeSourcePath);
-    validateEntryAgainstRoute(sourceEntry, routeSource);
-    templates.push(renderTemplate(sourceEntry));
-    fullDebriefProjections.push({
-      destination: routeSourcePath,
-      fileLabel: path.relative(repositoryRoot, routeSourcePath),
-      source: routeSource,
-      expected: replaceGeneratedAtAGlance(routeSource, renderFullDebriefAtAGlance(sourceEntry), {
-        fileLabel: path.relative(repositoryRoot, routeSourcePath),
-        requireGeneratedBlock: check,
-      }),
-    });
-  }
-  const block = `${startMarker}\n${templates.join("\n")}\n${endMarker}`;
-  const expected = materializedCatalog(catalog, block);
+  const catalogEdits = [];
+  const compactEdits = [];
+  const plans = [];
+  const renderedTemplates = [];
+  for (const source of sourceEntries) {
+    const { route } = source;
+    const routePath = validateRoute(route);
+    const page = await readAdmittedCaseBriefSource(routePath);
+    const routeTree = parseHtml(page, route);
+    const main = one(descendants(routeTree, node => node.tag === "main"), "main", route);
+    const template = byRoute.get(route);
+    const [glanceBase, extrasBase] = readCheckpoint(caseBriefSource, source.entry);
+    const coordinate = one(descendants(routeTree, node => node.attributes.get("id") === "case-brief"), "#case-brief", route);
+    const firstBuild = !glanceBase && coordinate.tag === "span" &&
+      hasAttribute(coordinate, "aria-hidden", "true") && !coordinate.children.length;
+    const pageGlance = firstBuild ? source : validateAtAGlance(routeTree, main, route);
+    if (offsets && glanceBase && !template) fail(`${catalogRelativePath} is missing the established ${route} summary template`);
+    const catalogCopy = template ? catalogEntry(template, route) : source;
+    if (template) {
+      const observed = catalog.slice(template.start, template.end);
+      const options = { collapseWhitespace: true, decodeEntities: true };
+      if (await minify(observed, options) !== await minify(renderTemplate(catalogCopy), options)) {
+        fail(`${route} catalog template has unsupported markup; preserve its summary, quick-scan disclosures and media structure`);
+      }
+    }
+    const candidates = await Promise.all([
+      [caseBriefSourceRelativePath, source], [catalogRelativePath, catalogCopy], [route, pageGlance],
+    ].map(async ([name, entry]) => {
+      const values = await glanceValues(entry, route);
+      return { name, entry, values, digest: fingerprint(values) };
+    }));
+    const [sourceCopy, catalogGlance, pageCopy] = candidates;
+    const glance = resolveChanges(candidates, glanceBase, route + " At-a-Glance");
+    const extras = await Promise.all(candidates.slice(0, 2).map(async candidate =>
+      ({ ...candidate, digest: await catalogOnlyDigest(candidate.entry) })));
+    const selectedExtras = resolveChanges(extras, extrasBase, route + " catalog title, quick scans and media");
+    const merged = { ...selectedExtras.entry, orientation: glance.entry.orientation,
+      fieldGroups: glance.entry.fieldGroups, basis: glance.entry.basis };
+    const checkpoint = `<!-- case-brief-sync ${glance.digest} ${selectedExtras.digest} -->`;
+    const compact = renderCompactEntry(merged, checkpoint);
+    const compactTree = parseHtml(compact, route);
+    validateEntryAgainstRoute(validateSourceEntry(directElements(compactTree)[0], route), routeTree, main);
 
-  if (check) {
-    if (expected !== catalog) fail(`${catalogRelativePath} Case Brief projections are stale; run npm run build:debrief-case-briefs`);
-    const staleFullDebrief = fullDebriefProjections.find(({ source, expected: routeExpected }) => source !== routeExpected);
-    if (staleFullDebrief) fail(`${staleFullDebrief.fileLabel} At-a-Glance projection is stale; run npm run build:debrief-case-briefs`);
-    process.stdout.write(`Case Brief and Full Debrief At-a-Glance projections are current: ${routes.length} source routes.\n`);
-    return;
-  }
-  for (const projection of fullDebriefProjections) {
-    if (projection.expected !== projection.source) {
-      await writeAtomically(projection.destination, projection.expected, {
-        expectedSource: projection.source,
-        fileLabel: projection.fileLabel,
-      });
+    if (sourceCopy.digest !== glance.digest || extras[0].digest !== selectedExtras.digest) {
+      compactEdits.push({ start: source.entry.start, end: source.entry.end, text: compact });
+    } else if (glanceBase !== glance.digest || extrasBase !== selectedExtras.digest) {
+      compactEdits.push({ start: source.entry.openEnd, end: source.title.start, text: `\n    ${checkpoint}\n    ` });
+    }
+    const rendered = renderTemplate(merged).trim();
+    renderedTemplates.push(rendered);
+    if (template && extras[1].digest !== selectedExtras.digest) {
+      catalogEdits.push({ start: template.start, end: template.end, text: rendered });
+    } else if (template && catalogGlance.digest !== glance.digest) {
+      const html = await glanceValues(merged, route, route, false);
+      catalogEdits.push(...replaceContents(glanceNodes(catalogCopy), catalogGlance.values, glance.values, html));
+    }
+    if (firstBuild) {
+      const expected = applyReplacements(page, [{ start: coordinate.start, end: coordinate.end, text: initialAtAGlance(merged) }]);
+      const tree = parseHtml(expected, route);
+      validateAtAGlance(tree, one(descendants(tree, node => node.tag === "main"), "main", route), route);
+      plans.push({ path: routePath, source: page, expected });
+    } else if (pageCopy.digest !== glance.digest) {
+      const html = await glanceValues(merged, route, "", false);
+      const edits = replaceContents(glanceNodes(pageGlance), pageCopy.values, glance.values, html);
+      plans.push({ path: routePath, source: page, expected: applyReplacements(page, edits) });
     }
   }
-  if (expected !== catalog) {
-    await writeAtomically(catalogPath, expected, {
-      expectedSource: catalog,
-      fileLabel: catalogRelativePath,
-    });
+  const nextCatalog = byRoute.size === routes.length ? applyReplacements(catalog, catalogEdits)
+    : await materializedCatalog(catalog, [startMarker, ...renderedTemplates, endMarker].join("\n"));
+  plans.push({ path: catalogPath, source: catalog, expected: nextCatalog });
+  // Publish the shared checkpoint last so a rerun can finish an interrupted write.
+  plans.push({ path: caseBriefSourcePath, source: caseBriefSource, expected: applyReplacements(caseBriefSource, compactEdits) });
+  const changes = plans.filter(item => item.source !== item.expected);
+  if (check && changes.length) {
+    fail(`${path.relative(repositoryRoot, changes[0].path)} needs synchronized case summaries; run npm run build:debrief-case-briefs`);
   }
-  process.stdout.write(`Materialized ${routes.length} catalog Case Brief and Full Debrief At-a-Glance projections.\n`);
+  for (const item of changes) {
+    await writeAtomically(item.path, item.expected, { expectedSource: item.source });
+  }
+  process.stdout.write(`Verified ${routes.length} case-study summaries; ${changes.length} files synchronized.\n`);
 }
 
 if (isDirectExecution(import.meta.url)) {
