@@ -1,7 +1,7 @@
 {
   "id": "prod-projection.deployment-manifest.v1",
   "version": "1",
-  "source_sha": "cb9bfa7aae82de3cfcd163df8b0257d10a46f44b",
+  "source_sha": "2f2a3f2f91404c0d41d487a23331f12493ff5ab6",
   "inputs": {
     "configuration": {
       "source_path": "deployment/cpanel/production-projection.config.json",
@@ -1160,7 +1160,7 @@
       "external_configuration": {
         "source_relationship": "external_digest_bound_input",
         "configuration_path": ".env.public",
-        "configuration_sha256": "3b2c372d74eb83e1c7741265d438861fdbd00c18d9e24cd900318998d9b9b93d",
+        "configuration_sha256": "475fc43d6cf58593a80a6b4ceaac09628da1980e379c2d06dd7a52a30fdd39d9",
         "keys": [
           "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE"
         ]
@@ -1210,7 +1210,7 @@
     "primary": {
       "root": "primary-public/",
       "files": 626,
-      "bytes": 51320227
+      "bytes": 51320231
     },
     "iframe": {
       "root": "iframe-public/",
@@ -20941,8 +20941,8 @@
       "source_path": "context-canvas-project-surface/context-canvas/canvas-shell.js",
       "projected_path": "primary-public/canvas-shell.js",
       "media_type": "text/javascript",
-      "bytes": 15719,
-      "sha256": "53c31ddaf59a1ddd42cd9daf4885a19d86d0d3df214669ca885e4917e66f7852",
+      "bytes": 15723,
+      "sha256": "1a26452b0f8824c47f37cababf8ea63caae392ce258443f8e3acb0b3ef47eed9",
       "standing": "generated",
       "source_sha256": "bfa7833adb2be63db6ab0135e17ffd808d0f24b28842bc8df426293d6a3bcb01"
     },
