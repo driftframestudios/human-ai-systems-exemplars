@@ -78,6 +78,6 @@ test('printed links, Showcase previews and the About Studio work from the built 
   ).toHaveAttribute('href', 'https://schemas.radiantnull.com/skills/');
   await expect(
     page.locator('footer').getByRole('link', { name: "View the author's professional profile", exact: true }),
-  ).toHaveAttribute('href', 'https://github.com/driftframestudios');
+  ).toHaveAttribute('href', 'https://www.linkedin.com/in/vik-kudesia/');
   assert.deepEqual(errors, []);
 });
